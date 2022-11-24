@@ -2,13 +2,14 @@
 @extends('layouts.vertical', ['title' => 'Starter'])
 
 @section('css')
+    {{-- the css class used goees here for this page --}}
 @endsection
 
 @section('content')
-    <!-- Start Content-->
+    {{-- Start Content --}}
     <div class="container-fluid">
 
-        <!-- start page title -->
+        {{-- start page title --}}
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
@@ -23,9 +24,10 @@
                 </div>
             </div>
         </div>
-        <!-- end page title -->
+        {{-- end page title --}}
 
-    </div> <!-- container -->
+    </div>
+    {{-- container --}}
 @endsection
 
 @section('script')
