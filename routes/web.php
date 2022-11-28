@@ -27,12 +27,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('permissions', PermissionController::class);
-    Route::resource('roles', RoleController::class);
-    Route::resource('system', SystemController::class);
-    Route::resource('users', UsersController::class);
-    Route::resource('departments', DepartmentController::class);
-    Route::resource('designations', DesignationController::class);
+    Route::resources([
+        'permissions' => PermissionController::class,
+        'roles' => RoleController::class,
+        'system' => SystemController::class,
+        'users' => UsersController::class,
+        'departments' => DepartmentController::class,
+        'designations' => DesignationController::class,
+    ]);
+
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
 });
 
