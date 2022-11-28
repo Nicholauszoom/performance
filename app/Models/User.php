@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\post;
 use Laravel\Sanctum\HasApiTokens;
-
+use App\Permissions\HasPermissionsTrait;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -17,10 +20,21 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'users';
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'address',
+        'phone',
+        'added_by',
+        'status',
+        'joining_date',
+ 'department_id',
+'designation_id',
+ 'disabled',
+    'disabled_date'
     ];
 
     /**
@@ -41,4 +55,27 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+ 
+   
+  
+       public function basic_details()
+    {
+        return $this->hasOne('App\Models\UserDetails\BasicDetails','user_id');
+    }
+
+    public function bank_details()
+    {
+        return $this->hasOne('App\Models\UserDetails\BankDetails','user_id');
+    }
+    
+    public function designation(){
+    
+        return $this->belongsTo('App\Models\Designation','designation_id');
+      }
+  public function department(){
+    
+        return $this->belongsTo('App\Models\Departments','department_id');
+      }
+    use HasPermissionsTrait; //Import The Trait
 }

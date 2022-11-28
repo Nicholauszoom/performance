@@ -30,7 +30,7 @@ class RoutingController extends Controller
     {
         if ($first != 'assets')
             return view($first);
-        return view('index');
+        return view('dashboard');
     }
 
     /**
@@ -40,7 +40,7 @@ class RoutingController extends Controller
     {
         if ($first != 'assets')
             return view($first.'.'.$second);
-        return view('index');
+        return view('dashboard');
     }
 
     /**
@@ -50,6 +50,6 @@ class RoutingController extends Controller
     {
         if ($first != 'assets')
             return view($first.'.'.$second.'.'.$third);
-        return view('index');
+        return view('dashboard');
     }
 }

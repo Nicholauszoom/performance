@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        @include('layouts.shared.title-meta', ['title' => "Log In"])
+        @include('login-layouts.shared.title-meta', ['title' => "Log In"])
         
-        @include('layouts.shared.head-css')
+        @include('login-layouts.shared.head-css')
     </head>
 
-    <body class="authentication-bg authentication-bg-pattern">
+    <body class="authentication-bg authentication-bg-pattern" style="background-color:#14144F;">
 
         <div class="account-pages mt-5 mb-5">
             <div class="container">
@@ -22,7 +22,7 @@
                                             {{-- href="{{route('index')}}" --}}
                                              class="logo logo-dark text-center">
                                             <span class="logo-lg">
-                                                <img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="22">
+                                                <img src="{{asset('login-assets/images/main-logo.png')}}" alt="" height="150" width="200">
                                             </span>
                                         </a>
                     
@@ -30,7 +30,7 @@
                                             {{-- href="{{route('index')}}"  --}}
                                             class="logo logo-light text-center">
                                             <span class="logo-lg">
-                                                <img src="{{asset('assets/images/logo-light.png')}}" alt="" height="22">
+                                                <img src="{{asset('login-assets/images/main-logo.png')}}" alt="" height="22">
                                             </span>
                                         </a>
                                     </div>
@@ -84,7 +84,7 @@
                                     </div>
 
                                     <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-primary btn-block" type="submit"> Log In </button>
+                                        <button class="btn btn-primary btn-block" style="background-color:#14144f;" type="submit"> Log In </button>
                                     </div>
 
                                 </form>
@@ -114,9 +114,9 @@
         <footer class="footer footer-alt">
             <script>
                 document.write(new Date().getFullYear())
-            </script> &copy; Created by <a href="">CITS</a>
+            </script> &copy; Developed by <a href="">CITS</a>
         </footer>
 
-        @include('layouts.shared.footer-script')        
+        @include('login-layouts.shared.footer-script')        
     </body>
 </html>
