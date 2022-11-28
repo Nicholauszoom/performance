@@ -14,7 +14,7 @@ class PermisionSeeder extends Seeder
     public function run()
     {
         $data = [
-            #3.start manage-AccessControl permissions  
+            #3.start manage-AccessControl permissions
             ['slug' => 'view-roles','sys_module_id'=>1],
             ['slug' => 'add-roles','sys_module_id'=>1],
             ['slug' => 'edit-roles','sys_module_id'=>1],
@@ -32,16 +32,11 @@ class PermisionSeeder extends Seeder
 
             ['slug' => 'view-dashboard','sys_module_id'=>1],
 
-            
+             // end manage-AccessControl permissions
+        ];
 
-             // end manage-AccessControl permissions 
-            
-
-            
-       ];
-
-         foreach ($data as $row) {
+        foreach ($data as $row) {
             Permission::firstOrCreate($row);
-         }
+        }
     }
 }

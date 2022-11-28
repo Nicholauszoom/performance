@@ -30,8 +30,9 @@
                     </div>
 
                     <?php
-$system=App\Models\AccessControll\System::first();
-?>
+                        $system = App\Models\AccessControll\System::first();
+                    ?>
+
                     <div class="text-center">
                         <h6 class="mb-0 text-white text-shadow-dark mt-3">
                             {{ !empty($system)? $system->name : 'sytem name not set'}}</h6>
@@ -93,13 +94,14 @@ $system=App\Models\AccessControll\System::first();
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
-                <!-- Main -->
+                {{-- Main --}}
                 <li class="nav-item-header">
-                    <div class="text-uppercase font-size-xs line-height-xs mt-1">Main</div> <i class="icon-menu"
-                        title="Main"></i>
+                    <div class="text-uppercase font-size-xs line-height-xs mt-1">Main</div>
+                    <i class="icon-menu" title="Main"></i>
                 </li>
+
                 <li class="nav-item">
-                    <a href="{{url('home')}}" class="nav-link  {{ (request()->is('dashboard')) ? 'active' : ''  }}">
+                    <a href = " {{ url('dashboard') }}" class="nav-link  {{ (request()->is('dashboard')) ? 'active' : ''  }}">
                         <i class="icon-home"></i>
                         <span>
                             Dashboard
@@ -1054,27 +1056,27 @@ $system=App\Models\AccessControll\System::first();
                     <li class="nav-item">
                         <a class="nav-link " href="{{ url('roles') }}"> {{__('Roles')}}</a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('permissions') }}"> {{__('Permissions')}}</a>
                     </li>
-                   
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('system') }}"> {{__('System Settings')}}</a>
                     </li>
-                   
+
                     <li class=""><a class="nav-link" href="{{url('departments')}}">Departments
                         </a></li>
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('designations') }}"> {{__('Designations')}}</a>
                     </li>
-                 
+
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('users') ? 'active' : '' }}"
                             href="{{ url('users') }}">User Management </a>
                     </li>
-                  
+
                 </ul>
             </li>
 
