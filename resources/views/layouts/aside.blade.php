@@ -645,6 +645,7 @@
                     </a>
                 </li>
                 @endcan
+
                 @can('view-training')
                 <li class="nav-item">
                     <a class="nav-link {{ (request()->is('training/training*')) ? 'active' : ''  }}"
@@ -898,6 +899,7 @@
                         </li>
                 </li>
                 @endcan
+
                 @can('view-balance_sheet')
                 <li class="nav-item ">
                     <a class="nav-link {{ (request()->is('financial_report/balance_sheet_summary')) ? 'active' : ''  }}"
@@ -1008,6 +1010,7 @@
             <li class="nav-item"><a class="nav-link {{ (request()->is('truck_summary.*')) ? 'active' : ''  }}"
                     href="{{url('truck_summary')}}">Truck Summary</a></li>
             @endcan
+
             @can('view-fuel')
             <li class="nav-item"><a class="nav-link {{ (request()->is('fuel_report')) ? 'active' : ''  }}"
                     href="{{url('fuel_report')}}">Fuel Report</a></li>
@@ -1053,6 +1056,10 @@
                 </a>
 
                 <ul class="nav nav-group-sub">
+                    <li class="nav-item">
+                        <a class="nav-link " href="{{ route('auditTrail.index') }}"> {{__('Audit Trail')}}</a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link " href="{{ url('roles') }}"> {{__('Roles')}}</a>
                     </li>
