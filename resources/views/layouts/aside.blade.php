@@ -101,7 +101,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href = " {{ url('dashboard') }}" class="nav-link  {{ (request()->is('dashboard')) ? 'active' : ''  }}">
+                    <a href=" {{ url('dashboard') }}"
+                        class="nav-link  {{ (request()->is('dashboard')) ? 'active' : ''  }}">
                         <i class="icon-home"></i>
                         <span>
                             Dashboard
@@ -109,85 +110,8 @@
                     </a>
                 </li>
 
-                @can('view-cargo-list')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link "><i class="icon-package"></i> <span>Cargo Management</span></a>
 
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        @can('view-cargo-list')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('pacel_name.*')) ? 'active' : ''  }}"
-                                href="{{url('pacel_name')}}">Pacel Name List</a></li>
-                        @endcan
-                        @can('view-cargo-client-list')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('client.*')) ? 'active' : ''  }}"
-                                href="{{url('client')}}">Client List</a></li>
-                        @endcan
-                        @can('view-cargo-quotation')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('pacel_quotation.*')) ? 'active' : ''  }}"
-                                href="{{url('pacel_quotation')}}">Quotation</a></li>
-                        @endcan
-                        @can('view-cargo-invoice')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('pacel_invoice.*')) ? 'active' : ''  }}"
-                                href="{{url('pacel_invoice')}}">Invoice</a></li>
-                        @endcan
-                        @can('view-cargo-mileage')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('mileage.*')) ? 'active' : ''  }}"
-                                href="{{url('mileage')}}">Mileage List</a></li>
-                        @endcan
-                        @can('view-cargo-permit')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('permit.*')) ? 'active' : ''  }}"
-                                href="{{url('permit')}}">Border Permit List</a></li>
-                        @endcan
-                    </ul>
-                </li>
-                @endcan
 
-                @can('manage-orders')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link "><i class="icon-cart"></i> <span>Cargo Tracking</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        @can('view-cargo-collection')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('collection.*')) ? 'active' : ''  }}"
-                                href="{{url('collection')}}"> Cargo List</a></li>
-                        @endcan
-                        @can('view-cargo-loading')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('loading.*')) ? 'active' : ''  }}"
-                                href="{{url('loading')}}"> Loading</a></li>
-                        @endcan
-                        @can('view-cargo-offloading')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('offloading.*')) ? 'active' : ''  }}"
-                                href="{{url('offloading')}}"> Offloading</a></li>
-                        @endcan
-                        @can('view-cargo-delivering')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('delivering.*')) ? 'active' : ''  }}"
-                                href="{{url('delivering')}}">Delivery</a></li>
-                        @endcan
-                        @can('view-cargo-wb')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('wb.*')) ? 'active' : ''  }}"
-                                href="{{url('wb')}}">Create WB</a></li>
-                        @endcan
-                        @can('view-cargo-activity')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('activity.*')) ? 'active' : ''  }}"
-                                href="{{url('activity')}}">Track Logistic Activity</a>
-                        </li>
-                        @endcan
-                        @can('view-cargo-order_report')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('order_report.*')) ? 'active' : ''  }}"
-                                href="{{url('order_report')}}">Uplift Report</a></li>
-                        @endcan
-                        @can('view-cargo-truck_mileage')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('truck_mileage.*')) ? 'active' : ''  }}"
-                                href="{{url('truck_mileage')}}">Return Truck Fuel &
-                                Mileage</a></li>
-                        @endcan
-                    </ul>
-                </li>
-                @endcan
 
 
 
@@ -196,7 +120,7 @@
                 @can('manage-payroll')
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link {{ (request()->is('payroll/*')) ? 'active' : ''  }}"><i
-                            class="icon-calculator"></i> <span>Payroll</span></a>
+                            class="icon-calculator"></i> <span> Payroll Management</span></a>
 
                     <ul class="nav nav-group-sub" data-submenu-title="Layouts">
                         @can('view-salary_template')
@@ -288,351 +212,25 @@
 
 
 
-                @can('manage-courier')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link "><i class="icon-copy"></i> <span>Courier Management</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        @can('view-courier_list')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_list.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_list')}}">Item List</a></li>
-                        @endcan
-                        @can('view-courier_client')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_client.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_client')}}">Client List</a></li>
-                        @endcan
-                        @can('view-courier_quotation')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_quotation.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_quotation')}}">Quotation</a></li>
-                        @endcan
-                        @can('view-courier_invoice')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_invoice.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_invoice')}}">Invoice</a></li>
-                        @endcan
-
-                        @can('view-courier_collection')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_collection.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_collection')}}"> Courier
-                                Collection</a></li>
-                        @endcan
-                        @can('view-courier_loading')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_loading.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_loading')}}"> Courier Loading</a>
-                        </li>
-                        @endcan
-                        @can('view-courier_offloading')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_offloading.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_offloading')}}"> Courier
-                                Offloading</a></li>
-                        @endcan
-                        @can('view-courier_delivering')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_delivering.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_delivering')}}"> Courier
-                                Delivery</a></li>
-                        @endcan
-                        @can('view-courier_activity')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_activity.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_activity')}}">Track Courier
-                                Activity</a></li>
-                        @endcan
-                        @can('view-courier_activity')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('courier_activity.*')) ? 'active' : ''  }}"
-                                href="{{url('courier_activity')}}"> Courier Uplift
-                                Report</a></li>
-                        @endcan
-                    </ul>
-                </li>
-                @endcan
-
-
-
-                @can('manage-logistic')
-                <li class="nav-item"><a class="nav-link {{ (request()->is('routes.*')) ? 'active' : ''  }}"
-                        href="{{url('routes')}}"><i data-feather="command" class="icon-road"></i><span>Routes</span></a>
-                </li>
-                @endcan
-
-                @can('view-supplier')
-                <li class="nav-item"><a class="nav-link {{ (request()->is('supplier.*')) ? 'active' : ''  }}"
-                        href="{{url('supplier')}}"><i data-feather="command"
-                            class="icon-cart"></i><span>Suppliers</span></a>
-                </li>
-                @endcan
-
-                @can('manage-inventory')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link "><i class="icon-car"></i> <span>Tire
-                            Management</span></a>
-
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
-                        @can('view-tyre_brand')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('tyre_brand.*')) ? 'active' : ''  }}"
-                                href="{{url('tyre_brand')}}">Tire Brand</a></li>
-                        @endcan
-                        @can('view-purchase_tyre')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('purchase_tyre.*')) ? 'active' : ''  }}"
-                                href="{{url('purchase_tyre')}}">Purchase Tire</a></li>
-                        @endcan
-                        @can('view-tyre_list')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('tyre_list.*')) ? 'active' : ''  }}"
-                                href="{{url('tyre_list')}}">Tire List</a></li>
-                        @endcan
-                        @can('view-assign_truck')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('assign_truck.*')) ? 'active' : ''  }}"
-                                href="{{url('assign_truck')}}">Assign Truck</a></li>
-                        @endcan
-                        @can('view-tyre_return')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('tyre_return.*')) ? 'active' : ''  }}"
-                                href="{{url('tyre_return')}}">Tire Return</a></li>
-                        @endcan
-                        @can('view-tyre_reallocation')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('tyre_reallocation.*')) ? 'active' : ''  }}"
-                                href="{{url('tyre_reallocation')}}">Tire
-                                Reallocation</a></li>
-                        @endcan
-                        @can('view-tyre_disposal')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('tyre_disposal.*')) ? 'active' : ''  }}"
-                                href="{{url('tyre_disposal')}}">Tire Disposal</a></li>
-                        @endcan
-                    </ul>
-                </li>
-                @endcan
-
-
-                @can('manage-inventory')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#inventory" class="nav-link {{ (request()->is('inventory/*')) ? 'active' : ''  }}"
-                        data-toggle="collapse" class="dropdown-toggle">
-
-                        <i class="icon-hammer2"></i><span>Inventory</span>
-
-
-                    </a>
-                    <ul class="nav nav-group-sub" id="inventory" data-parent="#accordionExample">
-
-                        @can('view-location')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('location/*')) ? 'active' : ''  }}"
-                                href="{{ url('location') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Location')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-inventory')
-                        <li class="nav-item">
-                            <a class="nav-link {{ (request()->is('inventory/*')) ? 'active' : ''  }}"
-                                href="{{ url('inventory') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Inventory Items')}}</span>
-
-                            </a>
-                        </li>
-
-                        @endcan
-                        @can('view-fieldstaff')
-                        <li class="nav-item">
-                            <a class="nav-link {{ (request()->is('fieldstaff/*')) ? 'active' : ''  }}"
-                                href="{{ url('fieldstaff') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Field Staff')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-purchase_inventory')
-                        <li class="nav-item">
-                            <a class="nav-link {{ (request()->is('purchase_inventory/*')) ? 'active' : ''  }}"
-                                href="{{ url('purchase_inventory') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Purchase Inventory')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-inventory_list')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('inventory_list/*')) ? 'active' : ''  }}"
-                                href="{{ url('inventory_list') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Inventory List')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-
-                        @can('view-inventory_list')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('service_type/*')) ? 'active' : ''  }}"
-                                href="{{ url('service_type') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> Service Type</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-maintainance')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('maintainance/*')) ? 'active' : ''  }}"
-                                href="{{ url('maintainance') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> Maintainance</span>
-
-                            </a>
-                        </li>
-                        @endcan
-
-                        @can('view-service')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('service/*')) ? 'active' : ''  }}"
-                                href="{{ url('service') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> Service</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-service')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('good_issue/*')) ? 'active' : ''  }}"
-                                href="{{ url('good_issue') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Good Issue')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-good_return')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('good_return/*')) ? 'active' : ''  }}"
-                                href="{{ url('good_return') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Good Return')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-good_return')
-                        <li class="nav-item">
-                            <a class="nav-link {{ (request()->is('good_movement/*')) ? 'active' : ''  }}"
-                                href="{{ url('good_movement') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Good Movement')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-good_reallocation')
-                        <li class="nav-item  ">
-                            <a class="nav-link {{ (request()->is('good_reallocation/*')) ? 'active' : ''  }}"
-                                href="{{ url('good_reallocation') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Good Reallocation')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-good_disposal')
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (request()->is('good_disposal/*')) ? 'active' : ''  }}"
-                                href="{{ url('good_disposal') }}" aria-expanded="false" class="dropdown-toggle">
-
-                                <span> {{__('Good Disposal')}}</span>
-
-                            </a>
-                        </li>
-                        @endcan
-
-                    </ul>
-                </li>
-                @endcan
 
 
 
 
 
 
-                @can('manage-logistic')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link {{ (request()->is('truck/*')) ? 'active' : ''  }} "><i
-                            class="icon-truck"></i> <span>
-                            Truck & Driver</span></a>
 
-                    <ul class="nav nav-group-sub" data-submenu-title="Layouts">
 
-                        @can('view-truck')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('truck.*')) ? 'active' : ''  }}"
-                                href="{{url('truck')}}">Truck Management</a></li>
-                        @endcan
-                        @can('view-driver')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('driver.*')) ? 'active' : ''  }}"
-                                href="{{url('driver')}}">Driver Management</a></li>
-                        @endcan
-                        @can('view-fuel')
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('fuel.*')) ? 'active' : ''  }}"
-                                href="{{url('fuel')}}">Fuel Control</a></li>
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('return_fuel*')) ? 'active' : ''  }}"
-                                href="{{url('return_fuel')}}">Return Fuel </a></li>
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('refill_list')) ? 'active' : ''  }}"
-                                href="{{url('refill_list')}}">Refill List</a></li>
-                        <li class="nav-item"><a class="nav-link {{ (request()->is('fuel_report')) ? 'active' : ''  }}"
-                                href="{{url('fuel_report')}}">Fuel Report</a></li>
 
-                        @endcan
-                        @can('view-connect')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('connect_driver.*')) ? 'active' : ''  }}"
-                                href="{{url('connect_driver')}}">Assign & Remove
-                                Driver</a></li>
-                        @endcan
 
-                        @can('view-connect')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('connect_trailer.*')) ? 'active' : ''  }}"
-                                href="{{url('connect_trailer')}}">Connect & Disconnect
-                                Trailer</a></li>
-                        @endcan
-                        @can('view-connect')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('assign_driver.*')) ? 'active' : ''  }}"
-                                href="{{url('assign_driver')}}">Assign Equipment to
-                                Truck</a></li>
-                        @endcan
-                        @can('view-connect')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('reverse_assign_driver.*')) ? 'active' : ''  }}"
-                                href="{{url('reverse_assign_driver')}}">Reversed Truck
-                                Equipment</a>
-                        </li>
-                        @can('view-connect')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('truck_report.*')) ? 'active' : ''  }}"
-                                href="{{url('truck_report')}}">Truck Report</a></li>
-                        @endcan
-                        @can('view-connect')
-                        <li class="nav-item"><a
-                                class="nav-link {{ (request()->is('truck_summary.*')) ? 'active' : ''  }}"
-                                href="{{url('truck_summary')}}">Truck Summary</a></li>
-                        @endcan
-                        @endcan
-                    </ul>
-                </li>
-                @endcan
+
+
+
+
+
+
+
+
+
 
                 @can('view-leave')
                 <li class="nav-item ">
@@ -645,7 +243,6 @@
                     </a>
                 </li>
                 @endcan
-
                 @can('view-training')
                 <li class="nav-item">
                     <a class="nav-link {{ (request()->is('training/training*')) ? 'active' : ''  }}"
@@ -713,91 +310,6 @@
                         </li>
                         @endcan
 
-
-                    </ul>
-                </li>
-                @endcan
-
-                @can('manage-transaction')
-                <li class="nav-item nav-item-submenu">
-                    <a href="#transaction" class="nav-link" data-toggle="collapse" class="dropdown-toggle">
-
-                        <i class="icon-diamond"></i><span>Transaction</span>
-
-
-
-                    </a>
-                    <ul class="nav nav-group-sub" id="transaction" data-parent="#accordionExample">
-                        @can('view-deposit')
-                        <li class="nav-item ">
-                            <a class="nav-link " href="{{ url('deposit') }}" aria-expanded="false"
-                                class="dropdown-toggle">
-
-                                <span>Deposit</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-expenses')
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{ url('expenses') }}" aria-expanded="false"
-                                class="dropdown-toggle">
-
-                                <span>Payments</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-expenses')
-                        <li class="nav-item ">
-                            <a class="nav-link " href="{{ url('transfer2') }}" aria-expanded="false"
-                                class="dropdown-toggle">
-
-                                <span> Transfer</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-expenses')
-                        <li class="nav-item ">
-                            <a class="nav-link " href="{{ url('account') }}" aria-expanded="false"
-                                class="dropdown-toggle">
-
-                                <span> Bank & Cash</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-bank_statement')
-                        <li class="nav-item ">
-                            <a class="nav-link " href="{{ url('accounting/bank_statement') }}" aria-expanded="false"
-                                class="dropdown-toggle">
-
-                                <span> Bank Statement</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-bank_reconciliation')
-                        <li class="nav-item ">
-                            <a class="nav-link" href="{{ url('accounting/bank_reconciliation') }}" aria-expanded="false"
-                                class="dropdown-toggle">
-
-                                <span> Bank Reconciliation</span>
-
-                            </a>
-                        </li>
-                        @endcan
-                        @can('view-reconciliation_report')
-                        <li class="nav-item ">
-                            <a class="nav-link " href="{{ url('accounting/reconciliation_report') }}"
-                                aria-expanded="false" class="dropdown-toggle">
-
-                                <span> Bank Reconciliation Report</span>
-
-                            </a>
-                        </li>
-                        @endcan
 
                     </ul>
                 </li>
@@ -899,7 +411,6 @@
                         </li>
                 </li>
                 @endcan
-
                 @can('view-balance_sheet')
                 <li class="nav-item ">
                     <a class="nav-link {{ (request()->is('financial_report/balance_sheet_summary')) ? 'active' : ''  }}"
@@ -924,51 +435,6 @@
 
                 <ul class="nav nav-group-sub" data-submenu-title="Layouts">
 
-
-
-                    @can('view-debtor-report')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/debtors_report.*')) ? 'active' : ''  }}"
-                            href="{{url('reports/debtors_report')}}"> Debtors
-                            Report</a></li>
-                    @endcan
-
-                    @can('view-debtor-report')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/debtors_summary_report.*')) ? 'active' : ''  }}"
-                            href="{{url('reports/debtors_summary_report')}}"> Debtors Summary
-                            Report</a></li>
-                    @endcan
-
-                    @can('view-debtor-report')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/deposit_report.*')) ? 'active' : ''  }}"
-                            href="{{url('reports/deposit_report')}}">Deposit
-                            Report</a></li>
-                    @endcan
-
-                    @can('view-debtor-report')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/client_summary.*')) ? 'active' : ''  }}"
-                            href="{{url('reports/client_summary')}}"> Client Summary
-                            Report</a></li>
-                    @endcan
-
-                    @can('view-creditor-report')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/creditors_report*')) ? 'active' : ''  }}"
-                            href="{{url('reports/creditors_report')}}"> Creditors Report</a></li>
-                    @endcan
-
-                    @can('view-cargo-activity')
-                    <li class="nav-item"><a class="nav-link {{ (request()->is('activity.*')) ? 'active' : ''  }}"
-                            href="{{url('activity')}}">Track Logistic Activity</a>
-                    </li>
-                    @endcan
-                    @can('view-cargo-order_report')
-                    <li class="nav-item"><a class="nav-link {{ (request()->is('order_report.*')) ? 'active' : ''  }}"
-                            href="{{url('order_report')}}">Uplift Report</a></li>
-                    @endcan
                     @can('view-payroll_summary')
                     <li class="nav-item"><a
                             class="nav-link {{ (request()->is('payroll/payroll_summary*')) ? 'active' : ''  }}"
@@ -976,70 +442,27 @@
                             Summary</a></li>
                     @endcan
 
-                    @can('view-tyre_list')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/tyre_report.*')) ? 'active' : ''  }}"
-                            href="{{url('reports/tyre_report')}}">Tire Report</a></li>
+
+
+
+
+
+
+
+
+                    @can('view-journal')
+                    <li class="nav-item">
+                        <a class="nav-link {{ (request()->is('accounting/journal*')) ? 'active' : ''  }}"
+                            href="{{ url('accounting/journal') }}" aria-expanded="false" class="dropdown-toggle">
+
+                            <span> Journal Entry Report</span>
+
+                        </a>
+                    </li>
                     @endcan
 
-                    @can('view-tyre_list')
-                    <li class="nav-item"><a class="nav-link {{ (request()->is('tyre_list.*')) ? 'active' : ''  }}"
-                            href="{{url('tyre_list')}}">Tire List</a></li>
-                    @endcan
-                    @can('view-inventory_list')
-                    <li class="nav-item ">
-                        <a class="nav-link {{ (request()->is('inventory_list/*')) ? 'active' : ''  }}"
-                            href="{{ url('inventory_list') }}" aria-expanded="false" class="dropdown-toggle">
 
-                            <span> {{__('Inventory List')}}</span>
-                            @endcan
-
-                            @can('view-inventory_list')
-                    <li class="nav-item"><a
-                            class="nav-link {{ (request()->is('reports/inventory_report.*')) ? 'active' : ''  }}"
-                            href="{{url('reports/inventory_report')}}">Inventory Report</a></li>
-                    @endcan
-                    @can('view-connect')
-                    <li class="nav-item"><a class="nav-link {{ (request()->is('truck_report.*')) ? 'active' : ''  }}"
-                            href="{{url('truck_report')}}">Truck Report</a></li>
-                    </a>
-            </li>
-            @endcan
-
-            @can('view-connect')
-            <li class="nav-item"><a class="nav-link {{ (request()->is('truck_summary.*')) ? 'active' : ''  }}"
-                    href="{{url('truck_summary')}}">Truck Summary</a></li>
-            @endcan
-
-            @can('view-fuel')
-            <li class="nav-item"><a class="nav-link {{ (request()->is('fuel_report')) ? 'active' : ''  }}"
-                    href="{{url('fuel_report')}}">Fuel Report</a></li>
-
-            @endcan
-
-            @can('view-journal')
-            <li class="nav-item">
-                <a class="nav-link {{ (request()->is('accounting/journal*')) ? 'active' : ''  }}"
-                    href="{{ url('accounting/journal') }}" aria-expanded="false" class="dropdown-toggle">
-
-                    <span> Journal Entry Report</span>
-
-                </a>
-            </li>
-            @endcan
-
-            @can('view-bank_statement')
-            <li class="nav-item ">
-                <a class="nav-link " href="{{ url('accounting/bank_statement') }}" aria-expanded="false"
-                    class="dropdown-toggle">
-
-                    <span> Bank Statement</span>
-
-                </a>
-            </li>
-            @endcan
-
-            </ul>
+                </ul>
             </li>
 
             @endcan
@@ -1056,10 +479,6 @@
                 </a>
 
                 <ul class="nav nav-group-sub">
-                    <li class="nav-item">
-                        <a class="nav-link " href="{{ route('auditTrail.index') }}"> {{__('Audit Trail')}}</a>
-                    </li>
-
                     <li class="nav-item">
                         <a class="nav-link " href="{{ url('roles') }}"> {{__('Roles')}}</a>
                     </li>
@@ -1080,8 +499,8 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('users') ? 'active' : '' }}"
-                            href="{{ url('users') }}">User Management </a>
+                        <a class="nav-link {{ request()->is('users') ? 'active' : '' }}" href="{{ url('users') }}">User
+                            Management </a>
                     </li>
 
                 </ul>

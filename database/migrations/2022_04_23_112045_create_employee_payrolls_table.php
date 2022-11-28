@@ -14,10 +14,12 @@ class CreateEmployeePayrollsTable extends Migration
     public function up()
     {
         Schema::create('tbl_employee_payroll', function (Blueprint $table) {
-            $table->id('payroll_id');
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('department_id');
             $table->integer('salary_template_id');
             $table->integer('added_by');
-            $table->integer('user_id');
+            $table->integer('disabled');
             $table->timestamps();
         });
     }
