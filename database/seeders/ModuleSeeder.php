@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Admin\SystemModule;
+use App\Models\AccessControll\SystemModule;
 
 class ModuleSeeder extends Seeder
 {
@@ -17,6 +17,7 @@ class ModuleSeeder extends Seeder
         //
         $data = [
             ['slug' => 'manage-access-control'], 
+            ['slug' => 'manage-payroll'],
         ];
 foreach ($data as $row) {
     SystemModule::updateOrCreate($row);

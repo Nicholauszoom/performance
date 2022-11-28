@@ -28,18 +28,18 @@ class PermissionServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        // Permission::get()->map(function ($permission) {
-        //     Gate::define($permission->slug, function ($user) use ($permission) {
-        //         return $user->hasPermissionTo($permission);
-        //     });
-        // });
+        Permission::get()->map(function ($permission) {
+            Gate::define($permission->slug, function ($user) use ($permission) {
+                return $user->hasPermissionTo($permission);
+            });
+        });
 
         
-        // SystemModule::get()->map(function ($module) {
-        //     Gate::define($module->slug, function ($user) use ($module) {
-        //         return $user->hasModuleTo($module);
-        //     });
-        // });
+        SystemModule::get()->map(function ($module) {
+            Gate::define($module->slug, function ($user) use ($module) {
+                return $user->hasModuleTo($module);
+            });
+        });
 
      
     }

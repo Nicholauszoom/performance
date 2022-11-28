@@ -1,8 +1,8 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Admin\Permission;
-use App\Models\Admin\Role;
+use App\Models\AccessControll\Permission;
+use App\Models\AccessControll\Role;
 use Illuminate\Database\Seeder;
 
 class RolePermissionSeeder extends Seeder
