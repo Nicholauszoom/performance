@@ -10,8 +10,8 @@ use App\Models\Payroll\SalaryTemplate;
 use App\Models\Payroll\EmployeePayroll;
 use App\Models\UserDetails\BasicDetails;
 use App\Models\Payroll\PayrollActivity;
-use App\Models\Departments;
-use App\Models\Designation;
+use App\Models\AccessControll\Departments;
+use App\Models\AccessControll\Designation;
 use App\Models\User;
 use Yajra\DataTables\DataTables;
 

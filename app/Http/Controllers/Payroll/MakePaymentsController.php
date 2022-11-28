@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Payroll;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Payroll\SalaryAllowance;
-use App\Models\Departments;
+use App\Models\AccessControll\Departments;
 use App\Models\Payroll\SalaryDeduction;
 use App\Models\Payroll\SalaryTemplate;
 use App\Models\Payroll\EmployeePayroll;

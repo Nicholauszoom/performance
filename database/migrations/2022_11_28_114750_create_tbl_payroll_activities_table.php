@@ -18,9 +18,9 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('module_id');
             $table->string('module');
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->string('activity');
-            $table->integer('added_by');
+            $table->integer('added_by')->nullable;
             $table->timestamps();
         });
     }

@@ -35,7 +35,7 @@ class SalaryTemplateController extends Controller
     public function index()
     {
       
-            $salary = SalaryTemplate::where('user_id',auth()->user()->added_by)->get();
+            $salary = SalaryTemplate::where('user_id',auth()->user()->id)->get();
 
          
         return view('payroll/salary_template',compact('salary'));
@@ -64,7 +64,7 @@ class SalaryTemplateController extends Controller
        
         $template_data['salary_grade'] = $request->salary_grade;
         $template_data['basic_salary'] = $request->basic_salary;
-        $template_data['user_id'] = auth()->user()->added_by;
+        $template_data['user_id'] = auth()->user()->id;
 
 // ************* Save into tbl_salary_template *************
            if(!empty($id))
@@ -95,7 +95,7 @@ class SalaryTemplateController extends Controller
                     $alsalary_allowance_data['salary_template_id'] = $salary_template_id;
                     $alsalary_allowance_data['allowance_label'] = $h_salary_allowance_label;
                     $alsalary_allowance_data['allowance_value'] = $asalary_allowance_data['allowance_value'][$hkey];
-                    $alsalary_allowance_data['user_id'] = auth()->user()->added_by;
+                    $alsalary_allowance_data['user_id'] = auth()->user()->id;
 // *********** save defualt value into tbl_salary_allowance    *******************
                 $salary_allowance = SalaryAllowance::create($alsalary_allowance_data);
                 }
@@ -174,7 +174,7 @@ class SalaryTemplateController extends Controller
                     $adeduction_data['salary_template_id'] = $salary_template_id;
                     $adeduction_data['deduction_label'] = $d_deduction_label;
                     $adeduction_data['deduction_value'] = $ddeduction_data['deduction_value'][$dkey];
-                    $adeduction_data['user_id'] = auth()->user()->added_by;
+                    $adeduction_data['user_id'] = auth()->user()->id;
 
 // *********** save defualt value into tbl_salary_allowance    *******************
                     //$this->payroll_model->_table_name = "tbl_salary_deduction"; // table name
@@ -238,8 +238,9 @@ class SalaryTemplateController extends Controller
       if(!empty($salary_template_id1)){
                     $activity =PayrollActivity::create(
                         [ 
-                            'added_by'=>auth()->user()->added_by,
+                            'id'=>auth()->user()->id,
        'user_id'=>auth()->user()->id,
+       'added_by'=>auth()->user()->id,
                             'module_id'=>$salary_template_id,
                              'module'=>'Salary Template',
                             'activity'=>"Salary Template for  " .  $salary_template_id1->salary_grade. "  Created",
@@ -393,7 +394,7 @@ $salary_allowance_info=SalaryAllowance::where('salary_template_id',$id)->get();
        
         $template_data['salary_grade'] = $request->salary_grade;
         $template_data['basic_salary'] = $request->basic_salary;
-        $template_data['user_id'] = auth()->user()->added_by;
+        $template_data['user_id'] = auth()->user()->id;
 
 // ************* Save into tbl_salary_template *************
       
@@ -423,7 +424,7 @@ $salary_allowance_info=SalaryAllowance::where('salary_template_id',$id)->get();
                     $alsalary_allowance_data['salary_template_id'] = $salary_template_id;
                     $alsalary_allowance_data['allowance_label'] = $h_salary_allowance_label;
                     $alsalary_allowance_data['allowance_value'] = $asalary_allowance_data['allowance_value'][$hkey];
-                    $alsalary_allowance_data['user_id'] = auth()->user()->added_by;
+                    $alsalary_allowance_data['user_id'] = auth()->user()->id;
 // *********** save defualt value into tbl_salary_allowance    *******************
                 $salary_allowance = SalaryAllowance::create($alsalary_allowance_data);
                 }
@@ -483,7 +484,7 @@ $salary_allowance_info=SalaryAllowance::where('salary_template_id',$id)->get();
                     $adeduction_data['salary_template_id'] = $salary_template_id;
                     $adeduction_data['deduction_label'] = $d_deduction_label;
                     $adeduction_data['deduction_value'] = $ddeduction_data['deduction_value'][$dkey];
-                    $adeduction_data['user_id'] = auth()->user()->added_by;
+                    $adeduction_data['user_id'] = auth()->user()->id;
 
 // *********** save defualt value into tbl_salary_allowance    *******************
                     //$this->payroll_model->_table_name = "tbl_salary_deduction"; // table name
@@ -546,7 +547,7 @@ $salary_allowance_info=SalaryAllowance::where('salary_template_id',$id)->get();
                  if(!empty($salary_template_id)){
                     $activity =PayrollActivity::create(
                         [ 
-                            'added_by'=>auth()->user()->added_by,
+                            'id'=>auth()->user()->id,
        'user_id'=>auth()->user()->id,
                             'module_id'=>$id,
                              'module'=>'Salary Template',
@@ -573,8 +574,9 @@ $salary_allowance_info=SalaryAllowance::where('salary_template_id',$id)->get();
             if(!empty($salary_template_id)){
                     $activity =PayrollActivity::create(
                         [ 
-                            'added_by'=>auth()->user()->added_by,
+                            'id'=>auth()->user()->id,
        'user_id'=>auth()->user()->id,
+       'added_by'=>auth()->user()->id,
                             'module_id'=>$id,
                              'module'=>'Salary Template',
                             'activity'=>"Salary Template  " .  $salary_template_id->salary_grade. "  Deleted ",
