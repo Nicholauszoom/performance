@@ -110,6 +110,14 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href=" {{ route('audit') }}"
+                        class="nav-link  {{ (request()->is('audit')) ? 'active' : ''  }}">
+                        <i class="icon-home"></i>
+                        <span> Audit </span>
+                    </a>
+                </li>
+
 
 
 
