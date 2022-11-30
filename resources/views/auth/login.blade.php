@@ -1,53 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        @include('login-layouts.shared.title-meta', ['title' => "Log In"])
-        
-        @include('login-layouts.shared.head-css')
+        @include('layouts.shared.title-meta', ['title' => "Log In"])
+
+        <link rel="stylesheet" href="{{ asset('tasset/fonts/inter/inter.css') }}">
+        <link rel="stylesheet" href="{{ asset('tasset/icons/phosphor/styles.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('tasset/css/ltr/all.min.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('tasset/css/custom.css') }}">
+
+        <script src="{{ asset('tasset/js/app.js') }}"></script>
     </head>
 
-    <body class="authentication-bg authentication-bg-pattern" style="background-color:#14144F;">
+    <body style="background: #001949;">
 
-        <div class="account-pages mt-5 mb-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-5">
-                        <div class="card bg-pattern">
+        <div class="page-content">
+            <div class="content-wrapper">
+                <div class="content-inner">
+                    <div class="content d-flex justify-content-center align-items-center">
 
-                            <div class="card-body p-4">
-                                
-                                <div class="text-center w-75 m-auto">
-                                    <div class="auth-logo mb-4">
-                                        <a 
-                                            {{-- href="{{route('index')}}" --}}
-                                             class="logo logo-dark text-center">
-                                            <span class="logo-lg">
-                                                <img src="{{asset('login-assets/images/main-logo.png')}}" alt="" height="150" width="200">
-                                            </span>
-                                        </a>
-                    
-                                        <a 
-                                            {{-- href="{{route('index')}}"  --}}
-                                            class="logo logo-light text-center">
-                                            <span class="logo-lg">
-                                                <img src="{{asset('login-assets/images/main-logo.png')}}" alt="" height="22">
-                                            </span>
-                                        </a>
+                        {{-- Login card --}}
+                        <form
+                            action="{{ route('login') }}"
+                            method="POST"
+                            class="login-form"
+                        >
+                        @csrf
+
+                            <div class="card mb-0">
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
+                                            <img src="{{ asset('login-assets/images/main-logo.png') }}" class="img-fluid rounded-circle" style="height: 10em" alt="logo">
+                                        </div>
+
                                     </div>
-                                </div>
 
-                                <form action="{{ route('login') }}" method="POST" novalidate>
-                                    @csrf
+                                    <div class="mb-3">
+                                        <label class="form-label">Username</label>
 
-                                    <div class="form-group mb-3">
-                                        <label for="emailaddress">Email address</label>
-                                        <input 
-                                            class="form-control  
-                                            @if($errors->has('email')) is-invalid @endif" name="email" type="email" 
-                                            id="emailaddress" required
-                                            value="{{ old('email')}}"
-                                            placeholder="Enter your email" 
-                                        />
+                                        <div class="form-control-feedback form-control-feedback-start">
+                                            <input
+                                                class="form-control @if($errors->has('email')) is-invalid @endif"
+                                                name="email"
+                                                type="email"
+                                                id="emailaddress"
+                                                required
+                                                value="{{ old('email')}}"
+                                                placeholder="admin@gmail.com"
+                                            >
+
+                                            <div class="form-control-feedback-icon">
+                                                <i class="ph-user-circle text-muted"></i>
+                                            </div>
+                                        </div>
 
                                         @if($errors->has('email'))
                                         <span class="invalid-feedback" role="alert">
@@ -56,19 +62,24 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <a href="{{route('login')}}" class="text-muted float-right"><small>Forgot your
-                                            password?</small></a>
-                                        <label for="password">Password</label>
-                                        <div class="input-group input-group-merge @if($errors->has('password')) is-invalid @endif">
-                                            <input class="form-control @if($errors->has('password')) is-invalid @endif" name="password" type="password" required=""
-                                                id="password" placeholder="Enter your password" />
-                                                <div class="input-group-append" data-password="false">
-                                                <div class="input-group-text">
-                                                    <span class="password-eye"></span>
-                                                </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+
+                                        <div class="form-control-feedback form-control-feedback-start">
+                                            <input
+                                                type="password"
+                                                id="password"
+                                                class="form-control @if($errors->has('password')) is-invalid @endif"
+                                                placeholder="password"
+                                                name="password"
+                                                required
+                                            >
+
+                                            <div class="form-control-feedback-icon">
+                                                <i class="ph-lock text-muted"></i>
                                             </div>
                                         </div>
+
                                         @if($errors->has('password'))
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $errors->first('password') }}</strong>
@@ -76,47 +87,29 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group mb-3">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="checkbox-signin" checked>
-                                            <label class="custom-control-label" for="checkbox-signin">Remember me</label>
-                                        </div>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <label class="form-check">
+                                            <input type="checkbox" name="remember" class="form-check-input" checked>
+                                            <span class="form-check-label">Remember</span>
+                                        </label>
+
+                                        <a href="{{ route('login') }}" class="ms-auto">Forgot password?</a>
                                     </div>
 
-                                    <div class="form-group mb-0 text-center">
-                                        <button class="btn btn-primary btn-block" style="background-color:#14144f;" type="submit"> Log In </button>
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-primary w-100 border-0" style="background: #012972">Log In</button>
                                     </div>
 
-                                </form>
+                                  </div>
+                            </div>
+                        </form>
+                        {{-- /login card --}}
 
-                            </div> <!-- end card-body -->
-                        </div>
-                        <!-- end card -->
-
-                        <div class="row mt-3">
-                            <div class="col-12 text-center">
-                                <p> 
-                                    <a 
-                                    {{-- href="{{route('second', ['auth', 'recoverpw-2'])}}"  --}}
-                                    class="text-white-50 ml-1">Forgot your password?</a></p>
-                            </div> <!-- end col -->
-                        </div>
-                        <!-- end row -->
-
-                    </div> <!-- end col -->
+                    </div>
                 </div>
-                <!-- end row -->
             </div>
-            <!-- end container -->
         </div>
-        {{-- end page  --}}
 
-        <footer class="footer footer-alt">
-            <script>
-                document.write(new Date().getFullYear())
-            </script> &copy; Developed by <a href="">CITS</a>
-        </footer>
-
-        @include('login-layouts.shared.footer-script')        
     </body>
+
 </html>

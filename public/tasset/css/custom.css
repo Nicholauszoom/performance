@@ -1,0 +1,22 @@
+.bg-main {
+    background: #001949;
+    color: #fff;
+}
+
+.bg-main-nav {
+    color: #000;
+    background: #fff;
+    border-right: 1px solid rgba(0, 0, 0, 0.144);
+}
+
+.main-link li a {
+    color: #000;
+}
+
+.sidebar-control {
+    color: #000;
+}
+
+.sidebar-control:hover {
+    color: #000;
+}
