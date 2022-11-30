@@ -5,6 +5,8 @@
 
 @stack('head-css')
 
+<link rel="stylesheet" href="{{ asset('tasset/css/custom.css') }}">
+
 <script src="{{ asset('tasset/js/configurator.js') }}"></script>
 <script src="{{ asset('tasset/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
