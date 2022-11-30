@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Payroll\PayrollModel;
+use App\CustomModels\PayrollModel;
 
 class Payroll extends Controller
 {
     public function __construct(PayrollModel $payroll_model=null)
     {
-        $this->payroll_model = $filpayroll_modelter;
+        $this->payroll_model = $payroll_model;
     }
 
 

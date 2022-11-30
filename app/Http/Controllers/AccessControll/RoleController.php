@@ -18,12 +18,15 @@ class RoleController extends Controller
 
             $query = " DISTINCT e.id as empID, CONCAT(e.name,' ', e.name) as NAME";
             //return DB::get(DB::raw($query))->first();
-            
-            $users = DB::table('users as e')
-                     ->select(DB::raw($query))
-                    
-                     ->count();
-           return $users;
+            $query1 = "UPDATE users SET name = 'Test6'   WHERE id = 1";
+            DB::insert(DB::raw($query1));
+             $s = "select name from users";
+
+             $s2 = DB::select(DB::raw($s));
+            $users = DB::table('users as e');
+                    // ->select(DB::raw($query));
+                     //->first();
+           return $s2;
 
         // $roles = Role::all();
         // $permissions = Permission::all();

@@ -208,9 +208,11 @@ trait PayrollModel {
 
 
     function recommendPayroll($author,$date){
-        $query = " SET state = 1,recom_author ='".$author."',recom_date = '".$date."'    WHERE state = 2";
+        $query = ["state" => 1,"recom_author" =>$author,"recom_date" =>$date];
+           
         DB::table('payroll_months')
-        ->update(DB::raw($query));
+        ->where('state',2)
+        ->update($query);
         return true;
     }
 
@@ -1373,7 +1375,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
     function updatePayrollMail($payrollDate){
 
         $query = " UPDATE payroll_months SET email_status = 1 WHERE payroll_date = '".$payrollDate."'";
-        DB::statement($query);
+        DB::insert(DB::raw($query));
         return true;
     }
 

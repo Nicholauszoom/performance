@@ -133,10 +133,12 @@ trait FlexPerformanceModel{
 	{
 		 DB::transaction(function()
        {
-		$this->db->insert("cost_center", $data);
-		$query = "SELECT id FROM cost_center ORDER BY id DESC LIMIT 1";
+		DB::table('cost_center')->insert($data);
+		$query = "id  ORDER BY id DESC LIMIT 1";
 		});
-		$row = $query->row();
+		$row = DB::table('cost_center')
+		->select(DB::raw($query))
+		->first();
     	return $row->id;
 	}
 
@@ -211,7 +213,7 @@ trait FlexPerformanceModel{
 	function updateCostCenter($updates, $id)
 	{
 		DB::table('cost_center')->where('id', $id)
-		->update('cost_center', $updates);
+		->update($updates);
 		return true;
 	}
 
@@ -423,8 +425,10 @@ trait FlexPerformanceModel{
        {
 
 	    $query = "UPDATE employee_overtime SET status = 4 WHERE id ='".$id."'";
+		DB::insert(DB::raw($query));
 
 	    $query = "DELETE FROM overtimes WHERE overtimeID ='".$id."'";
+		DB::insert(DB::raw($query));
 
 	    });
 
@@ -436,7 +440,7 @@ trait FlexPerformanceModel{
 
 
 	    $query = "UPDATE  overtimes SET status = ".$status." WHERE overtimeID ='".$id."'";
-
+		DB::insert(DB::raw($query));
 
 		return true;
 	}
@@ -444,22 +448,28 @@ trait FlexPerformanceModel{
 
     function get_payment_per_hour($overtimeID)
 	{
-	    $query = "SELECT ROUND((salary/30), 2) as payment FROM employee WHERE emp_id = (SELECT empID FROM employee_overtime WHERE id =".$overtimeID.") ";
-		$row = $query->row();
+	    $query = "ROUND((salary/30), 2) as payment WHERE emp_id = (SELECT empID FROM employee_overtime WHERE id =".$overtimeID.") ";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->first();
 		return $row->payment;
 	}
 
     function get_overtime_type($overtimeID)
 	{
-	    $query = " SELECT overtime_type as type FROM employee_overtime WHERE id =".$overtimeID." ";
-		$row = $query->row();
+	    $query = "overtime_type as type  WHERE id =".$overtimeID." ";
+		$row = DB::table('employee_overtime')
+		->select(DB::raw($query))
+		->first();
 		return $row->type;
 	}
 
     function checkApprovedOvertime($overtimID)
 	{
-	    $query = " SELECT COUNT(id) as counts FROM employee_overtime WHERE id = ".$overtimID." AND status = 2 ";
-		$row = $query->row();
+	    $query = "COUNT(id) as counts  WHERE id = ".$overtimID." AND status = 2 ";
+		$row = DB::table('employee_overtime')
+		->select(DB::raw($query))
+		->first();
 		return $row->counts;
 	}
 
@@ -469,9 +479,9 @@ trait FlexPerformanceModel{
 	     DB::transaction(function()
        {
 		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/240)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
-
+         DB::insert(DB::raw($query));
 	    $query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
-
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -481,7 +491,7 @@ trait FlexPerformanceModel{
 	     DB::transaction(function()
        {
 	    $query = "UPDATE employee_overtime SET status = 1,time_recommended_line ='".$time_approved."'  WHERE id ='".$id."'";
-
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -490,7 +500,8 @@ trait FlexPerformanceModel{
 	     DB::transaction(function()
        {
 	    $query = "UPDATE employee_overtime SET status = 3, hr ='".$signatory."',time_approved_hr ='".$time_approved."'  WHERE id ='".$id."'";
-	    });
+		DB::insert(DB::raw($query));    
+	});
 
 		return true;
 	}
@@ -498,7 +509,8 @@ trait FlexPerformanceModel{
 	     DB::transaction(function()
        {
 	    $query = "UPDATE employee_overtime SET status = 4, finance='".$signatory."',time_approved_fin ='".$time_approved."'  WHERE id ='".$id."'";
-	    });
+		DB::insert(DB::raw($query));    
+	});
 
 		return true;
 	}
@@ -506,8 +518,8 @@ trait FlexPerformanceModel{
 
 	public function deleteOvertime($id) {
 
-        $this->db->where('id',$id);
-        $this->db->delete('employee_overtime';
+        DB::table('employee_overtime')->where('id',$id)
+        ->delete('employee_overtime');
         return true;
 
     }
@@ -516,15 +528,16 @@ trait FlexPerformanceModel{
 
 	function getcontractbyid($id)
 	{
-		$this->db->where('id', $id);
-		$data = $this->db->get('contract';
-		return $data->result();
+		$data = DB::table('contract')->where('id', $id)
+		->select(DB::raw('*'));
+		
+		return $data;
 	}
 
 	function updatecontract($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('contract', $data);
+		DB::table('contract')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -769,14 +782,14 @@ function retire_list()
 
 	function updateOrganizationLevel($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('organization_level', $data);
+		DB::table('organization_level')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
 	function addAccountability($data)
 	{
-		$this->db->insert("accountability", $data);
+		DB::table('accountability')->insert($data);
 
 	}
 
@@ -795,15 +808,15 @@ function retire_list()
 
 	function confirm_graduation($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('confirmed_trainee', $data);
+		DB::table('confirmed_trainee')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
 	function updateTrainingRequest($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('training_application', $data);
+		DB::table('training_application')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -811,9 +824,10 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		$this->db->where('id', $requestID);
-		$this->db->update('training_application', $data);
+		DB::table('training_application')->where('id', $requestID);
+		->update($data);
 		$query = "INSERT INTO confirmed_trainee (skillsID, empID, cost, recommended_by, date_recommended, approved_by, date_approved, confirmed_by, date_confirmed, application_date, accepted_by, date_accepted, certificate, remarks)  SELECT skillsID, empID, sk.amount, recommended_by, date_recommended, approved_by, date_approved, confirmed_by, date_confirmed, application_date, '','2010-10-10', '','' FROM training_application, skills sk WHERE sk.id = training_application.id AND training_application.id = ".$requestID." ";
+		DB::insert(DB::raw($query));
 
 		});
 		return true;
@@ -823,10 +837,10 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		$this->db->where('id', $requestID);
-		$this->db->update('training_application', $data);
+		DB::table('training_application')->where('id', $requestID);
+		$this->db->update($data);
 		$query = "DELETE FROM confirmed_trainee WHERE empID = (SELECT empID FROM training_application WHERE id = ".$requestID." ) AND skillsID = (SELECT skillsID FROM training_application WHERE id = ".$requestID." ) ";
-
+        DB::insert(DB::raw($query));
 		});
 		return true;
 	}
@@ -836,6 +850,7 @@ function retire_list()
 	public function deleteTrainingRequest($requestID) {
 
 		$query = "DELETE FROM training_application WHERE id = '".$requestID."'";
+		DB::insert(DB::raw($query));
 		$this->audit_log("Deleted Training Request with ID =".$requestID." ");
         return true;
 
@@ -864,14 +879,16 @@ function retire_list()
 	function total_training_cost()
 	{
 
-		$query = "SELECT SUM(ct.cost) as cost FROM confirmed_trainee ct WHERE ct.status = 0";
-		$row = $query->row();
+		$query = "SUM(ct.cost) as cost WHERE ct.status = 0";
+		$row = DB::table('confirmed_trainee as ct')
+		->select(DB::raw($query))
+		->first();
 		return $row->cost;
 	}
 
 	function addBudget($data)
 	{
-		$this->db->insert("training_budget", $data);
+		DB::table('training_budget')->insert($data);
 		$this->audit_log("Created New Training Budget");
 		return true;
 
@@ -880,6 +897,7 @@ function retire_list()
 	public function deleteBudget($budgetID) {
 
 		$query = "DELETE FROM training_budget WHERE id = '".$budgetID."'";
+		DB::insert(DB::raw($query));
 		$this->audit_log("Deleted Training Budget");
         return true;
 
@@ -890,8 +908,8 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		$this->db->where('id', $budgetID);
-		$this->db->update('training_budget', $data);
+		DB::table('training_budget')->where('id', $budgetID);
+		->update($data);
 		$this->audit_log("Updated the Training Budget");
 		});
 		return true;
@@ -900,35 +918,37 @@ function retire_list()
 
 	function assignskills($data)
 	{
-		$this->db->insert("emp_skills", $data);
+		DB::table('emp_skills')->insert($data);
 		return true;
 
 	}
 
 	function getSkillsName($skillsID)
 	{
-		$query = "SELECT name FROM skills WHERE id = ".$skillsID."";
-		$row = $query->row();
+		$query = "name  WHERE id = ".$skillsID."";
+		$row = DB::table('skills')
+		->select(DB::raw(query))
+		->first();
 		return $row->name;
 	}
 
 	function requestTraining($data)
 	{
-		$this->db->insert("training_application", $data);
+		DB::table('training_application')->insert($data);
 		return true;
 
 	}
 	function addskills($data)
 	{
-		$this->db->insert("skills", $data);
+		DB::table('skills')->insert($data);
 
 	}
 
 
 	function updateskills($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('skills', $data);
+		DB::table('skills')->where('id', $id)
+		->update(, $data);
 		return true;
 	}
 
@@ -942,8 +962,10 @@ function retire_list()
 
 	function checkCourseExistance($course, $empID)
 	{
-		$query = "SELECT COUNT(es.id) as result FROM emp_skills es WHERE es.empID = ".$empID." AND es.skill_ID  = ".$course." ";
-		$row = $query->row();
+		$query = " COUNT(es.id) as result  WHERE es.empID = ".$empID." AND es.skill_ID  = ".$course." ";
+		$row = DB::table('emp_skills as es')
+		->select(DB::raw($query))
+		->first();
 		return $row->result;
 	}
 
@@ -1043,8 +1065,13 @@ function retire_list()
 
 	function getEmployeeName_and_email($empID)
 	{
-		$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,birthdate FROM  employee WHERE emp_id = '".$empID."'  ";
-		if($query->num_rows()>0) {
+		$query = "CONCAT(fname,' ', mname,' ', lname) as name, email,birthdate  WHERE emp_id = '".$empID."'  ";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->count();
+		
+		if($row>0) {
+			$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,birthdate from employee  WHERE emp_id = '".$empID."'  ";
 			return DB::select(DB::raw($query));
 		} else{
 			return false;
@@ -1053,8 +1080,12 @@ function retire_list()
 
 	function getEmployeeNameByemail($email)
 	{
-		$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,emp_id,birthdate,account_no FROM  employee WHERE state != 4 and email = '".$email."'  ";
-		if($query->num_rows()>0) {
+		$query = "CONCAT(fname,' ', mname,' ', lname) as name, email,emp_id,birthdate,account_no  WHERE state != 4 and email = '".$email."'  ";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->count()
+		if($row>0) {
+			$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,emp_id,birthdate,account_no FROM  employee WHERE state != 4 and email = '".$email."'  ";
 			return DB::select(DB::raw($query));
 		} else{
 			return false;
@@ -1083,10 +1114,10 @@ function retire_list()
 
 	function getkin($id)
 	{
-		$this->load->database();
-		$this->db->where('employee_fk', $id);
-		$data = $this->db->get('next_of_kin');
-		return $data->result();
+		//$this->load->database();
+		$data =DB::table('next_of_kin')->where('employee_fk', $id);
+		 ->select('*');
+		return $data->get();
 
 	}
 
@@ -1122,11 +1153,12 @@ function retire_list()
 		$confirmed_by = $data['confirmed_by'];
 		$exit_date = $data['exit_date'];
 
-		"INSERT INTO exit_list (empID, initiator, reason, date_confirmed,confirmed_by, exit_date) VALUES ('".$empID."', '".$initiator."', '".$reason."','".$date_confirmed."','".$confirmed_by."','".$exit_date."')";
-//			$this->db->insert("exit_list", $data);
+		$query  = "INSERT INTO exit_list (empID, initiator, reason, date_confirmed,confirmed_by, exit_date) VALUES ('".$empID."', '".$initiator."', '".$reason."','".$date_confirmed."','".$confirmed_by."','".$exit_date."')";
+        DB::insert(DB::raw($query));
+		//			$this->db->insert("exit_list", $data);
 		//update the employee table state
-		"UPDATE employee SET state = '3', contract_end = '".$exit_date."' WHERE emp_id = '".$empID."'";
-
+		$query = "UPDATE employee SET state = '3', contract_end = '".$exit_date."' WHERE emp_id = '".$empID."'";
+		DB::insert(DB::raw($query));
 
 	}
 
@@ -1149,15 +1181,15 @@ function retire_list()
 
 	function updatededuction($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('deduction', $data);
+		DB::table('deduction')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
 
 	function addDeduction($data)
 	{
-		$this->db->insert("deductions", $data);
+		DB::table('deductions')->insert($data);
 		return true;
 
 	}
@@ -1190,33 +1222,35 @@ function getMeaslById($deductionID)
 
 	function updatePension($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('pension_fund', $data);
+		DB::table('pension_fund')->where('id', $id)
+		->update($data);
 		return true;
 
 	}
 
 
 	function updateDeductions($updates, $deductionID)
-	{
-		$this->db->where('id', $deductionID);
-		$this->db->update('deductions', $updates);
+	{   
+		DB::table('deductions')->where('id', $deductionID)
+		->update($updates);
+	;
 		return true;
 
 	}
 
 	function updateCommonDeductions($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('deduction', $data);
+		DB::table('deduction')->where('id', $id)
+		->update($data);
+	
 		return true;
 
 	}
 
 	function updateMeals($updates, $deductionID)
 	{
-		$this->db->where('id', $deductionID);
-		$this->db->update('meals_deduction', $updates);
+		DB::table('meals_deduction')->where('id', $deductionID)
+		->update($updates);
 		return true;
 
 	}
@@ -1230,7 +1264,7 @@ function getMeaslById($deductionID)
 
 	function assign_deduction($data)
 	{
-		$this->db->insert("emp_deductions", $data);
+		DB::table('emp_deductions')->insert($data);
 		return true;
 
 	}
@@ -1238,19 +1272,19 @@ function getMeaslById($deductionID)
 
    public function remove_individual_deduction($empID, $deductionID)
     {
-        $this->db->where('empID', $empID);
-        $this->db->where('group_name', 0);
-        $this->db->where('deduction', $deductionID);
-        $this->db->delete('emp_deductions';
+        DB::table('emp_deductions')->where('empID', $empID)
+        ->where('group_name', 0)
+        ->where('deduction', $deductionID)
+        ->delete();
         return true;
     }
 
 
    public function remove_group_deduction($groupID, $deductionID)
     {
-        $this->db->where('group_name', $groupID);
-        $this->db->where('deduction', $deductionID);
-        $this->db->delete('emp_deductions';
+		DB::table('emp_deductions')->where('group_name', $groupID)
+        ->where('deduction', $deductionID)
+        ->delete();
         return true;
     }
 
@@ -1271,8 +1305,10 @@ function getMeaslById($deductionID)
 
 	function deduction_membersCount($deduction)
 	{
-		$query = "SELECT COUNT(DISTINCT ed.empID) members FROM  emp_deductions ed WHERE ed.deduction = ".$deduction."  ";
-		$row = $query->row();
+		$query = "COUNT(DISTINCT ed.empID) members FROM  WHERE ed.deduction = ".$deduction."  ";
+		$row =DB::table('emp_deductions as ed')
+		->select(DB::raw($query))
+		->first();
     	return $row->members;
 	}
 
@@ -1308,28 +1344,28 @@ function allowance()
 
 function addToBonus($data)
 	{
-		$result = $this->db->insert("bonus", $data);
+		$result = DB::table("bonus")->insert($data);
 		return $result;
 
 	}
 
 function updateBonus($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('bonus', $data);
+		DB::table('bonus')->where('id', $id)
+		->update($data);
 		return true;
 	}
 public function deleteBonus($id) {
 
-    $this->db->where('id',$id);
-    $this->db->delete('bonus';
+	DB::table('bonus')->where('id', $id)
+	->delete();
     return true;
 
 	}
 
 function addBonusTag($data)
 	{
-		$this->db->insert("bonus_tags", $data);
+		DB::table('bonus_tags')->insert($data);
 		return true;
 
 	}
@@ -1393,15 +1429,19 @@ function meals_deduction()
 
 	function allowance_membersCount($allowance)
 	{
-		$query = "SELECT COUNT(DISTINCT ea.empID) members FROM  emp_allowances ea WHERE ea.allowance = ".$allowance."  ";
-		$row = $query->row();
+		$query = "COUNT(DISTINCT ea.empID) members  WHERE ea.allowance = ".$allowance."  ";
+		$row = BD::table('emp_allowances as ea')
+		->select(DB::raw($query))
+		->first();
     	return $row->members;
 	}
 
 	function allowance_groupsCount($allowance)
 	{
-		$query = "SELECT COUNT(ea.id) members FROM  emp_allowances ea WHERE ea.allowance = ".$allowance."  ";
-		$row = $query->row();
+		$query = "COUNT(ea.id) members FROM  emp_allowances ea WHERE ea.allowance = ".$allowance."  ";
+		$row = BD::table('emp_allowances as ea')
+		->select(DB::raw($query))
+		->first();
     	return $row->members;
 	}
 
@@ -1409,7 +1449,7 @@ function meals_deduction()
 
 	function assign_allowance($data)
 	{
-		$this->db->insert("emp_allowances", $data);
+		DB::table('emp_allowances')->insert($data);
 		return true;
 
 	}
@@ -1446,22 +1486,22 @@ function meals_deduction()
 
 	function addAllowance($data)
 	{
-		$this->db->insert("allowances", $data);
+		DB::table('allowances')->insert($data);
 		return true;
 
 	}
 
 	public function updateAllowance($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('allowances', $data);
+		DB::table('allowances')->where('id', $id)
+		->update($data);
 		return true;
 
 	}
 
 	public function addOvertimeCategory($data)
 	{
-		$this->db->insert("overtime_category", $data);
+		DB::table('overtime_category')->insert($data);
 		return true;
 
 	}
@@ -1476,8 +1516,8 @@ function meals_deduction()
 
 	public function updateOvertimeCategory($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('overtime_category', $data);
+		DB::table('overtime_category')->where('id', $id)
+		->update($data);
 		return true;
 
 	}
@@ -1501,24 +1541,25 @@ function OvertimeCategoryInfo($id)
 
 	function addpaye($data)
 	{
-		$this->db->insert("paye", $data);
+		DB::table('paye')->insert($data);
 		return true;
 
 	}
 
 	function updatepaye($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('paye', $data);
+		DB::table('paye')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
 	function getpayebyid($id)
 	{
 		$this->load->database();
-		$this->db->where('id', $id);
-		$data = $this->db->get('paye';
-		return $data->result();
+		$data = DB::table('paye')->where('id', $id);
+
+		 
+		return $data->get();
 	}
 
 	#############################PAYE####################################
@@ -1537,7 +1578,7 @@ function contract_expire_list() {
 
 function terminate_contract($id) {
 	$query = "UPDATE employee SET state = 0 WHERE emp_id ='".$id."'";
-
+    DB::insert(DB::raw($query));
 		return true;
 }
 
@@ -1558,6 +1599,7 @@ function updateHESLB($date) {
 amount_last_paid = IF(((paid+(SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID)) > amount), amount-paid, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID))),
 
 last_paid_date='".$date."' WHERE  state = 1 and type = 3";
+ DB::insert(DB::raw($query));
 
 		return true;
 }
@@ -1565,8 +1607,10 @@ last_paid_date='".$date."' WHERE  state = 1 and type = 3";
 //START RUN PAYROLL FOR SCANIA
 
 function payrollcheck($date){
-	$query = " SELECT id  FROM payroll_logs  WHERE payroll_date like  '%".$date."%' ";
-	return $query->num_rows();
+	$query = " id  WHERE payroll_date like  '%".$date."%' ";
+	$row = DB::table('payroll_logs')
+	->select(DB::raw($query))->count();
+	return $row();
 }
 
 function run_payroll($payroll_date, $payroll_month){
@@ -1586,7 +1630,7 @@ function run_payroll($payroll_date, $payroll_month){
      '".$payroll_date."' AS payment_date
 
     FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance";
-
+   DB::insert(DB::raw($query));
     //INSERT BONUS
     $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
 
@@ -1599,7 +1643,7 @@ function run_payroll($payroll_date, $payroll_month){
     '".$payroll_date."' AS payment_date
 
     FROM employee e,  bonus b WHERE e.emp_id =  b.empID  AND b.state = 1 GROUP BY b.empID";
-
+	DB::insert(DB::raw($query));
     //INSERT OVERTIME
     $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
     SELECT o.empID AS empID, 'Overtimes' AS description,
@@ -1611,21 +1655,21 @@ function run_payroll($payroll_date, $payroll_month){
     '".$payroll_date."' AS payment_date
 
     FROM  employee e, overtimes o WHERE  o.duedate <= '".$payroll_date."' AND o.empID =  e.emp_id GROUP BY o.empID";
-
+	DB::insert(DB::raw($query));
 
     //UPDATE SALARY ADVANCE.
     $query = " UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
 	amount_last_paid = IF(((paid+deduction_amount) > amount), amount-paid, ((paid+deduction_amount))),
 	last_paid_date = '".$payroll_date."' WHERE  state = 1 AND NOT type = 3";
-
+    DB::insert(DB::raw($query));
     //UPDATE LOAN BOARD
     $query = " UPDATE loan SET paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID) ) > amount), amount, (paid+ (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID) )),
 	amount_last_paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID) ) > amount), amount-paid, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID) )),
 	last_paid_date = '".$payroll_date."' WHERE  state = 1 AND type = 3";
-
+    DB::insert(DB::raw($query));
     //INSERT LOAN LOGS
     $query = "INSERT into loan_logs(loanID, paid, remained, payment_date) SELECT id, amount_last_paid, amount-paid, last_paid_date FROM loan WHERE state = 1";
-
+    DB::insert(DB::raw($query));
     //INSERT DEDUCTION LOGS
     $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
 
@@ -1638,10 +1682,10 @@ function run_payroll($payroll_date, $payroll_month){
     '".$payroll_date."' as payment_date
 
     FROM emp_deductions ed,  deductions d, deduction_tags dt, employee e WHERE e.emp_id = ed.empID AND ed.deduction = d.id AND d.name = dt.id and d.state = 1";
-
+    DB::insert(DB::raw($query));
     //STOP LOAN
     $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
-
+    DB::insert(DB::raw($query));
     //INSERT PAYROLL LOG TABLE
 	$query = "INSERT INTO payroll_logs(
 
@@ -1898,7 +1942,7 @@ function run_payroll($payroll_date, $payroll_month){
 
      '".$payroll_date."' as payroll_date
      FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1";
-
+	 DB::insert(DB::raw($query));
      });
      return true;
 
@@ -1912,8 +1956,10 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function employee_hire_date($empID)
 	{
-		$query="SELECT hire_date  FROM employee WHERE emp_id='".$empID."'";
-		$row = $query->row();
+		$query="hire_date  WHERE emp_id='".$empID."'";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->first();
 		return $row->hire_date;
 	}
 
@@ -1921,8 +1967,10 @@ function run_payroll($payroll_date, $payroll_month){
 
     function get_max_salary_advance($empID)
 	{
-	    $query = "SELECT (rate_employee*(SELECT salary FROM employee WHERE emp_id = '".$empID."')) as margin FROM deduction WHERE id = 7";
-		$row = $query->row();
+	    $query = "(rate_employee*(SELECT salary WHERE emp_id = '".$empID."')) as margin FROM deduction WHERE id = 7";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->first();
 		return $row->margin;
 	}
 	
@@ -2007,7 +2055,9 @@ function run_payroll($payroll_date, $payroll_month){
 		 DB::transaction(function()
        {
 		$query = "UPDATE loan_application SET notification = 0 WHERE empID = '".$empID."' AND notification =1";
+		DB::insert(DB::raw($query));
 		$query = "UPDATE loan_application SET notification = 4 WHERE empID = '".$empID."' AND notification = 3";
+		DB::insert(DB::raw($query));
 		});
 		return true;
 	}
@@ -2017,8 +2067,11 @@ function run_payroll($payroll_date, $payroll_month){
 		 DB::transaction(function()
        {
 		$query = "UPDATE loan_application SET notification = 0 WHERE notification = 4";
+		DB::insert(DB::raw($query));
 		$query = "UPDATE loan_application SET notification = 1 WHERE  notification =3";
+		DB::insert(DB::raw($query));
 		$query = "UPDATE loan_application SET notification = 0 WHERE  notification = 2";
+		DB::insert(DB::raw($query));
 		});
 		return true;
 	}
@@ -2026,6 +2079,7 @@ function run_payroll($payroll_date, $payroll_month){
 	function update_salary_advance_notification_hr($empID)
 	{
 		$query = "UPDATE loan_application SET notification = 0 WHERE  notification = 2 ";
+		DB::insert(DB::raw($query));
 		return true;
 	}
 
@@ -2035,7 +2089,9 @@ function run_payroll($payroll_date, $payroll_month){
 		 DB::transaction(function()
        {
 		$query = "UPDATE loan_application SET notification = 0 WHERE notification = 4";
+		DB::insert(DB::raw($query));
 		$query = "UPDATE loan_application SET notification = 1 WHERE  notification =3";
+		DB::insert(DB::raw($query));
 		});
 		return true;
 	}
@@ -2044,16 +2100,16 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function getloanapplicationbyid($id)
 	{
-		$this->load->database();
-		$this->db->where('id', $id);
-		$data = $this->db->get('loan_application';
-		return $data->result();
+		//$this->load->database();
+		$data = DB::table('loan_application')->where('id', $id);
+		 
+		return $data->get();
 	}
 
 	function confirmloan($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('loan_application', $data);
+		DB::table('loan_application')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -2083,8 +2139,8 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function updateLoan($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('loan', $data);
+		DB::table('loan')->where('id', $id)
+		->update($data);
 		return true;
 	}
  // ONPROGRESS LOAN
@@ -2095,16 +2151,16 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function getloanbyid($id)
 	{
-		$this->load->database();
-		$this->db->where('id', $id);
-		$data = $this->db->get('loan_application';
-		return $data->result();
+		//$this->load->database();
+		$data = DB::table('loan_application')->where('id', $id);
+
+		return $data->get();
 	}
 
     function update_loan($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('loan_application', $data);
+		DB::table('loan_application')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -2115,14 +2171,14 @@ function run_payroll($payroll_date, $payroll_month){
 
     function deleteLoan($id)
 	{
-		$this->db->where('id', $id);
-		$this->db->delete('loan_application';
+		DB::table('loan_application')->where('id', $id)
+		->delete('loan_application');
 		return true;
 	}
 
     function applyloan($data)
 	{
-		$this->db->insert("loan_application", $data);
+		DB::table('loan_application')->insert($data);
 		return true;
 
 	}
@@ -2151,7 +2207,9 @@ function run_payroll($payroll_date, $payroll_month){
 		last_paid_date )
 
 		SELECT la.empID, IF((la.type=2), la.reason, lt.name) as description, la.type, la.form_four_index_no, la.amount, la.deduction_amount, la.application_date, 1, la.approved_hr, '".$signatory."', la.approved_date_hr, '".$todate."', 0, 0, '".$todate."' FROM loan_application la, loan_type lt WHERE lt.id = la.type AND la.id ='".$loanID."' ";
+		DB::insert(DB::raw($query));
 	    $query = "UPDATE loan_application SET status = 2, notification=1, approved_cd = '".$signatory."', time_approved_cd = '".$todate."'  WHERE id ='".$loanID."'";
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -2160,8 +2218,11 @@ function run_payroll($payroll_date, $payroll_month){
 
 
 function count_employees(){
-	$query = 'SELECT e.emp_id FROM employee e WHERE e.state = 1';
-	return $query->num_rows();
+	$query = 'e.emp_id  WHERE e.state = 1';
+	$row = DB::table('employee as e')
+	->select(DB::raw($query))
+	->first();
+	return $row;
 }
 
 function employees_info(){
@@ -2171,7 +2232,7 @@ function employees_info(){
 
 function comment($data){
 
-	$this->db->insert("comments", $data);
+	DB::table('comments')->insert($data);
 
 	return true;
 
@@ -2279,21 +2340,24 @@ function allLevels()
 
 	function department_reference()
 	{
-		$query = "SELECT id FROM department ORDER BY id DESC limit 1";
-		$row = $query->row();
+		$query = "id  ORDER BY id DESC limit 1";
+		$row = DB::table('department')
+		->select(DB::raw($query))
+		->first();
 		return $row->id;
 	}
 
 
 	function addBank($data)
 	{
-		$this->db->insert("bank", $data);
+		DB::table('bank')->insert($data);
 		return true;
 
 	}
 	function addBankBranch($data)
 	{
-		$this->db->insert("bank_branch", $data);
+		DB::table('bank_branch')->insert($data);
+		
 		return true;
 	}
 	function getbank($id)
@@ -2311,15 +2375,15 @@ function allLevels()
 
 	function updateBank($data, $bankID)
 	{
-		$this->db->where('id', $bankID);
-		$this->db->update('bank', $data);
+		DB::table('bank')->where('id', $bankID)
+		->update($data);
 		return true;
 	}
 
 	function updateBankBranch($data, $branchID)
 	{
-		$this->db->where('id', $branchID);
-		$this->db->update('bank_branch', $data);
+		DB::table('bank_branch')->where('id', $branchID)
+		->update($data);
 		return true;
 	}
 
@@ -2328,12 +2392,12 @@ function allLevels()
 	function positionFetcher($id)
 	{
 		$query = "SELECT * FROM position where dept_id = '".$id."' and state = 1";
-
+        $query = DB::select(DB::raw($query));
         $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '".$id."'";
-
+        $query_linemanager = DB::select(DB::raw($query_linemanager));
 		$query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
-
-		return [$query->result(),$query_linemanager->result(),$query_country_director->result()];
+		$$query_country_director = DB::select(DB::raw($query_country_director));
+		return [$query,$query_linemanager,$query_country_director];
 	}
 
 	// FORM
@@ -2344,11 +2408,13 @@ function allLevels()
 	{
 	     DB::transaction(function()
        {
-		$this->db->insert("employee",$employee);
+		DB::table('employee')->insert($employee);
         // $this->db->insert("company_property", $property);
         // $this->db->insert("employee_group", $datagroup);
-        $query = "SELECT id FROM employee ORDER BY id DESC LIMIT 1";
-        $row = $query->row();
+        $query = "id ORDER BY id DESC LIMIT 1";
+        $row = DB::table('employee')
+		->select(DB::raw($query))
+		->first();
         });
 		return $row->id;
 	}
@@ -2358,7 +2424,8 @@ function allLevels()
 		 DB::transaction(function()
        {
 		$query = "UPDATE employee SET emp_id = '".$empID."' WHERE id ='".$recordID."'";
-        //$this->db->insert("company_property", $property);
+        DB::insert(DB::raw($query));
+		DB::table('company_property')->insert($property);
         $this->db->insert("employee_group", $datagroup);
         });
 		return true;
