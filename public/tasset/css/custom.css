@@ -9,14 +9,34 @@
     border-right: 1px solid rgba(0, 0, 0, 0.144);
 }
 
-.main-link li a {
-    color: #000;
-}
-
 .sidebar-control {
     color: #000;
 }
 
 .sidebar-control:hover {
     color: #000;
+}
+
+.sidebar-section ul li a {
+    color: #000;
+}
+
+.sidebar-section ul .nav-item-submenu.nav-item-open a {
+    color: #000;
+}
+
+.sidebar-section ul li a:hover {
+    color: #000;
+}
+
+.sidebar-section ul li .nav-group-sub li a {
+    color: #000;
+}
+
+.sidebar-section ul li .nav-group-sub.show {
+    color: #000;
+}
+
+.sidebar-section ul li .nav-group-sub.show li .nav-link.active {
+    background: #001a4943;
 }
