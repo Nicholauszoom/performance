@@ -10,7 +10,7 @@
 @endpush
 
 @section('page-header')
-    <div class="page-header-content d-lg-flex">
+    {{-- <div class="page-header-content d-lg-flex">
         <div class="d-flex">
             <h4 class="page-title mb-0">
                 Setting - <span class="fw-normal">Audit Trail</span>
@@ -20,7 +20,7 @@
                 <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
             </a>
         </div>
-    </div>
+    </div> --}}
 
     <div class="page-header-content d-lg-flex border-top">
         <div class="d-flex">

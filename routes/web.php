@@ -18,23 +18,7 @@ use App\Http\Controllers\Payroll\EmployeeLoanController;
 use App\Http\Controllers\Payroll\OvertimeController;
 use App\Http\Controllers\Payroll\GetPaymentController;
 use App\Http\Controllers\Payroll\GetPayment2Controller;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+use App\Http\Controllers\WorkforceManagement\EmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -46,7 +30,6 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -63,6 +46,15 @@ Route::middleware('auth')->group(function () {
     ]);
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
+
+    /**
+     * Workforce Manegment
+     */
+    Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('members.active');
+    Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
+
+    Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
+
 
 
 //route for payroll

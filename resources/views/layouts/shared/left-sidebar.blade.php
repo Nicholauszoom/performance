@@ -27,73 +27,89 @@
         <div class="sidebar-section">
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
 
-                {{-- <li class="nav-item">
-                    <a href=" {{ route('dashboard') }}"
-                        class="nav-link  {{ request()->routeIs('audit') ? 'active' : null  }}">
-                        <i class="ph-house"></i>
-                        <span>
-                            Dashboard
-                        </span>
-                    </a>
-                </li> --}}
-
+                {{-- Dashboard --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null  }}">
                         <i class="ph-house"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
+                {{-- /Dashboard --}}
 
+                {{-- Projects --}}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="ph-hard-drives"></i>
+                        <span>Projects</span>
+                    </a>
+                </li>
+                {{-- /projects --}}
+
+
+                {{--
+                    payroll
+                        - Payroll
+
+                --}}
+
+                {{--
+                    Workforce management
+                        -   Active employess
+                        -   Suspended employess
+                        -   overtime
+                        -   Imprest
+                        -   Employee Approval
+                --}}
+
+                {{-- workforce management --}}
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-gear-six"></i>
-                        <span>Settings</span>
+                        <i class="ph-users-three"></i>
+                        <span>Workforce Management</span>
                     </a>
+
                     <ul class="nav-group-sub collapse">
                         <li class="nav-item">
                             <a
-                                href="{{ route('audit') }}"
-                                class="nav-link {{ request()->routeIs('audit') ? 'active' : null  }}"
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
-                                Audit Trail
+                                Active Employees
                             </a>
                         </li>
-
                     </ul>
                 </li>
+                {{-- /workforce management --}}
 
+
+                {{--
+                    Leave & Attendance
+                        -   Attendance
+                --}}
+
+                {{--
+                    Salary MOdel
+                        -   Application
+                --}}
+
+                {{--
+                    Organisation
+                        -   Cost center
+                        -   Departments
+                        -   Company brancehs
+                        -   Position
+                        -   Employee contracts
+                        -   Organisation levels
+                        -   Accounting coding
+                --}}
+
+                {{-- Organisation --}}
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-nut"></i>
-                        <span>Access Control</span>
+                        <i class="ph-buildings"></i>
+                        <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('roles.index') }}"
-                                class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null  }}"
-                            >
-                                Roles
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('permissions.index') }}"
-                                class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : null  }}"
-                            >
-                                Permissions
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('system.index') }}"
-                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null  }}"
-                            >
-                                System setting
-                            </a>
-                        </li>
 
                         <li class="nav-item">
                             <a
@@ -125,15 +141,69 @@
 
                     </ul>
                 </li>
+                {{-- /organisation --}}
 
+                {{--
+                    Settings
+                        - Roles
+                        - Alloances
+                        - Overtime
+                        - Statutory deductions
+                        - Audit trails
+                        - Funders
+                        - Nationality
+                        - Mail configaration
+                --}}
 
-
-                {{-- <li class="nav-item">
-                    <a href=" "  >
-                        <i class="ph-house"></i>
-                        <span> Audit </span>
+                {{-- settings --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-gear-six"></i>
+                        <span>Settings</span>
                     </a>
-                </li> --}}
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null  }}"
+                            >
+                                Company Setting
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('roles.index') }}"
+                                class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null  }}"
+                            >
+                                Roles
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('permissions.index') }}"
+                                class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : null  }}"
+                            >
+                                Permissions
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('audit') }}"
+                                class="nav-link {{ request()->routeIs('audit') ? 'active' : null  }}"
+                            >
+                                Audit Trail
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                {{-- /settings --}}
+
+
+
 
             </ul>
         </div>
