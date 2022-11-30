@@ -12,7 +12,7 @@ class AuditTrailController extends Controller
 
     public function index(Request $request)
     {
-        // SysHelpers::AuditLog('1', 'Creating the user', $request->ip());
+        SysHelpers::AuditLog('1', 'Creating the user', $request->ip());
 
         // $audits = AuditTrail::all();
 
