@@ -110,24 +110,6 @@ class SalaryTemplateController extends Controller
             $salary_allowance1 = SalaryAllowance::all()->where('salary_template_id',$salary_template_id)->last();
             
             
-            // if (!empty($salary_allowance1)) {
-            //     $salary_allowance = $salary_allowance1->salary_allowance_id;
-            //     $salary_allowance = array_column($salary_allowance, 'salary_allowance_id');
-            //     if (!empty($salary_allowance)) {
-            //         $delete_salary_allowance_id = array_diff($salary_allowance, $salary_allowance_id);
-            //         if (!empty($delete_salary_allowance_id)) {
-            //             foreach ($delete_salary_allowance_id as $deleted_id) {
-            //                 // $this->payroll_model->_table_name = "tbl_salary_allowance"; // table name
-            //                 // $this->payroll_model->_primary_key = "salary_allowance_id"; // $id
-            //                 // $this->payroll_model->delete($deleted_id);
-            //                 $salaryAllowance = SalaryAllowance::find($deleted_id);
-            //                 $salaryAllowance->delete();
-
-            //             }
-            //         }
-
-            //     }
-            // }
             if (!empty($salary_allowance_label)) {
                 foreach ($salary_allowance_label as $key => $v_salary_allowance_label) {
                     if (!empty($salary_allowance_value[$key])) {
@@ -135,17 +117,15 @@ class SalaryTemplateController extends Controller
                         $salary_allowance_data['allowance_label'] = $v_salary_allowance_label;
                         $salary_allowance_data['allowance_value'] = $salary_allowance_value[$key];
 // *********** save add more value into tbl_salary_allowance    *******************
-                        
-                        // $this->payroll_model->_table_name = "tbl_salary_allowance"; // table name
-                        // $this->payroll_model->_primary_key = "salary_allowance_id"; // $id
+                       
                         if (!empty($salary_allowance_id[$key])) {
                             
                             $allowance_id = $salary_allowance_id[$key];
                             SalaryAllowance::where('salary_allowance_id',$allowance_id)->update($salary_allowance_data);
-                            //$this->payroll_model->save($salary_allowance_data, $allowance_id);
+                           
                         } else {
                             SalaryAllowance::create($salary_allowance_data);
-                            //$this->payroll_model->save($salary_allowance_data);
+                            
                         }
                     }
                 }
@@ -177,9 +157,6 @@ class SalaryTemplateController extends Controller
                     $adeduction_data['user_id'] = auth()->user()->id;
 
 // *********** save defualt value into tbl_salary_allowance    *******************
-                    //$this->payroll_model->_table_name = "tbl_salary_deduction"; // table name
-                    //$this->payroll_model->_primary_key = "salary_deduction_id"; // $id
-                    //$this->payroll_model->save($adeduction_data);
                     SalaryDeduction::create($adeduction_data);
                 }
             }
@@ -194,24 +171,7 @@ class SalaryTemplateController extends Controller
 
             //$salary_deduction = get_any_field('tbl_salary_deduction', array('salary_template_id' => $salary_template_id), 'salary_deduction_id', true);
             $salary_deduction1 = SalaryDeduction::all()->where('salary_template_id',$salary_template_id)->last();
-            // if (!empty($salary_deduction)) {
-            //     $salary_deduction = $salary_deduction1->salary_deduction_id;
-            //     $salary_deduction = array_column($salary_deduction, 'salary_deduction_id');
-            //     if (!empty($salary_deduction)) {
-
-            //         $delete_salary_deduction_id = array_diff($salary_deduction, $salary_deduction_id);
-            //         if (!empty($delete_salary_deduction_id)) {
-            //             foreach ($delete_salary_deduction_id as $deleted_id) {
-            //                 // $this->payroll_model->_table_name = "tbl_salary_deduction"; // table name
-            //                 // $this->payroll_model->_primary_key = "salary_deduction_id"; // $id
-            //                 // $this->payroll_model->delete($deleted_id);
-            //                 $salaryDeduction = SalaryDeduction::find($deleted_id);
-            //                 $salaryDeducyion->delete();
-            //             }
-            //         }
-
-            //     }
-            // }
+           
 
             if (!empty($deduction_label)) {
                 foreach ($deduction_label as $key => $v_deduction_label) {

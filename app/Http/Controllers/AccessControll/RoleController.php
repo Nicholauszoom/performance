@@ -8,16 +8,27 @@ use Illuminate\Http\Request;
 use App\Models\AccessControll\Role;
 use App\Models\AccessControll\Permission;
 use App\Models\AccessControll\SystemModule;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {  
 
     public function index()
     {
-        $roles = Role::all();
-        $permissions = Permission::all();
-        $modules = SystemModule::all();
-        return view('access-controll.role.index', compact('roles', 'permissions', 'modules'));
+
+            $query = " DISTINCT e.id as empID, CONCAT(e.name,' ', e.name) as NAME";
+            //return DB::get(DB::raw($query))->first();
+            
+            $users = DB::table('users as e')
+                     ->select(DB::raw($query))
+                    
+                     ->count();
+           return $users;
+
+        // $roles = Role::all();
+        // $permissions = Permission::all();
+        // $modules = SystemModule::all();
+        // return view('access-controll.role.index', compact('roles', 'permissions', 'modules'));
     }
 
     public function create(Request $request)
