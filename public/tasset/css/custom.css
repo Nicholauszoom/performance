@@ -17,8 +17,13 @@
     color: #000;
 }
 
-.sidebar-section ul li a {
+.sidebar-section .main-link li a {
     color: #000;
+}
+
+.sidebar-section .main-link li a.active {
+    color: #000;
+    background: #001a4943;
 }
 
 .sidebar-section ul .nav-item-submenu.nav-item-open a {

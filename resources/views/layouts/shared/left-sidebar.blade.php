@@ -27,6 +27,23 @@
         <div class="sidebar-section">
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
 
+                {{-- <li class="nav-item">
+                    <a href=" {{ route('dashboard') }}"
+                        class="nav-link  {{ request()->routeIs('audit') ? 'active' : null  }}">
+                        <i class="ph-house"></i>
+                        <span>
+                            Dashboard
+                        </span>
+                    </a>
+                </li> --}}
+
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null  }}">
+                        <i class="ph-house"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-gear-six"></i>
