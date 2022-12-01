@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\CustomModels\PayrollModel;
 use App\CustomModels\flexFerformanceModel;
 use App\CustomModels\ReportsModel;
-use App\Models\Payroll\Accounts;
+use App\Models\Payroll\Payroll;
 
 class PayrollController extends Controller
 {
@@ -163,13 +163,15 @@ class PayrollController extends Controller
     {
        // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
        // Accounts::all();
-            $data['pendingPayroll_month'] = Accounts::pendingPayroll_month();
-            // $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            // $data['payroll'] = $this->payroll_model->pendingPayroll();
-            // $data['payrollList'] = $this->payroll_model->payrollMonthList();
+       $payroll = new Payroll();
+            $data['pendingPayroll_month'] = $payroll->pendingPayroll_month();
+            $data['pendingPayroll'] = $payroll->pendingPayrollCheck();
+            $data['payroll'] = $payroll->pendingPayroll();
+            $data['payrollList'] = $payroll->payrollMonthList();
             $data['title'] = "Payroll";
-echo $data['pendingPayroll_month'];
-            //return view('payroll.payroll')->with($data);
+            //dd($data);
+            //echo $data['pendingPayroll_month'];
+            return view('payroll.index')->with($data);
      
         // } else {
         //     echo 'Unauthorised Access';

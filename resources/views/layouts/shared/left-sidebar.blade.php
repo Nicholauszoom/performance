@@ -40,17 +40,17 @@
                 {{-- /Dashboard --}}
 
                 {{-- Projects --}}
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li>
+                </li> -->
                 {{-- /projects --}}
 
 
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
+                    <a href="#" class="nav-link">workforce management
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -72,10 +72,23 @@
                         -   Attendance
                 --}}
 
-                {{--
-                    Salary MOdel
+                {{-- Salary MOdel
                         -   Application
                 --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"> Payroll Management
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Payroll
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 {{--
                     Organisation
