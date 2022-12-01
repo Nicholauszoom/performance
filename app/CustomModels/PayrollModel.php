@@ -218,7 +218,7 @@ trait PayrollModel {
 
 
 
-    function pendingPayroll_month(){
+    public static function pendingPayroll_month(){
         $query = "payroll_date as payroll_month  WHERE state = 1 OR state = 2  LIMIT 1";
         $record = DB::table('payroll_months')
         ->select(DB::raw($query));
