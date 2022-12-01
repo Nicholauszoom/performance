@@ -15,18 +15,19 @@ class RoleController extends Controller
 
     public function index()
     {
-
-            $query = " DISTINCT e.id as empID, CONCAT(e.name,' ', e.name) as NAME";
+        //$query1 = "DELETE FROM users WHERE id = 1";
+        $query=" IF( (SELECT COUNT(id)  WHERE id=1)=0, 0, (SELECT SUM(id)   WHERE id=1 GROUP BY name)) as days_spent";
+           // $query = " DISTINCT e.id as empID, CONCAT(e.name,' ', e.name) as NAME";
             //return DB::get(DB::raw($query))->first();
-            $query1 = "UPDATE users SET name = 'Test6'   WHERE id = 1";
-            DB::insert(DB::raw($query1));
-             $s = "select name from users";
+            //$query1 = "UPDATE users SET name = 'Test6'   WHERE id = 1";
+           // DB::insert(DB::raw($query1));
+             $s = "select * from users";
 
              $s2 = DB::select(DB::raw($s));
-            $users = DB::table('users as e');
-                    // ->select(DB::raw($query));
-                     //->first();
-           return $s2;
+            $users = DB::table('users as e')
+                    ->select(DB::raw($query))
+                     ->first();
+           return $users;
 
         // $roles = Role::all();
         // $permissions = Permission::all();
