@@ -587,21 +587,23 @@ function retire_list()
 	{
 		$state = $data['state'];
 		$empID = $data['empID'];
-		"UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
-		$this->db->where('id', $id);
-		$this->db->update('activation_deactivation', $data);
+		$query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+		DB::insert(DB::raw($query));
+
+		DB::table('activation_deactivation')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
 	function insert_user_password($data)
 	{
-		$this->db->insert("user_passwords", $data);
+		DB::table('user_passwords')->insert($data);
 		return true;
 	}
 
 	function employeeTransfer($data)
 	{
-		$this->db->insert("transfer", $data);
+		DB::table('transfer')->insert($data);
 		return true;
 
 	}
@@ -615,48 +617,62 @@ function retire_list()
 
 	function newDepartmentTransfer($id){
 
-		$query = "SELECT name FROM department WHERE id = '".$id."' ";
-		$row = $query->row();
+		$query = "name WHERE id = '".$id."' ";
+		$row = DB::table('department')
+		->select(DB::raw($query))
+		->first();
     	return $row->name;
 	}
 
 	function newPositionTransfer($id){
 
-		$query = "SELECT name FROM position WHERE id = '".$id."'";
-		$row = $query->row();
+		$query = "name WHERE id = '".$id."'";
+		$row = DB::table('position')
+		->select(DB::raw($query))
+		->first();
     	return $row->name;
 	}
 
 	function newBranchTransfer($id){
 
-		$query = "SELECT name FROM branch WHERE id = '".$id."'";
-		$row = $query->row();
+		$query = "name WHERE id = '".$id."'";
+		$row = DB::table('branch')
+		->select(DB::raw($query))
+		->first();
     	return $row->name;
 	}
 
 
 	function pendingSalaryTranferCheck($empID){
 
-		$query = "SELECT count(id) as result FROM transfer WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
-		$row = $query->row();
+		$query = "count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
+		$row = DB::table('result')
+		->select(DB::raw($query))
+		->first();
     	return $row->result;
 	}
 	function pendingPositionTranferCheck($empID){
 
-		$query = "SELECT count(id) as result FROM transfer WHERE empID = '".$empID."' AND status = 0 AND parameterID = 2 ";
-		$row = $query->row();
+		$query = "count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 2 ";
+		$row = DB::table('transfer')
+		->select(DB::raw($query))
+		->first();
     	return $row->result;
 	}
 	function pendingDepartmentTranferCheck($empID){
 
-		$query = "SELECT count(id) as result FROM transfer WHERE empID = '".$empID."' AND status = 0 AND parameterID = 3 ";
-		$row = $query->row();
+		$query = " count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 3 ";
+		$row = DB::table('transfer')
+		->select(DB::raw($query))
+		->first();
     	return $row->result;
 	}
 	function pendingBranchTranferCheck($empID){
 
-		$query = "SELECT count(id) as result FROM transfer WHERE empID = '".$empID."' AND status = 0 AND parameterID = 4 ";
-		$row = $query->row();
+		$query = "count(id) as result  WHERE empID = '".$empID."' AND status = 0 AND parameterID = 4 ";
+		$row = DB::table('result')
+		->select(DB::raw($query))
+		->first();
     	return $row->result;
 	}
 
@@ -671,11 +687,11 @@ function retire_list()
 		 DB::transaction(function()
        {
 
-		$this->db->where('em.emp_id', $empID);
-		$this->db->update('employee AS em', $empUpdates);
+		DB::table('employee as em')->where('em.emp_id', $empID)
+		->update($empUpdates);
 
-		$this->db->where('tr.id', $transferID);
-		$this->db->update('transfer AS tr',$transferUpdates);
+		DB::table('transfer as tr')->where('tr.id', $transferID)
+		->update($transferUpdates);
 		});
     	return true;
 	}
@@ -683,8 +699,8 @@ function retire_list()
 	function cancelTransfer($transferID)
 	{
 
-		$this->db->where('id', $transferID);
-		$this->db->delete('transfer';
+		DB::table('transfer')->where('id', $transferID)
+		->delete('transfer');
     	return true;
 	}
 
@@ -693,8 +709,8 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		$this->db->insert("department", $departmentData);
-// 		$this->db->insert("position", $positionData);
+		DB::table('department')->insert($departmentData);
+// 		->insert("position", $positionData);
 		$query = "SELECT id as depID FROM department ORDER BY id DESC LIMIT 1";
 		});
     	return DB::select(DB::raw($query));
@@ -706,6 +722,7 @@ function retire_list()
 		 DB::transaction(function()
        {
 		$query = "UPDATE department SET code = '".$code."' WHERE id ='".$departmentID."'";
+		DB::insert(DB::raw($query));
 // 		$query = "UPDATE position SET dept_id = '".$departmentID."', dept_code = '".$code."' WHERE id ='".$positionID ."'";
 		});
 		return true;
@@ -720,8 +737,8 @@ function retire_list()
 	}
 	function updatedepartment($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('department', $data);
+		DB::table('deepartment')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -737,8 +754,8 @@ function retire_list()
 
 	function updateposition($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('position', $data);
+		DB::table('position')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -754,14 +771,14 @@ function retire_list()
 
 	function addposition($data)
 	{
-		$this->db->insert("position", $data);
+		DB::table('position')->insert($data);
 		return true;
 
 	}
 
 	function addOrganizationLevel($data)
 	{
-		$this->db->insert("organization_level", $data);
+		DB::table('organization_level')->insert($data);
 		return true;
 
 	}
@@ -824,7 +841,7 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		DB::table('training_application')->where('id', $requestID);
+		DB::table('training_application')->where('id', $requestID)
 		->update($data);
 		$query = "INSERT INTO confirmed_trainee (skillsID, empID, cost, recommended_by, date_recommended, approved_by, date_approved, confirmed_by, date_confirmed, application_date, accepted_by, date_accepted, certificate, remarks)  SELECT skillsID, empID, sk.amount, recommended_by, date_recommended, approved_by, date_approved, confirmed_by, date_confirmed, application_date, '','2010-10-10', '','' FROM training_application, skills sk WHERE sk.id = training_application.id AND training_application.id = ".$requestID." ";
 		DB::insert(DB::raw($query));
@@ -837,8 +854,8 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		DB::table('training_application')->where('id', $requestID);
-		$this->db->update($data);
+		DB::table('training_application')->where('id', $requestID)
+		->update($data);
 		$query = "DELETE FROM confirmed_trainee WHERE empID = (SELECT empID FROM training_application WHERE id = ".$requestID." ) AND skillsID = (SELECT skillsID FROM training_application WHERE id = ".$requestID." ) ";
         DB::insert(DB::raw($query));
 		});
@@ -908,7 +925,7 @@ function retire_list()
 	{
 		 DB::transaction(function()
        {
-		DB::table('training_budget')->where('id', $budgetID);
+		DB::table('training_budget')->where('id', $budgetID)
 		->update($data);
 		$this->audit_log("Updated the Training Budget");
 		});
@@ -948,7 +965,7 @@ function retire_list()
 	function updateskills($data, $id)
 	{
 		DB::table('skills')->where('id', $id)
-		->update(, $data);
+		->update($data);
 		return true;
 	}
 
@@ -1083,7 +1100,7 @@ function retire_list()
 		$query = "CONCAT(fname,' ', mname,' ', lname) as name, email,emp_id,birthdate,account_no  WHERE state != 4 and email = '".$email."'  ";
 		$row = DB::table('employee')
 		->select(DB::raw($query))
-		->count()
+		->count();
 		if($row>0) {
 			$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,emp_id,birthdate,account_no FROM  employee WHERE state != 4 and email = '".$email."'  ";
 			return DB::select(DB::raw($query));
@@ -1115,7 +1132,7 @@ function retire_list()
 	function getkin($id)
 	{
 		//$this->load->database();
-		$data =DB::table('next_of_kin')->where('employee_fk', $id);
+		$data =DB::table('next_of_kin')->where('employee_fk', $id)
 		 ->select('*');
 		return $data->get();
 
@@ -1155,7 +1172,7 @@ function retire_list()
 
 		$query  = "INSERT INTO exit_list (empID, initiator, reason, date_confirmed,confirmed_by, exit_date) VALUES ('".$empID."', '".$initiator."', '".$reason."','".$date_confirmed."','".$confirmed_by."','".$exit_date."')";
         DB::insert(DB::raw($query));
-		//			$this->db->insert("exit_list", $data);
+		//			->insert("exit_list", $data);
 		//update the employee table state
 		$query = "UPDATE employee SET state = '3', contract_end = '".$exit_date."' WHERE emp_id = '".$empID."'";
 		DB::insert(DB::raw($query));
@@ -2409,8 +2426,8 @@ function allLevels()
 	     DB::transaction(function()
        {
 		DB::table('employee')->insert($employee);
-        // $this->db->insert("company_property", $property);
-        // $this->db->insert("employee_group", $datagroup);
+        // ->insert("company_property", $property);
+        // ->insert("employee_group", $datagroup);
         $query = "id ORDER BY id DESC LIMIT 1";
         $row = DB::table('employee')
 		->select(DB::raw($query))
@@ -2426,42 +2443,46 @@ function allLevels()
 		$query = "UPDATE employee SET emp_id = '".$empID."' WHERE id ='".$recordID."'";
         DB::insert(DB::raw($query));
 		DB::table('company_property')->insert($property);
-        $this->db->insert("employee_group", $datagroup);
+        DB::table('company_property')->insert($datagroup);
         });
 		return true;
 	}
 
 	function get_latestEmployee()
 	{
-		$query = "SELECT emp_id FROM employee order by id DESC LIMIT 1";
-		$row = $query->row();
+		$query = "emp_id  order by id DESC LIMIT 1";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->first();
 		return $row->emp_id;
 	}
 	function getldPhoto($empID)
 	{
-		$query = "SELECT photo FROM employee WHERE emp_id = '".$empID."' ";
-		$row = $query->row();
+		$query = "photo WHERE emp_id = '".$empID."' ";
+		$row = DB::table('employee')
+		->select(DB::raw($query))
+		->first();
 		return $row->ephoto;
 	}
 
 	function updateEmployee($data, $empID)
 	{
-		$this->db->where('emp_id', $empID);
-		$this->db->update('employee', $data);
+		DB::table('employee')->where('emp_id', $empID)
+		->update($data);
 		return true;
 	}
 
 	function updateContractStart($data, $empID)
 	{
-		$this->db->where('emp_id', $empID);
-		$this->db->update('employee', $data);
+		DB::table('employee')->where('emp_id', $empID)
+		->update($data);
 		return true;
 	}
 
 	function updateContractEnd($data, $empID)
 	{
-		$this->db->where('emp_id', $empID);
-		$this->db->update('employee', $data);
+		DB::table('employee')->where('emp_id', $empID)
+		->update($data);
 		return true;
 	}
 
@@ -2469,12 +2490,13 @@ function allLevels()
 	{
 	     DB::transaction(function()
        {
-        $this->db->insert("company_property", $property);
-        $this->db->insert("employee_group", $datagroup);
-		$this->db->insert("activation_deactivation", $datalog);
+        DB::table('company_property')->insert($property);
+        DB::table('company_property')->insert($datagroup);
+		DB::table('activation_deactivation')->insert($datalog);
         $query = "UPDATE employee SET state = 1, last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
+		DB::insert(DB::raw($query));
         $query = "UPDATE activation_deactivation SET current_state = 1 WHERE id ='".$logID."'";
-
+        DB::insert(DB::raw($query));
         });
 
 		return true;
@@ -2487,8 +2509,9 @@ function allLevels()
 	     DB::transaction(function()
        {
         $query = "UPDATE employee SET state = '".$state."', last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
+		DB::insert(DB::raw($query));
 //        $query = "DELETE FROM company_property WHERE given_to ='".$empID."'";
-		$this->db->insert("activation_deactivation", $datalog);
+		DB::table('activation_deactivation')->insert($datalog);
 //        $query = "UPDATE activation_deactivation SET current_state = '".$state."' WHERE id ='".$logID."'";
 //        $query = "DELETE FROM employee_group  WHERE empID ='".$empID."'";
 //        $query = "DELETE FROM emp_allowances  WHERE empID ='".$empID."'";
@@ -2501,22 +2524,22 @@ function allLevels()
 
 	function addkin($data)
 	{
-		$this->db->insert("next_of_kin", $data);
+		DB::table('next_of_kin')->insert($data);
 
 	}
 
 
 	function addproperty($data)
 	{
-		$this->db->insert("company_property", $data);
+		DB::table('next_of_kin')->insert($data);
 		return true;
 
 	}
 
 	function updateproperty($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('company_property', $data);
+		DB::table('company_property')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -2525,16 +2548,17 @@ function allLevels()
 
 	function delete_employee($data, $id)
 	{
-		$this->db->where('emp_id', $id);
-		$this->db->update('employee', $data);
+		$DB::table('employee')->where('emp_id', $id)
+		->update($data);
 		return true;
 	}
 
 	public function employeestatelog($data){
 		$empID = $data['empID'];
 		$state = $data['state'];
-		"UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
-		$this->db->insert("activation_deactivation", $data);
+		$query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+        DB::insert(DB::raw($query));
+		DB::table('activation_deactivation')->insert($data);
 //		return true;
 	}
 
@@ -2545,9 +2569,12 @@ function allLevels()
 		return DB::select(DB::raw($query));
 	}
 
+
+	// to be checked
 	public function login_user($username, $password){
 		$query = "SELECT e.*, d.name as dname, c.name as CONTRACT, d.id as departmentID, p.id as positionID, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as lineManager from employee e, contract c, department d, position p WHERE d.id=e.department and e.contract_type = c.id and p.id=e.position and (e.state = '1' or e.state = '3')  and e.username ='".$username."'";
-		if($query->num_rows()>0) {
+		$row = DB::select(DB::raw($query));
+		if(count($query)>0) {
 			$row = $query->row();
 			$password_hash = $row->password;
 
@@ -2571,21 +2598,23 @@ function allLevels()
 
 	function insertAuditLog($logData)
 	{
-		$this->db->insert("audit_logs", $logData);
+		DB::table('audit_logs')->insert($logData);
 		return true;
 
 	}
 
 	function insertAuditPurgeLog($logData)
 	{
-		$this->db->insert("audit_purge_logs", $logData);
+		DB::table('audit_purge_logs')->insert($logData);
 		return true;
 
 	}
 
 	function userID(){
 		$query= 'SELECT id FROM employee ORDER BY id DESC LIMIT 1';
-		$row = $query->row();
+		$row =DB::table('employee')
+		->select(DB::raw($query))
+		->first();
 		return $row->id;
 	}
 
@@ -2652,13 +2681,13 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 
 	public function employer($data){
-		$this->db->insert("company_info", $data);
+		DB::table('company_info')->insert($data);
 	}
 
 	public function updateemployer($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('company_info', $data);
+		DB::table('company_info')->where('id', $id)
+		->update( $data);
 		return true;
 	}
 
@@ -2689,9 +2718,9 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function rolecount($id)
 	{
 		$query = "SELECT @s:=@s+1 as SNo, r.id, r.name FROM role r, (SELECT @s:=0) as s where r.id NOT IN (SELECT role FROM emp_role where userID ='".$id."' ) ";
+        $row = DB::select(DB::raw($query));
 
-
-		return $query->num_rows();
+		return count($row);
 	}
 	function allrole()
 	{
@@ -2743,8 +2772,10 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function memberscount($id)
 	{
-		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
-		$row = $query->row();
+		$query = "count(id) as headcounts  WHERE group_name =".$id."";
+		$row = DB::table('employee_group')
+		->select(DB::raw($query))
+		->first();
     	return $row->headcounts;
 	}
 
@@ -2788,7 +2819,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function add_to_group($data)
 	{
-		$this->db->insert("employee_group", $data);
+		DB::table('employee_group')->insert($data);
 		return true;
 	}
 
@@ -2821,11 +2852,13 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	     DB::transaction(function()
        {
 	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
-
+        DB::insert(DB::raw($query));  
 	    $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    $query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    $query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
-
+	    DB::insert(DB::raw($query));  
+		$query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
+	    DB::insert(DB::raw($query));  
+		$query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
+		DB::insert(DB::raw($query));  
 	    });
 
 		return true;
@@ -2838,6 +2871,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	     DB::transaction(function()
        {
 	    $query = "DELETE FROM emp_role WHERE id ='".$refID."'";
+		DB::insert(DB::raw($query));  
 	    });
 
 		return true;
@@ -2846,8 +2880,11 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function employeeFromGroup($refID)
 	{
 		$query = "select group_name FROM emp_role WHERE id ='".$refID."'";
-		if ($query->row()){
-			return $query->row()->group_name;
+		$row = DB::table("emp_role")
+		->select(DB::raw($query))
+		->first();
+		if (row){
+			return $row()->group_name;
 		}else{
 			return null;
 		}
@@ -2857,7 +2894,8 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		 DB::transaction(function()
        {
-		"DELETE FROM employee_group WHERE empID ='".$empID."' and group_name = '".$group_id."'";
+		$query = "DELETE FROM employee_group WHERE empID ='".$empID."' and group_name = '".$group_id."'";
+        DB::insert(DB::raw($query));
 		});
 
 		return true;
@@ -2867,6 +2905,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function addEmployeeToGroup($empID, $groupID)
 	{
 	    $query = "INSERT INTO  employee_group(empID, group_name) VALUES ('".$empID."', ".$groupID.") ";
+		DB::insert(DB::raw($query));
 		return true;
 	}
 
@@ -2875,8 +2914,8 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
    public function remove_from_group($id)
     {
-        $this->db->where('id',$id);
-        $this->db->delete('employee_group';
+        DB::table('employee_group')->where('id',$id)
+        ->delete();
         return true;
 
     }
@@ -2885,27 +2924,27 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
    public function remove_from_grouprole($value, $groupID)
     {
         // $id = $this->input->get("id";
-        $this->db->where('userID',$value);
-        $this->db->where('group_ref',$groupID);
-        $this->db->delete('emp_role';
+        DB::table('emp_role')->where('userID',$value)
+        ->where('group_ref',$groupID)
+        ->delete();
         return true;
     }
 
    public function remove_individual_from_allowance($empID, $allowanceID)
     {
-        $this->db->where('empID', $empID);
-        $this->db->where('group_name', 0);
-        $this->db->where('allowance', $allowanceID);
-        $this->db->delete('emp_allowances';
+        DB::table('emp_allowances')->where('empID', $empID)
+        ->where('group_name', 0)
+        ->where('allowance', $allowanceID)
+        ->delete();
         return true;
     }
 
 
    public function remove_group_from_allowance($groupID, $allowanceID)
     {
-        $this->db->where('group_name', $groupID);
-        $this->db->where('allowance', $allowanceID);
-        $this->db->delete('emp_allowances';
+        DB::table('emp_allowances')->where('group_name', $groupID)
+        ->where('allowance', $allowanceID)
+        ->delete();
         return true;
     }
 
@@ -2913,7 +2952,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function addrole($data)
 	{
-		$this->db->insert("role", $data);
+		DB::table('role')->insert($data);
 		return true;
 
 	}
@@ -2923,9 +2962,13 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
        {
 
 	    $query = "DELETE FROM groups WHERE id ='".$groupID."'";
+		DB::insert(DB::raw($query));
 	    $query = "DELETE FROM employee_group WHERE group_name ='".$groupID."'";
+		DB::insert(DB::raw($query));
 	    $query = "DELETE FROM emp_allowances WHERE group_name ='".$groupID."'";
+		DB::insert(DB::raw($query));
 	    $query = "DELETE FROM emp_role WHERE group_name='".$groupID."'";
+		DB::insert(DB::raw($query));
 
 	    });
 
@@ -2937,7 +2980,9 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
        {
 
 	    $query = "DELETE FROM role WHERE id ='".$roleID."'";
+		DB::insert(DB::raw($query));
 	    $query = "DELETE FROM emp_role WHERE role ='".$roleID."'";
+		DB::insert(DB::raw($query));
 
 	    });
 
@@ -2947,7 +2992,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function addgroup($data)
 	{
-		$this->db->insert("groups", $data);
+		DB::table('groups')->insert($data);
 		return true;
 
 	}
@@ -2963,7 +3008,9 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function getpermission($empID, $permissionID)
 	{
 		$query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
-		$results = $query->num_rows();
+		$results = DB::table('emp_role er')
+		->select(DB::raw($query))
+		->count();
 		if ($results>0) {
 			return true;
 		}else{
@@ -2973,7 +3020,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function assignrole($data)
 	{
-		$this->db->insert("emp_role", $data);
+		DB::table('emp_role')->insert($data);
 		return true;
 
 	}
@@ -3043,16 +3090,16 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function updaterole($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('role', $data);
+		DB::table('role')->where('id', $id)
+		->update($data);
 		return true;
 	}
 	function revokerole($id, $role, $isGroup)
 	{
-		$this->db->where('userID', $id);
-		$this->db->where('role', $role);
-		$this->db->where('group_name', $isGroup);
-		$this->db->delete('emp_role';
+		DB::table('role')->where('userID', $id)
+		->where('role', $role)
+		->where('group_name', $isGroup)
+		->delete();
 		return true;
 	}
 
@@ -3106,7 +3153,7 @@ function appreciated_employee()
 
 	function add_apprec($data)
 	{
-		$this->db->insert("appreciation", $data);
+		DB::table('appreciation')->insert($data);
 
 	}
 
@@ -3141,6 +3188,7 @@ function appreciated_employee()
 (SELECT IF((SELECT COUNT(lv.id) FROM leaves lv where lv.nature = 5 AND lv.start BETWEEN e.hire_date AND '".$date."' and lv.empID = '".$id."')>0,(SELECT lv.days FROM leaves lv   where lv.nature = 5 AND lv.start BETWEEN e.hire_date AND '".$date."' and lv.empID = '".$id."'),0))as SICK
 
 FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.empID and e.department=d.id and pl.position=p.id and pl.empID= '".$id."' and pl.due_date = '2018-12-25' ";
+DB::insert(DB::raw($query));
 	}
 
 
@@ -3150,8 +3198,10 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
 	######################NOTIFICATION#################################
 	function contract_to_expire()
 	{
-		$query = "SELECT e.emp_id FROM employee e, contract c WHERE e.state=1 and c.id = e.contract_type AND ((c.duration*12)-(DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30)) <= c.reminder";
-
+		$query = "e.emp_id WHERE e.state=1 and c.id = e.contract_type AND ((c.duration*12)-(DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30)) <= c.reminder";
+        $row = DB::table('employee as e','contract as c')
+		->select(DB::raw($query))
+		->count();
 		return $query->num_rows();
 	}
 
@@ -3159,73 +3209,83 @@ FROM payroll_logs pl, employee e, position p, department d where e.emp_id=pl.emp
 	function employee_to_retire()
 	{
 		$query = "SELECT empID FROM (SELECT emp_id as empID, (SELECT notify_before FROM retire WHERE id = 1) as notify_before, (SELECT retire_age FROM retire WHERE id = 1)-((DATEDIFF(CURRENT_DATE(), birthdate)/30)/12) as ages_to_retire, ((DATEDIFF(CURRENT_DATE(), birthdate)/30)/12) as age FROM employee  WHERE state=1) as parent_query WHERE ages_to_retire <= notify_before";
-
-		return $query->num_rows();
+        $row = DB::select(DB::raw($query));
+		return count($row);
 	}
 
 
 	function init_emp_state()
 	{
 		$query = "SELECT id FROM activation_deactivation WHERE  current_state = 1 AND state IN(0,1) AND notification = 1";
-		return $query->num_rows();
+		$row = DB::select(DB::raw($query));
+		return count($row);
 	}
 
 	function appr_emp_state()
 	{
 		$query = "SELECT id FROM activation_deactivation WHERE  current_state = 0 AND state IN(2,3) AND notification = 1";
-		return $query->num_rows();
+		$row = DB::select(DB::raw($query));
+		return count($row);
 	}
 
 	function loan_notification_employee($empID)
 	{
 		$query = "SELECT l.id FROM loan_application l WHERE l.empID = '".$empID."' AND l.notification = 1";
-		return $query->num_rows();
+		$row = DB::select(DB::raw($query));
+		return count($row);
 	}
 
 	function loan_notification_hr()
 	{
 		$query = "SELECT l.id FROM loan_application l WHERE l.notification = 2";
-		return $query->num_rows();
+		$row = DB::select(DB::raw($query));
+		return count($row);
 	}
 
 	function loan_notification_finance()
 	{
 		$query = "SELECT l.id FROM loan_application l  WHERE l.notification =3 ";
-		return $query->num_rows();
+		$row = DB::select(DB::raw($query));
+		return count($row);
 	}
 
 	function getParentPositionName($id)
 	{
-		$query = "SELECT name  FROM position  WHERE position_code = '".$id."'";
-		$row = $query->row();
-    	return $row->name;
+		$query = " name  WHERE position_code = '".$id."'";
+		$row = DB::table('position')
+		->select(DB::raw($query))
+		->first();
+    	return !empty($row)? $row->name:"";
 	}
 
 	function get_allowance_name($id)
 	{
-		$query = "SELECT CONCAT(name,'(',amount,')') as output FROM allowances  WHERE id = ".$id."";
-		$row = $query->row();
-    	return $row->output;
+		$query = "CONCAT(name,'(',amount,')') as output  WHERE id = ".$id."";
+		$row = DB::table('allowances')
+		->select(DB::raw($query))
+		->first();
+    	return !empty($row)? $row->output:"";
+    	
 	}
 
 
 	####################################### GRIEVANCES ###########################
 	function add_grievance($data)
 	{
-		$this->db->insert("grievances", $data);
+		DB::table('grievances')->insert($data);
 
 	}
 
 function updategrievances($data, $id)
 	{
-		$this->db->where('id', $id);
-		$this->db->update('grievances', $data);
+		DB::table('grievances')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
 	function forward_grievance($data, $id){
-		$this->db->where('id', $id);
-		$this->db->update('grievances', $data);
+		DB::table('grievances')->where('id', $id)
+		->update($data);
 		return true;
 	}
 
@@ -3268,11 +3328,13 @@ function my_grievances($empID)
 
 	function employeeRetired($empID){
 		$query = "UPDATE employee set retired = '2' where emp_id ='".$empID."'";
+		DB::insert(DB::raw($query));
 		return true;
 	}
 
 	function employeeLogin($empID){
 		$query = "UPDATE employee set login_user = '1' where emp_id ='".$empID."'";
+		DB::insert(DB::raw($query));
 		return true;
 	}
 
@@ -3285,7 +3347,7 @@ function my_grievances($empID)
 	{
 		 DB::transaction(function()
        {
-		$this->db->insert("partial_payment", $data);
+		DB::table('partial_payment')->insert($data);
 		});
 		return true;
 	}
@@ -3293,7 +3355,8 @@ function my_grievances($empID)
 	function updatePartialPayment($date){
 		 DB::transaction(function()
        {
-		"update partial_payment set status = 1, payroll_date = '".$date."' where status = 0 ";
+		$query = "update partial_payment set status = 1, payroll_date = '".$date."' where status = 0 ";
+		DB::insert(DB::raw($query));
 		});
 	}
 
@@ -3303,36 +3366,42 @@ function my_grievances($empID)
 	}
 
 	function employeePayrollLog($empID,$payroll_date){
-		$query = "select * from payroll_logs where empID = '".$empID."' and payroll_date = '".$payroll_date."' ";
-		$row = $query->row();
+		$query = "*  where empID = '".$empID."' and payroll_date = '".$payroll_date."' ";
+		$row = DB::table('payroll_logs')
+		->select(DB::raw($query))
+		->first();
 		return $row;
 	}
 
 	function employeePension($pension_id){
-		$query = "select * from pension_fund where id = '".$pension_id."' ";
-		$row = $query->row();
+		$query = "*  where id = '".$pension_id."' ";
+		$row = DB::table('pension_fund')
+		->select(DB::raw($query))
+		->first();
 		return $row;
 	}
 
 	function updatePayrollLog($empID, $payroll_date, $data){
 		 DB::transaction(function()
        {
-		"update payroll_logs set salary = '".$data['salary']."', pension_employee = '".$data['pension_employee']."',
+		$query = "update payroll_logs set salary = '".$data['salary']."', pension_employee = '".$data['pension_employee']."',
 		 pension_employer = '".$data['pension_employer']."', taxdue = '".$data['taxdue']."', sdl = '".$data['sdl']."',
 		 wcf = '".$data['wcf']."' where payroll_date = '".$payroll_date."' and empID = '".$empID."' ";
+		 DB::insert(DB::raw($query));
 		});
 	}
 
     public function deletePayment($id) {
 
-        $this->db->where('id',$id);
-        $this->db->delete('partial_payment';
+        DB::table('partial_payment')->where('id',$id)
+        ->delete();
         return true;
 
     }
 
 	public function updateGroupEdit($id, $name) {
-		"update groups set name = '".$name."' where id='".$id."' ";
+		$query = "update groups set name = '".$name."' where id='".$id."' ";
+		DB::insert(DB::raw($query));
 		return true;
 
 	}
@@ -3344,9 +3413,11 @@ function my_grievances($empID)
 	}
 
 	public function transfers($id){
-		$query = "select * from transfer where id = '".$id."' ";
-		if ($query->result()){
-			return $query->row();
+		$query = "*  where id = '".$id."' ";
+		$row = DB::table('transfer')
+		->select(DB::raw($query));
+		if ($row->get()){
+			return $row->first();
 		}else{
 			return null;
 		}
@@ -3355,9 +3426,11 @@ function my_grievances($empID)
 	public function approveRegistration($empID, $transferID, $approver, $date){
 		 DB::transaction(function()
        {
-		"update employee set state = 1 where emp_id = '".$empID."' ";
-		"update transfer set status = 6, approved_by = '".$approver."', date_approved = '".$date."'
+		$query = "update employee set state = 1 where emp_id = '".$empID."' ";
+		DB::insert(DB::raw($query));
+		$query = "update transfer set status = 6, approved_by = '".$approver."', date_approved = '".$date."'
 		 where id = '".$transferID."' ";
+		 DB::insert(DB::raw($query));
 		});
 		return true;
 	}
@@ -3365,10 +3438,14 @@ function my_grievances($empID)
 	public function disapproveRegistration($empID, $transferID){
 		 DB::transaction(function()
        {
-		"delete from employee where emp_id = '".$empID."' ";
-		"delete from employee_group where empID = '".$empID."' ";
-		"delete from employee_activity_grant where empID = '".$empID."' ";
-		"update transfer set status = 7 where id = '".$transferID."' ";
+		$query = "delete from employee where emp_id = '".$empID."' ";
+		DB::insert(DB::raw($query));
+		$query = "delete from employee_group where empID = '".$empID."' ";
+		DB::insert(DB::raw($query));
+		$query = "delete from employee_activity_grant where empID = '".$empID."' ";
+		DB::insert(DB::raw($query));
+		$query = "update transfer set status = 7 where id = '".$transferID."' ";
+		DB::insert(DB::raw($query));
 		});
 		return true;
 	}
@@ -3376,11 +3453,13 @@ function my_grievances($empID)
 	public function assignment_task_log($payroll_date){
 		 DB::transaction(function()
        {
-		"insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
+		$query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
 select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
 ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast 
 where ae.id = ast.assignment_employee_id and ast.status = 1 and ast.date is null;";
-		"update assignment_task set date = '".$payroll_date."' where date is null ";
+        DB::insert(DB::raw($query));
+		$query = "update assignment_task set date = '".$payroll_date."' where date is null ";
+		DB::insert(DB::raw($query));
 		});
 		return true;
 	}
