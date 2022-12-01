@@ -10,11 +10,13 @@
                 <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted">HR & Payroll System</h5>
 
                 <div>
-                    <button type="button" class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex" >
+                    <button type="button"
+                        class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
                         <i class="ph-arrows-left-right"></i>
                     </button>
 
-                    <button type="button" class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
+                    <button type="button"
+                        class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
                         <i class="ph-x"></i>
                     </button>
                 </div>
@@ -29,7 +31,8 @@
 
                 {{-- Dashboard --}}
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null  }}">
+                    <a href="{{ route('dashboard') }}"
+                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null  }}">
                         <i class="ph-house"></i>
                         <span>Dashboard</span>
                     </a>
@@ -37,35 +40,17 @@
                 {{-- /Dashboard --}}
 
                 {{-- Projects --}}
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li>
+                </li> -->
                 {{-- /projects --}}
 
 
-                {{--
-                    payroll
-                        - Payroll
-
-                --}}
-
-                {{--
-                    Workforce management
-                        -   Active employess
-                        -   Suspended employess
-                        -   overtime
-                        -   Imprest
-                        -   Employee Approval
-                --}}
-
-                {{-- workforce management --}}
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-users-three"></i>
-                        <span>Workforce Management</span>
+                    <a href="#" class="nav-link">workforce management
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -87,10 +72,23 @@
                         -   Attendance
                 --}}
 
-                {{--
-                    Salary MOdel
+                {{-- Salary MOdel
                         -   Application
                 --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"> Payroll Management
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Payroll
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                 {{--
                     Organisation
