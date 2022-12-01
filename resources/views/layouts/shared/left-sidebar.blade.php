@@ -50,7 +50,9 @@
 
 
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">workforce management
+                    <a href="#" class="nav-link">
+                        <i class="ph-users-three"></i>
+                        <span>workforce management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
