@@ -10,7 +10,7 @@
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="index.html" class="d-inline-flex align-items-center">
                 {{-- <img src="{{ asset('tasset/images/logo_icon.svg') }}" alt=""> --}}
-                <img src="{{ asset('tasset/images/logo_text_light.svg') }}" class="d-none d-sm-inline-block h-16px ms-3" alt="">
+                {{-- <img src="{{ asset('tasset/images/logo_text_light.svg') }}" class="d-none d-sm-inline-block h-16px ms-3" alt=""> --}}
             </a>
         </div>
 
@@ -198,9 +198,9 @@
                     </div>
                 </div>
 
-                <a href="#" class="navbar-nav-link align-items-center justify-content-center w-40px h-32px rounded-pill position-absolute end-0 top-50 translate-middle-y p-0 me-1" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                {{-- <a href="#" class="navbar-nav-link align-items-center justify-content-center w-40px h-32px rounded-pill position-absolute end-0 top-50 translate-middle-y p-0 me-1" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                     <i class="ph-faders-horizontal"></i>
-                </a>
+                </a> --}}
 
                 <div class="dropdown-menu w-100 p-3">
                     <div class="d-flex align-items-center mb-3">
@@ -273,36 +273,44 @@
                         <img src="{{ asset('tasset/images/demo/users/face11.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
-                    <span class="d-none d-lg-inline-block mx-lg-2">Victoria</span>
+                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->name }}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="#" class="dropdown-item">
+                    {{-- <a href="#" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
-                    </a>
-                    <a href="#" class="dropdown-item">
+                    </a> --}}
+                    {{-- <a href="#" class="dropdown-item">
                         <i class="ph-currency-circle-dollar me-2"></i>
                         My subscription
-                    </a>
-                    <a href="#" class="dropdown-item">
+                    </a> --}}
+                    {{-- <a href="#" class="dropdown-item">
                         <i class="ph-shopping-cart me-2"></i>
                         My orders
-                    </a>
-                    <a href="#" class="dropdown-item">
+                    </a> --}}
+                    {{-- <a href="#" class="dropdown-item">
                         <i class="ph-envelope-open me-2"></i>
                         My inbox
                         <span class="badge bg-primary rounded-pill ms-auto">26</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
+                    </a> --}}
+                    {{-- <div class="dropdown-divider"></div> --}}
+                    {{-- <a href="#" class="dropdown-item">
                         <i class="ph-gear me-2"></i>
                         Account settings
-                    </a>
-                    <a href="#" class="dropdown-item">
+                    </a> --}}
+
+                    <a
+                        href="{{ route('logout') }}"
+                        class="dropdown-item"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    >
                         <i class="ph-sign-out me-2"></i>
                         Logout
                     </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </div>
             </li>
         </ul>

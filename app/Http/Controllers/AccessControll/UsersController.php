@@ -24,11 +24,11 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
-        
-        $users = User::all();
-
-        return view('access-controll.users.index',Compact('users'));
+        return view('access-controll.users.index', [
+            'users' => User::all(),
+            'parent' => 'Organisation',
+            'child' => 'User'
+        ]);
     }
 
     /**
@@ -38,11 +38,12 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
-        $roles = Role::all();
-        //$region = Region::all();
-      $department = Departments::all();
-        return view('access-controll.users.add',Compact('roles','department'));
+        return view('access-controll.users.add', [
+            'roles' => Role::all(),
+            'department' =>  Departments::all(),
+            'parent' => 'User',
+            'child' => 'Create'
+        ]);
     }
 
     /**
@@ -52,22 +53,22 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {  
+    {
         $validatedData = $request->validate([
-        
+
             'name' => 'required|max:255|min:3|string',
             'role' => 'required|string',
             'address' => 'required|max:255|min:3|string',
-            'email' => 'required|string|min:3|unique:users', 
+            'email' => 'required|string|min:3|unique:users',
             'phone' => 'required|not_in:0|min:9',
            // 'password' => 'required|string|min:6|confirmed',
-           
-          
+
+
         ]);
         //
         $user = User::create([
             'name' => $request['name'],
-          
+
             'email' => $request['email'],
             'address' => $request['address'],
             'password' => Hash::make($request['password']),
@@ -78,15 +79,15 @@ class UsersController extends Controller
        // 'designation_id' => $request['designation_id'],
            'joining_date' => $request['joining_date'],
         ]);
-        
+
         $roles['user_id'] = $user->id;
         $roles['added_by'] = auth()->user()->id;
         $roles['role_id'] = $request['role'];
-        
-        
+
+
          foreach(auth()->user()->roles as $value)
          $roles['admin_role'] = $value->id;
-                          
+
         CompanyRoles::create($roles);
 
         if (!$user) {
@@ -94,9 +95,9 @@ class UsersController extends Controller
         }
 
         $user->roles()->attach($request['role']);
-        
+
         return redirect(route('users.index'));
-       
+
     }
 
     /**
@@ -144,7 +145,7 @@ class UsersController extends Controller
         //
         $user = User::findOrFail($id);
         $user->name = $request['name'];
-        
+
         $user->email = $request['email'];
         $user->phone = $request['phone'];
         $user->address = $request['address'];
@@ -154,29 +155,29 @@ class UsersController extends Controller
         $user->save();
 
         if (!$user) {
-           
+
         }
         $user->roles()->detach();
         $user->roles()->attach($request['role']);
-        
+
         $roles['user_id'] = $user->id;
         $roles['added_by'] = auth()->user()->id;
         $roles['role_id'] = $request['role'];
 
         // foreach(auth()->user()->roles as $value)
         // $roles['admin_role'] = $value->id;
-        
+
        // $exist = CompanyRoles::where('user_id',$id)->where('added_by',auth()->user()->id)->get();
-        
+
         // if(count($exist) > 0){
         //     CompanyRoles::where('user_id',$id)->update($roles);
-            
-            
+
+
         // }else{
         //     CompanyRoles::create($roles);
         // }
-        
-        
+
+
         return redirect(route('users.index'));
     }
 
@@ -205,7 +206,7 @@ class UsersController extends Controller
        $user->update($data);
 
       $payroll=   EmployeePayroll::where('user_id', $id)->first();
-        
+
 if(!empty($payroll)){
 $item['disabled']='1';
   $payroll->update($item);
@@ -216,7 +217,7 @@ $item['disabled']='1';
 public function findDepartment(Request $request)
     {
 
-        $district= Designation::where('department_id',$request->id)->get();                                                                                    
+        $district= Designation::where('department_id',$request->id)->get();
                return response()->json($district);
 
 }

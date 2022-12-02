@@ -10,6 +10,8 @@
 <script src="{{ asset('tasset/js/configurator.js') }}"></script>
 <script src="{{ asset('tasset/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
+<script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
+
 @stack('head-script')
 
 <script src="{{ asset('tasset/js/app.js') }}"></script>

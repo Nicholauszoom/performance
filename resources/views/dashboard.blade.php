@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Audit-trail'])
+@extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
     <script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
@@ -38,13 +38,7 @@
 
 @section('content')
 
-<!-- Basic datatable -->
-<div class="card">
-    <div class="card-header border-0">
-        <h5 class="mb-0 text-muted">Dashboard</h5>
-    </div>
-</div>
-<!-- /basic datatable -->
+{{-- content will come in this section --}}
 
 @endsection
 

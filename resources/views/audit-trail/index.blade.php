@@ -1,7 +1,6 @@
 @extends('layouts.vertical', ['title' => 'Audit-trail'])
 
 @push('head-script')
-    <script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
@@ -10,12 +9,11 @@
 @endpush
 
 @section('page-header')
-  @include('layouts.shared.page-header')  
+  @include('layouts.shared.page-header')
 @endsection
 
 @section('content')
 
-<!-- Basic datatable -->
 <div class="card">
     <div class="card-header border-0">
         <h5 class="mb-0 text-muted">Audit Trail</h5>
@@ -61,7 +59,6 @@
         </tbody>
     </table>
 </div>
-<!-- /basic datatable -->
 
 @endsection
 

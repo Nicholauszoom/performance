@@ -78,7 +78,9 @@
                         -   Application
                 --}}
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"> Payroll Management
+                    <a href="#" class="nav-link">
+                        <i class="ph-calculator"></i>
+                        <span>Payroll Management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -134,11 +136,9 @@
                                 href="{{ route('users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.index') ? 'active' : null  }}"
                             >
-                                Management
+                               User Management
                             </a>
                         </li>
-                        {{-- <li class="nav-item"><a href="form_checkboxes_radios.html" class="nav-link">Checkboxes &amp; radios</a></li> --}}
-
                     </ul>
                 </li>
                 {{-- /organisation --}}

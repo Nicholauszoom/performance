@@ -1,4 +1,48 @@
-@extends('layouts.master')
+@extends('layouts.vertical', ['title' => 'Department'])
+
+@push('head-script')
+	<script src="{{ asset('tasset/js/components/notifications/bootbox.min.js') }}"></script>
+    <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+    <script src="{{ asset('tasset/js/pages/components_modals.js') }}"></script>
+    <script src="{{ asset('tasset/js/pages/datatables_basic.js') }}"></script>
+@endpush
+
+{{-- @extends('layouts.master') --}}
+
+@section('content')
+
+    <div class="card">
+        <div class="card-header border-0">
+            <h5 class="mb-0 text-muted">Departments</h5>
+        </div>
+
+
+        <table class="table datatable-basic">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{-- @foreach ($audits as $audit) --}}
+                <tr>
+                    <td>1</td>
+                    <td><a href="#">IT</a></td>
+                    <td>Actions</td>
+
+                </tr>
+                {{-- @endforeach --}}
+            </tbody>
+        </table>
+    </div>
+
+@endsection
 
 
 @section('content')
@@ -11,26 +55,31 @@
                      <div class="card-header header-elements-sm-inline">
 								<h4 class="card-title"> Departments</h4>
 								<div class="header-elements">
-								   
-                             
+
+
                        <button type="button" class="btn btn-outline-info btn-xs px-4 pull-right"
                             data-toggle="modal" data-target="#addPermissionModal">
                         <i class="fa fa-plus-circle"></i>
                         Add
                     </button>
-									
+
 				                	</div>
-			                	
+
 							</div>
 
-                  
+
                     <div class="card-body">
 
-                       
+
                         <div class="tab-content tab-bordered" id="myTab3Content">
                             <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
+
+
+
+
+
                                     <table class="table datatable-basic table-striped" id="table-1">
                                     <thead>
                     <tr>
@@ -42,11 +91,11 @@
                     <tbody>
                     @if(isset($permissions))
                     @foreach($permissions as $permission)
-                   
+
                         <tr>
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $permission->name }}</td>
-                            
+
                             <td align="center">
                                 {!! Form::open(['route' => ['departments.destroy', $permission->id], 'method' => 'delete']) !!}
                                 <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
@@ -59,7 +108,7 @@
                                 {{ Form::close() }}
                             </td>
                         </tr>
-                  
+
                     @endforeach
                     @endif
                     </tbody>
@@ -83,7 +132,7 @@
 
 @endsection
 
-@section('scripts')
+{{-- @section('scripts')
 <script>
         $(document).on('click', '.edit_permission_btn', function () {
             var id = $(this).data('id');
@@ -106,7 +155,7 @@
                 lengthMenu: '<span>Show:</span> _MENU_',
              paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
             },
-        
+
         });
     </script>
-@endsection
+@endsection --}}

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+{{-- @extends('layouts.master')
 
 
 @section('content')
@@ -11,7 +11,7 @@
                      <div class="card-header header-elements-sm-inline">
 								<h4 class="card-title"> Designations</h4>
 								<div class="header-elements">
-								   
+
 
    <button type="button" class="btn btn-outline-info btn-xs px-4 pull-right"
                             data-toggle="modal" data-target="#addPermissionModal">
@@ -22,7 +22,7 @@
                     </div></div>
                     <div class="card-body">
 
-                       
+
                         <div class="tab-content tab-bordered" id="myTab3Content">
                             <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
@@ -39,7 +39,7 @@
                     <tbody>
                     @if(isset($permissions))
                     @foreach($permissions as $permission)
-                   
+
                         <tr>
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $permission->name }}</td>
@@ -57,7 +57,7 @@
                                 {{ Form::close() }}
                             </td>
                         </tr>
-                  
+
                     @endforeach
                     @endif
                     </tbody>
@@ -106,7 +106,7 @@
                 lengthMenu: '<span>Show:</span> _MENU_',
              paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
             },
-        
+
         });
     </script>
-@endsection
+@endsection --}}

@@ -10,16 +10,16 @@ use App\Models\AccessControll\Designation;
 use App\Models\AccessControll\SystemModule;
 
 class DesignationController extends Controller
-{  
+{
     public function __construct()
     {
-       
-        
+
+
     }
     public function index()
-    {  
+    {
         $permissions = Designation::all();
-         $department = Departments::all();
+        $department = Departments::all();
         return view('access-controll.designation.index', compact('permissions','department'));
     }
 
