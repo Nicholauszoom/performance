@@ -21,7 +21,7 @@
             <div class="content-inner">
                 <!-- Page header -->
                 <div class="page-header page-header-light shadow">
-                    @yield('page-header')
+                    @include('layouts.shared.page-header')
                 </div>
                 <!-- /page header -->
 

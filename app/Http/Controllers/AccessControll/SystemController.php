@@ -16,7 +16,7 @@ use Laracasts\Flash\Flash;
 
 class SystemController extends Controller
 {
-  
+
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +24,9 @@ class SystemController extends Controller
      */
     public function index()
     {
-      
+
         $system = System::all()->where('added_by',auth()->user()->added_by);
-        
+
         return view('access-controll.system.data', compact('system'));
     }
 
@@ -37,8 +37,6 @@ class SystemController extends Controller
      */
     public function create()
     {
-       
-      
         return view('account_codes.create');
     }
 
@@ -50,7 +48,7 @@ class SystemController extends Controller
      */
     public function store(Request $request)
     {
-      
+
 $data = $request->all();
 					 $data['added_by'] = auth()->user()->added_by;
       if ($request->hasFile('picture')) {
@@ -60,7 +58,7 @@ $data = $request->all();
 					$logo=$fileName;
 					$photo->move('assets/img/logo', $fileName );
 					 $data['picture'] = $logo;
-					 
+
 					  // $file = $request->picture;
 
                       // $file_new_name =  $file->move("public/assets/img/logo", $file->getClientOriginalName());
@@ -68,20 +66,20 @@ $data = $request->all();
     //$post->filename = $file_new_names;
             	}
 
-        
-            
-           
-            
+
+
+
+
             $system = System::create($data);
-            //   $system->name = $request->name;         
+            //   $system->name = $request->name;
             //   $system->picture = $logo ;
             // $system->save();
 
-            
+
             //Flash::success(trans('general.successfully_saved'));
             return redirect('system');
         }
-   
+
 
     /**
      * Display the specified resource.
@@ -98,7 +96,7 @@ $data = $request->all();
     public function edit($id)
     {
        $data= System::find($id);
-         
+
         return View::make('access-controll.system.data', compact('data','id'))->render();
     }
 
@@ -120,28 +118,28 @@ $data = $request->all();
 					$photo->move('assets/img/logo', $fileName );
 					$data['picture'] = $logo;
             	}
-            
-     
 
-            
+
+
+
          $system= System::find($id);
-         
+
         $system->update($data);
         //= $request->name ;
-  
-       
+
+
     //   if($request->hasFile('picture')){
-    //           unlink('public/assets/img/logo/'. $system->picture);      
-    //             $system->picture = $logo ;         
+    //           unlink('public/assets/img/logo/'. $system->picture);
+    //             $system->picture = $logo ;
     //         }
-             
+
     //         $system->save();
           return redirect('system');
-  
 
-        
-            
- 
+
+
+
+
     }
 
     /**
@@ -152,7 +150,7 @@ $data = $request->all();
      */
     public function destroy($id)
     {
-       
+
         System::destroy($id);
         //Flash::success(trans('general.successfully_deleted'));
            return redirect('system');

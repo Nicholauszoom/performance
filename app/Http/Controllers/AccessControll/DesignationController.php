@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers\AccessControll;
 
-use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+use App\Models\AccessControll\Permission;
 use App\Models\AccessControll\Departments;
 use App\Models\AccessControll\Designation;
 use App\Models\AccessControll\SystemModule;
 
 class DesignationController extends Controller
-{  
-    public function __construct()
-    {
-       
-        
-    }
+{
+    
     public function index()
-    {  
+    {
         $permissions = Designation::all();
-         $department = Departments::all();
-        return view('access-controll.designation.index', compact('permissions','department'));
+        $department = Departments::all();
+        return view('access-controll.designation.index', [
+            'permissions' => $permissions,
+            'department' => $department,
+            'parent' => 'Organisation',
+            'child' => 'Position'
+        ]);
     }
 
     public function create()

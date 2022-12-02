@@ -3,8 +3,10 @@
     <div class="d-flex">
         <div class="breadcrumb py-2">
             <a href="index.html" class="breadcrumb-item"><i class="ph-house"></i></a>
-            <a href="#" class="breadcrumb-item">{{isset($parent)? $parent : "..."}}</a>
-            <span class="breadcrumb-item active">{{isset($child)? $child : " "}}</span>
+            <a href="#" class="breadcrumb-item">{{ isset($parent) ? $parent : "..." }}</a>
+            @if ( isset($child) )
+                <span class="breadcrumb-item active">{{ isset($child) ? $child : " " }}</span>
+            @endif
         </div>
 
         <a href="#breadcrumb_elements"

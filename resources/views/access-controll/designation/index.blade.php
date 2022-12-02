@@ -1,4 +1,4 @@
-@extends('layouts.master')
+{{-- @extends('layouts.master')
 
 
 @section('content')
@@ -11,7 +11,7 @@
                      <div class="card-header header-elements-sm-inline">
 								<h4 class="card-title"> Designations</h4>
 								<div class="header-elements">
-								   
+
 
    <button type="button" class="btn btn-outline-info btn-xs px-4 pull-right"
                             data-toggle="modal" data-target="#addPermissionModal">
@@ -22,7 +22,7 @@
                     </div></div>
                     <div class="card-body">
 
-                       
+
                         <div class="tab-content tab-bordered" id="myTab3Content">
                             <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
@@ -39,7 +39,7 @@
                     <tbody>
                     @if(isset($permissions))
                     @foreach($permissions as $permission)
-                   
+
                         <tr>
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $permission->name }}</td>
@@ -57,7 +57,7 @@
                                 {{ Form::close() }}
                             </td>
                         </tr>
-                  
+
                     @endforeach
                     @endif
                     </tbody>
@@ -106,7 +106,79 @@
                 lengthMenu: '<span>Show:</span> _MENU_',
              paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
             },
-        
+
         });
     </script>
+@endsection --}}
+
+
+@extends('layouts.vertical', ['title' => 'Position'])
+
+@push('head-script')
+    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/datatables_advanced.js') }}"></script>
+@endpush
+
+
+@section('content')
+
+<div class="card">
+    <div class="card-header border-0">
+        <h5 class="mb-0 text-muted">Position</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <h5>List of Position</h5>
+
+            {{-- <a href="{{ route('employee.create') }}" class="btn btn-primary">Register Employee</a> --}}
+        </div>
+    </div>
+
+    <table class="table datatable-show-all">
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Department Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if(isset($permissions))
+                @foreach($permissions as $permission)
+
+                    <tr>
+                        <th>{{ $loop->iteration }}</th>
+                        <td>{{ $permission->name }}</td>
+                        <td>{{ $permission->department->name }}</td>
+                        <td align="center">
+                            {!! Form::open(['route' => ['designations.destroy', $permission->id], 'method' => 'delete']) !!}
+                            <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
+                                    data-toggle="modal"
+                                    data-id="{{$permission->id}}"
+                            data-name="{{$permission->name}}"
+                            data-department="{{$permission->department_id}}"
+                                <i class="fa fa-edit"></i> Edit
+                            </button>
+                            {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                            {{ Form::close() }}
+                        </td>
+                    </tr>
+
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+</div>
+
 @endsection
+
+
+
+

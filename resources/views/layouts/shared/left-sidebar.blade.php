@@ -31,8 +31,8 @@
 
                 {{-- Dashboard --}}
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}"
-                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null  }}">
+                    <a href="{{ route('dashboard.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null  }}">
                         <i class="ph-house"></i>
                         <span>Dashboard</span>
                     </a>
@@ -50,7 +50,9 @@
 
 
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">workforce management
+                    <a href="#" class="nav-link">
+                        <i class="ph-users-three"></i>
+                        <span>workforce management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -58,25 +60,58 @@
                             <a
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                                 >
+                               Employees Info Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                               >
+                                               Transfers  Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
-                                Active Employees
+                            Attendance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                            >
+                            Overtime management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                            >
+                            Grievances and Disciplinary Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                            >
+                            Performance & Productiviy Management
                             </a>
                         </li>
                     </ul>
                 </li>
-                {{-- /workforce management --}}
 
-
-                {{--
-                    Leave & Attendance
-                        -   Attendance
-                --}}
-
-                {{-- Salary MOdel
-                        -   Application
-                --}}
+                {{-- Payroll management --}}
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link"> Payroll Management
+                    <a href="#" class="nav-link">
+                        <i class="ph-calculator"></i>
+                        <span>Payroll Management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -87,8 +122,121 @@
                                 Payroll
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('payslip') }}"
+                                class="nav-link {{ request()->routeIs('payslip') ? 'active' : null  }}">
+                                Payslip
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('incentives') }}"
+                                class="nav-link {{ request()->routeIs('incentives') ? 'active' : null  }}">
+                                Incentives
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('partialPayment') }}"
+                                class="nav-link {{ request()->routeIs('partialPayment') ? 'active' : null  }}">
+                                Partial Payment
+                            </a>
+                        </li>
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Pending Payments
+                            </a>
+                        </li> --}}
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Statutory Reports
+                            </a>
+                        </li> --}}
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Organisation Reports
+                            </a>
+                        </li> --}}
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Salary Calculator
+                            </a>
+                        </li> --}}
                     </ul>
                 </li>
+                {{-- /Payroll management --}}
+
+
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-stack"></i>
+                        <span>Learning & Development</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                                Training Budgeting
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                                Training Application
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-trophy"></i>
+                        <span>Talent Management</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('members.active') }}"
+                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                                Talent Management
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {{-- /workforce management --}}
+
+
+
+                {{--
+                    Leave & Attendance
+                        -   Attendance
+                --}}
+
+
 
                 {{--
                     Organisation
@@ -108,6 +256,22 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
+                    <li class="nav-item">
+                            <a
+                                href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                            >
+                            Company Registration
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                            >
+                            Organization structure Registration
+                            </a>
+                        </li>
 
                         <li class="nav-item">
                             <a
@@ -123,22 +287,15 @@
                                 href="{{ route('designations.index') }}"
                                 class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null  }}"
                             >
-                                Position
+                            Role Profile Registration(Position)
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('users.index') }}"
-                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : null  }}"
-                            >
-                                Management
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item"><a href="form_checkboxes_radios.html" class="nav-link">Checkboxes &amp; radios</a></li> --}}
 
                     </ul>
                 </li>
+
+
                 {{-- /organisation --}}
 
 
@@ -234,6 +391,14 @@
                                 class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : null  }}"
                             >
                                 Permissions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('users.index') }}"
+                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : null  }}"
+                            >
+                               User Management
                             </a>
                         </li>
 

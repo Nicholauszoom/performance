@@ -1,16 +1,12 @@
-@extends('layouts.vertical', ['title' => 'Audit-trail'])
+@extends('layouts.vertical', ['title' => 'Projects'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
-
-@section('page-header')
-  @include('layouts.shared.page-header')
-@endsection
 
 @section('content')
 
@@ -33,7 +29,7 @@
         </thead>
 
         <tbody>
-            @foreach ($audits as $audit)
+            {{-- @foreach ($audits as $audit)
             <tr>
                 <td>{{ $audit->user_id }}</td>
                 <td><a href="#">{{ $audit->user_name }}</a></td>
@@ -55,11 +51,9 @@
                 </td>
 
             </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
     </table>
 </div>
 
 @endsection
-
-
