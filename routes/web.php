@@ -9,38 +9,23 @@ use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+use App\Http\Controllers\ProjectController;
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-
 Route::middleware('auth')->group(function () {
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+   // preoject
+   Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -69,7 +54,7 @@ Route::middleware('auth')->group(function () {
 //route for payroll
 Route::group(['prefix' => 'payroll'], function () {
     Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
-    
+
 });
 
 });

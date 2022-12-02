@@ -31,8 +31,8 @@
 
                 {{-- Dashboard --}}
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}"
-                        class="nav-link {{ request()->routeIs('dashboard') ? 'active' : null  }}">
+                    <a href="{{ route('dashboard.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null  }}">
                         <i class="ph-house"></i>
                         <span>Dashboard</span>
                     </a>
@@ -40,12 +40,12 @@
                 {{-- /Dashboard --}}
 
                 {{-- Projects --}}
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li> -->
+                </li>
                 {{-- /projects --}}
 
 
