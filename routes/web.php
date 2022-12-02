@@ -12,6 +12,7 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Payroll\Payroll;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -51,11 +52,14 @@ Route::middleware('auth')->group(function () {
 
 
 
-//route for payroll
-Route::group(['prefix' => 'payroll'], function () {
-    Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
+    //route for payroll
+    Route::group(['prefix' => 'payroll'], function () {
+        Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
+        Route::any('payslip', [PayrollController::class, 'payslip'])->name('payslip');
+        Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
+        Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
 
-});
+    });
 
 });
 

@@ -161,22 +161,53 @@ class PayrollController extends Controller
 
     public function payroll()
     {
-       // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
-       // Accounts::all();
-       $payroll = new Payroll();
-            $data['pendingPayroll_month'] = $payroll->pendingPayroll_month();
-            $data['pendingPayroll'] = $payroll->pendingPayrollCheck();
-            $data['payroll'] = $payroll->pendingPayroll();
-            $data['payrollList'] = $payroll->payrollMonthList();
-            $data['title'] = "Payroll";
-            //dd($data);
-            //echo $data['pendingPayroll_month'];
-            return view('payroll.index')->with($data);
-     
+        // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
+
+        $payroll = new Payroll();
+
+        $data['pendingPayroll_month'] = $payroll->pendingPayroll_month();
+        $data['pendingPayroll'] = $payroll->pendingPayrollCheck();
+        $data['payroll'] = $payroll->pendingPayroll();
+        $data['payrollList'] = $payroll->payrollMonthList();
+        $data['title'] = "Payroll";
+
+        //dd($data);
+        //echo $data['pendingPayroll_month'];
+
+        return view('payroll.payroll', [
+            'data' => $data,
+            'parent' => 'Payroll',
+            'child' => 'Payroll'
+        ]);
+
         // } else {
         //     echo 'Unauthorised Access';
         // }
 
+    }
+
+    public function payslip()
+    {
+        return view('payroll.payslip', [
+            'parent' => 'Payroll',
+            'child' => 'Payslip'
+        ]);
+    }
+
+    public function incentives()
+    {
+        return view('payroll.incentives', [
+            'parent' => 'Payroll',
+            'child' => 'Incentives'
+        ]);
+    }
+
+    public function partialPayment()
+    {
+        return view('payroll.partial-payment', [
+            'parent' => 'Payroll',
+            'child' => 'Partial Payment'
+        ]);
     }
 
 
@@ -1336,7 +1367,7 @@ class PayrollController extends Controller
             $empName = $row->empName;
             if ($row->email) {
                 $result = $this->payslip_attachments($empID, $email, $payroll_date, $payroll_month, $payroll_month_end, $empName);
-            
+
                 if($result){
                     $response_array['status'] = 'SENT';
                 }else{
@@ -2005,19 +2036,19 @@ class PayrollController extends Controller
 
     }
 
-    function password_generator($size){  
-        $char = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$'; 
-        $init = strlen($char); 
-        $init--; 
-        
-        $result=NULL; 
-        
-        for($x=1;$x<=$size; $x++){ 
-            $index = rand(0, $init); 
-            $result .= substr($char,$index,1); 
+    function password_generator($size){
+        $char = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
+        $init = strlen($char);
+        $init--;
+
+        $result=NULL;
+
+        for($x=1;$x<=$size; $x++){
+            $index = rand(0, $init);
+            $result .= substr($char,$index,1);
         }
-        
-        return $result; 
+
+        return $result;
     }
 
     function TestMail()

@@ -9,17 +9,22 @@ use App\Models\AccessControll\Permission;
 use App\Models\AccessControll\SystemModule;
 
 class PermissionController extends Controller
-{  
+{
     public function __construct()
     {
-       
-        
+
+
     }
     public function index()
     {  // , compact('permissions', 'modules')
         $permissions = Permission::all();
         $modules = SystemModule::all();
-        return view('access-controll.permission.index', compact('permissions', 'modules'));
+        return view('access-controll.permission.index', [
+            'permissions' => $permissions,
+            'modules' => $modules,
+            'parent' => 'Setting',
+            'child' => 'Permissions',
+        ]);
     }
 
     public function create()

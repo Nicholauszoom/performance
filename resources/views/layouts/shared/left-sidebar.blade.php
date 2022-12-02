@@ -74,9 +74,7 @@
                         -   Attendance
                 --}}
 
-                {{-- Salary MOdel
-                        -   Application
-                --}}
+                {{-- Payroll management --}}
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-calculator"></i>
@@ -91,8 +89,65 @@
                                 Payroll
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('payslip') }}"
+                                class="nav-link {{ request()->routeIs('payslip') ? 'active' : null  }}">
+                                Payslip
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('incentives') }}"
+                                class="nav-link {{ request()->routeIs('incentives') ? 'active' : null  }}">
+                                Incentives
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('partialPayment') }}"
+                                class="nav-link {{ request()->routeIs('partialPayment') ? 'active' : null  }}">
+                                Partial Payment
+                            </a>
+                        </li>
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Pending Payments
+                            </a>
+                        </li> --}}
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Statutory Reports
+                            </a>
+                        </li> --}}
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Organisation Reports
+                            </a>
+                        </li> --}}
+
+                        {{-- <li class="nav-item">
+                            <a
+                                href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Salary Calculator
+                            </a>
+                        </li> --}}
                     </ul>
                 </li>
+                {{-- /Payroll management --}}
 
                 {{--
                     Organisation
@@ -171,14 +226,14 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a
                                 href="{{ route('roles.index') }}"
                                 class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null  }}"
                             >
                                 Roles
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item">
                             <a
