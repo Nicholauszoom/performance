@@ -85,7 +85,7 @@
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
-                            Overtime management	
+                            Overtime management
                             </a>
                         </li>
                         <li class="nav-item">
@@ -106,6 +106,7 @@
                         </li>
                     </ul>
                 </li>
+
                 {{-- Payroll management --}}
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
@@ -180,13 +181,11 @@
                     </ul>
                 </li>
                 {{-- /Payroll management --}}
-                	
-
 
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-users-three"></i>
+                        <i class="ph-stack"></i>
                         <span>Learning & Development</span>
                     </a>
 
@@ -212,12 +211,12 @@
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-users-three"></i>
+                        <i class="ph-trophy"></i>
                         <span>Talent Management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
-                       
+
                         <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
@@ -229,7 +228,7 @@
                 </li>
 
                 {{-- /workforce management --}}
-                	
+
 
 
                 {{--
@@ -237,7 +236,7 @@
                         -   Attendance
                 --}}
 
-                
+
 
                 {{--
                     Organisation
@@ -292,7 +291,7 @@
                             </a>
                         </li>
 
-                       
+
                     </ul>
                 </li>
 
@@ -334,7 +333,7 @@
                             >
                                 Roles
                             </a>
-                        </li> 
+                        </li>
 
                         <li class="nav-item">
                             <a
