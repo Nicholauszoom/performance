@@ -141,6 +141,56 @@
                 </li>
                 {{-- /organisation --}}
 
+
+{{-- Learning & development --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-buildings"></i>
+                        <span>Learning & development</span>
+                    </a>
+                    <ul class="nav-group-sub collapse">
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('employee.index') }}"
+                                class="nav-link {{ request()->routeIs('employee.index') ? 'active' : null  }}"
+                            >
+                                Employee
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null  }}"
+                            >
+                              Skills
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('users.index') }}"
+                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : null  }}"
+                            >
+                                Training Application
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null  }}"
+                            >
+                              Training Budget
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item"><a href="form_checkboxes_radios.html" class="nav-link">Checkboxes &amp; radios</a></li> --}}
+
+                    </ul>
+                </li>
+                {{-- /Learning & development --}}
+
+
                 {{--
                     Settings
                         - Roles

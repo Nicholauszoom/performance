@@ -10,6 +10,7 @@ use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\LearningDevelopment\EmployeeController;
 
 
 
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
         'users' => UsersController::class,
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
+        'employee' => EmployeeController::class,
     ]);
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
