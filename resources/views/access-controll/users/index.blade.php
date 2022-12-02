@@ -1,11 +1,11 @@
 @extends('layouts.vertical', ['title' => 'User'])
 
 @push('head-script')
-    <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('tasset/js/pages/datatables_advanced.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_advanced.js') }}"></script>
 @endpush
 
 
@@ -60,7 +60,7 @@
                                 <span class="badge bg-success bg-opacity-10 text-success">Available</span>
                             @endif
                         </td>
-                        
+
                         <td>
                             <div class="form-inline">
                                 @if($user->disabled == 0)

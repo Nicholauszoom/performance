@@ -1,12 +1,12 @@
 @extends('layouts.vertical', ['title' => 'User Create'])
 
 @push('head-script')
-<script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('tasset/js/components/forms/selects/select2.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('tasset/js/pages/form_select2.js') }}"></script>
+<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
 
 @section('content')

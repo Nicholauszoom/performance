@@ -115,12 +115,12 @@
 @extends('layouts.vertical', ['title' => 'Position'])
 
 @push('head-script')
-    <script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('tasset/js/pages/datatables_advanced.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_advanced.js') }}"></script>
 @endpush
 
 

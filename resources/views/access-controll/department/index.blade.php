@@ -1,13 +1,13 @@
 @extends('layouts.vertical', ['title' => 'Department'])
 
 @push('head-script')
-	<script src="{{ asset('tasset/js/components/notifications/bootbox.min.js') }}"></script>
-    <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
+	<script src="{{ asset('assets/js/components/notifications/bootbox.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('tasset/js/pages/components_modals.js') }}"></script>
-    <script src="{{ asset('tasset/js/pages/datatables_basic.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/components_modals.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 {{-- @extends('layouts.master') --}}

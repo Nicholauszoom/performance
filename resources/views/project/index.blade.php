@@ -1,11 +1,11 @@
 @extends('layouts.vertical', ['title' => 'Projects'])
 
 @push('head-script')
-    <script src="{{ asset('tasset/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('tasset/js/pages/datatables_basic.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')

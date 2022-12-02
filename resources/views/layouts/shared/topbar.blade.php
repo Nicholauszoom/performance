@@ -9,8 +9,8 @@
 
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="index.html" class="d-inline-flex align-items-center">
-                {{-- <img src="{{ asset('tasset/images/logo_icon.svg') }}" alt=""> --}}
-                {{-- <img src="{{ asset('tasset/images/logo_text_light.svg') }}" class="d-none d-sm-inline-block h-16px ms-3" alt=""> --}}
+                {{-- <img src="{{ asset('assets/images/logo_icon.svg') }}" alt=""> --}}
+                {{-- <img src="{{ asset('assets/images/logo_text_light.svg') }}" class="d-none d-sm-inline-block h-16px ms-3" alt=""> --}}
             </a>
         </div>
 
@@ -39,7 +39,7 @@
                         <div class="col">
                             <button type="button" class="dropdown-item text-wrap h-100 align-items-start border-end-sm border-bottom p-3">
                                 <div>
-                                    <img src="{{ asset('tasset/images/demo/logos/1.svg') }}" class="h-40px mb-2" alt="">
+                                    <img src="{{ asset('assets/images/demo/logos/1.svg') }}" class="h-40px mb-2" alt="">
                                     <div class="fw-semibold my-1">Customer data platform</div>
                                     <div class="text-muted">Unify customer data from multiple sources</div>
                                 </div>
@@ -82,7 +82,7 @@
                     <div class="dropdown-menu-scrollable pb-2">
                         <a href="#" class="dropdown-item align-items-start text-wrap py-2">
                             <div class="status-indicator-container me-3">
-                                <img src="{{ asset('tassets/images/demo/users/face10.jpg') }}" class="w-40px h-40px rounded-pill" alt="">
+                                <img src="{{ asset('assetss/images/demo/users/face10.jpg') }}" class="w-40px h-40px rounded-pill" alt="">
                                 <span class="status-indicator bg-warning"></span>
                             </div>
 
@@ -153,7 +153,7 @@
 
                             <div class="dropdown-item cursor-pointer">
                                 <div class="me-3">
-                                    <img src="{{ asset('tasset/images/demo/users/face24.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
+                                    <img src="{{ asset('assets/images/demo/users/face24.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
                                 </div>
 
                                 <div class="d-flex flex-column flex-grow-1">
@@ -180,7 +180,7 @@
 
                             <div class="dropdown-item cursor-pointer">
                                 <div class="me-3">
-                                    <img src="{{ asset('tasset/images/brands/adobe.svg') }}" class="w-32px h-32px rounded-pill" alt="">
+                                    <img src="{{ asset('assets/images/brands/adobe.svg') }}" class="w-32px h-32px rounded-pill" alt="">
                                 </div>
 
                                 <div class="d-flex flex-column flex-grow-1">
@@ -270,7 +270,7 @@
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
-                        <img src="{{ asset('tasset/images/demo/users/face11.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
+                        <img src="{{ asset('assets/images/demo/users/face11.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
                     <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->name }}</span>

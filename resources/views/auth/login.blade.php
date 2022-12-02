@@ -3,13 +3,13 @@
     <head>
         @include('layouts.shared.title-meta', ['title' => "Log In"])
 
-        <link rel="stylesheet" href="{{ asset('tasset/fonts/inter/inter.css') }}">
-        <link rel="stylesheet" href="{{ asset('tasset/icons/phosphor/styles.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('tasset/css/ltr/all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}">
 
-        <link rel="stylesheet" href="{{ asset('tasset/css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
-        <script src="{{ asset('tasset/js/app.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
     </head>
 
     <body style="background: #001949;">
