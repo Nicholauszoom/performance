@@ -30,14 +30,28 @@
             </thead>
 
             <tbody>
-                {{-- @foreach ($audits as $audit) --}}
-                <tr>
-                    <td>1</td>
-                    <td><a href="#">IT</a></td>
-                    <td>Actions</td>
+                @if(isset($departments))
+                    @foreach($departments as $departments)
 
-                </tr>
-                {{-- @endforeach --}}
+                        <tr>
+                            <th>{{ $loop->iteration }}</th>
+                            <td>{{ $permission->name }}</td>
+
+                            <td align="center">
+                                {!! Form::open(['route' => ['departments.destroy', $permission->id], 'method' => 'delete']) !!}
+                                <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
+                                        data-toggle="modal"
+                                        data-id="{{$permission->id}}"
+                                 data-name="{{$permission->name}}"
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                                {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                                {{ Form::close() }}
+                            </td>
+                        </tr>
+
+                    @endforeach
+                    @endif
             </tbody>
         </table>
     </div>
@@ -45,7 +59,7 @@
 @endsection
 
 
-@section('content')
+{{-- @section('content')
 <section class="section">
     <div class="section-body">
         @include('layouts.alerts.message')
@@ -89,8 +103,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(isset($permissions))
-                    @foreach($permissions as $permission)
+                    @if(isset($departments))
+                    @foreach($departments as $departments)
 
                         <tr>
                             <th>{{ $loop->iteration }}</th>
@@ -130,7 +144,7 @@
 @include('access-controll.department.add')
 @include('access-controll.department.edit')
 
-@endsection
+@endsection --}}
 
 {{-- @section('scripts')
 <script>

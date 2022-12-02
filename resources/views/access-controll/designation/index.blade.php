@@ -110,3 +110,75 @@
         });
     </script>
 @endsection --}}
+
+
+@extends('layouts.vertical', ['title' => 'Position'])
+
+@push('head-script')
+    <script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+    <script src="{{ asset('tasset/js/pages/datatables_advanced.js') }}"></script>
+@endpush
+
+
+@section('content')
+
+<div class="card">
+    <div class="card-header border-0">
+        <h5 class="mb-0 text-muted">Position</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <h5>List of Position</h5>
+
+            {{-- <a href="{{ route('employee.create') }}" class="btn btn-primary">Register Employee</a> --}}
+        </div>
+    </div>
+
+    <table class="table datatable-show-all">
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Department Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @if(isset($permissions))
+                @foreach($permissions as $permission)
+
+                    <tr>
+                        <th>{{ $loop->iteration }}</th>
+                        <td>{{ $permission->name }}</td>
+                        <td>{{ $permission->department->name }}</td>
+                        <td align="center">
+                            {!! Form::open(['route' => ['designations.destroy', $permission->id], 'method' => 'delete']) !!}
+                            <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
+                                    data-toggle="modal"
+                                    data-id="{{$permission->id}}"
+                            data-name="{{$permission->name}}"
+                            data-department="{{$permission->department_id}}"
+                                <i class="fa fa-edit"></i> Edit
+                            </button>
+                            {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                            {{ Form::close() }}
+                        </td>
+                    </tr>
+
+                @endforeach
+            @endif
+        </tbody>
+    </table>
+</div>
+
+@endsection
+
+
+
+
