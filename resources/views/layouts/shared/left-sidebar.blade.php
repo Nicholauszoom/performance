@@ -7,7 +7,7 @@
         <!-- Sidebar header -->
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted">HR & Payroll System</h5>
+                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted">BANK ABC</h5>
 
                 <div>
                     <button type="button"
