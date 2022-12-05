@@ -7,7 +7,7 @@
         <!-- Sidebar header -->
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted">BANK ABC</h5>
+                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted">      BANK ABC</h5>
 
                 <div>
                     <button type="button"
@@ -125,8 +125,8 @@
 
                         <li class="nav-item">
                             <a
-                                href="{{ route('payslip') }}"
-                                class="nav-link {{ request()->routeIs('payslip') ? 'active' : null  }}">
+                                href="{{ route('employee_payslip') }}"
+                                class="nav-link {{ request()->routeIs('employee_payslip') ? 'active' : null  }}">
                                 Payslip
                             </a>
                         </li>

@@ -9,14 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payroll extends Model
 {
-    use HasFactory;
-
-    protected $table = "tbl_accounts";
-
-    protected $primaryKey = "account_id";
-
-    protected $fillable = ['account_id','account_name','description','balance','account_number','contact_person','contact_phone','bank_details','permission'];
-
     public function customemployee() {
         $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e WHERE e.state != 4 and e.login_user != 1 ";
         return DB::select(DB::raw($query));
@@ -1145,7 +1137,7 @@ DB::insert(DB::row($query));
     public function sdl_contribution(){
         $query = "rate_employer  as sdl  WHERE  id = 4";
        $row =  DB::table('deduction')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->sdl;
     }
@@ -1153,7 +1145,7 @@ DB::insert(DB::row($query));
     public function wcf_contribution(){
         $query = "rate_employer as wcf  WHERE id = 2";
         $row =  DB::table('deduction')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->wcf;
     }
@@ -1162,7 +1154,7 @@ DB::insert(DB::row($query));
 
         $query = "IF((SELECT COUNT(id))>0, (payroll_date WHERE state = 0 ORDER BY id DESC LIMIT 1), ".$currentDate.") as payroll_date ";
         $row =  DB::table('payroll_months')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->payroll_date ;
     }
@@ -1171,7 +1163,7 @@ DB::insert(DB::row($query));
 
         $query = "SELECT IF((SELECT COUNT(id))>0, (SELECT payroll_date WHERE state != 0 ORDER BY id DESC LIMIT 1), ".$currentDate.") as payroll_date ";
         $row =  DB::table('payroll_months')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->payroll_date ;
     }
@@ -1207,9 +1199,10 @@ DB::insert(DB::row($query));
 
     public function total_allowances($table, $payrollMonth){
 
-        $query = "SUM(amount) as amount  WHERE payment_date = '".$payrollMonth."'";
+        $query = "SUM(amount) as amount";
         $row =  DB::table($table)
-        ->select(DB::raw(query))
+        ->where("payment_date",$payrollMonth)
+        ->select(DB::raw($query))
         ->first();
         
         return $row->amount;
@@ -1233,7 +1226,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
         $query = "SUM(ll.paid) as paid FROM  ".$table." ll, loan lo WHERE ll.payment_date = '".$payrollMonth."' AND ll.loanID = lo.id AND lo.type = 3";
         $table2 = $table."as ll";
         $row =  DB::table($table2)
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->paid;
     }
@@ -1241,28 +1234,31 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
     public function total_deductions($table, $payrollMonth){
 
-        $query = "SUM(paid) as paid  WHERE payment_date = '".$payrollMonth."'";
+        $query = "SUM(paid) as paid";
        
         $row =  DB::table($table)
-        ->select(DB::raw(query))
+        ->where('payment_date',$payrollMonth)
+        ->select(DB::raw($query))
         ->first();
         return $row->paid;
     }
 
     public function total_bonuses($payrollMonth){
 
-        $query = "SUM(amount) as amount  WHERE payment_date = '".$payrollMonth."'";
+        $query = "SUM(amount) as amount";
         $row =  DB::table('bonus_logs')
-        ->select(DB::raw(query))
+        ->where('payment_date',$payrollMonth)
+        ->select(DB::raw($query))
         ->first();
         return $row->amount;
     }
 
     public function total_overtimes($payrollMonth){
 
-        $query = "SUM(amount) as amount WHERE payment_date = '".$payrollMonth."'";
+        $query = "SUM(amount) as amount";
         $row =  DB::table('overtime_logs')
-        ->select(DB::raw(query))
+        ->where('payment_date',$payrollMonth)
+        ->select(DB::raw($query))
         ->first();
         return $row->amount;
     }
@@ -1308,7 +1304,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
         $query = "SUM(tal.amount) as total_al  WHERE tal.empID = '".$empID."' AND tal.payment_date = '".$payrollMonth."'";
         $table2 = $table."as tal";
         $row =  DB::table($table2)
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->total_al;
     }
@@ -1319,7 +1315,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
         $query = "SUM(tdl.paid) as total_de WHERE tdl.empID = '".$empID."' AND tdl.payment_date = '".$payrollMonth."'";
         $table2 = $table."as tdl";
         $row =  DB::table($table2)
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->total_de;
     }
@@ -1385,7 +1381,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
        
         $row =  DB::table('payroll_logs')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
         return $row->payroll_date;
     }
@@ -1451,7 +1447,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
     public function update_payroll_month_only($updates, $payroll_date)
     {
-        DB::transaction(function()
+        DB::transaction(function() use($payroll_date,$updates)
        {
 
         DB::table('payroll_months')->
