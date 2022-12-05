@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('user_email');
             $table->string('action_performed');
             $table->string('ip_address', 45);
+            $table->string('user_agent');
             $table->integer('risk')->nullable();
             $table->timestamps();
         });
