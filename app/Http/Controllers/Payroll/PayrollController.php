@@ -10,17 +10,17 @@ use App\CustomModels\flexFerformanceModel;
 use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Payroll\ReportModel;
+use App\Helpers\SysHelpers;
 
 class PayrollController extends Controller
 {  
     
-    public function __construct($payroll_model=null,$flexperformance_model = null,ReportsModel $reports_model=null)
+    public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null)
     {   
-        
         $this->payroll_model = new Payroll();
-       // $this->payroll_model = $payroll_model;
-        $this->reports_model = $reports_model;
-        $this->flexperformance_model = $flexperformance_model;
+        $this->reports_model = new ReportModel;
+        $this->flexperformance_model = new FlexPerformanceModel;
     }
 
 
@@ -276,9 +276,9 @@ class PayrollController extends Controller
 
     // }
 
-    public function ADVtemp_less_payments()
+    public function ADVtemp_less_payments(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         $payrollMonthRecent = $this->payroll_model->recent_payroll_month1(date('Y-m-d'));
 
         if ($payrollMonthRecent) {
@@ -291,9 +291,12 @@ class PayrollController extends Controller
         $data['payroll_list'] = $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
         $data['confirmed'] = 1;
         $data['payroll_state'] = 0;
-        $data['title'] = "Payroll Info";
-
-        $this->load->view('less_payments', $data);
+        $title = "Payroll Info";
+        $parent = "Payroll";
+        $child = "Payroll Info";
+        
+        return view('payroll.less_payments',compact('title','data','parent','child'));
+        
     }
 
     public function less_payments()
@@ -383,9 +386,9 @@ class PayrollController extends Controller
         return $buf;
     }
 
-    public function grossReconciliation()
+    public function grossReconciliation(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         if (isset($payrollMonth)) {
             $current_payroll_month = $payrollMonth;
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
@@ -408,9 +411,12 @@ class PayrollController extends Controller
             $data['emp_ids'] = $payroll_employees;
             $data['total_previous_gross'] = $total_previous_gross;
             $data['total_current_gross'] = $total_current_gross;
-
-
-            $this->load->view('gross_recon', $data);
+            $title = "Gross Reconciliation";
+            $parent = "Payroll";
+            $child = "Gross Reconciliation";
+            
+            return view('payroll.gross_recon',compact('title','parent','child','data'));
+            
 
 
         }
@@ -607,31 +613,39 @@ class PayrollController extends Controller
 
     public function comission_bonus()
     {
-        if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
+       // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
             $data['employee'] = $this->payroll_model->customemployee();
-            $data['title'] = "Comission and Bonuses";
-            $this->load->view('comission_bonus', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+            $title = "Comission and Bonuses";
+            $parent = "Payroll";
+            $child = "Incentives";
+           
+
+            return view('payroll.comission_bonus',compact('title','parent','child','data'));
+        // } else {
+        //     echo "Unauthorized Access";
+        // }
     }
 
     public function partial_payment()
     {
-        if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
+       // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
             $data['employee'] = $this->payroll_model->customemployee();
             $data['partial_payments'] = $this->payroll_model->partial_payment_list();
-            $data['title'] = "Comission and Bonuses";
-            $this->load->view('partial_payment', $data);
-        } else {
-            echo "Unauthorized Access";
-        }
+            $title = "Comission and Bonuses";
+            $parent = "Comission and Bonuses";
+            $child = "Comission and Bonuses";
+            
+
+            return view('payroll.partial_payment',compact('title','parent','child','data'));
+        // } else {
+        //     echo "Unauthorized Access";
+        // }
     }
 
     public function salary_calculator()
@@ -892,17 +906,8 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->update_payroll_month_only($updates, $payrollMonth);
             }
             if ($result == true) {
-
-
-                $logData = array(
-                    'empID' => auth()->user()->id,
-                    'description' => "Generating checklist of full payment of payroll of date " . $payrollMonth,
-                    'agent' => $request->userAgent(),
-                    'platform' => '....',
-                    'ip_address' => $request->ip()
-                );
-
-                $result = $this->flexperformance_model->insertAuditLog($logData);
+                $description ="Generating checklist of full payment of payroll of date " . $payrollMonth;
+                $result = SysHelpers::auditLog(2,$description,$request);
 
                 $response_array['status'] = 1;
                 $response_array['message'] = "<p class='alert alert-success text-center'>Pay Checklist Generated)</p>";

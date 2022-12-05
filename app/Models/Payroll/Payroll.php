@@ -1160,9 +1160,12 @@ DB::insert(DB::row($query));
     }
 
     public function recent_payroll_month1($currentDate){
-
-        $query = "SELECT IF((SELECT COUNT(id))>0, (SELECT payroll_date WHERE state != 0 ORDER BY id DESC LIMIT 1), ".$currentDate.") as payroll_date ";
+       $count = DB::table('payroll_months')
+       ->select('id')
+       ->count();
+        $query = "IF((".$count.")>0, (SELECT payroll_date WHERE state != 0 ORDER BY id DESC LIMIT 1), ".$currentDate.") as payroll_date ";
         $row =  DB::table('payroll_months')
+        //->where('state','!=',0)
         ->select(DB::raw($query))
         ->first();
         return $row->payroll_date ;
