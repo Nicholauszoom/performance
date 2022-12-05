@@ -66,8 +66,6 @@
                                 <label class="ms-2" for="dc_li_u">Femal</label>
                             </div>
                         </div>
-
-                        {{-- <input type="text" name="fname" class="form-control" placeholder="First Name"> --}}
                     </div>
                 </div>
 
@@ -90,8 +88,8 @@
                         <label class="form-label">Nationality:</label>
                         <select class="form-control select" name="nationality">
                             <option selected disabled> Select </option>
-                            <option value="TANZANIA">Tanzania</option>
-                            <option value="KENYA">Kenya</option>
+                            <option value="255">Tanzania</option>
+                            <option value="254">Kenya</option>
                         </select>
                     </div>
                 </div>
@@ -138,6 +136,7 @@
                     <div class="mb-3">
                         <label class="form-label">Department:</label>
                         <select class="form-control select" name="department">
+                            <option selected disabled> Select </option>
                             <option value="1">Finance</option>
                             <option value="2">Information Technology</option>
                         </select>
@@ -148,6 +147,7 @@
                     <div class="mb-3">
                         <label class="form-label">Position:</label>
                         <select class="form-control select" name="position">
+                            <option selected disabled> Select </option>
                             <option value="1">Manager</option>
                             <option value="2">Position 2</option>
                         </select>
@@ -158,10 +158,8 @@
                     <div class="mb-3">
                         <label class="form-label">Line Manager:</label>
                         <select class="form-control select" name="line_manager">
-                            <option value="AZ">Arizona</option>
-                            <option value="CO">Colorado</option>
-                            <option value="ID">Idaho</option>
-                            <option value="WY">Wyoming</option>
+                            <option selected disabled> Select </option>
+                            <option value="DOUGLAS FORTUNATUS">Douglas Fortunatus</option>
                         </select>
                     </div>
                 </div>
@@ -170,6 +168,7 @@
                     <div class="mb-3">
                         <label class="form-label">Company Branch:</label>
                         <select class="form-control select" name="branch" required>
+                            <option selected disabled> Select </option>
                             <option value="AZ">Arizona</option>
                             <option value="CO">Colorado</option>
                             <option value="ID">Idaho</option>
@@ -195,7 +194,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Contract End:</label>
-                        <input type="date" name="contract_end" class="form-control">
+                        <input type="date" name="contract_end" value="{{ old('contract_end') }}" class="form-control">
                     </div>
                 </div>
 
@@ -214,14 +213,14 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Membership No:</label>
-                        <input type="text" name="pf_membership_no" class="form-control" placeholder="Membership No">
+                        <input type="text" name="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control" placeholder="Membership No">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Code:</label>
-                        <input type="text" name="fname" class="form-control" placeholder="First Name">
+                        <input type="text" name="" class="form-control" placeholder="First Name">
                     </div>
                 </div>
 
@@ -250,7 +249,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank Account No:</label>
-                        <input type="text" name="account_no" class="form-control" placeholder="01J85784784785">
+                        <input type="text" name="account_no" value="{{ old('account_no') }}" class="form-control" placeholder="01J85784784785">
                     </div>
                 </div>
 
@@ -278,35 +277,35 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Physical Address:</label>
-                        <input type="text" name="fname" class="form-control" placeholder="Physical Address">
+                        <input type="text" name="physical_address" value="{{ old('physical_address') }}" class="form-control" placeholder="Physical Address">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Home Address:</label>
-                        <input type="text" name="home" class="form-control" placeholder=" ... ">
+                        <input type="text" name="home" value="{{ old('home') }}" class="form-control" placeholder=" Home Address ">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">National ID:</label>
-                        <input type="text" name="fname" class="form-control" placeholder="National ID">
+                        <input type="text" name="national_id" value="{{ old('national_id') }}" class="form-control" placeholder="National ID">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Tin:</label>
-                        <input type="text" name="tin" class="form-control" placeholder="tin .... ">
+                        <input type="text" name="tin" value="{{ old('tin') }}" class="form-control" placeholder="tin">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Level:</label>
-                        <input type="text" name="level" class="form-control" placeholder="level">
+                        <input type="text" name="level" value="{{ old('level') }}" class="form-control" placeholder="level">
                     </div>
                 </div>
             </div>

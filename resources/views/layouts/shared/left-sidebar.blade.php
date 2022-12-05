@@ -266,14 +266,15 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                    <li class="nav-item">
-                            <a
-                                href="{{ route('departments.index') }}"
-                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
-                            >
-                            Company Registration
-                            </a>
+                        <li class="nav-item">
+                                <a
+                                    href="{{ route('departments.index') }}"
+                                    class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                                >
+                                Company Registration
+                                </a>
                         </li>
+
                         <li class="nav-item">
                             <a
                                 href="{{ route('departments.index') }}"
@@ -289,6 +290,15 @@
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
                             >
                                 Departments
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                            >
+                                Position
                             </a>
                         </li>
 

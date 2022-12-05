@@ -1,22 +1,29 @@
-@extends('layouts.vertical', ['title' => 'Department'])
+@extends('layouts.vertical', ['title' => 'Departments'])
 
 @push('head-script')
-	<script src="{{ asset('assets/js/components/notifications/bootbox.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/components_modals.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
 @endpush
-
-{{-- @extends('layouts.master') --}}
 
 @section('content')
 
     <div class="card">
         <div class="card-header border-0">
-            <h5 class="mb-0 text-muted">Departments</h5>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-muted">Departments</h5>
+
+                <button
+                    type="button"
+                    class="btn btn-perfrom"
+                    data-bs-toggle="modal"
+                    data-bs-target="#save_department"
+                >
+                    <i class="ph-plus me-2"></i> Department
+                </button>
+            </div>
         </div>
 
 
@@ -25,27 +32,37 @@
                 <tr>
                     <th>S/N</th>
                     <th>Name</th>
-                    <th>Action</th>
+                    <th>HOD</th>
+                    <th>Reports To</th>
+                    <th>State</th>
+                    <th class="text-center">Action</th>
                 </tr>
             </thead>
 
             <tbody>
                 @if(isset($departments))
-                    @foreach($departments as $departments)
-
+                    @foreach($departments as $department)
                         <tr>
-                            <th>{{ $loop->iteration }}</th>
-                            <td>{{ $permission->name }}</td>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $department->name }}</td>
+                            <td> HOD </td>
+                            <td> Upper level </td>
+                            <td> Active </td>
 
                             <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $permission->id], 'method' => 'delete']) !!}
-                                <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
-                                        data-toggle="modal"
-                                        data-id="{{$permission->id}}"
-                                 data-name="{{$permission->name}}"
-                                    <i class="fa fa-edit"></i> Edit
+                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-info btn-xs edit_permission_btn"
+                                    data-toggle="modal"
+                                    data-id="{{ $department->id }}"
+                                    data-name="{{ $department->name }}"
+                                >
+                                    <i class="ph-note-pencil"></i> Edit
                                 </button>
-                                {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+
+                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
                             </td>
                         </tr>
@@ -55,6 +72,12 @@
             </tbody>
         </table>
     </div>
+
+@endsection
+
+@section('modal')
+
+   @include('organisation.department.inc.add')
 
 @endsection
 

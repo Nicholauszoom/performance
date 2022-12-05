@@ -9,6 +9,18 @@
     border-right: 1px solid rgba(0, 0, 0, 0.144);
 }
 
+.btn-perfrom {
+    background-color: #001a49ef;
+    color: #fff;
+    font-weight: 500;
+}
+
+.btn-perfrom:hover {
+    background-color: #001a49cf;
+    color: #fff;
+    font-weight: 500;
+}
+
 .sidebar-control {
     color: #000;
 }

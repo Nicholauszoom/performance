@@ -10,8 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 class Departments extends Model
 {
     use HasFactory;
- protected $table = 'tbl_departments';
+    protected $table = 'departments';
+
     protected $fillable = [
-        'name'
+        'name',
+        'code',
+        'type',
+        'department_head_id',
+        'reports_to',
+        'State',
+        'department_pattern',
+        'parent_pattern',
+        'level',
+        'created_by',
     ];
+
 }
