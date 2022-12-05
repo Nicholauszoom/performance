@@ -9,12 +9,16 @@ use App\CustomModels\PayrollModel;
 use App\CustomModels\flexFerformanceModel;
 use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class PayrollController extends Controller
-{
-    public function __construct(PayrollModel $payroll_model=null,flexFerformanceModel $flexperformance_model = null,ReportsModel $reports_model=null)
-    {
-        $this->payroll_model = $payroll_model;
+{  
+    
+    public function __construct($payroll_model=null,$flexperformance_model = null,ReportsModel $reports_model=null)
+    {   
+        
+        $this->payroll_model = new Payroll();
+       // $this->payroll_model = $payroll_model;
         $this->reports_model = $reports_model;
         $this->flexperformance_model = $flexperformance_model;
     }
@@ -146,16 +150,17 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
-            $data['title'] = 'Employee Payslip';
+        //if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
+            $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
-            $data['title'] = "Employee Payslip";
             $data['month_list'] = $this->payroll_model->payroll_month_list();
             $data['employee'] = $this->payroll_model->customemployee();
-            $this->load->view('employee_payslip', $data);
-        } else {
-            echo 'Unauthorised Access';
-        }
+            
+            return view('payroll.employee_payslip',compact('data','title','parent','child'));
+            
+       // } else {
+         //   echo 'Unauthorised Access';
+       // }
 
     }
 
@@ -163,12 +168,12 @@ class PayrollController extends Controller
     {
         // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
 
-        $payroll = new Payroll();
+        
 
-        $data['pendingPayroll_month'] = $payroll->pendingPayroll_month();
-        $data['pendingPayroll'] = $payroll->pendingPayrollCheck();
-        $data['payroll'] = $payroll->pendingPayroll();
-        $data['payrollList'] = $payroll->payrollMonthList();
+        $data['pendingPayroll_month'] = $this->payroll_model->pendingPayroll_month();
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['payroll'] = $this->payroll_model->pendingPayroll();
+        $data['payrollList'] = $this->payroll_model->payrollMonthList();
         $data['title'] = "Payroll";
 
         //dd($data);
@@ -176,8 +181,9 @@ class PayrollController extends Controller
 
         return view('payroll.payroll', [
             'data' => $data,
-            'parent' => 'Payroll',
-            'child' => 'Payroll'
+            'parent'=>'Payroll',
+            'child'=>'Paayroll'
+            
         ]);
 
         // } else {
@@ -211,9 +217,9 @@ class PayrollController extends Controller
     }
 
 
-    public function temp_payroll_info()
+    public function temp_payroll_info(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_month_info'] = $this->payroll_model->payroll_month_info($payrollMonth);
         // $data['payroll_list'] =  $this->payroll_model->employeePayrollList("temp_payroll_logs",$payrollMonth);
@@ -234,7 +240,8 @@ class PayrollController extends Controller
         $data['total_deductions'] = $this->payroll_model->total_deductions("temp_deduction_logs", $payrollMonth);
         $data['payroll_state'] = 0;
         $data['title'] = "Payroll Info";
-        $this->load->view('payroll_info', $data);
+
+        return view('payroll.payroll_info',compact('data'));
     }
 
     public function payroll_info()
@@ -845,9 +852,9 @@ class PayrollController extends Controller
 
     }
 
-    function generate_checklist()
+    function generate_checklist(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         $result = false;
         if ($payrollMonth != '') {
             $updates = array(
@@ -888,11 +895,11 @@ class PayrollController extends Controller
 
 
                 $logData = array(
-                    'empID' => $this->session->userdata('emp_id'),
+                    'empID' => auth()->user()->id,
                     'description' => "Generating checklist of full payment of payroll of date " . $payrollMonth,
-                    'agent' => $this->session->userdata('agent'),
-                    'platform' => $this->agent->platform(),
-                    'ip_address' => $this->input->ip_address()
+                    'agent' => $request->userAgent(),
+                    'platform' => '....',
+                    'ip_address' => $request->ip()
                 );
 
                 $result = $this->flexperformance_model->insertAuditLog($logData);
@@ -909,7 +916,9 @@ class PayrollController extends Controller
 
         }
         header('Content-type: application/json');
-        echo json_encode($response_array);
+        return  json_encode($response_array);
+        
+       
     }
 
     function arrearsPayment()

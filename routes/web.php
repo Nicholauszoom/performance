@@ -59,7 +59,38 @@ Route::middleware('auth')->group(function () {
     //route for payroll
     Route::group(['prefix' => 'payroll'], function () {
         Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
-        Route::any('payslip', [PayrollController::class, 'payslip'])->name('payslip');
+        Route::any('temp_payroll_info',[PayrollController::class,'temp_payroll_info'])->name('temp_payroll_info');
+        Route::post('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
+        Route::post('payroll_report',[PayrollController::class,'payroll_report'])->name('payroll_report');
+        Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
+        Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
+        Route::any('send_payslips',[PayrollController::class,'send_payslips'])->name('send_payslips');
+        Route::any('recommendpayroll',[PayrollController::class,'recommendpayroll'])->name('recommendpayroll');
+        Route::any('cancelpayroll',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
+        Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
+        Route::any('less_payments_print',[PayrollController::class,'less_payments_print'])->name('less_payments_print');
+        Route::any('grossReconciliation',[PayrollController::class,'grossReconciliation'])->name('grossReconciliation');
+        Route::any('netReconciliation',[PayrollController::class,'netReconciliation'])->name('netReconciliation');
+        Route::any('sendReviewEmail',[PayrollController::class,'sendReviewEmail'])->name('sendReviewEmail');
+        Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
+        Route::any('generate_checklist',[PayrollController::class,'generate_checklist'])->name('generate_checklist');
+        Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
+        Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
+
+        
+        
+
+
+
+
+        
+        
+        
+
+        
+        
+        
+  
         Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
 
