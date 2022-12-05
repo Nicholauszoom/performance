@@ -58,52 +58,62 @@
                     <ul class="nav-group-sub collapse">
                         <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                                                 >
-                               Employees Info Management
+                                href="{{ route('employee.active') }}"
+                                class="nav-link {{ request()->routeIs('employee.active') ? 'active' : null  }}"
+                            >
+                               Active Employee
                             </a>
                         </li>
+
                         <li class="nav-item">
+                            <a
+                                href="{{ route('employee.suspended') }}"
+                                class="nav-link {{ request()->routeIs('employee.suspended') ? 'active' : null  }}"
+                            >
+                                Suspended Employee
+                            </a>
+                        </li>
+
+                        {{-- <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                                               >
-                                               Transfers  Management
+                            >
+                                Transfers  Management
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li> --}}
+                        {{-- <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
                             Attendance
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li> --}}
+                        {{-- <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
                             Overtime management
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li> --}}
+                        {{-- <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
                             Grievances and Disciplinary Management
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li> --}}
+                        {{-- <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
                                 class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
                             >
                             Performance & Productiviy Management
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
 
@@ -183,7 +193,7 @@
                 {{-- /Payroll management --}}
 
 
-                <li class="nav-item nav-item-submenu">
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-stack"></i>
                         <span>Learning & Development</span>
@@ -205,11 +215,11 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
 
 
-                <li class="nav-item nav-item-submenu">
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-trophy"></i>
                         <span>Talent Management</span>
@@ -225,7 +235,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
                 {{-- /workforce management --}}
 

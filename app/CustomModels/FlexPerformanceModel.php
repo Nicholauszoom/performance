@@ -20,9 +20,9 @@ trait FlexPerformanceModel{
 	function audit_logs()
 	{
 		$query = "SELECT  d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated,   CAST(al.due_date as time) as timed, p.name as position,  d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_logs al, employee e, position p, department d  WHERE al.empID = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.due_date DESC";
-        
+
         return DB::select(DB::raw($query));
-		
+
 	}
 
 	function audit_purge_logs()
@@ -34,14 +34,14 @@ trait FlexPerformanceModel{
 
 	public function clear_audit_logs() {
         DB::table('audit_logs')->truncate();
-        
+
         return true;
     }
 
     function getCurrentStrategy()
 	{
 		$query = "id as strategyID  ORDER BY id DESC limit 1";
-		
+
         $row =  DB::table('strategy')
         ->select(DB::raw(query))
         ->first();
@@ -118,14 +118,14 @@ trait FlexPerformanceModel{
 		 DB::transaction(function()
        {
         DB::table('branch')->insert($data);
-		
+
         $query = " id ORDER BY id DESC LIMIT 1";
         $row =  DB::table('branch')
         ->select(DB::raw(query))
         ->first();
-		
+
 		});
-		
+
     	return $row->id;
 	}
 
@@ -190,7 +190,7 @@ trait FlexPerformanceModel{
         Db::table('employee')
 		->select(DB::raw($query))
 		->first();
-		
+
 		return $row->counts;
 	}
 
@@ -229,7 +229,7 @@ trait FlexPerformanceModel{
 		$row = DB::table('company_info')
 		->select(DB::raw($query))
 		->first();
-		
+
     	return $row->logo;
 	}
 
@@ -500,7 +500,7 @@ trait FlexPerformanceModel{
 	     DB::transaction(function()
        {
 	    $query = "UPDATE employee_overtime SET status = 3, hr ='".$signatory."',time_approved_hr ='".$time_approved."'  WHERE id ='".$id."'";
-		DB::insert(DB::raw($query));    
+		DB::insert(DB::raw($query));
 	});
 
 		return true;
@@ -509,7 +509,7 @@ trait FlexPerformanceModel{
 	     DB::transaction(function()
        {
 	    $query = "UPDATE employee_overtime SET status = 4, finance='".$signatory."',time_approved_fin ='".$time_approved."'  WHERE id ='".$id."'";
-		DB::insert(DB::raw($query));    
+		DB::insert(DB::raw($query));
 	});
 
 		return true;
@@ -530,7 +530,7 @@ trait FlexPerformanceModel{
 	{
 		$data = DB::table('contract')->where('id', $id)
 		->select(DB::raw('*'));
-		
+
 		return $data;
 	}
 
@@ -1086,7 +1086,7 @@ function retire_list()
 		$row = DB::table('employee')
 		->select(DB::raw($query))
 		->count();
-		
+
 		if($row>0) {
 			$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,birthdate from employee  WHERE emp_id = '".$empID."'  ";
 			return DB::select(DB::raw($query));
@@ -1247,7 +1247,7 @@ function getMeaslById($deductionID)
 
 
 	function updateDeductions($updates, $deductionID)
-	{   
+	{
 		DB::table('deductions')->where('id', $deductionID)
 		->update($updates);
 	;
@@ -1259,7 +1259,7 @@ function getMeaslById($deductionID)
 	{
 		DB::table('deduction')->where('id', $id)
 		->update($data);
-	
+
 		return true;
 
 	}
@@ -1575,7 +1575,7 @@ function OvertimeCategoryInfo($id)
 		$this->load->database();
 		$data = DB::table('paye')->where('id', $id);
 
-		 
+
 		return $data->get();
 	}
 
@@ -1990,7 +1990,7 @@ function run_payroll($payroll_date, $payroll_month){
 		->first();
 		return $row->margin;
 	}
-	
+
 
 
 	function mysalary_advance($empID)
@@ -2119,7 +2119,7 @@ function run_payroll($payroll_date, $payroll_month){
 	{
 		//$this->load->database();
 		$data = DB::table('loan_application')->where('id', $id);
-		 
+
 		return $data->get();
 	}
 
@@ -2374,7 +2374,7 @@ function allLevels()
 	function addBankBranch($data)
 	{
 		DB::table('bank_branch')->insert($data);
-		
+
 		return true;
 	}
 	function getbank($id)
@@ -2423,15 +2423,15 @@ function allLevels()
 
 	function employeeAdd($employee)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function($employee)
        {
-		DB::table('employee')->insert($employee);
-        // ->insert("company_property", $property);
-        // ->insert("employee_group", $datagroup);
-        $query = "id ORDER BY id DESC LIMIT 1";
-        $row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
+            DB::table('employee')->insert($employee);
+            // ->insert("company_property", $property);
+            // ->insert("employee_group", $datagroup);
+            $query = "id ORDER BY id DESC LIMIT 1";
+            $row = DB::table('employee')
+            ->select(DB::raw($query))
+            ->first();
         });
 		return $row->id;
 	}
@@ -2852,13 +2852,13 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	     DB::transaction(function()
        {
 	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
-        DB::insert(DB::raw($query));  
+        DB::insert(DB::raw($query));
 	    $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    DB::insert(DB::raw($query));  
+	    DB::insert(DB::raw($query));
 		$query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    DB::insert(DB::raw($query));  
+	    DB::insert(DB::raw($query));
 		$query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
-		DB::insert(DB::raw($query));  
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -2871,7 +2871,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	     DB::transaction(function()
        {
 	    $query = "DELETE FROM emp_role WHERE id ='".$refID."'";
-		DB::insert(DB::raw($query));  
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -3265,7 +3265,7 @@ DB::insert(DB::raw($query));
 		->select(DB::raw($query))
 		->first();
     	return !empty($row)? $row->output:"";
-    	
+
 	}
 
 
@@ -3455,7 +3455,7 @@ function my_grievances($empID)
        {
 		$query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
 select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
-ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast 
+ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast
 where ae.id = ast.assignment_employee_id and ast.status = 1 and ast.date is null;";
         DB::insert(DB::raw($query));
 		$query = "update assignment_task set date = '".$payroll_date."' where date is null ";

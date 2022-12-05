@@ -12,7 +12,7 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\ProjectController;
-use App\Models\Payroll\Payroll;
+use App\Http\Controllers\WorkforceManagement\EmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -45,8 +45,12 @@ Route::middleware('auth')->group(function () {
     /**
      * Workforce Manegment
      */
-    Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('members.active');
+
+    Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
     Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
+    Route::post('/performance/workforce-management/employee/store', [EmployeeController::class, 'storeEmployee'])->name('employee.store');
+
+    Route::get('/suspended-employee', [EmployeeController::class, 'suspendedEmployee'])->name('employee.suspended');
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 

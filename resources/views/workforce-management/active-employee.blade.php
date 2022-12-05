@@ -1,12 +1,18 @@
-@extends('layouts.vertical', ['title' => 'Page starter'])
+@extends('layouts.vertical', ['title' => 'Active Employees'])
 
 @push('head-script')
-    <script src="{{ asset('tasset/js/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('tasset/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+
+
+	{{-- <script src="../../../assets/js/vendor/tables/datatables/datatables.min.js"></script> --}}
+	<script src="{{ asset('assets/js/components/tables/datatables/extensions/responsive.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('tasset/js/pages/datatables_advanced.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/datatables_advanced.js') }}"></script> --}}
+
+    <script src="{{ asset('assets/js/pages/datatables_extension_responsive.js') }}"></script>
+
 @endpush
 
 
@@ -25,23 +31,23 @@
         </div>
     </div>
 
-    <table class="table datatable-show-all">
+    <table class="table datatable-responsive-column-controlled">
         <thead>
             <tr>
-                <th>S\No</th>
+                <th></th>
                 <th>Name</th>
                 <th>Gender</th>
                 <th>Position</th>
                 <th>Line Manager</th>
                 <th>Contacts</th>
-                <th>Action</th>
+                <th class="text-center">Action</th>
             </tr>
         </thead>
 
         <tbody>
             {{-- @foreach ($audits as $audit) --}}
             <tr>
-                <td>01</td>
+                <td></td>
                 <td><a href="#">Douglas Fortunatus Mkonyi</a></td>
                 <td>Male</td>
                 <td>Software Developer</td>
