@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccessControll\RoleController;
+use App\Http\Controllers\Recruitment\RegisterController;
 use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\SystemController;
 use App\Http\Controllers\AccessControll\UsersController;
@@ -65,6 +66,12 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    //Routes for Recruitment Module
+
+Route::group(['prefix' => 'recruitment'], function () {
+     Route::get('/', [RegisterController::class, 'index']);
+     Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
+    });
 });
 
 require __DIR__.'/auth.php';
