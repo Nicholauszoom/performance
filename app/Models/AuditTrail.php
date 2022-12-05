@@ -15,6 +15,7 @@ class AuditTrail extends Model
         'user_id',
         'action_performed',
         'ip_address',
+        'user_agent',
         'risk',
     ];
 }

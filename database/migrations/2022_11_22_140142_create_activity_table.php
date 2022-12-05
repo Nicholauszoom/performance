@@ -13,7 +13,7 @@ class CreateActivityTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_ctivity', function (Blueprint $table) {
+        Schema::create('tbl_activity', function (Blueprint $table) {
             $table->integer('id')->primary();
             $table->string('name', 200);
             $table->string('code', 50);

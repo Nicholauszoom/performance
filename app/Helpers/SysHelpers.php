@@ -22,14 +22,15 @@ class SysHelpers
      * @param string $ip
      * @return void
      */
-    public static function AuditLog($risk, $action, $ip)
+    public static function AuditLog($risk, $action, Request $request)
     {
         AuditTrail::create([
             'user_id' => Auth::user()->id,
             'user_email' => Auth::user()->email,
             'user_name' => Auth::user()->name,
             'action_performed' => $action,
-            'ip_address' =>  $ip,
+            'ip_address' =>  $request->ip(),
+            'user_agent' => $request->userAgent(),
             'risk' => $risk
         ]);
     }
