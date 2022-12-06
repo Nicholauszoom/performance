@@ -63,6 +63,14 @@ Route::middleware('auth')->group(function () {
     // Employee overtime
     Route::get('/perfromance/workforce-management/overtime', [EmployeeController::class, 'overtime'])->name('overtime');
 
+    // Imprest
+    Route::get('performance/workforce-management/imprest', [EmployeeController::class, 'imprest'])->name('imprest.index');
+
+    // Approve Employee
+    Route::get('/performance/workforce-management/employee-Approve/changes', [EmployeeController::class, 'approveEmpoyee'])->name('approve.changes');
+    Route::get('/performance/workforce-management/employee-/register', [EmployeeController::class, 'approveRegister'])->name('approve.register');
+
+
 
 
     //route for payroll
@@ -89,12 +97,12 @@ Route::middleware('auth')->group(function () {
         Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
         Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
-        
 
 
-        
 
-        
+
+
+
 
         Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
         Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
@@ -103,7 +111,7 @@ Route::middleware('auth')->group(function () {
         Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
         Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
 
-        
+
 
 
         Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
@@ -113,12 +121,12 @@ Route::middleware('auth')->group(function () {
 
 
 
-        
 
 
-        
 
-        
+
+
+
 
 
 

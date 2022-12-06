@@ -116,7 +116,11 @@ class EmployeeController extends Controller
         # code...
     }
 
-    // Inactive employee
+
+    /**
+     * Inactive employee
+     *
+     */
     public function suspendedEmployee()
     {
         $parent = 'Employee';
@@ -128,12 +132,46 @@ class EmployeeController extends Controller
         return view('workforce-management.suspended-employee', compact('parent', 'child', 'employee1', 'employee2'));
     }
 
+
+    /**
+     * Overtime
+     *
+     */
     public function overtime()
     {
         $parent = 'Employee';
-        $child = 'Suspended';
+        $child = 'Overtime';
 
         return view('workforce-management.overtime', compact('parent', 'child'));
+    }
+
+
+    /**
+     * Imprest
+     *
+     */
+    public function imprest()
+    {
+        $parent = 'Employee';
+        $child = 'Imprest';
+
+        return view('workforce-management.imprest', compact('parent', 'child'));
+    }
+
+    public function approveEmpoyee()
+    {
+        $parent = 'Employee';
+        $child = 'Approve Employee';
+
+        return view('workforce-management.approve.changes', compact('parent', 'child'));
+    }
+
+    public function approveRegister()
+    {
+        $parent = 'Employee';
+        $child = 'Approve Employee';
+
+        return view('workforce-management.approve.register', compact('parent', 'child'));
     }
 
 

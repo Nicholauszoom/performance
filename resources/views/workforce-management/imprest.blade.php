@@ -17,7 +17,7 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">My Overtime</h5>
+            <h5 class="mb-0 text-muted">Imprest</h5>
 
             <button
                     type="button"
@@ -25,7 +25,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#save_department"
                 >
-                    <i class="ph-paper-plane-tilt me-2"></i> Apply Overtime
+                    <i class="ph-paper-plane-tilt me-2"></i> Request Imprest
                 </button>
         </div>
     </div>
@@ -35,9 +35,10 @@
         <thead>
             <tr>
                 <th>S/N</th>
-                <th>Date</th>
-                <th>Total Overtime(in Hrs.)</th>
-                <th>Reason(Description)</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Date Requested</th>
+                <th>Cost</th>
                 <th>Status</th>
                 <th>Option</th>
             </tr>

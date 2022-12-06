@@ -80,16 +80,16 @@
                         </li>
                         <li class="nav-item">
                             <a
-                                {{-- href="{{ route('members.active') }}" --}}
-                                {{-- class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}" --}}
+                                href="{{ route('imprest.index') }}"
+                                class="nav-link {{ request()->routeIs('imprest.index') ? 'active' : null  }}"
                             >
                                 Imprest
                             </a>
                         </li>
                         <li class="nav-item">
                             <a
-                                {{-- href="{{ route('members.active') }}" --}}
-                                {{-- class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}" --}}
+                                href="{{ route('approve.changes') }}"
+                                class="nav-link {{ request()->routeIs('approve.changes') ? 'active' : null  }}"
                             >
                                 Employee Aproval
                             </a>
