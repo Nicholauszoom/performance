@@ -11,6 +11,8 @@ use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\GeneralController;
+
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
@@ -83,6 +85,40 @@ Route::middleware('auth')->group(function () {
         Route::any('generate_checklist',[PayrollController::class,'generate_checklist'])->name('generate_checklist');
         Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
         Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
+        Route::any('submitLessPayments', [PayrollController::class, 'submitLessPayments'])->name('submitLessPayments');
+        Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
+        Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
+        Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
+        
+
+
+        
+
+        
+
+        Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
+        Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
+        Route::any('p10', [ReportController::class, 'p10'])->name('reports.p10');
+        Route::any('pension', [ReportController::class, 'pension'])->name('reports.pension');
+        Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
+        Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
+
+        
+
+
+        Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
+        Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
+        Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
+        Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
+
+
+
+        
+
+
+        
+
+        
 
 
 
