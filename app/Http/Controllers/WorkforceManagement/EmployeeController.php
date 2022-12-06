@@ -22,7 +22,9 @@ class EmployeeController extends Controller
     {
         $parent = 'Employee';
         $child = 'Active';
-        $employee = $this->employeeModel->employee();
+        $employee = $this->employeeModel->employeeData();
+
+        dd($employee);
 
 
         return view('workforce-management.active-employee', compact('parent', 'child'));

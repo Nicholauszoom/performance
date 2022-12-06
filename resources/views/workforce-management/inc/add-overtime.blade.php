@@ -55,9 +55,7 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Reason for overtime <span class="text-danger">*</span> :</label>
                         <div class="col-sm-9">
-
-                            <textarea name="" id="" cols="30" rows="10"></textarea>
-
+                            <textarea rows="3" cols="3" class="form-control" placeholder="Enter your message here"></textarea>
                             @error('name')
                                 <p class="text-danger mt-1"> Input field Error </p>
                             @enderror
