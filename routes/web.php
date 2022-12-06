@@ -4,12 +4,14 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccessControll\RoleController;
 use App\Http\Controllers\Recruitment\RegisterController;
+use App\Http\Controllers\Recruitment\LoginController;
 use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\SystemController;
 use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\ProjectController;
@@ -69,9 +71,13 @@ Route::middleware('auth')->group(function () {
     //Routes for Recruitment Module
 
 Route::group(['prefix' => 'recruitment'], function () {
-     Route::get('/', [RegisterController::class, 'index']);
+     Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
      Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
+    Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
+
+    Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
     });
+    Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
 });
 
 require __DIR__.'/auth.php';

@@ -1,0 +1,117 @@
+<?php
+
+namespace App\Http\Controllers\Recruitment;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\AccessControll\User;
+use Illuminate\Support\Facades\Auth;
+
+class LoginController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    
+    public function loginProcess(Request $request)
+    {
+        //
+         $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'min:6'],
+        ]);
+        $username = $request->input('username');
+        $password = $request->input('password');
+        if (Auth::attempt(['name' => $username, 'password' => $password])) {
+            // Authentication was successful...
+            $user = Auth::user()->roles;
+            if ($user[0]->id === 1){
+                $request->session()->regenerate();
+ 
+                return redirect()->intended('jobsearch-Dashboard');        }
+            }
+            
+        else {
+            return back()->withErrors([
+                    'password' => 'The provided credentials do not match our records.',
+                ]);
+            return response()->json([
+                'msg' => 'Incorrect login details',
+            ], 401);
+        }
+    
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}

@@ -26,7 +26,9 @@
                 <div class="content d-flex justify-content-center align-items-center">
 
                     <!-- Registration form -->
-                    <form class="login-form" action="index.html">
+                    <form action="{{ route('register.store') }}" method="POST" class="login-form"
+                        enctype="multipart/form-data">
+                        @csrf
                         <div class="card mb-0">
                             <div class="card-body">
                                 <div class="text-center mb-3">
@@ -38,50 +40,73 @@
                                 </div>
 
                                 <div class="text-center text-muted content-divider mb-3">
-                                    <span class="px-2">Your credentials</span>
+                                    <span class="px-2">Register Your Account</span>
                                 </div>
+                                {{-- @if ($errors->any())
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif --}}
 
                                 <div class="mb-3">
                                     <label class="form-label">Username</label>
                                     <div class="form-control-feedback form-control-feedback-start">
-                                        <input type="text" class="form-control" placeholder="JohnDoe">
+                                        <input type="text" name="username" class="form-control"
+                                            placeholder="JohnDoe">
                                         <div class="form-control-feedback-icon">
                                             <i class="ph-user-circle text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
-
-
+                                @error('username')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
                                     <div class="form-control-feedback form-control-feedback-start">
-                                        <input type="text" class="form-control" placeholder="john@doe.com">
+                                        <input type="text" name="email" class="form-control"
+                                            placeholder="john@doe.com">
                                         <div class="form-control-feedback-icon">
                                             <i class="ph-at text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
-
+                                @error('email')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <div class="mb-3">
                                     <label class="form-label">Password</label>
                                     <div class="form-control-feedback form-control-feedback-start">
-                                        <input type="password" class="form-control" placeholder="•••••••••••">
+                                        <input type="password" name="password" class="form-control"
+                                            placeholder="•••••••••••">
                                         <div class="form-control-feedback-icon">
                                             <i class="ph-lock text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
-
+                                @error('password')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <div class="mb-3">
                                     <label class="form-label">Confirm Password</label>
                                     <div class="form-control-feedback form-control-feedback-start">
-                                        <input type="password" class="form-control" placeholder="•••••••••••">
+                                        <input type="password" name="cpassword" class="form-control"
+                                            placeholder="•••••••••••" autocomplete="current-password">
                                         <div class="form-control-feedback-icon">
                                             <i class="ph-lock text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
-
+                                @error('cpassword')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                                @if (Session::has('notMatch'))
+                                    <p class="text-danger">{{ Session::get('notMatch') }}</p>
+                                @endif
                                 <div class="mb-3">
                                     {{-- <label class="form-check mb-2">
                                         <input type="checkbox" name="remember" class="form-check-input" checked>
@@ -102,6 +127,9 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-teal w-100">Register</button>
+                                {{-- <a  title="Don't have an account? Register here"
+                                class="icon-2 info-tooltip"><button type="button" onclick='get()' class="btn btn-primary w-100 border-0">Test</button></a> --}}
+                                <a href="{{route('recruitment.login')}}"><p>Already Have an Account? Login</p></a>
                             </div>
                         </div>
                     </form>
@@ -115,8 +143,17 @@
 
         </div>
         <!-- /main content -->
-
     </div>
+    {{-- @if (Session::has('success'))
+        <p class="text-danger">{{ Session::get('success') }}</p>
+    @endif --}}
 </body>
+
+<script>
+    // $.get('{{route('register.store')}}',function(data) {
+    //     var x =data;
+    //     console.log(x)
+    // })
+</script>
 
 </html>

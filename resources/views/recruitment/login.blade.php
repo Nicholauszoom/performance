@@ -21,7 +21,7 @@
 
                         {{-- Login card --}}
                         <form
-                            action="{{ route('login') }}"
+                            action="{{ route('jobseeker.login') }}"
                             method="POST"
                             class="login-form"
                         >
@@ -41,13 +41,13 @@
 
                                         <div class="form-control-feedback form-control-feedback-start">
                                             <input
-                                                class="form-control @if($errors->has('email')) is-invalid @endif"
-                                                name="email"
-                                                type="email"
+                                                class="form-control @if($errors->has('username')) is-invalid @endif"
+                                                name="username"
+                                                type="text"
                                                 id="emailaddress"
                                                 required
-                                                value="{{ old('email')}}"
-                                                placeholder="admin@gmail.com"
+                                                value="{{ old('username')}}"
+                                                placeholder="JohnDoe"
                                             >
 
                                             <div class="form-control-feedback-icon">
@@ -55,9 +55,9 @@
                                             </div>
                                         </div>
 
-                                        @if($errors->has('email'))
+                                        @if($errors->has('username'))
                                         <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('email') }}</strong>
+                                            <strong>{{ $errors->first('username') }}</strong>
                                         </span>
                                         @endif
                                     </div>
