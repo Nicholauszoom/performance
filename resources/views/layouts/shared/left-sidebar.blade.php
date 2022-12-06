@@ -74,46 +74,30 @@
                             </a>
                         </li>
 
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                href="{{ route('overtime') }}"
+                                class="nav-link {{ request()->routeIs('overtime') ? 'active' : null  }}"
                             >
-                                Transfers  Management
+                                Overtime
                             </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                {{-- href="{{ route('members.active') }}" --}}
+                                {{-- class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}" --}}
                             >
-                            Attendance
+                                Imprest
                             </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                {{-- href="{{ route('members.active') }}" --}}
+                                {{-- class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}" --}}
                             >
-                            Overtime management
+                                Employee Aproval
                             </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                            >
-                            Grievances and Disciplinary Management
-                            </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                            >
-                            Performance & Productiviy Management
-                            </a>
-                        </li> --}}
+                        </li>
                     </ul>
                 </li>
 

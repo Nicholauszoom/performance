@@ -13,18 +13,12 @@ class CreateDepartmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('departments', function (Blueprint $table) {
-            // $table->id();
-            // $table->string('name');
-            // $table->integer('department_head_id')->nullable();
-            // $table->integer('added_by')->nullable();
-            // $table->timestamps();
-
+        Schema::create('department', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('code')->default(1);
             $table->string('name');
             $table->integer('type')->default(1)->comment("1-Department, 2-Subdepartment");
-            $table->integer('department_head_id')->nullable();
+            $table->integer('hod')->nullable();
             $table->integer('reports_to')->default(3);
             $table->integer('state')->default(1);
             $table->string('department_pattern');

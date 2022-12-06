@@ -4,26 +4,26 @@ namespace App\Http\Controllers\WorkforceManagement;
 
 use App\Helpers\SysHelpers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\setting\Bank;
 use App\Models\workforceManagement\Employee;
 
 class EmployeeController extends Controller
 {
 
-    public function __construct()
+    public function __construct($employeeModel = null, $bankModel = null)
     {
-
+        $this->employeeModel = new Employee();
+        $this->bankModel = new Bank();
     }
-
 
     public function activeMembers()
     {
         $parent = 'Employee';
         $child = 'Active';
+        $employee = $this->employeeModel->employee();
 
-        $employee = Employee::employee();
-
-        dd($employee);
 
         return view('workforce-management.active-employee', compact('parent', 'child'));
     }
@@ -32,8 +32,11 @@ class EmployeeController extends Controller
     {
         $parent = 'Employee';
         $child = 'Create';
+        $banks = $this->bankModel->bank();
 
-        return view('workforce-management.add-employee', compact('parent', 'child'));
+        // dd($banks);
+
+        return view('workforce-management.add-employee', compact('parent', 'child', 'banks'));
     }
 
     public function storeEmployee(Request $request)
@@ -113,17 +116,24 @@ class EmployeeController extends Controller
         # code...
     }
 
+    // Inactive employee
     public function suspendedEmployee()
     {
         $parent = 'Employee';
         $child = 'Suspended';
 
-        return view('workforce-management.suspended-employee', compact('parent', 'child'));
+        $employee1 = $this->employeeModel->inactive_employee1();
+        $employee2 = $this->employeeModel->inactive_employee2();
+
+        return view('workforce-management.suspended-employee', compact('parent', 'child', 'employee1', 'employee2'));
     }
 
     public function overtime()
     {
-        # code...
+        $parent = 'Employee';
+        $child = 'Suspended';
+
+        return view('workforce-management.overtime', compact('parent', 'child'));
     }
 
 

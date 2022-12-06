@@ -13,7 +13,7 @@ class CreateEmployeeTable extends Migration
      */
     public function up()
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('employee', function (Blueprint $table) {
             $table->increments('id');
             $table->string('emp_id', 10)->unique('emp_id');
             $table->string('old_emp_id', 110)->default('0');

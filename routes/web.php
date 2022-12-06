@@ -12,7 +12,9 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
+use App\Models\workforceManagement\Employee;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -54,6 +56,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
+    Route::get('bank-branch/{id}', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
+
+    // Employee overtime
+    Route::get('/perfromance/workforce-management/overtime', [EmployeeController::class, 'overtime'])->name('overtime');
+
 
 
     //route for payroll
@@ -77,20 +84,20 @@ Route::middleware('auth')->group(function () {
         Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
         Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
 
-        
-        
 
 
 
 
-        
-        
-        
 
-        
-        
-        
-  
+
+
+
+
+
+
+
+
+
         Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
 

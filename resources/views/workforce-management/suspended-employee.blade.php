@@ -21,63 +21,48 @@
         <table class="table datatable-responsive-column-controlled">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th>No.</th>
                     <th>Name</th>
                     <th>Gender</th>
+                    {{-- <th hidden>empID</th> --}}
                     <th>Position</th>
-                    <th>Line Manager</th>
+                    <th>Linemanager</th>
                     <th>Contacts</th>
                     <th>Inactive Since</th>
-                    <th class="text-center">Options</th>
-                </tr>
+                    <th>Options</th>
+                  </tr>
             </thead>
 
             <tbody>
-                {{-- @foreach ($audits as $audit) --}}
-                <tr>
-                    <td>01</td>
-                    <td><a href="#">Douglas Fortunatus Mkonyi</a></td>
-                    <td>Male</td>
-                    <td>Software Developer</td>
-                    <td>Laison Marko</td>
-                    <td>0656 206 600</td>
-                    <td>22 July 2022</td>
-                    <td class="text-center">
-                        <div class="d-inline-flex">
-                          <div class="dropdown">
-                            <a
-                              href="#"
-                              class="text-body"
-                              data-bs-toggle="dropdown"
-                            >
-                              <i class="ph-list"></i>
-                            </a>
+                <?php
+                  foreach ($employee1 as $row) {
+                    $empid= $row->emp_id; ?>
+                  <tr id="emp<?php echo $empid; ?>">
+                    <td width="1px"><?php echo $row->SNo; ?></td>
+                    <td><a title="More Details"  href="<?php echo base_url()."index.php/cipay/userprofile/?id=".$row->emp_id; ?>">
+                    <font color="blue"><?php echo $row->NAME; ?></font></a></td>
+                    <td ><?php echo $row->gender; ?></td>
+                      <td hidden><?php echo $row->emp_id; ?></td>
+                      <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+                    <td><?php echo $row->LINEMANAGER; ?></td>
+                    <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
+                    <td ><?php echo $row->dated;  ?></td>
 
-                            <div class="dropdown-menu dropdown-menu-end">
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-info me-2"></i>
-                                Info
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-file-xls me-2"></i>
-                                Disable
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-file-doc me-2"></i>
-                                Update
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-file-doc me-2"></i>
-                                Evaluate
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
 
-                </tr>
-                {{-- @endforeach --}}
-            </tbody>
+                    <td class="options-width">
+                    <?php if($row->isRequested==0){
+                      if( $this->session->userdata('mng_emp')){ ?>
+                          <a href="javascript:void(0)" title="Request Activation" class="icon-2 info-tooltip" id="reactivate"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
+                    <?php } } else { ?>
+                    <div class="col-md-12">
+                        <span class="label label-primary"> ACTIVATION&nbsp;<br>&nbsp;REQUESTED
+                        </span></div>
+                    <?php } ?>
+
+                    </td>
+                    </tr>
+                  <?php } //} ?>
+              </tbody>
         </table>
     </div>
 </div>
@@ -91,69 +76,84 @@
         <table class="table datatable-responsive-column-controlled">
             <thead>
                 <tr>
-                    <th>No.</th>
-                    <th>Name</th>
-                    <th>Gender</th>
-                    <th>Department</th>
-                    <th>Position</th>
-                    <th>Line Manager</th>
-                    <th>Contacts</th>
-                    <th>Status</th>
-                    <th class="text-center">Options</th>
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Position</th>
+                        <th>Linemanager</th>
+                        <th>Contacts</th>
+                        <th>Status</th>
+                        <th>Options</th>
+                      </tr>
                 </tr>
             </thead>
 
             <tbody>
-                {{-- @foreach ($audits as $audit) --}}
-                <tr>
-                    <td>01</td>
-                    <td><a href="#">Douglas Fortunatus Mkonyi</a></td>
-                    <td>Male</td>
-                    <td>Information Technology</td>
-                    <td>Software Engineer</td>
-                    <td>Laison Marko</td>
-                    <td>0656 206 600</td>
-                    <td>
-                        <span class="badge bg-danger">Exit</span>
+                <?php
+                //if ($employee->num_rows() > 0){
+                  foreach ($employee2 as $row) {
+                    $empid= $row->emp_id; ?>
+                  <tr id="activeRecord<?php echo $row->logID; ?>">
+                    <td width="1px"><?php echo $row->SNo; ?></td>
+                    <td><a title="More Details"  href="<?php echo base_url()."index.php/cipay/userprofile/?id=".$row->emp_id; ?>">
+                    <font color="blue"><?php echo $row->NAME; ?></font></a></td>
+                    <td ><?php echo $row->gender; ?></td>
+                    <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+                    <td><?php echo $row->LINEMANAGER; ?></td>
+                    <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
+                    <td >
+                    <?php if ($row->current_state==1 && $row->log_state==1){  ?>
+                    <div class="col-md-12">
+                        <span class="label label-success">ACTIVE
+                        </span></div>
+                      <?php } elseif($row->current_state==1 && $row->log_state==0){ ?>
+                    <div class="col-md-12">
+                        <span class="label label-danger">INACTIVE
+                        </span></div>
+
+                      <?php }  if ($row->log_state==2){ ?>
+                        <div class="col-md-12">
+                        <span class="label label-danger">INACTIVE
+                        </span></div>
+                        <?php  } if ($row->log_state=="3"){ ?>
+                        <div class="col-md-12">
+                        <span class="label label-danger">Exit
+                        </span></div><?php  } if ($row->log_state=="4"){   } ?>
                     </td>
-                    <td class="text-center">
-                        <div class="d-inline-flex">
-                          <div class="dropdown">
-                            <a
-                              href="#"
-                              class="text-body"
-                              data-bs-toggle="dropdown"
-                            >
-                              <i class="ph-list"></i>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-end">
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-info me-2"></i>
-                                Info
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-file-xls me-2"></i>
-                                Disable
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-file-doc me-2"></i>
-                                Update
-                              </a>
-                              <a href="#" class="dropdown-item">
-                                <i class="ph-file-doc me-2"></i>
-                                Evaluate
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-
-                </tr>
 
 
-                {{-- @endforeach --}}
-            </tbody>
+                    <td class="options-width">
+
+
+                    <?php if ($row->current_state==0){
+
+                    if( $this->session->userdata('appr_emp')){
+
+                    if ($row->log_state==2){  ?>
+                    <a href="javascript:void(0)" onclick="activateEmployee(<?php echo $row->logID.','.$row->emp_id; ?>)"  title="Confirm and Activate Employee" class="icon-2 info-tooltip">
+                        <div class="col-md-12">
+                        <span class="label label-success">ACTIVATE
+                        </span></div></a> <?php }
+
+                        if ($row->log_state==3 && ($row->initiator != $this->session->userdata('emp_id'))){ ?>
+                    <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="icon-2 info-tooltip">
+                        <button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+                    </a> <?php } }
+
+                        if( $this->session->userdata('mng_emp')){ ?>
+                    <a href="javascript:void(0)" onclick="cancelRequest(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Cancel exit" class="icon-2 info-tooltip">
+                        <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
+                    </a>
+                    <?php } }  else { ?>
+                    <div class="col-md-12">
+                    <span class="label label-primary">comitted
+                    </span></div><?php  } ?>
+
+                        </td>
+                    </tr>
+                  <?php } //} ?>
+              </tbody>
         </table>
     </div>
 </div>
