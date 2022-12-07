@@ -40,35 +40,72 @@
                 <th>Date Requested</th>
                 <th>Cost</th>
                 <th>Status</th>
-                <th>Option</th>
+                {{-- <th>Option</th> --}}
             </tr>
         </thead>
 
         <tbody>
-            {{-- @foreach ($audits as $audit)
-            <tr>
-                <td>{{ $audit->user_id }}</td>
-                <td><a href="#">{{ $audit->user_name }}</a></td>
-                <td>{{ $audit->action_performed }}</td>
-                <td>{{ $audit->ip_address }}</td>
-                <td>{{ $audit->created_at }}</td>
-                <td>
-                    @isset($audit->risk)
-                        @if ($audit->risk == 1)
-                        <span class="badge bg-success bg-opacity-10 text-success">Low</span>
-                        @elseif ($audit->risk == 2)
-                        <span class="badge bg-info bg-opacity-10 text-info">Medium</span>
-                        @elseif ($audit->risk == 3)
-                        <span class="badge bg-danger bg-opacity-10 text-danger">High</span>
-                        @else
-                        <span class="badge bg-secondary bg-opacity-10 text-secondary">Unrecognized</span>
-                        @endif
-                    @endisset
-                </td>
+            @foreach ($my_imprests as $row)
+                <tr id="{{ "recordImprest".$row->id }}">
+                    <td width="1px"> {{ $row->SNo }} </td>
+                    <td> {{ $row->title }}</td>
+                    <td>
+                        <a
+                            class="panel-heading collapsed"
+                            role="tab"
+                            id="headingTwo"
+                            data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="{{ '#collapseDescription'.$row->id  }}"
+                            aria-expanded="false"
+                        >
+                          <span class="label label-default">DESCRIPTION</span>
+                        </a>
+                        <div id="{{ "collapseDescription" .$row->id }}" class="panel-collapse collapse" role="tabpanel" >
+                            <p>{{ $row->description }}</p>
+                        </div>
+                    </td>
+                    <td>{{ date('d-m-Y', strtotime($row->application_date)) }}</td>
 
-            </tr>
-            @endforeach --}}
-        </tbody>
+                    <td>
+                        <strong class="text-success">REQUESTED : </strong>{{ number_format($row->requested_amount, 2) }}
+                    </td>
+
+                    <td>
+                        <div id ="{{ "status".$row->id }}">
+                            @if($row->status==0)
+                                <span class="badge bg-default">REQUESTED</span>
+                            @elseif($row->status==1)
+                                <span class="badge bg-info">RECOMENDED BY FINANCE</span>
+                            @elseif($row->status==9)
+                                <span class="badge bg-info">RECOMENDED BY HR</span>
+                            @elseif($row->status==2)
+                                <span class="badge bg-success">APPROVED</span>
+                            @elseif($row->status==3)
+                                <span class="badge bg-success">CONFIRMED</span>
+                            @elseif($row->status==4)
+                                <span class="badge bg-success">RETIRED</span>
+                            @elseif($row->status==5)
+                                <span class="badge bg-success">RETIREMENT CONFIRMED</span>
+                            @elseif($row->status==6)
+                                <span class="badge bg-danger">DISSAPPROVED</span>
+                            @elseif($row->status==7)
+                                <span class="badge bg-danger">UNCONFIRMED</span>
+                            @elseif($row->status==8)
+                                <span class="badge bg-danger">UNCONFIRMED RETIREMENT</span>
+                            @endif
+                        </div>
+
+                    </td>
+
+                    {{-- options comes here --}}
+                </tr>
+            @endforeach
+
+
+
+
+          </tbody>
     </table>
 </div>
 
@@ -79,3 +116,4 @@
    @include('workforce-management.inc.add-imprest')
 
 @endsection
+
