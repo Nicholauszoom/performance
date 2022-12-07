@@ -178,7 +178,6 @@ class EmployeeController extends Controller
 
         $overtimeCategories = $this->employeeModel->overtimeCategory();
 
-        // dd($overtimeCategories);
 
         return view('workforce-management.overtime', compact('parent', 'child', 'overtimeCategories'));
     }

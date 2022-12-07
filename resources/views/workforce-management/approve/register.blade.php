@@ -74,7 +74,7 @@
                                                             @endif
                                                         </div>
                                                     </td>
-                                                    {{-- <td class="options-width">
+                                                    <td class="options-width">
                                                         <a
                                                             href="#"
                                                             title="Employee Info and Details"
@@ -93,7 +93,7 @@
                                                         @elseif ($row->parameterID==5)
                                                             <a href="javascript:void(0)" onclick="approveRegistration(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
                                                         @endif
-                                                    </td> --}}
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach

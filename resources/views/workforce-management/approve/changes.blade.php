@@ -55,8 +55,66 @@
                                     </thead>
 
                                     <tbody>
+                                        <?php
+                                        foreach ($transfers as $row) {
+                                            if($row->status==1 || $row->status>=5) continue; ?>
+                                            <tr>
+                                                <td width="1px"><?php echo $row->SNo; ?></td>
+                                                <td><?php  echo $row->empName; ?></td>
+                                                <td><?php echo "<b>DEPARTMENT:</b> ".$row->department_name."<br><b>POSITION: </b>".$row->position_name; ?></td>
 
-                                    </tbody>
+                                                <td><?php echo $row->parameter; ?></td>
+
+                                                <td> <?php
+                                                    if($row->parameterID==1){
+                                                        if($this->session->userdata('mng_paym') ){
+                                                            echo "<b>FROM: </b> ".number_format($row->old,2)."/=<br><b>TO: </b>".number_format($row->new,2)."/=";
+                                                        }
+                                                    }elseif ($row->parameterID==2) {
+                                                        echo $this->flexperformance_model->newPositionTransfer($row->new);
+                                                    }elseif ($row->parameterID==3) {
+                                                        echo "<b>DEPARTMENT:</b> ".$this->flexperformance_model->newDepartmentTransfer($row->new)."<br><b>POSITION: </b>".$this->flexperformance_model->newPositionTransfer($row->new_position);
+                                                    }elseif ($row->parameterID==4) {
+                                                        echo "<b>BRANCH:</b> ".$this->flexperformance_model->newBranchTransfer($row->new_department)."<br><b>DEPARTMENT:</b> ".$this->flexperformance_model->newDepartmentTransfer($row->new_department)."<br><b>POSITION: </b>".$this->flexperformance_model->newPositionTransfer($row->new_position);
+                                                    } ?>
+
+                                                </td>
+                                                <td>
+
+                                                    <div id ="status<?php echo $row->id; ?>">
+                                                        <?php if($row->status==0){ ?> <div class="col-md-12"><span class="label label-default">WAITING</span></div><?php }
+                                                        elseif($row->status==1){ ?><div class="col-md-12"><span class="label label-success">ACCEPTED</span></div><?php }
+                                                        elseif($row->status==2){ ?><div class="col-md-12"><span class="label label-danger">REJECTED</span></div><?php } ?>
+                                                    </div>
+
+                                                </td>
+
+                                                <td class="options-width">
+                                                    <a href="<?php echo base_url()."index.php/cipay/userprofile/?id=".$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+
+                                                    <?php if($row->status==0){ ?>
+
+                                                        <a href="javascript:void(0)" onclick="disapproveRequest(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button> </a>
+
+                                                        <?php if($row->parameterID==1){
+                                                            if($this->session->userdata('mng_paym')){  ?>
+                                                                <a href="javascript:void(0)" onclick="approveSalaryTransfer(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
+
+                                                            <?php } } elseif($row->parameterID==2){ ?>
+                                                            <a href="javascript:void(0)" onclick="approvePositionTransfer(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
+
+                                                        <?php }elseif($row->parameterID==3){ ?>
+                                                            <a href="javascript:void(0)" onclick="approveDeptPosTransfer(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
+
+                                                        <?php }elseif($row->parameterID==4){ ?>
+                                                            <a href="javascript:void(0)" onclick="approveBranchTransfer(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
+                                                        <?php } } ?>
+                                                </td>
+
+                                            </tr>
+
+                                        <?php } //} ?>
+                                        </tbody>
                                 </table>
                             </div>
                         </div>
