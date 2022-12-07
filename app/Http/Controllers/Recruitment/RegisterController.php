@@ -54,15 +54,17 @@ class RegisterController extends Controller
                 return back()->with('notMatch','Passwords does not match');
          }
          else{
-            $password=bcrypt($password);
+
+             $password=bcrypt($password);
                  $user=User::create([
                 'name'=>$request->username,
                 'email'=>$request->email,
                 'password'=>$password
             ]);
            
-             $role=Role::find(1);
+             $role=Role::where('name','JobSeeker')->first();
               $user->roles()->attach($role);
+              return response()->json('User and Role created successfully');
               return redirect()->route('recruitment.login')->with('success','You have been registered successfully');
          }
 

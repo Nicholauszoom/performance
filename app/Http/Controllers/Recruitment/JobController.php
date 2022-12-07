@@ -15,7 +15,7 @@ class JobController extends Controller
     public function index()
     {
         //
-        return view('recruitment.jobsearch-dashboard', [
+        return view('recruitment.jobseeker.dashboard', [
             'parent' => 'Dashboard'
         ]);
     }

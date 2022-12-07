@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AccessControll\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class LoginController extends Controller
 {
@@ -29,34 +30,34 @@ class LoginController extends Controller
         //
     }
 
-    
+
     public function loginProcess(Request $request)
     {
         //
-         $request->validate([
+        $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'min:6'],
         ]);
         $username = $request->input('username');
         $password = $request->input('password');
-        if (Auth::attempt(['name' => $username, 'password' => $password])) {
+        if (Auth::attempt(['name' => $username, 'password' => $password], $request->input('remember'))) {
             // Authentication was successful...
-            $user = Auth::user()->roles;
-            if ($user[0]->id === 1){
-                $request->session()->regenerate();
- 
-                return redirect()->intended('jobsearch-Dashboard');        }
-            }
             
-        else {
+            $userRole = Auth::user()->roles;
+            
+            if ($userRole[0]->name === 'jobSeeker') {
+                $request->session()->regenerate();
+               
+                return redirect()->intended('jobsearch-Dashboard')->with(['identifier' => 'Job Search Portal']);
+            }
+        } else {
             return back()->withErrors([
-                    'password' => 'The provided credentials do not match our records.',
-                ]);
+                'password' => 'The provided credentials do not match our records.',
+            ]);
             return response()->json([
                 'msg' => 'Incorrect login details',
             ], 401);
         }
-    
     }
 
     /**
