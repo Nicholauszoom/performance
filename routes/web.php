@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
      * Workforce Manegment
      */
 
-    Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
+    Route::get('/performance/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
     Route::get('/performance/profile', [EmployeeController::class, 'employeeProfile'])->name('employee.profile');
     Route::get('/employee-exit', [EmployeeController::class, 'employeeExit'])->name('employee.exit');
     Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
-    Route::get('bank-branch/{id}', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
+    Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
 
     // Employee overtime
     Route::get('/perfromance/workforce-management/overtime', [EmployeeController::class, 'overtime'])->name('overtime');

@@ -20,12 +20,10 @@ class Branch extends Model
 	}
 
 
-	// public function bankBranchFetcher($id)
-	// {
-	// 	$query = "SELECT * FROM bank_branch where bank = ".$id."";
+	public function bankBranchFetcher($id)
+	{
+		$query = "SELECT * FROM bank_branch where bank = ".$id."";
 
-
-
-	// 	return DB::select(DB::raw($query));
-	// }
+		return DB::select(DB::raw($query));
+	}
 }

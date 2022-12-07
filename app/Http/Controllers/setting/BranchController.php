@@ -10,17 +10,23 @@ use App\Http\Controllers\Controller;
 class BranchController extends Controller
 {
 
-    public function __construct($branchModel = null)
+    public function __construct(Branch $branch)
     {
-        $this->branchModel = new Branch();
+        $this->branch =  $branch;
     }
 
-    public function fetchBranch($id)
+    public function fetchBranch(Request $request)
     {
-        // $data = DB::table('bank_branch')->where('id', $id)->get();
+        if(isset($request->bank)){
 
-        $data = $this->branchModel->bankBranchFetcher($id);
+            $queryBranch = $this->branch->bankBranchFetcher($request->bank);
 
-        return response()->json(['data' => $data]);
+            foreach ($queryBranch as $rows){
+                echo "<option value='".$rows->id."'>".$rows->name."</option>";
+            }
+
+        }else{
+            echo '<option value="">What are you looking for exactly</option>';
+        }
     }
 }

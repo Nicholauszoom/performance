@@ -20,13 +20,13 @@
             <h5 class="mb-0 text-muted">Imprest</h5>
 
             <button
-                    type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#save_department"
-                >
-                    <i class="ph-paper-plane-tilt me-2"></i> Request Imprest
-                </button>
+                type="button"
+                class="btn btn-perfrom"
+                data-bs-toggle="modal"
+                data-bs-target="#save_department"
+            >
+                <i class="ph-paper-plane-tilt me-2"></i> Request Imprest
+            </button>
         </div>
     </div>
 
@@ -101,9 +101,6 @@
                     {{-- options comes here --}}
                 </tr>
             @endforeach
-
-
-
 
           </tbody>
     </table>

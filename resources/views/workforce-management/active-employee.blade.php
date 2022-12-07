@@ -21,7 +21,9 @@
             <div class="d-flex justify-content-between">
                 <h5>List of employees</h5>
 
-                <a href="{{ route('employee.create') }}" class="btn btn-primary">Register Employee</a>
+                <a href="{{ route('employee.create') }}" class="btn btn-perfrom">
+                    <i class="ph-plus me-2"></i> Register Employee
+                </a>
             </div>
         </div>
 

@@ -146,10 +146,8 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Position:</label>
-                        <select class="form-control select" name="position">
-                            <option selected disabled> Select </option>
-                            <option value="1">Manager</option>
-                            <option value="2">Position 2</option>
+                        <select class="form-control select1_single" id="pos" name="position">
+                            <option value=""> Select Position </option>
                         </select>
                     </div>
                 </div>
@@ -229,7 +227,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank:</label>
-                        <select class="form-control select select_bank" id='bank' name="bank">
+                        <select class="form-control select_bank" id='bank' name="bank">
                             <option value="">Select Employee Bank</option>
                             @foreach ($banks as $bank)
                             <option value="{{ $bank->id }}">{{ $bank->name }}</option>
@@ -241,16 +239,16 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank Branch:</label>
-                        <select class="form-control select select_bank_branch" id="bank_branch" name="banck_branch">
+                        <select class="form-control select_bank_branch" id="bank_branch" name="banck_branch">
 
                         </select>
                     </div>
                 </div>
 
-                <div class="col-md-4 col-lg-4">
+                <div id="accountNo" class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank Account No:</label>
-                        <input type="text" name="account_no" value="{{ old('account_no') }}" class="form-control" placeholder="01J85784784785">
+                        <input type="text" maxlength="15" name="accno" value="{{ old('account_no') }}" class="form-control" placeholder="01J85784784785">
                     </div>
                 </div>
 
@@ -329,166 +327,56 @@
 @endsection
 
 @push('footer-script')
-    {{-- populating select with bank and branch --}}
 
-    <script>
-        $(document).ready(function() {
-            $('#accountNo').show();
-
-            $('#bank').on('change', function() {
-                var bankID = $(this).val();
-
-                // console.log(bankID);
-
-                // $('#subCategory').find('option').not(':first').remove();
-
-                if (bankID) {
-                    $.ajax({
-                        type: 'GET',
-                        url: 'bank-branch/'+id,
-                        data: 'json',
-                        success: function(response) {
-                            // $('#bank_branch').html(html);
-                            var len = 0;
-                            if (response.data != null) {
-                                len = response.data.length;
-                            }
-
-                            if (len>0) {
-                                for (var i = 0; i<len; i++) {
-                                    var id = response.data[i].id;
-                                    var name = response.data[i].name;
-
-                                    var option = "<option value='"+id+"'>"+name+"</option>";
-
-                                    $("#bank_branch").append(option);
-                                }
-                            }
-                        }
-                    });
-                    if (bankID == "5") {
-                        $('#accountNo').hide();
-                    } else {
-                        $('#accountNo').show();
-                    }
-                } else {
-                    $('#bank_branch').html('<option >Select Bank First</option>');
-                }
-            });
-        });
-    </script>
-
-
-    {{-- populate salary --}}
-
-    {{-- <script>
-        $(document).ready(function() {
-
-            $('#pos').on('change', function() {
-                var positionID = $(this).val();
-                if (positionID) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '<?php echo base_url(); ?>index.php/cipay/getPositionSalaryRange/',
-                        data: 'positionID=' + positionID,
-                        success: function(response) {
-                            $('#salaryField').fadeOut('fast', function() {
-                                $('#salaryField').fadeIn('fast').html(response.salary);
-                            });
-                        }
-                    });
-                } else {
-
-                }
-            });
-        });
-    </script> --}}
-
-
-    {{-- populating departments --}}
-
-{{-- <script>
+<script>
     $(document).ready(function() {
+        $('#accountNo').show();
 
-        $('#department').on('change', function() {
-            var stateID = $(this).val();
-            if (stateID) {
+        $('#bank').on('change', function() {
+            var bankID = $(this).val();
+            if (bankID) {
                 $.ajax({
-                    type: 'POST',
-                    url: '<?php echo base_url(); ?>index.php/cipay/positionFetcher/',
-                    data: 'dept_id=' + stateID,
+                    type: 'GET',
+                    url: "{{ route('bankBranchFetcher') }}",
+                    data: 'bank=' + bankID,
                     success: function(html) {
-                        let jq_json_obj = $.parseJSON(html);
-                        let jq_obj = eval(jq_json_obj);
-
-                        //populate position
-                        $("#pos option").remove();
-                        $('#pos').append($('<option>', {
-                            value: '',
-                            text: 'Select Position',
-                            selected: true,
-                            disabled: true
-                        }));
-                        $.each(jq_obj.position, function(detail, name) {
-                            $('#pos').append($('<option>', {
-                                value: name.id,
-                                text: name.name
-                            }));
-                        });
-
-                        var x = [];
-                        $.each(jq_obj.linemanager, function(detail, name) {
-                            var y = {};
-                            y.name = name.NAME;
-                            y.id = name.empID;
-                            x.push(y);
-                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
-                        });
-                        $.each(jq_obj.director, function(detail, name) {
-                            var y = {};
-                            y.name = name.NAME;
-                            y.id = name.empID;
-                            x.push(y);
-
-                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
-                        });
-
-                        var flags = [];
-                        var output = [];
-                        for (var i = 0; i < x.length; i++) {
-                            var y = {};
-                            if (flags[x[i].id]) continue;
-                            flags[x[i].id] = true;
-                            y.id = x[i].id;
-                            y.name = x[i].name;
-                            output.push(y);
-                        }
-
-                        //populate linemanager
-                        $("#linemanager option").remove();
-                        $('#linemanager').append($('<option>', {
-                            value: '',
-                            text: 'Select Line Manager',
-                            selected: true,
-                            disabled: true
-                        }));
-                        $.each(output, function(detail, name) {
-                            $('#linemanager').append($('<option>', {
-                                value: name.id,
-                                text: name.name
-                            }));
-                        });
-
+                        $('#bank_branch').html(html);
                     }
                 });
+                if (bankID == "5") {
+                    $('#accountNo').hide();
+                } else {
+                    $('#accountNo').show();
+                }
             } else {
-                // $('#pos').html('<option value="">Select state first</option>');
+                $('#bank_branch').html('<option >Select Bank First</option>');
             }
         });
     });
-    </script> --}}
+</script>
 
+<script>
+    $(document).ready(function() {
 
+        $('#pos').on('change', function() {
+            var positionID = $(this).val();
+            if (positionID) {
+                $.ajax({
+                    type: 'POST',
+                    url: '<?php echo base_url(); ?>index.php/cipay/getPositionSalaryRange/',
+                    data: 'positionID=' + positionID,
+                    success: function(response) {
+                        $('#salaryField').fadeOut('fast', function() {
+                            $('#salaryField').fadeIn('fast').html(response.salary);
+                        });
+                    }
+                });
+            } else {
+
+            }
+        });
+    });
+</script>
 
 @endpush
 
