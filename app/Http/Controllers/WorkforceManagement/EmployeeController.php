@@ -21,14 +21,44 @@ class EmployeeController extends Controller
     public function activeMembers()
     {
         $parent = 'Employee';
-        $child = 'Active';
+        $child = 'Active Employees';
         $employee = $this->employeeModel->employeeData();
 
-        dd($employee);
-
-
-        return view('workforce-management.active-employee', compact('parent', 'child'));
+        return view('workforce-management.active-employee', compact('parent', 'child', 'employee'));
     }
+
+    public function employeeProfile()
+    {
+        return view('workforce-management.employee-profile');
+    }
+
+    public function employeeExit()
+    {
+        $empID = $this->uri->segment(3);
+        $datalog = array(
+            'state' =>0,
+            'empID' =>$empID,
+            'author' =>$this->session->userdata('emp_id')
+        );
+
+        $this->employeeModel->employeestatelog($datalog);
+
+        //  if($result ==true){
+        //  $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+        $response_array['status'] = "OK";
+        $response_array['title'] = "SUCCESS";
+        $response_array['message'] = "<p class='alert alert-success text-center'>Deactivation Request For This Employee Has Been Sent Successifully</p>";
+        header('Content-type: application/json');
+        return json_encode($response_array);
+        //  } else {
+        //    $response_array['status'] = "ERR";
+        //    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
+        //    header('Content-type: application/json');
+        //    echo json_encode($response_array);
+        //                }
+    }
+
+
 
     public function createEmployee()
     {
@@ -123,13 +153,15 @@ class EmployeeController extends Controller
      * Inactive employee
      *
      */
-    public function suspendedEmployee()
+    public function inactiveEmployee()
     {
         $parent = 'Employee';
         $child = 'Suspended';
 
         $employee1 = $this->employeeModel->inactive_employee1();
         $employee2 = $this->employeeModel->inactive_employee2();
+
+        // dd($employee2);
 
         return view('workforce-management.suspended-employee', compact('parent', 'child', 'employee1', 'employee2'));
     }
@@ -144,7 +176,11 @@ class EmployeeController extends Controller
         $parent = 'Employee';
         $child = 'Overtime';
 
-        return view('workforce-management.overtime', compact('parent', 'child'));
+        $overtimeCategories = $this->employeeModel->overtimeCategory();
+
+        // dd($overtimeCategories);
+
+        return view('workforce-management.overtime', compact('parent', 'child', 'overtimeCategories'));
     }
 
 
@@ -160,6 +196,11 @@ class EmployeeController extends Controller
         return view('workforce-management.imprest', compact('parent', 'child'));
     }
 
+
+    /**
+     * Approval
+     *
+     */
     public function approveEmpoyee()
     {
         $parent = 'Employee';
@@ -172,8 +213,11 @@ class EmployeeController extends Controller
     {
         $parent = 'Employee';
         $child = 'Approve Employee';
+        $transfer = $this->employeeModel->employeeTransfers();
 
-        return view('workforce-management.approve.register', compact('parent', 'child'));
+        dd($transfer);
+
+        return view('workforce-management.approve.register', compact('parent', 'child', 'transfer'));
     }
 
 

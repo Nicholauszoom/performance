@@ -20,8 +20,9 @@
 
                             <select class="form-control select" name="nationality">
                                 <option selected disabled> Select </option>
-                                <option value="255">Tanzania</option>
-                                <option value="254">Kenya</option>
+                                @foreach ($overtimeCategories as $overtimeCategorie)
+                                <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}</option>
+                                @endforeach
                             </select>
 
                             @error('name')

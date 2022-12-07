@@ -323,15 +323,7 @@
     - We need to be able to upload employee as a bacth
     - We will shift this on top as part of a dropdown link
     --}}
-<form action="">
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                upload all employees from here
-            </div>
-        </div>
-    </div>
-</form>
+
 
 
 @endsection

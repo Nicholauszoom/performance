@@ -53,7 +53,50 @@
                                     </thead>
 
                                     <tbody>
+                                        @foreach ($transfer as $row )
+                                            @if ( $row->status<5 || $row->status > 5 )
+                                                <tr>
+                                                    <td width="1px"> {{ $row->SNo }}</td>
+                                                    <td> {{ $row->empName }} </td>
+                                                    <td>
+                                                        <p><strong>Department :</strong> {{ $row->department_name }}</p>
+                                                        <p><strong>Position :</strong> {{ $row->position_name }}</p>
+                                                    </td>
+                                                    <td> {{ $row->parameter }} </td>
+                                                    <td>
+                                                        <div id="{{ 'status'.$row->id }}">
+                                                            @if ( $row->status == 5 )
+                                                                <div class="col-md-12"><span class="label label-default">WAITING</span></div>
+                                                            @elseif ( $row->status == 6 )
+                                                                <div class="col-md-12"><span class="label label-success">ACCEPTED</span></div>
+                                                            @elseif ( $row->status == 7 )
+                                                                <div class="col-md-12"><span class="label label-danger">REJECTED</span></div>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+                                                    {{-- <td class="options-width">
+                                                        <a
+                                                            href="#"
+                                                            title="Employee Info and Details"
+                                                            class="icon-2 info-tooltip"
+                                                        >
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-info btn-xs"
+                                                            >
+                                                                <i class="fa fa-info-circle"></i>
+                                                            </button>
+                                                        </a>
 
+                                                        @if ( $row->status == 5 )
+                                                            <a href="javascript:void(0)" onclick="disapproveRegistration(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button> </a>
+                                                        @elseif ($row->parameterID==5)
+                                                            <a href="javascript:void(0)" onclick="approveRegistration(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
+                                                        @endif
+                                                    </td> --}}
+                                                </tr>
+                                            @endif
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

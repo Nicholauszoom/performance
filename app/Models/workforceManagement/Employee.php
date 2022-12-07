@@ -89,4 +89,26 @@ class Employee extends Model
 
 		return DB::select(DB::raw($query));
 	}
+
+    public function overtimeCategory()
+    {
+        $query = DB::table('overtime_category')->get();
+        return $query;
+    }
+
+    public function employeestatelog($data){
+		$empID = $data['empID'];
+		$state = $data['state'];
+		$query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+        DB::insert(DB::raw($query));
+		DB::table('activation_deactivation')->insert($data);
+        //		return true;
+	}
+
+    public function employeeTransfers()
+	{
+		$query="SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
+
+		return DB::select(DB::raw($query));
+	}
 }

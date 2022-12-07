@@ -51,10 +51,12 @@ Route::middleware('auth')->group(function () {
      */
 
     Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
+    Route::get('/performance/profile', [EmployeeController::class, 'employeeProfile'])->name('employee.profile');
+    Route::get('/employee-exit', [EmployeeController::class, 'employeeExit'])->name('employee.exit');
     Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
     Route::post('/performance/workforce-management/employee/store', [EmployeeController::class, 'storeEmployee'])->name('employee.store');
 
-    Route::get('/suspended-employee', [EmployeeController::class, 'suspendedEmployee'])->name('employee.suspended');
+    Route::get('/suspended-employee', [EmployeeController::class, 'inactiveEmployee'])->name('employee.suspended');
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
