@@ -36,7 +36,7 @@ class Payroll extends Model
     }
 
     public function setOvertimeNotification($for) {
-        DB::transaction(function()
+        DB::transaction(function() use($for)
        {
         $query= "INSERT INTO notifications (`role`, `type`, `message`, `for`) VALUES ('line',0,'You have a pending overtime to approve','".$for."')";
         DB::insert(DB::raw($query));
@@ -44,7 +44,7 @@ class Payroll extends Model
         return true;
     }
     public function setPayrollNotification($for) {
-        DB::transaction(function()
+        DB::transaction(function() use($for)
        {
         $query= "INSERT INTO notifications (`role`, `type`, `message`, `for`) VALUES ('fin',2,'You have a pending payroll to approve','".$for."')";
         DB::insert(DB::raw($query));
@@ -52,7 +52,7 @@ class Payroll extends Model
         return true;
     }
     public function setImprestNotification($for) {
-        DB::transaction(function()
+        DB::transaction(function() use($for)
        {
         $query= "INSERT INTO notifications (`role`, `type`, `message`, `for`) VALUES ('fin',1,'You have a pending imprest to approve','".$for."')";
         DB::insert(DB::raw($query));
@@ -60,7 +60,7 @@ class Payroll extends Model
         return true;
     }
     public function setAdvSalaryNotification($for) {
-        DB::transaction(function()
+        DB::transaction(function() use($for)
        {
         $query= "INSERT INTO notifications (`role`, `type`, `message`, `for`) VALUES ('hr',3,'You have a pending advance salary to approve','".$for."')";
         DB::insert(DB::raw($query));
@@ -69,7 +69,7 @@ class Payroll extends Model
         return true;
     }
     public function setIncentiveNotification($for) {
-        DB::transaction(function()
+        DB::transaction(function() use($for)
        {
         $query=  "INSERT INTO notifications (`role`, `type`, `message`, `for`) VALUES ('fin',4,'You have a pending incentive to approve','".$for."')";
         DB::insert(DB::raw($query)); 
@@ -80,7 +80,7 @@ class Payroll extends Model
 
 
     public function clearNotification($type,$payroll_id) {
-        DB::transaction(function()
+        DB::transaction(function() use($type,$payroll_id)
        {
         $query= "DELETE FROM notifications WHERE notifications.type='".$type."' AND notifications.for='".$payroll_id."' ";
         DB::insert(DB::raw($query));  
@@ -89,7 +89,7 @@ class Payroll extends Model
     }
 
     public function seenPayrollNotification($type) {
-        DB::transaction(function()
+        DB::transaction(function() use($type)
        {
         $query= "DELETE FROM notifications WHERE notifications.type='".$type."' ";
         DB::insert(DB::raw($query)); 
@@ -241,21 +241,22 @@ class Payroll extends Model
     }
 
     public function payrollcheck($date){
-        $query = "id  WHERE payroll_date like  '%".$date."%' ";
+       // $query = "id  WHERE payroll_date like  '%".$date."%' ";
         $row = DB::table('payroll_logs')
-        ->select(DB::raw($query));
+        ->where('payroll_date','like','%'.$date.'%')
+        ->select('id');
         return $row->count();
     }
 
     public function initPayroll( $dateToday, $payroll_date, $payroll_month, $empID){
 
-        DB::transaction(function()
+        DB::transaction(function() use($dateToday,$payroll_date,$payroll_month,$empID)
        {
 
         //Insert into Pending Payroll Table
         $query = "INSERT INTO payroll_months (payroll_date, state, init_author, appr_author, init_date, appr_date,sdl, wcf) VALUES
-('".$payroll_date."', 2, '".$empID."', '', '".$dateToday."', '".$payroll_date."', (SELECT rate_employer from deduction where id=4 ), (SELECT rate_employer from deduction where id=2 ) )";
-        DB::insert(DB::row($query));
+        ('".$payroll_date."', 2, '".$empID."', '', '".$dateToday."', '".$payroll_date."', (SELECT rate_employer from deduction where id=4 ), (SELECT rate_employer from deduction where id=2 ) )";
+        DB::insert(DB::raw($query));
         //INSERT ALLOWANCES
         $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
 
@@ -268,7 +269,7 @@ class Payroll extends Model
 	     '".$payroll_date."' AS payment_date
 
 	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT BONUS
         $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
 
@@ -281,7 +282,7 @@ class Payroll extends Model
 	    '".$payroll_date."' AS payment_date
 
 	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state != 4 and e.login_user != 1 GROUP BY b.empID, bt.name";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT OVERTIME
         $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
 	    SELECT o.empID AS empID, 'Overtime' AS description,
@@ -293,7 +294,7 @@ class Payroll extends Model
 	    '".$payroll_date."' AS payment_date
 
 	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
 
         //UPDATE SALARY ADVANCE.
         /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
@@ -309,10 +310,10 @@ class Payroll extends Model
 
         //INSERT SALARY ADVANCE, FORCED DEDUCTIONS and other LOANS INTO LOAN LOGS
         $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '".$payroll_date."' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT HESLB INTO LOGS
         $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1)))))) as remained, '".$payroll_date."' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT DEDUCTION LOGS
         $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
 
@@ -325,14 +326,14 @@ class Payroll extends Model
 	    '".$payroll_date."' as payment_date
 
 	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state != 4 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //DEDUCTION LOGS FROM IMPREST REFUND
         $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
 
 	    SELECT empID, description, policy, paid, '".$payroll_date."'
 
 	    FROM once_off_deduction";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
 
 
 
@@ -349,7 +350,7 @@ class Payroll extends Model
 	     '".$payroll_date."' AS payment_date
 
 	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state != 4 and e.login_user != 1 AND a.id = 6";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //STOP LOAN
         // $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
 
@@ -632,7 +633,7 @@ class Payroll extends Model
 	     '".$payroll_date."' as payroll_date
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
 
-         DB::insert(DB::row($query));
+         DB::insert(DB::raw($query));
 
         });
         return true;
@@ -645,7 +646,7 @@ class Payroll extends Model
     //START  RUN PAYROLL FOR SCANIA
     public function run_payroll($payroll_date, $payroll_month, $empID, $todate){
 
-        DB::transaction(function()
+        DB::transaction(function() use($payroll_date, $payroll_month, $empID, $todate)
        {
 
         //INSERT ALLOWANCES
@@ -660,10 +661,10 @@ class Payroll extends Model
 	     '".$payroll_date."' AS payment_date
 
 	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT BONUS LOGS
         $query = " INSERT INTO bonus_logs(empID, amount, name, init_author, appr_author, payment_date) SELECT b.empID, b.amount, b.name, b.init_author, b.appr_author, '".$payroll_date."'  FROM bonus b WHERE b.state = 1";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT BONUS
         $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
 
@@ -676,7 +677,7 @@ class Payroll extends Model
 	    '".$payroll_date."' AS payment_date
 
 	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name  AND b.state = 1 and e.state != 4 and e.login_user != 1 GROUP BY b.empID, bt.name";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT OVERTIME
         $query = "INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
 	    SELECT o.empID AS empID, 'Overtime' AS description,
@@ -688,21 +689,21 @@ class Payroll extends Model
 	    '".$payroll_date."' AS payment_date
 
 	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT OVERTIME LOGS
         $query = " INSERT INTO overtime_logs(empID,time_start,time_end,amount,linemanager,hr,application_time,confirmation_time,approval_time,payment_date)  SELECT empID,time_start,time_end,amount,linemanager,hr,application_time,confirmation_time,approval_time, '".$payroll_date."'  FROM overtimes";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
 
         //UPDATE SALARY ADVANCE.
         $query = " UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
 		amount_last_paid = IF(((paid+deduction_amount) > amount), amount-paid, (deduction_amount)),
 		last_paid_date = '".$payroll_date."' WHERE  state = 1 AND NOT type = 3";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //UPDATE LOAN BOARD
         $query = " UPDATE loan SET paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) ) > amount), amount, (paid+ (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) )),
 		amount_last_paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) ) > amount), amount-paid, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) )),
 		last_paid_date = '".$payroll_date."' WHERE  state = 1 AND type = 3";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT LOAN LOGS
         // $query = "INSERT into loan_logs(loanID, paid, remained, payment_date) SELECT id, amount_last_paid, amount-paid, last_paid_date FROM loan WHERE state = 1";
 
@@ -713,10 +714,10 @@ IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), 
 IF(((paid) >= amount), paid, deduction_amount) as  paid,
 (amount - IF(((loan.paid) >= amount), amount,  ((paid)))) as remained,
 '".$payroll_date."' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
-DB::insert(DB::row($query));
+DB::insert(DB::raw($query));
         //INSERT HESLB INTO LOGS
         $query = "INSERT into loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1)))))) as remained, '".$payroll_date."' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT DEDUCTION LOGS
         $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
 
@@ -729,14 +730,14 @@ DB::insert(DB::row($query));
 	    '".$payroll_date."' as payment_date
 
 	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID AND ed.deduction = d.id AND  d.state = 1 and e.state != 4 and e.login_user != 1";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         // DEDUCTION LOGS FROM IMPREST REFUND
         $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
 
 	    SELECT empID, description, policy, paid, '".$payroll_date."'
 
 	    FROM once_off_deduction";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
 
         // DEDUCTION LOGS FOR EXPATRIATES(HOUSING ALLOWANCE REFUND)
         // Housing Allowance has id = 6
@@ -751,10 +752,10 @@ DB::insert(DB::row($query));
 	     '".$payroll_date."' AS payment_date
 
 	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state != 4 and e.login_user != 1 AND a.id = 6";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //STOP LOAN
         $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //INSERT PAYROLL LOG TABLE
         $query = "INSERT INTO payroll_logs(
 
@@ -1040,10 +1041,10 @@ DB::insert(DB::row($query));
 
 	     '".$payroll_date."' as payroll_date
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
-         DB::insert(DB::row($query));
+         DB::insert(DB::raw($query));
         //Confirm The Pending Payoll
         $query = " UPDATE payroll_months SET state = 0, appr_author = '".$empID."', appr_date = '".$todate."'  WHERE state = 1 ";
-        DB::insert(DB::row($query));
+        DB::insert(DB::raw($query));
         //CLEAR TEMPORARY PAYROLL LOGS
         DB::table('temp_allowance_logs')->truncate();
         DB::table('temp_deduction_logs')->truncate();
@@ -1424,7 +1425,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
     public function update_payroll_month($updates, $payroll_date, $arrearID, $dataLogs, $dataUpdates)
     {
-        DB::transaction(function()
+        DB::transaction(function() use($updates, $payroll_date, $arrearID, $dataLogs, $dataUpdates)
        { 
         DB::table('payroll_months')
         ->where('payroll_date', $payroll_date)
@@ -1462,7 +1463,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
     }
 
     public function lessPayments($update_arrears, $update_payroll_months, $update_payroll_logs, $empID, $payrollMonth){
-        DB::transaction(function()
+        DB::transaction(function() use($update_arrears, $update_payroll_months, $update_payroll_logs, $empID, $payrollMonth)
        {
 
         DB::table('payroll_months')->where('payroll_date',$payrollMonth)
@@ -1482,7 +1483,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
 
     public function temp_lessPayments($update_arrears, $update_payroll_months, $update_payroll_logs, $empID, $payrollMonth){
-        DB::transaction(function()
+        DB::transaction(function() use($update_arrears, $update_payroll_months, $update_payroll_logs, $empID, $payrollMonth)
        {
 
         DB::table('payroll_months')->where('payroll_date',$payrollMonth)
@@ -1531,7 +1532,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
     }
 
     public function pending_arrears_payment(){
-        $query = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.id = arp.arrear_id GROUP BY ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
+        $query = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.id = arp.arrear_id GROUP BY e.fname,e.mname,e.lname,ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
         return DB::select(DB::raw($query));
     }
 
@@ -1626,7 +1627,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
     // SELECT (@s:=@s+1) AS SNo, ar.*, pl.less_takehome, IF( (SELECT COUNT(id) FROM arrears_pendings WHERE arrear_id = ar.id)>0, (SELECT amount FROM arrears_pendings WHERE arrear_id = ar.id), 0 ) as pending_amount FROM arrears ar, payroll_logs pl, (SELECT @s:=0) AS s WHERE pl.payroll_date = ar.payroll_date AND pl.empID = ar.empID AND ar.empID = '2550001' AND ar.id = 10
 
     public function arrearsPayment($arrearID, $dataLogs, $dataUpdates){
-        DB::transaction(function()
+        DB::transaction(function() use($arrearID, $dataLogs, $dataUpdates)
        {
 
         DB::table('arrears')->where('id', $id)->update( $dataUpdates);

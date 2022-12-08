@@ -121,10 +121,16 @@
                 </a>
 
                 <ul class="nav-group-sub collapse">
+                <li class="nav-item">
+                        <a href="{{ route('payroll') }}"
+                            class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                            Salary Template
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('payroll') }}"
                             class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                            Payroll
+                            Run Payroll
                         </a>
                     </li>
 
@@ -149,13 +155,13 @@
                         </a>
                     </li>
 
-                    {{-- <li class="nav-item">
+                     <li class="nav-item">
                             <a
-                                href="{{ route('approved_financial_payments') }}"
-                    class="nav-link {{ request()->routeIs('approved_financial_payments') ? 'active' : null  }}">
+                                href="{{ route('cipay.approved_financial_payments') }}"
+                    class="nav-link {{ request()->routeIs('cipay.approved_financial_payments') ? 'active' : null  }}">
                     Pending Payments
                     </a>
-            </li> --}}
+            </li> 
 
 
 

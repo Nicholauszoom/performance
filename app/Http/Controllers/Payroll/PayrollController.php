@@ -34,20 +34,20 @@ class PayrollController extends Controller
             } else {
 
                 // DATE MANIPULATION
-                $calendar = $request('payrolldate');
+                $calendar = $request->payrolldate;
                 $datewell = explode("/", $calendar);
                 $mm = $datewell[1];
                 $dd = $datewell[0];
                 $yyyy = $datewell[2];
                 $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
                 $payroll_month = $yyyy . "-" . $mm;
-                $empID = $this->session->userdata('emp_id');
+                $empID = auth()->user()->emp_id;
                 $today = date('Y-m-d');
 
 
                 $check = $this->payroll_model->payrollcheck($payroll_month);
                 if ($check == 0) {
-                    $result = $this->payroll_model->k($today, $payroll_date, $payroll_month, $empID);
+                    $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
                     //notify the finance
 
 
@@ -64,6 +64,7 @@ class PayrollController extends Controller
                             'isActive' => $all_allocation->isActive,
                             'payroll_date' => $payroll_date
                         );
+                        
                         $this->payroll_model->insertAllocation($data_allocation_log);
 
                     }
@@ -115,22 +116,17 @@ class PayrollController extends Controller
 
                     if ($result == true) {
 
-                        $logData = array(
-                            'empID' => $this->session->userdata('emp_id'),
-                            'description' => "Run payroll of date " . $payroll_date,
-                            'agent' => $this->session->userdata('agent'),
-                            'platform' => $this->agent->platform(),
-                            'ip_address' => $this->input->ip_address()
-                        );
+  
+                        $description  = "Run payroll of date " . $payroll_date;
 
-                        $result = $this->flexperformance_model->insertAuditLog($logData);
+                        $result = SysHelpers::auditLog(1,$description,$request);
 
                         echo "<p class='alert alert-info text-center'>Payroll was Successifully Run,(Loans and Salaries Updated!)</p>";
                     } else {
                         echo "<p class='alert alert-danger text-center'>Failed To run the Payroll, Please Try again, If the Error persists Contact Your System Admin</p>";
                     }
                 } else {
-                    echo "<p class='alert alert-warning text-center'>Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
+                    echo "<p class='alert alert-warning text-center'>".$payroll_month."Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
                 }
             }
         }
@@ -456,12 +452,12 @@ class PayrollController extends Controller
         }
     }
 
-    public function sendReviewEmail()
+    public function sendReviewEmail(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
 
         if (isset($payrollMonth)) {
-            $empID = $this->session->userdata('emp_id');
+            $empID = auth()->user()->emp_id;
             /*hr*/
             if ($this->session->userdata('mng_paym')) {
                 $hr = '%569acdfijkmnr%';

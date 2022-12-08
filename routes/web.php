@@ -82,6 +82,9 @@ Route::middleware('auth')->group(function () {
         Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
         Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
+        Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
+
+        
         
 
 
@@ -95,6 +98,11 @@ Route::middleware('auth')->group(function () {
         Route::any('pension', [ReportController::class, 'pension'])->name('reports.pension');
         Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
         Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
+        Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
+
+        
+
+        Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
 
         
 
@@ -103,6 +111,9 @@ Route::middleware('auth')->group(function () {
         Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
         Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
         Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
+        Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
+
+        
 
 
 

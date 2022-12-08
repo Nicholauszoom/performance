@@ -3,13 +3,18 @@
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="../../../../global_assets/js/plugins/forms/selects/select2.min.js"></script>
+
+
+
 @endpush
 
 @push('head-scriptTwo')
 
 <script src="{{ asset('assets/js/form_layouts.js') }}"></script>
 <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+<!-- bootstrap-daterangepicker -->
+<script src="{{ asset('assets/date-picker/moment.min.js') }}"></script>
+<script src="{{ asset('assets/date-picker/daterangepicker.js') }}"></script>
 @endpush
 
 @section('page-header')
@@ -180,6 +185,7 @@ $payrollList = $data['payrollList'];
                                     <?php } ?>
 
                                 </td>
+                                <td></td>
                             </tr>
                             <?php }  ?>
                         </tbody>
@@ -202,6 +208,7 @@ $('#initPayroll').submit(function(e) {
     $('#initPayroll').hide();
     $.ajax({
             url: "{{route('initPayroll')}}",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -239,7 +246,7 @@ function approvePayroll() {
                     // SEND EMAILS
                     if (confirm(
                             "Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??"
-                            ) == true) {
+                        ) == true) {
                         $.ajax({
                             url: "{{route('send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
                             success: function(data) {}
@@ -255,7 +262,8 @@ function approvePayroll() {
                     }, 1500);
                 } else {
                     alert(
-                        "Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin.");
+                        "Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin."
+                        );
 
                     $('#payrollFeedback').fadeOut('fast', function() {
                         $('#payrollFeedback').fadeIn('fast').html(data.message);
@@ -288,7 +296,8 @@ function recomendPayroll() {
                     }, 1500);
                 } else {
                     alert(
-                        "Payroll Recommendation FAILED, Try again,  If the Error persists Contact Your System Admin.");
+                        "Payroll Recommendation FAILED, Try again,  If the Error persists Contact Your System Admin."
+                        );
 
                     $('#payrollFeedback').fadeOut('fast', function() {
                         $('#payrollFeedback').fadeIn('fast').html(data.message);
@@ -322,7 +331,8 @@ function cancelPayroll() {
                     }, 1500);
                 } else {
                     alert(
-                        "FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin.");
+                        "FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin."
+                        );
 
                     $('#payrollFeedback').fadeOut('fast', function() {
                         $('#payrollFeedback').fadeIn('fast').html(data.message);
@@ -369,7 +379,7 @@ function sendEmail(payrollDate) {
 
     if (confirm(
             "Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??"
-            ) == true) {
+        ) == true) {
 
         $.ajax({
             url: "{{route('send_payslips',['payrollDate'=>" + payrollDate + "])}}",
@@ -380,7 +390,7 @@ function sendEmail(payrollDate) {
                     $('#feedBackMail').fadeOut('fast', function() {
                         $('#feedBackMail').fadeIn('fast').html(
                             "<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>"
-                            );
+                        );
                     });
                     setTimeout(function() { // wait for 2 secs(2)
                         location.reload(); // then reload the div to clear the success notification
