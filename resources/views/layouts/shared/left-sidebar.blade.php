@@ -356,10 +356,21 @@
                         <li class="nav-item">
                             <a href="{{ route('system.index') }}"
                                 class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
-                                Company Setting
+                                Job Post Management
                             </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
+                                Job Application Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
+                                Interview Schedule Management
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 {{-- /settings --}}

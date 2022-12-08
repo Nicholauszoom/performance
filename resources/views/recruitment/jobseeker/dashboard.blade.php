@@ -13,15 +13,16 @@
         <div class="col-lg-4">
 
             <!-- Members online -->
-            
+
             <!-- /members online -->
+            <button type="submit" onclick="get()" id="demo" class="btn btn-primary w-100 border-0" style="background: #012972">Log In</button>
 
         </div>
 
         <div class="col-lg-4">
 
             <!-- Current server load -->
-            
+
             <!-- /current server load -->
 
         </div>
@@ -29,9 +30,16 @@
         <div class="col-lg-4">
 
             <!-- Today's revenue -->
-            
+
             <!-- /today's revenue -->
 
         </div>
+        <script>
+            function get() {
+                let x=10;
+                let x=11;
+                window.alert(x);
+            }
+        </script>
     </div>
 @endsection

@@ -93,7 +93,7 @@
                                             <span class="form-check-label">Remember</span>
                                         </label>
 
-                                        <a href="{{ route('login') }}" class="ms-auto">Forgot password?</a>
+                                        <a href="/forgot-password" class="ms-auto">Forgot password?</a>
                                     </div>
 
                                     <div class="mb-3">

@@ -34,6 +34,7 @@ class LoginController extends Controller
     public function loginProcess(Request $request)
     {
         //
+        $user =new User;
         $request->validate([
             'username' => ['required', 'string'],
             'password' => ['required', 'min:6'],
@@ -42,6 +43,11 @@ class LoginController extends Controller
         $password = $request->input('password');
         if (Auth::attempt(['name' => $username, 'password' => $password], $request->input('remember'))) {
             // Authentication was successful...
+            if ('password') {
+                # code...
+            } else {
+                # code...
+            }
             
             $userRole = Auth::user()->roles;
             
