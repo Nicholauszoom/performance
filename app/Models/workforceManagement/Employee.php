@@ -65,6 +65,20 @@ class Employee extends Model
 		return DB::select(DB::raw($query));
     }
 
+    function getPositionSalaryRange($positionID)
+	{
+		$query = "SELECT TRUNCATE((ol.minSalary/12),0) as minSalary, TRUNCATE((ol.maxSalary/12),0) as maxSalary from position p, organization_level ol WHERE p.organization_level = ol.id AND p.id = ".$positionID."";
+
+		return DB::select(DB::raw($query));
+	}
+
+    function contractdrop()
+	{
+		$query = "SELECT c.* FROM contract c WHERE NOT c.id = 1";
+
+		return DB::select(DB::raw($query));
+	}
+
     public function employeelinemanager($id) {
 		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*,
             CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, ( SELECT

@@ -12,9 +12,9 @@ use App\Models\workforceManagement\Employee;
 class EmployeeController extends Controller
 {
 
-    public function __construct($employeeModel = null, $bankModel = null)
+    public function __construct(Employee $employee, $bankModel = null)
     {
-        $this->employeeModel = new Employee();
+        $this->employee = $employee;
         $this->bankModel = new Bank();
     }
 
@@ -22,9 +22,40 @@ class EmployeeController extends Controller
     {
         $parent = 'Employee';
         $child = 'Active Employees';
-        $employee = $this->employeeModel->employeeData();
+        $employee = $this->employee->employeeData();
 
         return view('workforce-management.active-employee', compact('parent', 'child', 'employee'));
+    }
+
+    public function getPositionSalaryRange(Request $request)
+    {
+
+        $positionID = $request->position;
+
+        $data = array(
+            'state' => 0
+        );
+
+        $minSalary = $maxSalary = 0;
+
+        $result = $this->employee->getPositionSalaryRange($positionID);
+
+        foreach ($result as $value) {
+            $minSalary = $value->minSalary;
+            $maxSalary = $value->maxSalary;
+        }
+
+        if($result){
+            //$response_array['status'] = "OK";
+            $response_array['salary'] = "<input required='required'  class='form-control' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'>";
+        }else{
+            $response_array['salary'] = "<input required='required'  class='form-control' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
+        }
+
+        header('Content-type: application/json');
+
+        return json_encode($response_array);
+
     }
 
     public function employeeProfile()
@@ -65,62 +96,70 @@ class EmployeeController extends Controller
         $parent = 'Employee';
         $child = 'Create';
         $banks = $this->bankModel->bank();
+        $departments = DB::table('department')->get();
+        $company_branch = DB::table('branch')->get();
+        $contract = $this->employee->contractdrop();
+        $pensiondrop = DB::table('pension_fund')->get();
 
-        // dd($banks);
+        // dd($departments);
 
-        return view('workforce-management.add-employee', compact('parent', 'child', 'banks'));
+        return view('workforce-management.add-employee', compact('parent', 'child', 'banks', 'departments', 'company_branch', 'contract', 'pensiondrop'));
     }
 
     public function storeEmployee(Request $request)
     {
 
+        dd($request->all());
+
         Employee::create([
-            'emp_id' => "255002",
-            'old_emp_id' => "0",
-            'password_set' => "0",
-            'fname' => $request->fname,
-            'mname' => $request->mname,
-            'lname' => $request->lname,
-            'birthdate' => $request->birthdate, //date
-            'gender' => $request->gender,
-            'nationality' => $request->nationality,
-            'merital_status' => $request->merital_status,
-            'hire_date' => '2022-12-05', //date
-            'department' => $request->department,
-            'position' => $request->position,
-            'branch' => '001',
-            'shift' => 1,
-            'organization' => 1,
-            'line_manager' => 'Laison Marko',
-            'contract_type' => 'PERMANENT',
-            'contract_renewal_date' => '2022-12-05', //date
-            'salary' => 100000, //DECIMALS
-            'postal_address' => '15919',
-            'postal_city' => 'MWANZA',
-            'physical_address' => 'PHYSICAL ADDRESS',
-            'mobile' => '656205600',
-            'email' => 'fortunatusdouglas@gmail.com',
-            'photo' => 'user.png',
-            'is_expatriate' => 0,
-            'home'=> 'Dar es salaam',
-            'bank' => 1,
-            'bank_branch' => 2,
-            'account_no' => '01J89545495895',
-            'pension_fund' => 1,
-            'pf_membership_no' => 'pf_membership_no',
-            'username' => 'Employee001',
-            'password' => 'passoerd',
-            'state' => 1,
-            'login_user' => 0,
-            'last_updated' => '2022-12-25', //date
-            'last_login' => 'July 2022',
-            'retired' => 1,
-            'contract_end' => '2025-12-03', //date
-            'tin' => '683683268328382',
-            'national_id' => '21y2i1y2i1y2i3i'
+            // 'emp_id' => "255002",
+            // 'old_emp_id' => "0",
+            // 'password_set' => "0",
+            // 'fname' => $request->fname,
+            // 'mname' => $request->mname,
+            // 'lname' => $request->lname,
+            // 'birthdate' => $request->birthdate, //date
+            // 'gender' => $request->gender,
+            // 'nationality' => $request->nationality,
+            // 'merital_status' => $request->merital_status,
+            // 'hire_date' => '2022-12-05', //date
+            // 'department' => $request->department,
+            // 'position' => $request->position,
+            // 'branch' => '001',
+            // 'shift' => 1,
+            // 'organization' => 1,
+            // 'line_manager' => 'Laison Marko',
+            // 'contract_type' => 'PERMANENT',
+            // 'contract_renewal_date' => '2022-12-05', //date
+            // 'salary' => 100000, //DECIMALS
+            // 'postal_address' => '15919',
+            // 'postal_city' => 'MWANZA',
+            // 'physical_address' => 'PHYSICAL ADDRESS',
+            // 'mobile' => '656205600',
+            // 'email' => 'fortunatusdouglas@gmail.com',
+            // 'photo' => 'user.png',
+            // 'is_expatriate' => 0,
+            // 'home'=> 'Dar es salaam',
+            // 'bank' => 1,
+            // 'bank_branch' => 2,
+            // 'account_no' => '01J89545495895',
+            // 'pension_fund' => 1,
+            // 'pf_membership_no' => 'pf_membership_no',
+            // 'username' => 'Employee001',
+            // 'password' => 'passoerd',
+            // 'state' => 1,
+            // 'login_user' => 0,
+            // 'last_updated' => '2022-12-25', //date
+            // 'last_login' => 'July 2022',
+            // 'retired' => 1,
+            // 'contract_end' => '2025-12-03', //date
+            // 'tin' => '683683268328382',
+            // 'national_id' => '21y2i1y2i1y2i3i'
+
+            $request->all()
         ]);
 
-        SysHelpers::AuditLog(3, 'Employee Created', $request);
+        // SysHelpers::AuditLog(3, 'Employee Created', $request);
 
         return redirect( route('employee.active') );
 
@@ -158,8 +197,8 @@ class EmployeeController extends Controller
         $parent = 'Employee';
         $child = 'Suspended';
 
-        $employee1 = $this->employeeModel->inactive_employee1();
-        $employee2 = $this->employeeModel->inactive_employee2();
+        $employee1 = $this->employee->inactive_employee1();
+        $employee2 = $this->employee->inactive_employee2();
 
         // dd($employee2);
 
@@ -176,7 +215,7 @@ class EmployeeController extends Controller
         $parent = 'Employee';
         $child = 'Overtime';
 
-        $overtimeCategories = $this->employeeModel->overtimeCategory();
+        $overtimeCategories = $this->employee->overtimeCategory();
 
 
         return view('workforce-management.overtime', compact('parent', 'child', 'overtimeCategories'));
@@ -212,7 +251,7 @@ class EmployeeController extends Controller
     {
         $parent = 'Employee';
         $child = 'Approve Employee';
-        $transfer = $this->employeeModel->employeeTransfers();
+        $transfer = $this->employee->employeeTransfers();
 
         dd($transfer);
 
