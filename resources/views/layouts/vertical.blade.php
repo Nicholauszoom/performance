@@ -42,6 +42,8 @@
     </div>
     <!-- /page content -->
 
+    @yield('modal')
+
 
     @stack('footer-script')
 

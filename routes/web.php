@@ -14,7 +14,10 @@ use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\GeneralController;
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\setting\BranchController;
+use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
+use App\Models\workforceManagement\Employee;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -48,13 +51,30 @@ Route::middleware('auth')->group(function () {
      * Workforce Manegment
      */
 
-    Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
+    Route::get('/performance/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
+    Route::get('/performance/profile', [EmployeeController::class, 'employeeProfile'])->name('employee.profile');
+    Route::get('/employee-exit', [EmployeeController::class, 'employeeExit'])->name('employee.exit');
     Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
     Route::post('/performance/workforce-management/employee/store', [EmployeeController::class, 'storeEmployee'])->name('employee.store');
 
-    Route::get('/suspended-employee', [EmployeeController::class, 'suspendedEmployee'])->name('employee.suspended');
+    Route::get('/suspended-employee', [EmployeeController::class, 'inactiveEmployee'])->name('employee.suspended');
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
+
+    Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
+    Route::get('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
+    Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
+
+    // Employee overtime
+    Route::get('/perfromance/workforce-management/overtime', [EmployeeController::class, 'overtime'])->name('overtime');
+
+    // Imprest
+    Route::get('performance/workforce-management/imprest', [EmployeeController::class, 'imprest'])->name('imprest.index');
+
+    // Approve Employee
+    Route::get('/performance/workforce-management/employee-Approve/changes', [EmployeeController::class, 'approveEmpoyee'])->name('approve.changes');
+    Route::get('/performance/workforce-management/employee-/register', [EmployeeController::class, 'approveRegister'])->name('approve.register');
+
 
 
 
@@ -88,9 +108,10 @@ Route::middleware('auth')->group(function () {
         
 
 
-        
 
-        
+
+
+
 
         Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
         Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
@@ -104,7 +125,7 @@ Route::middleware('auth')->group(function () {
 
         Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
 
-        
+
 
 
         Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
@@ -117,27 +138,27 @@ Route::middleware('auth')->group(function () {
 
 
 
-        
-
-
-        
-
-        
-
-        
-        
 
 
 
 
-        
-        
-        
 
-        
-        
-        
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
 

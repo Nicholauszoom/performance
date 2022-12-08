@@ -151,9 +151,9 @@ class PayrollController extends Controller
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
             $data['employee'] = $this->payroll_model->customemployee();
-            
+
             return view('payroll.employee_payslip',compact('data','title','parent','child'));
-            
+
        // } else {
          //   echo 'Unauthorised Access';
        // }
@@ -164,7 +164,7 @@ class PayrollController extends Controller
     {
         // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
 
-        
+
 
         $data['pendingPayroll_month'] = $this->payroll_model->pendingPayroll_month();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -179,7 +179,7 @@ class PayrollController extends Controller
             'data' => $data,
             'parent'=>'Payroll',
             'child'=>'Paayroll'
-            
+
         ]);
 
         // } else {
@@ -918,8 +918,8 @@ class PayrollController extends Controller
         }
         header('Content-type: application/json');
         return  json_encode($response_array);
-        
-       
+
+
     }
 
     function arrearsPayment()

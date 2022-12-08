@@ -70,48 +70,32 @@
                             </a>
                         </li>
 
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                        class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                        >
-                        Transfers Management
-                        </a>
-                </li> --}}
-                {{-- <li class="nav-item">
+                                href="{{ route('overtime') }}"
+                                class="nav-link {{ request()->routeIs('overtime') ? 'active' : null  }}"
+                            >
+                                Overtime
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                >
-                Attendance
-                </a>
-                </li> --}}
-                {{-- <li class="nav-item">
+                                href="{{ route('imprest.index') }}"
+                                class="nav-link {{ request()->routeIs('imprest.index') ? 'active' : null  }}"
+                            >
+                                Imprest
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                >
-                Overtime management
-                </a>
-                </li> --}}
-                {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                >
-                Grievances and Disciplinary Management
-                </a>
-                </li> --}}
-                {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                >
-                Performance & Productiviy Management
-                </a>
-                </li> --}}
-            </ul>
-            </li>
+                                href="{{ route('approve.changes') }}"
+                                class="nav-link {{ request()->routeIs('approve.changes') ? 'active' : null  }}"
+                            >
+                                Employee Aproval
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
             {{-- Payroll management --}}
             <li class="nav-item nav-item-submenu">
@@ -241,32 +225,48 @@
                         -   Accounting coding
                 --}}
 
-            {{-- Organisation --}}
-            <li class="nav-item nav-item-submenu">
-                <a href="#" class="nav-link">
-                    <i class="ph-buildings"></i>
-                    <span>Organisation</span>
-                </a>
-                <ul class="nav-group-sub collapse">
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Company Registration
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Organization structure Registration
-                        </a>
-                    </li>
+                {{-- Organisation --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-buildings"></i>
+                        <span>Organisation</span>
+                    </a>
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                                <a
+                                    href="{{ route('departments.index') }}"
+                                    class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                                >
+                                Company Registration
+                                </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Departments
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                            >
+                            Organization structure Registration
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                            >
+                                Departments
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a
+                                href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
+                            >
+                                Position
+                            </a>
+                        </li>
 
                     <li class="nav-item">
                         <a href="{{ route('designations.index') }}"
