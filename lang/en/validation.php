@@ -155,8 +155,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'cpassword' => [
+            'required' => 'Please Confirm Your Password',
         ],
     ],
 

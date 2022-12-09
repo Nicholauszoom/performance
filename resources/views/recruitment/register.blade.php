@@ -26,7 +26,7 @@
                 <div class="content d-flex justify-content-center align-items-center">
 
                     <!-- Registration form -->
-                    <form action="{{ route('password.new') }}" method="POST" class="login-form"
+                    <form action="{{ route('register.store') }}" method="POST" class="login-form"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="card mb-0">
@@ -35,12 +35,13 @@
                                     <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
                                         <img src="../../../assets/images/logo_icon.svg" class="h-48px" alt="">
                                     </div>
+                                    <h5 class="mb-0">Create an Account</h5>
+                                    <span class="d-block text-muted">All fields are required</span>
                                 </div>
 
                                 <div class="text-center text-muted content-divider mb-3">
-                                    <span class="px-2">Enter Your Credentials to Reset</span>
+                                    <span class="px-2">Register Your Account</span>
                                 </div>
-
                                 {{-- @if ($errors->any())
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     <ul>
@@ -50,7 +51,20 @@
                                     </ul>
                                 </div>
                                 @endif --}}
-                                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <div class="form-control-feedback form-control-feedback-start">
+                                        <input type="text" name="username" class="form-control"
+                                            placeholder="JohnDoe">
+                                        <div class="form-control-feedback-icon">
+                                            <i class="ph-user-circle text-muted"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                @error('username')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
                                     <div class="form-control-feedback form-control-feedback-start">
@@ -80,20 +94,42 @@
                                 <div class="mb-3">
                                     <label class="form-label">Confirm Password</label>
                                     <div class="form-control-feedback form-control-feedback-start">
-                                        <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
+                                        <input type="password" name="cpassword" class="form-control"
                                             placeholder="•••••••••••" autocomplete="current-password">
                                         <div class="form-control-feedback-icon">
                                             <i class="ph-lock text-muted"></i>
                                         </div>
                                     </div>
                                 </div>
-                                @error('password')
+                                @error('cpassword')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                                 @if (Session::has('notMatch'))
                                     <p class="text-danger">{{ Session::get('notMatch') }}</p>
                                 @endif
-                                <button type="submit" class="btn btn-teal w-100">Reset Password</button>
+                                <div class="mb-3">
+                                    {{-- <label class="form-check mb-2">
+                                        <input type="checkbox" name="remember" class="form-check-input" checked>
+                                        <span class="form-check-label">Send me <a href="#">&nbsp;test account
+                                                settings</a></span>
+                                    </label>
+
+                                    <label class="form-check mb-2">
+                                        <input type="checkbox" name="remember" class="form-check-input" checked>
+                                        <span class="form-check-label">Subscribe to monthly newsletter</span>
+                                    </label> --}}
+
+                                    <label class="form-check">
+                                        <input type="checkbox" name="remember" class="form-check-input">
+                                        <span class="form-check-label">Accept <a href="#">&nbsp;Terms and
+                                                service</a></span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn btn-teal w-100">Register</button>
+                                {{-- <a  title="Don't have an account? Register here"
+                                class="icon-2 info-tooltip"><button type="button" onclick='get()' class="btn btn-primary w-100 border-0">Test</button></a> --}}
+                                <a href="{{route('recruitment.login')}}"><p>Already Have an Account? Login</p></a>
                             </div>
                         </div>
                     </form>
