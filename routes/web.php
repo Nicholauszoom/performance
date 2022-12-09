@@ -17,7 +17,6 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Models\workforceManagement\Employee;
 
 Route::get('/', function () {
     return view('auth.login');
