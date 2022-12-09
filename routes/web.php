@@ -51,29 +51,34 @@ Route::middleware('auth')->group(function () {
      * Workforce Manegment
      */
 
-    Route::get('/performance/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
-    Route::get('/performance/profile', [EmployeeController::class, 'employeeProfile'])->name('employee.profile');
-    Route::get('/employee-exit', [EmployeeController::class, 'employeeExit'])->name('employee.exit');
-    Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
-    Route::post('/performance/workforce-management/employee/store', [EmployeeController::class, 'storeEmployee'])->name('employee.store');
+     Route::prefix('performance')->controller(EmployeeController::class)->group(function (){
+        Route::get('/active-mebers',  'activeMembers')->name('employee.active');
+        Route::get('/profile',  'employeeProfile')->name('employee.profile');
+        Route::get('/employee-exit',  'employeeExit')->name('employee.exit');
+        Route::get('/workforce-management/employee-create',  'createEmployee')->name('employee.create');
+        Route::post('/workforce-management/employee/store',  'storeEmployee')->name('employee.store');
+        Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
+        Route::get('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
+        Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
 
-    Route::get('/suspended-employee', [EmployeeController::class, 'inactiveEmployee'])->name('employee.suspended');
+        // Imprest
+        Route::get('/workforce-management/imprest', 'imprest')->name('imprest.index');
+
+        // Approve Employee
+        Route::get('/workforce-management/employee-Approve/changes', 'approveEmpoyee')->name('approve.changes');
+        Route::get('/workforce-management/employee-/register', 'approveRegister')->name('approve.register');
+     });
+
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
     Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
-    Route::get('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
     Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
 
     // Employee overtime
-    Route::get('/perfromance/workforce-management/overtime', [EmployeeController::class, 'overtime'])->name('overtime');
 
-    // Imprest
-    Route::get('performance/workforce-management/imprest', [EmployeeController::class, 'imprest'])->name('imprest.index');
 
-    // Approve Employee
-    Route::get('/performance/workforce-management/employee-Approve/changes', [EmployeeController::class, 'approveEmpoyee'])->name('approve.changes');
-    Route::get('/performance/workforce-management/employee-/register', [EmployeeController::class, 'approveRegister'])->name('approve.register');
+
 
 
 
@@ -104,8 +109,6 @@ Route::middleware('auth')->group(function () {
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
         Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
 
-        
-        
 
 
 
@@ -121,7 +124,7 @@ Route::middleware('auth')->group(function () {
         Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
         Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
 
-        
+
 
         Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
 
@@ -134,7 +137,7 @@ Route::middleware('auth')->group(function () {
         Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
         Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
 
-        
+
 
 
 
