@@ -240,9 +240,9 @@ class PayrollController extends Controller
         return view('payroll.payroll_info',compact('data'));
     }
 
-    public function payroll_info()
+    public function payroll_info(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_list'] = $this->payroll_model->employeePayrollList($payrollMonth, "allowance_logs", "deduction_logs", "loan_logs", "payroll_logs");
         $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
@@ -259,7 +259,9 @@ class PayrollController extends Controller
         $data['payroll_state'] = 1;
         $data['title'] = "Payroll Info";
 
-        $this->load->view('payroll_info', $data);
+        $data['title'] = "Payroll Info";
+
+        return view('payroll.payroll_info',compact('data'));
     }
 
     // public function temp_less_payments(){

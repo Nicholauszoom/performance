@@ -17,7 +17,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Models\workforceManagement\Employee;
+use App\Http\Controller\Payroll\ReportController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'payroll'], function () {
         Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
         Route::any('temp_payroll_info',[PayrollController::class,'temp_payroll_info'])->name('temp_payroll_info');
-        Route::post('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
+        Route::any('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
         Route::post('payroll_report',[PayrollController::class,'payroll_report'])->name('payroll_report');
         Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
         Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
@@ -120,6 +120,10 @@ Route::middleware('auth')->group(function () {
         Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
         Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
         Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
+        Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
+
+
+        
 
         
 
