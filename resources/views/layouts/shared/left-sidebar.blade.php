@@ -40,12 +40,12 @@
                 {{-- /Dashboard --}}
 
                 {{-- Projects --}}
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li> -->
+                </li>
                 {{-- /projects --}}
 
 
