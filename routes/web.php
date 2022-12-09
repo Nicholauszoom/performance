@@ -177,24 +177,25 @@ Route::middleware('auth')->group(function () {
 });
 //Routes for Recruitment Module
 
-Route::group(['prefix' => 'recruitment'], function () {
-    Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
-    Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
-    Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
-    Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
-});
-Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
-// Password Resetting Routes...
+// Route::group(['prefix' => 'recruitment'], function () {
+//     Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
+//     Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
+//     Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
+//     Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
+// });
 
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
+// Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
+// // Password Resetting Routes...
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
+// Route::get('/forgot-password', function () {
+//     return view('auth.forgot-password');
+// })->middleware('guest')->name('password.request');
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+// Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
+
+// Route::get('/reset-password/{token}', function ($token) {
+//     return view('auth.reset-password', ['token' => $token]);
+// })->middleware('guest')->name('password.reset');
 
 
 
