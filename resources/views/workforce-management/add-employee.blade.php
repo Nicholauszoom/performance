@@ -363,12 +363,16 @@
 
         $('#pos').on('change', function() {
             var positionID = $(this).val();
+            
             if (positionID) {
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: "{{ route('getPositionSalaryRange') }}",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     data: 'positionID=' + positionID,
                     success: function(response) {
+                        
+                        var response = JSON.parse(response);
                         $('#salaryField').fadeOut('fast', function() {
                             $('#salaryField').fadeIn('fast').html(response.salary);
                         });
