@@ -41,13 +41,13 @@
 
                                         <div class="form-control-feedback form-control-feedback-start">
                                             <input
-                                                class="form-control @if($errors->has('email')) is-invalid @endif"
-                                                name="email"
-                                                type="email"
-                                                id="emailaddress"
+                                                class="form-control @if($errors->has('emp_id')) is-invalid @endif"
+                                                name="emp_id"
+                                                type="text"
+                                                id="emp-id"
                                                 required
-                                                value="{{ old('email')}}"
-                                                placeholder="admin@gmail.com"
+                                                value="{{ old('emp_id')}}"
+                                                placeholder="username"
                                             >
 
                                             <div class="form-control-feedback-icon">
@@ -55,9 +55,9 @@
                                             </div>
                                         </div>
 
-                                        @if($errors->has('email'))
+                                        @if($errors->has('emp_id'))
                                         <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('email') }}</strong>
+                                            <strong>{{ $errors->first('emp_id') }}</strong>
                                         </span>
                                         @endif
                                     </div>

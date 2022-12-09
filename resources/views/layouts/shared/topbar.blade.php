@@ -273,7 +273,7 @@
                         <img src="{{ asset('assets/images/demo/users/face11.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
-                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->name }}</span>
+                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->fname .' '.Auth::user()->lname }}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">

@@ -17,7 +17,6 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Models\workforceManagement\Employee;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -58,7 +57,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/workforce-management/employee-create',  'createEmployee')->name('employee.create');
         Route::post('/workforce-management/employee/store',  'storeEmployee')->name('employee.store');
         Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
-        Route::get('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
+        Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
         Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
 
         // Imprest
