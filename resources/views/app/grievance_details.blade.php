@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -89,7 +89,7 @@
                     <br><br>
                     <h5> <b> ATTACHMENT </b>:<br></h5>
                     <p>
-                      <a download= '' href ='<?php echo url().$attachment; ?>'><div class='col-md-12'>
+                      <a download= '' href ='<?php echo  url('').$attachment; ?>'><div class='col-md-12'>
                                 <span class='label label-info'>DOWNLOAD Attached Evidence File</span></div></a>
                     </p><br> <?php } ?>
                     
@@ -98,7 +98,7 @@
                     <h5> <b> ADDITIONAL Attachment </b>:<br></h5>
                     <p>
 
-                      <a download= '' href ='<?php echo url().$support_document; ?>'><div class='col-md-12'>
+                      <a download= '' href ='<?php echo  url('').$support_document; ?>'><div class='col-md-12'>
                                 <span class='label label-info'>DOWNLOAD Attached Evidence File</span></div></a>
                     </p> <?php } ?>
                     
@@ -117,7 +117,7 @@
                   <div class="x_content">
                       <p>Additional Details</p>
 
-                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo url().'flex/grievance_details/?id='.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url('').'flex/grievance_details/?id='.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
                      
                       <div class="form-group">

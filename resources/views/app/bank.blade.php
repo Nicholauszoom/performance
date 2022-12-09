@@ -58,7 +58,7 @@
                             <td><?php echo $row->name; ?></td>
                             <td><?php echo $row->bank_code; ?></td>
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/updateBank/?category=1&id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateBank/?category=1&id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                             </td>
                            </tr>
@@ -104,7 +104,7 @@
                             <td><?php echo $row->country; ?><br><?php echo $row->region; ?></td>
                             <td><?php echo $row->branch_code; ?></td>
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/updateBank/?category=2&id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateBank/?category=2&id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                             </td>
                            </tr>
@@ -218,7 +218,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addBank"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
+                          <form id="demo-form2" autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addBank"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
                         
 
                         <div class="form-group">
@@ -282,7 +282,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/addBankBranch",
+ url: "<?php echo  url(''); ?>/flex/addBankBranch",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

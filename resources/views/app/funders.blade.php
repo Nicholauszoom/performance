@@ -1,11 +1,11 @@
 <?php
-include_once "app/includes/header")
+@include("app/includes/header")
 
 <!-- Font Awesome -->
-<link href="<?php echo url(); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
+<link href="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
 <?php
-include_once "app/includes/sidebar.php";
-include_once "app/includes/top_navbar<!-- /top navigation -->
+@include("app/includes/sidebar.php";
+@include("app/includes/top_navbar<!-- /top navigation -->
 
 <!-- page content -->
 <div class="right_col" role="main">
@@ -135,7 +135,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
                                                         <input required="required" required type="text"
                                                                placeholder="Funder Name" id="address" name="name"
                                                                class="form-control col-md-7 col-xs-12">
-                                                        <span class="text-danger"><?php echo form_error("lname"); ?></span>
+                                                        <span class="text-danger"><?php// echo form_error("lname"); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -146,7 +146,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
                                                         <input required="required" placeholder="Email" type="email"
                                                                id="email" name="email"
                                                                class="form-control col-md-7 col-xs-12">
-                                                        <span class="text-danger"><?php echo form_error("lname"); ?></span>
+                                                        <span class="text-danger"><?php// echo form_error("lname"); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -179,7 +179,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
                                                         <input required="required" placeholder="Mobile Phone"
                                                                type="text" id="phone" name="phone"
                                                                class="form-control col-md-7 col-xs-12">
-                                                        <span class="text-danger"><?php echo form_error("lname"); ?></span>
+                                                        <span class="text-danger"><?php// echo form_error("lname"); ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -190,7 +190,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
                                                         <textarea type="text" id="more" name="description"
                                                                   placeholder="Description"
                                                                   class="form-control col-md-7 col-xs-12"></textarea>
-                                                        <span class="text-danger"><?php echo form_error("lname"); ?></span>
+                                                        <span class="text-danger"><?php// echo form_error("lname"); ?></span>
                                                     </div>
                                                 </div>
                                                 <div align="right" class="form-group">
@@ -629,7 +629,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
  ?>
 
 <!-- fstdropdown -->
-<script src="<?php echo url(); ?>style/fstdropdown/fstdropdown.js"></script>
+<script src="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.js"></script>
 
 <script>
     $(document).ready(function(){
@@ -852,7 +852,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         e.preventDefault(); // Prevent Default Submission
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/performance/addFunder",
+            url: "<?php echo  url(''); ?>/flex/performance/addFunder",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'
@@ -881,7 +881,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         e.preventDefault(); // Prevent Default Submission
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/performance/addSegment",
+            url: "<?php echo  url(''); ?>/flex/performance/addSegment",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'
@@ -910,7 +910,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         e.preventDefault(); // Prevent Default Submission
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/performance/addCategory",
+            url: "<?php echo  url(''); ?>/flex/performance/addCategory",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'
@@ -938,7 +938,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         e.preventDefault(); // Prevent Default Submission
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/performance/addException",
+            url: "<?php echo  url(''); ?>/flex/performance/addException",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'
@@ -966,7 +966,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         e.preventDefault(); // Prevent Default Submission
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/performance/addRequest",
+            url: "<?php echo  url(''); ?>/flex/performance/addRequest",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'
@@ -994,7 +994,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         if (projectCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchActivity',
+                url: '<?php echo  url(''); ?>/flex/project/fetchActivity',
                 data: 'projectCode=' + projectCode,
                 success: function (html) {
                     $('#activitySelectList').html(html);

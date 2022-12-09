@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -86,7 +86,7 @@
                     <?php if (session('conf_leave')!= 0 ){ ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <a><button type="button" id="modal" data-toggle="modal" data-target="#departmentModal" class="btn btn-success">LEAVE REPORT</button></a>
                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="<?php echo url(); ?>flex/attendance/customleavereport" ><button type="button" class="btn btn-success">View Individual Report</button></a> <?php } ?>
+                    <a href="<?php echo  url(''); ?>/flex/attendance/customleavereport" ><button type="button" class="btn btn-success">View Individual Report</button></a> <?php } ?>
                     </h2>
 
                     <div class="clearfix"></div>
@@ -151,7 +151,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data" target="_blank" method="post" action="<?php echo url(); ?>flex/attendance/customleavereport"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data" target="_blank" method="post" action="<?php echo  url(''); ?>/flex/attendance/customleavereport"  data-parsley-validate class="form-horizontal form-label-left">
                         
 
                         <div class="form-group">

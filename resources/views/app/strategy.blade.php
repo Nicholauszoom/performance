@@ -1,5 +1,5 @@
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -47,7 +47,7 @@
                   </div>
                   <div class="x_content">               
 
-                    <form  enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/performance/strategy_report"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
+                    <form  enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/strategy_report"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                     <input type="text"  hidden="" value="<?php echo $strategyID;?>" name="strategyID" />
                     <div class="col-lg-12">
                       <div class="col-lg-4">
@@ -221,7 +221,7 @@
                                                 </ul>
                                             </td>
                                             <td class="options-width">
-                                            <a href="<?php echo url()."flex/performance/strategy_info/?id=".base64_encode($row->id); ?>"   title="Strategy Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                            <a href="<?php echo  url('')."flex/performance/strategy_info/?id=".base64_encode($row->id); ?>"   title="Strategy Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                             
                                             <?php if($strategyID == $row->id) { ?>
                                             <a title="Current Selected Strategy Can Not Be Deleted, Change Selection and Try to Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>  NOT ALLOWED</button> </a>
@@ -249,7 +249,7 @@
                             <div class="x_panel">
                               <div class="x_title">
                                 <h2>Outcome
-                                <a href ="<?php echo url(); ?>flex/performance/outcome_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
+                                <a href ="<?php echo  url(''); ?>/flex/performance/outcome_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                 </h2>
             
                                 <div class="clearfix"></div>
@@ -351,9 +351,9 @@
                                               </ul>
                                           </td>
                                           <td class="options-width">
-                                              <a href="<?php echo url()."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                              <a href="<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                               <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                              <!-- <a href = "<?php echo url()."flex/performance/output/".$rowOutcome->id."/".$rowOutcome->strategy_ref; ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a> -->
+                                              <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id."/".$rowOutcome->strategy_ref; ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a> -->
                                               
                                               </td>
                                       </tr> 
@@ -370,7 +370,7 @@
                                 <div class="x_panel">
                                   <div class="x_title">
                                     <h2>Output 
-                                    <a href ="<?php echo url(); ?>flex/performance/output_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
+                                    <a href ="<?php echo  url(''); ?>/flex/performance/output_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                     </h2>
                 
                                     <div class="clearfix"></div>
@@ -485,9 +485,9 @@
                                                                 </ul>
                                                             </td>
                                                             <td class="options-width">
-                                                                <a href="<?php echo url()."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                                                <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                                                 <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                                                <a href="<?php echo url()."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>" ><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
+                                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>" ><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
                                                             </td>
                                                         </tr> 
                                                     <?php  }  ?>
@@ -508,9 +508,9 @@
                               <div class="x_title">
                                 <h2>Tasks
             
-                                <a href="<?php echo url()."flex/performance/assigntask/?id=".base64_encode($currentStrategy."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a>
+                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($currentStrategy."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a>
             
-                                <a href ="<?php echo url(); ?>flex/performance/task_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
+                                <a href ="<?php echo  url(''); ?>/flex/performance/task_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                 </h2>
                                 <div class="clearfix"></div>
                               </div>
@@ -641,14 +641,14 @@
                                             </ul>
                                         </td>
                                         <td class="options-width">
-                                            <a href="<?php echo url()."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                            <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
             
                                       <!-- Line Manager WHO  ASSIGNED The Task -->
                                       <?php 
                                         if($row->status==1){ ?>
                                         <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button>
             
-                                        <a href="<?php echo url()."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
+                                        <a href="<?php echo  url('')."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
             
             
                                         <?php } if($row->status==0){ ?>
@@ -662,7 +662,7 @@
                                             <!--ACTIONS-->
                                             </td>
             
-                                        <td><a href="<?php echo url()."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                                        <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
             
             
                                         
@@ -696,7 +696,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/performance/strategy"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/strategy"  data-parsley-validate class="form-horizontal form-label-left">
                           <div class="form-group">
                             <label class="control-label col-md-3  col-xs-6" >Type</label>
                             <div class="col-md-4 col-sm-6 col-xs-12">
@@ -713,7 +713,7 @@
                             </label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                               <input required="required" required type="text" id="address" name="name" class="form-control col-md-7 col-xs-12">
-                              <span class="text-danger"><?php echo form_error("lname");?></span>
+                              <span class="text-danger"><?php// echo form_error("lname");?></span>
                             </div>
                           </div>
 
@@ -737,7 +737,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <textarea required="" maxlength="256" class="form-control col-md-7 col-xs-12" required name="description" placeholder="Description" rows="3"></textarea> 
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                         
@@ -749,7 +749,7 @@
                           <input required="" placeholder="Start Date" type="text" name="start" class="form-control col-xs-12 has-feedback-left" id="strategy_startDate"  aria-describedby="inputSuccess2Status">
                           <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <div class="form-group">
@@ -760,7 +760,7 @@
                           <input required="" placeholder="End Date" type="text" name="end" class="form-control col-xs-12 has-feedback-left" id="strategy_endDate"  aria-describedby="inputSuccess2Status">
                           <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div>
                       <div class="modal-footer">

@@ -92,7 +92,7 @@
     $('#salaryCalculator').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/payroll/calculateSalary",
+                 url:"<?php echo  url(''); ?>/flex/payroll/calculateSalary",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

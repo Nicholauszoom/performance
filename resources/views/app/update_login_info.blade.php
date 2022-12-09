@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -56,7 +56,7 @@
                         
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input  type="text" required="" value="<?php echo $username; ?>" name="username" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("username");?></span>
+                          <span class="text-danger"><?php// echo form_error("username");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -64,7 +64,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input type="password" required placeholder="Enter Your New Password" name="password" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("password");?></span>
+                          <span class="text-danger"><?php// echo form_error("password");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -72,7 +72,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input  type="password" required placeholder="Confirm Your New Password Password"   name="conf_password"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("conf_password");?></span>
+                          <span class="text-danger"><?php// echo form_error("conf_password");?></span>
                         </div>
                       </div>
                       <!-- <div class="ln_solid"></div> -->
@@ -102,7 +102,7 @@
 
 
       $.ajax({
-          url: "<?php echo url(); ?>flex/update_login_info",
+          url: "<?php echo  url(''); ?>/flex/update_login_info",
           type: 'POST',
           data: $(this).serialize(), // it will serialize the form data
           // dataType: 'json',
@@ -142,7 +142,7 @@
 
 
  //   $.ajax({
- //url: "<?php //echo url(); ?>/flex/update_login_info",
+ //url: "<?php //echo  url(''); ?>/flex/update_login_info",
  //type: 'POST',
  //data: $(this).serialize(), // it will serialize the form data
  //       dataType: 'json'

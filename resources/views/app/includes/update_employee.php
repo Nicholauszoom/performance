@@ -63,7 +63,7 @@ function confirmBonus(id)
     $('#updateFirstName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateFirstName",
+                 url:"<?php echo  url(''); ?>/flex/updateFirstName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -88,7 +88,7 @@ function confirmBonus(id)
     $('#updateCode').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateCode",
+                 url:"<?php echo  url(''); ?>/flex/updateCode",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -113,7 +113,7 @@ function confirmBonus(id)
     $('#updateLevel').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateLevel",
+                 url:"<?php echo  url(''); ?>/flex/updateLevel",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -141,7 +141,7 @@ function confirmBonus(id)
     $('#updateMiddleName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMiddleName",
+                 url:"<?php echo  url(''); ?>/flex/updateMiddleName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -170,7 +170,7 @@ function confirmBonus(id)
     $('#updatedob').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateDob",
+                 url:"<?php echo  url(''); ?>/flex/updateDob",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -200,7 +200,7 @@ function confirmBonus(id)
     $('#updatePensionFund').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmployeePensionFund",
+                 url:"<?php echo  url(''); ?>/flex/updateEmployeePensionFund",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -229,7 +229,7 @@ function confirmBonus(id)
     $('#updateLastName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateLastName",
+                 url:"<?php echo  url(''); ?>/flex/updateLastName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -257,7 +257,7 @@ function confirmBonus(id)
     $('#updateGender').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateGender",
+                 url:"<?php echo  url(''); ?>/flex/updateGender",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -285,7 +285,7 @@ function confirmBonus(id)
     $('#updateExpatriate').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateExpatriate",
+                 url:"<?php echo  url(''); ?>/flex/updateExpatriate",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -313,7 +313,7 @@ function confirmBonus(id)
     $('#updatePosition').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmployeePosition",
+                 url:"<?php echo  url(''); ?>/flex/updateEmployeePosition",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -342,7 +342,7 @@ function confirmBonus(id)
     $('#updateBranch').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmployeeBranch",
+                 url:"<?php echo  url(''); ?>/flex/updateEmployeeBranch",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -371,7 +371,7 @@ function confirmBonus(id)
     $('#updateNationality').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmployeeNationality",
+                 url:"<?php echo  url(''); ?>/flex/updateEmployeeNationality",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -399,7 +399,7 @@ function confirmBonus(id)
     $('#updateDeptPos').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateDeptPos",
+                 url:"<?php echo  url(''); ?>/flex/updateDeptPos",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -426,7 +426,7 @@ function confirmBonus(id)
     $('#updateSalary').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateSalary",
+                 url:"<?php echo  url(''); ?>/flex/updateSalary",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -453,7 +453,7 @@ function confirmBonus(id)
     $('#updateEmail').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmail",
+                 url:"<?php echo  url(''); ?>/flex/updateEmail",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -480,7 +480,7 @@ function confirmBonus(id)
     $('#updatePostAddress').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePostAddress",
+                 url:"<?php echo  url(''); ?>/flex/updatePostAddress",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -507,7 +507,7 @@ function confirmBonus(id)
     $('#updatePostCity').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePostCity",
+                 url:"<?php echo  url(''); ?>/flex/updatePostCity",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -534,7 +534,7 @@ function confirmBonus(id)
     $('#updatePhysicalAddress').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePhysicalAddress",
+                 url:"<?php echo  url(''); ?>/flex/updatePhysicalAddress",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -561,7 +561,7 @@ function confirmBonus(id)
     $('#updateMobile').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMobile",
+                 url:"<?php echo  url(''); ?>/flex/updateMobile",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -588,7 +588,7 @@ function confirmBonus(id)
     $('#updateHomeAddress').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateHomeAddress",
+                 url:"<?php echo  url(''); ?>/flex/updateHomeAddress",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -615,7 +615,7 @@ function confirmBonus(id)
     $('#updateNationalID').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/updateNationalID",
+            url:"<?php echo  url(''); ?>/flex/updateNationalID",
             type:"post",
             data:new FormData(this),
             processData:false,
@@ -642,7 +642,7 @@ function confirmBonus(id)
     $('#updateTin').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/updateTin",
+            url:"<?php echo  url(''); ?>/flex/updateTin",
             type:"post",
             data:new FormData(this),
             processData:false,
@@ -669,7 +669,7 @@ function confirmBonus(id)
     $('#updateBankAccountNo').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateBankAccountNo",
+                 url:"<?php echo  url(''); ?>/flex/updateBankAccountNo",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -697,7 +697,7 @@ function confirmBonus(id)
     $('#updateBank_Bankbranch').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateBank_Bankbranch",
+                 url:"<?php echo  url(''); ?>/flex/updateBank_Bankbranch",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -728,7 +728,7 @@ function confirmBonus(id)
     $('#updatePensionFundNo').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePensionFundNo",
+                 url:"<?php echo  url(''); ?>/flex/updatePensionFundNo",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -755,7 +755,7 @@ function confirmBonus(id)
     $('#updateMeritalStatus').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMeritalStatus",
+                 url:"<?php echo  url(''); ?>/flex/updateMeritalStatus",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -782,7 +782,7 @@ function confirmBonus(id)
     $('#updateLineManager').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateLineManager",
+                 url:"<?php echo  url(''); ?>/flex/updateLineManager",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -809,7 +809,7 @@ function confirmBonus(id)
     $('#updateContract').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmployeeContract",
+                 url:"<?php echo  url(''); ?>/flex/updateEmployeeContract",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -836,7 +836,7 @@ function confirmBonus(id)
     $('#updateEmployeePhoto').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateEmployeePhoto",
+                 url:"<?php echo  url(''); ?>/flex/updateEmployeePhoto",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -863,7 +863,7 @@ function confirmBonus(id)
     $('#updateOldID').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateOldID",
+                 url:"<?php echo  url(''); ?>/flex/updateOldID",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -901,7 +901,7 @@ function confirmBonus(id)
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/remove_individual_from_allowance",
+                 url:"<?php echo  url(''); ?>/flex/remove_individual_from_allowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -930,7 +930,7 @@ function confirmBonus(id)
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/remove_group_from_allowance",
+                 url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -959,7 +959,7 @@ function confirmBonus(id)
         if (confirm("Are You Sure You Want To Delete This Allowance?") == true) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/deleteAllowance",
+                 url:"<?php echo  url(''); ?>/flex/deleteAllowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -1015,7 +1015,7 @@ function deleteAllowance(id)
     $('#addToBonus').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addToBonus",
+                 url:"<?php echo  url(''); ?>/flex/addToBonus",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -1045,7 +1045,7 @@ function deleteAllowance(id)
     $('#addBonusTag').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addBonusTag",
+                 url:"<?php echo  url(''); ?>/flex/addBonusTag",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

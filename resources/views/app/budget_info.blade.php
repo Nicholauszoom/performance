@@ -197,7 +197,7 @@
 
 <?php  
    
-  include_once "app/includes/training_operations
+  @include("app/includes/training_operations
 
      <!-- DATE SCRIPTS  -->
 

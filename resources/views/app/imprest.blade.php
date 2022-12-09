@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -109,7 +109,7 @@
                             <a href="javascript:void(0)" onclick="unretirementImprest(<?php echo $row->id;?>)">
                             <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
                             <?php }   ?>
-                            <a  href="<?php echo url()."flex/imprest/imprest_info/?id=".base64_encode($row->id); ?>" 
+                            <a  href="<?php echo  url('')."flex/imprest/imprest_info/?id=".base64_encode($row->id); ?>" 
                               title="Info and Details" class="icon-2 info-tooltip">
                               <button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                             </td>
@@ -198,7 +198,7 @@
 
        <?php
         
-       include_once "app/includes/imprest_operations")
+       @include("app/includes/imprest_operations")
 
 <script>
 $(function() {
@@ -283,7 +283,7 @@ $(function() {
     $('#requestImprest').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/imprest/requestImprest",
+                 url:"<?php echo  url(''); ?>/flex/imprest/requestImprest",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -301,7 +301,7 @@ $(function() {
           $('#requestImprest')[0].reset();
           setTimeout(function(){// wait for 5 secs(2)
            location.reload(); 
-            var url = "<?php echo url(); ?>flex/imprest/imprest_info/?id="+data.id
+            var url = "<?php echo  url(''); ?>/flex/imprest/imprest_info/?id="+data.id
             window.location.href = url;
           }, 1000);
 

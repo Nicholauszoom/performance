@@ -368,7 +368,7 @@
         if (projectCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchActivity',
+                url: '<?php echo  url(''); ?>/flex/project/fetchActivity',
                 data: 'projectCode=' + projectCode,
                 success: function (html) {
                     $('#activitySelectList2').html(html);
@@ -384,7 +384,7 @@
         if (activityCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchEmployee',
+                url: '<?php echo  url(''); ?>/flex/project/fetchEmployee',
                 data: 'activityCode=' + activityCode,
                 success: function (html) {
                     let jq_json_obj = $.parseJSON(html);
@@ -525,7 +525,7 @@
     $('#assignActivity').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateAssignment",
+            url: "<?php echo  url(''); ?>/flex/project/updateAssignment",
             type: "post",
             data: new FormData(this),
             processData: false,

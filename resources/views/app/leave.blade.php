@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -121,7 +121,7 @@
                             <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)">
                                 <button  class="btn btn-warning btn-xs">CANCEL</button></a>
                             <?php } ?>
-                            <a href="<?php echo url()."flex/attendance/leave_application_info/?id=".$row->id."&empID=".$row->empID; ?>"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                            <a href="<?php echo  url('')."flex/attendance/leave_application_info/?id=".$row->id."&empID=".$row->empID; ?>"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                             </td>
                             <td>
                             <?php echo $row->remarks."<br>"; ?>                             
@@ -269,9 +269,9 @@
                             </td>
                             <td>
                             <?php echo $row->remarks."<br>"; ?>
-                              <a href="<?php echo url()."flex/attendance/leave_remarks/?id=".$row->id; ?>">
+                              <a href="<?php echo  url('')."flex/attendance/leave_remarks/?id=".$row->id; ?>">
                               <button type="submit" name="go" class="btn btn-info btn-xs">Add Remark</button></a>
-                              <a href="<?php echo url()."flex/attendance/leave_application_info/?id=".$row->id."&empID=".$row->empID; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                              <a href="<?php echo  url('')."flex/attendance/leave_application_info/?id=".$row->id."&empID=".$row->empID; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                             </td> 
                             </tr>
 
@@ -310,7 +310,7 @@
                           <input type="text" name="start" class="form-control col-xs-12 has-feedback-left" placeholder="Start Date" id="leave_startDate" required="" aria-describedby="inputSuccess2Status">
                           <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div> 
                           <input type="text" name="limit" hidden value="<?php echo $totalAccrued; ?>">
@@ -322,7 +322,7 @@
                           <input type="text" required="" placeholder="End Date" name="end" class="form-control col-xs-12 has-feedback-left" id="leave_endDate"  aria-describedby="inputSuccess2Status">
                           <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <div class="form-group">
@@ -342,14 +342,14 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="required" type="text" id="address" name="address" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="required" class="form-control col-md-7 col-xs-12" type="text" name="mobile">
-                          <span class="text-danger"><?php echo form_error("mname");?></span>
+                          <span class="text-danger"><?php// echo form_error("mname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -357,7 +357,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea> 
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                           <!-- END -->

@@ -6,7 +6,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBankName",
+ url: "<?php echo  url(''); ?>/flex/updateBankName",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -42,7 +42,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateAbbrev",
+ url: "<?php echo  url(''); ?>/flex/updateAbbrev",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -77,7 +77,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBankCode",
+ url: "<?php echo  url(''); ?>/flex/updateBankCode",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -113,7 +113,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBranchName",
+ url: "<?php echo  url(''); ?>/flex/updateBranchName",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -151,7 +151,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBranchCode",
+ url: "<?php echo  url(''); ?>/flex/updateBranchCode",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -187,7 +187,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBranchSwiftcode",
+ url: "<?php echo  url(''); ?>/flex/updateBranchSwiftcode",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -224,7 +224,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBranchStreet",
+ url: "<?php echo  url(''); ?>/flex/updateBranchStreet",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -261,7 +261,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBranchRegion",
+ url: "<?php echo  url(''); ?>/flex/updateBranchRegion",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -298,7 +298,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateBranchCountry",
+ url: "<?php echo  url(''); ?>/flex/updateBranchCountry",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

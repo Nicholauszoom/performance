@@ -76,6 +76,8 @@
                                 Overtime
                             </a>
                         </li>
+
+
                         <!-- <li class="nav-item">
                             <a
                                 href="{{ route('imprest.index') }}"
@@ -103,8 +105,8 @@
                         <span>Payroll Management</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse">
-                        {{-- <!-- <li class="nav-item">
+                    {{--     <ul class="nav-group-sub collapse">
+                      <!-- <li class="nav-item">
                             <a href="{{ route('payroll') }}"
                                 class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
                                 Additional Payments
@@ -152,8 +154,27 @@
                     class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
                     Salary Calculator
                 </a>
-            </li> --> --}}
-                    </ul>
+            </li> -->
+                    </ul>  --}}
+
+
+                    
+                    <ul class="nav-group-sub collapse">
+                      <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/payroll" > Payroll </a></li>
+                      <?php if(session('mng_paym')){ ?>
+                      <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/employee_payslip" > Payslip </a></li>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/comission_bonus" >Incentives</a></li>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/partial_payment" >Partial Payment</a></li>
+                      <?php } ?>
+                      <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/approved_financial_payments" >Pending Payments </a></li>
+                      <?php if(session('mng_stat_rpt')){ ?>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/financial_reports" >Statutory Reports </a></li>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/organisation_reports" >Organisation Reports </a></li>
+                      <?php } ?>
+                      <?php if(session('mng_paym')){ ?>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/salary_calculator" > Salary Calculator </a></li>
+                      <?php } ?>
+                  </ul>
                 </li>
                 {{-- /Payroll management --}}
 
@@ -230,7 +251,20 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
+
+                    <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/costCenter">Cost Center </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/department">Departments </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/branch">Company Branches </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/position">Positions</a></li> 
+                      <?php if( session('mng_emp')){ ?>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/contract">Employee Contracts</a></li>
+                      <?php } ?>
+                      <!-- <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/accountCoding">Account Coding</a></li> -->
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/organization_level">Organisation Levels </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/organization_structure">Organisation Structure</a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/accounting_coding">Accounting Coding</a></li>
+
+                        <!-- <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
                                 Departments
@@ -283,7 +317,7 @@
                                 class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
                                 Accounting Coding
                             </a>
-                        </li>
+                        </li> -->
 
 
                 </ul>

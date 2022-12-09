@@ -219,7 +219,7 @@
         if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Group?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/removeEmployeeFromGroup",
+                 url:"<?php echo  url(''); ?>/flex/removeEmployeeFromGroup",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -249,7 +249,7 @@
         if (confirm("Are You Sure You Want To Add The selected Employee(s) Into  This Group?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addEmployeeToGroup",
+                 url:"<?php echo  url(''); ?>/flex/addEmployeeToGroup",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -276,7 +276,7 @@
         e.preventDefault();
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/updateGroupEdit",
+            url: "<?php echo  url(''); ?>/flex/updateGroupEdit",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'

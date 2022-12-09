@@ -11,6 +11,11 @@ use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use App\Helpers\SysHelpers;
 use App\Models\PerformanceModel;
+use App\CustomModels\PayrollModel;
+use App\CustomModels\flexFerformanceModel;
+use App\CustomModels\ReportsModel;
+use App\Models\AttendanceModel;
+use App\Models\ProjectModel;
 
 class GeneralController extends Controller
 {
@@ -18,11 +23,13 @@ class GeneralController extends Controller
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
-        $this->payroll_model =  $payroll_model;
-        $this->imprest_model =  $imprest_model;
-        $this->reports_model =  $reports_model;
-        $this->flexperformance_model =  $flexperformance_model;
-        $this->performanceModel = $performanceModel;
+      $this->flexperformance_model = new FlexPerformanceModel();
+      $this->imprest_model = new ImprestModel();
+      $this->reports_model = new ReportModel();
+      $this->attendance_model = new AttendanceModel();
+      $this->project_model = new ProjectModel();
+      $this->performance_model = new PerformanceModel();
+  
     }
 
 //    public function index()
@@ -5885,7 +5892,7 @@ function password_generator($size){
     public function organization_structure(Request $request)
       {
         $id = 1;
-       $this->load->model("flexperformance_model");
+       
        $data['details'] = $this->flexperformance_model->employerdetails($id);
 
        $data['allpositioncodes'] = $this->flexperformance_model->allpositioncodes();
@@ -5903,7 +5910,7 @@ function password_generator($size){
     public function accounting_coding()
     {
 
-        $this->load->model("flexperformance_model");
+        
         $data['accounting_coding'] = $this->flexperformance_model->accounting_coding();
         return view('app.accounting_coding', $data);
     }
@@ -5911,7 +5918,7 @@ function password_generator($size){
     public function department_structure(Request $request)
       {
         $id = 1;
-       $this->load->model("flexperformance_model");
+       
        $data['details'] = $this->flexperformance_model->employerdetails($id);
 
        $data['allpositioncodes'] = $this->flexperformance_model->allpositioncodes();
@@ -5930,7 +5937,7 @@ function password_generator($size){
     public function Oldorganization_structure(Request $request)
       {
         $id = 1;
-       $this->load->model("flexperformance_model");
+       
        $data['details'] = $this->flexperformance_model->employerdetails($id);
 
        $data['allpositioncodes'] = $this->flexperformance_model->allpositioncodes();

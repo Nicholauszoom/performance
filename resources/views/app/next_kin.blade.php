@@ -61,7 +61,7 @@
 
                      echo $this->session->flashdata("note");  ?>
 
-                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo url(); ?>flex/employeeAdd" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/employeeAdd" method="post" data-parsley-validate class="form-horizontal form-label-left">
                     <!-- test -->
                     <!-- <div class="row">
                       EMPLOYEE NAMES<br><br>
@@ -74,7 +74,7 @@
                         <label for="middle-name" >First Name</label>
                         <div >
                           <input id="class" placeholder="First Name" class="form-control col-md-7 col-xs-12" type="text" name="fname">
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -88,7 +88,7 @@
                               <input id="gender"  type="radio" name="gender" value="Female"> Female
                             </label>
                           </div>
-                          <span class="text-danger"><?php echo form_error("gender");?></span>
+                          <span class="text-danger"><?php// echo form_error("gender");?></span>
                         </div>
                       </div>
                       
@@ -96,14 +96,14 @@
                         <label for="stream" >Postal Address</label>
                         <div >
                           <input id="email" class="form-control col-md-7 col-xs-12" type="text" name="postaddress">
-                          <span class="text-danger"><?php echo form_error("postaddress");?></span>
+                          <span class="text-danger"><?php// echo form_error("postaddress");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="stream" >Office No</label>
                         <div >
                           <input id="email" class="form-control col-md-7 col-xs-12" type="text" name="postaddress">
-                          <span class="text-danger"><?php echo form_error("postaddress");?></span>
+                          <span class="text-danger"><?php// echo form_error("postaddress");?></span>
                         </div>
                       </div>
 
@@ -115,7 +115,7 @@
                         <label for="middle-name" >Middle Name</label>
                         <div >
                           <input id="class" placeholder="Middle Name" class="form-control col-md-7 col-xs-12" type="text" name="mname">
-                          <!-- <span class="text-danger"><?php echo form_error("mname");?></span> -->
+                          <!-- <span class="text-danger"><?php// echo form_error("mname");?></span> -->
                         </div>
                       </div>
                       
@@ -135,7 +135,7 @@
                         <label for="stream" >Mobile</label>
                         <div >
                           <input id="email" class="form-control col-md-7 col-xs-12" type="text" name="postaddress">
-                          <span class="text-danger"><?php echo form_error("postaddress");?></span>
+                          <span class="text-danger"><?php// echo form_error("postaddress");?></span>
                         </div>
                       </div>
 
@@ -147,21 +147,21 @@
                         <label for="middle-name" >Last Name</label>
                         <div >
                           <input id="class" placeholder="Last Name(Surname)" class="form-control col-md-7 col-xs-12" type="text" name="lname">
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="stream" >Relationship</label>
                         <div >
                           <input id="stream" class="form-control col-md-7 col-xs-12" type="text" name="salary">
-                          <span class="text-danger"><?php echo form_error("salary");?></span>
+                          <span class="text-danger"><?php// echo form_error("salary");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="middle-name" >Physical Address</label>
                         <div >
                           <input id="class" class="form-control col-md-7 col-xs-12" type="text" name="phyaddress">
-                          <span class="text-danger"><?php echo form_error("phyaddress");?></span>
+                          <span class="text-danger"><?php// echo form_error("phyaddress");?></span>
                         </div>
                       </div>
 

@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -97,7 +97,7 @@
     $('#confirmGraduation').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/confirmGraduation",
+                 url:"<?php echo  url(''); ?>/flex/confirmGraduation",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -123,7 +123,7 @@
     $('#employeeCertification').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/employeeCertification",
+                 url:"<?php echo  url(''); ?>/flex/employeeCertification",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

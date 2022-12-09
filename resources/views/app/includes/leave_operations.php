@@ -4,7 +4,7 @@
     $('#applyLeave').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/attendance/apply_leave",
+                 url:"<?php echo  url(''); ?>/flex/attendance/apply_leave",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -201,7 +201,7 @@
     $('#updateLeaveReason').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/attendance/updateLeaveReason",
+                 url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveReason",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -225,7 +225,7 @@
     $('#updateLeaveDateRange').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/attendance/updateLeaveDateRange",
+                 url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveDateRange",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -249,7 +249,7 @@
     $('#updateLeaveAddress').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/attendance/updateLeaveAddress",
+                 url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveAddress",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -273,7 +273,7 @@
     $('#updateLeaveMobile').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/attendance/updateLeaveMobile",
+                 url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveMobile",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

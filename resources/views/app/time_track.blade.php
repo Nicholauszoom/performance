@@ -554,7 +554,7 @@
     $('#addTask').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: "<?php echo url(); ?>flex/project/addTask",
+            url: "<?php echo  url(''); ?>/flex/project/addTask",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -580,7 +580,7 @@
      $('#addException').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: "<?php echo url(); ?>flex/project/addException",
+            url: "<?php echo  url(''); ?>/flex/project/addException",
             type: "post",
             data: new FormData(this),
             processData: false,

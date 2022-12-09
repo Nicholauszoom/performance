@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -34,7 +34,7 @@
                 <div class="x_panel">
                   <div class="x_title">
                     <h2> My <?php echo $tag; if($active>0 && session('line') != 0){ ?> 
-                    <a href="<?php echo url()."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
+                    <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
 
                     
 
@@ -178,7 +178,7 @@
 
                           <?php } if($active>0){  ?>
 
-                          <a href="<?php echo url()."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button type="button" name="notdone" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                          <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button type="button" name="notdone" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
 
                           <?php if($row->status==0){ ?>
                           <a href="javascript:void(0)" onclick="pauseTask(<?php echo $row->id;?>)"   title="PAUSE" class="icon-2 info-tooltip">
@@ -189,10 +189,10 @@
                           <!-- Line Manager WHO  ASSIGNED The Task -->
                           <?php }  } if($row->status==1 && $row->progress == 100){ ?>
                             <a download= '' href ="<?php echo url('uploads/task/').$row->attachment; ?>"> <button type="submit" name="notdone" class="btn btn-primary btn-xs">DOWNLOAD</button></a> 
-                            <a href="<?php echo url()."flex/performance/comment/?mode=2&id=".$row->id; ?>">
+                            <a href="<?php echo  url('')."flex/performance/comment/?mode=2&id=".$row->id; ?>">
                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button></a>
 
-                            <a href="<?php echo url()."flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
+                            <a href="<?php echo  url('')."flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
 
 
                             <?php }  if($row->status==0){ ?>
@@ -203,10 +203,10 @@
                             <?php if($active>0){ ?> 
 
                             <td>
-                                <a href="<?php echo url()."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>                               
+                                <a href="<?php echo  url('')."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>                               
 
                                 <?php if( $row->status!=2 && $row->progress==100 ){ ?>
-                                <a href="<?php echo url()."flex/performance/comment/?mode=3&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">SUBMIT</button></a>
+                                <a href="<?php echo  url('')."flex/performance/comment/?mode=3&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">SUBMIT</button></a>
                                 <?php }  ?>
                             </td>
                             <?php } ?> 
@@ -226,7 +226,7 @@
                   <div class="x_title">
                     <h2><?php echo $tag; ?> (Others)
                     <?php if($active>0){ ?> 
-                    <a href="<?php echo url()."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
+                    <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
 
                     
 
@@ -372,7 +372,7 @@
 
                           <?php } if($active>0){ ?> 
 
-                                <a href="<?php echo url()."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button type="button" name="notdone" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button type="button" name="notdone" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
 
 
                                 <a href="javascript:void(0)" onclick="pauseTask(<?php echo $row->id;?>)"   title="PAUSE" class="icon-2 info-tooltip">
@@ -382,10 +382,10 @@
                           <?php 
                             if($row->status==1 && $row->progress == 100){ ?>
                             <!-- <a href="javascript:void(0)" onclick="disapproveTask(<?php echo $row->id;?>)"   title="Cancel" class="icon-2 info-tooltip"> -->
-                            <a href="<?php echo url()."flex/performance/comment/?mode=2&id=".$row->id; ?>">
+                            <a href="<?php echo  url('')."flex/performance/comment/?mode=2&id=".$row->id; ?>">
                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button></a>
 
-                            <a href="<?php echo url()."flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
+                            <a href="<?php echo  url('')."flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
 
 
                             <?php } 
@@ -401,7 +401,7 @@
                             <?php if($active>0){ ?> 
 
                             <td>
-                                <a href="<?php echo url()."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                                <a href="<?php echo  url('')."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
                                 <?php if( $row->status!=2 && $row->progress==100 ){ ?>
                                 <a href="javascript:void(0)" onclick="submitTask(<?php echo $row->id;?>)" ><button  class="btn btn-info btn-xs">Submit</button></a>
                                 <?php }  ?>

@@ -49,7 +49,7 @@
                         $ammount = $row->type;
                           ?>
             <div class="col-lg-6">
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo url(); ?>flex/editallowance/?id=<?php echo $id; ?> && type=<?php echo $category; ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/editallowance/?id=<?php echo $id; ?> && type=<?php echo $category; ?>"  data-parsley-validate class="form-horizontal form-label-left">
                             
 
                       <div class="form-group">

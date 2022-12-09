@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -90,7 +90,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/adv_loan_pay",
+ url: "<?php echo  url(''); ?>/flex/adv_loan_pay",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

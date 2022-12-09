@@ -51,7 +51,7 @@
                           <tr id="domain<?php echo $row->id;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td width="50px"><b>
-                            <a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->empName; ?></a></b> </td>
+                            <a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->empName; ?></a></b> </td>
                             <td><?php echo "<b>Department: </b>".$row->department."<br><b>Position: </b>".$row->position; ?></td>
                             <td><?php echo $row->description; ?></td>
                             <td><?php echo "<b>Platform: </b>".$row->platform."<br><b>Agent: </b>".$row->agent; ?></td>

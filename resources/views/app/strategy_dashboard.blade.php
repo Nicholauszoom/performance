@@ -49,7 +49,7 @@
               <div class="title_left">
                 <h3>Performance 
                   <?php if( session('manage_strat') != ''){ ?>
-                  <a href ="<?php echo url(); ?>flex/home" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
+                  <a href ="<?php echo  url(''); ?>/flex/home" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
                         Switch to Home Dashboard
                         </button></a> <?php } ?>
                         </h3>
@@ -59,7 +59,7 @@
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>TRACK TO COMPLETION<small>Strategy. Outcome, Output and Tasks</small>
-                      <a href ="<?php echo url(); ?>flex/performance/printDashboard" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
+                      <a href ="<?php echo  url(''); ?>/flex/performance/printDashboard" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
 
                     </h2>
                     <div class="clearfix"></div>
@@ -210,7 +210,7 @@
         <!-- /page content -->
 
        <?php
-       // include_once "app/includes/homecharts.php"; 
+       // @include("app/includes/homecharts")
         ?>
        
        <script>
@@ -223,7 +223,7 @@
                 {
                     "outcome": "<?php echo $row->strategy_ref.'.'.$row->id; ?>",
                     "percent": <?php echo 100*number_format($percent, 2); ?>,
-                    "url": "<?php echo url()."flex/performance/outcome_info/?id=".base64_encode($row->strategy_ref."|".$row->id); ?>"
+                    "url": "<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($row->strategy_ref."|".$row->id); ?>"
                 }, 
                 <?php } ?>
             ];           
@@ -301,7 +301,7 @@
                     {
                         "output": "<?php echo $rowOutput->strategy_ref.'.'.$rowOutput->outcome_ref.'.'.$rowOutput->id; ?>",
                         "percentoutput": <?php echo 100*number_format($percentOut, 2); ?>,
-                        "url": "<?php echo url()."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"
+                        "url": "<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"
                     }, 
                     <?php } ?>
                 ];
@@ -469,7 +469,7 @@
       var label = outcomeChart.data.labels[firstPoint._index];
       var value = outcomeChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       
-      var url = "<?php echo url(); ?>flex/performance/outcome"+label.replace(/\s/g, '').toLowerCase();
+      var url = "<?php echo  url(''); ?>/flex/performance/outcome"+label.replace(/\s/g, '').toLowerCase();
       window.location.href = url;
       // window.open(url);
     };
@@ -481,7 +481,7 @@
       var label = outputChart.data.labels[firstPoint._index];
       var value = outputChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       
-      var url = "<?php echo url(); ?>flex/performance/output"+label.replace(/\s/g, '').toLowerCase();
+      var url = "<?php echo  url(''); ?>/flex/performance/output"+label.replace(/\s/g, '').toLowerCase();
       window.location.href = url;
       // window.open(url);
     };
@@ -494,7 +494,7 @@
       var label = taskChart.data.labels[firstPoint._index];
       var value = taskChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
       
-      var url = "<?php echo url(); ?>flex/performance/task"+label.replace(/\s/g, '').toLowerCase();
+      var url = "<?php echo  url(''); ?>/flex/performance/task"+label.replace(/\s/g, '').toLowerCase();
       // alert(url);
       window.location.href = url;
       // window.open(url);

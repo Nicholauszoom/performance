@@ -125,7 +125,7 @@
                                                                   </td>
 
                                                                   <td class="options-width">
-                                                                      <a href="<?php echo url(); ?>flex/userprofile/?id=".$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                                                      <a href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                                                                       <?php if($row->status==0){ ?>
 
@@ -198,7 +198,7 @@
                                                                       </div>
                                                                   </td>
                                                                   <td class="options-width">
-                                                                      <a href="<?php echo url(); ?>flex/userprofile/?id=".$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                                                      <a href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                                                                       <?php if($row->status==5){ ?>
 

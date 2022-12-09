@@ -231,7 +231,7 @@
         
 
 <?php 
-//include_once "app/includes/unrefresh_form_submit")
+//@include("app/includes/unrefresh_form_submit")
 
 
 
@@ -241,7 +241,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/task_marking",
+ url: "<?php echo  url(''); ?>/flex/performance/task_marking",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -269,7 +269,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/addTaskResources",
+ url: "<?php echo  url(''); ?>/flex/performance/addTaskResources",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

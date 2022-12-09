@@ -60,12 +60,12 @@
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><?php echo $row->name; ?></td>
                             <td><?php echo $row->CostCenterName; ?></td>
-                            <td><a title="More Details"  href="<?php echo url(); ?>flex/employee_info/?id=".$row->hod; ?>"><?php echo $row->HOD; ?></a></td>
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/employee_info/?id=".$row->hod; ?>"><?php echo $row->HOD; ?></a></td>
                             <td><?php echo $row->parentdept; ?></td>
 
                             <?php if(session('mng_org')){ ?>
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/department_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/department_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <?php if($row->id!=3){ ?>
                                 <a href="javascript:void(0)" onclick="deleteDepartment(<?php echo $row->id; ?>)" title="Delete Department" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                                 <?php } ?>
@@ -119,11 +119,11 @@
                           <tr id="domain<?php echo $row->id;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><?php echo $row->name; ?></td>
-                            <td><a title="More Details"  href="<?php echo url(); ?>flex/employee_info/?id=".$row->hod; ?>"><?php echo $row->HOD; ?></a></td>
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/employee_info/?id=".$row->hod; ?>"><?php echo $row->HOD; ?></a></td>
                             <td><?php echo $row->parentdept; ?></td>
                             <?php if(session('mng_org')){ ?>
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/department_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/department_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <?php if($row->id!=3){ ?>
                                 <a href="javascript:void(0)" onclick="activateDepartment(<?php echo $row->id; ?>)" title="Activate Department" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
                                 <?php } ?>
@@ -291,7 +291,7 @@ function notify(message, from, align, type) {
         e.preventDefault();
 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/departmentAdd",
+                 url:"<?php echo  url(''); ?>/flex/departmentAdd",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

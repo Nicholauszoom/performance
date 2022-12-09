@@ -142,7 +142,7 @@
     $('#addNationality').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addEmployeeNationality",
+                 url:"<?php echo  url(''); ?>/flex/addEmployeeNationality",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

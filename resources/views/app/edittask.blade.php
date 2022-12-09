@@ -73,7 +73,7 @@
                     <!-- <table id="datatable" class="table table-striped table-bordered"> -->
                      
             <div class="col-lg-6">
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo url(); ?>flex/performance/edittask/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
                             
 
                       <div class="form-group">
@@ -82,7 +82,7 @@
                         <span class="badge bg-green"><b><?php echo " ".$row->start; ?></font></b></span>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                            <input  value="<?php echo $row->start; ?>" name="start" id="single_cal2"   class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php ////echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <div class="form-group">
@@ -92,7 +92,7 @@
                         <!-- <small>Current Date: <b><font color="green"><?php echo " ".$row->end; ?></font></b></small> -->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                            <input  value="<?php echo $row->end; ?>" name="end" id="single_cal1"   class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php ////echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>
 
@@ -104,14 +104,14 @@
                       </div>
 
                     </form>
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo url(); ?>flex/performance/edittask/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left"> 
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left"> 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Description 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea  cols="3" class="form-control col-md-7 col-xs-12"  name="description"  rows="5"><?php echo $row->description; ?></textarea>
                           <!-- <input  value="<?php echo $row->description; ?>" id="last-name" name="lname" class="form-control col-md-7 col-xs-12"> -->
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
 
@@ -124,7 +124,7 @@
 
                     </form>
 
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo url(); ?>flex/performance/edittask/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group"><br><span class="badge bg-green"><b><?php echo " ".$row->NAME; ?></font></b></span>
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Assigned To</label>
@@ -135,7 +135,7 @@
                              # code... ?>
                           <option value="<?php echo $row->ID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
                         </select>  
-                          <span class="text-danger"><?php ////echo form_error("mname");?></span>
+                          <span class="text-danger"><?php // echo form_error("mname");?></span>
                         </div>
                       </div>
 
@@ -181,7 +181,7 @@
                           <td class="options-width">
                            <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php //echo $row->id;?>">Please wait...</a>
-                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo url()."/flex/main_controller/fetch_single_user/?id=".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user/?id=".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                         </tr>
                         <tr>
                           <th scope="row">2</th>
@@ -189,7 +189,7 @@
                           <td class="options-width">
                            <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php //echo $row->id;?>">Please wait...</a>
-                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo url()."/flex/main_controller/fetch_single_user/?id=".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user/?id=".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                         </tr>
                       </tbody>
                     </table>

@@ -112,7 +112,7 @@
                                                     <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
                                             </select>
                                         </div>
-                                        <span class="text-danger"><?php echo form_error("linemanager"); ?></span>
+                                        <span class="text-danger"><?php// echo form_error("linemanager"); ?></span>
                                     </div>
 
                                     <div class="form-group">
@@ -243,7 +243,7 @@
         event.preventDefault();
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/partial",
+            url: "<?php echo  url(''); ?>/flex/partial",
             method: "POST",
             data: new FormData(this),
             contentType: false,

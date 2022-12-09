@@ -36,7 +36,7 @@
                   <div class="x_content">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
 
-                    <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="<?php echo url(); ?>flex/grievances/" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/grievances/" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
                       
                       <div class="form-group">
@@ -121,7 +121,7 @@
                           foreach ($my_grievances as $row) {  ?>
                           <tr id="domain<?php echo $row->id;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='".url().$row->attachment."'>"."<div class='col-md-12'>
+                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."'>"."<div class='col-md-12'>
                                 <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
                             <td><?php echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
@@ -138,7 +138,7 @@
                                 <span class="label label-success">SOLVED</span></div>'; ?></td>
                             
                             <td class="options-width">
-                            <a title="Info and Details" href="<?php echo url(); ?>flex/grievance_details/?id=".$row->id; ?>">
+                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/?id=".$row->id; ?>">
                                   <button  class="btn btn-info btn-xs">INFO</button></a>
                                
                             </td> 
@@ -194,7 +194,7 @@
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->NAME; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else  echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='".url().$row->attachment."'>"."<div class='col-md-12'>
+                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."'>"."<div class='col-md-12'>
                                 <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
@@ -211,7 +211,7 @@
                                 <span class="label label-success">SOLVED</span></div>'; } ?></td>
                             
                             <td class="options-width">
-                            <a title="Info and Details" href="<?php echo url(); ?>flex/grievance_details/?id=".$row->id; ?>">
+                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/?id=".$row->id; ?>">
                                   <button  class="btn btn-info btn-xs">INFO</button></a>&nbsp;&nbsp;
                                 
                               <?php if( $row->status==0 ){ ?>
@@ -246,8 +246,7 @@
         </div>
         <!-- /page content -->
 
-       <?php
-       include_once "app/includes/customtask.php"; 
+       @include("app/includes/customtask")
         ?>
 
 <script type="text/javascript">

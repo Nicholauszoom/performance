@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -58,7 +58,7 @@
                           <input hidden name = "deductionID" value="<?php echo $deductionID; ?>">
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input  type="text"   value="<?php echo $name; ?>" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -67,7 +67,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="99" step="0.1" value="<?php echo 100*($rate_employer); ?>" name="rate_employer" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -76,7 +76,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required=""  type="number" min="0" max="99" step="0.1" value="<?php echo 100*($rate_employee); ?>" name="rate_employee"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employee");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employee");?></span>
                         </div>
                       </div>
                       <!-- <div class="ln_solid"></div> -->
@@ -106,7 +106,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updateCommonDeductions/",
+ url: "<?php echo  url(''); ?>/flex/updateCommonDeductions/",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'

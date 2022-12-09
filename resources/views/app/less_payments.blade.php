@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -44,7 +44,7 @@
                   </div>
                   <div class="x_content">
                       <?php if(isset($previous)) {?>
-                      <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/employeeCostExport_temp" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
+                      <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/employeeCostExport_temp" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                           <input type="hidden" name="payrolldate" value="<?php echo $payroll_date; ?>">
                           <button type="submit" name="submit" value ="submit" class="btn btn-primary">PRINT</button>
                       </form>
@@ -109,7 +109,7 @@
                                 <?php } ?>
                                     <?php if ($payroll_state == 0) {?>
                                     <td>
-                                        <form action="<?php echo url(); ?>flex/reports/temp_payslip" method="post" target="_blank">
+                                        <form action="<?php echo  url(''); ?>/flex/reports/temp_payslip" method="post" target="_blank">
                                             <input type="hidden" value="<?php echo $row->empID;?>" name="employee">
                                             <input type="hidden" value="<?php echo $payroll_date;?>" name="payrolldate">
                                             <input hidden name ="profile" value="0">
@@ -133,14 +133,14 @@
 
 <?php
 
-include_once "app/includes/update_allowances
+@include("app/includes/update_allowances
 
 <script type="text/javascript">
     $('#lessPaymentForm').submit(function(e){
         e.preventDefault();
         var num = <?php echo $confirmed ?>;
              $.ajax({
-                 url: (num == "0") ? "<?php echo url(); ?>flex/payroll/submitLessPayments" : "<?php echo url(); ?>flex/payroll/temp_submitLessPayments",
+                 url: (num == "0") ? "<?php echo  url(''); ?>/flex/payroll/submitLessPayments" : "<?php echo  url(''); ?>/flex/payroll/temp_submitLessPayments",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

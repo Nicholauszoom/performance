@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -52,7 +52,7 @@ $remained = null;
         <div class="right_col" role="main">
             <div class="page-title">
               <div class="title_left">
-                <h3>Payroll Info  <?php if($payrollState == 1){ ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href ="<?php echo url(); ?>flex/reports/payroll_report/?pdate=<?php echo base64_encode($payrollMonth); ?>" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT INFO</button></a><?php } ?></h3>
+                <h3>Payroll Info  <?php if($payrollState == 1){ ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($payrollMonth); ?>" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT INFO</button></a><?php } ?></h3>
               </div>
             </div>
 
@@ -137,23 +137,23 @@ $remained = null;
                       <small>Full Payment</b></small></button></a>
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <?php if($state==2 || $state==1){ ?>
-                      <a href ="<?php echo url(); ?>flex/payroll/ADVtemp_less_payments/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print" value ="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
+                      <a href ="<?php echo  url(''); ?>/flex/payroll/ADVtemp_less_payments/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print" value ="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
                       <small>Payment With Arrears</b></small></button></a>
                       <?php } else { ?>
-                        <a href ="<?php echo url(); ?>flex/payroll/less_payments/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print" value ="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
+                        <a href ="<?php echo  url(''); ?>/flex/payroll/less_payments/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print" value ="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
                       <small>Payment With Arrears</b></small></button></a>
                       <?php } ?>
                       <?php }  else { ?>
-                        <a href ="<?php echo url(); ?>flex/payroll/ADVtemp_less_payments/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print" value ="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
+                        <a href ="<?php echo  url(''); ?>/flex/payroll/ADVtemp_less_payments/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print" value ="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
                         <small>View</b></small></button></a>
                       <?php } ?>
                         <br>
                         <br>
-                        <a target="_blank" href ="<?php echo url(); ?>flex/payroll/less_payments_print/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-primary"><b>PRINT<br></button></a>
+                        <a target="_blank" href ="<?php echo  url(''); ?>/flex/payroll/less_payments_print/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-primary"><b>PRINT<br></button></a>
                         <?php if($payrollState == 0) {?>
-                          <a target="_self" href ="<?php echo url(); ?>flex/payroll/grossReconciliation/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>GROSS RECON<br></button></a>
-                          <a target="_self" href ="<?php echo url(); ?>flex/payroll/netReconciliation/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>NET RECON<br></button></a>
-                          <a target="_self" href ="<?php echo url(); ?>flex/payroll/sendReviewEmail/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a>
+                          <a target="_self" href ="<?php echo  url(''); ?>/flex/payroll/grossReconciliation/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>GROSS RECON<br></button></a>
+                          <a target="_self" href ="<?php echo  url(''); ?>/flex/payroll/netReconciliation/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>NET RECON<br></button></a>
+                          <a target="_self" href ="<?php echo  url(''); ?>/flex/payroll/sendReviewEmail/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a>
                         <?php } ?>
                     </div>
                   </div>
@@ -205,9 +205,9 @@ $remained = null;
                             echo number_format($amount,2); ?></td>
                             <td>
                             <?php if($payrollState == 0){ ?>
-                              <a href="<?php echo url()."flex/payroll/temp_payroll_review/?id=".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>
+                              <a href="<?php echo  url('')."flex/payroll/temp_payroll_review/?id=".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>
                               <?php } else { ?>
-                              <a href="<?php echo url()."flex/payroll/payroll_review/?id=".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>                              
+                              <a href="<?php echo  url('')."flex/payroll/payroll_review/?id=".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>                              
                               <?php } ?>
                             </td>
                          </tr>
@@ -226,7 +226,7 @@ $remained = null;
 
 <?php
 
-include_once "app/includes/update_allowances
+@include("app/includes/update_allowances
 
 <script>
     function notify(message, from, align, type) {

@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -148,7 +148,7 @@ $sum_arrears = $sum_paid = $sum_outstanding = $sum_last_paid=$sum_takehome=$sum_
     $('#arrearsPayment').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/payroll/arrearsPayment_schedule",
+                 url:"<?php echo  url(''); ?>/flex/payroll/arrearsPayment_schedule",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

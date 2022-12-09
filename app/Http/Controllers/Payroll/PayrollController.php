@@ -597,13 +597,17 @@ class PayrollController extends Controller
         if (!$mail->send()) {
 //            echo 'Mail error';
 //            echo 'Mailer Error: ' . $mail->ErrorInfo;
-            session['email_sent'] = 'false';
-            redirect($_SERVER['HTTP_REFERER']);
+            // session::put('email_sent') = 'false';
+            session(['email_sent' => 'false']);
+        //    return redirect(Request::server('HTTP_REFERER'));
+        return redirect()->back();
         } else {
 //            $response_array['status'] = 'SENT';
 //            echo json_encode($response_array);
-            session['email_sent'] = 'true';
-            redirect($_SERVER['HTTP_REFERER']);
+            // session::put('email_sent') = 'true';
+            session(['email_sent' => 'true']);
+            // return redirect(Request::server('HTTP_REFERER'));
+            return redirect()->back();
 
         }
 

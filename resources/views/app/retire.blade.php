@@ -54,7 +54,7 @@
                           foreach ($retire as $row) { ?>
                           <tr>
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->empID; ?>"><font color="blue"><?php echo $row->empName; ?></font></a></td>
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>"><font color="blue"><?php echo $row->empName; ?></font></a></td>
                             <td><?php echo $row->department; ?></td>
                             <td><?php echo $row->position; ?></td>
                             <td><?php echo $row->date_hired;?></td>
@@ -63,7 +63,7 @@
 
 
                             <td class="options-width">
-                           <a href="<?php echo url(); ?>flex/deleteemployee/?id=".$row->empID; ?>"   title="Terminate Contract" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-times"></i></font></a></td>
+                           <a href="<?php echo  url(''); ?>/flex/deleteemployee/?id=".$row->empID; ?>"   title="Terminate Contract" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-times"></i></font></a></td>
                             </tr>
                           <?php }  ?>
                       </tbody>

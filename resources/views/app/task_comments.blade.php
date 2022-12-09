@@ -1,11 +1,11 @@
 <?php 
-  include_once "app/includes/header")
+  @include("app/includes/header")
 
     <!-- Font Awesome -->
-    <link href="<?php echo url();?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
+    <link href="<?php echo  url('');?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
   <?php
-  include_once "app/includes/sidebar.php"; 
-  include_once "app/includes/top_navbar.php"; 
+  @include("app/includes/sidebar")
+  @include("app/includes/top_navbar")
 ?><!-- /top navigation -->
 
         <!-- page content -->
@@ -133,7 +133,7 @@
 
                                 </ul>
                                 <?php if($status !=2 && $commentMode != 3){ ?>
-                              <!-- <form id="submitComment" action="<?php echo url(); ?>flex/performance/sendComment" method="post"  > -->
+                              <!-- <form id="submitComment" action="<?php echo  url(''); ?>/flex/performance/sendComment" method="post"  > -->
                               <form id="submitComment"  method="post"  >
                                       <input  name="taskID" value="<?php echo $taskID;?>" hidden="" /> 
 
@@ -339,7 +339,7 @@
     $('#submitTask').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/performance/submitTask",
+                 url:"<?php echo  url(''); ?>/flex/performance/submitTask",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -363,7 +363,7 @@
     $('#submitComment').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/performance/sendComment",
+                 url:"<?php echo  url(''); ?>/flex/performance/sendComment",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -417,7 +417,7 @@ $(document).ready(function() {
     $('#addActivity').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/performance/addActivity",
+                 url:"<?php echo  url(''); ?>/flex/performance/addActivity",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

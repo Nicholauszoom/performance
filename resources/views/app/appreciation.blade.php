@@ -47,7 +47,7 @@
 
                   <?php if (session('manage_strat') !='') { ?>
 
-                    <form id="demo-form2"  enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/add_apprec"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">                        
+                    <form id="demo-form2"  enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/add_apprec"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">                        
                       
                       <div class="form-group">
                         <label class="control-label col-md-3  col-xs-6" >Employee</label>
@@ -67,7 +67,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                         <textarea placeholder="Description" cols="10" class="form-control col-md-7 col-xs-12"  name="description"  rows="5"></textarea>
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -114,7 +114,7 @@
                               <p><strong>Position: </strong><?php echo $position; ?> </p>
                               <p><strong>Department: </strong><?php echo $department; ?> </p>
                   <?php if (session('regemp') !='') { ?>
-                              <a href="<?php echo url(); ?>flex/userprofile/?id=".$id; ?>"><button type="button" class="btn btn-primary btn-xs">
+                              <a href="<?php echo  url(''); ?>/flex/userprofile/?id=".$id; ?>"><button type="button" class="btn btn-primary btn-xs">
                                 <i class="fa fa-user"> </i> View Profile
                               </button></a> <?php } ?>
                             </div>
@@ -141,9 +141,7 @@
         </div>
         <!-- /page content -->
 
-       <?php
-       include_once "app/includes/customtask.php"; 
-        ?>
+       @include("app/includes/customtask")
 
 
  @endsection

@@ -68,8 +68,8 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
  
 // set some language-dependent strings (optional)
 // set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).url().'/application/libraries/tcpdf/examples/lang/eng.php')) {
-               require_once(dirname(__FILE__).url().'/application/libraries/tcpdf/examples/lang/eng.php');
+if (@file_exists(dirname(__FILE__). url('').'/application/libraries/tcpdf/examples/lang/eng.php')) {
+               require_once(dirname(__FILE__). url('').'/application/libraries/tcpdf/examples/lang/eng.php');
                $pdf->setLanguageArray($l);
 }
  
@@ -525,7 +525,7 @@ $pdf->AddPage('L', 'A4');
 // $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
 // $pdf->SetXY(75, 10);
-// $path=url().'uploads/logo/cits.png';
+// $path= url('').'uploads/logo/cits.png';
 // $pdf->Image($path, 90, 10, 30, 30, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
 
 $pdf->SetXY(0, 10);

@@ -81,7 +81,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                 <div class="title_right" >
                   <h4>HOME
                       <!-- <?php if( session('manage_strat') != ''){ ?>
-                        <a href ="<?php echo url(); ?>flex/performance/strategy_dashboard" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
+                        <a href ="<?php echo  url(''); ?>/flex/performance/strategy_dashboard" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
                         Switch to Performance Dasshboard
                         </button></a> <?php } ?> -->
                   </h4>
@@ -113,7 +113,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                             </div>
                           </div>
                           <div class="col-xs-12 bottom text-center">
-                              <a href="<?php echo url(); ?>flex/appreciation"><button type="button" class="btn btn-primary btn-xs">
+                              <a href="<?php echo  url(''); ?>/flex/appreciation"><button type="button" class="btn btn-primary btn-xs">
                                 <i class="fa fa-tasks"> </i> View Task Description
                               </button></a>
                           </div>
@@ -137,7 +137,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
               <?php if(session('vw_emp_sum')) { ?>
 
               <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
-              {{-- <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo url(); ?>flex/employee"><?php //} ?> --}}
+              {{-- <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo  url(''); ?>/flex/employee"><?php //} ?> --}}
                 <div class="tile-stats">
 <!--                  <div class="icon"><i class="fa fa-users"></i></div>-->
                   <div class="count"><?php echo $employees; ?></div>
@@ -490,7 +490,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
  @push('footer-script')
 
-{{-- <script src="<?php echo url();?>style/jquery/jquery.easypiechart.min.js"></script> --}}
+{{-- <script src="<?php echo  url('');?>style/jquery/jquery.easypiechart.min.js"></script> --}}
 
 <script>
   $(function() {

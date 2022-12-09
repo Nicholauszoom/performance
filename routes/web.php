@@ -236,7 +236,7 @@ Route::prefix('')->controller(BaseController::class)->group(function (){
 
 });
 
-Route::prefix('flex')->controller(GenaralController::class)->group(function (){
+Route::prefix('flex')->controller(GeneralController::class)->group(function (){
 
 Route::any('/index','index')->name('flex.index');
 Route::any('/password_check/{$str}','password_check')->name('flex.password_check');

@@ -559,7 +559,7 @@
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) From  This Deduction?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/remove_individual_deduction",
+                 url:"<?php echo  url(''); ?>/flex/remove_individual_deduction",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -588,7 +588,7 @@
         if (confirm("Are You Sure You Want To Delete The selected Group(s) From This Deduction?") == true) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/remove_group_deduction",
+                 url:"<?php echo  url(''); ?>/flex/remove_group_deduction",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -616,7 +616,7 @@
     $('#assignIndividual').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/assign_deduction_individual",
+                 url:"<?php echo  url(''); ?>/flex/assign_deduction_individual",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -644,7 +644,7 @@
     $('#assignGroup').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/assign_deduction_group",
+                 url:"<?php echo  url(''); ?>/flex/assign_deduction_group",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

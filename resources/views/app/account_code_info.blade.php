@@ -87,7 +87,7 @@
     $('#updateAccountingCode').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAccountCode",
+                 url:"<?php echo  url(''); ?>/flex/updateAccountCode",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

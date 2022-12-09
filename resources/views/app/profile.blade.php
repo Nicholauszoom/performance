@@ -54,7 +54,7 @@
                         <div id="crop-avatar">
                           <!-- Current avatar -->
                           
-                          <img class="img-responsive avatar-view" src="<?php echo url().session('photo'); ?>" alt="<?php echo session('fname')." ".session('lname'); ?>">
+                          <img class="img-responsive avatar-view" src="<?php echo  url('').session('photo'); ?>" alt="<?php echo session('fname')." ".session('lname'); ?>">
                         </div>
                       </div>
                       <h3><?php echo session('fname')." ".session('mname')." ".session('lname'); ?></h3>
@@ -72,7 +72,7 @@
                         </li>
                       </ul>
 
-                      <a href="<?php echo url(); ?>flex/editemployee/?id=".session('emp_id'); ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+                      <a href="<?php echo  url(''); ?>/flex/editemployee/?id=".session('emp_id'); ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
                       <br />
 
                       <!-- start skills -->
@@ -319,7 +319,7 @@
                                     <td><?php echo $row->postal_address; ?></td>
 
                                     <td class="options-width">
-                                   <a href="<?php echo url(); ?>flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="<?php echo  url(''); ?>/flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                                    </td>
                                     </tr>
                                   <?php }  ?>
@@ -351,7 +351,7 @@
                           <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-                            <form action="<?php echo url(); ?>flex/revokerole/" method="post">
+                            <form action="<?php echo  url(''); ?>/flex/revokerole/" method="post">
                     <table class="table">
                       <thead>
                         <tr>
@@ -408,7 +408,7 @@
                           <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
-                            <form action="<?php echo url(); ?>flex/assignrole/?id=<?php echo session('emp_id'); ?>" method="post">
+                            <form action="<?php echo  url(''); ?>/flex/assignrole/?id=<?php echo session('emp_id'); ?>" method="post">
                     <table class="table">
                       <thead>
                         <tr>
@@ -492,7 +492,7 @@
                                     <td><?php echo $row->dated_on; ?></td>
 
                                     <td class="options-width">
-                                   <a href="<?php echo url(); ?>flex/deleteproperty/?id=".$row->id."&employee=".$empID; ?>"    title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="<?php echo  url(''); ?>/flex/deleteproperty/?id=".$row->id."&employee=".$empID; ?>"    title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                                    <a href="javascript:void(0)" onclick="deleteDomain(<?php echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php echo $row->id;?>">Please wait...</a>
                                    </td>
@@ -517,7 +517,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addproperty/ ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addproperty/ ?>"  data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Property Type</label>
@@ -535,7 +535,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="type2" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -543,7 +543,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="name"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -551,7 +551,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="serial"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       
@@ -582,13 +582,13 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addkin/?id=<?php echo session('emp_id'); ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addkin/?id=<?php echo session('emp_id'); ?>"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="fname" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -596,7 +596,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="mname" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -604,7 +604,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="lname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <div class="form-group">
@@ -625,7 +625,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="mobile" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -633,7 +633,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="postal_address" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -641,7 +641,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="physical_address" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -649,7 +649,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="office_no" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       
@@ -678,7 +678,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url()."flex/reports/payslip/"; ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url('')."flex/reports/payslip/"; ?>"  data-parsley-validate class="form-horizontal form-label-left">
                         
                         <input type="text" hidden="hidden" value="<?php echo session('emp_id'); ?>" name="employee">
                         <div class="form-group">
@@ -689,7 +689,7 @@
                           <input type="text" name="start" class="form-control col-xs-12 has-feedback-left" id="single_cal1"  aria-describedby="inputSuccess2Status">
                           <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div> 
 

@@ -45,7 +45,7 @@
                             </div>
                             <form id="addEmployee" enctype="multipart/form-data" autocomplete="off" method="post"
                                 data-parsley-validate class="form-horizontal form-label-left">
-                                <!-- action="<?php echo url(); ?>flex/registerEmployee" -->
+                                <!-- action="<?php echo  url(''); ?>/flex/registerEmployee" -->
                                 <div class="col-lg-12">
                                     <div class="col-lg-4">
 
@@ -55,7 +55,7 @@
                                                 <input placeholder="First Name" required
                                                     class="form-control col-md-7 col-xs-12" type="text" maxlength="15"
                                                     pattern="[a-zA-Z]+" title="Only enter letters" name="fname">
-                                                <span class="text-danger"><?php echo form_error("fname");?></span>
+                                                <span class="text-danger"><?php// echo form_error("fname");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -65,7 +65,7 @@
                                                     class="form-control col-md-7 col-xs-12" maxlength="15"
                                                     pattern="[a-zA-Z]+" title="Only enter letters" type="text"
                                                     name="mname">
-                                                <!-- <span class="text-danger"><?php echo form_error("mname");?></span> -->
+                                                <!-- <span class="text-danger"><?php// echo form_error("mname");?></span> -->
                                             </div>
                                         </div>
 
@@ -76,7 +76,7 @@
                                                     class="form-control col-md-7 col-xs-12" maxlength="15"
                                                     pattern="[a-zA-Z]+" title="Only enter letters" type="text"
                                                     name="lname">
-                                                <span class="text-danger"><?php echo form_error("lname");?></span>
+                                                <span class="text-danger"><?php// echo form_error("lname");?></span>
                                             </div>
                                         </div>
 
@@ -90,7 +90,7 @@
                                                 <input type="radio" value="Female" name="gender">
                                                 <span class="checkmarkradio"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("gender");?></span>
+                                            <span class="text-danger"><?php// echo form_error("gender");?></span>
                                         </div>
                                         <div class="form-group">
                                             <label for="stream">Birthdate</label>
@@ -126,7 +126,7 @@
                                             <div>
                                                 <input required id="email" maxlength="30"
                                                     class="form-control col-md-7 col-xs-12" type="email" name="email">
-                                                <span class="text-danger"><?php echo form_error("email");?></span>
+                                                <span class="text-danger"><?php// echo form_error("email");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -158,7 +158,7 @@
                                                 class="select1_single form-control" tabindex="-1">
                                                 <option value="">Select Position</option>
                                             </select>
-                                            <span class="text-danger"><?php echo form_error("position");?></span>
+                                            <span class="text-danger"><?php// echo form_error("position");?></span>
                                         </div>
                                         <div class="form-group">
                                             <label>Line Manager</label>
@@ -170,7 +170,7 @@
                                                 <!--">--><?php //echo $row->NAME; ?>
                                                 <!--</option> --><?php //} ?>
                                             </select>
-                                            <span class="text-danger"><?php echo form_error("linemanager");?></span>
+                                            <span class="text-danger"><?php// echo form_error("linemanager");?></span>
                                         </div>
 
                                         <div class="form-group">
@@ -196,7 +196,7 @@
                                         <div class="form-group">
                                             <label for="stream">Basic Salary</label>
                                             <div id="salaryField">
-                                                <span class="text-danger"><?php echo form_error("salary");?></span>
+                                                <span class="text-danger"><?php// echo form_error("salary");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -270,7 +270,7 @@
                                             <div>
                                                 <input id="email" maxlength="15" class="form-control col-md-7 col-xs-12"
                                                     type="text" name="accno">
-                                                <span class="text-danger"><?php echo form_error("accno");?></span>
+                                                <span class="text-danger"><?php// echo form_error("accno");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -278,7 +278,7 @@
                                             <div>
                                                 <input required id="stream" maxlength="14"
                                                     class="form-control col-md-7 col-xs-12" type="text" name="mobile">
-                                                <span class="text-danger"><?php echo form_error("mobile");?></span>
+                                                <span class="text-danger"><?php// echo form_error("mobile");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -286,7 +286,7 @@
                                             <div>
                                                 <input class="form-control col-md-7 col-xs-12" type="text"
                                                     maxlength="15" name="postaddress">
-                                                <span class="text-danger"><?php echo form_error("postaddress");?></span>
+                                                <span class="text-danger"><?php// echo form_error("postaddress");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -295,7 +295,7 @@
                                                 <input maxlength="15" class="form-control col-md-7 col-xs-12"
                                                     type="text" name="postalcity">
                                                 <span
-                                                    class="text-danger"><?php //echo form_error("postaddress");?></span>
+                                                    class="text-danger"><?php // echo form_error("postaddress");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -303,7 +303,7 @@
                                             <div>
                                                 <input id="class" maxlength="25" class="form-control col-md-7 col-xs-12"
                                                     type="text" name="phyaddress">
-                                                <span class="text-danger"><?php echo form_error("phyaddress");?></span>
+                                                <span class="text-danger"><?php// echo form_error("phyaddress");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -311,7 +311,7 @@
                                             <div>
                                                 <input maxlength="25" class="form-control col-md-7 col-xs-12"
                                                     type="text" name="haddress">
-                                                <span class="text-danger"><?php echo form_error("haddress");?></span>
+                                                <span class="text-danger"><?php// echo form_error("haddress");?></span>
                                             </div>
                                         </div>
 
@@ -320,7 +320,7 @@
                                             <div>
                                                 <input maxlength="150" class="form-control col-md-7 col-xs-12"
                                                     type="text" name="nationalid">
-                                                <span class="text-danger"><?php echo form_error("nationalid");?></span>
+                                                <span class="text-danger"><?php// echo form_error("nationalid");?></span>
                                             </div>
                                         </div>
 
@@ -329,7 +329,7 @@
                                             <div>
                                                 <input maxlength="100" class="form-control col-md-7 col-xs-12"
                                                     type="text" name="tin">
-                                                <span class="text-danger"><?php echo form_error("tin");?></span>
+                                                <span class="text-danger"><?php// echo form_error("tin");?></span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -356,7 +356,7 @@
 
                         <form id="import_form" method="post">
                             <div class="row col-lg-12" style="margin-top:50px;">
-                                <a href="<?php echo url(); ?>template/employee_upload_template.xls">Click here to
+                                <a href="<?php echo  url(''); ?>template/employee_upload_template.xls">Click here to
                                     download employees template</a>
                                 <div class="col-lg-2">
 
@@ -403,7 +403,7 @@ $(document).ready(function() {
         if (bankID) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/bankBranchFetcher/',
+                url: '<?php echo  url(''); ?>/flex/bankBranchFetcher/',
                 data: 'bank=' + bankID,
                 success: function(html) {
                     $('#bank_branch').html(html);
@@ -428,7 +428,7 @@ $(document).ready(function() {
         if (positionID) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/getPositionSalaryRange/',
+                url: '<?php echo  url(''); ?>/flex/getPositionSalaryRange/',
                 data: 'positionID=' + positionID,
                 success: function(response) {
                     $('#salaryField').fadeOut('fast', function() {
@@ -451,7 +451,7 @@ $(document).ready(function() {
         if (stateID) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/positionFetcher/',
+                url: '<?php echo  url(''); ?>/flex/positionFetcher/',
                 data: 'dept_id=' + stateID,
                 success: function(html) {
                     let jq_json_obj = $.parseJSON(html);
@@ -531,7 +531,7 @@ $('#addEmployee').submit(function(e) {
     e.preventDefault(); // Prevent Default Submission
 
     $.ajax({
-            url: "<?php echo url(); ?>flex/registerEmployee",
+            url: "<?php echo  url(''); ?>/flex/registerEmployee",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'
@@ -566,7 +566,7 @@ $('#addEmployee').submit(function(e) {
 $('#import_form').on('submit', function(event) {
     event.preventDefault();
     $.ajax({
-        url: "<?php echo url(); ?>flex/import",
+        url: "<?php echo  url(''); ?>/flex/import",
         method: "POST",
         data: new FormData(this),
         contentType: false,

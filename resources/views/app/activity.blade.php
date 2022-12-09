@@ -85,9 +85,9 @@
 <!-- $this->encrypt->encode($this->input->get("id")) -->
 
                             <td class="options-width">
-                           <a href="<?php echo url(); ?>flex/desletedepartment/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                           <a href="<?php echo  url(''); ?>/flex/desletedepartment/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
 
-                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php echo url()."flex/deepartment_info/?id=".base64_encode($row->id); ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php echo  url('')."flex/deepartment_info/?id=".base64_encode($row->id); ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                             </tr>
                           <?php } //} ?>
                       </tbody>
@@ -110,13 +110,13 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addactivity"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addactivity"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Activity Name 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>                      
                       

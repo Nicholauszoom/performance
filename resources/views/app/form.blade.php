@@ -30,7 +30,7 @@
                         <div class="panel-body">
                             <div class="row">
                             <div class="col-lg-4">
-                                    <form  method="post" enctype="multipart/form-data" action="<?php echo url(); ?>flex/main_controller/form_validation" >
+                                    <form  method="post" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/main_controller/form_validation" >
                             
 
                       <div class="form-group">
@@ -38,7 +38,7 @@
                         </label>
                         <div >
                           <input type="text" name="fname" id="fname"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("fname");?></span>
+                          <span class="text-danger"><?php// echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <div class="form-group">
@@ -46,14 +46,14 @@
                         </label>
                         <div >
                           <input type="text" id="lname" name="lname" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="middle-name" >Middle Name</label>
                         <div >
                           <input id="mname" class="form-control col-md-7 col-xs-12" type="text" name="mname">
-                          <span class="text-danger"><?php echo form_error("mname");?></span>
+                          <span class="text-danger"><?php// echo form_error("mname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -67,7 +67,7 @@
                               <input id="gender"  type="radio" name="gender" value="F"> Female
                             </label>
                           </div>
-                          <span class="text-danger"><?php echo form_error("gender");?></span>
+                          <span class="text-danger"><?php// echo form_error("gender");?></span>
                         </div>
                       </div>
 
@@ -79,21 +79,21 @@
                         <label for="middle-name" >Class</label>
                         <div >
                           <input id="class" class="form-control col-md-7 col-xs-12" type="text" name="class">
-                          <span class="text-danger"><?php echo form_error("class");?></span>
+                          <span class="text-danger"><?php// echo form_error("class");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="stream" >Stream</label>
                         <div >
                           <input id="stream" class="form-control col-md-7 col-xs-12" type="text" name="stream">
-                          <span class="text-danger"><?php echo form_error("stream");?></span>
+                          <span class="text-danger"><?php// echo form_error("stream");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="stream" >Email</label>
                         <div >
                           <input id="email" class="form-control col-md-7 col-xs-12" type="text" name="email">
-                          <span class="text-danger"><?php echo form_error("email");?></span>
+                          <span class="text-danger"><?php// echo form_error("email");?></span>
                         </div>
                       </div>
 
@@ -105,14 +105,14 @@
                         <label for="middle-name" >Password</label>
                         <div >
                           <input id="password" class="form-control col-md-7 col-xs-12" type="text" name="password">
-                          <span class="text-danger"><?php echo form_error("password");?></span>
+                          <span class="text-danger"><?php// echo form_error("password");?></span>
                         </div>
                       </div>
                       <div class="form-group">
                         <label for="stream" >Confirm Password</label>
                         <div >
                           <input " class="form-control col-md-7 col-xs-12" type="text" name="passwordconf">
-                          <span class="text-danger"><?php echo form_error("passwordconf");?></span>
+                          <span class="text-danger"><?php// echo form_error("passwordconf");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -120,7 +120,7 @@
                         </label>
                         <div >
                           <input id="dob" name="dob" class="date-picker form-control col-md-7 col-xs-12" type="text">
-                          <span class="text-danger"><?php echo form_error("dob");?></span>
+                          <span class="text-danger"><?php// echo form_error("dob");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -164,7 +164,7 @@
           $.ajax({
             type  :'POST',
             data  :{fname:fname, mname:mname, lname:lname, gender:gender, clas:clas, stm:stm, email:email, password:password, dob:dob },
-            url   :"<?php echo url(); ?>flex/main_controller/form_validation",
+            url   :"<?php echo  url(''); ?>/flex/main_controller/form_validation",
             success :function(result){
               $('#alert').show();
               $('#show').html(result);

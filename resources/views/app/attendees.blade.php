@@ -41,7 +41,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <form id="printAttendance" method ="post" action="<?php echo url(); ?>flex/reports/attendance" target="_blank" class="form-horizontal form-label-left">
+                    <form id="printAttendance" method ="post" action="<?php echo  url(''); ?>/flex/reports/attendance" target="_blank" class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3  col-xs-6" >Employee Attendance ON</label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -113,7 +113,7 @@
 
 
 <?php 
-      include_once "app/includes/dropdown")
+      @include("app/includes/dropdown")
 
       <script>
 

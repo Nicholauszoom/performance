@@ -13,7 +13,7 @@
 
 
 <!-- Font Awesome -->
-<link href="<?php echo url(); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
+<link href="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
 <!-- /top navigation -->
 
 <!-- page content -->
@@ -221,7 +221,7 @@
 
                                                                     <?php if ($row->state == 0) { ?>
                                                                         <?php if ($row->pay_checklist == 1) { ?>
-                                                                            <a href="<?php echo url(); ?>flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
+                                                                            <a href="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
                                                                                target="blank" title="Print Report"
                                                                                class="icon-2 info-tooltip">
                                                                                 <button type="button"
@@ -730,7 +730,7 @@
 
 
                                                         <td class="options-width">
-                                                            <a href="<?php echo url() . "flex/imprest/imprest_info/?id=" . base64_encode($row->id); ?>"
+                                                            <a href="<?php echo  url('') . "flex/imprest/imprest_info/?id=" . base64_encode($row->id); ?>"
                                                                title="Info and Details" class="icon-2 info-tooltip">
                                                                 <button type="button" class="btn btn-info btn-xs"><i
                                                                             class="fa fa-info-circle"></i></button>
@@ -934,7 +934,7 @@
                                                                                     class="fa fa-times"></i></button>
                                                                     </a>
                                                                 <?php } ?>
-                                                                <a href="<?php echo url() . "flex/cipay/arrears_info/?pdate=" . base64_encode($row->payroll_date); ?>"
+                                                                <a href="<?php echo  url('') . "flex/cipay/arrears_info/?pdate=" . base64_encode($row->payroll_date); ?>"
                                                                    title="Payments and Info"
                                                                    class="icon-2 info-tooltip">
                                                                     <button type="button" class="btn btn-info btn-xs"><i
@@ -998,7 +998,7 @@
 
                                                             <?php if (session('mng_emp')) { ?>
                                                                 <td>
-                                                                    <a href="<?php echo url() . "flex/cipay/arrears_info/?pdate=" . base64_encode($row->payroll_date); ?>"
+                                                                    <a href="<?php echo  url('') . "flex/cipay/arrears_info/?pdate=" . base64_encode($row->payroll_date); ?>"
                                                                        title="Payments and Info"
                                                                        class="icon-2 info-tooltip">
                                                                         <button type="button"
@@ -1032,7 +1032,7 @@
                                         <div class="x_content">
                                             <div id="feedBackSubmission"></div>
                                             <form method="post" class="form-horizontal form-label-left"
-                                                  action="<?php echo url(); ?>flex/reports/all_arrears/"
+                                                  action="<?php echo  url(''); ?>/flex/reports/all_arrears/"
                                                   target="blank">
                                                 <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">From<span
@@ -1136,13 +1136,13 @@
 
 <?php
 
-include_once "app/includes/imprest_operations.php";
-include_once "app/includes/overtime_operations.php";
-include_once "app/includes/update_allowances.php";
-include_once "app/includes/loan_operations
+@include("app/includes/imprest_operations.php";
+@include("app/includes/overtime_operations.php";
+@include("app/includes/update_allowances.php";
+@include("app/includes/loan_operations
 
 <!-- fstdropdown -->
-<script src="<?php echo url(); ?>style/fstdropdown/fstdropdown.js"></script>
+<script src="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.js"></script>
 
 <script type="text/javascript">
 

@@ -79,7 +79,7 @@
                                   <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
                                 </select>
                                 </div>
-                                  <span class="text-danger"><?php echo form_error("linemanager");?></span>
+                                  <span class="text-danger"><?php// echo form_error("linemanager");?></span>
                               </div>
 
                               <div class="form-group">

@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -57,7 +57,7 @@
                   <div class="x_content">
 
 
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/attendance/customleavereport"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off" >
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/attendance/customleavereport"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off" >
                         
                       
                       <div class="form-group">

@@ -68,7 +68,7 @@
                                                 data-toggle="modal" data-target="#updateModal<?php echo $row->id; ?>"
                                                 class="btn btn-info btn-xs"> <i class="fa fa-edit"></i></button></a>
 
-                                        <a href="<?php echo url(); ?>flex/company_branch_info/?id=".base64_encode($row->id); ?>"
+                                        <a href="<?php echo  url(''); ?>/flex/company_branch_info/?id=".base64_encode($row->id); ?>"
                                             title="Info and Details" class="icon-2 info-tooltip"><button type="button"
                                                 class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button>
                                         </a>
@@ -92,7 +92,7 @@
                                                         <!-- Modal Form -->
                                                         <form id="demo-form2" enctype="multipart/form-data"
                                                             method="post"
-                                                            action="<?php echo url(); ?>flex/updateCompanyBranch"
+                                                            action="<?php echo  url(''); ?>/flex/updateCompanyBranch"
                                                             data-parsley-validate
                                                             class="form-horizontal form-label-left">
 
@@ -277,7 +277,7 @@
 $('#addBranch').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/addCompanyBranch",
+            url: "<?php echo  url(''); ?>/flex/addCompanyBranch",
             type: "post",
             data: new FormData(this),
             processData: false,
