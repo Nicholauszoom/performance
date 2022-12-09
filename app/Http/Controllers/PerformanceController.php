@@ -1,5 +1,22 @@
 <?php
-class Performance extends CI_Controller { 
+
+namespace App\Http\Controllers;
+
+//use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
+use App\CustomModels\PayrollModel;
+use App\CustomModels\flexFerformanceModel;
+use App\CustomModels\ReportsModel;
+use App\Models\Payroll\Payroll;
+use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use App\Helpers\SysHelpers;
+use App\Models\PerformanceModel;
+
+class PerformanceController extends Controller
+{
 
   public function __construct(Request $request) {
     parent::__construct();
@@ -1376,7 +1393,7 @@ class Performance extends CI_Controller {
          
    }
 
-   public function update_task_behaviourSA()   {
+   public function update_task_behaviourSA(Request $request)   {
 
       if (isset($_POST['update'])) {
       $sum = 0;

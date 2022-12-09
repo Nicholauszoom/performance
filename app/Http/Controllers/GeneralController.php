@@ -1050,7 +1050,7 @@ public function activateDepartment(Request $request)
 
 
 
-  public function training_application(Request $request)  {
+  public function training_application()  {
       $empID=session('emp_id');
 
       $data['budget'] = $this->flexperformance_model->budget();
@@ -3013,7 +3013,7 @@ public function updateLevel(Request $request) {
 // ###################LEAVE######################################
 
 
-   public function salary_advance()   {
+   public function salary_advance(Request $request)   {
 
       // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
            $data['myloan'] = $this->flexperformance_model->mysalary_advance($this->session->userdata('emp_id'));
@@ -3070,7 +3070,7 @@ public function updateLevel(Request $request) {
    }
 
 
-   public function apply_salary_advance()   {
+   public function apply_salary_advance(Request $request)   {
 
       if (Request::isMethod('post')) {
         $amount_normal =$request->input("amount");
@@ -3108,7 +3108,7 @@ public function updateLevel(Request $request) {
 
    }
 
-   public function insert_directLoan()   {
+   public function insert_directLoan(Request $request)   {
 
       if (Request::isMethod('post')) {
           $category = $request->input("type");
@@ -3377,7 +3377,7 @@ public function updateLevel(Request $request) {
 
    }
 
-   public function updateloan_info()   {
+   public function updateloan_info(Request $request)   {
        if (Request::isMethod('post')&& $request->input('loanID')) {
           $loanID = $request->input('loanID');
           $updates = array(
@@ -3524,7 +3524,7 @@ function subdropFetcher(Request $request)  {
     if(!empty($this->uri_segment(3))){
     $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-     foreach ($querysub as $row){
+     foreach ($querypos as $row){
       echo "<option value='".$row->id."'>".$row->name."</option>";
 
         }
@@ -3673,7 +3673,7 @@ function subdropFetcher(Request $request)  {
       }
 
 
-      public function deleteproperty($id)
+      public function deleteproperty($id,Request $request)
           {
             $employee = $request->input("employee");
 
@@ -4438,7 +4438,7 @@ public function common_deductions_info(Request $request) {
 }
 
 
-    public function addAllowance()   {
+    public function addAllowance(Request $request)   {
 
       if (Request::isMethod('post')) {
         $policy = $request->input('policy');
@@ -4469,7 +4469,7 @@ public function common_deductions_info(Request $request) {
    }
 
 
-    public function addOvertimeCategory()   {
+    public function addOvertimeCategory(Request $request)   {
 
       if (Request::isMethod('post')) {
         $data = array(
@@ -4487,7 +4487,7 @@ public function common_deductions_info(Request $request) {
       }
     }
 
-    public function addDeduction()   {
+    public function addDeduction(Request $request)   {
 
       if (Request::isMethod('post')) {
         $policy = $request->input('policy');
@@ -5591,7 +5591,7 @@ public function updateCompanyName(Request $request) {
 
    }
 
-public function getPositionSalaryRange()
+public function getPositionSalaryRange(Request $request)
   {
 
     $positionID = $request->input("positionID");
