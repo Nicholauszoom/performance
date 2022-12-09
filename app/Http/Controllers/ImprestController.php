@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use App\CustomModels\PayrollModel;
 use App\CustomModels\flexFerformanceModel;
@@ -12,8 +11,10 @@ use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
-use App\Helpers\SysHelpers;
+use App\Models\AttendanceModel;
+use App\Models\ProjectModel;
 use App\Models\PerformanceModel;
+use App\Helpers\SysHelpers;
 
 class Imprest extends Controller
 {
@@ -42,11 +43,13 @@ class Imprest extends Controller
 
 
     // $this->flexperformance_model = new flexperformance_model();
-    $this->performance_model = new FlexPerformanceModel();
+
+    $this->flexperformance_model = new FlexPerformanceModel();
     $this->imprest_model = new ImprestModel();
     $this->reports_model = new ReportModel();
     $this->attendance_model = new AttendanceModel();
     $this->project_model = new ProjectModel();
+    $this->performance_model = new PerformanceModel();
     // $this->load->library('form_validation');
 
     session('agent', '');
