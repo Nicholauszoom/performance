@@ -439,7 +439,7 @@
                                             </div>
                                         </div>
                                         <img height="250px" width="250px" style="border-radius: 50%;" id="blah"
-                                            src="<?php echo base_url('uploads/userprofile/').$photo; ?>"
+                                            src="<?php echo url('uploads/userprofile/').$photo; ?>"
                                             alt="Current Employee Picture" />
                                     </div>
                                 </form>

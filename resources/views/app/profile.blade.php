@@ -54,7 +54,7 @@
                         <div id="crop-avatar">
                           <!-- Current avatar -->
                           
-                          <img class="img-responsive avatar-view" src="<?php echo base_url().session('photo'); ?>" alt="<?php echo session('fname')." ".session('lname'); ?>">
+                          <img class="img-responsive avatar-view" src="<?php echo url().session('photo'); ?>" alt="<?php echo session('fname')." ".session('lname'); ?>">
                         </div>
                       </div>
                       <h3><?php echo session('fname')." ".session('mname')." ".session('lname'); ?></h3>

@@ -404,7 +404,7 @@
                                         <?php if($row->status == 0){ ?>
                                             <a href = "<?php echo url(); ?>flex/confirm_graduation/?key=".$row->empID."|".$row->skillsID."|".$row->id; ?>"><button type="button" class="btn btn-info btn-xs">CONFIRM<br>GRADUATION</button></a>
                                         <?php } else{ ?>
-                                         <a download= '' href ='<?php echo base_url("uploads/graduation/".$row->certificate); ?>'>
+                                         <a download= '' href ='<?php echo url("uploads/graduation/".$row->certificate); ?>'>
                                          <div class='col-md-12'>
                                             <span class='label label-info'>DOWNLOAD</span></div></a>
                                           <?php } ?>

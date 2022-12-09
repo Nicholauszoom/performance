@@ -337,7 +337,7 @@
                                         <?php if( $row->status==3) {
 
                                         if($row->evidence!="0") { ?>
-                                        <a download= '' href ="<?php echo base_url('uploads/imprests/').$row->evidence; ?>"> <div class='col-md-12'>
+                                        <a download= '' href ="<?php echo url('uploads/imprests/').$row->evidence; ?>"> <div class='col-md-12'>
                                         <span class='label label-info'>DOWNLOAD</span></div></a> 
                                         <?php } else { ?>
                                         <div class="col-md-12"><span class="label label-warning">NO EVIDENCE</span></div>

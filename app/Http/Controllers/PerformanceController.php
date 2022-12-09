@@ -12,8 +12,10 @@ use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
-use App\Helpers\SysHelpers;
+use App\Models\AttendanceModel;
+use App\Models\ProjectModel;
 use App\Models\PerformanceModel;
+use App\Helpers\SysHelpers;
 
 class PerformanceController extends Controller
 {
@@ -21,17 +23,22 @@ class PerformanceController extends Controller
   public function __construct(Request $request) {
     parent::__construct();
 
-    $this->load->model('performance_model');
-    $this->load->model('flexperformance_model');
-    $this->load->model('imprest_model');
-    $this->load->model('payroll_model');
-    $this->load->model('attendance_model');
+
     $this->load->helper('url');
     $this->load->library('form_validation');
     $this->load->library('encryption');
     $this->load->library('Pdf');
     $this->load->library('user_agent');
     $this->load->model('project_model');
+
+
+    $this->flexperformance_model = new FlexPerformanceModel();
+    $this->imprest_model = new ImprestModel();
+    $this->reports_model = new ReportModel();
+    $this->attendance_model = new AttendanceModel();
+    $this->project_model = new ProjectModel();
+    $this->performance_model = new PerformanceModel();
+
 
 
       date_default_timezone_set('Africa/Dar_es_Salaam');
@@ -2727,4 +2734,4 @@ class PerformanceController extends Controller
 
 
 
-}?>
+}

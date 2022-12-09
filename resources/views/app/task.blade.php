@@ -188,7 +188,7 @@
 
                           <!-- Line Manager WHO  ASSIGNED The Task -->
                           <?php }  } if($row->status==1 && $row->progress == 100){ ?>
-                            <a download= '' href ="<?php echo base_url('uploads/task/').$row->attachment; ?>"> <button type="submit" name="notdone" class="btn btn-primary btn-xs">DOWNLOAD</button></a> 
+                            <a download= '' href ="<?php echo url('uploads/task/').$row->attachment; ?>"> <button type="submit" name="notdone" class="btn btn-primary btn-xs">DOWNLOAD</button></a> 
                             <a href="<?php echo url()."flex/performance/comment/?mode=2&id=".$row->id; ?>">
                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button></a>
 

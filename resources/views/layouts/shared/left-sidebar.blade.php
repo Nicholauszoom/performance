@@ -233,27 +233,55 @@
                         <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
-                                Company Registration
+                                Departments
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
-                                Organization structure Registration
+                                Positions
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
-                                Departments
+                                Employee Contracts
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('designations.index') }}"
                                 class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
-                                Role Profile Registration(Position)
+                                Nationality
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Company Branches
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Organization Levels
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Organization Structure
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Accounting Coding
                             </a>
                         </li>
 

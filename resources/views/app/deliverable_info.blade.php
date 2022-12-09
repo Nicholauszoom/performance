@@ -192,7 +192,7 @@
                         <?php if ($document) { ?>
                         <h5> Document:
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-                                href="<?php echo base_url() . 'uploads/' . $document; ?>">Document
+                                href="<?php echo url() . 'uploads/' . $document; ?>">Document
                                 link</a> </b></h5>
                         <?php } ?>
                         <h5>Description: &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $description; ?></b>
