@@ -12,6 +12,9 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
 
+use App\Http\Controllers\LearningDevelopment\SkillsController;
+use App\Http\Controllers\LearningDevelopment\TrainingAppController;
+
 
 
 
@@ -54,7 +57,8 @@ Route::middleware('auth')->group(function () {
         'users' => UsersController::class,
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
-        'employee' => EmployeeController::class,
+        'skill' => SkillsController::class,
+        'trainingApp'=>TrainingAppController::class,
     ]);
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
@@ -67,7 +71,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
-
+ //route for learning and development
+ Route::get('/skill', [SkillsController::class, 'skill'])->name('skill');
+ Route::get('/skillsList', [SkillsController::class, 'skillsList'])->name('skillsList');
+ Route::post('/addSkills', [SkillsController::class, 'skills'])->name('skills');
+ Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
+ Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
+ //end learning and development
 
     //route for payroll
     Route::group(['prefix' => 'payroll'], function () {
@@ -75,9 +85,15 @@ Route::middleware('auth')->group(function () {
         Route::any('payslip', [PayrollController::class, 'payslip'])->name('payslip');
         Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
+      
+
+
 
     });
 
+
+ 
+  
 });
 
 require __DIR__.'/auth.php';

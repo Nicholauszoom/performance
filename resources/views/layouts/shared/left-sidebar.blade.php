@@ -183,31 +183,7 @@
                 {{-- /Payroll management --}}
 
 
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-stack"></i>
-                        <span>Learning & Development</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                                Training Budgeting
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                                Training Application
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-
+                
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
@@ -300,49 +276,34 @@
 
 
 {{-- Learning & development --}}
-                <li class="nav-item nav-item-submenu">
+<li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-buildings"></i>
-                        <span>Learning & development</span>
+                        <i class="fas fa-book-reader"></i>
+                        <span>Learning & Development</span>
                     </a>
+
                     <ul class="nav-group-sub collapse">
-
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('employee.index') }}"
-                                class="nav-link {{ request()->routeIs('employee.index') ? 'active' : null  }}"
-                            >
-                                Employee
+                    <li class="nav-item">
+                        <a
+                                href="{{ route('skill') }}"
+                                class="nav-link {{ request()->routeIs('skill') ? 'active' : null  }}">
+                               Skills
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a
-                                href="{{ route('designations.index') }}"
-                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null  }}"
-                            >
-                              Skills
+                                href="{{ route('skillsList') }}"
+                                class="nav-link {{ request()->routeIs('skillsList') ? 'active' : null  }}">
+                                SkillsList
                             </a>
                         </li>
-
                         <li class="nav-item">
                             <a
-                                href="{{ route('users.index') }}"
-                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : null  }}"
-                            >
+                                href="{{ route('trainingApp') }}"
+                                class="nav-link {{ request()->routeIs('trainingApp') ? 'active' : null  }}">
                                 Training Application
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('designations.index') }}"
-                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null  }}"
-                            >
-                              Training Budget
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item"><a href="form_checkboxes_radios.html" class="nav-link">Checkboxes &amp; radios</a></li> --}}
-
                     </ul>
                 </li>
                 {{-- /Learning & development --}}
