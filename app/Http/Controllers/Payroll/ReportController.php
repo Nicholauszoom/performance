@@ -47,7 +47,7 @@ class ReportController extends Controller
     }
  }
    
- function pay_checklist(){
+ function pay_checklist(Request $request)  {
       if (isset($_POST['run'])) {
         $payroll_date =$request->input('payrolldate'); 
         $isReady = $this->reports_model->payCheklistStatus($payroll_date);
@@ -67,7 +67,7 @@ class ReportController extends Controller
              return view('app.reports/pay_checklist', $data);
 
         } else {
-            $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry the Pay Checklist for the Selected Payroll Month is Not Ready</font></p>");
+            session('note', "<p class='alert alert-warning text-center'>Sorry the Pay Checklist for the Selected Payroll Month is Not Ready</font></p>");
             return redirect('/flex/cipay/financial_reports/');
             
         } 
@@ -75,7 +75,7 @@ class ReportController extends Controller
  }
 
    
- function all_arrears(){  
+ function all_arrears(Request $request)  {  
     if (isset($_POST['print'])) {
         $start = $request->input('start');
         $finish = $request->input('finish');
@@ -90,7 +90,7 @@ class ReportController extends Controller
     }
  }
 
- function employee_arrears(){
+ function employee_arrears(Request $request)  {
     $empID = base64_decode($this->input->get('empid'));
     if($empID=='' || ($this->reports_model->employeeInfo($empID))==false){
         exit("Employee ID Not Found");
@@ -102,7 +102,7 @@ class ReportController extends Controller
     }
  }
 
-   function p9(){
+   function p9(Request $request)  {
       if (isset($_POST['run'])) {
         $payrolldate =$request->input('payrolldate');
           $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -119,7 +119,7 @@ class ReportController extends Controller
     }    
 }
 
-function p10(){
+function p10(Request $request)  {
     
     $period =$request->input('period'); 
     $year =$request->input('payrolldate');
@@ -171,7 +171,7 @@ function p10(){
 
 }
 
-function heslb(){
+function heslb(Request $request)  {
     $payrolldate =$request->input('payrolldate');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
     if ($reportType == 1){
@@ -187,7 +187,7 @@ function heslb(){
 
 }
 
-function pension(){
+function pension(Request $request)  {
     $payrollMonth =$request->input('payrolldate'); 
     $pensionFund =$request->input('fund');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -215,7 +215,7 @@ function pension(){
 
 
 
-function wcf(){
+function wcf(Request $request)  {
     if (isset($_POST['run'])) {
         $calendar =$request->input('payrolldate'); 
         $datewell = explode("-",$calendar);
@@ -242,7 +242,7 @@ function wcf(){
 }
 
 
-// function employment_cost_old(){
+// function employment_cost_old(Request $request)  {
 //     //if (isset($_POST['run'])) {
         
 //         //DATE MANIPULATION
@@ -268,7 +268,7 @@ function wcf(){
 
 // }
 
-function employment_cost(){
+function employment_cost(Request $request)  {
         $payrollMonth = '2009-01-22'; //base64_decode($this->input->get("pdate"));
         $data['info']= $this->reports_model->company_info();
         $data['authorization']= $this->reports_model->payrollAuthorization($payrollMonth);
@@ -294,7 +294,7 @@ function employment_cost(){
 
 
 
-public function loanreport()
+public function loanreport(Request $request)
       {
         if (isset($_POST['print'])) { 
 
@@ -331,7 +331,7 @@ public function loanreport()
 
   }
 
-  public function customleavereport()
+  public function customleavereport(Request $request)
       {
         if (isset($_POST['print'])) {  
 
@@ -378,7 +378,7 @@ public function loanreport()
          
       }
 
-    function payslip(){    
+    function payslip(Request $request)  {    
         if (isset($_POST['print'])) {    
          
       // DATE MANIPULATION
@@ -400,11 +400,11 @@ public function loanreport()
             
             if ($check == 0){
                 if($profile == 0){
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/cipay/employee_payslip/');
 
                 } else{
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/cipay/userprofile/?id='.$empID);
                 }
             } else{
@@ -449,7 +449,7 @@ public function loanreport()
             $check = $this->reports_model->payslipcheckAll($payroll_month);
 
             if ($check == 0){
-                $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                 return redirect('/flex/cipay/employee_payslip/');
             } else{
                 /*print all*/
@@ -488,7 +488,7 @@ public function loanreport()
         }
     }
 
-    function temp_payslip(){
+    function temp_payslip(Request $request)  {
 
             // DATE MANIPULATION
             $empID = $request->input("employee");
@@ -509,11 +509,11 @@ public function loanreport()
 
             if ($check == 0){
                 if($profile == 0){
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/cipay/employee_payslip/');
 
                 } else{
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/cipay/userprofile/?id='.$empID);
                 }
             } else{
@@ -541,7 +541,7 @@ public function loanreport()
 
     }
 
-function backup_payslip(){
+function backup_payslip(Request $request)  {
     
       if (isset($_POST['print'])) { 
     
@@ -567,7 +567,7 @@ function backup_payslip(){
             
             if ($check == 0){
                 exit("No Payroll Records Found For This Employee under This Month");
-                // $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry There is No Payroll or any Payment Informations to Appear in Your Salary Slip For the Year and Month Selected</font></p>");
+                // session('note', "<p class='alert alert-warning text-center'>Sorry There is No Payroll or any Payment Informations to Appear in Your Salary Slip For the Year and Month Selected</font></p>");
                 // return redirect('/flex/cipay/employee/');
             } else{
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $datee, $year_month, $date_one_year_back);
@@ -580,7 +580,7 @@ function backup_payslip(){
 
     }
 
-    function kpi(){
+    function kpi(Request $request)  {
         $empID = $request->input('empID');
         
         $data['strategies'] = $this->reports_model->allStrategies($empID);
@@ -592,7 +592,7 @@ function backup_payslip(){
     }   
     
    
-    function attendance(){
+    function attendance(Request $request)  {
           if (isset($_POST['print'])) {
 
         // DATE MANIPULATION
@@ -615,7 +615,7 @@ function backup_payslip(){
     ##############################################################################
     #################################END PROJECT REPORTS##############################
     
-    public function payrollInputJournalExport() {
+    public function payrollInputJournalExport(Request $request) {
         if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -987,7 +987,7 @@ function backup_payslip(){
         }    
     }
 
-    public function payrollInputJournalExportTime() {
+    public function payrollInputJournalExportTime(Request $request) {
         if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -1421,7 +1421,7 @@ function backup_payslip(){
         }    
     } 
 
-    public function staffPayrollBankExport() {
+    public function staffPayrollBankExport(Request $request) {
         if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -1539,7 +1539,7 @@ function backup_payslip(){
 
 
 
-    public function volunteerAllowanceMWPExport() {
+    public function volunteerAllowanceMWPExport(Request $request) {
         if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             //start
@@ -1639,7 +1639,7 @@ function backup_payslip(){
 
     ############################################################################
     ################################  PHP MAILER ################################
-function dynamic_pdf(){
+function dynamic_pdf(Request $request)  {
     $this->load->library('phpmailer_lib');
     $mail = $this->phpmailer_lib->load();
     $payrolldate ="2019-06-05";  
@@ -1908,7 +1908,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 //============================================================+
     }
 
-    function employeeReport(){
+    function employeeReport(Request $request)  {
         if (isset($_POST['print'])) {
             $empID = $request->input("employee");
             $data['employee_info'] = $this->reports_model->employeeProfile($empID);
@@ -1916,7 +1916,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function employeeCostExport() {
+    public function employeeCostExport(Request $request) {
         if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -2055,7 +2055,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function employeeCostExport_temp() {
+    public function employeeCostExport_temp(Request $request) {
         if ($request->input('payrolldate')) {
             $payroll_date = $request->input('payrolldate');
             $filename = "employeeCostExport".date('Y_m_d_H_i_s').".xls";
@@ -2184,7 +2184,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function employeeBioDataExport() {
+    public function employeeBioDataExport(Request $request) {
         if (isset($_POST['run']) && $request->input('status')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -2386,7 +2386,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     }
 
-    public function loanReports(){
+    public function loanReports(Request $request)  {
         if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -2407,7 +2407,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function projectTime(){
+    public function projectTime(Request $request)  {
         if (isset($_POST['run']) && $request->input('project')!='' ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];
@@ -2435,7 +2435,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function funder(){
+    public function funder(Request $request)  {
         if (isset($_POST['run']) && $request->input('project')!='' ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];

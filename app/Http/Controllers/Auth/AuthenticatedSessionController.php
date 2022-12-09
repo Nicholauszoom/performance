@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
 
 
 
-    public function setPermissions(){
+    public function setPermissions(Request $request)  {
 
 
         $data=$this->flexperformance_model->login_user($username, $password);
@@ -96,9 +96,9 @@ class AuthenticatedSessionController extends Controller
             
     }
 
-    public function getPermissions()  {
-        $id = $this->session->userdata('emp_id');
-        $empID = $this->session->userdata('emp_id');
+    public function getPermissions(Request $request)  {
+        $id =session('emp_id');
+        $empID =session('emp_id');
     
         // NEW ROLES AND PERMISSION;
         session(['vw_emp_sum'=> $this->flexperformance_model->getpermission($empID, '0')]);
@@ -141,7 +141,7 @@ class AuthenticatedSessionController extends Controller
         session(['current_strategy'=> $defaultStrategy]);
     
         $logData = array(
-           'empID' => $this->session->userdata('emp_id'),
+           'empID' =>session('emp_id'),
            'description' => "Logged In",
            'agent' =>$this->session->userdata('agent'),
            'platform' =>$this->agent->platform(),

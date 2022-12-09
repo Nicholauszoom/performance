@@ -1,7 +1,7 @@
 <?php
 class Imprest extends CI_Controller { 
 
-  public function __construct() {
+  public function __construct(Request $request) {
     parent::__construct();
 
     $this->load->model('imprest_model');    
@@ -19,31 +19,31 @@ class Imprest extends CI_Controller {
       } elseif(isset($_POST['register'])) {
         $this->register();
       } else {
-        $this->session->set_flashdata('error', 'Sorry! You Have to Login Before any Attempt');
+        session('error', 'Sorry! You Have to Login Before any Attempt');
         redirect(base_url()."index.php/base_controller/",'refresh');
       }
     }
 
   }
-  function confirmed_imprest(){
+  function confirmed_imprest(Request $request)  {
     $data['imprests'] = $this->imprest_model->confirmedImprests();
     $data['title']="Imprest"; 
      return view('app.confirmed_imprest', $data);       
   }
 
-  function imprest(){
+  function imprest(Request $request)  {
         
     $data['title']="Imprest";
     $this->load->model('payroll_model');
     $data['my_imprests'] = $this->imprest_model->my_imprests($this->session->userdata('emp_id')); 
-    // if($this->session->userdata('appr_paym') || $this->session->userdata('mng_paym') ){
+    // if($this->session->userdata('appr_paym') ||session('mng_paym') ){
     //   if($this->session->userdata('appr_paym')){
     //     $data['other_imprests'] = $this->imprest_model->other_imprests_line_hr($this->session->userdata('emp_id'));
     //   } elseif($this->session->userdata('appr_paym')){
     //   $data['other_imprests'] = $this->imprest_model->other_imprests_line_fin($this->session->userdata('emp_id')); 
     //   } elseif($this->session->userdata('appr_paym')){
     //   $data['other_imprests'] = $this->imprest_model->other_imprests_hr(); 
-    //   } elseif($this->session->userdata('appr_paym') || $this->session->userdata('mng_paym')){
+    //   } elseif($this->session->userdata('appr_paym') ||session('mng_paym')){
     //   $data['other_imprests'] = $this->imprest_model->other_imprests_line($this->session->userdata('emp_id')); 
     //   } elseif($this->session->userdata('appr_paym')){
     //     $data['other_imprests'] = $this->imprest_model->other_imprests_hr(); 
@@ -60,7 +60,7 @@ class Imprest extends CI_Controller {
         
   }
 
-  public function imprest_info()  {    
+  public function imprest_info(Request $request)  {    
     $imprestID =  base64_decode($this->input->get('id'));
       
     $data['imprest_details'] =  $this->imprest_model->getImprest($imprestID);
@@ -70,7 +70,7 @@ class Imprest extends CI_Controller {
   }
 
 
-   public function add_imprest_requirement() {
+   public function add_imprest_requirement(Request $request) {
         $imprestID = $request->input('imprestID');
         $description = trim($request->input('description'));
         $initial_amount = $request->input('initial_amount');
@@ -96,7 +96,7 @@ class Imprest extends CI_Controller {
          
       }
 
-public function uploadRequirementEvidence() {
+public function uploadRequirementEvidence(Request $request) {
         if (isset($_POST['confirm']) && $request->input('requirementID')!='') {
 
           $requirementID = $request->input('requirementID');
@@ -110,9 +110,9 @@ public function uploadRequirementEvidence() {
                 );
             $result = $this->imprest_model->update_imprest_requirement($updates, $requirementID);
             if($result==true) {
-              $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Retirement Done Successifully, No Evidence Uploaded</p>");
+              session('note', "<p class='alert alert-success text-center'>Retirement Done Successifully, No Evidence Uploaded</p>");
             } else {
-              $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Retirement Failed, Please try Again</p>");  }
+              session('note', "<p class='alert alert-danger text-center'>Retirement Failed, Please try Again</p>");  }
             $finalID = base64_encode($imprestID);
             return redirect('/flex/imprest/imprest_info/?id='.$finalID);
           } else {
@@ -133,11 +133,11 @@ public function uploadRequirementEvidence() {
                     );
                 $result = $this->imprest_model->update_imprest_requirement($updates, $requirementID);
                 if($result==true) {
-                  $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Evidence Uploaded Successifully</p>");
+                  session('note', "<p class='alert alert-success text-center'>Evidence Uploaded Successifully</p>");
                 } else {
-                $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Evidence Not Uploaded, Please try Again</p>");  }
+                session('note', "<p class='alert alert-danger text-center'>Evidence Not Uploaded, Please try Again</p>");  }
             } else {
-                $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Evidence Not Uploaded, Please try Again</p>"); 
+                session('note', "<p class='alert alert-danger text-center'>Evidence Not Uploaded, Please try Again</p>"); 
             }
 
             $finalID = base64_encode($imprestID);
@@ -148,7 +148,7 @@ public function uploadRequirementEvidence() {
          
       }
       
-  public function deleteImprest() { 
+  public function deleteImprest(Request $request) { 
           
     if($this->uri->segment(3)!=''){
               
@@ -168,7 +168,7 @@ public function uploadRequirementEvidence() {
     }
   }
       
-  public function deleteRequirement() { 
+  public function deleteRequirement(Request $request) { 
           
     if($this->uri->segment(3)!=''){
               
@@ -195,7 +195,7 @@ public function uploadRequirementEvidence() {
     }
   }
       
-  public function approveRequirement() { 
+  public function approveRequirement(Request $request) { 
           
     if ($this->uri->segment(3)!='') {
               
@@ -218,7 +218,7 @@ public function uploadRequirementEvidence() {
     }
   }
       
-  public function confirmRequirementRetirement() { 
+  public function confirmRequirementRetirement(Request $request) { 
           
     if ($this->uri->segment(3)!='') {
               
@@ -242,7 +242,7 @@ public function uploadRequirementEvidence() {
   }
 
       
-  public function unconfirmRequirementRetirement() { 
+  public function unconfirmRequirementRetirement(Request $request) { 
           
     if ($this->uri->segment(3)!='') {
               
@@ -266,7 +266,7 @@ public function uploadRequirementEvidence() {
   }
 
       
-  public function disapproveRequirement() { 
+  public function disapproveRequirement(Request $request) { 
           
     if ($this->uri->segment(3)!='') {
               
@@ -290,7 +290,7 @@ public function uploadRequirementEvidence() {
   }
 
       
-  public function confirmRequirement() { 
+  public function confirmRequirement(Request $request) { 
           
     if ($this->uri->segment(3)!='') {
               
@@ -313,7 +313,7 @@ public function uploadRequirementEvidence() {
     }
   } 
       
-  public function unconfirmRequirement() { 
+  public function unconfirmRequirement(Request $request) { 
           
     if ($this->uri->segment(3)!='') {
               
@@ -336,7 +336,7 @@ public function uploadRequirementEvidence() {
     }
   } 
       
-  public function deleteEvidence() {    
+  public function deleteEvidence(Request $request) {    
           
     if($this->uri->segment(3)!=''){
       $requirementID = $this->uri->segment(3);
@@ -373,7 +373,7 @@ public function uploadRequirementEvidence() {
       }
   }  
 
-  public function updateImprestTitle(){
+  public function updateImprestTitle(Request $request)  {
     if ($_POST) {
         
         if($request->input('imprestID')!=''){
@@ -391,7 +391,7 @@ public function uploadRequirementEvidence() {
         }
     }
   } 
-  public function updateImprestDescription(){
+  public function updateImprestDescription(Request $request)  {
     if ($_POST) {        
       if($request->input('imprestID')!=''){
             
@@ -408,7 +408,7 @@ public function uploadRequirementEvidence() {
         }
     }
   }
-  public function updateImprestDateRange(){
+  public function updateImprestDateRange(Request $request)  {
     if ($_POST) {
       if($request->input('imprestID')!=''){
         $imprestID = $request->input('imprestID');
@@ -437,7 +437,7 @@ public function uploadRequirementEvidence() {
     }
   }
 
-  public function update_imprestRequirement() { 
+  public function update_imprestRequirement(Request $request) { 
       
    if(isset($_POST['update']) && $request->input('imprestID')!='') {
     $imprestID = $request->input('imprestID');
@@ -449,12 +449,12 @@ public function uploadRequirementEvidence() {
       
       $result =  $this->imprest_model->update_imprest_requirement($updates, $requirementID);
       if($result){
-          $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");            
+          session('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");            
           $finalID = base64_encode($imprestID);
           return redirect('/flex/imprest/imprest_info/?id='.$finalID);
       } else {
 
-        $this->session->set_flashdata('note', "<p class='alert alert-success text-danger'>FAILED to Update</p>");            
+        session('note', "<p class='alert alert-success text-danger'>FAILED to Update</p>");            
         $finalID = base64_encode($imprestID);
         return redirect('/flex/imprest/imprest_info/?id='.$finalID);
       }
@@ -462,7 +462,7 @@ public function uploadRequirementEvidence() {
   }
 
 
-    public function confirmImprest()  { 
+    public function confirmImprest(Request $request)  { 
           
       if($this->uri->segment(3)!=''){              
       $imprestID  = $this->uri->segment(3);
@@ -487,7 +487,7 @@ public function uploadRequirementEvidence() {
           );   
       $updates = array( 
              'date_confirmed' => date('Y-m-d'),
-             'confirmed_by' => $this->session->userdata('emp_id'),
+             'confirmed_by' =>session('emp_id'),
              'status' =>3
         ); 
         $result = $this->imprest_model->confirmImprest($updates, $data, $imprestID);
@@ -498,7 +498,7 @@ public function uploadRequirementEvidence() {
    } 
 
 
-    public function unconfirmImprest()  { 
+    public function unconfirmImprest(Request $request)  { 
           
       if($this->uri->segment(3)!=''){              
         $imprestID  = $this->uri->segment(3); 
@@ -509,7 +509,7 @@ public function uploadRequirementEvidence() {
       }
    } 
 
-    public function confirmImprestRetirement()  { 
+    public function confirmImprestRetirement(Request $request)  { 
           
       if($this->uri->segment(3)!=''){              
       $imprestID  = $this->uri->segment(3);
@@ -528,7 +528,7 @@ public function uploadRequirementEvidence() {
    } 
 
       
-  public function resolveImprest() { 
+  public function resolveImprest(Request $request) { 
     if($this->uri->segment(3)!=''){
       $this->load->model('flexperformance_model');
       $imprestID = $this->uri->segment(3);
@@ -578,7 +578,7 @@ public function uploadRequirementEvidence() {
     }
   }
       
-    public function recommendImprest()  { 
+    public function recommendImprest(Request $request)  { 
           
           if($this->uri->segment(3)!=''){
               
@@ -598,7 +598,7 @@ public function uploadRequirementEvidence() {
 
 
      
-   public function hr_recommendImprest()  { 
+   public function hr_recommendImprest(Request $request)  { 
           
     if($this->uri->segment(3)!=''){
         
@@ -634,7 +634,7 @@ public function uploadRequirementEvidence() {
           }
    } 
       
-    public function approveImprest() { 
+    public function approveImprest(Request $request) { 
       if($this->uri->segment(3)!=''){
 
               
@@ -651,7 +651,7 @@ public function uploadRequirementEvidence() {
         }
       }
       
-    public function disapproveImprest()  {
+    public function disapproveImprest(Request $request)  {
       if($this->uri->segment(3)!=''){
 
               
@@ -668,7 +668,7 @@ public function uploadRequirementEvidence() {
       }
    }
 
-    public function requestImprest() {         
+    public function requestImprest(Request $request) {         
       if ($_POST) {
 
         $start =str_replace('/', '-', $request->input('start'));

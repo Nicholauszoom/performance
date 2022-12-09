@@ -264,7 +264,7 @@ class PayrollController extends Controller
         return view('payroll.payroll_info',compact('data'));
     }
 
-    // public function temp_less_payments(){
+    // public function temp_less_payments(Request $request)  {
     //   $payrollMonth = base64_decode($this->input->get('pdate'));
     //   $data['payroll_list'] =  $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");
     //   $data['confirmed'] =1;
