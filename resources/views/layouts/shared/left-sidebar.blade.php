@@ -7,7 +7,7 @@
         <!-- Sidebar header -->
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted">HR & Payroll System</h5>
+                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
 
                 <div>
                     <button type="button"
@@ -52,7 +52,7 @@
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-users-three"></i>
-                        <span>workforce management</span>
+                        <span>Workforce Management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -70,46 +70,29 @@
                             </a>
                         </li>
 
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                            >
-                                Transfers  Management
+                        <li class="nav-item">
+                            <a href="{{ route('overtime') }}"
+                                class="nav-link {{ request()->routeIs('overtime') ? 'active' : null  }}">
+                                Overtime
                             </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
+                        </li>
+                        <!-- <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                href="{{ route('imprest.index') }}"
+                                class="nav-link {{ request()->routeIs('imprest.index') ? 'active' : null  }}"
                             >
-                            Attendance
+                                Imprest
                             </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
+                                href="{{ route('approve.changes') }}"
+                                class="nav-link {{ request()->routeIs('approve.changes') ? 'active' : null  }}"
                             >
-                            Overtime management
+                                Employee Aproval
                             </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                            >
-                            Grievances and Disciplinary Management
-                            </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}"
-                            >
-                            Performance & Productiviy Management
-                            </a>
-                        </li> --}}
+                        </li> -->
+
                     </ul>
                 </li>
 
@@ -121,6 +104,12 @@
                     </a>
 
                     <ul class="nav-group-sub collapse">
+                        <!-- <li class="nav-item">
+                            <a href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Additional Payments
+                            </a>
+                        </li> -->
                         <li class="nav-item">
                             <a href="{{ route('payroll') }}"
                                 class="nav-link {{ request()->routeIs('payroll') ? 'active' : null }}">
@@ -147,39 +136,23 @@
                                 class="nav-link {{ request()->routeIs('partialPayment') ? 'active' : null }}">
                                 Partial Payment
                             </a>
-                        </li>
+                        </li> -->
 
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('payroll') }}"
-                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                        <li class="nav-item">
+                            <a href="{{ route('cipay.approved_financial_payments') }}"
+                                class="nav-link {{ request()->routeIs('cipay.approved_financial_payments') ? 'active' : null  }}">
                                 Pending Payments
                             </a>
-                        </li> --}}
+                        </li>
 
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('payroll') }}"
-                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                                Statutory Reports
-                            </a>
-                        </li> --}}
 
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('payroll') }}"
-                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                                Organisation Reports
-                            </a>
-                        </li> --}}
 
-                        {{-- <li class="nav-item">
-                            <a
-                                href="{{ route('payroll') }}"
-                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                                Salary Calculator
-                            </a>
-                        </li> --}}
+                        <!-- <li class="nav-item">
+                <a href="{{ route('payroll') }}"
+                    class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                    Salary Calculator
+                </a>
+            </li> -->
                     </ul>
                 </li>
                 {{-- /Payroll management --}}
@@ -195,23 +168,22 @@
                         <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                                Training Budgeting
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                                Training Application
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
+                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                Training Budgeting
+                </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('members.active') }}"
+                        class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                        Training Application
+                    </a>
+                </li>
+            </ul>
+            </li> --}}
 
 
 
-                {{-- <li class="nav-item nav-item-submenu">
+            {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-trophy"></i>
                         <span>Talent Management</span>
@@ -222,25 +194,25 @@
                         <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
-                                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                                Talent Management
-                            </a>
-                        </li>
-                    </ul>
-                </li> --}}
+            class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+            Talent Management
+            </a>
+            </li>
+            </ul>
+            </li> --}}
 
-                {{-- /workforce management --}}
+            {{-- /workforce management --}}
 
 
 
-                {{--
+            {{--
                     Leave & Attendance
                         -   Attendance
                 --}}
 
 
 
-                {{--
+            {{--
                     Organisation
                         -   Cost center
                         -   Departments
@@ -286,13 +258,36 @@
                         </li>
 
 
-                    </ul>
-                </li>
+                </ul>
+            </li>
+
+            <li class="nav-item nav-item-submenu">
+                <a href="#" class="nav-link">
+                    <i class="ph-buildings"></i>
+                    <span>Reports</span>
+                </a>
+                <ul class="nav-group-sub collapse">
+                    <li class="nav-item">
+                        <a href="{{ route('cipay.financial_reports') }}"
+                            class="nav-link {{ request()->routeIs('cipay.financial_reports') ? 'active' : null  }}">
+                            Statutory Reports
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('cipay.organisation_reports') }}"
+                            class="nav-link {{ request()->routeIs('cipay.organisation_reports') ? 'active' : null  }}">
+                            Organisation Reports
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
 
 
-                {{-- /organisation --}}
+            {{-- /organisation --}}
 
-                {{--
+            {{--
                     Settings
                         - Roles
                         - Alloances

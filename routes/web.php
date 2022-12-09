@@ -14,7 +14,11 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\GeneralController;
+
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\setting\BranchController;
+use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -50,13 +54,35 @@ Route::middleware('auth')->group(function () {
      * Workforce Manegment
      */
 
-    Route::get('/performance/workforce-management/active-mebers', [EmployeeController::class, 'activeMembers'])->name('employee.active');
-    Route::get('/performance/workforce-management/employee-create', [EmployeeController::class, 'createEmployee'])->name('employee.create');
-    Route::post('/performance/workforce-management/employee/store', [EmployeeController::class, 'storeEmployee'])->name('employee.store');
+     Route::prefix('performance')->controller(EmployeeController::class)->group(function (){
+        Route::get('/active-mebers',  'activeMembers')->name('employee.active');
+        Route::get('/profile',  'employeeProfile')->name('employee.profile');
+        Route::get('/employee-exit',  'employeeExit')->name('employee.exit');
+        Route::get('/workforce-management/employee-create',  'createEmployee')->name('employee.create');
+        Route::post('/workforce-management/employee/store',  'storeEmployee')->name('employee.store');
+        Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
+        Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
+        Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
 
-    Route::get('/suspended-employee', [EmployeeController::class, 'suspendedEmployee'])->name('employee.suspended');
+        // Imprest
+        Route::get('/workforce-management/imprest', 'imprest')->name('imprest.index');
+
+        // Approve Employee
+        Route::get('/workforce-management/employee-Approve/changes', 'approveEmpoyee')->name('approve.changes');
+        Route::get('/workforce-management/employee-/register', 'approveRegister')->name('approve.register');
+     });
+
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
+
+    Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
+    Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
+
+    // Employee overtime
+
+
+
+
 
 
 
