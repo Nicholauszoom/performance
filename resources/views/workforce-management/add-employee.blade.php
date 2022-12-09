@@ -378,7 +378,7 @@
 
         $('#pos').on('change', function() {
             var positionID = $(this).val();
-            
+
             if (positionID) {
                 $.ajax({
                     type: 'POST',
@@ -386,7 +386,7 @@
                     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     data: 'positionID=' + positionID,
                     success: function(response) {
-                        
+
                         var response = JSON.parse(response);
                         $('#salaryField').fadeOut('fast', function() {
                             $('#salaryField').fadeIn('fast').html(response.salary);
@@ -481,7 +481,38 @@
     });
 </script>
 
-{{-- form submit --}}
+<script>
+    $('#addEmployee').submit(function(e) {
+
+        e.preventDefault(); // Prevent Default Submission
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('employee.store') }}",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            data: $(this).serialize(), // it will serialize the form data
+            dataType: 'json'
+        })
+        .done(function (data) {
+            alert(data.tile);
+
+            if (data.status == 'OK'){
+                $('#feedBackSubmission').fadeOut('fast', function() {
+                    $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                });
+
+            }else{
+                $('#feedBackSubmission').fadeOut('fast', function() {
+                    $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                });
+                $('#addEmployee').trigger("reset");
+            }
+        })
+        .fail(function () {
+            alert('Registration Failed');
+        });
+    });
+</script>
 
 <script>
     $(function() {
