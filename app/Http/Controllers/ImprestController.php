@@ -30,7 +30,7 @@ class Imprest extends Controller
    
     date_default_timezone_set('Africa/Dar_es_Salaam');    
 
-    if ($this->session->userdata('emp_id')==''){
+    if (session('emp_id')==''){
       if (isset($_POST['login'])) {
         $this->login();
       } elseif(isset($_POST['register'])) {
@@ -52,25 +52,25 @@ class Imprest extends Controller
         
     $data['title']="Imprest";
     $this->load->model('payroll_model');
-    $data['my_imprests'] = $this->imprest_model->my_imprests($this->session->userdata('emp_id')); 
-    // if($this->session->userdata('appr_paym') ||session('mng_paym') ){
-    //   if($this->session->userdata('appr_paym')){
-    //     $data['other_imprests'] = $this->imprest_model->other_imprests_line_hr($this->session->userdata('emp_id'));
-    //   } elseif($this->session->userdata('appr_paym')){
-    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line_fin($this->session->userdata('emp_id')); 
-    //   } elseif($this->session->userdata('appr_paym')){
+    $data['my_imprests'] = $this->imprest_model->my_imprests(session('emp_id')); 
+    // if(session('appr_paym') ||session('mng_paym') ){
+    //   if(session('appr_paym')){
+    //     $data['other_imprests'] = $this->imprest_model->other_imprests_line_hr(session('emp_id'));
+    //   } elseif(session('appr_paym')){
+    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line_fin(session('emp_id')); 
+    //   } elseif(session('appr_paym')){
     //   $data['other_imprests'] = $this->imprest_model->other_imprests_hr(); 
-    //   } elseif($this->session->userdata('appr_paym') ||session('mng_paym')){
-    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line($this->session->userdata('emp_id')); 
-    //   } elseif($this->session->userdata('appr_paym')){
+    //   } elseif(session('appr_paym') ||session('mng_paym')){
+    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line(session('emp_id')); 
+    //   } elseif(session('appr_paym')){
     //     $data['other_imprests'] = $this->imprest_model->other_imprests_hr(); 
-    //   } elseif ($this->session->userdata('appr_paym')) {
+    //   } elseif (session('appr_paym')) {
     //     $data['other_imprests'] = $this->imprest_model->other_imprests_fin();
     //   }     
     // }
     
 
-    $data['other_imprests'] = $this->imprest_model->othersImprests($this->session->userdata('emp_id'));
+    $data['other_imprests'] = $this->imprest_model->othersImprests(session('emp_id'));
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
      return view('app.imprest', $data);
@@ -562,8 +562,8 @@ public function uploadRequirementEvidence(Request $request) {
               'empID' =>$empID,
               'amount' =>$refund,
               'name' =>12,
-              'init_author' =>$this->session->userdata('emp_id'),
-              'appr_author' =>$this->session->userdata('emp_id'),
+              'init_author' =>session('emp_id'),
+              'appr_author' =>session('emp_id'),
               'state' =>1
           );
         $result = $this->flexperformance_model->addToBonus($data);
@@ -602,7 +602,7 @@ public function uploadRequirementEvidence(Request $request) {
         $imprestID = $this->uri->segment(3);
         $data = array( 
                  'status' =>1,  
-                 'recommended_by' =>$this->session->userdata('emp_id'),               
+                 'recommended_by' =>session('emp_id'),               
                  'date_recommended' => date('Y-m-d')
             );   
           $result = $this->imprest_model->update_imprest($data, $imprestID);
@@ -622,7 +622,7 @@ public function uploadRequirementEvidence(Request $request) {
   $imprestID = $this->uri->segment(3);
   $data = array( 
            'status' =>9,  
-           'hr_recommend' =>$this->session->userdata('emp_id'),               
+           'hr_recommend' =>session('emp_id'),               
            'date_hr_recommend' => date('Y-m-d')
       );   
     $result = $this->imprest_model->update_imprest($data, $imprestID);
@@ -641,7 +641,7 @@ public function uploadRequirementEvidence(Request $request) {
         $imprestID = $this->uri->segment(3);
         $data = array( 
                  'status' =>3,
-                 'recommended_by' =>$this->session->userdata('emp_id'),               
+                 'recommended_by' =>session('emp_id'),               
                  'date_recommended' => date('Y-m-d')
             );   
           $result = $this->imprest_model->update_imprest($data, $imprestID);
@@ -658,7 +658,7 @@ public function uploadRequirementEvidence(Request $request) {
         $imprestID = $this->uri->segment(3);
         $data = array( 
                  'status' =>2,
-                 'approved_by' =>$this->session->userdata('emp_id'),               
+                 'approved_by' =>session('emp_id'),               
                  'date_approved' => date('Y-m-d')
             );   
           $result = $this->imprest_model->update_imprest($data, $imprestID);
@@ -675,7 +675,7 @@ public function uploadRequirementEvidence(Request $request) {
         $imprestID = $this->uri->segment(3);
         $data = array( 
                  'status' =>5,
-                 'approved_by' =>$this->session->userdata('emp_id'),               
+                 'approved_by' =>session('emp_id'),               
                  'date_approved' => date('Y-m-d')
             );   
           $result = $this->imprest_model->update_imprest($data, $imprestID);
@@ -702,7 +702,7 @@ public function uploadRequirementEvidence(Request $request) {
           $data = array(  
                'title' => $request->input('title'),
                'description' =>$request->input('description'), 
-               'empID' =>$this->session->userdata('emp_id'),
+               'empID' =>session('emp_id'),
                'start' =>$dateStart,
                'end' =>$dateEnd,
                'date_recommended' => $date_today,
@@ -714,7 +714,7 @@ public function uploadRequirementEvidence(Request $request) {
           );   
           $result = $this->imprest_model->requestImprest($data);
           if($result == true){ 
-            $id =$this->imprest_model->getRecentImprest($this->session->userdata('emp_id'));        
+            $id =$this->imprest_model->getRecentImprest(session('emp_id'));        
             $response_array['status'] = "OK";
             $response_array['id'] = base64_encode($id);
             header('Content-type: application/json');            

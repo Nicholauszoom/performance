@@ -33,7 +33,7 @@ class ProjectController extends Controller
    $this->load->library('Pdf');  
     date_default_timezone_set('Africa/Dar_es_Salaam');    
 
-    if ($this->session->userdata('emp_id')==''){
+    if (session('emp_id')==''){
         session('error', 'Sorry! You Have to Login Before any Attempt');
         redirect(base_url()."index.php/base_controller/",'refresh');      
     }
@@ -41,7 +41,7 @@ class ProjectController extends Controller
   }
 
   public function index(Request $request) {
-    if($this->session->userdata('vw_proj') ||session('mng_proj')){
+    if(session('vw_proj') ||session('mng_proj')){
       
      
       $data['projects'] = $this->project_model->allProjects();
@@ -62,18 +62,18 @@ class ProjectController extends Controller
 
 
         $data['allocations'] = $this->project_model->getProjectAllocations();
-//       $data['allocations'] = $this->project_model->getProjectAllocationsByLineManager($this->session->userdata('username'));
+//       $data['allocations'] = $this->project_model->getProjectAllocationsByLineManager(session('username'));
       $data['grants'] = $this->project_model->allGrants();
       $data['activities'] = $this->project_model->allActivities();
       $data['employee'] =  $this->payroll_model->customemployee();
-      $data['assignments'] = $this->project_model->myAssignmentsAll($this->session->userdata('emp_id'));
+      $data['assignments'] = $this->project_model->myAssignmentsAll(session('emp_id'));
       $data['categories'] = $this->performance_model->getExpenseCategory();
 
     }else{      
-      $data['projects'] = $this->project_model->myProjects($this->session->userdata('emp_id'));
-      $data['allocations'] = $this->project_model->myProjectAllocations($this->session->userdata('emp_id'));
-      $data['activities'] = $this->project_model->myActivities($this->session->userdata('emp_id'));
-      $data['assignments'] = $this->project_model->myAssignmentsAll($this->session->userdata('emp_id'));
+      $data['projects'] = $this->project_model->myProjects(session('emp_id'));
+      $data['allocations'] = $this->project_model->myProjectAllocations(session('emp_id'));
+      $data['activities'] = $this->project_model->myActivities(session('emp_id'));
+      $data['assignments'] = $this->project_model->myAssignmentsAll(session('emp_id'));
       $data['categories'] = $this->performance_model->getExpenseCategory();
     }
     $data['title'] = "Project";
@@ -1190,7 +1190,7 @@ class ProjectController extends Controller
                 }
                 $data2 = array(
                     'assignment_id' => $assignment_id,
-                    'emp_id' =>$this->session->userdata('emp_id')
+                    'emp_id' =>session('emp_id')
                 );
                 $this->project_model->addAssignmentEmployee($data2);
             }
@@ -1207,13 +1207,13 @@ class ProjectController extends Controller
     }
 
     public function assignmentInfo(Request $request) {
-        if($this->session->userdata('vw_proj') ||session('mng_proj')) {
+        if(session('vw_proj') ||session('mng_proj')) {
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
 
             $data['action'] = 1; // O For Addition, 1 For Info and Update
             $data['assignments'] = $this->project_model->allAssignments($assignID);
-            $data['my_assignments'] = $this->project_model->myAssignments($this->session->userdata('emp_id'),$assignID);
+            $data['my_assignments'] = $this->project_model->myAssignments(session('emp_id'),$assignID);
             $data['assignment_costs'] = $this->project_model->allAssignmentCosts($assignID);
             $data['title'] = "Create New Project";
              return view('app.assignment_info', $data);
@@ -1221,23 +1221,23 @@ class ProjectController extends Controller
     }
 
     public function timeTrackInfo(Request $request) {
-        if($this->session->userdata('vw_proj') ||session('mng_proj')) {
+        if(session('vw_proj') ||session('mng_proj')) {
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
             $data['action'] = 1; // O For Addition, 1 For Info and Update
-            $data['my_assignments'] = $this->project_model->myAssignments($this->session->userdata('emp_id'),$assignID);
-            $data['time_track'] = $this->project_model->allTimeTrackAll($this->session->userdata('emp_id'),$assignID);
+            $data['my_assignments'] = $this->project_model->myAssignments(session('emp_id'),$assignID);
+            $data['time_track'] = $this->project_model->allTimeTrackAll(session('emp_id'),$assignID);
             $data['exceptions'] = $this->performance_model->getException();
-            $data['all_exceptions'] = $this->project_model->allException($this->session->userdata('emp_id'));
+            $data['all_exceptions'] = $this->project_model->allException(session('emp_id'));
             $data['title'] = "Create New Project";
         }else{
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
             $data['action'] = 1; // O For Addition, 1 For Info and Update
-            $data['time_track'] = $this->project_model->myTimeTrack($this->session->userdata('emp_id'),$assignID);
-            $data['my_assignments'] = $this->project_model->myAssignments($this->session->userdata('emp_id'),$assignID);
+            $data['time_track'] = $this->project_model->myTimeTrack(session('emp_id'),$assignID);
+            $data['my_assignments'] = $this->project_model->myAssignments(session('emp_id'),$assignID);
             $data['exceptions'] = $this->performance_model->getException();
-            $data['all_exceptions'] = $this->project_model->myException($this->session->userdata('emp_id'));
+            $data['all_exceptions'] = $this->project_model->myException(session('emp_id'));
             $data['title'] = "Create New Project";
         }
          return view('app.time_track', $data);
@@ -1246,13 +1246,13 @@ class ProjectController extends Controller
     }
 
     public function commentInfo(Request $request) {
-        if($this->session->userdata('vw_proj') ||session('mng_proj')) {
+        if(session('vw_proj') ||session('mng_proj')) {
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
             $data['action'] = 1; // O For Addition, 1 For Info and Update
             $data['comments'] = $this->project_model->allComment($assignID);
             $data['assignID'] = $assignID;
-            $data['my_assignments'] = $this->project_model->myAssignmentsAll($this->session->userdata('emp_id'));
+            $data['my_assignments'] = $this->project_model->myAssignmentsAll(session('emp_id'));
             $data['title'] = "Create New Project";
         }else{
             $data['projects'] = $this->project_model->allProjects();
@@ -1260,7 +1260,7 @@ class ProjectController extends Controller
             $data['action'] = 1; // O For Addition, 1 For Info and Update
             $data['comments'] = $this->project_model->allComment($assignID);
             $data['assignID'] = $assignID;
-            $data['my_assignments'] = $this->project_model->myAssignments($this->session->userdata('emp_id'),$assignID);
+            $data['my_assignments'] = $this->project_model->myAssignments(session('emp_id'),$assignID);
             $data['title'] = "Create New Project";
         }
 
@@ -1517,7 +1517,7 @@ class ProjectController extends Controller
     public function addCost(Request $request)  {
         if($_POST) {
             $data = array(
-                'emp_id' =>$this->session->userdata('emp_id'),
+                'emp_id' =>session('emp_id'),
                 'project' => $request->input('project_name'),
                 'activity' => $request->input('activity_name'),
                 'assignment' => $request->input('id'),
@@ -1525,7 +1525,7 @@ class ProjectController extends Controller
                 'amount' => $request->input('cost_amount'),
                 'description' => $request->input('cost_description'),
                 'created_at' => date('Y-m-d'),
-                'created_by' =>$this->session->userdata('emp_id')
+                'created_by' =>session('emp_id')
             );
 
             //upload file
@@ -1576,7 +1576,7 @@ class ProjectController extends Controller
                             'mode' => "OUT",
                             'amount' => $request->input('cost_amount'),
                             'created_at' => date('Y-m-d'),
-                            'created_by' =>$this->session->userdata('emp_id')
+                            'created_by' =>session('emp_id')
                         );
                         $this->performance_model->addRequest($data_1);
                         $this->performance_model->updateGrant($item->grant_code, $data_);

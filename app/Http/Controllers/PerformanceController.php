@@ -36,7 +36,7 @@ class PerformanceController extends Controller
 
       date_default_timezone_set('Africa/Dar_es_Salaam');
 
-    if ($this->session->userdata('emp_id')==''){
+    if (session('emp_id')==''){
       if (isset($_POST['login'])) {
         $this->login();
       } elseif(isset($_POST['register'])) {
@@ -186,7 +186,7 @@ class PerformanceController extends Controller
             'title' => $request->input('name'),
             'strategy_ref' => $strategyID,
             'description' =>$request->input('description'), 
-            'assigned_by' =>$this->session->userdata('emp_id'),
+            'assigned_by' =>session('emp_id'),
             'assigned_to' =>$employee,
             'isAssigned' => $isAssigned,
             'start' =>$dateStart,
@@ -243,7 +243,7 @@ class PerformanceController extends Controller
              'title' => $request->input('name'),
              'description' =>$request->input('description'),
              'funder' =>$request->input('funder'),
-             'author' =>$this->session->userdata('emp_id'),
+             'author' =>session('emp_id'),
              'type' =>$request->input('type'), 
              'start' =>$dateStart,
              'end' =>$dateEnd
@@ -290,7 +290,7 @@ class PerformanceController extends Controller
           'email' =>$request->input('email'), 
           'phone' =>$request->input('phone'), 
           'description' =>$request->input('description'), 
-          'createdBy' =>$this->session->userdata('emp_id'),
+          'createdBy' =>session('emp_id'),
           'country' => $request->input('nationality'),
           'type' => $request->input('type')
       );   
@@ -314,7 +314,7 @@ class PerformanceController extends Controller
             $data = array(
                 'name' => $request->input('name'),
                 'created_at' => date('Y-m-d'),
-                'created_by' =>$this->session->userdata('emp_id')
+                'created_by' =>session('emp_id')
             );
             $result = $this->performance_model->addSegment($data);
             if($result==true){
@@ -334,7 +334,7 @@ class PerformanceController extends Controller
             $data = array(
                 'name' => $request->input('category_name'),
                 'created_at' => date('Y-m-d'),
-                'created_by' =>$this->session->userdata('emp_id')
+                'created_by' =>session('emp_id')
             );
             $result = $this->performance_model->addCategory($data);
             if($result==true){
@@ -354,7 +354,7 @@ class PerformanceController extends Controller
             $data = array(
                 'name' => $request->input('exception_name'),
                 'created_at' => date('Y-m-d'),
-                'created_by' =>$this->session->userdata('emp_id')
+                'created_by' =>session('emp_id')
             );
             $result = $this->performance_model->addException($data);
             if($result==true){
@@ -378,7 +378,7 @@ class PerformanceController extends Controller
                 'mode' => "IN",
                 'amount' => trim($request->input('amount')),
                 'created_at' => date('Y-m-d'),
-                'created_by' =>$this->session->userdata('emp_id')
+                'created_by' =>session('emp_id')
             );
             $result = $this->performance_model->addRequest($data);
 
@@ -488,7 +488,7 @@ class PerformanceController extends Controller
       $today = date('Y-m-d');
 
       
-      $data['author'] =session('fname')." ".$this->session->userdata('mname') ." ".$this->session->userdata('lname');      
+      $data['author'] =session('fname')." ".session('mname') ." ".session('lname');      
       $data['strategy_info'] = $this->performance_model->strategy_report_info($strategyID);
       $data["strategy_progress"] = $this->performance_model->strategyProgress($strategyID);
 
@@ -980,7 +980,7 @@ class PerformanceController extends Controller
           $data = array(
             'comment' =>$comment,
             'taskID' =>$taskID,
-            'staff' =>$this->session->userdata('emp_id')
+            'staff' =>session('emp_id')
           );
           $result = $this->performance_model->progress_comment($data, $progress, $taskID);
         } else{
@@ -988,7 +988,7 @@ class PerformanceController extends Controller
         $data = array(
               'comment' =>$request->input('comment'),
               'taskID' =>$taskID,
-              'staff' =>$this->session->userdata('emp_id')
+              'staff' =>session('emp_id')
             );
         $result = $this->performance_model->comment($data);
 
@@ -1014,7 +1014,7 @@ class PerformanceController extends Controller
           'comment' =>$comment,
           'comment_type' =>2,
           'taskID' =>$taskID,
-          'staff' =>$this->session->userdata('emp_id')
+          'staff' =>session('emp_id')
         );
         $result = $this->performance_model->reject_task($comments, $taskUpdates, $taskID);
         if($result ==true) {
@@ -1038,7 +1038,7 @@ class PerformanceController extends Controller
           $data = array(
             'comment' =>$comment,
             'taskID' =>$taskID,
-            'staff' =>$this->session->userdata('emp_id')
+            'staff' =>session('emp_id')
           );
           $result = $this->performance_model->progress_comment($data, $progress, $taskID);
         } else{
@@ -1046,7 +1046,7 @@ class PerformanceController extends Controller
         $data = array(
               'comment' =>$request->input('comment'),
               'taskID' =>$taskID,
-              'staff' =>$this->session->userdata('emp_id')
+              'staff' =>session('emp_id')
             );
         $result = $this->performance_model->comment($data);
         }
@@ -1068,7 +1068,7 @@ class PerformanceController extends Controller
           'comment' =>$comment,
           'comment_type' =>2,
           'taskID' =>$taskID,
-          'staff' =>$this->session->userdata('emp_id')
+          'staff' =>session('emp_id')
         );
         $result = $this->performance_model->rejectTask($comments, $taskUpdates, $taskID);
         if($result ==true) {
@@ -1509,7 +1509,7 @@ class PerformanceController extends Controller
       $data['employeeReport'] = $empReport;
       $data['departmentReport'] = $deptReport;
       $data['organizationReport'] = $orgReport;
-      $data['author'] =session('fname')." ".$this->session->userdata('mname') ." ".$this->session->userdata('lname');      
+      $data['author'] =session('fname')." ".session('mname') ." ".session('lname');      
 
       $data['title']="Productivity";
        return view('app.reports/productivity_report', $data);
@@ -1633,7 +1633,7 @@ class PerformanceController extends Controller
           'title' =>$request->input("title"),
           'initial_quantity' =>$request->input("quantity"),
           'description' =>$request->input("description"),
-          'assigned_by' =>$this->session->userdata('emp_id'),
+          'assigned_by' =>session('emp_id'),
           'assigned_to' =>$employee,
           'isAssigned' => $isAssigned,
           'quantity_type' =>$request->input('quantity_type'),
@@ -1690,7 +1690,7 @@ class PerformanceController extends Controller
             'outcome_ref' =>$request->input("outcomeID"),
             'title' =>$request->input("title"),
             'description' =>$request->input("description"),
-            'assigned_by' =>$this->session->userdata('emp_id'),
+            'assigned_by' =>session('emp_id'),
             'assigned_to' =>$employee,
             'quantity_type' =>$request->input('quantity_type'),
             'initial_quantity' =>$request->input('quantity'),
@@ -1810,8 +1810,8 @@ class PerformanceController extends Controller
                  'strategy_ref' =>$request->input('strategyID'), 
                  'start' => $dateStart, 
                  'outcome_ref' =>$outcomeref,  
-                 'author' =>$this->session->userdata('emp_id'),  
-                 'assigned_by' =>$this->session->userdata('emp_id'),
+                 'author' =>session('emp_id'),  
+                 'assigned_by' =>session('emp_id'),
                  'assigned_to' =>$employee,
                  'isAssigned' => $isAssigned, 
                    'end' =>$dateEnd
@@ -1921,8 +1921,8 @@ class PerformanceController extends Controller
 
  public function adhoc_task(Request $request)  {
     $empID =session('emp_id');
-    $data['mytask'] = $this->performance_model->my_adhoc_task($this->session->userdata('emp_id'));
-    $data['othertask'] = $this->performance_model->other_adhoc_task($this->session->userdata('emp_id'));
+    $data['mytask'] = $this->performance_model->my_adhoc_task(session('emp_id'));
+    $data['othertask'] = $this->performance_model->other_adhoc_task(session('emp_id'));
     $data['tag'] = ' All Task';
     $data['title'] = 'Adhoc Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
@@ -2129,7 +2129,7 @@ class PerformanceController extends Controller
       
       $data['data'] =  $this->performance_model->gettaskbyid($id);
       $data['title']="Task";
-      $data['subordinate'] = $this->performance_model->taskdropdown($this->session->userdata('emp_id'));
+      $data['subordinate'] = $this->performance_model->taskdropdown(session('emp_id'));
        return view('app.edittask', $data);}
 
   public function edittask()  
@@ -2290,13 +2290,13 @@ class PerformanceController extends Controller
    
       
   function task_notification(Request $request)  {
-        if($this->session->userdata('line')!= 0 ){
-             $counts1 = $this->performance_model->task_notification_line_manager($this->session->userdata('emp_id'));
-             $counts2 = $this->performance_model->task_notification_employee($this->session->userdata('emp_id'));
+        if(session('line')!= 0 ){
+             $counts1 = $this->performance_model->task_notification_line_manager(session('emp_id'));
+             $counts2 = $this->performance_model->task_notification_employee(session('emp_id'));
              if(($counts1+$counts2)>0){
                  echo '<span class="badge bg-red">'.($counts1+$counts2).'</span>'; } else echo "";
         } else {
-              $counts = $this->performance_model->task_notification_employee($this->session->userdata('emp_id'));
+              $counts = $this->performance_model->task_notification_employee(session('emp_id'));
               if($counts>0){
                   echo '<span class="badge bg-red">'.$counts.'</span>'; } else echo "";
         }
@@ -2315,12 +2315,12 @@ class PerformanceController extends Controller
     
       
   function activation_notification(Request $request)  {
-      if($this->session->userdata('init_emp_state')!= 0 ||session('appr_emp_state')!= 0 ){
-        if($this->session->userdata('init_emp_state')!=0 &&session('appr_emp_state')!= 0){
+      if(session('init_emp_state')!= 0 ||session('appr_emp_state')!= 0 ){
+        if(session('init_emp_state')!=0 &&session('appr_emp_state')!= 0){
            $count = $this->performance_model->appr_emp_state()+$this->performance_model->init_emp_state();
-        } elseif($this->session->userdata('appr_emp_state')!= 0 ) {
+        } elseif(session('appr_emp_state')!= 0 ) {
             $count = $this->performance_model->appr_emp_state();          
-        }elseif($this->session->userdata('init_emp_state')!=0 ) {
+        }elseif(session('init_emp_state')!=0 ) {
             $count = $this->performance_model->init_emp_state();          
         }
 
@@ -2332,30 +2332,30 @@ class PerformanceController extends Controller
    
    function loan_notification(Request $request)  {
        
-      if($this->session->userdata('recom_loan')!= 0 ||session('appr_loan')!=0 ){
-          if($this->session->userdata('recom_loan')!=0 &&session('appr_loan')!= 0){
-              $counts1 = $this->performance_model->loan_notification_employee($this->session->userdata('emp_id'));
+      if(session('recom_loan')!= 0 ||session('appr_loan')!=0 ){
+          if(session('recom_loan')!=0 &&session('appr_loan')!= 0){
+              $counts1 = $this->performance_model->loan_notification_employee(session('emp_id'));
               $counts2 = $this->performance_model->loan_notification_hr();
               $counts3 = $this->performance_model->loan_notification_finance();
               $counts = $counts1+$counts2+$counts3;
                if($counts>0){
                   echo '<span class="badge bg-red">'.$counts.'</span>'; } else echo "";
-          } elseif($this->session->userdata('recom_loan')!=0) {
+          } elseif(session('recom_loan')!=0) {
               $counts1 = $this->performance_model->loan_notification_hr();
-              $counts2 = $this->performance_model->loan_notification_employee($this->session->userdata('emp_id'));
+              $counts2 = $this->performance_model->loan_notification_employee(session('emp_id'));
               $counts = $counts1+$counts2;
               if($counts>0){
                   echo '<span class="badge bg-red">'.$counts.'</span>'; } else echo "";
-          } elseif($this->session->userdata('appr_loan')!=0){
+          } elseif(session('appr_loan')!=0){
                
-              $counts1 = $this->performance_model->loan_notification_employee($this->session->userdata('emp_id'));
+              $counts1 = $this->performance_model->loan_notification_employee(session('emp_id'));
               $counts2 = $this->performance_model->loan_notification_finance();
               $counts = $counts1+$counts2;
               if($counts>0){
                   echo '<span class="badge bg-red">'.$counts.'</span>'; } else echo "";
           } 
         }else {
-              $counts = $this->performance_model->loan_notification_employee($this->session->userdata('emp_id'));
+              $counts = $this->performance_model->loan_notification_employee(session('emp_id'));
               if($counts>0){
                   echo '<span class="badge bg-red">'.$counts.'</span>'; } else echo "";
         }
@@ -2366,35 +2366,35 @@ class PerformanceController extends Controller
        
     $counts1 = 0; $counts2 = 0; $counts3 = 0; $countt1 = 0; $countt2 = 0;
         //   FOR TASK NOTIFICATION
-    if($this->session->userdata('line')!= 0 ){
-           if($this->session->userdata('dotask')== 0){
-               $countt1 = $this->performance_model->task_notification_line_manager($this->session->userdata('emp_id'));
-               $countt2 = $this->performance_model->task_notification_employee($this->session->userdata('emp_id'));
+    if(session('line')!= 0 ){
+           if(session('dotask')== 0){
+               $countt1 = $this->performance_model->task_notification_line_manager(session('emp_id'));
+               $countt2 = $this->performance_model->task_notification_employee(session('emp_id'));
            } else{
-                $countt1 = $this->performance_model->task_notification_line_manager($this->session->userdata('emp_id'));
+                $countt1 = $this->performance_model->task_notification_line_manager(session('emp_id'));
            }
-       } else if($this->session->userdata('line')== 0){
-      $countt1 = $this->performance_model->task_notification_employee($this->session->userdata('emp_id'));
+       } else if(session('line')== 0){
+      $countt1 = $this->performance_model->task_notification_employee(session('emp_id'));
       
       }
       $sum2 = $countt1+$countt2;
       
     //   FOR LEAVE NOTIFICATION
-     if($this->session->userdata('recomleave')!= 0 ){
-          if($this->session->userdata('confleave')!=0){
-              $counts1 = $this->attendance_model->leave_notification_employee($this->session->userdata('emp_id'));
-              $counts2 = $this->attendance_model->leave_notification_line_manager($this->session->userdata('emp_id'));
+     if(session('recomleave')!= 0 ){
+          if(session('confleave')!=0){
+              $counts1 = $this->attendance_model->leave_notification_employee(session('emp_id'));
+              $counts2 = $this->attendance_model->leave_notification_line_manager(session('emp_id'));
               $counts3 = $this->attendance_model->leave_notification_hr();
           } else{
-              $counts1 = $this->attendance_model->leave_notification_line_manager($this->session->userdata('emp_id'));
-              $counts2 = $this->attendance_model->leave_notification_employee($this->session->userdata('emp_id'));
+              $counts1 = $this->attendance_model->leave_notification_line_manager(session('emp_id'));
+              $counts2 = $this->attendance_model->leave_notification_employee(session('emp_id'));
             } 
-      } elseif($this->session->userdata('confleave')!=0){
+      } elseif(session('confleave')!=0){
                
-              $counts1 = $this->attendance_model->leave_notification_employee($this->session->userdata('emp_id'));
+              $counts1 = $this->attendance_model->leave_notification_employee(session('emp_id'));
               $counts2 = $this->attendance_model->leave_notification_hr();
      } else {
-              $counts1 = $this->attendance_model->leave_notification_employee($this->session->userdata('emp_id'));
+              $counts1 = $this->attendance_model->leave_notification_employee(session('emp_id'));
             }
     $sum1 = $counts1+$counts2+$counts3;
     $sum = $sum1+$sum2;
@@ -2405,16 +2405,16 @@ class PerformanceController extends Controller
   public function current_task_progress(Request $request)  {
 
     if(session('line') != 0 ){
-      $data['mytask'] = $this->performance_model->task_staff_current($this->session->userdata('emp_id'));
-      $data['othertask'] = $this->performance_model->task_line_manager_current($this->session->userdata('emp_id'));
-      $this->performance_model-> update_notification_task_line_manager($this->session->userdata('emp_id'));
+      $data['mytask'] = $this->performance_model->task_staff_current(session('emp_id'));
+      $data['othertask'] = $this->performance_model->task_line_manager_current(session('emp_id'));
+      $this->performance_model-> update_notification_task_line_manager(session('emp_id'));
       $data['active'] = 1; //Whether The Task is Active or Paused 
       $data['title'] = 'Task';
       $data['tag'] = "Current Task";
        return view('app.task', $data);
     } else {
-      $data['mytask'] = $this->performance_model->task_staff_current($this->session->userdata('emp_id'));
-      $this->performance_model-> update_notification_task_staff($this->session->userdata('emp_id'));
+      $data['mytask'] = $this->performance_model->task_staff_current(session('emp_id'));
+      $this->performance_model-> update_notification_task_staff(session('emp_id'));
       $data['active'] = 1; //Whether The Task is Active or Paused 
       $data['title'] = 'Task';
       $data['tag'] = "Current Task";
@@ -2423,7 +2423,7 @@ class PerformanceController extends Controller
   }
 
   public function strategy_dashboard(Request $request)  {
-    $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+    $strategyStatistics = $this->performance_model->strategy_info(session('current_strategy'));
     foreach ($strategyStatistics as $key) {
       $strategyID = $key->id;
       $strategyTitle = $key->title;
@@ -2434,8 +2434,8 @@ class PerformanceController extends Controller
     $data['appreciated'] =  $this->flexperformance_model->appreciated_employee();
     $data['summary'] =  $this->performance_model->highlights();
 
-    $data['taskline']= $this->performance_model->total_taskline($this->session->userdata('emp_id'));
-    $data['taskstaff']= $this->performance_model->total_taskstaff($this->session->userdata('emp_id'));
+    $data['taskline']= $this->performance_model->total_taskline(session('emp_id'));
+    $data['taskstaff']= $this->performance_model->total_taskstaff(session('emp_id'));
 
 
     // Redirect To HOME
@@ -2492,8 +2492,8 @@ class PerformanceController extends Controller
   //STRATEGY REPORTS
    
  function printDashboard(Request $request)  {
-  //$this->session->userdata('current_strateg') 
-     $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+  //session('current_strateg') 
+     $strategyStatistics = $this->performance_model->strategy_info(session('current_strategy'));
         foreach ($strategyStatistics as $key) {
           $strategyID = $key->id;
           $strategyTitle = $key->title;
@@ -2544,7 +2544,7 @@ class PerformanceController extends Controller
  }
    
  function outcome_report(Request $request)  {
-     $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+     $strategyStatistics = $this->performance_model->strategy_info(session('current_strategy'));
         foreach ($strategyStatistics as $key) {
           $strategyID = $key->id;
           $strategyTitle = $key->title;
@@ -2559,7 +2559,7 @@ class PerformanceController extends Controller
  }
    
  function output_report(Request $request)  {
-     $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+     $strategyStatistics = $this->performance_model->strategy_info(session('current_strategy'));
         foreach ($strategyStatistics as $key) {
           $strategyID = $key->id;
           $strategyTitle = $key->title;
@@ -2574,7 +2574,7 @@ class PerformanceController extends Controller
  }
    
  function task_report(Request $request)  {
-     $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+     $strategyStatistics = $this->performance_model->strategy_info(session('current_strategy'));
         foreach ($strategyStatistics as $key) {
           $strategyID = $key->id;
           $strategyTitle = $key->title;

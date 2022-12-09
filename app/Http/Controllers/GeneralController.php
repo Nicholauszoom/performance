@@ -364,7 +364,7 @@ class GeneralController extends Controller
              'parent_pattern' =>$parent_code,
              'reports_to' => $parent_id,
              'level' => $parent_level+1,
-             'created_by' =>$this->session->userdata('emp_id')
+             'created_by' =>session('emp_id')
         );
 
         $identifiers = $this->flexperformance_model->departmentAdd($departmentData);
@@ -1007,7 +1007,7 @@ public function activateDepartment(Request $request)
       $budgetID = $this->uri->segment(3);
       $data = array(
                'status' =>1,
-               'approved_by' =>$this->session->userdata('emp_id'),
+               'approved_by' =>session('emp_id'),
                'date_approved' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->updateBudget($data, $budgetID);
@@ -1023,7 +1023,7 @@ public function activateDepartment(Request $request)
       $budgetID = $this->uri->segment(3);
       $data = array(
                'status' =>2,
-               'approved_by' =>$this->session->userdata('emp_id'),
+               'approved_by' =>session('emp_id'),
                'date_approved' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->updateBudget($data, $budgetID);
@@ -1057,21 +1057,21 @@ public function activateDepartment(Request $request)
       $totalCost = $this->flexperformance_model->total_training_cost();
 
 
-      if($this->session->userdata('appr_training')!=0 &&session('conf_training')!=0 &&session('line')!=0) {
+      if(session('appr_training')!=0 &&session('conf_training')!=0 &&session('line')!=0) {
         $data['other_applications'] = $this->flexperformance_model->all_training_applications($empID);
 
-      }elseif ($this->session->userdata('appr_training')!=0 &&session('conf_training')!=0) {
+      }elseif (session('appr_training')!=0 &&session('conf_training')!=0) {
         $data['other_applications'] = $this->flexperformance_model->appr_conf_training_applications();
 
-      }elseif ($this->session->userdata('appr_training')!=0 &&session('line')!=0) {
+      }elseif (session('appr_training')!=0 &&session('line')!=0) {
         $data['other_applications'] = $this->flexperformance_model->appr_line_training_applications($empID);
-      }elseif ($this->session->userdata('conf_training')!=0 &&session('line')!=0) {
+      }elseif (session('conf_training')!=0 &&session('line')!=0) {
         $data['other_applications'] = $this->flexperformance_model->conf_line_training_applications($empID);
-      }elseif ($this->session->userdata('line')!=0) {
+      }elseif (session('line')!=0) {
         $data['other_applications'] = $this->flexperformance_model->line_training_applications($empID);
-      }elseif ($this->session->userdata('appr_training')!=0) {
+      }elseif (session('appr_training')!=0) {
         $data['other_applications'] = $this->flexperformance_model->appr_training_applications();
-      }elseif ($this->session->userdata('conf_training')!=0) {
+      }elseif (session('conf_training')!=0) {
         $data['other_applications'] = $this->flexperformance_model->conf_training_applications();
       }
 
@@ -1148,7 +1148,7 @@ public function activateDepartment(Request $request)
       $requestID = $this->uri->segment(3);
       $data = array(
                'status' =>1,
-               'recommended_by' =>$this->session->userdata('emp_id'),
+               'recommended_by' =>session('emp_id'),
                'date_recommended' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1164,7 +1164,7 @@ public function activateDepartment(Request $request)
       $requestID = $this->uri->segment(3);
       $data = array(
                'status' =>4, //Held or Suspended
-               'recommended_by' =>$this->session->userdata('emp_id'),
+               'recommended_by' =>session('emp_id'),
                'date_recommended' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1180,7 +1180,7 @@ public function activateDepartment(Request $request)
       $requestID = $this->uri->segment(3);
       $data = array(
                'status' =>3, //Held or Suspended
-               'approved_by' =>$this->session->userdata('emp_id'),
+               'approved_by' =>session('emp_id'),
                'date_approved' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1196,7 +1196,7 @@ public function activateDepartment(Request $request)
       $requestID = $this->uri->segment(3);
       $data = array(
                'status' =>5, //DisApproved
-               'approved_by' =>$this->session->userdata('emp_id'),
+               'approved_by' =>session('emp_id'),
                'date_approved' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
@@ -1212,7 +1212,7 @@ public function activateDepartment(Request $request)
       $requestID = $this->uri->segment(3);
       $data = array(
                'status' =>3, //Confirmed
-               'confirmed_by' =>$this->session->userdata('emp_id'),
+               'confirmed_by' =>session('emp_id'),
                'date_confirmed' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->confirmTrainingRequest($data, $requestID);
@@ -1228,7 +1228,7 @@ public function activateDepartment(Request $request)
       $requestID = $this->uri->segment(3);
       $data = array(
                'status' =>6, //DisApproved
-               'confirmed_by' =>$this->session->userdata('emp_id'),
+               'confirmed_by' =>session('emp_id'),
                'date_confirmed' => date('Y-m-d')
           );
         $result = $this->flexperformance_model->unconfirmTrainingRequest($data, $requestID);
@@ -1360,7 +1360,7 @@ public function activateDepartment(Request $request)
             'certificate' =>$data["file_name"],
             'status' =>1,
             'remarks' =>$remarks,
-            'accepted_by' =>$this->session->userdata('emp_id'),
+            'accepted_by' =>session('emp_id'),
             'date_accepted' =>date('Y-m-d')
         );
         $data_skills = array(
@@ -1453,7 +1453,7 @@ public function addAccountability(Request $request)
              'amount' => $request->input('amount'),
              'type' => $request->input('type'),
              'description' => $request->input('description'),
-             'created_by' =>$this->session->userdata('emp_id')
+             'created_by' =>session('emp_id')
         );
 
         } else {
@@ -1464,7 +1464,7 @@ public function addAccountability(Request $request)
                  'type' => $request->input('type'),
                  'description' => $request->input('description'),
                  'mandatory' => 0,
-                 'created_by' =>$this->session->userdata('emp_id')
+                 'created_by' =>session('emp_id')
             );
         }
 
@@ -1616,7 +1616,7 @@ public function addAccountability(Request $request)
                  'code' => strtoupper($request->input('code')),
                  'driving_licence' => $licence,
                  'minimum_qualification' => $request->input('qualification'),
-                 'created_by' =>$this->session->userdata('emp_id'),
+                 'created_by' =>session('emp_id'),
                  'position_code' =>$this->code_generator(6),
                  'parent_code' => $parent_code,
                  'level' => $level+1
@@ -1873,14 +1873,14 @@ public function activatePosition(Request $request)
   function overtime(Request $request)  {
 
     $data['title']="Overtime";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes($this->session->userdata('emp_id'));
+    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
     $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
-    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes($this->session->userdata('emp_id'));
+    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
-    // elseif ($this->session->userdata('line')!=0) {
-    //   $data['adv_overtime'] = $this->flexperformance_model->overtimesLinemanager($this->session->userdata('emp_id'));
+    // elseif (session('line')!=0) {
+    //   $data['adv_overtime'] = $this->flexperformance_model->overtimesLinemanager(session('emp_id'));
     // }
-    // elseif ($this->session->userdata('conf_overtime')!=0) {
+    // elseif (session('conf_overtime')!=0) {
     //   $data['adv_overtime'] = $this->flexperformance_model->overtimesHR();
     // }
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -1951,7 +1951,7 @@ public function activatePosition(Request $request)
         $data = array(
                  'status' =>5,
                  'time_confirmed_line' => date('Y-m-d h:i:s'),
-                 'linemanager' =>$this->session->userdata('emp_id')
+                 'linemanager' =>session('emp_id')
             );
           $this->flexperformance_model->update_overtime($data, $overtimeID);
           echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
@@ -1973,7 +1973,7 @@ public function activatePosition(Request $request)
    }
 
     public function approved_financial_payments(Request $request)  {
-       // if($this->session->userdata('mng_paym')||session('recom_paym')||$this->session->userdata('appr_paym')){
+       // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
             $data['overtime'] = $this->flexperformance_model->approvedOvertimes();
             $data['imprests'] = $this->imprest_model->confirmedImprests();
             //$data['arrears'] = $this->payroll_model->all_arrears();
@@ -2306,12 +2306,12 @@ public function activatePosition(Request $request)
 
   public function employee(Request $request)  {
 
-    // if($this->session->userdata('mng_emp')){
+    // if(session('mng_emp')){
     //     $data['employee'] = $this->flexperformance_model->employee();
-    //   } elseif($this->session->userdata('mng_emp') ){
+    //   } elseif(session('mng_emp') ){
         $data['employee'] = $this->flexperformance_model->employee();
-      /*}elseif($this->session->userdata('mng_emp')){
-        $data['employee'] = $this->flexperformance_model->employeelinemanager($this->session->userdata('emp_id'));
+      /*}elseif(session('mng_emp')){
+        $data['employee'] = $this->flexperformance_model->employeelinemanager(session('emp_id'));
       }*/
 
     $data['title']="Employee";
@@ -2499,7 +2499,7 @@ public function updateLevel(Request $request) {
         'empID' =>$empID,
         'parameter' =>'Position',
         'parameterID' =>2,
-        'recommended_by' =>$this->session->userdata('emp_id'),
+        'recommended_by' =>session('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
         'old' =>$request->input('old'),
@@ -2524,7 +2524,7 @@ public function updateLevel(Request $request) {
         'empID' =>$empID,
         'parameter' =>'Branch',
         'parameterID' =>4,
-        'recommended_by' =>$this->session->userdata('emp_id'),
+        'recommended_by' =>session('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
         'old' =>$request->input('old'),
@@ -2579,7 +2579,7 @@ public function updateLevel(Request $request) {
         'empID' =>$empID,
         'parameter' =>'Department',
         'parameterID' =>3,
-        'recommended_by' =>$this->session->userdata('emp_id'),
+        'recommended_by' =>session('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
         'old' =>$request->input('oldDepartment'),
@@ -2616,7 +2616,7 @@ public function updateLevel(Request $request) {
         'last_updated' =>date('Y-m-d')
       );
       $transferUpdates = array(
-        'approved_by' =>$this->session->userdata('emp_id'),
+        'approved_by' =>session('emp_id'),
         'status' =>1,
         'date_approved' =>date('Y-m-d')
       );
@@ -2642,7 +2642,7 @@ public function updateLevel(Request $request) {
         'last_updated' =>date('Y-m-d')
       );
       $transferUpdates = array(
-        'approved_by' =>$this->session->userdata('emp_id'),
+        'approved_by' =>session('emp_id'),
         'status' =>1,
         'date_approved' =>date('Y-m-d')
       );
@@ -2668,7 +2668,7 @@ public function updateLevel(Request $request) {
         'last_updated' =>date('Y-m-d')
       );
       $transferUpdates = array(
-        'approved_by' =>$this->session->userdata('emp_id'),
+        'approved_by' =>session('emp_id'),
         'status' =>1,
         'date_approved' =>date('Y-m-d')
       );
@@ -2704,7 +2704,7 @@ public function updateLevel(Request $request) {
         'empID' =>$empID,
         'parameter' =>'Salary',
         'parameterID' =>1,
-        'recommended_by' =>$this->session->userdata('emp_id'),
+        'recommended_by' =>session('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
         'old' =>$request->input('old'),
@@ -2995,7 +2995,7 @@ public function updateLevel(Request $request) {
 
   public function transfers(Request $request) {
     // $data['leave'] =  $this->attendance_model->leavereport();
-      if($this->session->userdata('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
+      if(session('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
           $data['transfers'] =  $this->flexperformance_model->employeeTransfers();
           $data['title']="Transfers";
           return view('app.transfer', $data);
@@ -3013,21 +3013,21 @@ public function updateLevel(Request $request) {
    public function salary_advance(Request $request)   {
 
       // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
-           $data['myloan'] = $this->flexperformance_model->mysalary_advance($this->session->userdata('emp_id'));
+           $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
 
-           // if($this->session->userdata('recom_loan')!='' &&session('appr_loan')){
+           // if(session('recom_loan')!='' &&session('appr_loan')){
 
            $data['otherloan'] = $this->flexperformance_model->salary_advance();
 
-           // } elseif ($this->session->userdata('recom_loan')!=''){
+           // } elseif (session('recom_loan')!=''){
            //     $data['otherloan'] = $this->flexperformance_model->hr_fin_salary_advance();
            // }
-           // elseif ($this->session->userdata('appr_loan')!=''){
+           // elseif (session('appr_loan')!=''){
            //     $data['otherloan'] = $this->flexperformance_model->fin_salary_advance();
            // }
 
            $data['employee'] =  $this->flexperformance_model->customemployee();
-           $data['max_amount'] =  $this->flexperformance_model->get_max_salary_advance($this->session->userdata('emp_id'));
+           $data['max_amount'] =  $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
            $data['title']="Loans and Salaries";
            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
            return view('app.salary_advance', $data);
@@ -3039,21 +3039,21 @@ public function updateLevel(Request $request) {
 
 
   public function current_loan_progress(Request $request)  {
-    $data['max_amount'] =  $this->flexperformance_model->get_max_salary_advance($this->session->userdata('emp_id'));
-      $data['myloan'] = $this->flexperformance_model->mysalary_advance_current($this->session->userdata('emp_id'));
+    $data['max_amount'] =  $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
+      $data['myloan'] = $this->flexperformance_model->mysalary_advance_current(session('emp_id'));
 
-      $this->flexperformance_model-> update_salary_advance_notification_staff($this->session->userdata('emp_id'));
+      $this->flexperformance_model-> update_salary_advance_notification_staff(session('emp_id'));
 
 
-      if($this->session->userdata('recom_loan')!='' &&session('appr_loan')!='' ){
+      if(session('recom_loan')!='' &&session('appr_loan')!='' ){
           $data['otherloan'] = $this->flexperformance_model->hr_fin_salary_advance_current();
-          $this->flexperformance_model-> update_salary_advance_notification_hr_fin($this->session->userdata('emp_id'));
+          $this->flexperformance_model-> update_salary_advance_notification_hr_fin(session('emp_id'));
 
-      } elseif ($this->session->userdata('recom_loan')!=''){
+      } elseif (session('recom_loan')!=''){
           $data['otherloan'] = $this->flexperformance_model->hr_salary_advance_current();
           $this->flexperformance_model-> update_salary_advance_notification_hr();
 
-      }  elseif ($this->session->userdata('appr_loan')!=''){
+      }  elseif (session('appr_loan')!=''){
           $data['otherloan'] = $this->flexperformance_model->fin_salary_advance_current();
           $this->flexperformance_model-> update_salary_advance_notification_fin();
 
@@ -3084,7 +3084,7 @@ public function updateLevel(Request $request) {
         }
 
          $data = array(
-              'empID' =>$this->session->userdata('emp_id'),
+              'empID' =>session('emp_id'),
               'amount' =>$amount,
               'deduction_amount' =>$deduction_amount,
               'type' =>1,
@@ -3124,7 +3124,7 @@ public function updateLevel(Request $request) {
                 'empID' =>$request->input("employee"),
                 'amount' =>$request->input("amount"),
                 'deduction_amount' =>$deduction,
-                'approved_hr' =>$this->session->userdata('emp_id'),
+                'approved_hr' =>session('emp_id'),
                 'status' =>0,
                 'notification' =>3,
                 'approved_date_hr' => date('Y-m-d'),
@@ -3149,7 +3149,7 @@ public function updateLevel(Request $request) {
       $empID =session('emp_id');
 
       $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
-      if($this->session->userdata('appr_loan')!=''){
+      if(session('appr_loan')!=''){
         $data['other_loans'] = $this->flexperformance_model->all_confirmedloan();
       }
       $data['title']="Loan";
@@ -3225,7 +3225,7 @@ public function updateLevel(Request $request) {
         $data = array(
 
                  'approved_date_finance' =>date('Y-m-d'),
-                 'approved_finance' =>$this->session->userdata('emp_id'),
+                 'approved_finance' =>session('emp_id'),
                  'status' =>1,
                 'notification' =>3,
             );
@@ -3243,7 +3243,7 @@ public function updateLevel(Request $request) {
      $data = array(
 
               'approved_date_hr' =>date('Y-m-d'),
-              'approved_hr' =>$this->session->userdata('emp_id'),
+              'approved_hr' =>session('emp_id'),
               'status' =>6,
              'notification' =>3,
          );
@@ -3345,12 +3345,12 @@ public function updateLevel(Request $request) {
       return view('app.loan_application_remarks', $data);
 
       if (isset($_POST['add'])) {
-        if ($this->session->userdata('recomloan')!=0) {
+        if (session('recomloan')!=0) {
               $data2 = array(
             'reason_hr' =>$request->input("remarks")
             );
             }
-            elseif ($this->session->userdata('appr_loan')!=0) {
+            elseif (session('appr_loan')!=0) {
               $data2 = array(
             'reason_finance' =>$request->input("remarks")
             );
@@ -3397,7 +3397,7 @@ public function updateLevel(Request $request) {
     public function financial_reports(Request $request)
       {
     //
-         // if($this->session->userdata('mng_paym')||session('recom_paym')||$this->session->userdata('appr_paym')){
+         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
               $data['month_list'] = $this->flexperformance_model->payroll_month_list();
               $data['year_list'] = $this->flexperformance_model->payroll_year_list();
               $title="Financial Reports";
@@ -3415,7 +3415,7 @@ public function updateLevel(Request $request) {
 
     public function organisation_reports()
     {
-        if($this->session->userdata('mng_paym')||session('recom_paym')||$this->session->userdata('appr_paym')){
+        if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
@@ -3446,7 +3446,7 @@ public function updateLevel(Request $request) {
    }
 
   public function home(Request $request) {
-    $strategyStatistics = $this->performanceModel->strategy_info($this->session->userdata('current_strategy'));
+    $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy'));
     $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
       $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
@@ -3473,8 +3473,8 @@ public function updateLevel(Request $request) {
     $data["strategyProgress"] = $strategyProgress;
     $data["monthly"] = $rate_per_month;
 
-    $data['taskline']= $this->performanceModel->total_taskline($this->session->userdata('emp_id'));
-    $data['taskstaff']= $this->performanceModel->total_taskstaff($this->session->userdata('emp_id'));
+    $data['taskline']= $this->performanceModel->total_taskline(session('emp_id'));
+    $data['taskstaff']= $this->performanceModel->total_taskstaff(session('emp_id'));
 
 
     $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
@@ -3501,7 +3501,7 @@ public function updateLevel(Request $request) {
     $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month,'');
     $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
-    if($this->session->userdata('password_set') =="1"){
+    if(session('password_set') =="1"){
       $this->login_info();
     }else{
 
@@ -3630,7 +3630,7 @@ function subdropFetcher(Request $request)  {
                       'prop_type' =>$type,
                       'prop_name' =>$request->input("name"),
                       'serial_no' =>$request->input("serial"),
-                      'given_by' =>$this->session->userdata('emp_id'),
+                      'given_by' =>session('emp_id'),
                       'given_to' =>$request->input("employee")
                 );
 
@@ -3651,7 +3651,7 @@ function subdropFetcher(Request $request)  {
               $datalog = array(
                   'state' =>0,
                   'empID' =>$empID,
-                  'author' =>$this->session->userdata('emp_id')
+                  'author' =>session('emp_id')
               );
 
                 $this->flexperformance_model->employeestatelog($datalog);
@@ -3694,7 +3694,7 @@ function subdropFetcher(Request $request)  {
           $data = array(
               'empID' =>$request->input("empID"),
               'initiator' =>$request->input("initiator"),
-              'confirmed_by' =>$this->session->userdata('emp_id'),
+              'confirmed_by' =>session('emp_id'),
               'date_confirmed' =>date('Y-m-d'),
               'reason' =>$request->input("reason"),
               'exit_date' => date('Y-m-d',strtotime($exit_date))
@@ -3703,7 +3703,7 @@ function subdropFetcher(Request $request)  {
           $datalog = array(
               'state' =>3,
               'empID' =>$request->input("empID"),
-              'author' =>$this->session->userdata('emp_id')
+              'author' =>session('emp_id')
           );
 //          echo json_encode($data);
 
@@ -3724,7 +3724,7 @@ function subdropFetcher(Request $request)  {
         $datalog = array(
           'state' =>1,
           'empID' =>$empID,
-          'author' =>$this->session->userdata('emp_id')
+          'author' =>session('emp_id')
         );
         $result = $this->flexperformance_model->updateemployeestatelog($datalog,$empID);
         if($result ==true){
@@ -3782,7 +3782,7 @@ function subdropFetcher(Request $request)  {
               'prop_type' =>"Employee Package",
               'prop_name' =>"Employee ID, Health Insuarance Card Email and System Access",
               'serial_no' =>$empID,
-              'given_by' =>$this->session->userdata('emp_id'),
+              'given_by' =>session('emp_id'),
               'given_to' =>$empID
         );
         $datagroup = array(
@@ -3794,7 +3794,7 @@ function subdropFetcher(Request $request)  {
           'state' =>1,
           'current_state' =>1,
           'empID' =>$empID,
-          'author' =>$this->session->userdata('emp_id')
+          'author' =>session('emp_id')
           );
 
 
@@ -3827,7 +3827,7 @@ function subdropFetcher(Request $request)  {
           'state' =>4,
           'current_state' =>4,
           'empID' =>$empID,
-          'author' =>$this->session->userdata('emp_id')
+          'author' =>session('emp_id')
           );
 //        echo json_encode($datalog);
 
@@ -3856,7 +3856,7 @@ function subdropFetcher(Request $request)  {
     }
 
    public function inactive_employee(Request $request) {
-       if($this->session->userdata('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
+       if(session('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
            $data['employee1'] = $this->flexperformance_model->inactive_employee1();
            $data['employee2'] = $this->flexperformance_model->inactive_employee2();
 
@@ -4989,7 +4989,7 @@ public function deleteBonus(Request $request)
       if(isset($_POST['addrole'])){
         $data = array(
              'name' => $request->input('name'),
-             'created_by' =>$this->session->userdata('emp_id')
+             'created_by' =>session('emp_id')
         );
 
         $result = $this->flexperformance_model->addrole($data);
@@ -5007,7 +5007,7 @@ public function deleteBonus(Request $request)
         $data = array(
              'name' => $request->input('name'),
              'type' => $request->input('type'),
-             'created_by' =>$this->session->userdata('emp_id')
+             'created_by' =>session('emp_id')
         );
 
         $this->flexperformance_model->addgroup($data);
@@ -5570,7 +5570,7 @@ public function updateCompanyName(Request $request) {
    }
 
  function addEmployee(Request $request)  {
-     if($this->session->userdata('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
+     if(session('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
          $data['pdrop'] = $this->flexperformance_model->positiondropdown();
          $data['contract'] = $this->flexperformance_model->contractdrop();
          $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
@@ -5753,7 +5753,7 @@ function password_generator($size){
                 'prop_type' =>"Employee Package",
                 'prop_name' =>"Employee ID, Health Insuarance Card, Email Address and System Access",
                 'serial_no' =>$empID,
-                'given_by' =>$this->session->userdata('emp_id'),
+                'given_by' =>session('emp_id'),
                 'given_to' =>$empID
           );
           $datagroup = array(
@@ -6003,7 +6003,7 @@ function password_generator($size){
       $empID =session('emp_id');
       $data['title'] =  'Grievances and Disciplinary';
       $data['my_grievances'] =  $this->flexperformance_model->my_grievances($empID);
-      //if($this->session->userdata('griev_hr')!=''){
+      //if(session('griev_hr')!=''){
         $data['other_grievances'] =  $this->flexperformance_model->all_grievances();
       //}
       return view('app.grievances', $data);
@@ -6029,7 +6029,7 @@ function password_generator($size){
           $data = array(
             'title' =>$request->input("title"),
             'description' =>$request->input("description"),
-            'empID' =>$this->session->userdata('emp_id'),
+            'empID' =>session('emp_id'),
             'anonymous' => 1,
             'attachment' =>$path.$data["file_name"],
             'forwarded' => 1
@@ -6039,7 +6039,7 @@ function password_generator($size){
           $data = array(
             'title' =>$request->input("title"),
             'description' =>$request->input("description"),
-            'empID' =>$this->session->userdata('emp_id'),
+            'empID' =>session('emp_id'),
             'attachment' =>$path.$data["file_name"]
             );
 
@@ -6059,7 +6059,7 @@ function password_generator($size){
           $data = array(
             'title' =>$request->input("title"),
             'description' =>$request->input("description"),
-            'empID' =>$this->session->userdata('emp_id'),
+            'empID' =>session('emp_id'),
             'attachment' =>"N/A",
             'anonymous' => 1,
             'forwarded' => 1
@@ -6072,7 +6072,7 @@ function password_generator($size){
           $data = array(
             'title' =>$request->input("title"),
             'description' =>$request->input("description"),
-            'empID' =>$this->session->userdata('emp_id'),
+            'empID' =>session('emp_id'),
             'attachment' =>"N/A",
             );
 
