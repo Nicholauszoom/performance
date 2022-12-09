@@ -4388,13 +4388,8 @@ public function common_deductions_info() {
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
-<<<<<<< HEAD
       return view('app.allowance_overtime', $data);
       
-=======
-      $this->load->view('allowance_overtime', $data);
-
->>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
     }else{
       echo "Unauthorized Access";
     }
@@ -4416,13 +4411,8 @@ public function common_deductions_info() {
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
       $data['title']="Statutory Deductions";
-<<<<<<< HEAD
       return view('app.statutory_deduction', $data);
       
-=======
-      $this->load->view('statutory_deduction', $data);
-
->>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
     }else{
       echo "Unauthorized Access";
     }
@@ -4439,13 +4429,8 @@ public function common_deductions_info() {
     $data['meals'] = $this->flexperformance_model->meals_deduction();
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
     $data['title']="Non-Statutory Deductions";
-<<<<<<< HEAD
     return view('app.non_statutory_deductions', $data);
     
-=======
-    $this->load->view('non_statutory_deductions', $data);
-
->>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
   }else{
     echo "Unauthorized Access";
   }
@@ -5747,15 +5732,9 @@ function password_generator($size){
             'tin' =>$request->input("tin"),
 
       );
-<<<<<<< HEAD
       $empName = $request->input("fname") .' '.$request->input("mname").' '.$request->input("lname");  
       
       
-=======
-      $empName = $this->input->post("fname") .' '.$this->input->post("mname").' '.$this->input->post("lname");
-
-
->>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
       $recordID = $this->flexperformance_model->employeeAdd($employee);
 
         if($recordID > 0){
@@ -5815,15 +5794,9 @@ function password_generator($size){
     //     $mail->setFrom($senderEmail, $senderName);
 
     //     // Add a recipient
-<<<<<<< HEAD
     //     $mail->addAddress($request->input("email"));
         
         
-=======
-    //     $mail->addAddress($this->input->post("email"));
-
-
->>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
     //     // Email subject
     //     $mail->Subject = "VSO User Credentials";
 
