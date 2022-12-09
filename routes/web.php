@@ -88,9 +88,6 @@ Route::middleware('auth')->group(function () {
 
     //route for payroll
     Route::group(['prefix' => 'payroll'], function () {
-        Route::any('payroll', [PayrollController::class, 'payroll'])->name('payroll');
-        Route::any('payslip', [PayrollController::class, 'payslip'])->name('payslip');
-        Route::any('incentives', [PayrollController::class, 'incentives'])->name('incentives');
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
     });
 });
