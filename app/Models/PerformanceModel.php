@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 class PerformanceModel extends Model
@@ -560,9 +561,9 @@ function strategies()
 
     function strategy_info($id)
 	{
-		$query = $this->db->query("SELECT @s:=@s+1 as SNo, s.* FROM strategy s,  (SELECT @s:=0) as s WHERE s.id = ".$id."") ;
+		$query = "SELECT @s:=@s+1 as SNo, s.* FROM strategy s,  (SELECT @s:=0) as s WHERE s.id = ".$id."" ;
 
-		return $query->result();
+		return DB::select(DB::raw($query));
 	}
 
 

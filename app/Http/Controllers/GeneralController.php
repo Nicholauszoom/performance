@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 //use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\CustomModels\PayrollModel;
-use App\CustomModels\flexFerformanceModel;
-use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
@@ -18,61 +15,61 @@ use App\Models\PerformanceModel;
 class GeneralController extends Controller
 {
 
-    public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null,$imprest_model = null, PerformanceModel $performanceModel)
+
+    public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
-        $this->payroll_model = new Payroll();
-        $this->imprest_model = new ImprestModel;
-        $this->reports_model = new ReportModel;
-        $this->flexperformance_model = new FlexPerformanceModel;
+        $this->payroll_model =  $payroll_model;
+        $this->imprest_model =  $imprest_model;
+        $this->reports_model =  $reports_model;
+        $this->flexperformance_model =  $flexperformance_model;
         $this->performanceModel = $performanceModel;
-
     }
 
-   public function index()
-      {
-      $list = $this->flexperformance_model->contract_expire_list();
-      foreach($list as $key){
+//    public function index()
+//       {
+//       $list = $this->flexperformance_model->contract_expire_list();
+//       foreach($list as $key){
 
-      $this->flexperformance_model->terminate_contract($key->IDs);
-      }
-    $data['title']="Login";
-    return view('app.login', $data);
-   }
-
-
-
-  public function password_check($str)
-  {
-     if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
-       return TRUE;
-     }
-     $this->form_validation->set_message('password_check', 'The Password Should Contain 8 Characters Length with Mix of Letters and Numbers');
-     return FALSE;
-  }
+//       $this->flexperformance_model->terminate_contract($key->IDs);
+//       }
+//     $data['title']="Login";
+//     return view('app.login', $data);
+//    }
 
 
-  public function login_info() {
 
-    $empID = $this->session->userdata('emp_id');
-    $data['info'] = $this->flexperformance_model->login_info($empID);
-    $data['title'] = "Login Credentials";
-    return view('app.update_login_info', $data);
-  }
+//   public function password_check($str)
+//   {
+//      if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
+//        return TRUE;
+//      }
+//      $this->form_validation->set_message('password_check', 'The Password Should Contain 8 Characters Length with Mix of Letters and Numbers');
+//      return FALSE;
+//   }
 
 
-  function checkPassword($password){
-    $uppercase = preg_match('@[A-Z]@', $password);
-    $lowercase = preg_match('@[a-z]@', $password);
-    $number    = preg_match('@[0-9]@', $password);
-    $specialChars = preg_match('@[^\w]@', $password);
-    $res = false;
-    if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-      $res = false;
-      }else{
-        $res = true;
-    }
-    return $res;
-}
+//   public function login_info() {
+
+//     $empID = $this->session->userdata('emp_id');
+//     $data['info'] = $this->flexperformance_model->login_info($empID);
+//     $data['title'] = "Login Credentials";
+//     return view('app.update_login_info', $data);
+//   }
+
+
+//   function checkPassword($password){
+//     $uppercase = preg_match('@[A-Z]@', $password);
+//     $lowercase = preg_match('@[a-z]@', $password);
+//     $number    = preg_match('@[0-9]@', $password);
+//     $specialChars = preg_match('@[^\w]@', $password);
+//     $res = false;
+//     if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+//       $res = false;
+//       }else{
+//         $res = true;
+//     }
+//     return $res;
+// }
 
 
  public function update_login_info() {
@@ -3448,27 +3445,28 @@ public function updateLevel() {
 
    }
 
-  public function home() {
-    $strategyStatistics = $this->performanceModel->strategy_info($this->session->userdata('current_strategy'));
-    $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+    public function home() {
+      $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy'));
+      $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
-  $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
-  $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+      $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
+      $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-    foreach ($strategyStatistics as $key) {
-      $strategyID = $key->id;
-      $strategyTitle = $key->title;
-      $start = date_create($key->start);
-    }
-    $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
+      foreach ($strategyStatistics as $key) {
+        $strategyID = $key->id;
+        $strategyTitle = $key->title;
+        $start = date_create($key->start);
+      }
 
-    $current = date_create(date('Y-m-d'));
-    $diff=date_diff($start, $current);
-    $required = $diff->format("%a");
-    $months = number_format(($required/30.5), 4);
-    $rate_per_month = number_format(($strategyProgress/ $months), 1);
+      $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
 
-    $data['appreciated'] =  $this->flexperformance_model->appreciated_employee();
+      $current = date_create(date('Y-m-d'));
+      $diff=date_diff($start, $current);
+      $required = $diff->format("%a");
+      $months = number_format(($required/30.5), 4);
+      $rate_per_month = number_format(($strategyProgress/ $months), 1);
+
+      $data['appreciated'] =  $this->flexperformance_model->appreciated_employee();
 
     // $data['employee_count'] =  $this->flexperformance_model->count_employees();
     $data['overview'] =  $this->flexperformance_model->employees_info();
@@ -3624,7 +3622,7 @@ function subdropFetcher(){
         if($request->input("type") != 'Others'){
         // $id = $request->input('id');
           $type = $request->input("type");
-        
+
         }
         else { $type = $request->input("type2"); }
 
@@ -4389,7 +4387,7 @@ public function common_deductions_info() {
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
       return view('app.allowance_overtime', $data);
-      
+
     }else{
       echo "Unauthorized Access";
     }
@@ -4412,7 +4410,7 @@ public function common_deductions_info() {
 
       $data['title']="Statutory Deductions";
       return view('app.statutory_deduction', $data);
-      
+
     }else{
       echo "Unauthorized Access";
     }
@@ -4430,7 +4428,7 @@ public function common_deductions_info() {
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
     $data['title']="Non-Statutory Deductions";
     return view('app.non_statutory_deductions', $data);
-    
+
   }else{
     echo "Unauthorized Access";
   }
@@ -5732,9 +5730,9 @@ function password_generator($size){
             'tin' =>$request->input("tin"),
 
       );
-      $empName = $request->input("fname") .' '.$request->input("mname").' '.$request->input("lname");  
-      
-      
+      $empName = $request->input("fname") .' '.$request->input("mname").' '.$request->input("lname");
+
+
       $recordID = $this->flexperformance_model->employeeAdd($employee);
 
         if($recordID > 0){
@@ -5795,8 +5793,8 @@ function password_generator($size){
 
     //     // Add a recipient
     //     $mail->addAddress($request->input("email"));
-        
-        
+
+
     //     // Email subject
     //     $mail->Subject = "VSO User Credentials";
 
