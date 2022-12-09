@@ -15,7 +15,7 @@ use App\Helpers\SysHelper;
 
 class BaseController extends Controller {
 
-    // function __construct() {
+    // function __construct(Request $request) {
 	  //   parent::__construct();
 	   
     //   $this->load->model('flexperformance_model');
@@ -79,7 +79,7 @@ class BaseController extends Controller {
     }
 
 
-    function index(){
+    function index(Request $request)  {
 
 
       if(strlen('')>0){
@@ -204,7 +204,7 @@ class BaseController extends Controller {
 
 
 
-     function login() {
+     function login(Request $request) {
       $this->load->library('form_validation');
       $this->form_validation->set_rules("username", "Userame", 'required');
       $this->form_validation->set_rules("password", "Password", 'required');
@@ -270,7 +270,7 @@ class BaseController extends Controller {
             $this->flexperformance_model->updateEmployee($updates, $data['emp_id']);    
             $this->getPermissions();
           } else {
-            $this->session->set_flashdata('note', 'Invalid username or Password');
+            session('note', 'Invalid username or Password');
             
             $data['title'] = "Login";
             $this->load->view("login", $data);    
@@ -289,7 +289,7 @@ class BaseController extends Controller {
    }
 
 
-   public function register_submit(){
+   public function register_submit(Request $request)  {
     $this->form_validation->set_rules("username", "Userame", 'required');
     $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]|max_length[30]');
     $this->form_validation->set_rules('password_conf', 'Password Confirmation', 'trim|required|matches[password]');
@@ -306,11 +306,11 @@ class BaseController extends Controller {
         );
 
       if ($this->flexperformance_model->updateEmployee($data, $id)) {
-        $this->session->set_flashdata('note', "<p><font color = 'green'>Employee Credentials Updated Successifully</font></p>");
+        session('note', "<p><font color = 'green'>Employee Credentials Updated Successifully</font></p>");
         $data['title'] = "Register";
          return view('app.register', $data); 
     } else {
-        $this->session->set_flashdata('note', "<p><font color = 'red'>Employee Credentials Not Updated Successifully</font></p>");
+        session('note', "<p><font color = 'red'>Employee Credentials Not Updated Successifully</font></p>");
         $data['title'] = "Register";
          return view('app.register', $data); 
     }
@@ -321,9 +321,9 @@ class BaseController extends Controller {
     }
   }
 
-  public function getPermissions()  {
-    $id = $this->session->userdata('emp_id');
-    $empID = $this->session->userdata('emp_id');
+  public function getPermissions(Request $request)  {
+    $id =session('emp_id');
+    $empID =session('emp_id');
 
     // NEW ROLES AND PERMISSION;
     $this->session->set_userdata('vw_emp_sum', $this->flexperformance_model->getpermission($empID, '0'));
@@ -366,7 +366,7 @@ class BaseController extends Controller {
     $this->session->set_userdata('current_strategy', $defaultStrategy);
 
     $logData = array(
-       'empID' => $this->session->userdata('emp_id'),
+       'empID' =>session('emp_id'),
        'description' => "Logged In",
        'agent' =>$this->session->userdata('agent'),
        'platform' =>$this->agent->platform(),
@@ -388,7 +388,7 @@ class BaseController extends Controller {
      return view('app.reset_password', $data);
    }
 
-   public function resetPassword(){
+   public function resetPassword(Request $request)  {
 
     if (Request::isMethod('post')&& $request->input('email')!='') {
       $this->load->model('payroll_model');      
@@ -462,7 +462,7 @@ class BaseController extends Controller {
 
         if(!$mail->send()){
             
-            $this->session->set_flashdata("note", "<p><font color='red'>Password Reset Has Failed, Please contact Your System Admin</font></p>");
+            session("note", "<p><font color='red'>Password Reset Has Failed, Please contact Your System Admin</font></p>");
         }else{
           $result = $this->flexperformance_model->updateEmployee($updates, $empID);
           if ($result == true) {
@@ -475,16 +475,16 @@ class BaseController extends Controller {
            ); 
        
            $result = $this->flexperformance_model->insertAuditLog($logData);
-            $this->session->set_flashdata("note", "<p><font color='green'>Password Has been Reset  Successfully, Check Your Email to view the new Login Credentials</font></p>");
+            session("note", "<p><font color='green'>Password Has been Reset  Successfully, Check Your Email to view the new Login Credentials</font></p>");
             
           } else {
             
-            $this->session->set_flashdata("note", "<p><font color='red'>Password Reset Has Failed, Please contact Your System Admin</font></p>");
+            session("note", "<p><font color='red'>Password Reset Has Failed, Please contact Your System Admin</font></p>");
 
           }
         }
       } else {
-        $this->session->set_flashdata("note","<p><font color='red'>Sorry No Employee With This Email, Please Contact Your System Admin</font></p>");
+        session("note","<p><font color='red'>Sorry No Employee With This Email, Please Contact Your System Admin</font></p>");
       }
                  
         
@@ -507,10 +507,10 @@ class BaseController extends Controller {
     return $result; 
   }
 
-  public function logout(){
+  public function logout(Request $request)  {
     
     $logData = array(
-      'empID' => $this->session->userdata('emp_id'),
+      'empID' =>session('emp_id'),
       'description' => "Logged out",
       'agent' =>$this->session->userdata('agent'),
       'platform' =>$this->agent->platform(),

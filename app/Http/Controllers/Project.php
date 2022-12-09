@@ -1,7 +1,7 @@
 <?php
 class Project extends CI_Controller { 
 
-  public function __construct() {
+  public function __construct(Request $request) {
     parent::__construct();
 
     $this->load->model('flexperformance_model');
@@ -17,14 +17,14 @@ class Project extends CI_Controller {
     date_default_timezone_set('Africa/Dar_es_Salaam');    
 
     if ($this->session->userdata('emp_id')==''){
-        $this->session->set_flashdata('error', 'Sorry! You Have to Login Before any Attempt');
+        session('error', 'Sorry! You Have to Login Before any Attempt');
         redirect(base_url()."index.php/base_controller/",'refresh');      
     }
 
   }
 
-  public function index() {
-    if($this->session->userdata('vw_proj') || $this->session->userdata('mng_proj')){
+  public function index(Request $request) {
+    if($this->session->userdata('vw_proj') ||session('mng_proj')){
       
      
       $data['projects'] = $this->project_model->allProjects();
@@ -63,12 +63,12 @@ class Project extends CI_Controller {
      return view('app.project', $data);     
   }
 
-  public function employeeTotalPercentAllocation(){
+  public function employeeTotalPercentAllocation(Request $request)  {
       $data = $this->project_model->employeeAllocationPercentage($request->input("projectCode"));
       echo json_encode($data);
   }
 
-    public function employeeRellocation(){
+    public function employeeRellocation(Request $request)  {
         if ($_POST) {
             header('Content-type: application/json');
             if (strtoupper(trim($request->input('percent'))) == 0){
@@ -136,7 +136,7 @@ class Project extends CI_Controller {
 
     }
 
-  public function fetchActivity(){
+  public function fetchActivity(Request $request)  {
     if(!empty($request->input("projectCode"))){
     $activities = $this->project_model->fetchActivities($request->input("projectCode"));
     
@@ -149,7 +149,7 @@ class Project extends CI_Controller {
     }    
    }
 
-  public function fetchGrant(){
+  public function fetchGrant(Request $request)  {
     if(!empty($request->input("activityCode"))){
     $grants = $this->project_model->fetchGrants($request->input("activityCode"));
     
@@ -163,7 +163,7 @@ class Project extends CI_Controller {
     
    }
 
-    public function fetchEmployee(){
+    public function fetchEmployee(Request $request)  {
         if(!empty($request->input("activityCode"))){
             $employees = $this->project_model->fetchActivityEmployee($request->input("activityCode"));
             echo json_encode($employees);
@@ -171,7 +171,7 @@ class Project extends CI_Controller {
 
     }
 
-  public function newProject() {
+  public function newProject(Request $request) {
     $data['action'] = 0; // O For Addition, 1 For Info and Update
     $data['segments'] = $this->performance_model->getProjectSegment();
     $data['funders'] = $this->performance_model->getFunders();
@@ -181,7 +181,7 @@ class Project extends CI_Controller {
   } 
 
 
-  public function addProject() {    
+  public function addProject(Request $request) {    
     if ($_POST) {
         if ($request->input('start_date') != ''){
             $start_date = date('Y-m-d',strtotime(str_replace('/', '-', $request->input('start_date'))));
@@ -240,7 +240,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function evaluateEmployee(){
+  public function evaluateEmployee(Request $request)  {
     $pattern = $request->input('id');
     $values = explode('|', $pattern);
     $empID = $values[0];
@@ -259,7 +259,7 @@ class Project extends CI_Controller {
      return view('app.employee_evaluation', $data);
 
   }
-  public function addEvaluationResults(){
+  public function addEvaluationResults(Request $request)  {
     $pattern = $request->input('id');
     $values = explode('|', $pattern);
     $empID = $values[0];
@@ -280,7 +280,7 @@ class Project extends CI_Controller {
      return view('app.employee_evaluation_result', $data);
   }
 
-  public function printPerformance(){
+  public function printPerformance(Request $request)  {
     $id = $request->input('id');
  
     $data['basic_info'] = $this->project_model->getEmpInfoById($id);
@@ -296,7 +296,7 @@ class Project extends CI_Controller {
      return view('app.reports/performance_report', $data);
   }
 
-  public function saveActivityResult() {    
+  public function saveActivityResult(Request $request) {    
     if ($_POST) {
         if ($request->input('start_date') != ''){
             $start_date = date('Y-m-d',strtotime(str_replace('/', '-', $request->input('start_date'))));
@@ -376,7 +376,7 @@ class Project extends CI_Controller {
     }
   }
   
-  public function saveActivity() {    
+  public function saveActivity(Request $request) {    
     if ($_POST) {
         if ($request->input('start_date') != ''){
             $start_date = date('Y-m-d',strtotime(str_replace('/', '-', $request->input('start_date'))));
@@ -434,7 +434,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function saveDeliverable() {    
+  public function saveDeliverable(Request $request) {    
     if ($_POST) {
         if ($request->input('start_date') != ''){
             $start_date = date('Y-m-d',strtotime(str_replace('/', '-', $request->input('start_date'))));
@@ -492,7 +492,7 @@ class Project extends CI_Controller {
     }
   }
 
-    public function updateProject() {
+    public function updateProject(Request $request) {
         if ($_POST) {
             if ($request->input('start_date') != ''){
                 $start_date = date('Y-m-d',strtotime(str_replace('/', '-', $request->input('start_date'))));
@@ -564,7 +564,7 @@ class Project extends CI_Controller {
             }
         }
     }
-    public function editProject() {
+    public function editProject(Request $request) {
       $projectId = base64_decode($this->input->get('code'));
   
       $data['action'] = 1; // O For Addition, 1 For Info and Update  
@@ -578,7 +578,7 @@ class Project extends CI_Controller {
     } 
   
     
-  public function projectInfo() {
+  public function projectInfo(Request $request) {
     $projectId = base64_decode($this->input->get('code'));
 
     $data['action'] = 1; // O For Addition, 1 For Info and Update  
@@ -591,7 +591,7 @@ class Project extends CI_Controller {
     $data['title']="Create New Project";
      return view('app.project_info', $data);
   } 
-  public function deliverableInfo() {
+  public function deliverableInfo(Request $request) {
     $deliverableId = base64_decode($this->input->get('deliverableId'));
 
     $data['action'] = 1; // O For Addition, 1 For Info and Update  
@@ -605,7 +605,7 @@ class Project extends CI_Controller {
      return view('app.deliverable_info', $data);
   } 
 
-  public function updateProjectName() {    
+  public function updateProjectName(Request $request) {    
     if ($_POST) {
       $projectID = $request->input('projectID');
       $data = array(        
@@ -619,7 +619,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function updateProjectCode() {    
+  public function updateProjectCode(Request $request) {    
     if ($_POST) {
       $projectID = $request->input('projectID');
       $data = array(        
@@ -633,7 +633,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function updateProjectDescription() {    
+  public function updateProjectDescription(Request $request) {    
     if ($_POST) {
       $projectID = $request->input('projectID');
       $data = array(        
@@ -646,14 +646,14 @@ class Project extends CI_Controller {
       }          
     }
   }
-   public function newGrant() {
+   public function newGrant(Request $request) {
     $data['action'] = 0; // O For Addition, 1 For Info and Update
     $data['funders'] = $this->performance_model->getFunders();
     $data['title']="Create New Grant";
      return view('app.grant_info', $data);
   }
 
-  public function addGrant() {    
+  public function addGrant(Request $request) {    
     if ($_POST) {
       $data = array(        
         'name' =>trim($request->input('name')),
@@ -670,7 +670,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function grantInfo() {
+  public function grantInfo(Request $request) {
     $grantId = base64_decode($this->input->get('grantCode'));
 
     $data['action'] = 1; // O For Addition, 1 For Info and Update  
@@ -680,7 +680,7 @@ class Project extends CI_Controller {
      return view('app.grant_info', $data);
   } 
 
-  public function updateGrantName() {    
+  public function updateGrantName(Request $request) {    
     if ($_POST) {
       $grantID = $request->input('grantID');
       $data = array(        
@@ -694,7 +694,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function updateGrantCode() {    
+  public function updateGrantCode(Request $request) {    
     if ($_POST) {
       $grantID = $request->input('grantID');
       $data = array(        
@@ -708,7 +708,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function updateGrantDescription() {    
+  public function updateGrantDescription(Request $request) {    
     if ($_POST) {
       $grantID = $request->input('grantID');
       $data = array(        
@@ -722,7 +722,7 @@ class Project extends CI_Controller {
     }
   }
 
-   public function newActivity() {
+   public function newActivity(Request $request) {
     $data['action'] = 0; // O For Addition, 1 For Info and Update  
     $data['title']="Create New Activity";
     $data['projects'] = $this->project_model->allProjects();
@@ -730,7 +730,7 @@ class Project extends CI_Controller {
      return view('app.activity_info', $data);
   }
 
-  public function addActivity() {    
+  public function addActivity(Request $request) {    
     if ($_POST) {
       $activityCode = strtoupper(trim($request->input('code')));
       $checkExistance = $this->project_model->checkExistance($activityCode);
@@ -757,7 +757,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function activityInfo() {
+  public function activityInfo(Request $request) {
     $activityId = base64_decode($this->input->get('activityCode'));
 
     $data['action'] = 1; // O For Addition, 1 For Info and Update  
@@ -768,7 +768,7 @@ class Project extends CI_Controller {
      return view('app.activity_info', $data);
   } 
 
-  public function updateActivityName() {    
+  public function updateActivityName(Request $request) {    
     if ($_POST) {
       $activityID = $request->input('activityID');
       $data = array(        
@@ -782,7 +782,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function updateActivityCode() {    
+  public function updateActivityCode(Request $request) {    
     if ($_POST) {
       $activityID = $request->input('activityID');
       $data = array(        
@@ -797,7 +797,7 @@ class Project extends CI_Controller {
   }
 
 
-  public function allocateGrantToActivity() {    
+  public function allocateGrantToActivity(Request $request) {    
     if ($_POST) {
       $data = array(        
         'activity_code' =>strtoupper(trim($request->input('activityCode'))),
@@ -811,7 +811,7 @@ class Project extends CI_Controller {
     }
   }
 
-  public function updateActivityDescription() {    
+  public function updateActivityDescription(Request $request) {    
     if ($_POST) {
       $activityID = $request->input('activityID');
       $data = array(        
@@ -824,7 +824,7 @@ class Project extends CI_Controller {
       }          
     }
   } 
-  public function allocateActivity() {    
+  public function allocateActivity(Request $request) {    
     if ($_POST) {
       header('Content-type: application/json'); 
       $data = array(        
@@ -911,7 +911,7 @@ class Project extends CI_Controller {
   }
 
      
-  public function deleteActivity() { 
+  public function deleteActivity(Request $request) { 
     if ($this->uri->segment(3)>0) {
       $activityCode = $this->uri->segment(3);
       $result = $this->project_model->deleteActivity($activityCode);
@@ -932,7 +932,7 @@ class Project extends CI_Controller {
          
   }
 
-   public function deleteActivityGrant() { 
+   public function deleteActivityGrant(Request $request) { 
     if ($this->uri->segment(3)>0) {
       $id = $this->uri->segment(3);
       $result = $this->project_model->deleteActivityGrant($id);
@@ -953,7 +953,7 @@ class Project extends CI_Controller {
          
   }
      
-  public function deleteAllocation() { 
+  public function deleteAllocation(Request $request) { 
     if ($this->uri->segment(3) > 0) {
       $id = $this->uri->segment(3);
       $result = $this->project_model->deleteAllocation($id);
@@ -975,7 +975,7 @@ class Project extends CI_Controller {
   }
 
      
-  public function deactivateAllocation() { 
+  public function deactivateAllocation(Request $request) { 
     header('Content-type: application/json'); 
     if ($this->uri->segment(3) > 0) {
         $id = $this->uri->segment(3);
@@ -1018,7 +1018,7 @@ class Project extends CI_Controller {
              
   }
 
-    public function deactivateActivity() {
+    public function deactivateActivity(Request $request) {
         header('Content-type: application/json');
         if ($this->uri->segment(3) > 0) {
             $id = $this->uri->segment(3);
@@ -1066,7 +1066,7 @@ class Project extends CI_Controller {
 
     }
 
-    public function deactivateProject() {
+    public function deactivateProject(Request $request) {
         header('Content-type: application/json');
         if ($this->uri->segment(3) > 0) {
             $id = $this->uri->segment(3);
@@ -1131,7 +1131,7 @@ class Project extends CI_Controller {
 
     }
 
-    public function assignActivity(){
+    public function assignActivity(Request $request)  {
         if ($_POST) {
             $assignment_name = trim($request->input('assignment_name'));
             $project = trim($request->input('project_assign'));
@@ -1156,7 +1156,7 @@ class Project extends CI_Controller {
                 'start_date' => $start_date,
                 'end_date' => $end_date,
                 'description' => $description,
-                'assigned_by' => $this->session->userdata('emp_id')
+                'assigned_by' =>session('emp_id')
             );
 
             $assignment_id = $this->project_model->addAssignment($data);
@@ -1189,8 +1189,8 @@ class Project extends CI_Controller {
         }
     }
 
-    public function assignmentInfo() {
-        if($this->session->userdata('vw_proj') || $this->session->userdata('mng_proj')) {
+    public function assignmentInfo(Request $request) {
+        if($this->session->userdata('vw_proj') ||session('mng_proj')) {
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
 
@@ -1203,8 +1203,8 @@ class Project extends CI_Controller {
         }
     }
 
-    public function timeTrackInfo() {
-        if($this->session->userdata('vw_proj') || $this->session->userdata('mng_proj')) {
+    public function timeTrackInfo(Request $request) {
+        if($this->session->userdata('vw_proj') ||session('mng_proj')) {
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
             $data['action'] = 1; // O For Addition, 1 For Info and Update
@@ -1228,8 +1228,8 @@ class Project extends CI_Controller {
 
     }
 
-    public function commentInfo() {
-        if($this->session->userdata('vw_proj') || $this->session->userdata('mng_proj')) {
+    public function commentInfo(Request $request) {
+        if($this->session->userdata('vw_proj') ||session('mng_proj')) {
             $data['projects'] = $this->project_model->allProjects();
             $assignID = base64_decode($this->input->get('code'));
             $data['action'] = 1; // O For Addition, 1 For Info and Update
@@ -1252,7 +1252,7 @@ class Project extends CI_Controller {
 
     }
 
-    public function updateAssignment(){
+    public function updateAssignment(Request $request)  {
         if ($_POST) {
             $assignID = trim($request->input('assignID'));
             $assignment_name = trim($request->input('assignment_name'));
@@ -1281,7 +1281,7 @@ class Project extends CI_Controller {
                     'start_date' => $start_date,
                     'end_date' => $end_date,
                     'description' => $description,
-                    'assigned_by' => $this->session->userdata('emp_id')
+                    'assigned_by' =>session('emp_id')
                 );
 
                 $assignment = $this->project_model->updateAssignment($data,$assignID);
@@ -1329,7 +1329,7 @@ class Project extends CI_Controller {
         }
     }
 
-    public function deleteEmployeeAssignment() {
+    public function deleteEmployeeAssignment(Request $request) {
         if ($this->uri->segment(3)>0) {
             $assignID = $this->uri->segment(3);
             $emp_id = $this->uri->segment(4);
@@ -1352,7 +1352,7 @@ class Project extends CI_Controller {
 
     }
 
-    public function addTask(){
+    public function addTask(Request $request)  {
         if ($_POST) {
             $assignment_employee_id = trim($request->input('assignment_employee_id'));
             $description = trim($request->input('descriptions'));
@@ -1395,10 +1395,10 @@ class Project extends CI_Controller {
         }
     }
 
-    public function addException(){
+    public function addException(Request $request)  {
         if ($_POST) {
             $assignment_id = trim($request->input('name_id'));
-            $emp_id = $this->session->userdata('emp_id');
+            $emp_id =session('emp_id');
             $exception_type = trim($request->input('exception_type'));
 
             if ($request->input('start_date')){
@@ -1433,7 +1433,7 @@ class Project extends CI_Controller {
         }
     }
 
-    public function approveTask() {
+    public function approveTask(Request $request) {
         if ($this->uri->segment(3)>0) {
             $assignID = $this->uri->segment(3);
             $data = array(
@@ -1462,7 +1462,7 @@ class Project extends CI_Controller {
             $data = array(
                 'task_id' => $assignID,
                 'remarks' => $comment,
-                'remark_by' => $this->session->userdata('emp_id'),
+                'remark_by' =>session('emp_id'),
                 'date' => date('Y-m-d H:i:s')
             );
             $result = $this->project_model->taskComment($data);
@@ -1478,7 +1478,7 @@ class Project extends CI_Controller {
         echo json_encode($response_array);
     }
 
-    public function deleteComment() {
+    public function deleteComment(Request $request) {
         if ($this->uri->segment(3)>0) {
             $assignID = $this->uri->segment(3);
 
@@ -1497,7 +1497,7 @@ class Project extends CI_Controller {
 
     }
 
-    public function addCost(){
+    public function addCost(Request $request)  {
         if($_POST) {
             $data = array(
                 'emp_id' =>$this->session->userdata('emp_id'),
