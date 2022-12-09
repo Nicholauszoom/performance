@@ -56,26 +56,26 @@ class Performance extends CI_Controller {
     $data['strategyID']=$strategyID;
     $data['outcomeID']=$outcomeID;
     $data['outputID']=$outputID;
-    $this->load->view('output_info', $data);
+     return view('app.output_info', $data);
   }
    public function assign_output(){
       if ($_POST) {
-         $outcomeref =  $this->input->post('employeeID');
-        $outputID =  $this->input->post('outputID');
+         $outcomeref =  $request->input('employeeID');
+        $outputID =  $request->input('outputID');
         // echo $outputID."<><>".$outcomeref; exit();
         if($outputID=='') {
             echo "Sorry! Output Not Assigned, either No Outcome selected or Outcome Reference Has Expired!, Please Reselect the Outcome which You want to add an output to";
-            // redirect('/performance/outcome', 'refresh');
+            // return redirect('/flex/performance/outcome');
             
         } else{
             
             $data = array( 
-                 'assigned_to' =>$this->input->post('employeeID'),
+                 'assigned_to' =>$request->input('employeeID'),
                  'isAssigned' =>1
             );   
           $this->performance_model->update_output($data, $outputID);
           echo "Output Assigned Successifully";
-    //   redirect('/performance/outcome', 'refresh');
+    //   return redirect('/flex/performance/outcome');
         }
             
         }
@@ -84,11 +84,11 @@ class Performance extends CI_Controller {
      public function updateoutputDescription(){
       if ($_POST) {
           
-          if($this->input->post('description')!='' && $this->input->post('outputID')!=''){
+          if($request->input('description')!='' && $request->input('outputID')!=''){
               
-        $outputID = $this->input->post('outputID');
+        $outputID = $request->input('outputID');
         $data = array( 
-                 'description' =>$this->input->post('description')
+                 'description' =>$request->input('description')
             );   
           $this->performance_model->update_output($data, $outputID);
           echo "<p class='alert alert-success text-center'>Description Updated Successifully</p>";
@@ -97,9 +97,9 @@ class Performance extends CI_Controller {
    }
     public function updateOutputDateRange(){
     if ($_POST) {
-      $outputID = $this->input->post('outputID');
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $outputID = $request->input('outputID');
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
@@ -130,10 +130,10 @@ class Performance extends CI_Controller {
           
       if ($_POST) {
           
-          if($this->input->post('title')!='' && $this->input->post('outputID')!=''){
-        $outputID = $this->input->post('outputID');
+          if($request->input('title')!='' && $request->input('outputID')!=''){
+        $outputID = $request->input('outputID');
         $data = array( 
-                 'title' =>$this->input->post('title')
+                 'title' =>$request->input('title')
             );   
           $this->performance_model->update_output($data, $outputID);
           echo "<p class='alert alert-success text-center'>Title Updated Successifully</p>";
@@ -144,18 +144,18 @@ class Performance extends CI_Controller {
    }
   public function addOutcome(){
     if($_POST) { 
-      $strategyID = $this->input->post('strategyID');
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $strategyID = $request->input('strategyID');
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
       $date_today=date('Y-m-d');
-      if ($this->input->post('employee')=='') {
+      if ($request->input('employee')=='') {
         $employee = $this->session->userdata('emp_id');
         $isAssigned = 0;
       } else {
-        $employee = $this->input->post('employee');
+        $employee = $request->input('employee');
         $isAssigned = 1;
       }
 
@@ -166,9 +166,9 @@ class Performance extends CI_Controller {
           echo json_encode($response_array);
       }else{
         $data = array(  
-            'title' => $this->input->post('name'),
+            'title' => $request->input('name'),
             'strategy_ref' => $strategyID,
-            'description' =>$this->input->post('description'), 
+            'description' =>$request->input('description'), 
             'assigned_by' =>$this->session->userdata('emp_id'),
             'assigned_to' =>$employee,
             'isAssigned' => $isAssigned,
@@ -206,12 +206,12 @@ class Performance extends CI_Controller {
       $data['activeOutcomes'] = $this->performance_model->outcomes($strategyID); 
       $data["strategyID"] = $strategyID; //$this->performance_model->strategy_info($strategyID);
       $data['title']="Strategy";
-      $this->load->view('strategy', $data);
+       return view('app.strategy', $data);
 
      if(isset($_POST['addstrategy'])) {
 
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
@@ -219,25 +219,25 @@ class Performance extends CI_Controller {
 
       if ($dateStart < $date_today || $dateEnd <= $dateStart) {
         $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Invalid Date, Choose The correct Date and Try Again!</p>");
-        redirect('/performance/strategy', 'refresh');
+        return redirect('/flex/performance/strategy');
       } else { 
 
         $data = array(  
-             'title' => $this->input->post('name'),
-             'description' =>$this->input->post('description'),
-             'funder' =>$this->input->post('funder'),
+             'title' => $request->input('name'),
+             'description' =>$request->input('description'),
+             'funder' =>$request->input('funder'),
              'author' =>$this->session->userdata('emp_id'),
-             'type' =>$this->input->post('type'), 
+             'type' =>$request->input('type'), 
              'start' =>$dateStart,
              'end' =>$dateEnd
         );   
           $result = $this->performance_model->addstrategy($data);
           if($result==true){
             $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Strategy Added Successifully</p>");
-            redirect('/performance/strategy', 'refresh');
+            return redirect('/flex/performance/strategy');
           } else {
             $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Strategy NOT Added, Some Internal Errors Occured, Please Contact The System Administrator</p>");
-          redirect('/performance/strategy', 'refresh');
+          return redirect('/flex/performance/strategy');
           }
           
        
@@ -258,7 +258,7 @@ class Performance extends CI_Controller {
               $data['projects'] = $this->project_model->allProjects();
               $data['title']="Project Funders";
 
-              $this->load->view('funders', $data);
+               return view('app.funders', $data);
          }
     }else{
       echo "Unauthorized Access";
@@ -269,13 +269,13 @@ class Performance extends CI_Controller {
   public function addFunder(){
     if($_POST) { 
       $data = array(  
-          'name' => $this->input->post('name'),
-          'email' =>$this->input->post('email'), 
-          'phone' =>$this->input->post('phone'), 
-          'description' =>$this->input->post('description'), 
+          'name' => $request->input('name'),
+          'email' =>$request->input('email'), 
+          'phone' =>$request->input('phone'), 
+          'description' =>$request->input('description'), 
           'createdBy' =>$this->session->userdata('emp_id'),
-          'country' => $this->input->post('nationality'),
-          'type' => $this->input->post('type')
+          'country' => $request->input('nationality'),
+          'type' => $request->input('type')
       );   
       $result = $this->performance_model->addFunder($data);
       if($result==true){
@@ -295,7 +295,7 @@ class Performance extends CI_Controller {
     public function addSegment(){
         if($_POST) {
             $data = array(
-                'name' => $this->input->post('name'),
+                'name' => $request->input('name'),
                 'created_at' => date('Y-m-d'),
                 'created_by' =>$this->session->userdata('emp_id')
             );
@@ -315,7 +315,7 @@ class Performance extends CI_Controller {
     public function addCategory(){
         if($_POST) {
             $data = array(
-                'name' => $this->input->post('category_name'),
+                'name' => $request->input('category_name'),
                 'created_at' => date('Y-m-d'),
                 'created_by' =>$this->session->userdata('emp_id')
             );
@@ -335,7 +335,7 @@ class Performance extends CI_Controller {
     public function addException(){
         if($_POST) {
             $data = array(
-                'name' => $this->input->post('exception_name'),
+                'name' => $request->input('exception_name'),
                 'created_at' => date('Y-m-d'),
                 'created_by' =>$this->session->userdata('emp_id')
             );
@@ -355,11 +355,11 @@ class Performance extends CI_Controller {
     public function addRequest(){
         if($_POST) {
             $data = array(
-                'funder' => $this->input->post('funder'),
-                'project' => $this->input->post('project'),
-                'activity' => $this->input->post('activity'),
+                'funder' => $request->input('funder'),
+                'project' => $request->input('project'),
+                'activity' => $request->input('activity'),
                 'mode' => "IN",
-                'amount' => trim($this->input->post('amount')),
+                'amount' => trim($request->input('amount')),
                 'created_at' => date('Y-m-d'),
                 'created_by' =>$this->session->userdata('emp_id')
             );
@@ -367,10 +367,10 @@ class Performance extends CI_Controller {
 
             if($result==true){
                 //get activity
-                $grant_code = $this->performance_model->getGrantCode($this->input->post('activity'),$this->input->post('project'));
+                $grant_code = $this->performance_model->getGrantCode($request->input('activity'),$request->input('project'));
                 if ($grant_code){
                     foreach ($grant_code as $item){
-                        $new_grant = $this->input->post('amount') + $item->amount;
+                        $new_grant = $request->input('amount') + $item->amount;
                         $data_ = array(
                             'amount' => $new_grant
                         );
@@ -391,9 +391,9 @@ class Performance extends CI_Controller {
 
   public function updateStrategyDateRange(){
     if ($_POST) {
-      $strategyID = $this->input->post('strategyID');
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $strategyID = $request->input('strategyID');
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
@@ -417,31 +417,31 @@ class Performance extends CI_Controller {
   } 
      public function updateStrategy(){          
       if ($_POST) {          
-          if($this->input->post('title')!='' && $this->input->post('strategyID')!='' && $this->input->post('attribute') == "title" ){
-        $strategyID = $this->input->post('strategyID');
-        // $dates = $this->input->post('start');
+          if($request->input('title')!='' && $request->input('strategyID')!='' && $request->input('attribute') == "title" ){
+        $strategyID = $request->input('strategyID');
+        // $dates = $request->input('start');
         // $dateStart = str_replace('/', '-', $dates);
         $data = array( 
-                 'title' =>$this->input->post('title')
+                 'title' =>$request->input('title')
             );   
           $this->performance_model->update_strategy($data, $strategyID);
           echo "<p class='alert alert-success text-center'>Title Updated Successifully</p>";
           }
           
-          if($this->input->post('description')!='' && $this->input->post('strategyID')!='' && $this->input->post('attribute') == "description" ){
-        $strategyID = $this->input->post('strategyID');
-        // $dates = $this->input->post('end');
+          if($request->input('description')!='' && $request->input('strategyID')!='' && $request->input('attribute') == "description" ){
+        $strategyID = $request->input('strategyID');
+        // $dates = $request->input('end');
         // $dateEnd = str_replace('/', '-', $dates);
         $data = array( 
-                 'description' =>$this->input->post('description')
+                 'description' =>$request->input('description')
             );   
           $this->performance_model->update_strategy($data, $strategyID);
           echo "<p class='alert alert-success text-center'>Description Updated Successifully</p>";
           }
           
-          if($this->input->post('end')!='' && $this->input->post('strategyID')!='' && $this->input->post('attribute') == "endDate" ){
-        $strategyID = $this->input->post('strategyID');
-        $dates = $this->input->post('end');
+          if($request->input('end')!='' && $request->input('strategyID')!='' && $request->input('attribute') == "endDate" ){
+        $strategyID = $request->input('strategyID');
+        $dates = $request->input('end');
         $dateEnd = str_replace('/', '-', $dates);
         $data = array( 
                  'end' =>date('Y-m-d', strtotime($dateEnd))
@@ -450,9 +450,9 @@ class Performance extends CI_Controller {
           echo "<p class='alert alert-success text-center'>End Date Updated Successifully</p>";
           }
           
-          if($this->input->post('start')!='' && $this->input->post('strategyID')!='' && $this->input->post('attribute') == "startDate" ){
-        $strategyID = $this->input->post('strategyID');
-        $dates = $this->input->post('start');
+          if($request->input('start')!='' && $request->input('strategyID')!='' && $request->input('attribute') == "startDate" ){
+        $strategyID = $request->input('strategyID');
+        $dates = $request->input('start');
         $dateStart = str_replace('/', '-', $dates);
         $data = array( 
                  'start' =>date('Y-m-d', strtotime($dateStart))
@@ -465,9 +465,9 @@ class Performance extends CI_Controller {
 
   public function strategy_report(){
     if(isset($_POST['print'])) {
-      $target = $this->input->post('target');
-      $status = $this->input->post('status');
-      $strategyID = $this->input->post('strategyID');
+      $target = $request->input('target');
+      $status = $request->input('status');
+      $strategyID = $request->input('strategyID');
       $today = date('Y-m-d');
 
       
@@ -482,21 +482,21 @@ class Performance extends CI_Controller {
           $data['outputList'] = $this->performance_model-> all_all_output($strategyID);       
           $data['taskList'] = $this->performance_model-> all_all_task($strategyID);
           $data['report_name'] = "Overall Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
 
         } elseif ($target==2){
           $data['outcomeList'] = $this->performance_model-> all_fin_outcomes($strategyID);
           $data['outputList'] = $this->performance_model-> all_fin_output($strategyID);
           $data['taskList'] = $this->performance_model-> all_fin_task($strategyID);
           $data['report_name'] = "Overall Finencial Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
 
         }elseif($target==3){
           $data['outcomeList'] = $this->performance_model-> all_qty_outcomes($strategyID);
           $data['outputList'] = $this->performance_model-> all_qty_output($strategyID);
           $data['taskList'] = $this->performance_model-> all_qty_task($strategyID);
           $data['report_name'] = "Overall Quantitative Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         }
       }elseif($status==2){ //PROGRESS
         if($target==1){
@@ -504,21 +504,21 @@ class Performance extends CI_Controller {
           $data['outputList'] = $this->performance_model-> progress_all_output($strategyID);      
           $data['taskList'] = $this->performance_model-> progress_all_task($strategyID);
           $data['report_name'] = "General Progress Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
 
         } elseif ($target==2){
           $data['outcomeList'] = $this->performance_model-> progress_fin_outcomes($strategyID);
           $data['outputList'] = $this->performance_model-> progress_fin_output($strategyID);      
           $data['taskList'] = $this->performance_model-> progress_fin_task($strategyID);
           $data['report_name'] = "General Finencial Progress Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         
         }elseif($target==3){
           $data['outcomeList'] = $this->performance_model-> progress_qty_outcomes($strategyID);
           $data['outputList'] = $this->performance_model-> progress_qty_output($strategyID);      
           $data['taskList'] = $this->performance_model-> progress_qty_task($strategyID);
           $data['report_name'] = "General Quantitative Progress Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         }
 
       }elseif($status==3){ //COMPLETED
@@ -527,7 +527,7 @@ class Performance extends CI_Controller {
           $data['outputList'] = $this->performance_model-> completed_all_output($strategyID);
           $data['taskList'] = $this->performance_model-> completed_all_task($strategyID);
           $data['report_name'] = "General Approved Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
 
         } elseif ($target==2){
           $data['outcomeList'] = $this->performance_model-> completed_fin_outcomes($strategyID);
@@ -539,7 +539,7 @@ class Performance extends CI_Controller {
           $data['total_output'] = $this->performance_model-> total_completed_fin_output($strategyID);
           $data['total_task'] = $this->performance_model-> total_completed_fin_task($strategyID);
           $data['report_name'] = "Approved Financial Report";
-          $this->load->view('reports/strategy_report_approved', $data);
+           return view('app.reports/strategy_report_approved', $data);
         
         }elseif($target==3){
           $data['outcomeList'] = $this->performance_model-> completed_qty_outcomes($strategyID);
@@ -551,7 +551,7 @@ class Performance extends CI_Controller {
           $data['total_output'] = $this->performance_model-> total_completed_qty_output($strategyID);
           $data['total_task'] = $this->performance_model-> total_completed_qty_task($strategyID);
           $data['report_name'] = "Approved Quantitative Report";
-          $this->load->view('reports/strategy_report_approved', $data);
+           return view('app.reports/strategy_report_approved', $data);
         }
 
       } elseif($status==4){ //OVERDUE
@@ -560,7 +560,7 @@ class Performance extends CI_Controller {
           $data['outputList'] = $this->performance_model-> overdue_all_output($strategyID,$today);
           $data['taskList'] = $this->performance_model-> overdue_all_task($strategyID,$today);
           $data['report_name'] = "General Overdue Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
 
         } elseif ($target==2){
           $data['outcomeList'] = $this->performance_model-> overdue_fin_outcomes($strategyID,$today);
@@ -568,14 +568,14 @@ class Performance extends CI_Controller {
           $data['taskList'] = $this->performance_model-> overdue_fin_task($strategyID,$today);
 
           $data['report_name'] = "Overdue Financial Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         
         }elseif($target==3){
           $data['outcomeList'] = $this->performance_model-> overdue_qty_outcomes($strategyID,$today);
           $data['outputList'] = $this->performance_model-> overdue_qty_output($strategyID,$today);
           $data['taskList'] = $this->performance_model-> overdue_qty_task($strategyID,$today);
           $data['report_name'] = "Overdue Quantitative Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         }
 
       } elseif($status==5){ //NOT STARTED
@@ -584,7 +584,7 @@ class Performance extends CI_Controller {
           $data['outputList'] = $this->performance_model-> not_started_all_output($strategyID,$today);
           $data['taskList'] = $this->performance_model-> not_started_all_task($strategyID,$today);
           $data['report_name'] = "General Not Started Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
 
         } elseif ($target==2){
           $data['outcomeList'] = $this->performance_model-> not_started_fin_outcomes($strategyID,$today);
@@ -592,7 +592,7 @@ class Performance extends CI_Controller {
           $data['taskList'] = $this->performance_model-> not_started_fin_task($strategyID,$today);
 
           $data['report_name'] = "Not Started Financial Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         
         }elseif($target==3){
           $data['outcomeList'] = $this->performance_model-> not_started_qty_outcomes($strategyID,$today);
@@ -600,7 +600,7 @@ class Performance extends CI_Controller {
           $data['taskList'] = $this->performance_model-> not_started_qty_task($strategyID,$today);
 
           $data['report_name'] = "Not Started Quantitative Report";
-          $this->load->view('reports/strategy_report', $data);
+           return view('app.reports/strategy_report', $data);
         }
 
       }else{ //UNCLASSIFIED
@@ -616,9 +616,9 @@ class Performance extends CI_Controller {
    
   public function updateOutcomeDateRange(){
     if ($_POST) {
-      $outcomeID = $this->input->post('outcomeID');
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $outcomeID = $request->input('outcomeID');
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
@@ -643,33 +643,33 @@ class Performance extends CI_Controller {
    
   public function updateOutcome()  {           
     if ($_POST) {          
-      if($this->input->post('title')!='' && $this->input->post('outcomeID')!='' && $this->input->post('attribute') == "title" ){
-        $outcomeID = $this->input->post('outcomeID');
-        // $dates = $this->input->post('start');
+      if($request->input('title')!='' && $request->input('outcomeID')!='' && $request->input('attribute') == "title" ){
+        $outcomeID = $request->input('outcomeID');
+        // $dates = $request->input('start');
         // $dateStart = str_replace('/', '-', $dates);
         $data = array( 
-                 'title' =>$this->input->post('title')
+                 'title' =>$request->input('title')
           );   
         $this->performance_model->update_outcome($data, $outcomeID);
         echo "<p class='alert alert-success text-center'>Title Updated Successifully</p>";
       }
           
-      if($this->input->post('description')!='' && $this->input->post('outcomeID')!='' && $this->input->post('attribute') == "description" ){
-        $outcomeID = $this->input->post('outcomeID');
-        // $dates = $this->input->post('end');
+      if($request->input('description')!='' && $request->input('outcomeID')!='' && $request->input('attribute') == "description" ){
+        $outcomeID = $request->input('outcomeID');
+        // $dates = $request->input('end');
         // $dateEnd = str_replace('/', '-', $dates);
         $data = array( 
-                 'description' =>$this->input->post('description')
+                 'description' =>$request->input('description')
             );   
         $this->performance_model->update_outcome($data, $outcomeID);
         echo "<p class='alert alert-success text-center'>Description Updated Successifully</p>";
       }
           
-      if($this->input->post('indicator')!='' && $this->input->post('outcomeID')!='' && $this->input->post('attribute') == "indicator" ){
-        $outcomeID = $this->input->post('outcomeID');
+      if($request->input('indicator')!='' && $request->input('outcomeID')!='' && $request->input('attribute') == "indicator" ){
+        $outcomeID = $request->input('outcomeID');
         
         $data = array( 
-                 'indicator' =>$this->input->post('indicator')
+                 'indicator' =>$request->input('indicator')
             );   
         $this->performance_model->update_outcome($data, $outcomeID);
         echo "<p class='alert alert-success text-center'>Title Updated Successifully</p>";
@@ -679,11 +679,11 @@ class Performance extends CI_Controller {
       
   public function updateOutcomeStrategy_ref(){
     if ($_POST) {        
-      if($this->input->post('strategy_ref')!='' && $this->input->post('outcomeID')!=''){
+      if($request->input('strategy_ref')!='' && $request->input('outcomeID')!=''){
             
-        $outcomeID = $this->input->post('outcomeID');
+        $outcomeID = $request->input('outcomeID');
         $data = array( 
-               'strategy_ref' =>$this->input->post('strategy_ref')
+               'strategy_ref' =>$request->input('strategy_ref')
           );   
         $this->performance_model->update_outcome($data, $outcomeID);
         echo "<p class='alert alert-success text-center'>Strategy Reference For this Outcome has Updated Successifully</p>";
@@ -694,11 +694,11 @@ class Performance extends CI_Controller {
       
   public function updateOutcomeAssign(){
     if ($_POST) {        
-      if($this->input->post('assigned_to')!='' && $this->input->post('outcomeID')!=''){
+      if($request->input('assigned_to')!='' && $request->input('outcomeID')!=''){
             
-        $outcomeID = $this->input->post('outcomeID');
+        $outcomeID = $request->input('outcomeID');
         $data = array( 
-                 'assigned_to' =>$this->input->post('assigned_to'),
+                 'assigned_to' =>$request->input('assigned_to'),
                  'isAssigned' =>1
             );   
         $this->performance_model->update_outcome($data, $outcomeID);
@@ -710,8 +710,8 @@ class Performance extends CI_Controller {
   
   public function reference_output()  {        
     if ($_POST) {         
-      $outcomeref =  $this->input->post('outcomeKEY');
-      $outputID =  $this->input->post('outputID');        
+      $outcomeref =  $request->input('outcomeKEY');
+      $outputID =  $request->input('outputID');        
       // echo $outputID."<><>".$outcomeref; exit();
       if($outputID=='') {
         echo "Sorry! Output Not Assigned, either No Outcome selected or Outcome Reference Has Expired!, Please Reselect the Outcome which You want to add an output to";
@@ -743,7 +743,7 @@ class Performance extends CI_Controller {
     $data['strategyID'] = $strategyID;
     $data['mode'] = 1;
           
-    $this->load->view('strategy_info', $data);
+     return view('app.strategy_info', $data);
              
   }
       
@@ -781,7 +781,7 @@ class Performance extends CI_Controller {
     $data['strategyID'] = $strategyID;
     $data['mode'] = 2;
           
-    $this->load->view('outcomeinfo', $data);
+     return view('app.outcomeinfo', $data);
              
   }
 
@@ -895,8 +895,8 @@ class Performance extends CI_Controller {
   }
 
   public function comment() {    
-      $id = $this->input->get('id');
-      $mode = $this->input->get('mode');    
+      $id = $request->input('id');
+      $mode = $request->input('mode');    
       $data['funders'] =  $this->performance_model->getFunders(); 
       $data['activities'] =  $this->performance_model->getFunders();  
       $data['comment'] =  $this->performance_model->getcomments($id);
@@ -904,17 +904,17 @@ class Performance extends CI_Controller {
       $data['activities'] =  $this->performance_model->getActivities($id);
       $data['title']="Task";
       $data['mode']=$mode ; //1 for normal comments, 2 for Dissapproval comments, 3 for submission
-      $this->load->view('task_comments', $data);
+       return view('app.task_comments', $data);
     }
 
   function addActivity(){          
     if($_POST){ 
       $response_array; 
-      $dueDate =str_replace('/', '-', $this->input->post('activityDate'));
-      $startTimeH = $this->input->post('startTimeH');
-      $startTimeM = $this->input->post('startTimeM');
-      $finishTimeH = $this->input->post('finishTimeH');
-      $finishTimeM = $this->input->post('finishTimeM');
+      $dueDate =str_replace('/', '-', $request->input('activityDate'));
+      $startTimeH = $request->input('startTimeH');
+      $startTimeM = $request->input('startTimeM');
+      $finishTimeH = $request->input('finishTimeH');
+      $finishTimeM = $request->input('finishTimeM');
       $startTime = $startTimeH.":".$startTimeM;
       $finishTime = $finishTimeH.":".$finishTimeM;
 
@@ -927,11 +927,11 @@ class Performance extends CI_Controller {
       } else { 
 
         $data = array(  
-             'activityDate' => $this->input->post('activityDate'),
-             'name' =>$this->input->post('description'),
+             'activityDate' => $request->input('activityDate'),
+             'name' =>$request->input('description'),
              'startTime' =>$startTime,
              'finishTime' =>$finishTime,
-             'taskID' =>$this->input->post('taskID'),
+             'taskID' =>$request->input('taskID'),
              'activityDate' =>$activityDate,
              'createdBy' => $this->session->userdata('emp_id')
         ); 
@@ -955,11 +955,11 @@ class Performance extends CI_Controller {
   }
 
   public function sendCommentOLd() {
-      if (isset($_POST['send']) && $this->input->post('taskID')!='' ) {  
-        $taskID = $this->input->post('taskID');
-        if($this->input->post('progress')!=''){
-          $comment = $this->input->post('progress')."% =>>".$this->input->post('comment');
-          $progress =$this->input->post('progress');
+      if (isset($_POST['send']) && $request->input('taskID')!='' ) {  
+        $taskID = $request->input('taskID');
+        if($request->input('progress')!=''){
+          $comment = $request->input('progress')."% =>>".$request->input('comment');
+          $progress =$request->input('progress');
           $data = array(
             'comment' =>$comment,
             'taskID' =>$taskID,
@@ -969,7 +969,7 @@ class Performance extends CI_Controller {
         } else{
 
         $data = array(
-              'comment' =>$this->input->post('comment'),
+              'comment' =>$request->input('comment'),
               'taskID' =>$taskID,
               'staff' =>$this->session->userdata('emp_id')
             );
@@ -978,17 +978,17 @@ class Performance extends CI_Controller {
         }
         if($result ==true) { 
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Success.</p>");
-        redirect('/performance/comment/?mode=1&id='.$taskID, 'refresh');           
+        return redirect('/flex/performance/comment/?mode=1&id='.$taskID);           
           
         } else {
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Submission Failed</p>");
-          redirect('/performance/comment/?mode=1&id='.$taskID, 'refresh');
+          return redirect('/flex/performance/comment/?mode=1&id='.$taskID);
         }
-        // redirect('/performance/comment/?id='.$taskID, 'refresh');
+        // return redirect('/flex/performance/comment/?id='.$taskID);
 
-      } elseif (isset($_POST['reject']) && $this->input->post('taskID')!='' ) {  
-        $taskID = $this->input->post('taskID');
-        $comment = $this->input->post('comment');
+      } elseif (isset($_POST['reject']) && $request->input('taskID')!='' ) {  
+        $taskID = $request->input('taskID');
+        $comment = $request->input('comment');
         $taskUpdates = array(  
             'status' =>5,
             'notification' =>4
@@ -1002,22 +1002,22 @@ class Performance extends CI_Controller {
         $result = $this->performance_model->reject_task($comments, $taskUpdates, $taskID);
         if($result ==true) {
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Success.</p>");
-          redirect('/performance/comment/?id='.$taskID, 'refresh');
+          return redirect('/flex/performance/comment/?id='.$taskID);
         } else {
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Submission Failed, Try again.</p>");
-          redirect('/performance/comment/?id='.$taskID, 'refresh');
+          return redirect('/flex/performance/comment/?id='.$taskID);
         }
       } 
          
    }
   public function sendComment() {
-    if ($_POST && $this->input->post('taskID')!='' ) {  
-      $taskID = $this->input->post('taskID');
-      $action = $this->input->post('action');
+    if (Request::isMethod('post')&& $request->input('taskID')!='' ) {  
+      $taskID = $request->input('taskID');
+      $action = $request->input('action');
       if($action=="1"){
-        if($this->input->post('progress')!=''){
-          $comment = $this->input->post('progress')."% =>>".$this->input->post('comment');
-          $progress =$this->input->post('progress');
+        if($request->input('progress')!=''){
+          $comment = $request->input('progress')."% =>>".$request->input('comment');
+          $progress =$request->input('progress');
           $data = array(
             'comment' =>$comment,
             'taskID' =>$taskID,
@@ -1027,7 +1027,7 @@ class Performance extends CI_Controller {
         } else{
 
         $data = array(
-              'comment' =>$this->input->post('comment'),
+              'comment' =>$request->input('comment'),
               'taskID' =>$taskID,
               'staff' =>$this->session->userdata('emp_id')
             );
@@ -1041,8 +1041,8 @@ class Performance extends CI_Controller {
         }
 
       } elseif($action=="2"){
-        $taskID = $this->input->post('taskID');
-        $comment = $this->input->post('comment');
+        $taskID = $request->input('taskID');
+        $comment = $request->input('comment');
         $taskUpdates = array(  
             'status' =>5,
             'notification' =>4
@@ -1066,16 +1066,16 @@ class Performance extends CI_Controller {
    public function assignCostValue()  
       {
           
-      if (isset($_POST['assignValue']) && $this->input->post('taskID')!='' ) {
-          $taskRef = $this->input->post('taskID');
-          $outputID = $this->input->post('outputID'); 
+      if (isset($_POST['assignValue']) && $request->input('taskID')!='' ) {
+          $taskRef = $request->input('taskID');
+          $outputID = $request->input('outputID'); 
         $data = array(
-              'monetaryValue' =>$this->input->post('amount')
+              'monetaryValue' =>$request->input('amount')
             );
         $this->performance_model->updateTask($data, $taskRef);
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>The Cost Value For The Task was Assigned Successifully.</p>");
 
-        redirect('/performance/output_info/?id='.base64_encode($outputID), 'refresh');
+        return redirect('/flex/performance/output_info/?id='.base64_encode($outputID));
 
             } else  exit("REQUEST TYPE OF ACCESSING THIS FUNCTIONALITY HAS DENIED"); 
          
@@ -1084,7 +1084,7 @@ class Performance extends CI_Controller {
    public function task_approval()  
       {    
 
-        $taskID = $this->input->get('id');
+        $taskID = $request->input('id');
 
         $data['task_details'] =  $this->performance_model->gettaskbyid($taskID);
         $data['behaviour'] =  $this->performance_model->getbehaviour();
@@ -1095,7 +1095,7 @@ class Performance extends CI_Controller {
         if ($data['task_details']) {
 
           $data['title']="Task";
-          $this->load->view('task_approval', $data);
+           return view('app.task_approval', $data);
         } 
         else { exit("REQUEST TYPE OF ACCESSING THIS FUNCTIONALITY HAS DENIED"); }
          
@@ -1104,13 +1104,13 @@ class Performance extends CI_Controller {
      public function addTaskResources(){
       if ($_POST) {
           
-          if($this->input->post('name')!='' && $this->input->post('taskID')!=''&& $this->input->post('cost')!=''){
+          if($request->input('name')!='' && $request->input('taskID')!=''&& $request->input('cost')!=''){
               
-        $taskID = $this->input->post('taskID');
+        $taskID = $request->input('taskID');
         $data = array( 
-                 'name' =>$this->input->post('name'),
-                 'cost' =>$this->input->post('cost'),
-                 'taskID' =>$this->input->post('taskID')
+                 'name' =>$request->input('name'),
+                 'cost' =>$request->input('cost'),
+                 'taskID' =>$request->input('taskID')
             );   
           $result = $this->performance_model->addTaskResource($data, $taskID);
           if($result ==true) { 
@@ -1139,18 +1139,18 @@ class Performance extends CI_Controller {
    
    public function task_marking()  
       { 
-        if ($_POST && $this->input->post('taskID')>0) {
-          $taskID = $this->input->post('taskID');
+        if (Request::isMethod('post')&& $request->input('taskID')>0) {
+          $taskID = $request->input('taskID');
           $sum =0;
 
           // START QUALITY MANIPULATION
-        $percent_quantity = $this->input->post('percent_quantity');
+        $percent_quantity = $request->input('percent_quantity');
 
-        $required_duration = $this->input->post('required_duration');
-        $submitted_duration = $this->input->post('submitted_duration');
+        $required_duration = $request->input('required_duration');
+        $submitted_duration = $request->input('submitted_duration');
 
-        $required_quantity = $this->input->post('required_quantity');
-        $submitted_quantity = $this->input->post('submitted_quantity');
+        $required_quantity = $request->input('required_quantity');
+        $submitted_quantity = $request->input('submitted_quantity');
 
         $final_quantity = 0;
         $excess_points = 0;
@@ -1214,22 +1214,22 @@ class Performance extends CI_Controller {
           $countbehaviour =  $this->performance_model->count_behaviour();
           for($x=1;$x<=$countbehaviour; $x++){
 
-             $sum+=$this->input->post('behaviour'.$x);
+             $sum+=$request->input('behaviour'.$x);
           } 
-          $marks_behaviour = ($sum/100)*$this->input->post('marks_behaviour');
+          $marks_behaviour = ($sum/100)*$request->input('marks_behaviour');
 
         //   exit("Behaviour".$marks_behaviour."<br>Quantity".$submitted_quantity."<br>Ratio".$percent_quantity.":".(100-$percent_quantity));
           $data = array(
                 'quality' =>$marks_behaviour,
-                'quantity' =>$final_quantity,//$this->input->post('quantity'),
+                'quantity' =>$final_quantity,//$request->input('quantity'),
                 'excess_points' =>number_format($excess_points,2,".",""),
-                'monetaryValue' =>$this->input->post('monetary_value'),
+                'monetaryValue' =>$request->input('monetary_value'),
                 'date_marked' =>date('Y-m-d'),
                 'status' =>2,
                 'submitted_quantity' => $submitted_quantity,
                 'qb_ratio' =>$percent_quantity.":".(100-$percent_quantity),
                 'notification' =>3,
-                'remarks' =>$this->input->post('remarks')
+                'remarks' =>$request->input('remarks')
               );          
           $result = $this->performance_model->updateTask($data, $taskID);
           if($result ==true) { 
@@ -1250,7 +1250,7 @@ class Performance extends CI_Controller {
       $data['ratings'] =  $this->performance_model->tasksettings_ratings();
       $data['totalMarks'] =  $this->performance_model->totalMarksbehaviour();
       $data['title'] =  "Task Settings";
-      $this->load->view('task_marking', $data);
+       return view('app.task_marking', $data);
                
    }
 
@@ -1258,15 +1258,15 @@ class Performance extends CI_Controller {
      
      public function updateTaskMarkingBasics(){
       if ($_POST) {
-        $quantity = $this->input->post('quantity');
-        $behaviour = $this->input->post('behaviour');
+        $quantity = $request->input('quantity');
+        $behaviour = $request->input('behaviour');
           
         if($quantity+$behaviour==100 ){
               
         $id = 1;
         $data = array(
-              'behaviour' =>$this->input->post('behaviour'),
-              'quantity' =>$this->input->post('quantity')
+              'behaviour' =>$request->input('behaviour'),
+              'quantity' =>$request->input('quantity')
              
             );   
           $result = $this->performance_model->update_task_settings($data, $id);
@@ -1287,7 +1287,7 @@ class Performance extends CI_Controller {
       if ($_POST) {
               
         $id = 2;
-        $data = array( 'value' =>$this->input->post('percent') );   
+        $data = array( 'value' =>$request->input('percent') );   
           $result = $this->performance_model->update_task_settings($data, $id);
           if($result ==true) { 
               echo "<p class='alert alert-success text-center'>Updated Successifully</p>"; 
@@ -1320,7 +1320,7 @@ class Performance extends CI_Controller {
         $sum = 0;
         $ids =  $this->performance_model->behaviour_ids();
         foreach ($ids as $key) {
-          $sum+=$this->input->post('marks'.$key->id);        
+          $sum+=$request->input('marks'.$key->id);        
           }
 
           if ($sum<100||$sum>100) {
@@ -1329,9 +1329,9 @@ class Performance extends CI_Controller {
 
         foreach ($ids as $key) {
           $parameterID = $key->id;
-          $marks = $this->input->post('marks'.$key->id);
-          $title = $this->input->post('title'.$key->id);
-          $description = $this->input->post('description'.$key->id);
+          $marks = $request->input('marks'.$key->id);
+          $title = $request->input('title'.$key->id);
+          $description = $request->input('description'.$key->id);
 
           $data = array(
               'description' =>$description,
@@ -1354,17 +1354,17 @@ class Performance extends CI_Controller {
         $upper = 100;
           $category = 5;
           for ($i=1; $i <=$category ; $i++) {
-            $upper_bound = $this->input->post("upper".$i);
-            $contribution = $this->input->post("contr".$i);
+            $upper_bound = $request->input("upper".$i);
+            $contribution = $request->input("contr".$i);
             if($upper_bound>=100){
               $upper= 100.4;
             } else {
               $upper = $upper_bound;
             }
             $data = array(
-              'lower_limit' =>$this->input->post('lower'.$i),
+              'lower_limit' =>$request->input('lower'.$i),
               'upper_limit' =>$upper,
-              'title' =>$this->input->post('title'.$i),
+              'title' =>$request->input('title'.$i),
               'contribution' => ($contribution/100)
              
             );
@@ -1382,21 +1382,21 @@ class Performance extends CI_Controller {
       $sum = 0;
       $ids =  $this->performance_model->behaviour_ids();
       foreach ($ids as $key) {
-        $sum+=$this->input->post('marks'.$key->id);        
+        $sum+=$request->input('marks'.$key->id);        
         }
 
         if ($sum<100||$sum>100) {
             $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Parameters Not Updated, Marks either are Less than 100% or Greater Than 100%, Please Review and Correct them Before Resubmission</p>");
 
-            $reload = '/performance/tasksettings/';
-            redirect($reload, 'refresh');
+            $reload = '/flex/performance/tasksettings/';
+            redirect($reload);
           } else{
 
         foreach ($ids as $key) {
           $parameterID = $key->id;
-          $marks = $this->input->post('marks'.$key->id);
-          $title = $this->input->post('title'.$key->id);
-          $description = $this->input->post('description'.$key->id);
+          $marks = $request->input('marks'.$key->id);
+          $title = $request->input('title'.$key->id);
+          $description = $request->input('description'.$key->id);
 
           $data = array(
               'description' =>$description,
@@ -1408,8 +1408,8 @@ class Performance extends CI_Controller {
          }
             $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Parameters  Updated, Successifully!</p>");
 
-            $reload = '/performance/tasksettings/';
-            redirect($reload, 'refresh');
+            $reload = '/flex/performance/tasksettings/';
+            redirect($reload);
         }
       }
                
@@ -1419,8 +1419,8 @@ class Performance extends CI_Controller {
       if ($_POST) {
               
         $data = array(
-                    'title' =>$this->input->post("title"),
-                    'description' =>$this->input->post("description")
+                    'title' =>$request->input("title"),
+                    'description' =>$request->input("description")
                   );      
           $result = $this->performance_model->add_task_parameter($data);
           if($result ==true) { 
@@ -1439,8 +1439,8 @@ class Performance extends CI_Controller {
 
     if (isset($_POST['show'])) {
 
-      $datestart = $this->input->post('start');
-      $dateend = $this->input->post('end');
+      $datestart = $request->input('start');
+      $dateend = $request->input('end');
     }
       $datesValue = str_replace('/', '-', $datestart);
       $dateeValue = str_replace('/', '-', $dateend);
@@ -1456,7 +1456,7 @@ class Performance extends CI_Controller {
       $data['date_from'] = $datestart;
       $data['date_to'] = $dateend;
       $data['title']="Productivity";
-      $this->load->view('productivity', $data);
+       return view('app.productivity', $data);
    }
    
    
@@ -1464,12 +1464,12 @@ class Performance extends CI_Controller {
        
     if (isset($_POST['print'])) {
 
-      $departmentRef = $this->input->post('deptID');
-      $empReport = $this->input->post('employee');
-      $deptReport = $this->input->post('department');
-      $orgReport = $this->input->post('organization');
-      $datestart = $this->input->post('start');
-      $dateend = $this->input->post('end');
+      $departmentRef = $request->input('deptID');
+      $empReport = $request->input('employee');
+      $deptReport = $request->input('department');
+      $orgReport = $request->input('organization');
+      $datestart = $request->input('start');
+      $dateend = $request->input('end');
     
       $datesValue = str_replace('/', '-', $datestart);
       $dateeValue = str_replace('/', '-', $dateend);
@@ -1495,7 +1495,7 @@ class Performance extends CI_Controller {
       $data['author'] = $this->session->userdata('fname')." ".$this->session->userdata('mname') ." ".$this->session->userdata('lname');      
 
       $data['title']="Productivity";
-      $this->load->view('reports/productivity_report', $data);
+       return view('app.reports/productivity_report', $data);
     }
    }
 
@@ -1543,14 +1543,14 @@ class Performance extends CI_Controller {
 
     $data["talents"] = $this->performance_model->talents($strategyID);  
     $data['title'] = 'Talents';
-    $this->load->view('talents', $data);    
+     return view('app.talents', $data);    
   } 
 
    public function submitTask(){  
         if ($_POST) {
 
-          $taskID = $this->input->post('taskID');
-          $remarks = trim($this->input->post('comment'));
+          $taskID = $request->input('taskID');
+          $remarks = trim($request->input('comment'));
           if (!empty($_FILES['userfile']['name']))  {
             $namefile = "report_".$taskID."_".date('YmdHis');            
             $config['upload_path']='./uploads/task/';
@@ -1585,19 +1585,19 @@ class Performance extends CI_Controller {
   public function addtask() { 
     if ($_POST) {
       // DATE MANIPULATION
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
       $date_today=date('Y-m-d');
       //exit($dateEnd."AND".$dateStart);      
 
-      if ($this->input->post('employee')=='') {
+      if ($request->input('employee')=='') {
         $employee = $this->session->userdata('emp_id');
         $isAssigned = 0;
       } else {
-        $employee = $this->input->post('employee');
+        $employee = $request->input('employee');
         $isAssigned = 1;
       }
 
@@ -1610,17 +1610,17 @@ class Performance extends CI_Controller {
         $data = array(
           'start' =>$dateStart,
           'end' =>$dateEnd,
-          'output_ref' =>$this->input->post("outputID"),
-          'outcome_ref' =>$this->input->post("outcomeID"),
-          'strategy_ref' =>$this->input->post("strategyID"),
-          'title' =>$this->input->post("title"),
-          'initial_quantity' =>$this->input->post("quantity"),
-          'description' =>$this->input->post("description"),
+          'output_ref' =>$request->input("outputID"),
+          'outcome_ref' =>$request->input("outcomeID"),
+          'strategy_ref' =>$request->input("strategyID"),
+          'title' =>$request->input("title"),
+          'initial_quantity' =>$request->input("quantity"),
+          'description' =>$request->input("description"),
           'assigned_by' =>$this->session->userdata('emp_id'),
           'assigned_to' =>$employee,
           'isAssigned' => $isAssigned,
-          'quantity_type' =>$this->input->post('quantity_type'),
-          'monetaryValue' =>$this->input->post('monetary_value'),
+          'quantity_type' =>$request->input('quantity_type'),
+          'monetaryValue' =>$request->input('monetary_value'),
           'date_assigned' =>date('Y-m-d')
           );
         
@@ -1640,8 +1640,8 @@ class Performance extends CI_Controller {
           
           // DATE MANIPULATION
         $erv = 3;
-        $dates = $this->input->post('start');
-        $datee = $this->input->post('end');
+        $dates = $request->input('start');
+        $datee = $request->input('end');
         $datesValue = str_replace('/', '-', $dates);
         $dateeValue = str_replace('/', '-', $datee);
 
@@ -1649,11 +1649,11 @@ class Performance extends CI_Controller {
         $dateEnd = date('Y-m-d', strtotime($dateeValue ));
         $date_today=date('Y-m-d');
 
-        if ($this->input->post('employee')=='') {
+        if ($request->input('employee')=='') {
           $employee = $this->session->userdata('emp_id');
           $isAssigned = 0;
         } else {
-          $employee = $this->input->post('employee');
+          $employee = $request->input('employee');
           $isAssigned = 1;
         }
 
@@ -1668,16 +1668,16 @@ class Performance extends CI_Controller {
           $data = array(
             'start' =>$dateStart,
             'end' =>$dateEnd,
-            'strategy_ref' =>$this->input->post("strategyID"),
-            'output_ref' =>$this->input->post("outputID"),
-            'outcome_ref' =>$this->input->post("outcomeID"),
-            'title' =>$this->input->post("title"),
-            'description' =>$this->input->post("description"),
+            'strategy_ref' =>$request->input("strategyID"),
+            'output_ref' =>$request->input("outputID"),
+            'outcome_ref' =>$request->input("outcomeID"),
+            'title' =>$request->input("title"),
+            'description' =>$request->input("description"),
             'assigned_by' =>$this->session->userdata('emp_id'),
             'assigned_to' =>$employee,
-            'quantity_type' =>$this->input->post('quantity_type'),
-            'initial_quantity' =>$this->input->post('quantity'),
-            'monetaryValue' =>$this->input->post('monetary_value'),
+            'quantity_type' =>$request->input('quantity_type'),
+            'initial_quantity' =>$request->input('quantity'),
+            'monetaryValue' =>$request->input('monetary_value'),
             'isAssigned'=>$isAssigned,
             'date_assigned' =>date('Y-m-d')
             );
@@ -1707,7 +1707,7 @@ class Performance extends CI_Controller {
       $data["outcomes"] = $this->performance_model->outcomes($strategyID);  
       $data['tag'] = ' All Outcomes';
       $data['title'] = 'Outcomes';
-      $this->load->view('outcome', $data);    
+       return view('app.outcome', $data);    
   } 
 
 
@@ -1717,7 +1717,7 @@ class Performance extends CI_Controller {
     $data['outcomes'] = $this->performance_model->pie_outcomescompleted($strategyID);
     $data['tag'] = 'Completed Outcomes';
     $data['title'] = 'Outcomes';
-    $this->load->view('outcome', $data);   
+     return view('app.outcome', $data);   
  }
 
 
@@ -1730,7 +1730,7 @@ class Performance extends CI_Controller {
     $data['outcomes'] = $this->performance_model->pie_outcomesontrack($strategyID, $today, $percentToAlert);
     $data['tag'] = 'Outcomes On Track';
     $data['title'] = 'Outcomes';
-    $this->load->view('outcome', $data);   
+     return view('app.outcome', $data);   
  }
 
 
@@ -1742,7 +1742,7 @@ class Performance extends CI_Controller {
     $data['outcomes'] = $this->performance_model->pie_outcomesofftrack($strategyID, $today, $percentToAlert);
     $data['tag'] = 'Delayed Outcomes';
     $data['title'] = 'Outcomes';
-    $this->load->view('outcome', $data);   
+     return view('app.outcome', $data);   
  }
 
 
@@ -1753,7 +1753,7 @@ class Performance extends CI_Controller {
     $data['outcomes'] = $this->performance_model->pie_outcomesoverdue($strategyID, $today);
     $data['tag'] = 'Overdue Outcomes';
     $data['title'] = 'Outcomes';
-    $this->load->view('outcome', $data);   
+     return view('app.outcome', $data);   
  }
 
  //OUTPUTS
@@ -1761,21 +1761,21 @@ class Performance extends CI_Controller {
         
         if ($_POST) { 
 
-        $outcomeref =  $this->input->post('outcomeKEY');
-        $strategyID = $this->input->post('strategyID');
+        $outcomeref =  $request->input('outcomeKEY');
+        $strategyID = $request->input('strategyID');
 
-        $start =str_replace('/', '-', $this->input->post('start'));
-        $end = str_replace('/', '-', $this->input->post('end'));
+        $start =str_replace('/', '-', $request->input('start'));
+        $end = str_replace('/', '-', $request->input('end'));
 
         $dateStart = date('Y-m-d', strtotime($start));
         $dateEnd = date('Y-m-d', strtotime($end));
         $date_today=date('Y-m-d');
 
-        if ($this->input->post('employee')=='') {
+        if ($request->input('employee')=='') {
         $employee = $this->session->userdata('emp_id');
         $isAssigned = 0;
         } else {
-          $employee = $this->input->post('employee');
+          $employee = $request->input('employee');
           $isAssigned = 1;
         }
         if ($dateEnd < $dateStart||$strategyID=='') {
@@ -1788,9 +1788,9 @@ class Performance extends CI_Controller {
           if($outcomeref !='' && $strategyID != '') {
                     
             $data = array( 
-                 'title' =>$this->input->post('title'),
-                 'description' =>$this->input->post('description'), 
-                 'strategy_ref' =>$this->input->post('strategyID'), 
+                 'title' =>$request->input('title'),
+                 'description' =>$request->input('description'), 
+                 'strategy_ref' =>$request->input('strategyID'), 
                  'start' => $dateStart, 
                  'outcome_ref' =>$outcomeref,  
                  'author' =>$this->session->userdata('emp_id'),  
@@ -1831,7 +1831,7 @@ class Performance extends CI_Controller {
       $data["output"] = $this->performance_model->all_output($strategyID); 
       $data['tag'] = ' All Outputs';
       $data['title'] = 'Outputs';
-      $this->load->view('output', $data);    
+       return view('app.output', $data);    
   } 
 
 
@@ -1841,7 +1841,7 @@ class Performance extends CI_Controller {
     $data['output'] = $this->performance_model->pie_outputscompleted($strategyID);
     $data['tag'] = 'Completed Output';
     $data['title'] = 'Output';
-    $this->load->view('output', $data);   
+     return view('app.output', $data);   
  }
 
 
@@ -1853,7 +1853,7 @@ class Performance extends CI_Controller {
     $data['output'] = $this->performance_model->pie_outputsontrack($strategyID, $today, $percentToAlert);
     $data['tag'] = 'Outputs On Track';
     $data['title'] = 'Outputs';
-    $this->load->view('output', $data);   
+     return view('app.output', $data);   
  }
 
 
@@ -1865,7 +1865,7 @@ class Performance extends CI_Controller {
     $data['output'] = $this->performance_model->pie_outputsofftrack($strategyID, $today, $percentToAlert);
     $data['tag'] = 'Delayed Outputs';
     $data['title'] = 'Outputs';
-    $this->load->view('output', $data);   
+     return view('app.output', $data);   
  }
 
 
@@ -1876,7 +1876,7 @@ class Performance extends CI_Controller {
     $data['output'] = $this->performance_model->pie_outputsoverdue($strategyID, $today);
     $data['tag'] = 'Overdue Outputs';
     $data['title'] = 'Outputs';
-    $this->load->view('output', $data);   
+     return view('app.output', $data);   
  }
 
 //TASKS
@@ -1888,7 +1888,7 @@ class Performance extends CI_Controller {
     $data['tag'] = ' All Task';
     $data['title'] = 'Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data);    
+     return view('app.task', $data);    
  } 
 
  public function task(){
@@ -1899,7 +1899,7 @@ class Performance extends CI_Controller {
     $data['tag'] = ' All Task';
     $data['title'] = 'Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data);    
+     return view('app.task', $data);    
  } 
 
  public function adhoc_task(){
@@ -1909,7 +1909,7 @@ class Performance extends CI_Controller {
     $data['tag'] = ' All Task';
     $data['title'] = 'Adhoc Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data);    
+     return view('app.task', $data);    
  } 
 
  public function paused_task(){
@@ -1920,7 +1920,7 @@ class Performance extends CI_Controller {
     $data['tag'] = 'Paused Task';
     $data['active'] = 0;
     $data['title'] = 'Task';
-    $this->load->view('task', $data);    
+     return view('app.task', $data);    
  }  
 
   public function pauseTask()  { 
@@ -1978,7 +1978,7 @@ class Performance extends CI_Controller {
     $data['tag'] = 'Completed Task';
     $data['title'] = 'Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data);   
+     return view('app.task', $data);   
  }
 
  public function taskoverdue(){
@@ -1990,7 +1990,7 @@ class Performance extends CI_Controller {
     $data['tag'] = 'Overdue Tasks';
     $data['title'] = 'Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data); 
+     return view('app.task', $data); 
 
    
  }
@@ -2005,7 +2005,7 @@ class Performance extends CI_Controller {
     $data['tag'] = 'Task On Track';
     $data['title'] = 'Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data); 
+     return view('app.task', $data); 
 
    
  }  
@@ -2020,7 +2020,7 @@ class Performance extends CI_Controller {
     $data['tag'] = 'Task Off Track (Delayed)';
     $data['title'] = 'Task';
     $data['active'] = 1; //Whether The Task is Active or Paused
-    $this->load->view('task', $data); 
+     return view('app.task', $data); 
 
    
  }  
@@ -2043,7 +2043,7 @@ class Performance extends CI_Controller {
     $data['resource'] =  $this->performance_model->task_resources($taskID); 
     $data['output'] =  $this->performance_model->outputs_select(); 
     $data['title'] = 'Task';
-    $this->load->view('task_info', $data); 
+     return view('app.task_info', $data); 
  }  
 
  public function adhoc_task_info(){
@@ -2053,32 +2053,32 @@ class Performance extends CI_Controller {
     $data['totalResourceCost'] =  $this->performance_model->resource_cost($taskID); 
     $data['output'] =  $this->performance_model->outputs_select(); 
     $data['title'] = 'Task';
-    $this->load->view('task_info', $data); 
+     return view('app.task_info', $data); 
  } 
 
  public function update_taskResource() {   
-    $taskID = $this->input->post('taskID');
-    $resourceID = $this->input->post('resourceID');
-    $outputID = $this->input->post('outputID');
+    $taskID = $request->input('taskID');
+    $resourceID = $request->input('resourceID');
+    $outputID = $request->input('outputID');
 
     if (isset($_POST['update']) && $taskID!='' && $resourceID!='' ) {
       $updates = array(
-          'name' =>$this->input->post('name'),
-          'cost' =>$this->input->post('cost')
+          'name' =>$request->input('name'),
+          'cost' =>$request->input('cost')
           );
 
     
      $result = $this->performance_model->update_taskResource($updates, $resourceID);
      if($result == true){
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Resource Updated Successifully</p>");
-        redirect('/performance/task_info/?id='.base64_encode($taskID."|".$outputID), 'refresh');
+        return redirect('/flex/performance/task_info/?id='.base64_encode($taskID."|".$outputID));
       } else {
         $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Resource Not Updated </p>");
-        redirect('/performance/task_info/?id='.base64_encode($taskID."|".$outputID), 'refresh'); 
+        return redirect('/flex/performance/task_info/?id='.base64_encode($taskID."|".$outputID)); 
       }
     } else {
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Resource Not Updated, Some Errors Occured</p>");
-        redirect('/performance/task_info/?id='.base64_encode($taskID."|".$outputID), 'refresh');
+        return redirect('/flex/performance/task_info/?id='.base64_encode($taskID."|".$outputID));
     }
    }
 
@@ -2101,29 +2101,29 @@ class Performance extends CI_Controller {
       $data['outcomeID'] =$outcomeID;
       $data['strategyID'] =$strategyID;
       $data['title'] = 'Task';
-      $this->load->view('assign_task', $data);
+       return view('app.assign_task', $data);
    
  } 
 
   public function gettask()  
       {    
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
       
       $data['data'] =  $this->performance_model->gettaskbyid($id);
       $data['title']="Task";
       $data['subordinate'] = $this->performance_model->taskdropdown($this->session->userdata('emp_id'));
-      $this->load->view('edittask', $data);}
+       return view('app.edittask', $data);}
 
   public function edittask()  
       {    
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
       if (isset($_POST['editdate'])) {   
         
         // DATE MANIPULATION
-        $start = $this->input->post("start");
-        $end =$this->input->post("end");
+        $start = $request->input("start");
+        $end =$request->input("end");
         $datewells = explode("/",$start);
         $datewelle = explode("/",$end);
         $mms = $datewells[1];
@@ -2142,17 +2142,17 @@ class Performance extends CI_Controller {
     }
     elseif (isset($_POST['editsubordinate'])) { 
       $data = array(
-            'assigned_to' =>$this->input->post("assigned_to"));
+            'assigned_to' =>$request->input("assigned_to"));
     }
     elseif (isset($_POST['editdesc'])) { 
       $data = array(
-            'description' =>$this->input->post("description")
+            'description' =>$request->input("description")
             ); }
 
       
         $this->performance_model->updateTask($data, $id);
          $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Task Updated Successifully</p>");
-        redirect('/performance/task', 'refresh');
+        return redirect('/flex/performance/task');
          
    } 
     
@@ -2160,11 +2160,11 @@ class Performance extends CI_Controller {
      public function updateTaskTitle(){
       if ($_POST) {
           
-          if($this->input->post('title')!='' && $this->input->post('taskID')!=''){
+          if($request->input('title')!='' && $request->input('taskID')!=''){
               
-        $taskID = $this->input->post('taskID');
+        $taskID = $request->input('taskID');
         $data = array( 
-                 'title' =>$this->input->post('title')
+                 'title' =>$request->input('title')
             );   
           $this->performance_model->updateTask($data, $taskID);
           echo "<p class='alert alert-success text-center'>Title Updated Successifully</p>";
@@ -2175,11 +2175,11 @@ class Performance extends CI_Controller {
      public function updateTaskCost(){
       if ($_POST) {
           
-          if($this->input->post('cost')!='' && $this->input->post('taskID')!=''){
+          if($request->input('cost')!='' && $request->input('taskID')!=''){
               
-        $taskID = $this->input->post('taskID');
+        $taskID = $request->input('taskID');
         $data = array( 
-                 'monetaryValue' =>$this->input->post('cost')
+                 'monetaryValue' =>$request->input('cost')
             );   
           $this->performance_model->updateTask($data, $taskID);
           echo "<p class='alert alert-success text-center'>Market Time Cost Updated Successifully</p>";
@@ -2190,11 +2190,11 @@ class Performance extends CI_Controller {
      public function updateTaskDescription(){
       if ($_POST) {
           
-          if($this->input->post('description')!='' && $this->input->post('taskID')!=''){
+          if($request->input('description')!='' && $request->input('taskID')!=''){
               
-        $taskID = $this->input->post('taskID');
+        $taskID = $request->input('taskID');
         $data = array( 
-                 'description' =>$this->input->post('description')
+                 'description' =>$request->input('description')
             );   
           $this->performance_model->updateTask($data, $taskID);
           echo "<p class='alert alert-success text-center'>Description Updated Successifully</p>";
@@ -2204,9 +2204,9 @@ class Performance extends CI_Controller {
 
    public function updateTaskDateRange(){
     if ($_POST) {
-      $taskID = $this->input->post('taskID');
-      $start =str_replace('/', '-', $this->input->post('start'));
-      $end = str_replace('/', '-', $this->input->post('end'));
+      $taskID = $request->input('taskID');
+      $start =str_replace('/', '-', $request->input('start'));
+      $end = str_replace('/', '-', $request->input('end'));
 
       $dateStart = date('Y-m-d', strtotime($start));
       $dateEnd = date('Y-m-d', strtotime($end));
@@ -2234,8 +2234,8 @@ class Performance extends CI_Controller {
       public function updateTaskAdvanced()  
       { 
       if ($_POST) {
-        $updates =  $this->input->post('outputID');
-        $taskID =  $this->input->post('taskID');
+        $updates =  $request->input('outputID');
+        $taskID =  $request->input('taskID');
         
         $values = explode('|', $updates);
             $output_ref = $values[0];
@@ -2256,8 +2256,8 @@ class Performance extends CI_Controller {
    public function updateTaskAdvanced2()  
       { 
       if ($_POST) {
-        $employee =  $this->input->post('employeeID');
-        $taskID =  $this->input->post('taskID');
+        $employee =  $request->input('employeeID');
+        $taskID =  $request->input('taskID');
         
         // echo $outputID."<><>".$outcomeref; exit();
         if($employee!=''||$taskID!=''){
@@ -2394,14 +2394,14 @@ class Performance extends CI_Controller {
       $data['active'] = 1; //Whether The Task is Active or Paused 
       $data['title'] = 'Task';
       $data['tag'] = "Current Task";
-      $this->load->view('task', $data);
+       return view('app.task', $data);
     } else {
       $data['mytask'] = $this->performance_model->task_staff_current($this->session->userdata('emp_id'));
       $this->performance_model-> update_notification_task_staff($this->session->userdata('emp_id'));
       $data['active'] = 1; //Whether The Task is Active or Paused 
       $data['title'] = 'Task';
       $data['tag'] = "Current Task";
-      $this->load->view('task', $data);
+       return view('app.task', $data);
     }
   }
 
@@ -2455,7 +2455,7 @@ class Performance extends CI_Controller {
     $data['outputsGraph'] = $this->performance_model->outputsGraph($strategyID);
     
     $data['title'] = "Strategy_dashboard"; 
-    $this->load->view('strategy_dashboard', $data); 
+     return view('app.strategy_dashboard', $data); 
     
    } 
    
@@ -2521,7 +2521,7 @@ class Performance extends CI_Controller {
     $data['totalOutcome'] = ($this->performance_model-> outcomesNotStarted($strategyID, $toDate)+$this->performance_model-> outcomesCompleted($strategyID)+$this->performance_model-> outcomesProgress($strategyID));
     $data['totalOutput'] = ($this->performance_model-> outputsNotStarted($strategyID,$toDate )+$this->performance_model-> outputsProgress($strategyID)+$this->performance_model-> outputsCompleted($strategyID));
     $data['totalTask'] = ($this->performance_model-> tasksNotStarted($strategyID)+$this->performance_model-> tasksProgress($strategyID)+$this->performance_model-> tasksCompleted($strategyID));
-    $this->load->view('reports/strategy_statistics', $data); 
+     return view('app.reports/strategy_statistics', $data); 
          
      
  }
@@ -2537,7 +2537,7 @@ class Performance extends CI_Controller {
     $data['outcomeList'] = $this->performance_model-> outcomes($strategyID);
     $data["strategyProgress"] = $this->performance_model->strategyProgress($strategyID);
     $data['title'] = $strategyTitle;
-    $this->load->view('reports/outcome_report', $data); 
+     return view('app.reports/outcome_report', $data); 
      
  }
    
@@ -2552,7 +2552,7 @@ class Performance extends CI_Controller {
     $data['outputList'] = $this->performance_model-> output_report($strategyID);
     $data["strategyProgress"] = $this->performance_model->strategyProgress($strategyID);
     $data['title'] = $strategyTitle;
-    $this->load->view('reports/output_report', $data); 
+     return view('app.reports/output_report', $data); 
      
  }
    
@@ -2567,7 +2567,7 @@ class Performance extends CI_Controller {
     $data['taskList'] = $this->performance_model-> task_report($strategyID);
     $data["strategyProgress"] = $this->performance_model->strategyProgress($strategyID);
     $data['title'] = $strategyTitle;
-    $this->load->view('reports/task_report', $data); 
+     return view('app.reports/task_report', $data); 
      
  }
 
@@ -2578,14 +2578,14 @@ class Performance extends CI_Controller {
         $data['funder_info'] = $this->performance_model->funderInfo($funderId);
         $data['country_list'] = $this->flexperformance_model->nationality();
         $data['title']="Create New Funder";
-        $this->load->view('funder_info', $data);
+         return view('app.funder_info', $data);
     }
 
     public function updateFunderName(){
         if ($_POST) {
-            $funderID = $this->input->post('funderID');
+            $funderID = $request->input('funderID');
             $data = array(
-                'name' =>trim($this->input->post('name'))
+                'name' =>trim($request->input('name'))
             );
             $result = $this->performance_model->updateFunder($data, $funderID);
             if($result==true) {
@@ -2597,9 +2597,9 @@ class Performance extends CI_Controller {
 
     public function updateFunderEmail(){
         if ($_POST) {
-            $funderID = $this->input->post('funderID');
+            $funderID = $request->input('funderID');
             $data = array(
-                'email' =>trim($this->input->post('email'))
+                'email' =>trim($request->input('email'))
             );
             $result = $this->performance_model->updateFunder($data, $funderID);
             if($result==true) {
@@ -2611,9 +2611,9 @@ class Performance extends CI_Controller {
 
     public function updateFunderPhone(){
         if ($_POST) {
-            $funderID = $this->input->post('funderID');
+            $funderID = $request->input('funderID');
             $data = array(
-                'phone' =>trim($this->input->post('phone'))
+                'phone' =>trim($request->input('phone'))
             );
             $result = $this->performance_model->updateFunder($data, $funderID);
             if($result==true) {
@@ -2625,9 +2625,9 @@ class Performance extends CI_Controller {
 
     public function updateFunderDescription(){
         if ($_POST) {
-            $funderID = $this->input->post('funderID');
+            $funderID = $request->input('funderID');
             $data = array(
-                'description' =>trim($this->input->post('description'))
+                'description' =>trim($request->input('description'))
             );
             $result = $this->performance_model->updateFunder($data, $funderID);
             if($result==true) {

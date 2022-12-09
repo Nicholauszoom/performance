@@ -28,7 +28,7 @@ class Imprest extends CI_Controller {
   function confirmed_imprest(){
     $data['imprests'] = $this->imprest_model->confirmedImprests();
     $data['title']="Imprest"; 
-    $this->load->view('confirmed_imprest', $data);       
+     return view('app.confirmed_imprest', $data);       
   }
 
   function imprest(){
@@ -56,7 +56,7 @@ class Imprest extends CI_Controller {
     $data['other_imprests'] = $this->imprest_model->othersImprests($this->session->userdata('emp_id'));
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-    $this->load->view('imprest', $data);
+     return view('app.imprest', $data);
         
   }
 
@@ -66,15 +66,15 @@ class Imprest extends CI_Controller {
     $data['imprest_details'] =  $this->imprest_model->getImprest($imprestID);
     $data['requirements'] =  $this->imprest_model->getImprestRequirements($imprestID);
     $data['title']="Imprest";
-    $this->load->view('imprest_info', $data);         
+     return view('app.imprest_info', $data);         
   }
 
 
    public function add_imprest_requirement() {
-        $imprestID = $this->input->post('imprestID');
-        $description = trim($this->input->post('description'));
-        $initial_amount = $this->input->post('initial_amount');
-        if ($_POST && $imprestID!='') {
+        $imprestID = $request->input('imprestID');
+        $description = trim($request->input('description'));
+        $initial_amount = $request->input('initial_amount');
+        if (Request::isMethod('post')&& $imprestID!='') {
             $database = array(
                 'evidence' =>'0',
                 'status' =>0,
@@ -97,11 +97,11 @@ class Imprest extends CI_Controller {
       }
 
 public function uploadRequirementEvidence() {
-        if (isset($_POST['confirm']) && $this->input->post('requirementID')!='') {
+        if (isset($_POST['confirm']) && $request->input('requirementID')!='') {
 
-          $requirementID = $this->input->post('requirementID');
-          $final_amount = $this->input->post('final_amount');
-          $imprestID = $this->input->post('imprestID');
+          $requirementID = $request->input('requirementID');
+          $final_amount = $request->input('final_amount');
+          $imprestID = $request->input('imprestID');
           if (empty($_FILES['userfile']['name'])) {             
             $updates = array(
                     'final_amount' =>$final_amount,
@@ -114,7 +114,7 @@ public function uploadRequirementEvidence() {
             } else {
               $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Retirement Failed, Please try Again</p>");  }
             $finalID = base64_encode($imprestID);
-            redirect('/imprest/imprest_info/?id='.$finalID, 'refresh');
+            return redirect('/flex/imprest/imprest_info/?id='.$finalID);
           } else {
             $namefile = "evidence_".$imprestID."_".date('YmdHis');            
             $config['upload_path']='./uploads/imprests/';
@@ -141,7 +141,7 @@ public function uploadRequirementEvidence() {
             }
 
             $finalID = base64_encode($imprestID);
-            redirect('/imprest/imprest_info/?id='.$finalID, 'refresh');
+            return redirect('/flex/imprest/imprest_info/?id='.$finalID);
           }
 
         }  else { echo "INVALID ACCESS</p>"; }
@@ -376,11 +376,11 @@ public function uploadRequirementEvidence() {
   public function updateImprestTitle(){
     if ($_POST) {
         
-        if($this->input->post('imprestID')!=''){
+        if($request->input('imprestID')!=''){
             
-      $imprestID = $this->input->post('imprestID');
+      $imprestID = $request->input('imprestID');
       $updates = array( 
-               'title' =>$this->input->post('title')
+               'title' =>$request->input('title')
           ); 
           $result = $this->imprest_model->update_imprest($updates, $imprestID);
         if($result == true){
@@ -393,11 +393,11 @@ public function uploadRequirementEvidence() {
   } 
   public function updateImprestDescription(){
     if ($_POST) {        
-      if($this->input->post('imprestID')!=''){
+      if($request->input('imprestID')!=''){
             
-      $imprestID = $this->input->post('imprestID');
+      $imprestID = $request->input('imprestID');
       $updates = array( 
-               'description' =>$this->input->post('description')
+               'description' =>$request->input('description')
           ); 
           $result = $this->imprest_model->update_imprest($updates, $imprestID);
         if($result == true){
@@ -410,10 +410,10 @@ public function uploadRequirementEvidence() {
   }
   public function updateImprestDateRange(){
     if ($_POST) {
-      if($this->input->post('imprestID')!=''){
-        $imprestID = $this->input->post('imprestID');
-        $start =str_replace('/', '-', $this->input->post('start'));
-        $end = str_replace('/', '-', $this->input->post('end'));
+      if($request->input('imprestID')!=''){
+        $imprestID = $request->input('imprestID');
+        $start =str_replace('/', '-', $request->input('start'));
+        $end = str_replace('/', '-', $request->input('end'));
 
         $dateStart = date('Y-m-d', strtotime($start));
         $dateEnd = date('Y-m-d', strtotime($end));
@@ -439,24 +439,24 @@ public function uploadRequirementEvidence() {
 
   public function update_imprestRequirement() { 
       
-   if(isset($_POST['update']) && $this->input->post('imprestID')!='') {
-    $imprestID = $this->input->post('imprestID');
-    $requirementID = $this->input->post('requirementID');
+   if(isset($_POST['update']) && $request->input('imprestID')!='') {
+    $imprestID = $request->input('imprestID');
+    $requirementID = $request->input('requirementID');
       $updates = array(  
-           'description' => $this->input->post('description'),
-           'initial_amount' => $this->input->post('initial_amount')
+           'description' => $request->input('description'),
+           'initial_amount' => $request->input('initial_amount')
       );
       
       $result =  $this->imprest_model->update_imprest_requirement($updates, $requirementID);
       if($result){
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");            
           $finalID = base64_encode($imprestID);
-          redirect('/imprest/imprest_info/?id='.$finalID, 'refresh');
+          return redirect('/flex/imprest/imprest_info/?id='.$finalID);
       } else {
 
         $this->session->set_flashdata('note', "<p class='alert alert-success text-danger'>FAILED to Update</p>");            
         $finalID = base64_encode($imprestID);
-        redirect('/imprest/imprest_info/?id='.$finalID, 'refresh');
+        return redirect('/flex/imprest/imprest_info/?id='.$finalID);
       }
     } 
   }
@@ -671,8 +671,8 @@ public function uploadRequirementEvidence() {
     public function requestImprest() {         
       if ($_POST) {
 
-        $start =str_replace('/', '-', $this->input->post('start'));
-        $end = str_replace('/', '-', $this->input->post('end'));
+        $start =str_replace('/', '-', $request->input('start'));
+        $end = str_replace('/', '-', $request->input('end'));
 
         $dateStart = date('Y-m-d', strtotime($start));
         $dateEnd = date('Y-m-d', strtotime($end));
@@ -683,8 +683,8 @@ public function uploadRequirementEvidence() {
         } else { 
 
           $data = array(  
-               'title' => $this->input->post('title'),
-               'description' =>$this->input->post('description'), 
+               'title' => $request->input('title'),
+               'description' =>$request->input('description'), 
                'empID' =>$this->session->userdata('emp_id'),
                'start' =>$dateStart,
                'end' =>$dateEnd,

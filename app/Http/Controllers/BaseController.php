@@ -53,7 +53,7 @@ class BaseController extends Controller {
     //     $this->session->set_userdata('ip_address', $this->input->ip_address()); 
 
 
-    //     $username = $this->input->post('username');
+    //     $username = $request->input('username');
     // }
 
 
@@ -144,12 +144,12 @@ class BaseController extends Controller {
     
         // Redirect To HOME
         $data['title'] = "Home";
-        $this->load->view('home', $data);
+         return view('app.home', $data);
         }
 
       }else{
         $data['title']="login";
-        $this->load->view('login', $data); 
+         return view('app.login', $data); 
       }
 
     	
@@ -213,9 +213,9 @@ class BaseController extends Controller {
     
       if ( isset($_POST['login']) && $this->form_validation->run()) {
 
-        // $password = base64_encode($this->input->post('password'));
-        $username = trim($this->input->post('username'));
-        $password = trim($this->input->post('password'));
+        // $password = base64_encode($request->input('password'));
+        $username = trim($request->input('username'));
+        $password = trim($request->input('password'));
 
         $data=$this->flexperformance_model->login_user($username, $password);
         $from="";
@@ -277,7 +277,7 @@ class BaseController extends Controller {
           }
         } else {          
             $data['title']="Login";
-            $this->load->view('login', $data);  
+             return view('app.login', $data);  
         }
     
     }
@@ -285,7 +285,7 @@ class BaseController extends Controller {
     function register()
    { 
     $data['title'] = "Register";
-    $this->load->view('register', $data);
+     return view('app.register', $data);
    }
 
 
@@ -297,27 +297,27 @@ class BaseController extends Controller {
 
     if (isset($_POST['register']) && $this->form_validation->run()) {
 
-      $id = $this->input->post('userID');
-      $password = password_hash(trim($this->input->post('password')), PASSWORD_BCRYPT);     
+      $id = $request->input('userID');
+      $password = password_hash(trim($request->input('password')), PASSWORD_BCRYPT);     
     
       $data=array(
-        'username'=>$this->input->post('username'),
+        'username'=>$request->input('username'),
         'password'=>$password
         );
 
       if ($this->flexperformance_model->updateEmployee($data, $id)) {
         $this->session->set_flashdata('note', "<p><font color = 'green'>Employee Credentials Updated Successifully</font></p>");
         $data['title'] = "Register";
-        $this->load->view('register', $data); 
+         return view('app.register', $data); 
     } else {
         $this->session->set_flashdata('note', "<p><font color = 'red'>Employee Credentials Not Updated Successifully</font></p>");
         $data['title'] = "Register";
-        $this->load->view('register', $data); 
+         return view('app.register', $data); 
     }
 
     } else {        
       $data['title'] = "Register";
-      $this->load->view('register', $data); 
+       return view('app.register', $data); 
     }
   }
 
@@ -375,7 +375,7 @@ class BaseController extends Controller {
 
     $result = $this->flexperformance_model->insertAuditLog($logData);
     if($result==true) {
-      redirect('/cipay/home', 'refresh');    
+      return redirect('/flex/cipay/home');    
     } else { 
       echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
     }
@@ -385,16 +385,16 @@ class BaseController extends Controller {
     function forgot_password()
    { 
     $data['title'] = "Reset Password";
-    $this->load->view('reset_password', $data);
+     return view('app.reset_password', $data);
    }
 
    public function resetPassword(){
 
-    if ($_POST && $this->input->post('email')!='') {
+    if (Request::isMethod('post')&& $request->input('email')!='') {
       $this->load->model('payroll_model');      
       $this->load->library('phpmailer_lib');
       $mail = $this->phpmailer_lib->load();
-      $email = $this->input->post('email');
+      $email = $request->input('email');
       $senderInfo = $this->payroll_model->senderInfo();
       $randomPassword = $this->password_generator(6);
       $password_hash = password_hash($randomPassword, PASSWORD_BCRYPT);
@@ -489,7 +489,7 @@ class BaseController extends Controller {
                  
         
         $data['title'] = "Reset Password";
-        $this->load->view('reset_password', $data);
+         return view('app.reset_password', $data);
       }
     }
 
@@ -520,7 +520,7 @@ class BaseController extends Controller {
    $result = $this->flexperformance_model->insertAuditLog($logData);
    }
     $this->session->sess_destroy();
-    redirect('/Base_controller/', 'refresh');
+    return redirect('/flex/Base_controller/');
   }
 
 

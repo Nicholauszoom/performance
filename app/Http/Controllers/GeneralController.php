@@ -33,7 +33,7 @@ class GeneralController extends Controller
       $this->flexperformance_model->terminate_contract($key->IDs);
       }
     $data['title']="Login";
-    $this->load->view('login', $data);
+    return view('app.login', $data);
    }
 
 
@@ -53,7 +53,7 @@ class GeneralController extends Controller
     $empID = $this->session->userdata('emp_id');
     $data['info'] = $this->flexperformance_model->login_info($empID);
     $data['title'] = "Login Credentials";
-    $this->load->view('update_login_info', $data);
+    return view('app.update_login_info', $data);
   }
 
 
@@ -74,12 +74,12 @@ class GeneralController extends Controller
 
  public function update_login_info() {
 
-    if($_POST) {
+    if(Request::isMethod('post')) {
       $empID = $this->session->userdata('emp_id');
 
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-        $password_conf = $this->input->post('conf_password');
+        $username = $request->input('username');
+        $password = $request->input('password');
+        $password_conf = $request->input('conf_password');
 
       if($username!='' && $password!=''&& $password== $password_conf){
         if($this->checkPassword($password)){
@@ -134,13 +134,13 @@ class GeneralController extends Controller
 
   public function logout(){
     $this->session->sess_destroy();
-    redirect('/Base_controller/', 'refresh');
+    return  redirect('/flex/Base_controller/');
   }
 
 
   public function userprofile() {
-    $id = $this->input->get('id');
-    $extra = $this->input->get('extra');
+    $id = $request->input('id');
+    $extra = $request->input('extra');
     $data['employee'] = $this->flexperformance_model->userprofile($id);
     $data['kin'] = $this->flexperformance_model->getkin($id);
     $data['property'] = $this->flexperformance_model->getproperty($id);
@@ -160,7 +160,7 @@ class GeneralController extends Controller
     $data['skills_have'] = $this->flexperformance_model->skills_have($id);
     $data['month_list'] = $this->flexperformance_model->payroll_month_list();
     $data['title']="Profile";
-    $this->load->view('userprofile', $data);
+    return view('app.userprofile', $data);
   }
 
 
@@ -169,7 +169,7 @@ class GeneralController extends Controller
 
       $data['contract_expire'] = $this->flexperformance_model->contract_expiration_list();
       $data['title']="Contract";
-      $this->load->view('contract_expire', $data);
+      return view('app.contract_expire', $data);
   }
 
 
@@ -178,7 +178,7 @@ class GeneralController extends Controller
 
       $data['retire'] = $this->flexperformance_model->retire_list();
       $data['title']="Contract";
-      $this->load->view('retire', $data);
+      return view('app.retire', $data);
    }
 
 
@@ -186,15 +186,15 @@ class GeneralController extends Controller
 
       $data['contract'] = $this->flexperformance_model->contract();
       $data['title']="Contract";
-      $this->load->view('contract', $data);
+      return view('app.contract', $data);
   }
 
   public function addContract() {
-    if($_POST) {
+    if(Request::isMethod('post')) {
       $data = array(
-           'name' => $this->input->post('name'),
-           'duration' => $this->input->post('duration'),
-           'reminder' =>$this->input->post('alert')
+           'name' => $request->input('name'),
+           'duration' => $request->input('duration'),
+           'reminder' =>$request->input('alert')
       );
 
       $result = $this->flexperformance_model->contractAdd($data);
@@ -224,22 +224,22 @@ class GeneralController extends Controller
 
     public function updatecontract()
       {
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
       $data['contract'] =  $this->flexperformance_model->getcontractbyid($id);
       $data['title']="Contract";
-      $this->load->view('update_contract', $data);
+      return view('app.update_contract', $data);
 
       if (isset($_POST['update']) && $id!='') {
         $updates = array(
-            'name' =>$this->input->post('name'),
-            'duration' =>$this->input->post('duration'),
-            'reminder' =>$this->input->post('alert')
+            'name' =>$request->input('name'),
+            'duration' =>$request->input('duration'),
+            'reminder' =>$request->input('alert')
             );
         $result = $this->flexperformance_model->updatecontract($updates, $id);
         if($result ==true){
             $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Contract Deleted Successifully</p>");
-            redirect('/cipay/contract/');
+            return  redirect('/flex/contract/');
         }
       }
    }
@@ -267,7 +267,7 @@ class GeneralController extends Controller
       $data['banks'] =  $this->flexperformance_model->bank();
       $data['branch'] =  $this->flexperformance_model->bank_branch();
       $data['title']="Bank";
-      $this->load->view('bank', $data);
+      return view('app.bank', $data);
     } else{
       echo "Unauthorized Access";
     }
@@ -282,7 +282,7 @@ class GeneralController extends Controller
        $data['department'] = $this->flexperformance_model->alldepartment();
        $data['inactive_department'] = $this->flexperformance_model->inactive_department();
       $data['title']="Department";
-      $this->load->view('department', $data);
+      return view('app.department', $data);
    }
 
 
@@ -290,14 +290,14 @@ class GeneralController extends Controller
       {
        $data['level'] = $this->flexperformance_model->getAllOrganizationLevel();
       $data['title']="Department";
-      $this->load->view('organization_level', $data);
+      return view('app.organization_level', $data);
    }
 
    public function organization_level_info()  {
       $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Organization Level';
       $data['category'] =  $this->flexperformance_model->organization_level_info($id);
-      $this->load->view('organization_level_info', $data);
+      return view('app.organization_level_info', $data);
     }
 
 
@@ -305,15 +305,15 @@ class GeneralController extends Controller
       $id = $this->session->userdata('emp_id');
       $data['department'] = $this->flexperformance_model->alldepartment();
       $data['title']="Department";
-      $this->load->view('department', $data);
+      return view('app.department', $data);
 
    }
 
   public function updateOrganizationLevelName() {
-    $ID = $this->input->post('levelID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('levelID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'name' =>$this->input->post('name')
+                      'name' =>$request->input('name')
                   );
               $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
               if($result==true) {
@@ -323,10 +323,10 @@ class GeneralController extends Controller
       }
    }
   public function updateMinSalary() {
-    $ID = $this->input->post('levelID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('levelID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'minSalary' =>$this->input->post('minSalary')
+                      'minSalary' =>$request->input('minSalary')
                   );
               $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
               if($result==true) {
@@ -336,10 +336,10 @@ class GeneralController extends Controller
       }
    }
   public function updateMaxSalary() {
-    $ID = $this->input->post('levelID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('levelID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'maxSalary' =>$this->input->post('maxSalary')
+                      'maxSalary' =>$request->input('maxSalary')
                   );
               $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
               if($result==true) {
@@ -351,15 +351,15 @@ class GeneralController extends Controller
 
     public function departmentAdd() {
 
-      if($_POST) {
-        $values = explode('|', $this->input->post('parent'));
+      if(Request::isMethod('post')) {
+        $values = explode('|', $request->input('parent'));
         $parent_id = $values[0];
         $parent_code = $values[1];
         $parent_level = $values[2];
         $departmentData = array(
-             'name' => $this->input->post('name'),
-             'hod' => $this->input->post('hod'),
-             'cost_center_id' => $this->input->post('cost_center_id'),
+             'name' => $request->input('name'),
+             'hod' => $request->input('hod'),
+             'cost_center_id' => $request->input('cost_center_id'),
              'department_pattern' =>$this->code_generator(6),
              'parent_pattern' =>$parent_code,
              'reports_to' => $parent_id,
@@ -395,7 +395,7 @@ class GeneralController extends Controller
        $data['department'] = $this->flexperformance_model->alldepartment();
        $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
       $data['title']="Company Branch";
-      $this->load->view('branch', $data);
+      return view('app.branch', $data);
    }
 
    public function costCenter()
@@ -404,7 +404,7 @@ class GeneralController extends Controller
     $data['cost_center'] =  $this->flexperformance_model->costCenter();
     $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
    $data['title']="Cost Center";
-   $this->load->view('cost_center', $data);
+   return view('app.cost_center', $data);
 }
 
   public function nationality()
@@ -412,16 +412,16 @@ class GeneralController extends Controller
        $id = $this->session->userdata('emp_id');
        $data['nationality'] =  $this->flexperformance_model->nationality();
       $data['title']="Employee Nationality";
-      $this->load->view('nationality', $data);
+      return view('app.nationality', $data);
    }
 
 
   public function addEmployeeNationality() {
-    if ($_POST) {
+    if (Request::isMethod('post')) {
 
       $data = array(
-        'name' =>$this->input->post('name'),
-        'code' =>$this->input->post('code')
+        'name' =>$request->input('name'),
+        'code' =>$request->input('code')
       );
         $result = $this->flexperformance_model->addEmployeeNationality($data);
         if($result==true) {
@@ -450,15 +450,15 @@ class GeneralController extends Controller
   }
 
   public function addCompanyBranch() {
-    if ($_POST) {
+    if (Request::isMethod('post')) {
 
       $data = array(
-        'name' =>$this->input->post('name'),
-        'department_id' =>$this->input->post('department_id'),
-        'street' =>$this->input->post('street'),
-        'region' =>$this->input->post('region'),
+        'name' =>$request->input('name'),
+        'department_id' =>$request->input('department_id'),
+        'street' =>$request->input('street'),
+        'region' =>$request->input('region'),
         'code' =>"0",
-        'country' =>$this->input->post('country')
+        'country' =>$request->input('country')
       );
       $branchID = $this->flexperformance_model->addCompanyBranch($data);
       if($branchID>0) {
@@ -477,14 +477,14 @@ class GeneralController extends Controller
   }
 
   public function addCostCenter() {
-    if ($_POST) {
+    if (Request::isMethod('post')) {
 
       $data = array(
-        'name' =>$this->input->post('name'),
-        'street' =>$this->input->post('street'),
-        'region' =>$this->input->post('region'),
+        'name' =>$request->input('name'),
+        'street' =>$request->input('street'),
+        'region' =>$request->input('region'),
         'code' =>"0",
-        'country' =>$this->input->post('country')
+        'country' =>$request->input('country')
       );
       $branchID = $this->flexperformance_model->addCostCenter($data);
       if($branchID>0) {
@@ -504,43 +504,43 @@ class GeneralController extends Controller
 
   public function updateCompanyBranch() {
 
-   if(isset($_POST['update']) && $this->input->post('branchID')!='') {
-    $branchID = $this->input->post('branchID');
+   if(isset($_POST['update']) && $request->input('branchID')!='') {
+    $branchID = $request->input('branchID');
       $updates = array(
-           'name' => $this->input->post('name'),
-           'department_id' => $this->input->post('department_id'),
-           'region' => $this->input->post('region'),
-           'street' => $this->input->post('street')
+           'name' => $request->input('name'),
+           'department_id' => $request->input('department_id'),
+           'region' => $request->input('region'),
+           'street' => $request->input('street')
       );
 
       $result =  $this->flexperformance_model->updateCompanyBranch($updates, $branchID);
       if($result){
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");
-          redirect('/cipay/branch/', 'refresh');
+          return  redirect('/flex/branch/');
       } else {
         $this->session->set_flashdata('note', "<p class='alert alert-success text-danger'>FAILED to Update</p>");
-        redirect('/cipay/branch/', 'refresh');
+        return  redirect('/flex/branch/');
       }
     }
   }
 
   public function updateCostCenter() {
 
-    if(isset($_POST['update']) && $this->input->post('costCenterID')!='') {
-     $branchID = $this->input->post('costCenterID');
+    if(isset($_POST['update']) && $request->input('costCenterID')!='') {
+     $branchID = $request->input('costCenterID');
        $updates = array(
-            'name' => $this->input->post('name'),
-            'region' => $this->input->post('region'),
-            'street' => $this->input->post('street')
+            'name' => $request->input('name'),
+            'region' => $request->input('region'),
+            'street' => $request->input('street')
        );
  
        $result =  $this->flexperformance_model->updateCostCenter($updates, $branchID);
        if($result){
            $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");
-           redirect('/cipay/costCenter/', 'refresh');
+           return  redirect('/flex/costCenter/');
        } else {
          $this->session->set_flashdata('note', "<p class='alert alert-success text-danger'>FAILED to Update</p>");
-         redirect('/cipay/branch/', 'refresh');
+         return  redirect('/flex/branch/');
        }
      }
    }
@@ -548,16 +548,16 @@ class GeneralController extends Controller
   public function addBank() {
      if(isset($_POST['add'])) {
         $data = array(
-             'name' => $this->input->post('name'),
-             'abbr' => $this->input->post('abbrv'),
-             'bank_code' => $this->input->post('bank_code')
+             'name' => $request->input('name'),
+             'abbr' => $request->input('abbrv'),
+             'bank_code' => $request->input('bank_code')
         );
         if( $this->session->userdata('mng_bank_info')){
           $result = $this->flexperformance_model->addBank($data);
           if($result){
               $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
-              redirect('/cipay/bank', 'refresh');
-          } else {  redirect('/cipay/bank', 'refresh'); }
+              return  redirect('/flex/bank');
+          } else {  return  redirect('/flex/bank'); }
         }else{
           echo "Unauthorized Access";
         }
@@ -567,15 +567,15 @@ class GeneralController extends Controller
 
 
       public function addBankBranch() {
-        if($_POST) {
+        if(Request::isMethod('post')) {
           $data = array(
-                  'name' => $this->input->post('name'),
-                  'bank' => $this->input->post('bank'),
-                  'street' => $this->input->post('street'),
-                  'region' => $this->input->post('region'),
-                  'branch_code' => $this->input->post('code'),
-                  'country' => $this->input->post('country'),
-                  'swiftcode' => $this->input->post('swiftcode')
+                  'name' => $request->input('name'),
+                  'bank' => $request->input('bank'),
+                  'street' => $request->input('street'),
+                  'region' => $request->input('region'),
+                  'branch_code' => $request->input('code'),
+                  'country' => $request->input('country'),
+                  'swiftcode' => $request->input('swiftcode')
               );
           $result = $this->flexperformance_model->addBankBranch($data);
           if($result){
@@ -602,26 +602,26 @@ class GeneralController extends Controller
         $data['bank_info'] =  $this->flexperformance_model->getbank($id);
         $data['category']=1;
         $data['title']="Bank Info";
-        $this->load->view('update_bank', $data);
+        return view('app.update_bank', $data);
       }else{//Update Branch
         $data['branch_info'] =  $this->flexperformance_model->getbankbranch($id);
         $data['category']=2;
         $data['title']="Bank Info";
-        $this->load->view('update_bank', $data);
+        return view('app.update_bank', $data);
 
       }
     }
 
       public function updateBankBranchName() {
-        if($_POST) {
+        if(Request::isMethod('post')) {
           $data = array(
-                  'name' => $this->input->post('name'),
-                  'bank' => $this->input->post('bank'),
-                  'street' => $this->input->post('street'),
-                  'region' => $this->input->post('region'),
-                  'branch_code' => $this->input->post('code'),
-                  'country' => $this->input->post('country'),
-                  'swiftcode' => $this->input->post('swiftcode')
+                  'name' => $request->input('name'),
+                  'bank' => $request->input('bank'),
+                  'street' => $request->input('street'),
+                  'region' => $request->input('region'),
+                  'branch_code' => $request->input('code'),
+                  'country' => $request->input('country'),
+                  'swiftcode' => $request->input('swiftcode')
               );
           $result = $this->flexperformance_model->addBankBranch($data);
           if($result){
@@ -640,10 +640,10 @@ class GeneralController extends Controller
       }
 
       public function updateBankName() {
-        if($_POST && $this->input->post('bankID')!='') {
-          $bankID = $this->input->post('bankID');
+        if(Request::isMethod('post')&& $request->input('bankID')!='') {
+          $bankID = $request->input('bankID');
           $data = array(
-                  'name' => $this->input->post('name')
+                  'name' => $request->input('name')
               );
           $result = $this->flexperformance_model->updateBank($data,$bankID );
           if($result){
@@ -662,10 +662,10 @@ class GeneralController extends Controller
       }
 
       public function updateAbbrev() {
-        if($_POST && $this->input->post('bankID')!='') {
-          $bankID = $this->input->post('bankID');
+        if(Request::isMethod('post')&& $request->input('bankID')!='') {
+          $bankID = $request->input('bankID');
           $data = array(
-                  'abbr' => $this->input->post('abbrev')
+                  'abbr' => $request->input('abbrev')
               );
           $result = $this->flexperformance_model->updateBank($data,$bankID );
           if($result){
@@ -684,10 +684,10 @@ class GeneralController extends Controller
       }
 
       public function updateBankCode() {
-        if($_POST && $this->input->post('bankID')!='') {
-          $bankID = $this->input->post('bankID');
+        if(Request::isMethod('post')&& $request->input('bankID')!='') {
+          $bankID = $request->input('bankID');
           $data = array(
-                  'bank_code' => $this->input->post('bank_code')
+                  'bank_code' => $request->input('bank_code')
               );
           $result = $this->flexperformance_model->updateBank($data,$bankID );
           if($result){
@@ -706,10 +706,10 @@ class GeneralController extends Controller
       }
 
       public function updateBranchName() {
-        if($_POST && $this->input->post('branchID')!='') {
-          $branchID = $this->input->post('branchID');
+        if(Request::isMethod('post')&& $request->input('branchID')!='') {
+          $branchID = $request->input('branchID');
           $data = array(
-                  'name' => $this->input->post('name')
+                  'name' => $request->input('name')
               );
           $result = $this->flexperformance_model->updateBankBranch($data,$branchID );
           if($result){
@@ -728,10 +728,10 @@ class GeneralController extends Controller
       }
 
       public function updateBranchCode() {
-        if($_POST && $this->input->post('branchID')!='') {
-          $branchID = $this->input->post('branchID');
+        if(Request::isMethod('post')&& $request->input('branchID')!='') {
+          $branchID = $request->input('branchID');
           $data = array(
-                  'branch_code' => $this->input->post('branch_code')
+                  'branch_code' => $request->input('branch_code')
               );
           $result = $this->flexperformance_model->updateBankBranch($data,$branchID );
           if($result){
@@ -750,10 +750,10 @@ class GeneralController extends Controller
       }
 
       public function updateBranchSwiftcode() {
-        if($_POST && $this->input->post('branchID')!='') {
-          $branchID = $this->input->post('branchID');
+        if(Request::isMethod('post')&& $request->input('branchID')!='') {
+          $branchID = $request->input('branchID');
           $data = array(
-                  'swiftcode' => $this->input->post('swiftcode')
+                  'swiftcode' => $request->input('swiftcode')
               );
           $result = $this->flexperformance_model->updateBankBranch($data,$branchID );
           if($result){
@@ -771,10 +771,10 @@ class GeneralController extends Controller
 
       }
       public function updateBranchStreet() {
-        if($_POST && $this->input->post('branchID')!='') {
-          $branchID = $this->input->post('branchID');
+        if(Request::isMethod('post')&& $request->input('branchID')!='') {
+          $branchID = $request->input('branchID');
           $data = array(
-                  'street' => $this->input->post('street')
+                  'street' => $request->input('street')
               );
           $result = $this->flexperformance_model->updateBankBranch($data,$branchID );
           if($result){
@@ -793,10 +793,10 @@ class GeneralController extends Controller
       }
 
       public function updateBranchRegion() {
-        if($_POST && $this->input->post('branchID')!='') {
-          $branchID = $this->input->post('branchID');
+        if(Request::isMethod('post')&& $request->input('branchID')!='') {
+          $branchID = $request->input('branchID');
           $data = array(
-                  'region' => $this->input->post('region')
+                  'region' => $request->input('region')
               );
           $result = $this->flexperformance_model->updateBankBranch($data,$branchID );
           if($result){
@@ -814,10 +814,10 @@ class GeneralController extends Controller
       }
 
       public function updateBranchCountry() {
-        if($_POST && $this->input->post('branchID')!='') {
-          $branchID = $this->input->post('branchID');
+        if(Request::isMethod('post')&& $request->input('branchID')!='') {
+          $branchID = $request->input('branchID');
           $data = array(
-                  'country' => $this->input->post('country')
+                  'country' => $request->input('country')
               );
           $result = $this->flexperformance_model->updateBankBranch($data,$branchID );
           if($result){
@@ -887,7 +887,7 @@ public function activateDepartment()
       $data['accountability'] =  $this->flexperformance_model->getaccountability($id);
       $data['position'] =  $this->flexperformance_model->getpositionbyid($id);
       $data['title']="Positions";
-      $this->load->view('position_info', $data);
+      return view('app.position_info', $data);
    }
 
 
@@ -901,7 +901,7 @@ public function activateDepartment()
        $data['parent_department'] =  $this->flexperformance_model->departmentdropdown();
       $data['data'] =  $this->flexperformance_model->getdepartmentbyid($id);
       $data['title']="Department";
-      $this->load->view('department_info', $data);
+      return view('app.department_info', $data);
    }
 
   ############################## LEARNING AND DEVELOPMENT(TRAINING)#############################
@@ -910,8 +910,8 @@ public function activateDepartment()
   public function addBudget() {
     if (isset($_POST['request'])){
 
-      $start = $this->input->post('start');
-      $end = $this->input->post('end');
+      $start = $request->input('start');
+      $end = $request->input('end');
 
       $start_calendar = str_replace('/', '-', $start);
       $finish_calendar = str_replace('/', '-', $end);
@@ -920,14 +920,14 @@ public function activateDepartment()
       $end_final = date('Y-m-d ', strtotime($finish_calendar));
       if($end_final <= $start_final) {
         $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>INVALID DATE Selection, Budget Not Added, Try Again</p>");
-        redirect('/cipay/training_application', 'refresh');
+        return  redirect('/flex/training_application');
       } else {
 
         $data = array(
-             'description' => $this->input->post('name'),
+             'description' => $request->input('name'),
              'start' => $start_final,
              'end' => $end_final,
-             'amount' => $this->input->post('amount'),
+             'amount' => $request->input('amount'),
              'recommended_by' => $this->session->userdata('emp_id'),
              'date_recommended' => date('Y-m-d'),
              'date_approved' => date('Y-m-d')
@@ -936,10 +936,10 @@ public function activateDepartment()
 
         if($result==true){
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Budget Added Successifully</p>");
-          redirect('/cipay/training_application', 'refresh');
+          return  redirect('/flex/training_application');
         } else {
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Budget Request Has FAILED, Please Try again</p>");
-          redirect('/cipay/training_application', 'refresh');
+          return  redirect('/flex/training_application');
 
         }
       }
@@ -947,10 +947,10 @@ public function activateDepartment()
   }
 
   public function updateBudgetDescription() {
-    if($_POST && $this->input->post('budgetID')!=''){
-      $budgetID = $this->input->post('budgetID');
+    if(Request::isMethod('post')&& $request->input('budgetID')!=''){
+      $budgetID = $request->input('budgetID');
       $data = array(
-               'description' =>$this->input->post('description')
+               'description' =>$request->input('description')
           );
         $result = $this->flexperformance_model->updateBudget($data, $budgetID);
         if($result == true){
@@ -961,10 +961,10 @@ public function activateDepartment()
   }
 
   public function updateBudgetAmount() {
-    if($_POST && $this->input->post('budgetID')!=''){
-      $budgetID = $this->input->post('budgetID');
+    if(Request::isMethod('post')&& $request->input('budgetID')!=''){
+      $budgetID = $request->input('budgetID');
       $data = array(
-               'amount' =>$this->input->post('amount')
+               'amount' =>$request->input('amount')
           );
         $result = $this->flexperformance_model->updateBudget($data, $budgetID);
         if($result == true){
@@ -975,10 +975,10 @@ public function activateDepartment()
   }
 
   public function updateBudgetDateRange() {
-    if($_POST && $this->input->post('budgetID')!=''){
-      $budgetID = $this->input->post('budgetID');
-      $start = $this->input->post('start');
-      $end = $this->input->post('end');
+    if(Request::isMethod('post')&& $request->input('budgetID')!=''){
+      $budgetID = $request->input('budgetID');
+      $start = $request->input('start');
+      $end = $request->input('end');
 
       $start_calendar = str_replace('/', '-', $start);
       $finish_calendar = str_replace('/', '-', $end);
@@ -1079,19 +1079,19 @@ public function activateDepartment()
       $data['course'] = $this->flexperformance_model->all_skills($empID);
       $data['title']="Training Application";
       $data['total_training_cost'] = $totalCost;
-      $this->load->view('training', $data);
+      return view('app.training', $data);
   }
 
   function budget_info(){
     $budgetID =  base64_decode($this->input->get('id'));
     $data['info'] = $this->flexperformance_model->getBudget($budgetID);
     $data['title']="Training Budget";
-    $this->load->view('budget_info', $data);
+    return view('app.budget_info', $data);
   }
 
 
   public function requestTraining() {
-    $pattern = $this->input->get('pattern');
+    $pattern = $request->input('pattern');
 
     $value = explode('|', $pattern);
     $empID = $value[0];
@@ -1117,9 +1117,9 @@ public function activateDepartment()
   }
 
   public function requestTraining2() {
-    if($_POST){
+    if(Request::isMethod('post')){
       $empID = $this->session->userdata('emp_id');
-      $course = $this->input->post('course');
+      $course = $request->input('course');
       $data = array(
               'empID' => $empID,
               'skillsID' => $course,
@@ -1252,8 +1252,8 @@ public function activateDepartment()
 
    public function response_training_linemanager(){
 
-     if(isset($_POST['recommend']) && !empty($this->input->post('option')))  {
-           $arr = $this->input->post('option');
+     if(isset($_POST['recommend']) && !empty($request->input('option')))  {
+           $arr = $request->input('option');
 
            foreach($arr as $check) {
                $applicationID = $check;
@@ -1276,8 +1276,8 @@ public function activateDepartment()
 
         }
 
-     if(isset($_POST['reject'])  && !empty($this->input->post('option')))  {
-       $arr = $this->input->post('option');
+     if(isset($_POST['reject'])  && !empty($request->input('option')))  {
+       $arr = $request->input('option');
 
            foreach($arr as $check) {
                $applicationID = $check;
@@ -1304,7 +1304,7 @@ public function activateDepartment()
 
    public function confirm_graduation(){
 
-       $key = $this->input->get('key');
+       $key = $request->input('key');
 
         $values = explode('|', $key);
         $empID = $values[0];
@@ -1317,13 +1317,13 @@ public function activateDepartment()
        $data['skillsID'] = $skillsID;
        $data['title']="Training";
        $data['courseTitle']=$this->flexperformance_model->getSkillsName($skillsID);
-       $this->load->view('confirm_graduation', $data);
+       return view('app.confirm_graduation', $data);
    }
 
 
    public function employeeCertification(){
 
-       $key = $this->input->get('val');
+       $key = $request->input('val');
 
         $values = explode('|', $key);
         $empID = $values[0];
@@ -1336,16 +1336,16 @@ public function activateDepartment()
        $data['skillsID'] = $skillsID;
        $data['title']="Qualification";
        $data['courseTitle']=$this->flexperformance_model->getSkillsName($skillsID);
-       $this->load->view('confirm_graduation', $data);
+       return view('app.confirm_graduation', $data);
    }
 
 
   public function confirmGraduation() {
-    $ID = $this->input->post('trainingID');
-    $traineeID = $this->input->post('traineeID');
-    $skillsID = $this->input->post('skillsID');
-    $remarks = trim($this->input->post('remarks'));
-    if ($_POST && $ID!='') {
+    $ID = $request->input('trainingID');
+    $traineeID = $request->input('traineeID');
+    $skillsID = $request->input('skillsID');
+    $remarks = trim($request->input('remarks'));
+    if (Request::isMethod('post')&& $ID!='') {
       $namefile = "certificate_".$traineeID."_".$skillsID;
 
       $config['upload_path']='./uploads/graduation/';
@@ -1384,10 +1384,12 @@ public function activateDepartment()
   }
 
   public function confirmEmployeeCertification() {
-    $traineeID = $this->input->post('traineeID');
-    $skillsID = $this->input->post('skillsID');
-    $remarks = trim($this->input->post('remarks'));
-    if ($_POST && $ID!='') {
+    $traineeID = $request->input('traineeID');
+    $skillsID = $request->input('skillsID');
+    $remarks = trim($request->input('remarks'));
+    // if (Request::isMethod('post')&& $ID!='') {
+
+      if (Request::isMethod('post')) {
 
       $namefile = "certificate_".$traineeID."_".$skillsID;
 
@@ -1424,17 +1426,17 @@ public function activateDepartment()
 
 public function addAccountability()
       {
-        $positionID =  $this->input->post('positionID');
+        $positionID =  $request->input('positionID');
         $data = array(
-             'name' => $this->input->post('title'),
+             'name' => $request->input('title'),
              'position_ref' => $positionID,
-             'weighting' => $this->input->post('weighting')
+             'weighting' => $request->input('weighting')
         );
         $this->flexperformance_model->addAccountability($data);
 
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Accountability Added Successifully</p>");
-        $reload = '/cipay/position_info/?id='.$positionID;
-        redirect($reload, 'refresh');
+        $reload = '/flex/position_info/?id='.$positionID;
+        return redirect($reload);
 
       }
 
@@ -1442,25 +1444,25 @@ public function addAccountability()
 
      if(isset($_POST['add']))
       {
-        $id = $this->input->post('positionID');
-        if($this->input->post('mandatory')=='1'){
+        $id = $request->input('positionID');
+        if($request->input('mandatory')=='1'){
 
         $data = array(
-             'name' => $this->input->post('name'),
+             'name' => $request->input('name'),
              'position_ref' => $id,
-             'amount' => $this->input->post('amount'),
-             'type' => $this->input->post('type'),
-             'description' => $this->input->post('description'),
+             'amount' => $request->input('amount'),
+             'type' => $request->input('type'),
+             'description' => $request->input('description'),
              'created_by' =>$this->session->userdata('emp_id')
         );
 
         } else {
           $data = array(
-                 'name' => $this->input->post('name'),
+                 'name' => $request->input('name'),
                  'position_ref' => $id,
-                 'amount' => $this->input->post('amount'),
-                 'type' => $this->input->post('type'),
-                 'description' => $this->input->post('description'),
+                 'amount' => $request->input('amount'),
+                 'type' => $request->input('type'),
+                 'description' => $request->input('description'),
                  'mandatory' => 0,
                  'created_by' =>$this->session->userdata('emp_id')
             );
@@ -1469,19 +1471,19 @@ public function addAccountability()
         $this->flexperformance_model->addskills($data);
         //echo "Record Added";
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Skills Added Successifully</p>");
-        $reload = '/cipay/position_info/?id='.$id;
-        redirect($reload, 'refresh');
+        $reload = '/flex/position_info/?id='.$id;
+        return redirect($reload);
 
       }
     }
 
     public function updatePositionName() {
-        if($_POST){
+        if(Request::isMethod('post')){
 
-          if($this->input->post('positionID')!=''){
-            $positionID = $this->input->post('positionID');
+          if($request->input('positionID')!=''){
+            $positionID = $request->input('positionID');
             $data = array(
-                   'name' => $this->input->post('name')
+                   'name' => $request->input('name')
               );
             $result = $this->flexperformance_model->updateposition($data, $positionID);
             if($result ==true){
@@ -1502,11 +1504,11 @@ public function addAccountability()
       }
 
     public function updatePositionReportsTo() {
-        if($_POST){
+        if(Request::isMethod('post')){
 
-          if($this->input->post('positionID')!=''){
-            $positionID = $this->input->post('positionID');
-            $values = explode('|', $this->input->post('parent'));
+          if($request->input('positionID')!=''){
+            $positionID = $request->input('positionID');
+            $values = explode('|', $request->input('parent'));
             $parent_code = $values[0];
             $level = $values[1];
             $data = array(
@@ -1532,12 +1534,12 @@ public function addAccountability()
       }
 
     public function updatePositionCode() {
-        if($_POST){
+        if(Request::isMethod('post')){
 
-          if($this->input->post('positionID')!=''){
-            $positionID = $this->input->post('positionID');
+          if($request->input('positionID')!=''){
+            $positionID = $request->input('positionID');
             $data = array(
-                   'code' =>strtoupper($this->input->post('code'))
+                   'code' =>strtoupper($request->input('code'))
               );
             $result = $this->flexperformance_model->updateposition($data, $positionID);
             if($result ==true){
@@ -1559,12 +1561,12 @@ public function addAccountability()
 
 
     public function updatePositionOrganizationLevel() {
-        if($_POST){
+        if(Request::isMethod('post')){
 
-          if($this->input->post('positionID')!=''){
-            $positionID = $this->input->post('positionID');
+          if($request->input('positionID')!=''){
+            $positionID = $request->input('positionID');
             $data = array(
-                   'organization_level' =>strtoupper($this->input->post('organization_level'))
+                   'organization_level' =>strtoupper($request->input('organization_level'))
               );
             $result = $this->flexperformance_model->updateposition($data, $positionID);
             if($result ==true){
@@ -1591,29 +1593,29 @@ public function addAccountability()
       $data['position'] = $this->flexperformance_model->position();
       $data['inactive_position'] = $this->flexperformance_model->inactive_position();
       $data['title']="Position";
-      $this->load->view('position', $data);
+      return view('app.position', $data);
 
     }
     public function addPosition() {
-        if($_POST){
+        if(Request::isMethod('post')){
 
-            if($this->input->post('driving_licence')==""){
+            if($request->input('driving_licence')==""){
             $licence = 0;
             }  else   $licence = 1;
 
 
-            $values = explode('|', $this->input->post('parent'));
+            $values = explode('|', $request->input('parent'));
             $parent_code = $values[0];
             $level = $values[1];
 
             $data = array(
-                 'name' => $this->input->post('name'),
-                 'purpose' => $this->input->post('purpose'),
-                 'dept_id' => $this->input->post('department'),
-                 'organization_level' => $this->input->post('organization_level'),
-                 'code' => strtoupper($this->input->post('code')),
+                 'name' => $request->input('name'),
+                 'purpose' => $request->input('purpose'),
+                 'dept_id' => $request->input('department'),
+                 'organization_level' => $request->input('organization_level'),
+                 'code' => strtoupper($request->input('code')),
                  'driving_licence' => $licence,
-                 'minimum_qualification' => $this->input->post('qualification'),
+                 'minimum_qualification' => $request->input('qualification'),
                  'created_by' =>$this->session->userdata('emp_id'),
                  'position_code' =>$this->code_generator(6),
                  'parent_code' => $parent_code,
@@ -1635,12 +1637,12 @@ public function addAccountability()
       }
 
     public function addOrganizationLevel() {
-        if($_POST){
+        if(Request::isMethod('post')){
 
             $data = array(
-                 'name' => $this->input->post('name'),
-                 'minSalary' => $this->input->post('minSalary'),
-                 'maxSalary' => $this->input->post('maxSalary')
+                 'name' => $request->input('name'),
+                 'minSalary' => $request->input('minSalary'),
+                 'maxSalary' => $request->input('maxSalary')
 
             );
             $result = $this->flexperformance_model->addOrganizationLevel($data);
@@ -1702,26 +1704,26 @@ public function activatePosition()
 
      if(isset($_POST['update']))
       {
-        $positionref = $this->input->post('positionref');
-        $skillsref = $this->input->post('skillsID');
-        if($this->input->post('mandatory')=='1'){
+        $positionref = $request->input('positionref');
+        $skillsref = $request->input('skillsID');
+        if($request->input('mandatory')=='1'){
 
         $data = array(
-             'name' => $this->input->post('name'),
+             'name' => $request->input('name'),
              'position_ref' => $positionref,
-             'amount' => $this->input->post('amount'),
-             'type' => $this->input->post('type'),
-             'description' => $this->input->post('description')
+             'amount' => $request->input('amount'),
+             'type' => $request->input('type'),
+             'description' => $request->input('description')
         );
 
         } else {
 
         $data = array(
-           'name' => $this->input->post('name'),
+           'name' => $request->input('name'),
            'position_ref' => $positionref,
-           'amount' => $this->input->post('amount'),
-           'type' => $this->input->post('type'),
-           'description' => $this->input->post('description'),
+           'amount' => $request->input('amount'),
+           'type' => $request->input('type'),
+           'description' => $request->input('description'),
            'mandatory' => 0
         );
       }
@@ -1729,20 +1731,20 @@ public function activatePosition()
       $this->flexperformance_model->updateskills($data,  $skillsref);
       //echo "Record Added";
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Skills Added Successifully</p>");
-      $reload = '/cipay/position_info/?id='.$positionref;
-      redirect($reload, 'refresh');
+      $reload = '/flex/position_info/?id='.$positionref;
+      return redirect($reload);
     }
   }
 
 
-  function applyOvertime(){
+  function applyOvertime(Request $request){
 
-    if($_POST){
+    if(Request::isMethod('post')){
 
-      $start = $this->input->post('time_start');
-      $finish = $this->input->post('time_finish');
-      $reason = $this->input->post('reason');
-      $category = $this->input->post('category');
+      $start = $request->input('time_start');
+      $finish = $request->input('time_finish');
+      $reason = $request->input('reason');
+      $category = $request->input('category');
       $empID = $this->session->userdata('emp_id');
 
       $split_start = explode("  at  ", $start);
@@ -1883,7 +1885,7 @@ public function activatePosition()
     // }
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-    $this->load->view('overtime', $data);
+    return view('app.overtime', $data);
 
   }
 
@@ -1894,8 +1896,8 @@ public function activatePosition()
 
         if(isset($_POST['update_overtime'])){
 
-            $timeframe = $this->input->post('time_range');
-            $overtimeID = $this->input->post('overtimeID');
+            $timeframe = $request->input('time_range');
+            $overtimeID = $request->input('overtimeID');
 
             // Separate between Start Time-Date and End Time-Date
             $datetime = explode(" - ", $timeframe);
@@ -1922,7 +1924,7 @@ public function activatePosition()
             $data = array(
                  'time_start' =>$start,
                  'time_end' => $end,
-                 'reason' => $this->input->post('reason'),
+                 'reason' => $request->input('reason'),
                  'empID' => $this->session->userdata('emp_id')
             );
 
@@ -1930,14 +1932,14 @@ public function activatePosition()
 
 
            $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
-           redirect('/cipay/overtime', 'refresh');
+           return  redirect('/flex/overtime');
 
         }
 
         $data['title']="Overtime";
         $data['mode'] = 2; // Mode 1 for Comment Purpose and Mode 2 for Update Purpose
         $data['overtime'] = $this->flexperformance_model->fetch_my_overtime($initialOvertimeID);
-        $this->load->view('overtime_info', $data);
+        return view('app.overtime_info', $data);
 
     }
 
@@ -2017,7 +2019,7 @@ public function activatePosition()
         $data['arrears'] = $this->payroll_model->monthly_arrears($payrollMonth);
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['title'] = "Arrears";
-        $this->load->view('arrears_info', $data);
+        return view('app.arrears_info', $data);
     }
  }
 
@@ -2034,7 +2036,7 @@ public function activatePosition()
         $data['arrears'] = $this->payroll_model->employee_arrears1($empID,$payroll_date);
         $data['employee'] = $this->reports_model->employeeInfo($empID);
         $data['title'] = "Arrears";
-        $this->load->view('individual_arrears_info', $data);
+        return view('app.individual_arrears_info', $data);
     }
  }
 
@@ -2200,23 +2202,23 @@ public function activatePosition()
         $data['comment'] = $this->flexperformance_model->fetchOvertimeComment($overtimeID);
         $data['mode'] = 1; // Mode 1 fo Comment Purpose and Mode 2 for Update Purpose
 
-      $this->load->view('overtime_info', $data);
+      return view('app.overtime_info', $data);
    }
 
     public function commentOvertime()
       {
 
       if (isset($_POST['apply'])) {
-          $overtimeID = $this->input->post('overtimeID');
+          $overtimeID = $request->input('overtimeID');
         $data = array(
-            'final_line_manager_comment' =>$this->input->post('comment'),
+            'final_line_manager_comment' =>$request->input('comment'),
             'commit' =>1
             );
 
           $this->flexperformance_model->update_overtime($data, $overtimeID);
 
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
-        redirect('/cipay/overtime', 'refresh');
+        return  redirect('/flex/overtime');
 
       }
 
@@ -2241,59 +2243,59 @@ public function activatePosition()
 
       }*/
           /*{
-            $id = $this->input->get("id");
+            $id = $request->input("id");
             $data = array(
              'state' => 0
             );
             $this->flexperformance_model->updateposition($data, $id);
             $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
-            redirect('/cipay/position', 'refresh');
+            return  redirect('/flex/position');
 
           }*/
 
 
    public function editdepartment()
       {
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
       if (isset($_POST['updatename'])) {
 
       $data = array(
-            'name' =>$this->input->post("name")
+            'name' =>$request->input("name")
             );
 
         $this->flexperformance_model->updatedepartment($data, $id);
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
-            redirect('/cipay/department', 'refresh');
+            return  redirect('/flex/department');
     }
     elseif(isset($_POST['updatecenter'])){
       $data = array(
-        'cost_center_id' =>$this->input->post("cost_center_id")
+        'cost_center_id' =>$request->input("cost_center_id")
         );
 
     $this->flexperformance_model->updatedepartment($data, $id);
     $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Cost Center Updated Successifully</p>");
-        redirect('/cipay/department', 'refresh');
+        return  redirect('/flex/department');
     }
     elseif (isset($_POST['updatehod'])) {
 
       $data = array(
-            'hod' =>$this->input->post("hod")
+            'hod' =>$request->input("hod")
             );
 
         $this->flexperformance_model->updatedepartment($data, $id);
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
-            redirect('/cipay/department', 'refresh');
+            return  redirect('/flex/department');
     }
     elseif (isset($_POST['updateparent'])) {
 
       $data = array(
-            'reports_to' =>$this->input->post("parent")
+            'reports_to' =>$request->input("parent")
             );
 
         $this->flexperformance_model->updatedepartment($data, $id);
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
-        redirect('/cipay/department');
+        return  redirect('/flex/department');
     }
 
    }
@@ -2313,7 +2315,7 @@ public function activatePosition()
       }*/
 
     $data['title']="Employee";
-    $this->load->view('employee', $data);
+    return view('app.employee', $data);
 
   }
 
@@ -2322,7 +2324,7 @@ public function activatePosition()
    public function payroll()
       {
       $data['title']="Payrolls And Associated";
-      $this->load->view('payroll', $data);
+      return view('app.payroll', $data);
 
    }
 
@@ -2330,7 +2332,7 @@ public function activatePosition()
 
    public function updateEmployee()
       {
-        $pattern = $this->input->get('id');
+        $pattern = $request->input('id');
         $values = explode('|', $pattern);
         $empID = $values[0];
         $departmentID = $values[1];
@@ -2350,15 +2352,15 @@ public function activatePosition()
         $data['departmentTransfer'] = $this->flexperformance_model->pendingDepartmentTranferCheck($empID);
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
         $data['bankdrop'] = $this->flexperformance_model->bank();
-        $this->load->view('updateEmployee',$data);
+        return view('app.updateEmployee',$data);
 
    }
 
    public function updateFirstName() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'fname' =>$this->input->post('fname'),
+                            'fname' =>$request->input('fname'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2370,10 +2372,10 @@ public function activatePosition()
    }
 
    public function updateCode() {
-    $empID = $this->input->post('empID');
-      if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+      if (Request::isMethod('post')&& $empID!='') {
           $updates = array(
-                      'emp_code' =>$this->input->post('emp_code'),
+                      'emp_code' =>$request->input('emp_code'),
                       'last_updated' => date('Y-m-d')
                   );
               $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2385,10 +2387,10 @@ public function activatePosition()
 }
 
 public function updateLevel() {
-  $empID = $this->input->post('empID');
-    if ($_POST && $empID!='') {
+  $empID = $request->input('empID');
+    if (Request::isMethod('post')&& $empID!='') {
         $updates = array(
-                    'emp_level' =>$this->input->post('emp_level'),
+                    'emp_level' =>$request->input('emp_level'),
                     'last_updated' => date('Y-m-d')
                 );
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2400,10 +2402,10 @@ public function updateLevel() {
 }
 
    public function updateMiddleName() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'mname' =>$this->input->post('mname'),
+                            'mname' =>$request->input('mname'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2415,10 +2417,10 @@ public function updateLevel() {
    }
 
    public function updateLastName() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'lname' =>$this->input->post('lname'),
+                            'lname' =>$request->input('lname'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2430,10 +2432,10 @@ public function updateLevel() {
    }
 
    public function updateGender() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'gender' =>$this->input->post('gender'),
+                            'gender' =>$request->input('gender'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2445,10 +2447,10 @@ public function updateLevel() {
    }
 
    public function updateDob() {
-    $empID = $this->input->post('empID');
-      if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+      if (Request::isMethod('post')&& $empID!='') {
           $updates = array(
-                      'birthdate' =>$this->input->post('dob'),
+                      'birthdate' =>$request->input('dob'),
                       'last_updated' => date('Y-m-d')
                   );
               $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2460,10 +2462,10 @@ public function updateLevel() {
 }
 
    public function updateExpatriate() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'is_expatriate' =>$this->input->post('expatriate'),
+                            'is_expatriate' =>$request->input('expatriate'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2475,10 +2477,10 @@ public function updateLevel() {
    }
 
    public function updateEmployeePensionFund() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'pension_fund' =>$this->input->post('pension_fund'),
+                            'pension_fund' =>$request->input('pension_fund'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2490,8 +2492,8 @@ public function updateLevel() {
    }
 
   public function updateEmployeePosition() {
-    $empID = $this->input->post('empID');
-    if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+    if (Request::isMethod('post')&& $empID!='') {
 
       $data = array(
         'empID' =>$empID,
@@ -2500,12 +2502,12 @@ public function updateLevel() {
         'recommended_by' =>$this->session->userdata('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
-        'old' =>$this->input->post('old'),
-        'new' =>$this->input->post('position')
+        'old' =>$request->input('old'),
+        'new' =>$request->input('position')
       );
       $result = $this->flexperformance_model->employeeTransfer($data);
-      $old = $this->flexperformance_model->getAttributeName("name","position", "id", $this->input->post('old') );
-      $new = $this->flexperformance_model->getAttributeName("name","position", "id", $this->input->post('position') );
+      $old = $this->flexperformance_model->getAttributeName("name","position", "id", $request->input('old') );
+      $new = $this->flexperformance_model->getAttributeName("name","position", "id", $request->input('position') );
       if($result==true) {
           $this->flexperformance_model->audit_log("Requested Position Change For Employee with ID = ".$empID." From ".$old." To ".$new."");
           echo "<p class='alert alert-success text-center'>Request For Position Transfer Has Been Sent Successifully!</p>";
@@ -2516,8 +2518,8 @@ public function updateLevel() {
   }
 
  /* public function updateEmployeeBranch() {
-    $empID = $this->input->post('empID');
-    if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+    if (Request::isMethod('post')&& $empID!='') {
       $data = array(
         'empID' =>$empID,
         'parameter' =>'Branch',
@@ -2525,8 +2527,8 @@ public function updateLevel() {
         'recommended_by' =>$this->session->userdata('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
-        'old' =>$this->input->post('old'),
-        'new' =>$this->input->post('branch')
+        'old' =>$request->input('old'),
+        'new' =>$request->input('branch')
       );
       $result = $this->flexperformance_model->employeeTransfer($data);
       if($result==true) {
@@ -2539,10 +2541,10 @@ public function updateLevel() {
 
 
    public function updateEmployeeBranch() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'branch' =>$this->input->post('branch'),
+                            'branch' =>$request->input('branch'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2555,10 +2557,10 @@ public function updateLevel() {
 
 
    public function updateEmployeeNationality() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'nationality' =>$this->input->post('nationality'),
+                            'nationality' =>$request->input('nationality'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2570,8 +2572,8 @@ public function updateLevel() {
    }
 
   public function updateDeptPos() {
-    $empID = $this->input->post('empID');
-    if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+    if (Request::isMethod('post')&& $empID!='') {
 
       $data = array(
         'empID' =>$empID,
@@ -2580,16 +2582,16 @@ public function updateLevel() {
         'recommended_by' =>$this->session->userdata('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
-        'old' =>$this->input->post('oldDepartment'),
-        'new' =>$this->input->post('department'),
-        'old_position' =>$this->input->post('oldPosition'),
-        'new_position' =>$this->input->post('position')
+        'old' =>$request->input('oldDepartment'),
+        'new' =>$request->input('department'),
+        'old_position' =>$request->input('oldPosition'),
+        'new_position' =>$request->input('position')
       );
       $result = $this->flexperformance_model->employeeTransfer($data);
-      $oldp = $this->flexperformance_model->getAttributeName("name","position", "id", $this->input->post('oldPosition') );
-      $newp = $this->flexperformance_model->getAttributeName("name","position", "id", $this->input->post('position') );
-      $oldd = $this->flexperformance_model->getAttributeName("name","department", "id", $this->input->post('oldDepartment') );
-      $newd = $this->flexperformance_model->getAttributeName("name","department", "id", $this->input->post('department') );
+      $oldp = $this->flexperformance_model->getAttributeName("name","position", "id", $request->input('oldPosition') );
+      $newp = $this->flexperformance_model->getAttributeName("name","position", "id", $request->input('position') );
+      $oldd = $this->flexperformance_model->getAttributeName("name","department", "id", $request->input('oldDepartment') );
+      $newd = $this->flexperformance_model->getAttributeName("name","department", "id", $request->input('department') );
       if($result==true) {
         $this->flexperformance_model->audit_log("Requested Department Change For Employee with ID = ".$empID." From ".$oldd." To ".$newd." and Position From ".$oldp." To ".$newp."");
           echo "<p class='alert alert-success text-center'>Request For Department and Position Transfer Has Been Sent Successifully!</p>";
@@ -2693,10 +2695,10 @@ public function updateLevel() {
   }
 
   public function updateSalary() {
-    $empID = $this->input->post('empID');
-    if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+    if (Request::isMethod('post')&& $empID!='') {
       $updates = array(
-        'salary' =>$this->input->post('salary')
+        'salary' =>$request->input('salary')
       );
       $data = array(
         'empID' =>$empID,
@@ -2705,8 +2707,8 @@ public function updateLevel() {
         'recommended_by' =>$this->session->userdata('emp_id'),
         'date_recommended' =>date('Y-m-d'),
         'date_approved' =>date('Y-m-d'),
-        'old' =>$this->input->post('old'),
-        'new' =>$this->input->post('salary')
+        'old' =>$request->input('old'),
+        'new' =>$request->input('salary')
       );
       // $result = $this->flexperformance_model->updateEmployee($updates, $empID);
       $result = $this->flexperformance_model->employeeTransfer($data);
@@ -2719,10 +2721,10 @@ public function updateLevel() {
   }
 
    public function updateEmail() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'email' =>$this->input->post('email'),
+                            'email' =>$request->input('email'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2734,9 +2736,9 @@ public function updateLevel() {
    }
 
    public function updatePostAddress() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
-              $address_no = $this->input->post('address');
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
+              $address_no = $request->input('address');
               $full_address = "P.O Box ".$address_no;
                 $updates = array(
                             'postal_address' =>$full_address,
@@ -2751,10 +2753,10 @@ public function updateLevel() {
    }
 
    public function updatePostCity() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'postal_city' =>$this->input->post('city'),
+                            'postal_city' =>$request->input('city'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2766,10 +2768,10 @@ public function updateLevel() {
    }
 
    public function updatePhysicalAddress() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'physical_address' =>$this->input->post('phys_address'),
+                            'physical_address' =>$request->input('phys_address'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2781,10 +2783,10 @@ public function updateLevel() {
    }
 
    public function updateMobile() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'mobile' =>$this->input->post('mobile'),
+                            'mobile' =>$request->input('mobile'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2796,10 +2798,10 @@ public function updateLevel() {
    }
 
    public function updateHomeAddress() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'home' =>$this->input->post('home_address')
+                            'home' =>$request->input('home_address')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
                     if($result==true) {
@@ -2810,10 +2812,10 @@ public function updateLevel() {
    }
 
     public function updateNationalID() {
-        $empID = $this->input->post('empID');
-        if ($_POST && $empID!='') {
+        $empID = $request->input('empID');
+        if (Request::isMethod('post')&& $empID!='') {
             $updates = array(
-                'national_id' =>$this->input->post('nationalid')
+                'national_id' =>$request->input('nationalid')
             );
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if($result==true) {
@@ -2824,10 +2826,10 @@ public function updateLevel() {
     }
 
     public function updateTin() {
-        $empID = $this->input->post('empID');
-        if ($_POST && $empID!='') {
+        $empID = $request->input('empID');
+        if (Request::isMethod('post')&& $empID!='') {
             $updates = array(
-                'tin' =>$this->input->post('tin')
+                'tin' =>$request->input('tin')
             );
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if($result==true) {
@@ -2838,10 +2840,10 @@ public function updateLevel() {
     }
 
    public function updateBankAccountNo() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'account_no' =>$this->input->post('acc_no'),
+                            'account_no' =>$request->input('acc_no'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2854,10 +2856,10 @@ public function updateLevel() {
 
 
    public function updateBank_Bankbranch(){
-    $empID = $this->input->post('empID');
-    $bank = $this->input->post('bank');
-    $bank_branch = $this->input->post('bank_branch');
-    if ($_POST && $empID!='') {
+    $empID = $request->input('empID');
+    $bank = $request->input('bank');
+    $bank_branch = $request->input('bank_branch');
+    if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
                           'bank' =>$bank,
                           'bank_branch' =>$bank_branch,
@@ -2880,10 +2882,10 @@ public function updateLevel() {
 
 
    public function updateLineManager() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'line_manager' =>$this->input->post('line_manager'),
+                            'line_manager' =>$request->input('line_manager'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2895,10 +2897,10 @@ public function updateLevel() {
    }
 
    public function updateEmployeeContract() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'contract_type' =>$this->input->post('contract'),
+                            'contract_type' =>$request->input('contract'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2910,10 +2912,10 @@ public function updateLevel() {
    }
 
    public function updateMeritalStatus() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'merital_status' =>$this->input->post('merital_status'),
+                            'merital_status' =>$request->input('merital_status'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2925,10 +2927,10 @@ public function updateLevel() {
    }
 
    public function updatePensionFundNo() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'pf_membership_no' =>$this->input->post('pension_no'),
+                            'pf_membership_no' =>$request->input('pension_no'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2940,10 +2942,10 @@ public function updateLevel() {
    }
 
    public function updateOldID() {
-          $empID = $this->input->post('empID');
-            if ($_POST && $empID!='') {
+          $empID = $request->input('empID');
+            if (Request::isMethod('post')&& $empID!='') {
                 $updates = array(
-                            'old_emp_id' =>$this->input->post('old_id'),
+                            'old_emp_id' =>$request->input('old_id'),
                             'last_updated' => date('Y-m-d')
                         );
                     $result = $this->flexperformance_model->updateEmployee($updates, $empID);
@@ -2955,14 +2957,14 @@ public function updateLevel() {
    }
 
    public function updateEmployeePhoto() {
-          $empID = $this->input->post('empID');
+          $empID = $request->input('empID');
           // $old_photo = $this->flexperformance_model->getOldPhoto($empID);
           // $photo_path = './uploads/userprofile/'.$old_photo;
           // if($old_photo!='user.png'){
           //   unlink($photo_path);
           // }
 
-            if ($_POST && $empID!='') {
+            if (Request::isMethod('post')&& $empID!='') {
               $namefile = "user_".$empID;
               $config['upload_path']='./uploads/userprofile/';
               $config['file_name'] = $namefile;
@@ -2996,7 +2998,7 @@ public function updateLevel() {
       if($this->session->userdata('mng_emp') || $this->session->userdata('vw_emp') || $this->session->userdata('appr_emp') || $this->session->userdata('mng_roles_grp')){
           $data['transfers'] =  $this->flexperformance_model->employeeTransfers();
           $data['title']="Transfers";
-          $this->load->view('transfer', $data);
+          return view('app.transfer', $data);
       }else{
           echo 'Unauthorized Access';
       }
@@ -3028,7 +3030,7 @@ public function updateLevel() {
            $data['max_amount'] =  $this->flexperformance_model->get_max_salary_advance($this->session->userdata('emp_id'));
            $data['title']="Loans and Salaries";
            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-           $this->load->view('salary_advance', $data);
+           return view('app.salary_advance', $data);
       // }else{
        //    echo 'Unauthorized Access';
        //}
@@ -3060,18 +3062,18 @@ public function updateLevel() {
       $data['employee'] =  $this->flexperformance_model->customemployee();
       $data['title']="Loans and Salaries";
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-      $this->load->view('salary_advance', $data);
+      return view('app.salary_advance', $data);
 
    }
 
 
    public function apply_salary_advance()   {
 
-      if ($_POST) {
-        $amount_normal =$this->input->post("amount");
-        $amount_mid =$this->input->post("amount_mid");
-        $advance_type =$this->input->post("advance_type");
-        $deduction =$this->input->post("deduction");
+      if (Request::isMethod('post')) {
+        $amount_normal =$request->input("amount");
+        $amount_mid =$request->input("amount_mid");
+        $advance_type =$request->input("advance_type");
+        $deduction =$request->input("deduction");
 
         if($advance_type==1){
           $amount = $amount_normal;
@@ -3088,7 +3090,7 @@ public function updateLevel() {
               'type' =>1,
               'notification' =>2,
               'status' =>0,
-              'reason' =>$this->input->post("reason"),
+              'reason' =>$request->input("reason"),
               'application_date' =>date('Y-m-d')
           );
 
@@ -3105,22 +3107,22 @@ public function updateLevel() {
 
    public function insert_directLoan()   {
 
-      if ($_POST) {
-          $category = $this->input->post("type");
+      if (Request::isMethod('post')) {
+          $category = $request->input("type");
 
           if($category == 2){
               $type = 3;
-              $form_four_index_no = $this->input->post("index_no");
+              $form_four_index_no = $request->input("index_no");
               $deduction =0;
           } elseif($category == 1) {
             $form_four_index_no = "0";
             $type = 2;
-            $deduction =$this->input->post("deduction");
+            $deduction =$request->input("deduction");
           }
 
            $data = array(
-                'empID' =>$this->input->post("employee"),
-                'amount' =>$this->input->post("amount"),
+                'empID' =>$request->input("employee"),
+                'amount' =>$request->input("amount"),
                 'deduction_amount' =>$deduction,
                 'approved_hr' =>$this->session->userdata('emp_id'),
                 'status' =>0,
@@ -3128,7 +3130,7 @@ public function updateLevel() {
                 'approved_date_hr' => date('Y-m-d'),
                 'type' =>$type,
                 'form_four_index_no' => $form_four_index_no,
-                'reason' =>$this->input->post("reason"),
+                'reason' =>$request->input("reason"),
                 'application_date' => date('Y-m-d')
             );
 
@@ -3151,7 +3153,7 @@ public function updateLevel() {
         $data['other_loans'] = $this->flexperformance_model->all_confirmedloan();
       }
       $data['title']="Loan";
-      $this->load->view('loan', $data);
+      return view('app.loan', $data);
 
    }
 
@@ -3160,18 +3162,18 @@ public function updateLevel() {
 
       $data['loan_info'] = $this->flexperformance_model->getloan($loanID);
       $data['title']="Advanced Loan Payments";
-      $this->load->view('loan_adv_payment', $data);
+      return view('app.loan_adv_payment', $data);
 
    }
 
     public function adv_loan_pay() {
-    if($_POST) {
+    if(Request::isMethod('post')) {
       $state = 1;
-      $loanID = $this->input->post('loanID');
-      $accrued = $this->input->post('accrued');
-      $paid = $this->input->post('paid');
-      $amount = $this->input->post('amount');
-      $remained = $this->input->post('remained');
+      $loanID = $request->input('loanID');
+      $accrued = $request->input('accrued');
+      $paid = $request->input('paid');
+      $amount = $request->input('amount');
+      $remained = $request->input('remained');
       if($amount === $remained){
         $state = 0;
       }
@@ -3336,27 +3338,27 @@ public function updateLevel() {
 
 
    public function loan_application_info()  {
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
       $data['data'] =  $this->flexperformance_model->getloanbyid($id);
       $data['title']="Loans and Salary Advance";
-      $this->load->view('loan_application_remarks', $data);
+      return view('app.loan_application_remarks', $data);
 
       if (isset($_POST['add'])) {
         if ($this->session->userdata('recomloan')!=0) {
               $data2 = array(
-            'reason_hr' =>$this->input->post("remarks")
+            'reason_hr' =>$request->input("remarks")
             );
             }
             elseif ($this->session->userdata('appr_loan')!=0) {
               $data2 = array(
-            'reason_finance' =>$this->input->post("remarks")
+            'reason_finance' =>$request->input("remarks")
             );
             }
 
         $this->flexperformance_model->confirmloan($data2, $id);
-        $reload = '/cipay/loan_application';
-        redirect($reload, 'refresh');
+        $reload = '/flex/loan_application';
+        return redirect($reload);
       }
 
    }
@@ -3364,21 +3366,21 @@ public function updateLevel() {
 
    public function updateloan(){
 
-      $loanID = $this->input->get('id');
+      $loanID = $request->input('id');
 
       $data['loan'] =  $this->flexperformance_model->getloanbyid($loanID);
       $data['title']="Loan";
-      $this->load->view('updateloan', $data);
+      return view('app.updateloan', $data);
 
    }
 
    public function updateloan_info()   {
-       if ($_POST && $this->input->post('loanID')) {
-          $loanID = $this->input->post('loanID');
+       if (Request::isMethod('post')&& $request->input('loanID')) {
+          $loanID = $request->input('loanID');
           $updates = array(
-            'amount' => $this->input->post('amount'),
-            'deduction_amount' =>$this->input->post('deduction'),
-            'reason' =>$this->input->post('reason'),
+            'amount' => $request->input('amount'),
+            'deduction_amount' =>$request->input('deduction'),
+            'reason' =>$request->input('reason'),
             'notification'=>1
             );
 
@@ -3418,7 +3420,7 @@ public function updateLevel() {
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
             $data['title']="Organisation Reports";
-            $this->load->view('organisation_reports', $data);
+            return view('app.organisation_reports', $data);
         }else{
             echo 'Unauthorized Access';
         }
@@ -3432,14 +3434,14 @@ public function updateLevel() {
    function not_logged_in()
    {
     $this->session->set_flashdata('error', 'Sorry! You Have to Login Before any Attempt');
-    redirect('/cipay/', 'refresh');
+    return  redirect('/flex/');
    }
 
    public function viewrecords()
       {
 
       $data['viewrecords'] = $this->flexperformance_model->viewrecords();
-      $this->load->view('viewrecords', $data);
+      return view('app.viewrecords', $data);
 
    }
 
@@ -3502,9 +3504,9 @@ public function updateLevel() {
       $this->login_info();
     }else{
 
-    // Redirect To HOME
+    // return Redirect To HOME
     $data['title'] = "Home";
-    $this->load->view('home', $data);
+    return view('app.home', $data);
 
     }
 
@@ -3531,8 +3533,8 @@ function subdropFetcher(){
 
    function positionFetcher(){
 
-    if(!empty($this->input->post("dept_id"))){
-    $query = $this->flexperformance_model->positionfetcher($this->input->post("dept_id"));
+    if(!empty($request->input("dept_id"))){
+    $query = $this->flexperformance_model->positionfetcher($request->input("dept_id"));
     $querypos = $query[0];
     $querylinemanager = $query[1];
     $querydirector = $query[2];
@@ -3551,8 +3553,8 @@ function subdropFetcher(){
 
    function bankBranchFetcher(){
 
-    if(!empty($this->input->post("bank"))){
-    $queryBranch = $this->flexperformance_model->bankBranchFetcher($this->input->post("bank"));
+    if(!empty($request->input("bank"))){
+    $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
 
      foreach ($queryBranch as $rows){
       echo "<option value='".$rows->id."'>".$rows->name."</option>";
@@ -3570,18 +3572,18 @@ function subdropFetcher(){
 
      if(isset($_POST['add']))
       {
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
                 $data = array(
-                      'fname' =>$this->input->post("fname"),
-                      'mname' =>$this->input->post("mname"),
-                      'lname' =>$this->input->post("lname"),
-                      'mobile' =>$this->input->post("mobile"),
-                      'relationship' =>$this->input->post("relationship"),
+                      'fname' =>$request->input("fname"),
+                      'mname' =>$request->input("mname"),
+                      'lname' =>$request->input("lname"),
+                      'mobile' =>$request->input("mobile"),
+                      'relationship' =>$request->input("relationship"),
                       'employee_fk' =>$id,
-                      'postal_address' =>$this->input->post("postal_address"),
-                      'physical_address' =>$this->input->post("physical_address"),
-                      'office_no' =>$this->input->post("office_no"),
+                      'postal_address' =>$request->input("postal_address"),
+                      'physical_address' =>$request->input("physical_address"),
+                      'office_no' =>$request->input("office_no"),
                      'added_on' => date('Y-m-d')
                 );
 
@@ -3589,8 +3591,8 @@ function subdropFetcher(){
                 //echo "Record Added";
                   $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
 
-                  $reload = '/cipay/userprofile/?id='.$id;
-                    redirect($reload, 'refresh');
+                  $reload = '/flex/userprofile/?id='.$id;
+                    return redirect($reload);
 
 
               }
@@ -3599,13 +3601,13 @@ function subdropFetcher(){
 
       public function deletekin()
           {
-            $id = $this->input->get("id");
+            $id = $request->input("id");
             $this->db->where('id',$id);
             $this->db->delete('next_of_kin');
             $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
 
-                  $reload = '/cipay/employee_info/';
-                    redirect($reload, 'refresh');
+                  $reload = '/flex/employee_info/';
+                    return redirect($reload);
 
           }
 
@@ -3616,24 +3618,26 @@ function subdropFetcher(){
 
      if(isset($_POST['add']))
       {
-        if($this->input->post("type") != 'Others'){
-        // $id = $this->input->get('id');
-          $type = $this->input->post("type");}
-        else { $type = $this->input->post("type2"); }
+        if($request->input("type") != 'Others'){
+        // $id = $request->input('id');
+          $type = $request->input("type");
+        
+        }
+        else { $type = $request->input("type2"); }
 
                 $data = array(
                       'prop_type' =>$type,
-                      'prop_name' =>$this->input->post("name"),
-                      'serial_no' =>$this->input->post("serial"),
+                      'prop_name' =>$request->input("name"),
+                      'serial_no' =>$request->input("serial"),
                       'given_by' =>$this->session->userdata('emp_id'),
-                      'given_to' =>$this->input->post("employee")
+                      'given_to' =>$request->input("employee")
                 );
 
                 $this->flexperformance_model->addproperty($data);
                   $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
 
-                  $reload = '/cipay/userprofile/?id='.$this->input->post("employee");
-                    redirect($reload, 'refresh');
+                  $reload = '/flex/userprofile/?id='.$request->input("employee");
+                    return redirect($reload);
 
               }
       }
@@ -3668,7 +3672,7 @@ function subdropFetcher(){
 
       public function deleteproperty($id)
           {
-            $employee = $this->input->get("employee");
+            $employee = $request->input("employee");
 
             $data = array(
                       'isActive' =>0
@@ -3684,31 +3688,31 @@ function subdropFetcher(){
   public function employeeDeactivationRequest() {
       if(isset($_POST['exit']))
       {
-          $exit_date = str_replace('/', '-', $this->input->post('exit_date'));
+          $exit_date = str_replace('/', '-', $request->input('exit_date'));
 
           $data = array(
-              'empID' =>$this->input->post("empID"),
-              'initiator' =>$this->input->post("initiator"),
+              'empID' =>$request->input("empID"),
+              'initiator' =>$request->input("initiator"),
               'confirmed_by' =>$this->session->userdata('emp_id'),
               'date_confirmed' =>date('Y-m-d'),
-              'reason' =>$this->input->post("reason"),
+              'reason' =>$request->input("reason"),
               'exit_date' => date('Y-m-d',strtotime($exit_date))
           );
 
           $datalog = array(
               'state' =>3,
-              'empID' =>$this->input->post("empID"),
+              'empID' =>$request->input("empID"),
               'author' =>$this->session->userdata('emp_id')
           );
 //          echo json_encode($data);
 
           $this->flexperformance_model->employee_exit($data);
           $this->flexperformance_model->employeestatelog($datalog);
-          $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$this->input->post("empID")."");
+          $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$request->input("empID")."");
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
 
-          $reload = '/cipay/userprofile/?id='.$this->input->post("empID");
-          redirect($reload, 'refresh');
+          $reload = '/flex/userprofile/?id='.$request->input("empID");
+          return redirect($reload);
 
       }
 
@@ -3856,7 +3860,7 @@ function subdropFetcher(){
            $data['employee2'] = $this->flexperformance_model->inactive_employee2();
 
            $data['title']="Employee";
-           $this->load->view('inactive_employee', $data);
+           return view('app.inactive_employee', $data);
        }else{
            echo 'Unauthorized Access';
        }
@@ -3870,7 +3874,7 @@ function subdropFetcher(){
 
    public function delete_deduction()
       {
-         $id = $this->input->get('id');
+         $id = $request->input('id');
          // $is_active = 0;
 
       $data = array(
@@ -3881,14 +3885,14 @@ function subdropFetcher(){
 
        if($this->flexperformance_model->updatededuction($data, $id))
        {
-          redirect('/cipay/deduction', 'refresh');
+          return  redirect('/flex/deduction');
       }
 
    }
 
     public function deduction_info()  {
 
-        $pattern = $this->input->get('pattern');
+        $pattern = $request->input('pattern');
         $values = explode('|', $pattern);
         $deductionID = $values[0];
         $deductionType = $values[1];
@@ -3922,22 +3926,22 @@ function subdropFetcher(){
 
       $data['parameter']=$deductionType;
       $data['title']="Deductions";
-      $this->load->view('deduction_info', $data);
+      return view('app.deduction_info', $data);
 
    }
 
 public function assign_deduction_individual(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
       $data = array(
-          'empID' =>$this->input->post('empID'),
-          'deduction' =>$this->input->post('deduction')
+          'empID' =>$request->input('empID'),
+          'deduction' =>$request->input('deduction')
           );
 
       $result = $this->flexperformance_model->assign_deduction($data);
       if($result==true) {
-        $this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =".$this->input->post('empID')."");
+        $this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =".$request->input('empID')."");
             echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
         } else { echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>"; }
 
@@ -3947,20 +3951,20 @@ public function assign_deduction_individual(){
 
 public function assign_deduction_group(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $members = $this->flexperformance_model->get_deduction_members($this->input->post('deduction'), $this->input->post('group'));
+      $members = $this->flexperformance_model->get_deduction_members($request->input('deduction'), $request->input('group'));
       foreach ($members as $row) {
          $data = array(
           'empID' =>$row->empID,
-          'deduction' =>$this->input->post('deduction'),
-          'group_name' => $this->input->post('group')
+          'deduction' =>$request->input('deduction'),
+          'group_name' => $request->input('group')
           );
       $result = $this->flexperformance_model->assign_deduction($data);
 
         }
       if($result==true) {
-        $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =".$this->input->post('group')."");
+        $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =".$request->input('group')."");
         echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
       } else { echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>"; }
 
@@ -3972,11 +3976,11 @@ public function assign_deduction_group(){
 
 public function remove_individual_deduction(){
 
-  if ($_POST && !empty($this->input->post('option'))) {
+  if (Request::isMethod('post')&& !empty($request->input('option'))) {
 
-      $arr = $this->input->post('option');
+      $arr = $request->input('option');
       $arrayString = implode(",", $arr);
-      $deductionID = $this->input->post('deductionID');
+      $deductionID = $request->input('deductionID');
       if(sizeof($arr)<1){
           echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>";
       } else {
@@ -3998,11 +4002,11 @@ public function remove_individual_deduction(){
 
 public function remove_group_deduction(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $arr = $this->input->post('option');
+      $arr = $request->input('option');
       $arrayString = implode(",", $arr);
-      $deductionID = $this->input->post('deductionID');
+      $deductionID = $request->input('deductionID');
       if(sizeof($arr)<1){
           echo "<p class='alert alert-warning text-center'>No Group Selected! Please Select Atlest One Employee</p>";
       } else {
@@ -4030,16 +4034,16 @@ public function remove_group_deduction(){
 
 
   public function addpaye() {
-    if($_POST) {
-      $minimum = $this->input->post('minimum');
-      $maximum = $this->input->post('maximum');
-      $excess = $this->input->post('excess');
+    if(Request::isMethod('post')) {
+      $minimum = $request->input('minimum');
+      $maximum = $request->input('maximum');
+      $excess = $request->input('excess');
       if($maximum>$minimum && $excess<$minimum){
         $data = array(
-             'minimum' => $this->input->post('minimum'),
-             'maximum' => $this->input->post("maximum"),
-             'excess_added' => $this->input->post("excess"),
-             'rate' => 0.01*($this->input->post("rate"))
+             'minimum' => $request->input('minimum'),
+             'maximum' => $request->input("maximum"),
+             'excess_added' => $request->input("excess"),
+             'rate' => 0.01*($request->input("rate"))
             );
         $result = $this->flexperformance_model->addpaye($data);
         if($result){
@@ -4071,12 +4075,12 @@ public function remove_group_deduction(){
 
 public function deletepaye()
           {
-            $id = $this->input->get('id');
+            $id = $request->input('id');
             $this->db->where('id',$id);
             $this->db->delete('PAYE');
             // die;
             $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Record Deleted Successifully</p>");
-                   redirect('/cipay/paye', 'refresh');
+                   return  redirect('/flex/paye');
 
           }
 
@@ -4086,26 +4090,26 @@ public function deletepaye()
 
 public function paye_info()
       {
-        $id = $this->input->get('id');
+        $id = $request->input('id');
 
       $data['paye'] =  $this->flexperformance_model->getpayebyid($id);
       $data['title']="PAYE";
-      $this->load->view('updatepaye', $data);
+      return view('app.updatepaye', $data);
    }
 
 
   public function updatepaye() {
-    if($_POST) {
-      $payeID = $this->input->post('payeID');
-      $minimum = $this->input->post('minimum');
-      $maximum = $this->input->post('maximum');
-      $excess = $this->input->post('excess');
+    if(Request::isMethod('post')) {
+      $payeID = $request->input('payeID');
+      $minimum = $request->input('minimum');
+      $maximum = $request->input('maximum');
+      $excess = $request->input('excess');
       if($maximum>$minimum && $excess<$minimum && $payeID!=''){
         $updates = array(
-             'minimum' => $this->input->post('minimum'),
-             'maximum' => $this->input->post("maximum"),
-             'excess_added' => $this->input->post("excess"),
-             'rate' => 0.01*($this->input->post("rate"))
+             'minimum' => $request->input('minimum'),
+             'maximum' => $request->input("maximum"),
+             'excess_added' => $request->input("excess"),
+             'rate' => 0.01*($request->input("rate"))
             );
         $result = $this->flexperformance_model->updatepaye($updates, $payeID);
         if($result){
@@ -4134,12 +4138,12 @@ public function paye_info()
 
   }
   public function updateOvertimeAllowance(){
-      if ($_POST && $this->input->post('allowanceID')!='') {
-        $allowanceID = $this->input->post('allowanceID');
+      if (Request::isMethod('post')&& $request->input('allowanceID')!='') {
+        $allowanceID = $request->input('allowanceID');
         $updates = array(
-            'name' =>$this->input->post('name'),
-            'rate_employee' =>$this->input->post('rate_employee')/100,
-            'rate_employer' =>$this->input->post('rate_employer')/100
+            'name' =>$request->input('name'),
+            'rate_employee' =>$request->input('rate_employee')/100,
+            'rate_employer' =>$request->input('rate_employer')/100
         );
           $result = $this->flexperformance_model->updateCommonDeductions($updates, $allowanceID);
           if($result ==true) {
@@ -4153,12 +4157,12 @@ public function paye_info()
 
 
   public function updateCommonDeductions(){
-      if ($_POST && $this->input->post('deductionID')!='') {
-        $deductionID = $this->input->post('deductionID');
+      if (Request::isMethod('post')&& $request->input('deductionID')!='') {
+        $deductionID = $request->input('deductionID');
         $updates = array(
-            'name' =>$this->input->post('name'),
-            'rate_employee' =>$this->input->post('rate_employee')/100,
-            'rate_employer' =>$this->input->post('rate_employer')/100
+            'name' =>$request->input('name'),
+            'rate_employee' =>$request->input('rate_employee')/100,
+            'rate_employer' =>$request->input('rate_employer')/100
         );
           $result = $this->flexperformance_model->updateCommonDeductions($updates, $deductionID);
           if($result ==true) {
@@ -4174,19 +4178,19 @@ public function paye_info()
 
 public function common_deductions_info() {
 
-      $id = $this->input->get('id');
+      $id = $request->input('id');
       $data['deductions'] =  $this->flexperformance_model->getcommon_deduction($id);
       $data['title']="Deductions";
-      $this->load->view('updatededuction', $data);
+      return view('app.updatededuction', $data);
 
    }
 
 
     public function updatePensionName() {
-          $fundID = $this->input->post('fundID');
-            if ($_POST && $fundID!='') {
+          $fundID = $request->input('fundID');
+            if (Request::isMethod('post')&& $fundID!='') {
                 $updates = array(
-                            'name' =>$this->input->post('name')
+                            'name' =>$request->input('name')
                         );
                     $result = $this->flexperformance_model->updatePension($updates, $fundID);
                     if($result==true) {
@@ -4197,14 +4201,14 @@ public function common_deductions_info() {
    }
 
     public function updatePercentEmployee() {
-          $fundID = $this->input->post('fundID');
-            if ($_POST && $fundID!='') {
+          $fundID = $request->input('fundID');
+            if (Request::isMethod('post')&& $fundID!='') {
                 $updates = array(
-                            'amount_employee' =>$this->input->post('employee_amount')/100
+                            'amount_employee' =>$request->input('employee_amount')/100
                         );
                     $result = $this->flexperformance_model->updatePension($updates, $fundID);
                     if($result==true) {
-                      $this->flexperformance_model->audit_log("Updated Pension with ID =".$fundID." To Employee Value of ".$this->input->post('employee_amount')." ");
+                      $this->flexperformance_model->audit_log("Updated Pension with ID =".$fundID." To Employee Value of ".$request->input('employee_amount')." ");
                         echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
                     } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
@@ -4212,14 +4216,14 @@ public function common_deductions_info() {
    }
 
     public function updatePercentEmployer() {
-          $fundID = $this->input->post('fundID');
-            if ($_POST && $fundID!='') {
+          $fundID = $request->input('fundID');
+            if (Request::isMethod('post')&& $fundID!='') {
                 $updates = array(
-                            'amount_employer' =>$this->input->post('employer_amount')/100
+                            'amount_employer' =>$request->input('employer_amount')/100
                         );
                     $result = $this->flexperformance_model->updatePension($updates, $fundID);
                     if($result==true) {
-                      $this->flexperformance_model->audit_log("Updated Pension with ID =".$fundID." To Employer Value of ".$this->input->post('employee_amount')." ");
+                      $this->flexperformance_model->audit_log("Updated Pension with ID =".$fundID." To Employer Value of ".$request->input('employee_amount')." ");
                         echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
                     } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
@@ -4227,10 +4231,10 @@ public function common_deductions_info() {
    }
 
     public function updatePensionPolicy() {
-          $fundID = $this->input->post('fundID');
-            if ($_POST && $fundID!='') {
+          $fundID = $request->input('fundID');
+            if (Request::isMethod('post')&& $fundID!='') {
                 $updates = array(
-                            'deduction_from' =>$this->input->post('policy')
+                            'deduction_from' =>$request->input('policy')
                         );
                     $result = $this->flexperformance_model->updatePension($updates, $fundID);
                     if($result==true) {
@@ -4241,10 +4245,10 @@ public function common_deductions_info() {
    }
 
     public function updateDeductionName() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'name' =>$this->input->post('name')
+                            'name' =>$request->input('name')
                         );
                     $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
                     if($result==true) {
@@ -4255,10 +4259,10 @@ public function common_deductions_info() {
    }
 
     public function updateDeductionAmount() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'amount' =>$this->input->post('amount')
+                            'amount' =>$request->input('amount')
                         );
                     $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
                     if($result==true) {
@@ -4269,10 +4273,10 @@ public function common_deductions_info() {
    }
 
     public function updateDeductionPercent() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'percent' =>$this->input->post('percent')/100
+                            'percent' =>$request->input('percent')/100
                         );
                     $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
                     if($result==true) {
@@ -4283,10 +4287,10 @@ public function common_deductions_info() {
    }
 
     public function updateDeductionPolicy() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'mode' =>$this->input->post('policy')
+                            'mode' =>$request->input('policy')
                         );
                     $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
                     if($result==true) {
@@ -4299,10 +4303,10 @@ public function common_deductions_info() {
    //UPDATE MEALS DEDUCTION
 
     public function updateMealsName() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'name' =>$this->input->post('name')
+                            'name' =>$request->input('name')
                         );
                     $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
                     if($result==true) {
@@ -4313,10 +4317,10 @@ public function common_deductions_info() {
    }
 
     public function updateMealsMargin() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'minimum_gross' =>$this->input->post('margin')
+                            'minimum_gross' =>$request->input('margin')
                         );
                     $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
                     if($result==true) {
@@ -4327,10 +4331,10 @@ public function common_deductions_info() {
    }
 
     public function updateMealsLowerAmount() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'minimum_payment' =>$this->input->post('amount_lower')
+                            'minimum_payment' =>$request->input('amount_lower')
                         );
                     $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
                     if($result==true) {
@@ -4341,10 +4345,10 @@ public function common_deductions_info() {
    }
 
     public function updateMealsUpperAmount() {
-          $deductionID = $this->input->post('deductionID');
-            if ($_POST && $deductionID!='') {
+          $deductionID = $request->input('deductionID');
+            if (Request::isMethod('post')&& $deductionID!='') {
                 $updates = array(
-                            'maximum_payment' =>$this->input->post('amount_upper')
+                            'maximum_payment' =>$request->input('amount_upper')
                         );
                     $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
                     if($result==true) {
@@ -4366,7 +4370,7 @@ public function common_deductions_info() {
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['title']="Allowances";
-            $this->load->view('allowance', $data);
+            return view('app.allowance', $data);
         }else{
             echo "Unauthorized Access";
         }
@@ -4381,7 +4385,7 @@ public function common_deductions_info() {
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
-      $this->load->view('allowance_overtime', $data);
+      return view('app.allowance_overtime', $data);
       
     }else{
       echo "Unauthorized Access";
@@ -4404,7 +4408,7 @@ public function common_deductions_info() {
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
   
       $data['title']="Statutory Deductions";
-      $this->load->view('statutory_deduction', $data);
+      return view('app.statutory_deduction', $data);
       
     }else{
       echo "Unauthorized Access";
@@ -4422,7 +4426,7 @@ public function common_deductions_info() {
     $data['meals'] = $this->flexperformance_model->meals_deduction();
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
     $data['title']="Non-Statutory Deductions";
-    $this->load->view('non_statutory_deductions', $data);
+    return view('app.non_statutory_deductions', $data);
     
   }else{
     echo "Unauthorized Access";
@@ -4433,19 +4437,19 @@ public function common_deductions_info() {
 
     public function addAllowance()   {
 
-      if ($_POST) {
-        $policy = $this->input->post('policy');
+      if (Request::isMethod('post')) {
+        $policy = $request->input('policy');
         if($policy==1){
-          $amount = $this->input->post('amount');
+          $amount = $request->input('amount');
           $percent = 0;
         } else{
           $amount = 0;
-          $percent = 0.01*($this->input->post('rate'));
+          $percent = 0.01*($request->input('rate'));
         }
         $data = array(
-            'name' =>$this->input->post('name'),
+            'name' =>$request->input('name'),
             'amount' =>$amount,
-            'mode' =>$this->input->post('policy'),
+            'mode' =>$request->input('policy'),
             'state' =>1,
             'percent' =>$percent
             );
@@ -4464,11 +4468,11 @@ public function common_deductions_info() {
 
     public function addOvertimeCategory()   {
 
-      if ($_POST) {
+      if (Request::isMethod('post')) {
         $data = array(
-            'name' =>$this->input->post('name'),
-            'day_percent' =>($this->input->post('day_percent')/100),
-            'night_percent' =>($this->input->post('night_percent')/100)
+            'name' =>$request->input('name'),
+            'day_percent' =>($request->input('day_percent')/100),
+            'night_percent' =>($request->input('night_percent')/100)
           );
           $result = $this->flexperformance_model->addOvertimeCategory($data);
           if($result==true){
@@ -4482,19 +4486,19 @@ public function common_deductions_info() {
 
     public function addDeduction()   {
 
-      if ($_POST) {
-        $policy = $this->input->post('policy');
+      if (Request::isMethod('post')) {
+        $policy = $request->input('policy');
         if($policy==1){
-          $amount = $this->input->post('amount');
+          $amount = $request->input('amount');
           $percent = 0;
         } else{
           $amount = 0;
-          $percent = 0.01*($this->input->post('rate'));
+          $percent = 0.01*($request->input('rate'));
         }
         $data = array(
-            'name' =>trim($this->input->post('name')),
+            'name' =>trim($request->input('name')),
             'amount' =>$amount,
-            'mode' =>$this->input->post('policy'),
+            'mode' =>$request->input('policy'),
             'state' =>1,
             'apply_to' =>2,
             'percent' =>$percent
@@ -4513,16 +4517,16 @@ public function common_deductions_info() {
 
 public function assign_allowance_individual(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
       $data = array(
-          'empID' =>$this->input->post('empID'),
-          'allowance' =>$this->input->post('allowance')
+          'empID' =>$request->input('empID'),
+          'allowance' =>$request->input('allowance')
           );
 
       $result = $this->flexperformance_model->assign_allowance($data);
       if($result==true) {
-        $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = ".$this->input->post('empID')." ");
+        $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = ".$request->input('empID')." ");
             echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
         } else { echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>"; }
 
@@ -4533,20 +4537,20 @@ public function assign_allowance_individual(){
 
 public function assign_allowance_group(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $members = $this->flexperformance_model->get_allowance_members($this->input->post('allowance'), $this->input->post('group'));
+      $members = $this->flexperformance_model->get_allowance_members($request->input('allowance'), $request->input('group'));
       foreach ($members as $row) {
          $data = array(
           'empID' =>$row->empID,
-          'allowance' =>$this->input->post('allowance'),
-          'group_name' => $this->input->post('group')
+          'allowance' =>$request->input('allowance'),
+          'group_name' => $request->input('group')
           );
       $result = $this->flexperformance_model->assign_allowance($data);
 
         }
       if($result==true) {
-        $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = ".$this->input->post('group')." ");
+        $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = ".$request->input('group')." ");
         echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
       } else { echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>"; }
 
@@ -4556,10 +4560,10 @@ public function assign_allowance_group(){
 
 public function remove_individual_from_allowance(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $arr = $this->input->post('option');
-      $allowanceID = $this->input->post('allowanceID');
+      $arr = $request->input('option');
+      $allowanceID = $request->input('allowanceID');
       if(sizeof($arr)<1){
           echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>";
       } else {
@@ -4578,10 +4582,10 @@ public function remove_individual_from_allowance(){
 
 public function remove_group_from_allowance(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $arr = $this->input->post('option');
-      $allowanceID = $this->input->post('allowanceID');
+      $arr = $request->input('option');
+      $allowanceID = $request->input('allowanceID');
       if(sizeof($arr)<1){
           echo "<p class='alert alert-warning text-center'>No Group Selected! Please Select Atlest One Employee</p>";
       } else {
@@ -4609,7 +4613,7 @@ public function remove_group_from_allowance(){
       $data['employee'] =  $this->flexperformance_model->employee_allowance($id);
       $data['allowanceID'] =  $id;
       $data['title'] =  "Allowances";
-      $this->load->view('allowance_info', $data);
+      return view('app.allowance_info', $data);
     }
 
 
@@ -4617,7 +4621,7 @@ public function remove_group_from_allowance(){
       $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Overtime Category';
       $data['category'] =  $this->flexperformance_model->OvertimeCategoryInfo($id);
-      $this->load->view('overtime_category_info', $data);
+      return view('app.overtime_category_info', $data);
     }
 
 
@@ -4667,10 +4671,10 @@ public function remove_group_from_allowance(){
 
 
   public function updateAllowanceName() {
-    $ID = $this->input->post('allowanceID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('allowanceID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'name' =>$this->input->post('name')
+                      'name' =>$request->input('name')
                   );
               $result = $this->flexperformance_model->updateAllowance($updates, $ID);
               if($result==true) {
@@ -4681,10 +4685,10 @@ public function remove_group_from_allowance(){
    }
 
    public function updateAllowanceTaxable() {
-    $ID = $this->input->post('allowanceID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('allowanceID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'taxable' =>$this->input->post('taxable')
+                      'taxable' =>$request->input('taxable')
                   );
               $result = $this->flexperformance_model->updateAllowance($updates, $ID);
               if($result==true) {
@@ -4695,10 +4699,10 @@ public function remove_group_from_allowance(){
    }
 
    public function updateAllowancePentionable() {
-    $ID = $this->input->post('allowanceID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('allowanceID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'pentionable' =>$this->input->post('pentionable')
+                      'pentionable' =>$request->input('pentionable')
                   );
               $result = $this->flexperformance_model->updateAllowance($updates, $ID);
               if($result==true) {
@@ -4709,10 +4713,10 @@ public function remove_group_from_allowance(){
    }
 
   public function updateOvertimeName() {
-    $ID = $this->input->post('categoryID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('categoryID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'name' =>$this->input->post('name')
+                      'name' =>$request->input('name')
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
@@ -4722,10 +4726,10 @@ public function remove_group_from_allowance(){
       }
    }
   public function updateOvertimeRateDay() {
-    $ID = $this->input->post('categoryID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('categoryID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'day_percent' =>($this->input->post('day_percent')/100)
+                      'day_percent' =>($request->input('day_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
@@ -4735,10 +4739,10 @@ public function remove_group_from_allowance(){
       }
    }
   public function updateOvertimeRateNight() {
-    $ID = $this->input->post('categoryID');
-      if ($_POST && $ID!='') {
+    $ID = $request->input('categoryID');
+      if (Request::isMethod('post')&& $ID!='') {
           $updates = array(
-                      'night_percent' =>($this->input->post('night_percent')/100)
+                      'night_percent' =>($request->input('night_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
@@ -4750,10 +4754,10 @@ public function remove_group_from_allowance(){
 
 
     public function updateAllowanceAmount() {
-          $ID = $this->input->post('allowanceID');
-            if ($_POST && $ID!='') {
+          $ID = $request->input('allowanceID');
+            if (Request::isMethod('post')&& $ID!='') {
                 $updates = array(
-                            'amount' =>$this->input->post('amount')
+                            'amount' =>$request->input('amount')
                         );
                     $result = $this->flexperformance_model->updateAllowance($updates, $ID);
                     if($result==true) {
@@ -4764,10 +4768,10 @@ public function remove_group_from_allowance(){
    }
 
     public function updateAllowancePercent() {
-          $ID = $this->input->post('allowanceID');
-            if ($_POST && $ID!='') {
+          $ID = $request->input('allowanceID');
+            if (Request::isMethod('post')&& $ID!='') {
                 $updates = array(
-                            'percent' =>$this->input->post('percent')/100
+                            'percent' =>$request->input('percent')/100
                         );
                     $result = $this->flexperformance_model->updateAllowance($updates, $ID);
                     if($result==true) {
@@ -4779,10 +4783,10 @@ public function remove_group_from_allowance(){
 
 
     public function updateAllowanceApplyTo() {
-          $ID = $this->input->post('allowanceID');
-            if ($_POST && $ID!='') {
+          $ID = $request->input('allowanceID');
+            if (Request::isMethod('post')&& $ID!='') {
                 $updates = array(
-                            'apply_to' =>$this->input->post('apply_to')
+                            'apply_to' =>$request->input('apply_to')
                         );
                     $result = $this->flexperformance_model->updateAllowance($updates, $ID);
                     if($result==true) {
@@ -4793,10 +4797,10 @@ public function remove_group_from_allowance(){
    }
 
     public function updateAllowancePolicy() {
-          $ID = $this->input->post('allowanceID');
-            if ($_POST && $ID!='') {
+          $ID = $request->input('allowanceID');
+            if (Request::isMethod('post')&& $ID!='') {
                 $updates = array(
-                            'mode' =>$this->input->post('policy')
+                            'mode' =>$request->input('policy')
                         );
                     $result = $this->flexperformance_model->updateAllowance($updates, $ID);
                     if($result==true) {
@@ -4811,16 +4815,16 @@ public function remove_group_from_allowance(){
 
 
     public function addToBonus() {
-          $empID = $this->input->post('employee');
+          $empID = $request->input('employee');
           $init_author = $this->session->userdata('emp_id');
-          $amount = $this->input->post('amount');
-          $days = $this->input->post('days');
-          $percent = $this->input->post('percent');
-            if ($_POST && $empID!='' && $amount!='' && $days =='' && $percent != '') {
+          $amount = $request->input('amount');
+          $days = $request->input('days');
+          $percent = $request->input('percent');
+            if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days =='' && $percent != '') {
                 $data = array(
-                            'empID' =>$this->input->post('employee'),
+                            'empID' =>$request->input('employee'),
                             'amount' =>$amount*$percent/100,
-                            'name' =>$this->input->post('bonus'),
+                            'name' =>$request->input('bonus'),
                             'init_author' =>$init_author,
                             'appr_author' =>"",
                             'state' =>0
@@ -4831,11 +4835,11 @@ public function remove_group_from_allowance(){
                     } else { echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>"; }
 
             }
-            if ($_POST && $empID!='' && $amount!='' && $days !='' && $percent == '') {
+            if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days !='' && $percent == '') {
               $data = array(
-                          'empID' =>$this->input->post('employee'),
+                          'empID' =>$request->input('employee'),
                           'amount' =>$amount*$days/30,
-                          'name' =>$this->input->post('bonus'),
+                          'name' =>$request->input('bonus'),
                           'init_author' =>$init_author,
                           'appr_author' =>"",
                           'state' =>0
@@ -4847,11 +4851,11 @@ public function remove_group_from_allowance(){
                   } else { echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>"; }
 
           }
-          if ($_POST && $empID!='' && $amount!='' && $days =='' && $percent == '') {
+          if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days =='' && $percent == '') {
             $data = array(
-                        'empID' =>$this->input->post('employee'),
+                        'empID' =>$request->input('employee'),
                         'amount' =>$amount,
-                        'name' =>$this->input->post('bonus'),
+                        'name' =>$request->input('bonus'),
                         'init_author' =>$init_author,
                         'appr_author' =>"",
                         'state' =>0
@@ -4864,10 +4868,10 @@ public function remove_group_from_allowance(){
         }
    }
     public function addBonusTag() {
-          $name = $this->input->post('name');
-            if ($_POST && $name!='') {
+          $name = $request->input('name');
+            if (Request::isMethod('post')&& $name!='') {
                 $data = array(
-                            'name' =>$this->input->post('name')
+                            'name' =>$request->input('name')
                         );
                     $result = $this->flexperformance_model->addBonusTag($data);
                     if($result==true) {
@@ -4983,7 +4987,7 @@ public function deleteBonus()
     if( $this->session->userdata('mng_roles_grp')){
       if(isset($_POST['addrole'])){
         $data = array(
-             'name' => $this->input->post('name'),
+             'name' => $request->input('name'),
              'created_by' =>$this->session->userdata('emp_id')
         );
 
@@ -4991,7 +4995,7 @@ public function deleteBonus()
         if($result==true) {
           $this->flexperformance_model->audit_log("Created New Role with empty permission set");
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
-        redirect('/cipay/role', 'refresh');
+        return  redirect('/flex/role');
         } else {
           echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
         }
@@ -5000,8 +5004,8 @@ public function deleteBonus()
       } elseif(isset($_POST['addgroup'])) {
 
         $data = array(
-             'name' => $this->input->post('name'),
-             'type' => $this->input->post('type'),
+             'name' => $request->input('name'),
+             'type' => $request->input('type'),
              'created_by' =>$this->session->userdata('emp_id')
         );
 
@@ -5009,7 +5013,7 @@ public function deleteBonus()
 
         $this->session->set_flashdata('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
         $this->department();
-        redirect('/cipay/role', 'refresh');
+        return  redirect('/flex/role');
       } else {
         // $id = $this->session->userdata('emp_id');
         $data['role'] = $this->flexperformance_model->allrole();
@@ -5017,7 +5021,7 @@ public function deleteBonus()
         $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['title']="Roles and Groups";
-        $this->load->view('role', $data);
+        return view('app.role', $data);
       }
     }else{
         echo "Unauthorized Access";
@@ -5031,7 +5035,7 @@ public function deleteBonus()
         $data['headcounts'] = $this->flexperformance_model->memberscount($id);
         $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
         $data['title']="Groups";
-        $this->load->view('groups', $data);
+        return view('app.groups', $data);
       } else {
         echo "Unauthorized Access";
       }
@@ -5040,10 +5044,10 @@ public function deleteBonus()
 
 public function removeEmployeeFromGroup(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $arr = $this->input->post('option');
-      $groupID = $this->input->post('groupID');
+      $arr = $request->input('option');
+      $groupID = $request->input('groupID');
       if(sizeof($arr)<1){
           echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
       } else {
@@ -5065,9 +5069,9 @@ public function removeEmployeeFromGroup(){
 
 public function removeEmployeeFromRole(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $arr = $this->input->post('option');
+      $arr = $request->input('option');
       if($arr == "" || $arr == "[]"){
           echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
       } else {
@@ -5095,10 +5099,10 @@ public function removeEmployeeFromRole(){
 
 public function addEmployeeToGroup(){
 
-  if ($_POST) {
+  if (Request::isMethod('post')) {
 
-      $arr = $this->input->post('option');
-      $groupID = $this->input->post('groupID');
+      $arr = $request->input('option');
+      $groupID = $request->input('groupID');
       $group_roles = $this->flexperformance_model->get_group_roles($groupID);
       $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
       $group_deductions = $this->flexperformance_model->get_group_deductions($groupID);
@@ -5160,11 +5164,11 @@ public function addEmployeeToGroup(){
     public function updategroup(){
       if (isset($_POST['addselected'])) {
 
-      $arr = $this->input->post('option');
-        $groupID = $this->input->get('id');
+      $arr = $request->input('option');
+        $groupID = $request->input('id');
         if(sizeof($arr)<1){
           $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>");
-          redirect('/cipay/groups/?id='.base64_encode($groupID), 'refresh');
+          return  redirect('/flex/groups/?id='.base64_encode($groupID));
       }
         foreach ($arr as $value) {
           $datagroup = array(
@@ -5205,17 +5209,17 @@ public function addEmployeeToGroup(){
 
     }
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Employee(s) Added Successifully!</p>");
-      redirect('/cipay/groups/?id='.base64_encode($groupID), 'refresh');
+      return  redirect('/flex/groups/?id='.base64_encode($groupID));
 
       }
 
       elseif (isset($_POST['removeselected'])) {
 
-      $arr = $this->input->post('option');
-      $groupID = $this->input->get('id');
+      $arr = $request->input('option');
+      $groupID = $request->input('id');
       if(sizeof($arr)<1){
           $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>");
-          redirect('/cipay/groups/?id='.base64_encode($groupID), 'refresh');
+          return  redirect('/flex/groups/?id='.base64_encode($groupID));
       }
 
         foreach ($arr as $composite) {
@@ -5229,7 +5233,7 @@ public function addEmployeeToGroup(){
 
     }
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Employees Removed Successifully!</p>");
-      redirect('/cipay/groups/?id='.base64_encode($groupID), 'refresh');
+      return  redirect('/flex/groups/?id='.base64_encode($groupID));
 
     }
 
@@ -5277,7 +5281,7 @@ public function deleteGroup()
 
       $data['permission'] = $this->flexperformance_model->permission();
       $data['title']="Roles and Activities";
-      $this->load->view('permission', $data);
+      return view('app.permission', $data);
 
 
    }
@@ -5285,26 +5289,26 @@ public function deleteGroup()
     public function assignrole2() {
 
         if(isset($_POST['assign'])){
-            $roleref = base64_encode($this->input->post('roleID'));
+            $roleref = base64_encode($request->input('roleID'));
 
           $data = array(
-                     'userID' =>$this->input->post('empID'),
-                     'role' => $this->input->post('roleID')
+                     'userID' =>$request->input('empID'),
+                     'role' => $request->input('roleID')
                 );
 
           $this->flexperformance_model->assignrole($data);
 
 
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Role Assigned Successifully</p>");
-          $reload = '/cipay/role_info/?id='. $roleref;
-          redirect($reload, 'refresh');
+          $reload = '/flex/role_info/?id='. $roleref;
+          return redirect($reload);
 
 
 
         }
         if(isset($_POST['addgroup'])){
-      $groupID = $this->input->post("groupID");
-      $roleID = $this->input->post("roleID");
+      $groupID = $request->input("groupID");
+      $roleID = $request->input("roleID");
 
       $members = $this->flexperformance_model->get_rolegroupmembers($groupID);
       foreach ($members as $row) {
@@ -5318,8 +5322,8 @@ public function deleteGroup()
         }
 
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Role Assigned Successifully</p>");
-          $reload = '/cipay/role_info/?id='. base64_encode($roleID);
-          redirect($reload, 'refresh');
+          $reload = '/flex/role_info/?id='. base64_encode($roleID);
+          return redirect($reload);
         }
 
 
@@ -5348,7 +5352,7 @@ public function deleteGroup()
             foreach ($all_member_in_role as $item){
                 $data['group'][$item->userID] = $this->flexperformance_model->memberWithGroup($id,$item->userID);
             }
-          $this->load->view('updaterole', $data);
+          return view('app.updaterole', $data);
       }
     }
 
@@ -5370,8 +5374,8 @@ public function deleteGroup()
 
   function updaterole(){
     if (isset($_POST['assign'])) {
-      $arr = $this->input->post('option');
-      $idpost = $this->input->post('roleID');
+      $arr = $request->input('option');
+      $idpost = $request->input('roleID');
       $data = array(
            'permissions' =>implode("" , $arr)
       );
@@ -5380,28 +5384,28 @@ public function deleteGroup()
       if($result==true){
         $this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as ".implode("" , $arr)." ");
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
-        redirect('/cipay/role/', 'refresh');
+        return  redirect('/flex/role/');
       }else{
         $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>FAILED: Permissions NOT Assigned, Please try Again!</p>");
-        redirect('/cipay/role/', 'refresh');
+        return  redirect('/flex/role/');
       }
 
     }
     if (isset($_POST['updatename'])) {
-      $idpost = $this->input->get('id');
+      $idpost = $request->input('id');
 
       $data = array(
-           'name' =>$this->input->post('name')
+           'name' =>$request->input('name')
       );
 
       $result = $this->flexperformance_model->updaterole($data, $idpost);
       if($result==true){
-        $this->flexperformance_model->audit_log("Updated Role Name to   ".$this->input->post('name')." ");
+        $this->flexperformance_model->audit_log("Updated Role Name to   ".$request->input('name')." ");
         $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
-        redirect('/cipay/role', 'refresh');
+        return  redirect('/flex/role');
       } else{
         $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>FAILED: Role Name NOT Updated, Please Try Again!</p>");
-        redirect('/cipay/role', 'refresh');
+        return  redirect('/flex/role');
       }
     }
   }
@@ -5412,12 +5416,12 @@ public function deleteGroup()
     function assignrole(){
 
       if (isset($_POST['assign'])) {
-        $arr = $this->input->post('option');
+        $arr = $request->input('option');
 
-        $userID = $this->input->post('empID');
+        $userID = $request->input('empID');
         if (sizeof($arr)<=0) {
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
-            redirect('/cipay/userprofile/?id='.$userID, 'refresh');
+            return  redirect('/flex/userprofile/?id='.$userID);
 
         }else{
         for ($i=0; $i < sizeof($arr); $i++) {
@@ -5433,10 +5437,10 @@ public function deleteGroup()
           $this->flexperformance_model->audit_log("Assigned a Role with IDs  ".implode(",", $arr)."  to User with ID ".$userID." ");
 
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
-            redirect('/cipay/userprofile/?id='.$userID.'#tab_role', 'refresh');
+            return  redirect('/flex/userprofile/?id='.$userID.'#tab_role');
         }else{
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
-            redirect('/cipay/userprofile/?id='.$userID.'#tab_role', 'refresh');
+            return  redirect('/flex/userprofile/?id='.$userID.'#tab_role');
 
         }
         }
@@ -5448,14 +5452,14 @@ public function deleteGroup()
 
       if (isset($_POST['revoke'])) {
 
-      $arr = $this->input->post('option');
-        $userID = $this->input->post('empID');
-        $roleid = $this->input->post('roleid');
+      $arr = $request->input('option');
+        $userID = $request->input('empID');
+        $roleid = $request->input('roleid');
 
         if (sizeof($arr)<=0) {
 
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
-          redirect('/cipay/userprofile/?id='.$userID, 'refresh');
+          return  redirect('/flex/userprofile/?id='.$userID);
 
         } else{
         for ($i=0; $i < sizeof($arr); $i++) {
@@ -5467,10 +5471,10 @@ public function deleteGroup()
         if($result==true){
            $this->flexperformance_model->audit_log("Revoked a Role with IDs  ".implode(",", $arr)."  to User with ID ".$userID." ");
            $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
-          redirect('/cipay/userprofile/?id='.$userID, 'refresh');
+          return  redirect('/flex/userprofile/?id='.$userID);
         }else{
           $this->session->set_flashdata('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
-          redirect('/cipay/userprofile/?id='.$userID, 'refresh');
+          return  redirect('/flex/userprofile/?id='.$userID);
         }
 
       }
@@ -5485,7 +5489,7 @@ public function appreciation(){
       $data['title'] =  'Appreciation';
       $data['appreciated'] =  $this->flexperformance_model->appreciated_employee();
       $data['employee'] =  $this->flexperformance_model->customemployee();
-      $this->load->view('appreciation', $data);
+      return view('app.appreciation', $data);
 }
 
 public function add_apprec()
@@ -5498,14 +5502,14 @@ public function add_apprec()
 
 
           $data = array(
-            'empID' =>$this->input->post("empID"),
-            'description' =>$this->input->post("description"),
+            'empID' =>$request->input("empID"),
+            'description' =>$request->input("description"),
             'date_apprd' =>date('Y-m-d')
             );
 
           $this->flexperformance_model->add_apprec($data);
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Employee of the month Updated Successifully</p>");
-       redirect('/cipay/appreciation', 'refresh');
+       return  redirect('/flex/appreciation');
 
        }
       }
@@ -5518,7 +5522,7 @@ public function employee_payslip(){
     $data['title'] = "Employee Payslip";
     $data['month_list'] = $this->payroll_model->payroll_month_list();
     $data['employee'] = $this->payroll_model->customemployee();
-    $this->load->view('employee_payslip', $data);
+    return view('app.employee_payslip', $data);
 }
 
 
@@ -5546,9 +5550,9 @@ public function employee_payslip(){
 
 public function updateCompanyName() {
       $id = 1;
-        if ($_POST && $id!='') {
+        if (Request::isMethod('post')&& $id!='') {
             $data = array(
-                        'cname' =>$this->input->post('name')
+                        'cname' =>$request->input('name')
                     );
                 $result = $this->flexperformance_model->updateemployer($data, $id);
                 if($result==true) {
@@ -5577,7 +5581,7 @@ public function updateCompanyName() {
          $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
 
          $data['title'] = "Add Employee";
-         $this->load->view('employeeAdd', $data);
+         return view('app.employeeAdd', $data);
      }else{
          echo 'Unauthorized Access';
      }
@@ -5587,7 +5591,7 @@ public function updateCompanyName() {
 public function getPositionSalaryRange()
   {
 
-    $positionID = $this->input->post("positionID");
+    $positionID = $request->input("positionID");
     $data = array(
     'state' => 0
     );
@@ -5664,12 +5668,12 @@ function password_generator($size){
 
   public function registerEmployee() {
 
-    if($_POST) {
+    if(Request::isMethod('post')) {
 
       // DATE MANIPULATION
-        $calendar = str_replace('/', '-', $this->input->post('birthdate'));
-        $contract_end = str_replace('/', '-', $this->input->post('contract_end'));
-        $contract_start = str_replace('/', '-', $this->input->post('contract_start'));
+        $calendar = str_replace('/', '-', $request->input('birthdate'));
+        $contract_end = str_replace('/', '-', $request->input('contract_end'));
+        $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
       $birthdate = date('Y-m-d', strtotime($calendar));
 
@@ -5681,51 +5685,51 @@ function password_generator($size){
 
       if (($required/365) > 16) {
 
-        $countryCode = $this->input->post("nationality");
+        $countryCode = $request->input("nationality");
         $randomPassword = $this->password_generator(8);
         $employee = array(
-          'fname' =>$this->input->post("fname"),
-          'mname' =>$this->input->post("mname"),
+          'fname' =>$request->input("fname"),
+          'mname' =>$request->input("mname"),
 
-          'emp_code' =>$this->input->post("emp_code"),
-          'emp_level' =>$this->input->post("emp_level"),
-          //'lname' =>$this->input->post("lname"),
+          'emp_code' =>$request->input("emp_code"),
+          'emp_level' =>$request->input("emp_level"),
+          //'lname' =>$request->input("lname"),
           'lname' =>$randomPassword,
-          'salary' =>$this->input->post("salary"),
-          'gender' =>$this->input->post("gender"),
-          'email' =>$this->input->post("email"),
-          'nationality' =>$this->input->post("nationality"),
-          'merital_status' =>$this->input->post("status"),
+          'salary' =>$request->input("salary"),
+          'gender' =>$request->input("gender"),
+          'email' =>$request->input("email"),
+          'nationality' =>$request->input("nationality"),
+          'merital_status' =>$request->input("status"),
           'birthdate' =>$birthdate,
-          'position' =>$this->input->post("position"),
-          'contract_type' =>$this->input->post("ctype"),
-          'postal_address' =>$this->input->post("postaddress"),
-          'physical_address' =>$this->input->post('haddress'),
-          'mobile' =>$this->input->post('mobile'),
-          'account_no' =>$this->input->post("accno"),
-          'bank' =>$this->input->post("bank"),
-          'bank_branch' =>$this->input->post("bank_branch"),
-          'pension_fund' =>$this->input->post("pension_fund"),
-          'pf_membership_no' =>$this->input->post("pf_membership_no"),
-          'home' =>$this->input->post("haddress"),
-          'postal_city' =>$this->input->post("postalcity"),
+          'position' =>$request->input("position"),
+          'contract_type' =>$request->input("ctype"),
+          'postal_address' =>$request->input("postaddress"),
+          'physical_address' =>$request->input('haddress'),
+          'mobile' =>$request->input('mobile'),
+          'account_no' =>$request->input("accno"),
+          'bank' =>$request->input("bank"),
+          'bank_branch' =>$request->input("bank_branch"),
+          'pension_fund' =>$request->input("pension_fund"),
+          'pf_membership_no' =>$request->input("pf_membership_no"),
+          'home' =>$request->input("haddress"),
+          'postal_city' =>$request->input("postalcity"),
           'photo' =>"user.png",
           'password_set' =>"1",
-          'line_manager' =>$this->input->post("linemanager"),
-          'department' =>$this->input->post("department"),
-          'branch' => $this->input->post("branch"),
+          'line_manager' =>$request->input("linemanager"),
+          'department' =>$request->input("department"),
+          'branch' => $request->input("branch"),
           'hire_date' => date('Y-m-d',strtotime($contract_start)),
           'contract_renewal_date' => date('Y-m-d'),
-            'emp_id' => $this->input->post("emp_id"),
-            'username' => $this->input->post("emp_id"),
+            'emp_id' => $request->input("emp_id"),
+            'username' => $request->input("emp_id"),
             'password' => password_hash( $randomPassword, PASSWORD_BCRYPT),
             'contract_end' => date('Y-m-d',strtotime($contract_end)),
             'state' => 5,
-            'national_id' =>$this->input->post("nationalid"),
-            'tin' =>$this->input->post("tin"),
+            'national_id' =>$request->input("nationalid"),
+            'tin' =>$request->input("tin"),
 
       );
-      $empName = $this->input->post("fname") .' '.$this->input->post("mname").' '.$this->input->post("lname");  
+      $empName = $request->input("fname") .' '.$request->input("mname").' '.$request->input("lname");  
       
       
       $recordID = $this->flexperformance_model->employeeAdd($employee);
@@ -5734,7 +5738,7 @@ function password_generator($size){
 
         /*give 100 allocation*/
             $data = array(
-                'empID' =>$this->input->post("emp_id"),
+                'empID' =>$request->input("emp_id"),
                 'activity_code' =>'AC0018',
                 'grant_code' =>'VSO',
                 'percent' => 100.00
@@ -5742,7 +5746,7 @@ function password_generator($size){
           $this->project_model->allocateActivity($data);
 
           // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
-          $empID = $this->input->post("emp_id");
+          $empID = $request->input("emp_id");
 
           $property = array(
                 'prop_type' =>"Employee Package",
@@ -5787,7 +5791,7 @@ function password_generator($size){
     //     $mail->setFrom($senderEmail, $senderName);
         
     //     // Add a recipient
-    //     $mail->addAddress($this->input->post("email"));
+    //     $mail->addAddress($request->input("email"));
         
         
     //     // Email subject
@@ -5815,15 +5819,15 @@ function password_generator($size){
 
               /*add in transfer with status = 5 (registered, waiting for approval)*/
               $data_transfer = array(
-                  'empID' => $this->input->post("emp_id"),
+                  'empID' => $request->input("emp_id"),
                   'parameter' => 'New Employee',
                   'parameterID' => 5,
                   'old' => 0,
-                  'new' => $this->input->post("salary"),
+                  'new' => $request->input("salary"),
                   'old_department' => 0,
-                  'new_department' => $this->input->post("department"),
+                  'new_department' => $request->input("department"),
                   'old_position' => 0,
-                  'new_position' => $this->input->post("position"),
+                  'new_position' => $request->input("position"),
                   'status' => 5,//new employee
                   'recommended_by' => $this->session->userdata('emp_id'),
                   'approved_by' => '',
@@ -5841,7 +5845,7 @@ function password_generator($size){
                       <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
                     </div>";
             header('Content-type: application/json');
-            $response_array['credentials'] = "username ni ".$this->input->post("emp_id")."password:".$randomPassword;
+            $response_array['credentials'] = "username ni ".$request->input("emp_id")."password:".$randomPassword;
             echo json_encode($response_array);
           }else{
             $response_array['status'] = "ERR";
@@ -5890,7 +5894,7 @@ function password_generator($size){
        $data['childDepartments'] = $this->flexperformance_model->childDepartments();
 
        $data['title'] = "Employer Info";
-       $this->load->view('company_info', $data);
+       return view('app.company_info', $data);
       }
 
     public function accounting_coding()
@@ -5898,7 +5902,7 @@ function password_generator($size){
 
         $this->load->model("flexperformance_model");
         $data['accounting_coding'] = $this->flexperformance_model->accounting_coding();
-        $this->load->view('accounting_coding', $data);
+        return view('app.accounting_coding', $data);
     }
 
     public function department_structure()
@@ -5916,7 +5920,7 @@ function password_generator($size){
        $data['childDepartments'] = $this->flexperformance_model->childDepartments();
 
        $data['title'] = "Employer Info";
-       $this->load->view('company_info', $data);
+       return view('app.company_info', $data);
       }
 
 
@@ -5931,7 +5935,7 @@ function password_generator($size){
        $data['otherpositions'] = $this->flexperformance_model->otherpositions();
 
        $data['title'] = "Employer Info";
-       $this->load->view('company_info', $data);
+       return view('app.company_info', $data);
 
 
          if(isset($_POST['update']))
@@ -5952,31 +5956,31 @@ function password_generator($size){
         // $completepath =  $path.$data["file_name"];
 
          $data = array(
-            // 'tin' => $this->input->post('tin'),
-            // 'cname' => $this->input->post('cname'),
-            // 'postal_address' => $this->input->post('postal_address'),
-            'postal_city' => $this->input->post('postal_city'),
-            'phone_no1' => $this->input->post('phone_no1'),
-            'phone_no2' => $this->input->post('phone_no2'),
-            'phone_no3' => $this->input->post('phone_no3'),
-            'fax_no' => $this->input->post('fax_no'),
-            'email' => $this->input->post('email' ),
-            'plot_no' => $this->input->post('plot_no'),
-            'block_no' => $this->input->post('block_no'),
-            'street' => $this->input->post('street'),
-            'branch' => $this->input->post('branch'),
-            'wcf_reg_no' => $this->input->post('wcf_reg_no'),
-            'heslb_code_no' => $this->input->post('heslb_code_no'),
-            'business_nature' => $this->input->post('business_nature'),
+            // 'tin' => $request->input('tin'),
+            // 'cname' => $request->input('cname'),
+            // 'postal_address' => $request->input('postal_address'),
+            'postal_city' => $request->input('postal_city'),
+            'phone_no1' => $request->input('phone_no1'),
+            'phone_no2' => $request->input('phone_no2'),
+            'phone_no3' => $request->input('phone_no3'),
+            'fax_no' => $request->input('fax_no'),
+            'email' => $request->input('email' ),
+            'plot_no' => $request->input('plot_no'),
+            'block_no' => $request->input('block_no'),
+            'street' => $request->input('street'),
+            'branch' => $request->input('branch'),
+            'wcf_reg_no' => $request->input('wcf_reg_no'),
+            'heslb_code_no' => $request->input('heslb_code_no'),
+            'business_nature' => $request->input('business_nature'),
             'logo' => $path.$data["file_name"],
-            'company_type' => $this->input->post('company_type')
+            'company_type' => $request->input('company_type')
 
                );
 
           $this->flexperformance_model->updateemployer($data, $id);// ) {
           $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Company Information Updated Successifully</p>");
 
-          redirect('/cipay/employer', 'refresh');
+          return  redirect('/flex/employer');
           }
 
 
@@ -5984,7 +5988,7 @@ function password_generator($size){
         {
         // $error = $this->upload->display_errors();
         $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>The filetype you are attempting to upload is not allowed!.</p>");
-          redirect('/cipay/employer', 'refresh');
+          return  redirect('/flex/employer');
         }
 
       }
@@ -6001,7 +6005,7 @@ function password_generator($size){
       //if($this->session->userdata('griev_hr')!=''){
         $data['other_grievances'] =  $this->flexperformance_model->all_grievances();
       //}
-      $this->load->view('grievances', $data);
+      return view('app.grievances', $data);
 
 
 
@@ -6019,11 +6023,11 @@ function password_generator($size){
         if($this->upload->do_upload()){
 
         $data =  $this->upload->data();
-         if($this->input->post('anonymous') == '1'){
+         if($request->input('anonymous') == '1'){
 
           $data = array(
-            'title' =>$this->input->post("title"),
-            'description' =>$this->input->post("description"),
+            'title' =>$request->input("title"),
+            'description' =>$request->input("description"),
             'empID' =>$this->session->userdata('emp_id'),
             'anonymous' => 1,
             'attachment' =>$path.$data["file_name"],
@@ -6032,8 +6036,8 @@ function password_generator($size){
             else {
 
           $data = array(
-            'title' =>$this->input->post("title"),
-            'description' =>$this->input->post("description"),
+            'title' =>$request->input("title"),
+            'description' =>$request->input("description"),
             'empID' =>$this->session->userdata('emp_id'),
             'attachment' =>$path.$data["file_name"]
             );
@@ -6043,17 +6047,17 @@ function password_generator($size){
 
       $this->flexperformance_model->add_grievance($data);
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-      redirect('/cipay/grievances', 'refresh');
+      return  redirect('/flex/grievances');
         }
 
         else{
 
 
-         if($this->input->post('anonymous') == '1'){
+         if($request->input('anonymous') == '1'){
 
           $data = array(
-            'title' =>$this->input->post("title"),
-            'description' =>$this->input->post("description"),
+            'title' =>$request->input("title"),
+            'description' =>$request->input("description"),
             'empID' =>$this->session->userdata('emp_id'),
             'attachment' =>"N/A",
             'anonymous' => 1,
@@ -6065,8 +6069,8 @@ function password_generator($size){
 
 
           $data = array(
-            'title' =>$this->input->post("title"),
-            'description' =>$this->input->post("description"),
+            'title' =>$request->input("title"),
+            'description' =>$request->input("description"),
             'empID' =>$this->session->userdata('emp_id'),
             'attachment' =>"N/A",
             );
@@ -6076,7 +6080,7 @@ function password_generator($size){
 
       $this->flexperformance_model->add_grievance($data);
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-      redirect('/cipay/grievances', 'refresh');
+      return  redirect('/flex/grievances');
 
         }
 
@@ -6088,16 +6092,16 @@ function password_generator($size){
 
 public function grievance_details()
       {
-         $id = $this->input->get('id');
+         $id = $request->input('id');
 
           $data['title'] =  'Grievances and Disciplinary';
           $data['details'] =  $this->flexperformance_model->grievance_details($id);
 
-    $this->load->view('grievance_details', $data);
+    return view('app.grievance_details', $data);
 
     if (isset($_POST["submit"]) ){
 
-      $id = $this->input->get('id');
+      $id = $request->input('id');
 
       $config = array(
             'upload_path' => "./uploads/grievances/",
@@ -6114,7 +6118,7 @@ public function grievance_details()
         $uploadData =  $this->upload->data();
 
           $updates = array(
-            'remarks' =>$this->input->post("remarks"),
+            'remarks' =>$request->input("remarks"),
             'support_document' => $path.$uploadData["file_name"],
             'forwarded_by' => $this->session->userdata('emp_id'),
             'forwarded' => 1
@@ -6122,14 +6126,14 @@ public function grievance_details()
 
       $this->flexperformance_model->forward_grievance($updates, $id);
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-      redirect('/cipay/grievances', 'refresh');
+      return  redirect('/flex/grievances');
         }
 
         else{
 
 
           $data = array(
-            'remarks' =>$this->input->post("remarks"),
+            'remarks' =>$request->input("remarks"),
             'forwarded_by' => $this->session->userdata('emp_id'),
             'forwarded' => 1
             );
@@ -6138,7 +6142,7 @@ public function grievance_details()
 
       $this->flexperformance_model->forward_grievance($data, $id);
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-      redirect('/cipay/grievances', 'refresh');
+      return  redirect('/flex/grievances');
 
 
 
@@ -6149,7 +6153,7 @@ public function grievance_details()
 
     if (isset($_POST["solve"]) ){
 
-      $id = $this->input->get('id');
+      $id = $request->input('id');
 
       $config = array(
             'upload_path' => "./uploads/grievances/",
@@ -6166,7 +6170,7 @@ public function grievance_details()
         $uploadData =  $this->upload->data();
 
           $updates = array(
-            'remarks' =>$this->input->post("remarks"),
+            'remarks' =>$request->input("remarks"),
             'support_document' => $path.$uploadData["file_name"],
             'forwarded_by' => $this->session->userdata('emp_id'),
             'forwarded' => 1,
@@ -6175,13 +6179,13 @@ public function grievance_details()
 
       $this->flexperformance_model->forward_grievance($updates, $id);
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
-      redirect('/cipay/grievances', 'refresh');
+      return  redirect('/flex/grievances');
 
         } else{
 
 
           $data = array(
-            'remarks' =>$this->input->post("remarks"),
+            'remarks' =>$request->input("remarks"),
             'forwarded_by' => $this->session->userdata('emp_id'),
             'forwarded' => 1,
             'status' => 1
@@ -6191,7 +6195,7 @@ public function grievance_details()
 
       $this->flexperformance_model->forward_grievance($data, $id);
       $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
-      redirect('/cipay/grievances', 'refresh');
+      return  redirect('/flex/grievances');
 
 
 
@@ -6241,7 +6245,7 @@ public function grievance_details()
       $data['logs'] =  $this->flexperformance_model->audit_logs();
       $data['purge_logs'] =  $this->flexperformance_model->audit_purge_logs();
       $data['title']="Audit Trail";
-      $this->load->view('audit_logs', $data);
+      return view('app.audit_logs', $data);
     } else {
       echo "Unauthorized Access";
     }
@@ -6440,7 +6444,7 @@ public function grievance_details()
      if ($this->email->send())
      {
        echo 'User Registered Successfuly';
-        // redirect('../setting/user/');
+        // return redirect('../setting/user/');
        echo $this->email->print_debugger();
      }
      else
@@ -6493,7 +6497,7 @@ public function patterntest(){
      if ($this->email->send())
      {
        echo 'User Registered Successfuly';
-        // redirect('../setting/user/');
+        // return redirect('../setting/user/');
        echo $this->email->print_debugger();
      }
      else
@@ -6584,19 +6588,19 @@ function send(){
     }
 
     public function retired(){
-        $empID = $this->input->get('id');
+        $empID = $request->input('id');
         $this->flexperformance_model->employeeRetired($empID);
         $this->session->set_flashdata('retired', "<p class='alert alert-warning text-center'>Contract Deleted Successifully</p>");
-        $reload = '/cipay/userprofile/?id='.$empID;
-        redirect($reload, 'refresh');
+        $reload = '/flex/userprofile/?id='.$empID;
+        return redirect($reload);
     }
 
     public function loginuser(){
-        $empID = $this->input->get('id');
+        $empID = $request->input('id');
         $this->flexperformance_model->employeeLogin($empID);
         $this->session->set_flashdata('loginuser', "<p class='alert alert-warning text-center'>Contract Deleted Successifully</p>");
-        $reload = '/cipay/userprofile/?id='.$empID;
-        redirect($reload, 'refresh');
+        $reload = '/flex/userprofile/?id='.$empID;
+        return redirect($reload);
     }
 
     public function employeeReport() {
@@ -6604,19 +6608,19 @@ function send(){
         $data['employees'] =  $this->flexperformance_model->employeeReport();
         $data['month_list'] = $this->payroll_model->payroll_month_list();
         $data['title']="Employee Report";
-        $this->load->view('employee_report', $data);
+        return view('app.employee_report', $data);
 
     }
 
     public function partial(){
-        if($_POST) {
-            if ($this->input->post('to') == '' || $this->input->post('from') == ''){
+        if(Request::isMethod('post')) {
+            if ($request->input('to') == '' || $request->input('from') == ''){
                 $response_array['status'] = "no_date";
                 echo json_encode($response_array);
             }else{
 
-                $fx = explode('/',$this->input->post('from'));
-                $tx = explode('/',$this->input->post('to'));
+                $fx = explode('/',$request->input('from'));
+                $tx = explode('/',$request->input('to'));
                 $from = $fx[2].'-'.$fx[1].'-'.$fx[0];
                 $to = $tx[2].'-'.$tx[1].'-'.$tx[0];
                 $start = strtotime($from);
@@ -6629,7 +6633,7 @@ function send(){
                     echo json_encode($response_array);
                 }else{
                     $data = array(
-                        'empID' => $this->input->post('employee'),
+                        'empID' => $request->input('employee'),
                         'start_date' => $from,
                         'end_date' => $to,
                         'days' =>$days,
@@ -6660,10 +6664,10 @@ function send(){
     }
 
     public function updateGroupEdit(){
-        if($_POST) {
+        if(Request::isMethod('post')) {
 
-            $group_id = $this->input->post('group_id');
-            $group_name = $this->input->post('group_name');
+            $group_id = $request->input('group_id');
+            $group_name = $request->input('group_name');
             $result = $this->flexperformance_model->updateGroupEdit($group_id,$group_name);
             if($result ==true){
                 $response_array['status'] = "OK";
@@ -6708,9 +6712,9 @@ function send(){
     }
 
     public function updateContractStart() {
-        $empID = $this->input->post('empID');
-        if ($_POST && $empID!='') {
-            $contract_start = str_replace('/', '-', $this->input->post('contract_start'));
+        $empID = $request->input('empID');
+        if (Request::isMethod('post')&& $empID!='') {
+            $contract_start = str_replace('/', '-', $request->input('contract_start'));
             $updates = array(
                 'hire_date' =>date('Y-m-d',strtotime($contract_start)),
                 'last_updated' => date('Y-m-d')
@@ -6724,9 +6728,9 @@ function send(){
     }
 
     public function updateContractEnd() {
-        $empID = $this->input->post('empID');
-        if ($_POST && $empID!='') {
-            $contract_end = str_replace('/', '-', $this->input->post('contract_end'));
+        $empID = $request->input('empID');
+        if (Request::isMethod('post')&& $empID!='') {
+            $contract_end = str_replace('/', '-', $request->input('contract_end'));
             $updates = array(
                 'contract_end' =>date('Y-m-d',strtotime($contract_end)),
                 'last_updated' => date('Y-m-d')
