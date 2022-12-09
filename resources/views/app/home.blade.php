@@ -91,7 +91,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
             </div>
 
             <div class="row top_tiles">
-            <!-- Appreciation  -->
+            {{-- <!-- Appreciation  -->
                       <!-- <div class="col-md-5 col-sm-4 col-xs-12 profile_details">
                         <div class="well profile_view">
                           <div class="col-sm-12">
@@ -119,7 +119,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                           </div>
                         </div>
                       </div> -->
-                      <!-- Appreciation -->
+                      <!-- Appreciation --> --}}
 
                  <div class="<?php if(session('vw_emp_sum')) { ?> col-md-8 <?php }else{ ?> col-md-12 <?php }?>">
                 <div class="x_panel">
@@ -137,7 +137,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
               <?php if(session('vw_emp_sum')) { ?>
 
               <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
-              <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo url(); ?>flex/employee"><?php //} ?>
+              {{-- <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo url(); ?>flex/employee"><?php //} ?> --}}
                 <div class="tile-stats">
 <!--                  <div class="icon"><i class="fa fa-users"></i></div>-->
                   <div class="count"><?php echo $employees; ?></div>
@@ -490,7 +490,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
  @push('footer-script')
 
-<script src="<?php echo url();?>style/jquery/jquery.easypiechart.min.js"></script>
+{{-- <script src="<?php echo url();?>style/jquery/jquery.easypiechart.min.js"></script> --}}
 
 <script>
   $(function() {

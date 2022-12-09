@@ -3446,12 +3446,11 @@ public function updateLevel(Request $request) {
    }
 
   public function home(Request $request) {
-    // dd(session()->all());
 
-    $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+      $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
 
-    // dd($strategyStatistics);
-    $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
+      // dd($strategyStatistics);
+      $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
       $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
       $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -3472,48 +3471,45 @@ public function updateLevel(Request $request) {
 
       $data['appreciated'] =  $this->flexperformance_model->appreciated_employee();
 
-    // $data['employee_count'] =  $this->flexperformance_model->count_employees();
-    $data['overview'] =  $this->flexperformance_model->employees_info();
-    $data["strategyProgress"] = $strategyProgress;
-    $data["monthly"] = $rate_per_month;
+      // $data['employee_count'] =  $this->flexperformance_model->count_employees();
+      $data['overview'] =  $this->flexperformance_model->employees_info();
+      $data["strategyProgress"] = $strategyProgress;
+      $data["monthly"] = $rate_per_month;
 
-    $data['taskline']= $this->performanceModel->total_taskline(session('emp_id'));
-    $data['taskstaff']= $this->performanceModel->total_taskstaff(session('emp_id'));
+      $data['taskline']= $this->performanceModel->total_taskline(session('emp_id'));
+      $data['taskstaff']= $this->performanceModel->total_taskstaff(session('emp_id'));
 
 
-    $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
-    $data['total_allowances'] =  $this->payroll_model->total_allowances("allowance_logs",$payrollMonth);
-    $data['total_bonuses'] =  $this->payroll_model->total_bonuses($payrollMonth);
-    $data['total_loans'] =  $this->payroll_model->total_loans("loan_logs",$payrollMonth);
-    $data['total_heslb'] =  $this->payroll_model->total_heslb("loan_logs",$payrollMonth);
-    $data['take_home'] = $this->reports_model-> sum_take_home($payrollMonth);
-    $data['total_deductions'] =  $this->payroll_model->total_deductions("deduction_logs",$payrollMonth);
-    $data['total_overtimes'] =  $this->payroll_model->total_overtimes($payrollMonth);
-    $data['payroll_date']= $payrollMonth;
-    $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
-    $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
-    $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
-    $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
-    $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
-    $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
-    $data['v_net_c'] = $this->reports_model->volunteer_sum_take_home($payrollMonth);
-    $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
-    $data['v_net_p'] = $this->reports_model->volunteer_sum_take_home($previous_payroll_month);
-    $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth,'');
-    $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth,'');
-    $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month,'');
-    $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month,'');
-    $data['net_total'] = $this->netTotalSummation($payrollMonth);
+      $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
+      $data['total_allowances'] =  $this->payroll_model->total_allowances("allowance_logs",$payrollMonth);
+      $data['total_bonuses'] =  $this->payroll_model->total_bonuses($payrollMonth);
+      $data['total_loans'] =  $this->payroll_model->total_loans("loan_logs",$payrollMonth);
+      $data['total_heslb'] =  $this->payroll_model->total_heslb("loan_logs",$payrollMonth);
+      $data['take_home'] = $this->reports_model-> sum_take_home($payrollMonth);
+      $data['total_deductions'] =  $this->payroll_model->total_deductions("deduction_logs",$payrollMonth);
+      $data['total_overtimes'] =  $this->payroll_model->total_overtimes($payrollMonth);
+      $data['payroll_date']= $payrollMonth;
+      $data['arrears'] = $this->payroll_model->arrearsMonth($payrollMonth);
+      $data['s_gross_c'] = $this->reports_model->s_grossMonthly($payrollMonth);
+      $data['v_gross_c'] = $this->reports_model->v_grossMonthly($payrollMonth);
+      $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
+      $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
+      $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
+      $data['v_net_c'] = $this->reports_model->volunteer_sum_take_home($payrollMonth);
+      $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
+      $data['v_net_p'] = $this->reports_model->volunteer_sum_take_home($previous_payroll_month);
+      $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth,'');
+      $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth,'');
+      $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month,'');
+      $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month,'');
+      $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
-    if(session('password_set') =="1"){
-      $this->login_info();
-    }else{
-
-    // return Redirect To HOME
-    $data['title'] = "Home";
-    return view('app.home', $data);
-
-    }
+      if(session('password_set') =="1"){
+        $this->login_info();
+      }else{
+        $data['parent'] = 'Dashboard';
+        return view('app.home', $data);
+      }
 
 
   }
