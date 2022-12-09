@@ -2596,6 +2596,15 @@ function allLevels()
 		}
 	}
 
+	public function get_login_user($username){
+		$query = "SELECT e.*, d.name as dname, c.name as CONTRACT, d.id as departmentID, p.id as positionID, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as lineManager from employee e, contract c, department d, position p WHERE d.id=e.department and e.contract_type = c.id and p.id=e.position and (e.state = '1' or e.state = '3')  and e.fname ='".$username."'";
+		$row = DB::select(DB::raw($query));
+		if(count($row)>0) {
+			return $row;
+			
+		}
+	}
+
 
 	function password_age($empID)
 	{

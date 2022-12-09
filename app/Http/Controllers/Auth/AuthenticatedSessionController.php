@@ -7,9 +7,15 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Payroll\FlexPerformanceModel;
+
 
 class AuthenticatedSessionController extends Controller
 {
+
+    public function __construc(FlexPerformanceModel $flexperformance_model  ){
+        $this->flexperformance_model = $flexperformance_model;       
+    }
     /**
      * Display the login view.
      *
@@ -32,19 +38,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $this->setPermissions();
+        $this->setPermissions(Auth::user()->fname);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
 
 
-    public function setPermissions(Request $request)  {
+    public function setPermissions($username)  {
 
 
-        $data=$this->flexperformance_model->login_user($username, $password);
+        $data=$this->flexperformance_model->login_user($username);
         $from="";
-        $last_pass_date = $this->flexperformance_model->password_age($username);
+        $last_pass_date = $this->flexperformance_model->password_age(Auth::user()->emp_id);
         foreach($last_pass_date as $row){
           $from = $row->time;
         }
@@ -96,7 +102,7 @@ class AuthenticatedSessionController extends Controller
             
     }
 
-    public function getPermissions(Request $request)  {
+    public function getPermissions()  {
         $id =session('emp_id');
         $empID =session('emp_id');
     
