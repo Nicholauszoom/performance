@@ -16,8 +16,6 @@ class DashboardController extends Controller
 
         // dd(Session::get('name'));
 
-        return view('dashboard', [
-            'parent' => 'Dashboard'
-        ]);
+        return view('app.home');
     }
 }
