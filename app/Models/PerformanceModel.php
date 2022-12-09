@@ -1,6 +1,11 @@
 <?php
 
-class Performance_model extends CI_Model {
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class PerformanceModel extends Model
+{
 
 	public function audit_log($description){
 		$logData = array(
@@ -13,6 +18,7 @@ class Performance_model extends CI_Model {
 	    );
 	    $this->db->insert("audit_logs", $logData);
 	}
+
 	function total_task_assigned($id)
 	{
 		$query = $this->db->query("SELECT  count(t.id) FROM task t WHERE t.assigned_to ='".$id."'");
@@ -1696,4 +1702,4 @@ function funderInfo($funderId){
 	    return $query->result();
     }
 
-}?>
+}
