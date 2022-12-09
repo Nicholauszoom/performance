@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\WorkforceManagement;
 
 use App\Helpers\SysHelpers;
+use App\Models\setting\Bank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\setting\Bank;
+use Illuminate\Support\Facades\Session;
 use App\Models\workforceManagement\Employee;
 
 class EmployeeController extends Controller
@@ -93,6 +94,7 @@ class EmployeeController extends Controller
 
     public function createEmployee()
     {
+        Session::put('Good', 'Douglas Fortunatus');
         $parent = 'Employee';
         $child = 'Create';
         $banks = $this->bankModel->bank();
@@ -174,6 +176,11 @@ class EmployeeController extends Controller
         /**
          * Activate and deactivate employees
          */
+    }
+
+    public function profile()
+    {
+        return view('workforce-management.employee.profile');
     }
 
     public function addKin()

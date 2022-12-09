@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
         Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
         Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
+        Route::get('/profile', 'profile')->name('employee.profile');
 
         // Imprest
         Route::get('/workforce-management/imprest', 'imprest')->name('imprest.index');
