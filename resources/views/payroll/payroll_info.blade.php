@@ -159,17 +159,17 @@ $state = $key->state;
                 <div class="x_content">
                     <?php if($payrollState == 0 /*&&  $this->session->userdata('mng_emp')*/){ ?>
                     <a href="javascript:void(0)" onclick="generate_checklist()"><button type="button"
-                            class="btn btn-success"><b>PAY CHECKLIST<br>
-                                <small>Full Payment</b></small></button></a>
+                            class="btn btn-success"><b>Run Full Payment <br>
+                                <!-- <small>Full Payment</b></small></button></a> -->
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php if($state==2 || $state==1){ ?>
-                    <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}"><button
+                    <!-- <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}"><button
                             type="button" name="print" value="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
-                                <small>Payment With Arrears</b></small></button></a>
+                                <small>Payment With Arrears</b></small></button></a> -->
                     <?php } else { ?>
-                    <a href="{{route('less_payments',['pdate',base64_encode($payrollMonth)])}}"><button type="button"
+                    <!-- <a href="{{route('less_payments',['pdate',base64_encode($payrollMonth)])}}"><button type="button"
                             name="print" value="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
-                                <small>Payment With Arrears</b></small></button></a>
+                                <small>Payment With Arrears</b></small></button></a> -->
                     <?php } ?>
                     <?php }  else { ?>
                     <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}"><button
@@ -188,8 +188,8 @@ $state = $key->state;
                     <a target="_self"
                         href="{{route('netReconciliation',['pdate',base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>NET RECON<br></button></a>
-                    <a target="_self" href="{{route('sendReviewEmail',['pdate',base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a>
+                    <!-- <a target="_self" href="{{route('sendReviewEmail',['pdate',base64_encode($payrollMonth)])}}"><button
+                            type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>
                 </div>
             </div>

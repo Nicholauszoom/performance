@@ -7,7 +7,7 @@
         <!-- Sidebar header -->
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
-                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"> BANK ABC</h5>
+                <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
 
                 <div>
                     <button type="button"
@@ -52,7 +52,7 @@
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-users-three"></i>
-                        <span>workforce management</span>
+                        <span>Workforce Management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
@@ -71,14 +71,12 @@
                         </li>
 
                         <li class="nav-item">
-                            <a
-                                href="{{ route('overtime') }}"
-                                class="nav-link {{ request()->routeIs('overtime') ? 'active' : null  }}"
-                            >
+                            <a href="{{ route('overtime') }}"
+                                class="nav-link {{ request()->routeIs('overtime') ? 'active' : null  }}">
                                 Overtime
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a
                                 href="{{ route('imprest.index') }}"
                                 class="nav-link {{ request()->routeIs('imprest.index') ? 'active' : null  }}"
@@ -93,74 +91,74 @@
                             >
                                 Employee Aproval
                             </a>
-                        </li>
+                        </li> -->
+
                     </ul>
                 </li>
 
-            {{-- Payroll management --}}
-            <li class="nav-item nav-item-submenu">
-                <a href="#" class="nav-link">
-                    <i class="ph-calculator"></i>
-                    <span>Payroll Management</span>
-                </a>
-
-                <ul class="nav-group-sub collapse">
-                <li class="nav-item">
-                        <a href="{{ route('payroll') }}"
-                            class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                            Salary Template
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('payroll') }}"
-                            class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                            Run Payroll
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('employee_payslip') }}"
-                            class="nav-link {{ request()->routeIs('employee_payslip') ? 'active' : null  }}">
-                            Payslip
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('comission_bonus') }}"
-                            class="nav-link {{ request()->routeIs('comission_bonus') ? 'active' : null  }}">
-                            Incentives
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('partial_payment') }}"
-                            class="nav-link {{ request()->routeIs('partial_payment') ? 'active' : null  }}">
-                            Partial Payment
-                        </a>
-                    </li>
-
-                     <li class="nav-item">
-                            <a
-                                href="{{ route('cipay.approved_financial_payments') }}"
-                    class="nav-link {{ request()->routeIs('cipay.approved_financial_payments') ? 'active' : null  }}">
-                    Pending Payments
+                {{-- Payroll management --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-calculator"></i>
+                        <span>Payroll Management</span>
                     </a>
-            </li> 
+
+                    <ul class="nav-group-sub collapse">
+                        <!-- <li class="nav-item">
+                            <a href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Additional Payments
+                            </a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Payroll
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('employee_payslip') }}"
+                                class="nav-link {{ request()->routeIs('employee_payslip') ? 'active' : null  }}">
+                                Payslip
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('comission_bonus') }}"
+                                class="nav-link {{ request()->routeIs('comission_bonus') ? 'active' : null  }}">
+                                Incentives
+                            </a>
+                        </li>
+
+                        <!-- <li class="nav-item">
+                            <a href="{{ route('partial_payment') }}"
+                                class="nav-link {{ request()->routeIs('partial_payment') ? 'active' : null  }}">
+                                Partial Payment
+                            </a>
+                        </li> -->
+
+                        <li class="nav-item">
+                            <a href="{{ route('cipay.approved_financial_payments') }}"
+                                class="nav-link {{ request()->routeIs('cipay.approved_financial_payments') ? 'active' : null  }}">
+                                Pending Payments
+                            </a>
+                        </li>
 
 
 
-            <!-- <li class="nav-item">
+                        <!-- <li class="nav-item">
                 <a href="{{ route('payroll') }}"
                     class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
                     Salary Calculator
                 </a>
             </li> -->
-            </ul>
-            </li>
-            {{-- /Payroll management --}}
+                    </ul>
+                </li>
+                {{-- /Payroll management --}}
 
 
-            {{-- <li class="nav-item nav-item-submenu">
+                {{-- <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-stack"></i>
                         <span>Learning & Development</span>
@@ -170,16 +168,16 @@
                         <li class="nav-item">
                             <a
                                 href="{{ route('members.active') }}"
-            class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-            Training Budgeting
-            </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ route('members.active') }}"
-                    class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                    Training Application
+                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                Training Budgeting
                 </a>
-            </li>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('members.active') }}"
+                        class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
+                        Training Application
+                    </a>
+                </li>
             </ul>
             </li> --}}
 
@@ -225,48 +223,40 @@
                         -   Accounting coding
                 --}}
 
-                {{-- Organisation --}}
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-buildings"></i>
-                        <span>Organisation</span>
-                    </a>
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
-                                <a
-                                    href="{{ route('departments.index') }}"
-                                    class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
-                                >
-                                Company Registration
-                                </a>
-                        </li>
+            {{-- Organisation --}}
+            <li class="nav-item nav-item-submenu">
+                <a href="#" class="nav-link">
+                    <i class="ph-buildings"></i>
+                    <span>Organisation</span>
+                </a>
+                <ul class="nav-group-sub collapse">
+                    <li class="nav-item">
+                        <a href="{{ route('departments.index') }}"
+                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
+                            Company Registration
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('departments.index') }}"
-                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
-                            >
+                    <li class="nav-item">
+                        <a href="{{ route('departments.index') }}"
+                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
                             Organization structure Registration
-                            </a>
-                        </li>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('departments.index') }}"
-                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
-                            >
-                                Departments
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{{ route('departments.index') }}"
+                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
+                            Departments
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('departments.index') }}"
-                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}"
-                            >
-                                Position
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{{ route('departments.index') }}"
+                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
+                            Position
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('designations.index') }}"

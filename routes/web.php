@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
     Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
+    Route::post('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
     Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
 
     // Employee overtime

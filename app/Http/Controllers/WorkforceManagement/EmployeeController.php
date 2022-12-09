@@ -30,7 +30,7 @@ class EmployeeController extends Controller
     public function getPositionSalaryRange(Request $request)
     {
 
-        $positionID = $request->position;
+        $positionID = $request->positionID;
 
         $data = array(
             'state' => 0
@@ -54,7 +54,7 @@ class EmployeeController extends Controller
 
         header('Content-type: application/json');
 
-        return json_encode($response_array);
+        echo json_encode($response_array);
 
     }
 
