@@ -253,13 +253,13 @@ SUM(pl.salary+pl.allowances+pl.pension_employer+pl.wcf+pl.sdl) as employment_cos
 	}
 
 	function total_taskline($id) {
-    	$query = $this->db->query("SELECT (SELECT count(t.id) FROM task t WHERE t.assigned_by ='".$id."') as ALL_TASKS, (SELECT count(t.id) FROM task t WHERE t.assigned_by ='".$id."' AND t.status = 2) as COMPLETED ");
-        return $query->result();
+    	$query = "SELECT (SELECT count(t.id) FROM task t WHERE t.assigned_by ='".$id."') as ALL_TASKS, (SELECT count(t.id) FROM task t WHERE t.assigned_by ='".$id."' AND t.status = 2) as COMPLETED ";
+        return DB::select(DB::raw($query));
     }
 
 	function total_taskstaff($id) {
-	$query = $this->db->query("SELECT (SELECT count(t.id) FROM task t WHERE t.assigned_to ='".$id."') as ALL_TASKSTAFF, (SELECT count(t.id) FROM task t WHERE t.assigned_to ='".$id."' AND t.status = 2) as COMPLETEDSTAFF ");
-    return $query->result();
+	$query = "SELECT (SELECT count(t.id) FROM task t WHERE t.assigned_to ='".$id."') as ALL_TASKSTAFF, (SELECT count(t.id) FROM task t WHERE t.assigned_to ='".$id."' AND t.status = 2) as COMPLETEDSTAFF ";
+    return DB::select(DB::raw($query));
 }
 
 
@@ -1159,9 +1159,11 @@ function outcomesGraph($strategyID)
 	}
 function strategyProgress($id)
 	{
-		$query = $this->db->query("SELECT  s.id,  (SELECT SUM(task.progress) FROM task WHERE outcome_ref IN(SELECT id from outcome WHERE strategy_ref = s.id)) as sumProgress, (SELECT COUNT(task.id) FROM task WHERE outcome_ref IN(SELECT id from outcome WHERE strategy_ref = s.id)) as countTask FROM strategy s WHERE s.id = ".$id."");
-	    $row = $query->row();
-	    if($row->countTask==0){ return 0;} else return $row->sumProgress/$row->countTask;
+		$query = "SELECT  s.id,  (SELECT SUM(task.progress) FROM task WHERE outcome_ref IN(SELECT id from outcome WHERE strategy_ref = s.id)) as sumProgress, (SELECT COUNT(task.id) FROM task WHERE outcome_ref IN(SELECT id from outcome WHERE strategy_ref = s.id)) as countTask FROM strategy s WHERE s.id = ".$id."";
+	    $row = DB::select(DB::raw($query));
+
+        // dd($row);
+	    if($row[0]->countTask==0){ return 0;} else return $row[0]->sumProgress/$row[0]->countTask;
 	}
 
 function outputsGraph($strategyID)

@@ -3446,7 +3446,11 @@ public function updateLevel(Request $request) {
    }
 
   public function home(Request $request) {
-    $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy'));
+    // dd(session()->all());
+
+    $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+
+    // dd($strategyStatistics);
     $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
       $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
