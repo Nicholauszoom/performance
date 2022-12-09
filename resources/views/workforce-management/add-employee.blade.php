@@ -39,21 +39,21 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="firstName">First name:</label>
-                        <input type="text" id="firstName" name="fname" value="{{ old('fname') }}" class="form-control" placeholder="First Name">
+                        <input type="text" id="firstName" name="fname" value="{{ old('fname') }}" class="form-control @error('fname') is-invalid @enderror" placeholder="First Name">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="middleName">Middle name:</label>
-                        <input type="text" id="middleName" name="mname" value="{{ old('mname') }}" class="form-control" placeholder="Middle Name">
+                        <input type="text" id="middleName" name="mname" value="{{ old('mname') }}" class="form-control @error('mname') is-invalid @enderror" placeholder="Middle Name">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Last name:</label>
-                        <input type="text" name="lname" value="{{ old('lname') }}" class="form-control" placeholder="Last Name">
+                        <input type="text" name="lname" value="{{ old('lname') }}" class="form-control @error('lname') is-invalid @enderror" placeholder="Last Name">
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
                         <label class="form-label">Birthdate:</label>
                         <div class="input-group">
 							<span class="input-group-text"><i class="ph-calendar"></i></span>
-							<input type="text" class="form-control daterange-single" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
+							<input type="text" class="form-control daterange-single @error('birthdate') is-invalid @enderror" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
 						</div>
                     </div>
                 </div>
@@ -88,17 +88,18 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" class="form-control" name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com">
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Nationality:</label>
-                        <select class="form-control select" name="nationality">
+                        <select class="form-control select @error('nationality') is-invalid @enderror" name="nationality">
                             <option selected disabled> Select </option>
-                            <option value="255">Tanzania</option>
-                            <option value="254">Kenya</option>
+                            @foreach ($countryDrop as $row)
+                            <option value="{{ $row->code }}">{{ $row->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -106,7 +107,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Maritial Status:</label>
-                        <select class="form-control" name="status">
+                        <select class="form-control @error('status') is-invalid @enderror" name="status">
                             <option selected disabled> Select </option>
                             <option value="Married">Married</option>
                             <option value="Single">Single</option>
@@ -118,7 +119,7 @@
                 {{-- <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Photo:</label>
-                        <input type="file" class="form-control" name="photo">
+                        <input type="file" class="form-control @error('photo') is-invalid @enderror" name="photo">
                         <div class="form-text text-muted">Accepted formats: png, jpg. Max file size 2Mb</div>
                     </div>
                 </div> --}}
@@ -136,7 +137,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Employee ID:</label>
-                        <input type="text" name="emp_id" value="{{ old('emp_id') }}" class="form-control" placeholder="ID : 78609">
+                        <input type="text" name="emp_id" value="{{ old('emp_id') }}" class="form-control @error('emp_id') is-invalid @enderror" placeholder="ID : 78609">
                     </div>
                 </div>
 
@@ -144,7 +145,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Department:</label>
-                        <select class="form-control select" id="department" name="department">
+                        <select class="form-control select @error('department') is-invalid @enderror" id="department" name="department">
                             <option value=""> Select Department </option>
                             @foreach ($departments as $depart)
                             <option value="{{ $depart->id }}">{{ $depart->name }}</option>
@@ -156,7 +157,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Position:</label>
-                        <select class="form-control select1_single select" id="pos" name="position">
+                        <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos" name="position">
                             <option value=""> Select Position </option>
                         </select>
                     </div>
@@ -165,7 +166,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Line Manager:</label>
-                        <select class="form-control select" id="linemanager" name="linemanager">
+                        <select class="form-control select @error('linemanager') is-invalid @enderror" id="linemanager" name="linemanager">
                             <option selected disabled> Select </option>
                         </select>
                     </div>
@@ -174,7 +175,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Company Branch:</label>
-                        <select class="form-control select" name="branch" required>
+                        <select class="form-control select @error('branch') is-invalid @enderror" name="branch" required>
                             <option value=""> Select </option>
                             @foreach ($company_branch as $row)
                             <option value="{{ $row->code }}">{{ $row->name }}</option>
@@ -186,7 +187,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Contract Type:</label>
-                        <select class="form-control select" name="ctype" required>
+                        <select class="form-control select @error('ctype') is-invalid @enderror" name="ctype" required>
                             <option value="" selected disabled>Select type</option>
                             @foreach ($contract as $row)
                             <option value="{{ $row->id }}">{{ $row->name }}</option>
@@ -208,7 +209,7 @@
 
                         <div class="input-group">
 							<span class="input-group-text"><i class="ph-calendar"></i></span>
-							<input type="text" class="form-control daterange-single" name="contract_start" id="contract_start">
+							<input type="text" class="form-control daterange-single @error('contract_start') is-invalid @enderror" name="contract_start" id="contract_start">
 						</div>
                     </div>
                 </div>
@@ -219,7 +220,7 @@
 
                         <div class="input-group">
 							<span class="input-group-text"><i class="ph-calendar"></i></span>
-							<input type="text" class="form-control daterange-single" name="contract_end" id="contract_end">
+							<input type="text" class="form-control daterange-single @error('contract_end') is-invalid @enderror" name="contract_end" id="contract_end">
 						</div>
                     </div>
                 </div>
@@ -227,7 +228,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Pension Fund:</label>
-                        <select class="form-control select" name="pension_fund">
+                        <select class="form-control select @error('pension_fund') is-invalid @enderror" name="pension_fund">
                             <option value="">Select Pension Fund</option>
                             @foreach ($pensiondrop as $row)
                             <option value="{{ $row->id }}">{{ $row->name }}</option>
@@ -239,14 +240,14 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Membership No:</label>
-                        <input type="text" maxlength="30" name="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control" placeholder="Membership No">
+                        <input type="text" maxlength="30" name="pf_membership_no" value="{{ old('pf_membership_no') }}" class="form-control @error('pf_membership_no') is-invalid @enderror" placeholder="Membership No">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Code:</label>
-                        <input type="text" name="emp_code" maxlength="30" class="form-control" placeholder="First Name">
+                        <input type="text" name="emp_code" maxlength="30" class="form-control @error('emp_code') is-invalid @enderror" placeholder="code">
                     </div>
                 </div>
 
@@ -255,7 +256,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank:</label>
-                        <select class="form-control select_bank select" id='bank' name="bank">
+                        <select class="form-control select_bank select @error('bank') is-invalid @enderror" id='bank' name="bank">
                             <option value="">Select Employee Bank</option>
                             @foreach ($banks as $bank)
                             <option value="{{ $bank->id }}">{{ $bank->name }}</option>
@@ -267,70 +268,70 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank Branch:</label>
-                        <select class="form-control select_bank_branch select" id="bank_branch" name="banck_branch"></select>
+                        <select class="form-control select_bank_branch select @error('bank_branch') is-invalid @enderror" id="bank_branch" name="banck_branch"></select>
                     </div>
                 </div>
 
                 <div id="accountNo" class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank Account No:</label>
-                        <input type="text" maxlength="15" name="accno" value="{{ old('account_no') }}" class="form-control" placeholder="01J85784784785">
+                        <input type="text" maxlength="15" name="accno" value="{{ old('accno') }}" class="form-control @error('accno') is-invalid @enderror" placeholder="075168023994">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Employee Mobile:</label>
-                        <input type="number" name="mobile" value="{{ old('mobile') }}" class="form-control" placeholder="687 205 600">
+                        <input type="number" name="mobile" value="{{ old('mobile') }}" class="form-control @error('mobile') is-invalid @enderror" placeholder="687 205 600">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Postal Address:</label>
-                        <input type="text" name="postaddress" value="{{ old('postal_address') }}" class="form-control" placeholder="P O BOX 1865">
+                        <input type="text" name="postaddress" value="{{ old('postal_address') }}" class="form-control @error('postal_address') is-invalid @enderror" placeholder="P O BOX 1865">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Postal City:</label>
-                        <input type="text" name="postalcity" value="{{ old('postal_city') }}" class="form-control" placeholder="Dar Es Salaam">
+                        <input type="text" name="postalcity" value="{{ old('postal_city') }}" class="form-control @error('postal_city') is-invalid @enderror" placeholder="Dar Es Salaam">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Physical Address:</label>
-                        <input type="text" name="phyaddress" value="{{ old('physical_address') }}" class="form-control" placeholder="Physical Address">
+                        <input type="text" name="phyaddress" value="{{ old('physical_address') }}" class="form-control @error('physical_address') is-invalid @enderror" placeholder="Physical Address">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Home Address:</label>
-                        <input type="text" name="haddress" value="{{ old('haddress') }}" class="form-control" placeholder=" Home Address ">
+                        <input type="text" name="haddress" value="{{ old('haddress') }}" class="form-control @error('haddress') is-invalid @enderror" placeholder=" Home Address ">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">National ID:</label>
-                        <input type="text" name="nationalid" value="{{ old('nationalid') }}" class="form-control" placeholder="National ID">
+                        <input type="text" name="nationalid" value="{{ old('nationalid') }}" class="form-control @error('nationalid') is-invalid @enderror" placeholder="National ID">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Tin:</label>
-                        <input type="text" name="tin" value="{{ old('tin') }}" class="form-control" placeholder="tin">
+                        <input type="text" name="tin" value="{{ old('tin') }}" class="form-control @error('tin') is-invalid @enderror" placeholder="tin">
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Level:</label>
-                        <input type="text" name="emp_level" value="{{ old('emp_level') }}" class="form-control" placeholder="level">
+                        <input type="text" name="emp_level" value="{{ old('emp_level') }}" class="form-control emp_level" placeholder="level">
                     </div>
                 </div>
             </div>
