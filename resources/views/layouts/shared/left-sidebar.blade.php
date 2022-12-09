@@ -104,55 +104,55 @@
                     </a>
 
                     <ul class="nav-group-sub collapse">
-                        <!-- <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('payroll') }}"
                                 class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
                                 Additional Payments
                             </a>
-                        </li> -->
-                        <li class="nav-item">
+                        </li>  --}}
+                        {{-- <li class="nav-item">
                             <a href="{{ route('payroll') }}"
                                 class="nav-link {{ request()->routeIs('payroll') ? 'active' : null }}">
                                 Payroll
                             </a>
-                        </li>
-
+                        </li> --}}
+{{--
                         <li class="nav-item">
                             <a href="{{ route('payslip') }}"
                                 class="nav-link {{ request()->routeIs('payslip') ? 'active' : null }}">
                                 Payslip
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('incentives') }}"
                                 class="nav-link {{ request()->routeIs('incentives') ? 'active' : null }}">
                                 Incentives
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('partialPayment') }}"
                                 class="nav-link {{ request()->routeIs('partialPayment') ? 'active' : null }}">
                                 Partial Payment
                             </a>
-                        </li> -->
+                        </li>  --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('cipay.approved_financial_payments') }}"
                                 class="nav-link {{ request()->routeIs('cipay.approved_financial_payments') ? 'active' : null  }}">
                                 Pending Payments
                             </a>
-                        </li>
+                        </li> --}}
 
 
 
-                        <!-- <li class="nav-item">
-                <a href="{{ route('payroll') }}"
-                    class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
-                    Salary Calculator
-                </a>
-            </li> -->
+                         {{-- <li class="nav-item">
+                            <a href="{{ route('payroll') }}"
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                Salary Calculator
+                            </a>
+                        </li>  --}}
                     </ul>
                 </li>
                 {{-- /Payroll management --}}
@@ -267,19 +267,19 @@
                     <span>Reports</span>
                 </a>
                 <ul class="nav-group-sub collapse">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('cipay.financial_reports') }}"
                             class="nav-link {{ request()->routeIs('cipay.financial_reports') ? 'active' : null  }}">
                             Statutory Reports
                         </a>
-                    </li>
+                    </li> --}}
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('cipay.organisation_reports') }}"
                             class="nav-link {{ request()->routeIs('cipay.organisation_reports') ? 'active' : null  }}">
                             Organisation Reports
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </li>
