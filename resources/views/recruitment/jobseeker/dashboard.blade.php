@@ -34,12 +34,11 @@
             <!-- /today's revenue -->
 
         </div>
-        <script>
+        {{-- <script>
             function get() {
-                let x=10;
-                let x=11;
-                window.alert(x);
+                const cars={Type:"Fiat", Model:"New Model", color: "White"}
+                alert(cars.Model)
             }
-        </script>
+        </script> --}}
     </div>
 @endsection
