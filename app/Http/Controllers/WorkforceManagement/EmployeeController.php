@@ -47,9 +47,9 @@ class EmployeeController extends Controller
 
         if($result){
             //$response_array['status'] = "OK";
-            $response_array['salary'] = "<input required='required'  class='form-control' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'>";
+            $response_array['salary'] = "<div><input required='required'  class='form-control @error('salary') is-invalid @enderror' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'><div class='form-text text-muted'>Minimum salary is ".$minSalary." and Maximam salary is ".$maxSalary."</div></div>";
         }else{
-            $response_array['salary'] = "<input required='required'  class='form-control' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
+            $response_array['salary'] = "<input required='required'  class='form-control @error('salary') is-invalid @enderror' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
         }
 
         header('Content-type: application/json');
@@ -100,10 +100,9 @@ class EmployeeController extends Controller
         $company_branch = DB::table('branch')->get();
         $contract = $this->employee->contractdrop();
         $pensiondrop = DB::table('pension_fund')->get();
+        $countryDrop = DB::table('country')->get();
 
-        // dd($departments);
-
-        return view('workforce-management.add-employee', compact('parent', 'child', 'banks', 'departments', 'company_branch', 'contract', 'pensiondrop'));
+        return view('workforce-management.add-employee', compact('parent', 'child', 'banks', 'departments', 'company_branch', 'contract', 'pensiondrop', 'countryDrop'));
     }
 
     public function storeEmployee(Request $request)
