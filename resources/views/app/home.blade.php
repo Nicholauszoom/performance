@@ -1,16 +1,14 @@
-
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
-<!-- /top navigation -->
 
 <?php
 
@@ -22,7 +20,7 @@
     $description = $row->description;
     $date = $row->date_apprd;
     $photo = $row->photo;
-  }  
+  }
 
   foreach ($overview as $row) {
     $employees = $row->emp_count;
@@ -36,13 +34,13 @@
   foreach ($taskline as $row) {
     $all = $row->ALL_TASKS;
     $completed = $row->COMPLETED;
-  } 
+  }
 
 
   foreach ($taskstaff as $row) {
     $allstaff = $row->ALL_TASKSTAFF;
     $allstaff_completed = $row->COMPLETEDSTAFF;
-  } 
+  }
 
   foreach ($payroll_totals as $row) {
     $salary = $row->salary;
@@ -65,7 +63,7 @@
 
   foreach ($take_home as $row) {
     $net = $row->takehome - $arrears;
-  } 
+  }
 
 
 if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age') < 0){
@@ -74,14 +72,14 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
 
 ?>
-      
+
         <!-- page content -->
         <div class="right_col" role="main">
 
             <div class="row top_tiles">
               <div class="page-title">
                 <div class="title_right" >
-                  <h4>HOME 
+                  <h4>HOME
                       <!-- <?php if( session('manage_strat') != ''){ ?>
                         <a href ="<?php echo url(); ?>flex/performance/strategy_dashboard" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
                         Switch to Performance Dasshboard
@@ -91,7 +89,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                 </div>
               </div>
             </div>
-            
+
             <div class="row top_tiles">
             <!-- Appreciation  -->
                       <!-- <div class="col-md-5 col-sm-4 col-xs-12 profile_details">
@@ -103,12 +101,12 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                             </div>
                             <div class="left col-xs-7">
                               <h2><?php echo $name; ?></h2>
-                              <p><strong>Appreciated On: </strong><?php 
+                              <p><strong>Appreciated On: </strong><?php
                               $datewell = explode("-",$date);
                                   $mm = $datewell[1];
                                   $dd = $datewell[2];
-                                  $yyyy = $datewell[0];  
-                                  $clear_date = $dd."-".$mm."-".$yyyy; 
+                                  $yyyy = $datewell[0];
+                                  $clear_date = $dd."-".$mm."-".$yyyy;
                                   echo $clear_date; ?> </p>
                               <p><strong>Position: </strong><?php echo $position; ?> </p>
                               <p><strong>Department: </strong><?php echo $department; ?> </p>
@@ -135,8 +133,8 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                   </div>
                 </div>
               </div>
-              
-              <?php if(session('vw_emp_sum')) { ?> 
+
+              <?php if(session('vw_emp_sum')) { ?>
 
               <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
               <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo url(); ?>flex/employee"><?php //} ?>
@@ -153,7 +151,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
               </div>
 
 
-                              
+
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -161,7 +159,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                     <div class="clearfix"></div>
                   </div>
                   <div class="row x_content">
-                
+
                     <h5><?php echo number_format($salary,2); ?>
                       <b class="col-md-4">Basic Salaries:</b></h5>
                       <?php if($allowances > 0 ){ ?> <b class="col-md-4">Allowances:</b>
@@ -203,7 +201,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
 <!--                      <h5> --><?php //echo number_format($total_heslb,2); ?>
 <!--                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="col-md-4"> HESLB:</b></h5>                 -->
-                    
+
                   </div>
                   <!-- <div class="x_content">
                     <article class="media event">
@@ -337,7 +335,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                   </div>
 
               <?php } ?>
-         
+
 
 
               <!-- <div class="col-md-4">
@@ -431,7 +429,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                         <a class="title" href="#">Tasks Completed</a>
                       </div>
                     </article> -->
-<!-- 
+<!--
                   </div>
                 </div>
               </div>  -->
@@ -439,7 +437,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
 
             </div>
-            
+
             <div class="row">
 
 
@@ -487,23 +485,28 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
        <?php
         ?>
 
-<script src="<?php echo url();?>style/jquery/jquery.easypiechart.min.js"></script>
-<script>
-      $(function() {
-        $('.chart').easyPieChart({
-          easing: 'easeOutElastic',
-          delay: 3000,
-          barColor: '#26B99A',
-          trackColor: '#fff',
-          scaleColor: false,
-          lineWidth: 20,
-          trackWidth: 16,
-          lineCap: 'butt',
-          onStep: function(from, to, percent) {
-            $(this.el).find('.percent').text(Math.round(percent));
-          }
-        });
-      });
-    </script>
 
  @endsection
+
+ @push('footer-script')
+
+<script src="<?php echo url();?>style/jquery/jquery.easypiechart.min.js"></script>
+
+<script>
+  $(function() {
+    $('.chart').easyPieChart({
+      easing: 'easeOutElastic',
+      delay: 3000,
+      barColor: '#26B99A',
+      trackColor: '#fff',
+      scaleColor: false,
+      lineWidth: 20,
+      trackWidth: 16,
+      lineCap: 'butt',
+      onStep: function(from, to, percent) {
+        $(this.el).find('.percent').text(Math.round(percent));
+      }
+    });
+  });
+</script>
+ @endpush

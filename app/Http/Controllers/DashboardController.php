@@ -10,11 +10,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $permission = DB::table('permission')->get();
-
-        Session::put('name', $permission);
-
-        // dd(Session::get('name'));
 
         return view('app.home');
     }

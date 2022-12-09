@@ -13,16 +13,19 @@ use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use App\Helpers\SysHelpers;
+use App\Models\PerformanceModel;
 
 class GeneralController extends Controller
-{  
-    
-    public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null,$imprest_model = null)
-    {   
+{
+
+    public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null,$imprest_model = null, PerformanceModel $performanceModel)
+    {
         $this->payroll_model = new Payroll();
         $this->imprest_model = new ImprestModel;
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
+        $this->performanceModel = $performanceModel;
+
     }
 
    public function index()
@@ -64,7 +67,7 @@ class GeneralController extends Controller
     $specialChars = preg_match('@[^\w]@', $password);
     $res = false;
     if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-      $res = false; 
+      $res = false;
       }else{
         $res = true;
     }
@@ -99,7 +102,7 @@ class GeneralController extends Controller
             'password' => $password_hash,
             'time' =>date('Y-m-d')
           );
-          
+
           $this->flexperformance_model->insert_user_password($data);
             $response_array['status'] = 'OK';
             echo json_encode($response_array);
@@ -149,10 +152,10 @@ class GeneralController extends Controller
     $data['allrole'] = $this->flexperformance_model->role($id);
     $data['role'] = $this->flexperformance_model->getuserrole($id);
     $data['rolecount'] = $this->flexperformance_model->rolecount($id);
-    $data['task_duration'] = $this->performance_model->total_task_duration($id);
-    $data['task_actual_duration'] = $this->performance_model->total_task_actual_duration($id);
-    $data['task_monetary_value'] = $this->performance_model->all_task_monetary_value($id);
-    $data['allTaskcompleted'] = $this->performance_model->allTaskcompleted($id);
+    $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+    $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+    $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+    $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
 
     $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
 
@@ -533,7 +536,7 @@ class GeneralController extends Controller
             'region' => $request->input('region'),
             'street' => $request->input('street')
        );
- 
+
        $result =  $this->flexperformance_model->updateCostCenter($updates, $branchID);
        if($result){
            $this->session->set_flashdata('note', "<p class='alert alert-success text-center'>Updated Successifully</p>");
@@ -1985,7 +1988,7 @@ public function activatePosition()
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
             $data['employee'] =  $this->payroll_model->customemployee();
-            
+
 
             $data['otherloan'] = $this->flexperformance_model->salary_advance();
 
@@ -1998,12 +2001,12 @@ public function activatePosition()
             $data['other_imprests'] = $this->imprest_model->othersImprests(auth()->user()->emp_id);
 
             $data['adv_overtime'] = $this->flexperformance_model->allOvertimes(auth()->user()->emp_id);
-            
+
             $title = "Pending Payments";$parent = 'Payroll';$child = "pending-payments";
-            
+
             return view('payroll.financial_payment',compact('title','parent','child','data'));
 
-            
+
         // }else{
         //     echo 'Unauthorised Access';
         // }
@@ -3403,7 +3406,7 @@ public function updateLevel() {
               $title="Financial Reports";
               $parent="Payroll";
               $child="Financial Reports";
-              
+
 
               return view('payroll.financial_reports',compact('title','parent','child','data'));
         //   }else{
@@ -3446,7 +3449,7 @@ public function updateLevel() {
    }
 
   public function home() {
-    $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+    $strategyStatistics = $this->performanceModel->strategy_info($this->session->userdata('current_strategy'));
     $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
   $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
@@ -3457,7 +3460,7 @@ public function updateLevel() {
       $strategyTitle = $key->title;
       $start = date_create($key->start);
     }
-    $strategyProgress = $this->performance_model->strategyProgress($strategyID);
+    $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
 
     $current = date_create(date('Y-m-d'));
     $diff=date_diff($start, $current);
@@ -3472,8 +3475,8 @@ public function updateLevel() {
     $data["strategyProgress"] = $strategyProgress;
     $data["monthly"] = $rate_per_month;
 
-    $data['taskline']= $this->performance_model->total_taskline($this->session->userdata('emp_id'));
-    $data['taskstaff']= $this->performance_model->total_taskstaff($this->session->userdata('emp_id'));
+    $data['taskline']= $this->performanceModel->total_taskline($this->session->userdata('emp_id'));
+    $data['taskstaff']= $this->performanceModel->total_taskstaff($this->session->userdata('emp_id'));
 
 
     $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
@@ -4385,12 +4388,17 @@ public function common_deductions_info() {
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
+<<<<<<< HEAD
       return view('app.allowance_overtime', $data);
       
+=======
+      $this->load->view('allowance_overtime', $data);
+
+>>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
     }else{
       echo "Unauthorized Access";
     }
-  
+
   }
 
   public function statutory_deductions(){
@@ -4403,22 +4411,27 @@ public function common_deductions_info() {
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['deduction'] = $this->flexperformance_model->deduction();
-  
+
       $data['paye'] = $this->flexperformance_model->paye();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-  
+
       $data['title']="Statutory Deductions";
+<<<<<<< HEAD
       return view('app.statutory_deduction', $data);
       
+=======
+      $this->load->view('statutory_deduction', $data);
+
+>>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
     }else{
       echo "Unauthorized Access";
     }
-  
+
   }
 
 
  public function non_statutory_deductions() {
-  if( $this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')){  
+  if( $this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')){
     $data['allowance'] = $this->flexperformance_model->allowance();
     $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
     $data['deduction'] = $this->flexperformance_model->deductions();
@@ -4426,8 +4439,13 @@ public function common_deductions_info() {
     $data['meals'] = $this->flexperformance_model->meals_deduction();
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
     $data['title']="Non-Statutory Deductions";
+<<<<<<< HEAD
     return view('app.non_statutory_deductions', $data);
     
+=======
+    $this->load->view('non_statutory_deductions', $data);
+
+>>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
   }else{
     echo "Unauthorized Access";
   }
@@ -4960,7 +4978,7 @@ public function deleteBonus()
       {
         $bonusID = $this->uri->segment(3);
         $result = $this->flexperformance_model->deleteBonus( $bonusID);
-        
+
         if($result ==true){
             $response_array['status'] = "OK";
             $response_array['message'] = "<p class='alert alert-success text-center'>Bonus Deleted Successifully</p>";
@@ -5652,17 +5670,17 @@ function import()
 }
 
 
-function password_generator($size){  
-  $char = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$'; 
-  $init = strlen($char); 
-  $init--; 
+function password_generator($size){
+  $char = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
+  $init = strlen($char);
+  $init--;
 
-  $result=NULL; 
-      for($x=1;$x<=$size; $x++){ 
-          $index = rand(0, $init); 
-          $result .= substr($char,$index,1); 
+  $result=NULL;
+      for($x=1;$x<=$size; $x++){
+          $index = rand(0, $init);
+          $result .= substr($char,$index,1);
       }
-  return $result; 
+  return $result;
 }
 
 
@@ -5729,11 +5747,17 @@ function password_generator($size){
             'tin' =>$request->input("tin"),
 
       );
+<<<<<<< HEAD
       $empName = $request->input("fname") .' '.$request->input("mname").' '.$request->input("lname");  
       
       
+=======
+      $empName = $this->input->post("fname") .' '.$this->input->post("mname").' '.$this->input->post("lname");
+
+
+>>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
       $recordID = $this->flexperformance_model->employeeAdd($employee);
-      
+
         if($recordID > 0){
 
         /*give 100 allocation*/
@@ -5778,28 +5802,34 @@ function password_generator($size){
     //     $mail = $this->phpmailer_lib->load();// PHPMailer object
     //     // SMTP configuration
     //     $mail->isSMTP();
-    //     $mail->Host     = $host; 
+    //     $mail->Host     = $host;
     //     $mail->SMTPAuth = true;
     //     $mail->Username = $username;
     //     $mail->Password = $password;
-        
-        
+
+
     //     $mail->SMTPSecure = $smtpsecure;
     //     $mail->Port     = $port;
-        
-        
+
+
     //     $mail->setFrom($senderEmail, $senderName);
-        
+
     //     // Add a recipient
+<<<<<<< HEAD
     //     $mail->addAddress($request->input("email"));
         
         
+=======
+    //     $mail->addAddress($this->input->post("email"));
+
+
+>>>>>>> 2060c53f9c83095561312569d6f63cbac54fa4fa
     //     // Email subject
     //     $mail->Subject = "VSO User Credentials";
-        
+
     //     // Set email format to HTML
     //     $mail->isHTML(true);
-        
+
     //     // Email body content
     //     $mailContent = "<p>Dear <b>".$empName."</b>,</p>
     //                 <p>Your Flex Performance Account login credential are  password: <b>".$randomPassword."</b>.
@@ -5811,7 +5841,7 @@ function password_generator($size){
     //     $mail->Body = $mailContent;
 
     //     if(!$mail->send()){
-            
+
     //         $this->session->set_flashdata("note", "<p><font color='green'>Email was not sent</font></p>");
     //         }else{
     //         $this->session->set_flashdata("note","<p><font color='green'>Email sent!</font></p>");
@@ -5864,8 +5894,8 @@ function password_generator($size){
                   </div>';
           header('Content-type: application/json');
           echo json_encode($response_array);
-          
-          
+
+
         }
 
       }
