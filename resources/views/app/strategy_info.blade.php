@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
   foreach($strategy_details as $detail){

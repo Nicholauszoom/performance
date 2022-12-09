@@ -11,7 +11,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
         <!-- page content -->

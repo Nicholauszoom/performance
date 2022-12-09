@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
         <?php if(session('mng_emp') || session('vw_emp') || session('appr_emp')){  ?> 
