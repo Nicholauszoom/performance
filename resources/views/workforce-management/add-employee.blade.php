@@ -331,7 +331,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Level:</label>
-                        <input type="text" name="emp_level" value="{{ old('emp_level') }}" class="form-control emp_level" placeholder="level">
+                        <input type="text" name="emp_level" value="{{ old('emp_level') }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="level">
                     </div>
                 </div>
             </div>
