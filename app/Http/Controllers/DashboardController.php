@@ -14,7 +14,7 @@ class DashboardController extends Controller
 
         Session::put('name', $permission);
 
-        dd(Session::get('name'));
+        // dd(Session::get('name'));
 
         return view('dashboard', [
             'parent' => 'Dashboard'
