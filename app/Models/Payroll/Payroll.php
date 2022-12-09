@@ -1227,12 +1227,10 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
     public function total_heslb($table, $payrollMonth){
 
-        $query = "SUM(ll.paid) as paid FROM  ".$table." ll, loan lo WHERE ll.payment_date = '".$payrollMonth."' AND ll.loanID = lo.id AND lo.type = 3";
-        $table2 = $table."as ll";
-        $row =  DB::table($table2)
-        ->select(DB::raw($query))
-        ->first();
-        return $row->paid;
+
+        $query = "SELECT SUM(ll.paid) as paid FROM  ".$table." ll, loan lo WHERE ll.payment_date = '".$payrollMonth."' AND ll.loanID = lo.id AND lo.type = 3";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->paid;
     }
 
 
