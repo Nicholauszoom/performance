@@ -3,15 +3,15 @@
 namespace App\Models\AccessControll;
 
 use App\Models;
-
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\post;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use App\Permissions\HasPermissionsTrait;
-class Users extends Authenticatable
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -57,7 +57,10 @@ class Users extends Authenticatable
     ];
 
  
-   
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'users_roles');
+    }
   
        public function basic_details()
     {

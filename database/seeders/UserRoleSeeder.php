@@ -26,11 +26,15 @@ class UserRoleSeeder extends Seeder
         //dd($permission);
        
         $role = new Role;
+        $role2 = new Role;
         $role->slug  = 'superAdmin';
         $role->name  = 'superAdmin';
         $role->save();
         
         
+        $role2->slug  = 'jobSeeker';
+        $role2->name  = 'jobSeeker';
+        $role2->save();
          $role->refreshPermissions($permission);
 
        

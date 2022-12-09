@@ -32,7 +32,7 @@
                 {{-- Dashboard --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}"
-                        class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null  }}">
+                        class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null }}">
                         <i class="ph-house"></i>
                         <span>Dashboard</span>
                     </a>
@@ -58,14 +58,14 @@
                     <ul class="nav-group-sub collapse">
                         <li class="nav-item">
                             <a href="{{ route('employee.active') }}"
-                                class="nav-link {{ request()->routeIs('employee.active') ? 'active' : null  }}">
+                                class="nav-link {{ request()->routeIs('employee.active') ? 'active' : null }}">
                                 Active Employee
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('employee.suspended') }}"
-                                class="nav-link {{ request()->routeIs('employee.suspended') ? 'active' : null  }}">
+                                class="nav-link {{ request()->routeIs('employee.suspended') ? 'active' : null }}">
                                 Suspended Employee
                             </a>
                         </li>
@@ -112,28 +112,28 @@
                         </li> -->
                         <li class="nav-item">
                             <a href="{{ route('payroll') }}"
-                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
+                                class="nav-link {{ request()->routeIs('payroll') ? 'active' : null }}">
                                 Payroll
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('employee_payslip') }}"
-                                class="nav-link {{ request()->routeIs('employee_payslip') ? 'active' : null  }}">
+                            <a href="{{ route('payslip') }}"
+                                class="nav-link {{ request()->routeIs('payslip') ? 'active' : null }}">
                                 Payslip
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('comission_bonus') }}"
-                                class="nav-link {{ request()->routeIs('comission_bonus') ? 'active' : null  }}">
+                            <a href="{{ route('incentives') }}"
+                                class="nav-link {{ request()->routeIs('incentives') ? 'active' : null }}">
                                 Incentives
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a href="{{ route('partial_payment') }}"
-                                class="nav-link {{ request()->routeIs('partial_payment') ? 'active' : null  }}">
+                        <li class="nav-item">
+                            <a href="{{ route('partialPayment') }}"
+                                class="nav-link {{ request()->routeIs('partialPayment') ? 'active' : null }}">
                                 Partial Payment
                             </a>
                         </li> -->
@@ -223,47 +223,39 @@
                         -   Accounting coding
                 --}}
 
-            {{-- Organisation --}}
-            <li class="nav-item nav-item-submenu">
-                <a href="#" class="nav-link">
-                    <i class="ph-buildings"></i>
-                    <span>Organisation</span>
-                </a>
-                <ul class="nav-group-sub collapse">
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Company Registration
-                        </a>
-                    </li>
+                {{-- Organisation --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-buildings"></i>
+                        <span>Organisation</span>
+                    </a>
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
+                                Company Registration
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
+                                Organization structure Registration
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Organization structure Registration
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('departments.index') }}"
+                                class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
+                                Departments
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Departments
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('departments.index') }}"
-                            class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null  }}">
-                            Position
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ route('designations.index') }}"
-                            class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null  }}">
-                            Role Profile Registration(Position)
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Role Profile Registration(Position)
+                            </a>
+                        </li>
 
 
                 </ul>
@@ -307,50 +299,76 @@
                         - Mail configaration
                 --}}
 
-            {{-- settings --}}
-            <li class="nav-item nav-item-submenu">
-                <a href="#" class="nav-link">
-                    <i class="ph-gear-six"></i>
-                    <span>Settings</span>
-                </a>
-                <ul class="nav-group-sub collapse">
-                    <li class="nav-item">
-                        <a href="{{ route('system.index') }}"
-                            class="nav-link {{ request()->routeIs('system.index') ? 'active' : null  }}">
-                            Company Setting
-                        </a>
-                    </li>
+                {{-- settings --}}
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-gear-six"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
+                                Company Setting
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('roles.index') }}"
-                            class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null  }}">
-                            Roles
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('roles.index') }}"
+                                class="nav-link {{ request()->routeIs('roles.index') ? 'active' : null }}">
+                                Roles
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('permissions.index') }}"
-                            class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : null  }}">
-                            Permissions
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('users.index') }}"
-                            class="nav-link {{ request()->routeIs('users.index') ? 'active' : null  }}">
-                            User Management
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('permissions.index') }}"
+                                class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : null }}">
+                                Permissions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('users.index') }}"
+                                class="nav-link {{ request()->routeIs('users.index') ? 'active' : null }}">
+                                User Management
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('audit') }}"
-                            class="nav-link {{ request()->routeIs('audit') ? 'active' : null  }}">
-                            Audit Trail
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="{{ route('audit') }}"
+                                class="nav-link {{ request()->routeIs('audit') ? 'active' : null }}">
+                                Audit Trail
+                            </a>
+                        </li>
 
-                </ul>
-            </li>
-            {{-- /settings --}}
+                    </ul>
+                </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-briefcase"></i>
+                        <span>Recruitment Management</span>
+                    </a>
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item">
+                            <a href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
+                                Job Post Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
+                                Job Application Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('system.index') }}"
+                                class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
+                                Interview Schedule Management
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- /settings --}}
 
 
 
@@ -360,7 +378,5 @@
         <!-- /main navigation -->
 
     </div>
-    <!-- /sidebar content -->
-
 </div>
 <!-- /main sidebar -->

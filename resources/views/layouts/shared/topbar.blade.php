@@ -277,10 +277,10 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    {{-- <a href="#" class="dropdown-item">
+                    <a href="#" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
-                    </a> --}}
+                    </a>
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-currency-circle-dollar me-2"></i>
                         My subscription
@@ -294,7 +294,7 @@
                         My inbox
                         <span class="badge bg-primary rounded-pill ms-auto">26</span>
                     </a> --}}
-                    {{-- <div class="dropdown-divider"></div> --}}
+                    <div class="dropdown-divider"></div>
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-gear me-2"></i>
                         Account settings
