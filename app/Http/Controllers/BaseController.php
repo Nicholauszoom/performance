@@ -7,53 +7,54 @@ use Illuminate\Http\Request;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
-use App\Models\Payroll\AttendanceModel;
-use App\models\Payroll\ProjectModel;
+use App\Models\AttendanceModel;
+use App\models\Payroll\ImprestModel;
+use App\models\ProjectModel;
 use App\models\PerformanceModel;
 use App\Helpers\SysHelper;
 
 class BaseController extends Controller {
 
-    function __construct() {
-	    parent::__construct();
+    // function __construct() {
+	  //   parent::__construct();
 	   
-      $this->load->model('flexperformance_model');
-      $this->load->model('performance_model');
-      $this->load->library('session');
-      $this->load->model('imprest_model');
-      $this->load->model('payroll_model');
-      $this->load->model('reports_model');
-      $this->load->model('attendance_model');
-      $this->load->model('project_model');
+    //   $this->load->model('flexperformance_model');
+    //   $this->load->model('performance_model');
+    //   $this->load->library('session');
+    //   $this->load->model('imprest_model');
+    //   $this->load->model('payroll_model');
+    //   $this->load->model('reports_model');
+    //   $this->load->model('attendance_model');
+    //   $this->load->model('project_model');
 
-	    $this->load->helper('url');
-        $this->load->library('user_agent');  
-        $this->load->library('form_validation');
-        $this->load->model('flexperformance_model');
+	  //   $this->load->helper('url');
+    //     $this->load->library('user_agent');  
+    //     $this->load->library('form_validation');
+    //     $this->load->model('flexperformance_model');
 
-        if ($this->agent->is_browser())
-        {
-          $agent = $this->agent->browser().' '.$this->agent->version();
-        }
-        elseif ($this->agent->is_robot())
-        {
-          $agent = $this->agent->robot();
-        }
-        elseif ($this->agent->is_mobile())
-        {
-          $agent = $this->agent->mobile();
-        }
-        else
-        {
-          $agent = 'Unidentified User Agent';
-        }
-        $this->session->set_userdata('agent', $agent);
-        $this->session->set_userdata('platform', $this->agent->platform()); 
-        $this->session->set_userdata('ip_address', $this->input->ip_address()); 
+    //     if ($this->agent->is_browser())
+    //     {
+    //       $agent = $this->agent->browser().' '.$this->agent->version();
+    //     }
+    //     elseif ($this->agent->is_robot())
+    //     {
+    //       $agent = $this->agent->robot();
+    //     }
+    //     elseif ($this->agent->is_mobile())
+    //     {
+    //       $agent = $this->agent->mobile();
+    //     }
+    //     else
+    //     {
+    //       $agent = 'Unidentified User Agent';
+    //     }
+    //     $this->session->set_userdata('agent', $agent);
+    //     $this->session->set_userdata('platform', $this->agent->platform()); 
+    //     $this->session->set_userdata('ip_address', $this->input->ip_address()); 
 
 
-        $username = $this->input->post('username');
-    }
+    //     $username = $this->input->post('username');
+    // }
 
 
     public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null)
@@ -63,13 +64,12 @@ class BaseController extends Controller {
         $this->flexperformance_model = new FlexPerformanceModel;
         
 
-        $this->flexperformance_model = new flexperformance_model();
-        $this->performance_model = new performance_model();
-        $this->imprest_model = new imprest_model();
-        $this->payroll_model = new payroll_model();
-        $this->reports_model = new reports_model();
-        $this->attendance_model = new attendance_model();
-        $this->project_model = new project_model();
+        // $this->flexperformance_model = new flexperformance_model();
+        $this->performance_model = new FlexPerformanceModel();
+        $this->imprest_model = new ImprestModel();
+        $this->reports_model = new ReportModel();
+        $this->attendance_model = new AttendanceModel();
+        $this->project_model = new ProjectModel();
         // $this->load->library('form_validation');
 
         session('agent','');

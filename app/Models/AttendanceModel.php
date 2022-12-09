@@ -1,5 +1,14 @@
 <?php
-Class Attendance_model extends CI_Model {
+
+namespace App\Models\Payroll;
+
+use Illuminate\Support\Facades\DB;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class AttendanceModel extends Model
+{
 
 	function attendance($data)
 	{
