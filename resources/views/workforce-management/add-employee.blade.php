@@ -2,6 +2,10 @@
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+
+	<script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
+	<script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
+	<script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
@@ -18,8 +22,10 @@
 </div>
 
 <form
-    action="{{ route('employee.store') }}"
     method="POST"
+    id="addEmployee"
+    enctype="multipart/form-data"
+    autocomplete="off"
 >
     @csrf
 
@@ -72,7 +78,10 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Birthdate:</label>
-                        <input type="date" name="birthdate" class="form-control" placeholder="First Name">
+                        <div class="input-group">
+							<span class="input-group-text"><i class="ph-calendar"></i></span>
+							<input type="text" class="form-control daterange-single" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
+						</div>
                     </div>
                 </div>
 
@@ -158,7 +167,6 @@
                         <label class="form-label">Line Manager:</label>
                         <select class="form-control select" id="linemanager" name="linemanager">
                             <option selected disabled> Select </option>
-                            <option value="DOUGLAS FORTUNATUS">Douglas Fortunatus</option>
                         </select>
                     </div>
                 </div>
@@ -191,21 +199,28 @@
                     <div class="mb-3">
                         <label class="form-label">Basic Salary:</label>
                         <div id="salaryField"></div>
-                        {{-- <input type="number" min="0" name="salary" class="form-control" placeholder="100,000"> --}}
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Contract start:</label>
-                        <input type="date" name="contract_start" class="form-control">
+
+                        <div class="input-group">
+							<span class="input-group-text"><i class="ph-calendar"></i></span>
+							<input type="text" class="form-control daterange-single" name="contract_start" id="contract_start">
+						</div>
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Contract End:</label>
-                        <input type="date" name="contract_end" value="{{ old('contract_end') }}" class="form-control">
+
+                        <div class="input-group">
+							<span class="input-group-text"><i class="ph-calendar"></i></span>
+							<input type="text" class="form-control daterange-single" name="contract_end" id="contract_end">
+						</div>
                     </div>
                 </div>
 
@@ -465,6 +480,137 @@
         });
     });
 </script>
+
+{{-- form submit --}}
+
+<script>
+    $(function() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var startYear = today.getFullYear() - 18;
+        var endYear = today.getFullYear() - 60;
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+        var dateStart = dd + '/' + mm + '/' + startYear;
+        var dateEnd = dd + '/' + mm + '/' + endYear;
+
+        $('#birthdate').daterangepicker({
+            drops: 'up',
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            showDropdowns: true,
+            maxDate: dateStart,
+            minDate: dateEnd,
+            startDate: dateStart,
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            singleClasses: "picker_2"
+        }, function(start, end, label) {
+            var years = moment().diff(start, 'years');
+            var message = "The Employee is " + years + " Years Old!";
+            $('#age').fadeOut('fast', function() {
+                $('#age').fadeIn('fast').html(message);
+            });
+
+        });
+        $('#birthdate').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY'));
+        });
+        $('#birthdate').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var startYear = today.getFullYear() - 18;
+        var endYear = today.getFullYear() - 60;
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+
+        var dateStart = dd + '/' + mm + '/' + startYear;
+        var dateEnd = dd + '/' + mm + '/' + endYear;
+        $('#contract_end').daterangepicker({
+            drops: 'up',
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            showDropdowns: true,
+            maxYear: parseInt(moment().format('YYYY'), 100),
+            minDate: dateEnd,
+            startDate: moment(),
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            singleClasses: "picker_2"
+        }, function(start, end, label) {
+
+        });
+        $('#contract_end').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY'));
+        });
+        $('#contract_end').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
+
+    $(function() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var startYear = today.getFullYear() - 18;
+        var endYear = today.getFullYear() - 60;
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+
+
+        var dateStart = dd + '/' + mm + '/' + startYear;
+        var dateEnd = dd + '/' + mm + '/' + endYear;
+        $('#contract_start').daterangepicker({
+            drops: 'up',
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            showDropdowns: true,
+            maxYear: parseInt(moment().format('YYYY'), 100),
+            minDate: dateEnd,
+            startDate: moment(),
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+            singleClasses: "picker_2"
+        }, function(start, end, label) {
+
+        });
+        $('#contract_start').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY'));
+        });
+        $('#contract_start').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
+    </script>
 
 @endpush
 
