@@ -20,7 +20,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = 'users';
+    protected $table = 'employee';
 
     protected $fillable = [
         'name',
@@ -31,10 +31,10 @@ class User extends Authenticatable
         'added_by',
         'status',
         'joining_date',
- 'department_id',
-'designation_id',
- 'disabled',
-    'disabled_date'
+        'department_id',
+        'designation_id',
+        'disabled',
+        'disabled_date'
     ];
 
     /**
@@ -56,9 +56,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
- 
-   
-  
+
+
+
        public function basic_details()
     {
         return $this->hasOne('App\Models\UserDetails\BasicDetails','user_id');
@@ -68,13 +68,13 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\UserDetails\BankDetails','user_id');
     }
-    
+
     public function designation(){
-    
+
         return $this->belongsTo('App\Models\Designation','designation_id');
       }
   public function department(){
-    
+
         return $this->belongsTo('App\Models\Departments','department_id');
       }
       public function employee(){

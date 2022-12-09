@@ -273,14 +273,14 @@
                         <img src="{{ asset('assets/images/demo/users/face11.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
                         <span class="status-indicator bg-success"></span>
                     </div>
-                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->name }}</span>
+                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->fname .' '.Auth::user()->lname }}</span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    {{-- <a href="#" class="dropdown-item">
+                    <a href="#" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
-                    </a> --}}
+                    </a>
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-currency-circle-dollar me-2"></i>
                         My subscription
@@ -294,7 +294,7 @@
                         My inbox
                         <span class="badge bg-primary rounded-pill ms-auto">26</span>
                     </a> --}}
-                    {{-- <div class="dropdown-divider"></div> --}}
+                    <div class="dropdown-divider"></div>
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-gear me-2"></i>
                         Account settings

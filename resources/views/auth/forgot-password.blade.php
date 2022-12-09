@@ -1,35 +1,78 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+<head>
+    @include('layouts.shared.title-meta', ['title' => 'Password Recovery'])
+
+    <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+</head>
+
+<body style="background:#3b465a;">
+    <div class="page-content">
+
+        <!-- Main content -->
+        <div class="content-wrapper ">
+
+            <!-- Inner content -->
+            <div class="content-inner">
+
+                <!-- Content area -->
+                <div class="content d-flex justify-content-center align-items-center">
+
+                    <!-- Password recovery form -->
+                    <form method="POST" action="{{ route('password.email') }}">
+                        @csrf
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <div class="text-center mb-3">
+                                    <div
+                                        class="d-inline-flex bg-primary bg-opacity-10 text-primary lh-1 rounded-pill p-3 mb-3 mt-1">
+                                        <i class="ph-arrows-counter-clockwise ph-2x"></i>
+                                    </div>
+                                    <h5 class="mb-0">Password recovery</h5>
+                                    <span class="d-block text-muted">We'll send you instructions in email</span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Your email</label>
+                                    <div class="form-control-feedback form-control-feedback-start">
+                                        <input type="email" name="email" class="form-control"
+                                            placeholder="john@doe.com">
+                                        <div class="form-control-feedback-icon">
+                                            <i class="ph-at text-muted"></i>
+                                        </div>
+                                        @error('email')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                        @if (Session::has('message'))
+                                                <p class="text-success">{{ Session::get('message') }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="ph-arrow-counter-clockwise me-2"></i>
+                                    Reset password
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- /password recovery form -->
+
+                </div>
+
+            </div>
+            <!-- /inner content -->
+
         </div>
+        <!-- /main content -->
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+    </div>
+</body>
 
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-input-label for="email" :value="__('Email')" />
-
-                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-primary-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+</html>
