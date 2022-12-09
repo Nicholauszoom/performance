@@ -70,7 +70,7 @@ $state = $key->state;
 <div class="card">
     <div class="card-header border-0">
         <h3>Payroll Info <?php if($payrollState == 1){ ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-                href="<?php echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($payrollMonth); ?>"
+                href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>"
                 target="blank"><button type="button" name="print" value="print" class="btn btn-info">EXPORT
                     INFO</button></a><?php } ?></h3>
     </div>
