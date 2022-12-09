@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Payroll;
+namespace App\Models;
 
 use Illuminate\Support\Facades\DB;
 
