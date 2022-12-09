@@ -143,7 +143,7 @@ class AuthenticatedSessionController extends Controller
         $logData = array(
            'empID' =>session('emp_id'),
            'description' => "Logged In",
-           'agent' =>$this->session->userdata('agent'),
+           'agent' =>session('agent'),
            'platform' =>$this->agent->platform(),
            'ip_address' =>$this->input->ip_address()
         ); 

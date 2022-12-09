@@ -69,7 +69,7 @@ class EmployeeController extends Controller
         $datalog = array(
             'state' =>0,
             'empID' =>$empID,
-            'author' =>$this->session->userdata('emp_id')
+            'author' =>session('emp_id')
         );
 
         $this->employeeModel->employeestatelog($datalog);

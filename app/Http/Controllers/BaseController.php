@@ -84,7 +84,7 @@ class BaseController extends Controller {
 
       if(strlen('')>0){
 
-        $strategyStatistics = $this->performance_model->strategy_info($this->session->userdata('current_strategy'));
+        $strategyStatistics = $this->performance_model->strategy_info(session('current_strategy'));
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
     
       $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($payrollMonth."-1 month"))));
@@ -110,8 +110,8 @@ class BaseController extends Controller {
         $data["strategyProgress"] = $strategyProgress;
         $data["monthly"] = $rate_per_month;
     
-        $data['taskline']= $this->performance_model->total_taskline($this->session->userdata('emp_id'));
-        $data['taskstaff']= $this->performance_model->total_taskstaff($this->session->userdata('emp_id'));
+        $data['taskline']= $this->performance_model->total_taskline(session('emp_id'));
+        $data['taskstaff']= $this->performance_model->total_taskstaff(session('emp_id'));
     
     
         $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
@@ -138,7 +138,7 @@ class BaseController extends Controller {
         $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month,'');
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
     
-        if($this->session->userdata('password_set') =="1"){
+        if(session('password_set') =="1"){
           $this->login_info();
         }else{
     
@@ -368,7 +368,7 @@ class BaseController extends Controller {
     $logData = array(
        'empID' =>session('emp_id'),
        'description' => "Logged In",
-       'agent' =>$this->session->userdata('agent'),
+       'agent' =>session('agent'),
        'platform' =>$this->agent->platform(),
        'ip_address' =>$this->input->ip_address()
     ); 
@@ -469,7 +469,7 @@ class BaseController extends Controller {
             $logData = array(
               'empID' => $empID,
               'description' => "Requested password reset",
-              'agent' =>$this->session->userdata('agent'),
+              'agent' =>session('agent'),
               'platform' =>$this->agent->platform(),
               'ip_address' =>$this->input->ip_address()
            ); 
@@ -512,11 +512,11 @@ class BaseController extends Controller {
     $logData = array(
       'empID' =>session('emp_id'),
       'description' => "Logged out",
-      'agent' =>$this->session->userdata('agent'),
+      'agent' =>session('agent'),
       'platform' =>$this->agent->platform(),
       'ip_address' =>$this->input->ip_address()
    ); 
-   if(!$this->session->userdata('emp_id')==null){
+   if(!session('emp_id')==null){
    $result = $this->flexperformance_model->insertAuditLog($logData);
    }
     $this->session->sess_destroy();

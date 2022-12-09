@@ -372,7 +372,7 @@ public function loanreport(Request $request)
     }
 
       $data['showbox'] = 0;
-    $data['leave'] =  $this->attendance_model->leavereport2($this->session->userdata('emp_id'));
+    $data['leave'] =  $this->attendance_model->leavereport2(session('emp_id'));
       $data['customleave'] =  $this->attendance_model->customleave();    
        return view('app.customleave_report', $data);
          
