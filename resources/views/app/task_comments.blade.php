@@ -73,7 +73,7 @@
                                     if ($row->staff==session('emp_id')) { ?>
 
                                   <li class="me"><br>
-                                    <img class="avatar" src="<?php echo base_url('uploads/userprofile/').$row->photo; ?>" alt="">
+                                    <img class="avatar" src="<?php echo url('uploads/userprofile/').$row->photo; ?>" alt="">
                                     <div class="message_wrapper">
                                         <small class="pull-right text-muted">
                                           <i class="fa fa-clock-o fa-fw"></i>
@@ -102,7 +102,7 @@
                                   <?php } else { ?>
 
                                   <li class="him"><br>
-                                    <img class="avatar" src="<?php echo base_url('uploads/userprofile/').$row->photo; ?>" alt="">
+                                    <img class="avatar" src="<?php echo url('uploads/userprofile/').$row->photo; ?>" alt="">
                                     <div class="message_wrapper">
                                         <small class="pull-right text-muted">
                                           <i class="fa fa-clock-o fa-fw"></i>

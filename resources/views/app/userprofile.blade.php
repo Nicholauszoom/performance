@@ -79,7 +79,7 @@
                     <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
                       <div class="profile_img">
                         <div id="crop-avatar">
-                          <img class="img-responsive avatar-view" src="<?php echo base_url('uploads/userprofile/').$photo; ?>"" alt="<?php echo $name; ?>">
+                          <img class="img-responsive avatar-view" src="<?php echo url('uploads/userprofile/').$photo; ?>"" alt="<?php echo $name; ?>">
                         </div>
                       </div>
                       <h3><?php echo $name; ?></h3>

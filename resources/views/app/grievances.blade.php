@@ -121,7 +121,7 @@
                           foreach ($my_grievances as $row) {  ?>
                           <tr id="domain<?php echo $row->id;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='".base_url().$row->attachment."'>"."<div class='col-md-12'>
+                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='".url().$row->attachment."'>"."<div class='col-md-12'>
                                 <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
                             <td><?php echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
@@ -194,7 +194,7 @@
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->NAME; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else  echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='".base_url().$row->attachment."'>"."<div class='col-md-12'>
+                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='".url().$row->attachment."'>"."<div class='col-md-12'>
                                 <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>

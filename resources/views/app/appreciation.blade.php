@@ -119,7 +119,7 @@
                               </button></a> <?php } ?>
                             </div>
                             <div class="right col-xs-5 text-center">
-                              <img  src="<?php echo base_url('uploads/userprofile/').$photo; ?>"  class="img-circle img-responsive">
+                              <img  src="<?php echo url('uploads/userprofile/').$photo; ?>"  class="img-circle img-responsive">
                             </div>
                           </div>
                           <div class="col-xs-12 bottom text-center">

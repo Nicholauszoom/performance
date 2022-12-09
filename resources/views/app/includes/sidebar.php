@@ -4,7 +4,7 @@
               <a href="<?php echo url(); ?>flex/home" class="site_title">
 
               <!-- <i class=""> -->
-              <!--<img height="100px" width="100px" src = "<?php echo base_url().session('logo'); ?>"/><!-- </i> -->
+              <!--<img height="100px" width="100px" src = "<?php echo url().session('logo'); ?>"/><!-- </i> -->
               <!--<span><i></i></span>-->
               </a>
             </div>

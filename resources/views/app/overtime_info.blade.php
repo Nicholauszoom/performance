@@ -46,7 +46,7 @@
                         $commit = $row->commit; 
                       }
                 ?>
-                    <form  align="center" enctype="multipart/form-data"  method="post" action="<?php echo base_url().'flex/commentOvertime/'; ?>"     data-parsley-validate class="form-horizontal form-label-left">
+                    <form  align="center" enctype="multipart/form-data"  method="post" action="<?php echo url().'flex/commentOvertime/'; ?>"     data-parsley-validate class="form-horizontal form-label-left">
                     <input type="text" name = "overtimeID" hidden value = "<?php echo $id; ?>">
                       
                       <div class="form-group">

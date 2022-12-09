@@ -462,7 +462,7 @@
                                         else { ?>
                                         <div class="col-md-12">
                                             <span class="label label-info">GRADUATED</span></div><br><br>
-                                            <?php if($row->certificate != NULL) echo "<a download= '' href ='".base_url()."uploads/graduation/".$row->certificate."'>"."<div class='col-md-12'>
+                                            <?php if($row->certificate != NULL) echo "<a download= '' href ='".url()."uploads/graduation/".$row->certificate."'>"."<div class='col-md-12'>
                                             <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NO CERTIFICATE"; ?>
                                             <?php } ?></td>
                                         <td><?php echo number_format($row->cost, 2);  ?></td>

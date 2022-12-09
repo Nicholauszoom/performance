@@ -97,7 +97,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                           <div class="col-sm-12">
                             <h4 class="brief"><i>Current Employee Of the Month</i></h4>
                             <div class="right col-xs-5 text-center">
-                              <img src="<?php echo base_url('uploads/userprofile/').$photo; ?>" alt="" class="img-circle img-responsive">
+                              <img src="<?php echo url('uploads/userprofile/').$photo; ?>" alt="" class="img-circle img-responsive">
                             </div>
                             <div class="left col-xs-7">
                               <h2><?php echo $name; ?></h2>
