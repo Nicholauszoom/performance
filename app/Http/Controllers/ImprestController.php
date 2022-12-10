@@ -67,7 +67,7 @@ class ImprestController extends Controller
   {
 
     $data['title'] = "Imprest";
-    $this->load->model('payroll_model');
+    // $this->load->model('payroll_model');
     $data['my_imprests'] = $this->imprest_model->my_imprests(session('emp_id'));
     // if(session('appr_paym') ||session('mng_paym') ){
     //   if(session('appr_paym')){
@@ -593,7 +593,7 @@ class ImprestController extends Controller
   public function resolveImprest(Request $request)
   {
     if ($this->uri->segment(3) != '') {
-      $this->load->model('flexperformance_model');
+      // $this->load->model('flexperformance_model');
       $imprestID = $this->uri->segment(3);
       $initial = $this->imprest_model->getInitialConfirmedCost($imprestID);
       $empID = $this->imprest_model->getConfirmedEmployee($imprestID);

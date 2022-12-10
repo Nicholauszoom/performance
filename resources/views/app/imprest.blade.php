@@ -9,13 +9,9 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
-<?php
-  $CI_Model = get_instance();
-  $CI_Model->load->model('imprest_model');
-?><!-- /top navigation -->
-      
+  
         <!-- page content -->
         <div class="right_col" role="main">
 
@@ -196,7 +192,7 @@
         </div>
         <!-- /page content -->
 
-       <?php
+
         
        @include("app/includes/imprest_operations")
 

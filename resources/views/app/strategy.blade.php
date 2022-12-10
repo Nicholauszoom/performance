@@ -10,7 +10,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php 
   
