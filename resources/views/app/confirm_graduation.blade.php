@@ -13,7 +13,7 @@
 
 <?php
   
-  //$CI_Model = get_instance();
+  ////$CI_Model = get_instance();
   //$CI_Model->load->model('flexperformance_model');
   
   if($mode == 1){

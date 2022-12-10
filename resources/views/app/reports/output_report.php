@@ -31,7 +31,7 @@
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
 //LOAD MODEL
-$CI_Model = get_instance();
+//$CI_Model = get_instance();
 $CI_Model->load->model('flexperformance_model');
  
 // set document information
