@@ -85,7 +85,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -152,7 +152,7 @@
                                                 <input type="radio" name="period" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -169,7 +169,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -222,7 +222,7 @@
                                               <span class="checkmark"></span>
                                             </label> -->
 
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -239,7 +239,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -288,7 +288,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -338,7 +338,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// // echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
