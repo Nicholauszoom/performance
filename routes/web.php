@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
         'users' => UsersController::class,
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
+
     ]);
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
@@ -82,6 +83,8 @@ Route::middleware('auth')->group(function () {
 
     // Employee overtime
 
+//routes for setting
+Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
 
 
