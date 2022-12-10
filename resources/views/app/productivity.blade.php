@@ -12,7 +12,7 @@
 @section('content')
 
 <?php
-  $CI_Model = get_instance();
+  //$CI_Model = get_instance();
   $CI_Model->load->model('performance_model');
 ?>
 

@@ -348,7 +348,7 @@ table tfoot tr td:first-child {
         $number_array[$i] = $received_number_array[$j]; 
     }
 
-    $number_to_words_string = "";
+    $number_to_words_string = ";
     //Finding out whether it is teen ? and then multiply by 10, example 17 is seventeen, so if 1 is preceeded with 7 multiply 1 by 10 and add 7 to it.
     for($i=0,$j=1;$i<9;$i++,$j++){
         //"01,23,45,6,78"
@@ -363,7 +363,7 @@ table tfoot tr td:first-child {
         }
     }
 
-    $value = "";
+    $value = ";
     for($i=0;$i<9;$i++){
         if($i==0 || $i==2 || $i==4 || $i==7){    
             $value = $number_array[$i]*10; 
