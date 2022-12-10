@@ -146,7 +146,10 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        //if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // dd(session()->all());
+
+        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+            
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
@@ -154,9 +157,9 @@ class PayrollController extends Controller
 
             return view('payroll.employee_payslip',compact('data','title','parent','child'));
 
-       // } else {
-         //   echo 'Unauthorised Access';
-       // }
+       } else {
+           echo 'Unauthorised Access';
+       }
 
     }
 

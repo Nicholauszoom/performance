@@ -98,7 +98,7 @@
 
                             <tbody>
                                 <?php
-                            foreach ($payrollList as $row) { ?>
+                                    foreach ($payrollList as $row) { ?>
 
                                 <tr id="domain<?php echo $row->id;?>">
                                     <td width="1px"><?php echo $row->SNo; ?></td>
