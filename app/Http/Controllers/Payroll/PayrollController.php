@@ -14,10 +14,10 @@ use App\Models\Payroll\ReportModel;
 use App\Helpers\SysHelpers;
 
 class PayrollController extends Controller
-{  
-    
+{
+
     public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null)
-    {   
+    {
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
@@ -64,7 +64,7 @@ class PayrollController extends Controller
                             'isActive' => $all_allocation->isActive,
                             'payroll_date' => $payroll_date
                         );
-                        
+
                         $this->payroll_model->insertAllocation($data_allocation_log);
 
                     }
@@ -116,7 +116,7 @@ class PayrollController extends Controller
 
                     if ($result == true) {
 
-  
+
                         $description  = "Run payroll of date " . $payroll_date;
 
                         $result = SysHelpers::auditLog(1,$description,$request);
@@ -172,8 +172,10 @@ class PayrollController extends Controller
         $data['payrollList'] = $this->payroll_model->payrollMonthList();
         $data['title'] = "Payroll";
 
-        //dd($data);
+        // dd($data['pendingPayroll']);
         //echo $data['pendingPayroll_month'];
+
+
 
         return view('payroll.payroll', [
             'data' => $data,
@@ -292,9 +294,9 @@ class PayrollController extends Controller
         $title = "Payroll Info";
         $parent = "Payroll";
         $child = "Payroll Info";
-        
+
         return view('payroll.less_payments',compact('title','data','parent','child'));
-        
+
     }
 
     public function less_payments()
@@ -412,9 +414,9 @@ class PayrollController extends Controller
             $title = "Gross Reconciliation";
             $parent = "Payroll";
             $child = "Gross Reconciliation";
-            
+
             return view('payroll.gross_recon',compact('title','parent','child','data'));
-            
+
 
 
         }
@@ -623,7 +625,7 @@ class PayrollController extends Controller
             $title = "Comission and Bonuses";
             $parent = "Payroll";
             $child = "Incentives";
-           
+
 
             return view('payroll.comission_bonus',compact('title','parent','child','data'));
         // } else {
@@ -642,7 +644,7 @@ class PayrollController extends Controller
             $title = "Comission and Bonuses";
             $parent = "Comission and Bonuses";
             $child = "Comission and Bonuses";
-            
+
 
             return view('payroll.partial_payment',compact('title','parent','child','data'));
         // } else {
