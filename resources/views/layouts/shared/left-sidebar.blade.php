@@ -136,7 +136,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/branch') }}">Company Branches </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/position') }}">Positions</a></li>
                         @if (session('mng_emp'))
-                            <li class="nav-item"><a class="nav-link" href="/flex/contract">Employee Contracts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/contract')}}">Employee Contracts</a></li>
                         @endif
                         {{-- <li  class="nav-item"><a class="nav-link"  href="{{ url('/flex/accountCoding') }}">Account Coding</a></li> --}}
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/organization_level') }}">Organisation Levels </a></li>
@@ -178,22 +178,22 @@
                         @if (session('mng_roles_grp'))
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/role') }}">Roles and Groups</a></li>
                         @endif
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance') }}">Allowances</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance_overtime') }}">Overtime</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/statutory_deductions') }}">Statutory Deductions</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/non_statutory_deductions') }}">Non-Statutory Deductions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/allowance">Allowances</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/allowance_overtime">Overtime</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/statutory_deductions">Statutory Deductions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/non_statutory_deductions">Non-Statutory Deductions</a></li>
 
                         @if (session('mng_bank_info'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/bank') }}">Banking Information</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/flex/bank">Banking Information</a></li>
                         @endif
 
                         @if (session('mng_audit'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/audit_logs') }}">Audit Trail</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/flex/audit_logs">Audit Trail</a></li>
                         @endif
 
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/performance/funder') }}"></i> Funders </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality') }}">Nationality</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/mailConfiguration') }}"></i> Mail Configuration </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/performance/funder"></i> Funders </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/nationality">Nationality</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/flex/payroll/mailConfiguration"></i> Mail Configuration </a></li>
                     </ul>
                 </li>
 
