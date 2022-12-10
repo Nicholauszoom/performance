@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('branch', function (Blueprint $table) {
             //
-            $table->integer('department')->unsigned()->nullable()->after('id');
+            $table->integer('department_id')->unsigned()->nullable()->after('id');
 
         });
     }
