@@ -9,6 +9,11 @@
 @endpush
 
 @section('content')
+@php
+$employee = $data['employee'];
+@endphp
+
+
 
   <!-- Basic datatable -->
       <div class="card">
@@ -24,58 +29,49 @@
           </div>
           
         </div>
-        <table class="table datatable-basic">
-          <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Job Title</th>
-              <th>DOB</th>
-              <th>Status</th>
-              <th class="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Marth</td>
-              <td><a href="#">Enright</a></td>
-              <td>Traffic Court Referee</td>
-              <td>22 Jun 1972</td>
-              <td>
-                <span class="badge bg-success bg-opacity-10 text-success"
-                  >Active</span
-                >
-              </td>
-              <td class="text-center">
-                <div class="d-inline-flex">
-                  <div class="dropdown">
-                    <a
-                      href="#"
-                      class="text-body"
-                      data-bs-toggle="dropdown"
-                    >
-                      <i class="ph-list"></i>
-                    </a>
+       <table class="table datatable-basic">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>HOD</th>
+                    <th>Reports To</th>
+                    <th>State</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
 
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-pdf me-2"></i>
-                        Export to .pdf
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-xls me-2"></i>
-                        Export to .csv
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-doc me-2"></i>
-                        Export to .doc
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+            <tbody>
+                @if(isset($departments))
+                    @foreach($departments as $department)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $department->name }}</td>
+                            <td> HOD </td>
+                            <td> Upper level </td>
+                            <td> Active </td>
+
+                            <td align="center">
+                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
+
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-info btn-xs edit_permission_btn"
+                                    data-toggle="modal"
+                                    data-id="{{ $department->id }}"
+                                    data-name="{{ $department->name }}"
+                                >
+                                    <i class="ph-note-pencil"></i> Edit
+                                </button>
+
+                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                                {{ Form::close() }}
+                            </td>
+                        </tr>
+
+                    @endforeach
+                    @endif
+            </tbody>
         </table>
       </div>
   <!-- /basic datatable -->

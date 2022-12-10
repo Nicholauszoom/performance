@@ -1,5 +1,5 @@
 <div id="save_department" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Department Form</h5>
@@ -15,16 +15,32 @@
 
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Department Name :</label>
-                        <div class="col-sm-9">
-
+                        
+                    <div class="form-group">
+                        <label class="col-form-label col-sm-3">Department Name</label>
                             <input type="text" name="name" placeholder="Department Name" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>
                             @enderror
-                        </div>
-
+                    </div>
+                    <div class="form-group">
+                        <label class="">Head os Department</label>
+                        <select name="department_id" class="form-control m-b"  required>
+                            @if(!empty($employee))
+                            @foreach($employee as  $row)
+                               
+                               <option value="">{{$row}}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="">Reports To</label>
+                        <select name="department_id" class="form-control m-b"  required>
+                            <option value="">Select Department</option>
+                        </select>
+                    </div>
 
                     </div>
                 </div>
