@@ -223,7 +223,7 @@ $html .='<tr>
                         $submission_date =  date('d/m/Y', strtotime($key->date_completed));
                         $statusTag = "Completed"; 
                     } else{
-                        $submission_date = "";
+                        $submission_date = ";
                         
                         if($finish > date('Y-m-d')){
                             if($progress==0){ $statusTag = "Not Started"; 
@@ -277,7 +277,7 @@ $html .='<tr>
                         $submission_date =  date('d/m/Y', strtotime($key->date_completed));
                         $statusTag = "Completed"; 
                     } else{
-                        $submission_date = "";
+                        $submission_date = ";
                         
                         if($finish > date('Y-m-d')){
                             if($progress==0){ $statusTag = "Not Started"; 
