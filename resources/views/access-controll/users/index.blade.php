@@ -37,7 +37,7 @@
         <tbody>
             @if(isset($users))
                 @foreach($users as $user)
-                    {{-- @php $role = "";  @endphp --}}
+                    {{-- @php $role = ";  @endphp --}}
 
                     @foreach($user->roles as $value2)
                         @php $role = $value2->id  @endphp

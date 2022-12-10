@@ -17,6 +17,7 @@
         $pendingPayroll_month = $data['pendingPayroll_month'];
         $payroll = $data['payroll'];
         $payrollList = $data['payrollList'];
+        $pendingPayroll = $data['pendingPayroll'];
     @endphp
 
     <div class="card">
@@ -27,8 +28,8 @@
         <div class="card-body">
 
             @if ($pendingPayroll == 0 && session('mng_paym'))
-                <div class="col-lg-6 offset-3">
-                    <!-- Basic layout-->
+                <div class="col-lg-12">
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">Run Payroll</h5>
@@ -36,26 +37,48 @@
 
                         <div class="card-body">
                             <div id="payrollFeedback"></div>
-                            <form autocomplete="off" id="initPayroll" method="POST" class="form-horizontal form-label-left">
-                                <div class="mb-3">
-                                    <label class="form-label">Payroll Month:</label>
-                                    <input type="text" required="" placeholder="Payroll Month" name="payrolldate"
-                                        class="form-control col-xs-12 has-feedback-left" id="payrollDate"
-                                        aria-describedby="inputSuccess2Status">
-                                    <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form autocomplete="off" id="initPayroll" method="POST">
+                                        <div class="mb-3 row">
+                                            <div class="col-7 row">
+                                                <label class="form-label col-md-3 text-center font-bold">
+                                                    <h6>Payroll Month:</h6>
+                                                </label>
+
+                                                <div class="col-md-9">
+                                                    <input
+                                                    type="text"
+                                                    required
+                                                    placeholder="Payroll Month"
+                                                    name="payrolldate"
+                                                    class="form-control col-md-7 has-feedback-left"
+                                                    id="payrollDate"
+                                                    aria-describedby="inputSuccess2Status"
+                                                >
+                                                <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-3">
+                                                <button name="init" type="submit" class="btn btn-main">RUN PAYROLL</button>
+                                            </div>
+
+                                        </div>
+                                        <div class="d-flex justify-content-end align-items-center">
+
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="d-flex justify-content-end align-items-center">
-                                    <button name="init" type="submit" class="btn btn-success">RUN PAYROLL
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             @endif
 
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
-                <!-- Basic layout-->
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Payslip Mail Delivery List</h5>
@@ -75,7 +98,7 @@
 
                             <tbody>
                                 <?php
-                            foreach ($payrollList as $row) { ?>
+                                    foreach ($payrollList as $row) { ?>
 
                                 <tr id="domain<?php echo $row->id;?>">
                                     <td width="1px"><?php echo $row->SNo; ?></td>

@@ -3,6 +3,18 @@
     color: #fff;
 }
 
+.btn-main {
+    background: #001949;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-main:hover {
+    background: #001a49e0;
+    color: #fff;
+    font-weight: 600;
+}
+
 .bg-main-nav {
     color: #000;
     background: #fff;

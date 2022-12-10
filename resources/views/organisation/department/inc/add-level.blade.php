@@ -1,28 +1,24 @@
-<div id="save_department" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+<div id="add-organizational" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Apply Overtime</h5>
+                <h5 class="modal-title">Add Organisation Level </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form
-                {{-- action="{{ route('departments.store') }}" --}}
-                method="POST"
-                class="form-horizontal"
-            >
+            <form {{-- action="{{ route('departments.store') }}" --}} method="POST" class="form-horizontal">
                 @csrf
 
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Overtime Category :</label>
+                        <label class="col-form-label col-sm-3">Organisation Level Name:</label>
                         <div class="col-sm-9">
 
                             <select class="form-control select" name="nationality">
                                 <option selected disabled> Select </option>
-                                @foreach ($overtimeCategories as $overtimeCategorie)
+                                {{-- @foreach ($overtimeCategories as $overtimeCategorie)
                                 <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
 
                             @error('name')
@@ -32,9 +28,10 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Time Start :</label>
+                        <label class="col-form-label col-sm-3">Mininum Annual Basic Salary Range:</label>
                         <div class="col-sm-9">
-                            <input type="datetime" name="" class="form-control" id="">
+                            <input id="minSalary" type="number" min="100" max="10000000000" name=""
+                                class="form-control" id="minSalary" name="minSalary" placeholder="Minimum Salary">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Input field Error </p>
@@ -43,20 +40,11 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Time End :</label>
+                        <label class="col-form-label col-sm-3">Maximum Annual Basic Salary Range:</label>
                         <div class="col-sm-9">
-                            <input type="datetime" name="" class="form-control" id="">
+                            <input id="maxSalary" type="number" min="100" max="10000000000" step="0.01"
+                                name="maxSalary" placeholder="Maximum Salary" class="form-control" id="">
 
-                            @error('name')
-                                <p class="text-danger mt-1"> Input field Error </p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Reason for overtime <span class="text-danger">*</span> :</label>
-                        <div class="col-sm-9">
-                            <textarea rows="3" cols="3" class="form-control" placeholder="Enter your message here"></textarea>
                             @error('name')
                                 <p class="text-danger mt-1"> Input field Error </p>
                             @enderror
@@ -66,10 +54,9 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-perfrom">Send Request</button>
+                    <button type="submit" class="btn btn-perfrom">Add</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-

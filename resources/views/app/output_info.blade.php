@@ -604,7 +604,7 @@
 
 // @include("app/includes/projectchart")
 
-@include("app/includes/unrefresh_form_submit.php";
+@include("app/includes/unrefresh_form_submit");
 
  ?>
 
@@ -612,13 +612,13 @@
 
 <script>
 $(function() {
-  var minStartDate = "<?php echo date('d/m/Y', strtotime($startDate)); ?>";
-  var maxEndDate = "<?php echo date('d/m/Y', strtotime($endDate)); ?>";
+  var minStartDate = "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>";
+  var maxEndDate = "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>";
   $('#task_startDate').daterangepicker({
     drops: 'up',
     singleDatePicker: true,
     autoUpdateInput: false,
-    startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>",
+    startDate: "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>",
     minDate:minStartDate,
     maxDate:maxEndDate,
     locale: {      
@@ -640,13 +640,13 @@ $(function() {
 
 <script>
 $(function() {
-  var minStartDate = "<?php echo date('d/m/Y', strtotime($startDate)); ?>";
-  var maxEndDate = "<?php echo date('d/m/Y', strtotime($endDate)); ?>";
+  var minStartDate = "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>";
+  var maxEndDate = "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>";
   $('#task_endDate').daterangepicker({
     drops: 'up',
     singleDatePicker: true,
     autoUpdateInput: false,
-    startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>",
+    startDate: "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>",
     minDate:minStartDate,
     maxDate:maxEndDate,
     locale: {      
@@ -674,7 +674,7 @@ $(function() {
     drops: 'up',
     singleDatePicker: true,
     autoUpdateInput: false,
-    startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>",
+    startDate: "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>",
     minDate:minStartDate,
     maxDate:maxEndDate,
     locale: {      
@@ -702,7 +702,7 @@ $(function() {
     drops: 'up',
     singleDatePicker: true,
     autoUpdateInput: false,
-    startDate: "<?php echo date('d/m/Y', strtotime($endDate)); ?>",
+    startDate: "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>",
     minDate:minStartDate,
     maxDate:maxEndDate,
     locale: {      

@@ -63,7 +63,7 @@ class MYPDF extends TCPDF {
 }
 
 $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
- $CI_Model = get_instance();
+ //$CI_Model = get_instance();
   $CI_Model->load->model('performance_model');
 
 

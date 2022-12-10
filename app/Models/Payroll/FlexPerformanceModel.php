@@ -14,10 +14,10 @@ class FlexPerformanceModel extends Model
 		$logData = array(
 	       'empID' => auth()->user()->id,
 	       'description' => $description,
-	       'agent' =>$this->session->userdata('agent'),
-	       'platform' =>$this->session->userdata('platform'),
+	       'agent' =>session('agent'),
+	       'platform' =>session('platform'),
 	       'due_date' =>date('Y-m-d h:i:s'),
-	       'ip_address' =>$this->session->userdata('ip_address')
+	       'ip_address' =>session('ip_address')
 	    );
         DB::table('audit_logs')->insert($logData);
 	}
@@ -1992,11 +1992,10 @@ function run_payroll($payroll_date, $payroll_month){
 
     function get_max_salary_advance($empID)
 	{
-	    $query = "(rate_employee*(SELECT salary WHERE emp_id = '".$empID."')) as margin FROM deduction WHERE id = 7";
-		$row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
-		return $row->margin;
+	    $query = "SELECT (rate_employee*(SELECT salary FROM employee WHERE emp_id = '".$empID."')) as margin FROM deduction WHERE id = 7 limit 1";
+
+		$query = DB::select(DB::raw($query));
+		return $query[0]->margin;
 	}
 
 
