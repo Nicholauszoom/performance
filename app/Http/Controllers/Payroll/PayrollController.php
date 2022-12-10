@@ -146,7 +146,7 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        //if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        //if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
@@ -162,7 +162,7 @@ class PayrollController extends Controller
 
     public function payroll()
     {
-        // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
 
 
 
@@ -259,9 +259,7 @@ class PayrollController extends Controller
         $data['payroll_state'] = 1;
         $data['title'] = "Payroll Info";
 
-        $data['title'] = "Payroll Info";
-
-        return view('payroll.payroll_info',compact('data'));
+        $this->load->view('payroll_info', $data);
     }
 
     // public function temp_less_payments(){
@@ -461,7 +459,7 @@ class PayrollController extends Controller
         if (isset($payrollMonth)) {
             $empID = auth()->user()->emp_id;
             /*hr*/
-            if (session('mng_paym')) {
+            if ($this->session->userdata('mng_paym')) {
                 $hr = '%569acdfijkmnr%';
                 $roles = $this->payroll_model->role($hr);
                 if ($roles) {
@@ -473,14 +471,14 @@ class PayrollController extends Controller
                                     if ($employee->email) {
 //                                        $empEmail,$empName,$email,$subject,$message
                                         $message = "<p>Hello <b>" . $employee->fname . "</b>,</p>
-                    <p>Be informed payroll of : <b>" . $payrollMonth . "</b> has been prepared by <b>" . session('fname') . "</b> and ready for your review</p>
+                    <p>Be informed payroll of : <b>" . $payrollMonth . "</b> has been prepared by <b>" . $this->session->userdata('fname') . "</b> and ready for your review</p>
                     Please visit <a href =".base_url().'index.php/cipay/approved_financial_payments'." >Fléx Performance</a>
                     <p>
                         <br><br>
                         Thank you,<br>
                         Fléx Performance.
                         </p>";
-                                        $this->sendMail(session('email'), session('fname'),
+                                        $this->sendMail($this->session->userdata('email'), $this->session->userdata('fname'),
                                             $employee->email, 'Reviewed Payroll', $message);
                                     }
                                 }
@@ -491,7 +489,7 @@ class PayrollController extends Controller
             }
 
             /*finance*/
-            if (session('recom_paym')) {
+            if ($this->session->userdata('recom_paym')) {
                 $fn = '%8ghop%';
                 $roles = $this->payroll_model->role($fn);
                 if ($roles) {
@@ -502,14 +500,14 @@ class PayrollController extends Controller
                                 if ($employee->empID != $empID) {
                                     if ($employee->email) {
                                         $message = "<p>Hello <b>" . $employee->fname . "</b>,</p>
-                    <p>Be informed payroll of : <b>" . $payrollMonth . "</b> has been recommended by <b>" . session('fname') . "</b> and ready for your review</p>
+                    <p>Be informed payroll of : <b>" . $payrollMonth . "</b> has been recommended by <b>" . $this->session->userdata('fname') . "</b> and ready for your review</p>
                     Please visit <a href =".base_url().'index.php/cipay/approved_financial_payments'." >Fléx Performance</a>
                     <p>
                         <br><br>
                         Thank you,<br>
                         Fléx Performance.
                         </p>";
-                                        $this->sendMail(session('email'), session('fname'),
+                                        $this->sendMail($this->session->userdata('email'), $this->session->userdata('fname'),
                                             $employee->email, 'Reviewed Payroll', $message);
                                     }
                                 }
@@ -520,7 +518,7 @@ class PayrollController extends Controller
             }
 
             /*director*/
-            if (session('appr_paym')) {
+            if ($this->session->userdata('appr_paym')) {
                 $dr = '%lq%';
                 $roles = $this->payroll_model->role($dr);
                 if ($roles) {
@@ -531,13 +529,13 @@ class PayrollController extends Controller
                                 if ($employee->empID != $empID) {
                                     if ($employee->email) {
                                         $message = "<p>Hello <b>" . $employee->fname . "</b>,</p>
-                    <p>Be informed payroll of : <b>" . $payrollMonth . "</b> has been reviewed by <b>" . session('fname') . "</b> and approved</p>
+                    <p>Be informed payroll of : <b>" . $payrollMonth . "</b> has been reviewed by <b>" . $this->session->userdata('fname') . "</b> and approved</p>
                     <p>
                         <br><br>
                         Thank you,<br>
                         Fléx Performance.
                         </p>";
-                                        $this->sendMail(session('email'), session('fname'),
+                                        $this->sendMail($this->session->userdata('email'), $this->session->userdata('fname'),
                                             $employee->email, 'Reviewed Payroll', $message);
                                     }
                                 }
@@ -597,12 +595,12 @@ class PayrollController extends Controller
         if (!$mail->send()) {
 //            echo 'Mail error';
 //            echo 'Mailer Error: ' . $mail->ErrorInfo;
-            session['email_sent'] = 'false';
+            $this->session->userdata['email_sent'] = 'false';
             redirect($_SERVER['HTTP_REFERER']);
         } else {
 //            $response_array['status'] = 'SENT';
 //            echo json_encode($response_array);
-            session['email_sent'] = 'true';
+            $this->session->userdata['email_sent'] = 'true';
             redirect($_SERVER['HTTP_REFERER']);
 
         }
@@ -611,7 +609,7 @@ class PayrollController extends Controller
 
     public function comission_bonus()
     {
-       // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+       // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
@@ -629,7 +627,7 @@ class PayrollController extends Controller
 
     public function partial_payment()
     {
-       // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+       // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
@@ -648,7 +646,7 @@ class PayrollController extends Controller
 
     public function salary_calculator()
     {
-        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $data['allowances'] = $this->payroll_model->selectAllowances();
             $data['pensions'] = $this->payroll_model->pensionAll();
             $data['title'] = "Salary Calculator";
@@ -725,7 +723,7 @@ class PayrollController extends Controller
     {
         $payrollMonth = $this->uri->segment(3);
         if ($payrollMonth != "") {
-            $empID = session('emp_id');
+            $empID = $this->session->userdata('emp_id');
             $todate = date('Y-m-d');
 
             $check = $this->payroll_model->pendingPayrollCheck();
@@ -733,9 +731,9 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->recommendPayroll($empID, $todate);
                 if ($result == true) {
                     $logData = array(
-                        'empID' => session('emp_id'),
+                        'empID' => $this->session->userdata('emp_id'),
                         'description' => "Recommendation of payroll of date " . $todate,
-                        'agent' => session('agent'),
+                        'agent' => $this->session->userdata('agent'),
                         'platform' => $this->agent->platform(),
                         'ip_address' => $this->input->ip_address()
                     );
@@ -767,7 +765,7 @@ class PayrollController extends Controller
             $payroll_date = $payrollMonth;
             $payroll_month = date('Y-m', strtotime($payrollMonth));
             $todate = date('Y-m-d');
-            $empID = session('emp_id');
+            $empID = $this->session->userdata('emp_id');
 
             $check = $this->payroll_model->payrollcheck($payroll_month);
             if ($check == 0) {
@@ -783,9 +781,9 @@ class PayrollController extends Controller
                     if ($result) {
 
                         $logData = array(
-                            'empID' => session('emp_id'),
+                            'empID' => $this->session->userdata('emp_id'),
                             'description' => "Approved payment of payroll of date " . $payroll_date,
-                            'agent' => session('agent'),
+                            'agent' => $this->session->userdata('agent'),
                             'platform' => $this->agent->platform(),
                             'ip_address' => $this->input->ip_address()
                         );
@@ -1002,9 +1000,9 @@ class PayrollController extends Controller
 
         if ($result == true) {
             $logData = array(
-                'empID' => session('emp_id'),
+                'empID' => $this->session->userdata('emp_id'),
                 'description' => "Generating checklist with arrears payment of payroll of date " . $payrollMonth,
-                'agent' => session('agent'),
+                'agent' => $this->session->userdata('agent'),
                 'platform' => $this->agent->platform(),
                 'ip_address' => $this->input->ip_address()
             );
@@ -1056,9 +1054,9 @@ class PayrollController extends Controller
 
         if ($result == true) {
             $logData = array(
-                'empID' => session('emp_id'),
+                'empID' => $this->session->userdata('emp_id'),
                 'description' => "Generating checklist with arrears payment of payroll of date " . $payrollMonth,
-                'agent' => session('agent'),
+                'agent' => $this->session->userdata('agent'),
                 'platform' => $this->agent->platform(),
                 'ip_address' => $this->input->ip_address()
             );
@@ -1102,7 +1100,7 @@ class PayrollController extends Controller
                         $data = array(
                             'arrear_id' => $arrearID,
                             'amount' => $amountPaid,
-                            'init_by' => session('emp_id'),
+                            'init_by' => $this->session->userdata('emp_id'),
                             'date_confirmed' => $payment_date
                         );
 
@@ -1142,7 +1140,7 @@ class PayrollController extends Controller
                 $data = array(
                     'arrear_id' => $arrearID,
                     'amount' => ($employee->amount - $employee->paid),
-                    'init_by' => session('emp_id'),
+                    'init_by' => $this->session->userdata('emp_id'),
                     'date_confirmed' => $payment_date
                 );
 
@@ -1169,7 +1167,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 0,
-                'confirmed_by' => session('emp_id')
+                'confirmed_by' => $this->session->userdata('emp_id')
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1188,7 +1186,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 1,
-                'confirmed_by' => session('emp_id')
+                'confirmed_by' => $this->session->userdata('emp_id')
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1251,7 +1249,7 @@ class PayrollController extends Controller
         if ($this->uri->segment(3) != '') {
             $updates = array(
                 'status' => 2,
-                'recommended_by' => session('emp_id')
+                'recommended_by' => $this->session->userdata('emp_id')
             );
 
             $arrearID = $this->uri->segment(3);
@@ -1259,9 +1257,9 @@ class PayrollController extends Controller
             if ($result == true) {
 
                 $logData = array(
-                    'empID' => session('emp_id'),
+                    'empID' => $this->session->userdata('emp_id'),
                     'description' => "Recommendation of Arreas on date " . date('Y-m-d'),
-                    'agent' => session('agent'),
+                    'agent' => $this->session->userdata('agent'),
                     'platform' => $this->agent->platform(),
                     'ip_address' => $this->input->ip_address()
                 );
@@ -1980,7 +1978,7 @@ class PayrollController extends Controller
 
     public function mailConfiguration()
     {
-        if (session('vw_settings')) {
+        if ($this->session->userdata('vw_settings')) {
             $data['mails'] = $this->payroll_model->mailConfig();
             $data['title'] = "Mail Configuration";
             $this->load->view('mail_config', $data);

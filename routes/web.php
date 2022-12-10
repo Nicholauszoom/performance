@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+});
     Route::resources([
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
@@ -110,16 +110,16 @@ Route::middleware('auth')->group(function () {
         Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
         Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
-
-Route::group(['prefix' => 'recruitment'], function () {
+    });
+    Route::group(['prefix' => 'recruitment'], function () {
     Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
     Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
     Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
     Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
-});
-Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
-// Password Resetting Routes...
 
+    Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
+// Password Resetting Routes...
+});
 Route::get('/forgot-password', function () {
     return view('auth.forgot-password');
 })->middleware('guest')->name('password.request');
@@ -144,7 +144,7 @@ Route::get('/reset-password/{token}', function ($token) {
 
 
         
-
+        Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
     Route::any('/attendance' ,'attendance')->name('attendandance.attendance'); 
     Route::any('/attendees' ,'attendees')->name('attendandance.attendees'); 
     Route::any('/leave' ,'leave')->name('attendandance.leave'); 
