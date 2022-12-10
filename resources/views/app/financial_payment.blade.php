@@ -77,7 +77,7 @@
                                 Incentives
                             </a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <a href="#arrearsTab" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
                                 <i class="ph-at me-2"></i>
@@ -97,7 +97,7 @@
                                 <i class="ph-at me-2"></i>
                                 (all)Arrears
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
@@ -1162,15 +1162,21 @@
 </div>
 
 
-@include("app/includes/imprest_operations");
-@include("app/includes/overtime_operations");
-@include("app/includes/update_allowances");
-@include("app/includes/loan_operations");
 
-<!-- fstdropdown -->
-<script src="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.js"></script>
 
-<script type="text/javascript">
+ @endsection
+
+ @push('footer-script')
+
+ @include('app.includes.imprest_operations')
+
+ @include('app.includes.overtime_operations')
+ @include("app.includes.update_allowances")
+    @include("app.includes.loan_operations")
+
+
+
+ <script type="text/javascript">
 
     function resolveImprest(id) {
         if (confirm("Are You Sure You Want To Resolve This Imprest? (Action is NOT REVERSIBLE)") == true) {
@@ -1553,7 +1559,7 @@
             mouse_over: false,
 
             icon_type: 'class',
-            template: '<div data-growl="container" class="alert" role="alert">' +
+            template: '<div data-growl="container" class="alert" role="alert" style="padding-bottom:20px;">' +
                 '<button type="button" class="close" data-growl="dismiss">' +
                 '<span aria-hidden="true">&times;</span>' +
                 '<span class="sr-only">Close</span>' +
@@ -1568,4 +1574,4 @@
 
 </script>
 
- @endsection
+ @endpush
