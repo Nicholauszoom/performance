@@ -115,14 +115,6 @@ Route::middleware('auth')->group(function () {
         Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
         Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
-
-
-
-
-
-
-
-
         Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
         Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
         Route::any('p10', [ReportController::class, 'p10'])->name('reports.p10');
@@ -131,48 +123,12 @@ Route::middleware('auth')->group(function () {
         Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
         Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
         Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
-
-
-
-
-
-
         Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
-
-
-
-
         Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
         Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
         Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
         Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
         Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
     });
@@ -231,6 +187,7 @@ Route::prefix('flex/attendance')->controller(AttendanceController::class)->group
 Route::prefix('')->controller(BaseController::class)->group(function (){
 
     Route::any('/index' ,'index')->name('index');
+    Route::any('/' ,'index')->name('index');
     Route::any('/netTotalSummation' ,'netTotalSummation')->name('netTotalSummation');
     Route::any('/register' ,'register')->name('register');
     Route::any('/register_submit' ,'register_submit')->name('register_submit');
@@ -241,6 +198,7 @@ Route::prefix('')->controller(BaseController::class)->group(function (){
 Route::prefix('flex')->controller(GeneralController::class)->group(function (){
 
 Route::any('/index','index')->name('flex.index');
+Route::any('/','index')->name('flex.index');
 Route::any('/password_check/{$str}','password_check')->name('flex.password_check');
 Route::any('/login_info','login_info')->name('flex.login_info');
 Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
@@ -739,6 +697,7 @@ Route::prefix('flex/project')->controller(ProjectController::class)->group(funct
 
 
 Route::any('/index','index')->name('project.index');
+Route::any('/','index')->name('project.index');
 Route::any('/employeeTotalPercentAllocation','employeeTotalPercentAllocation')->name('project.employeeTotalPercentAllocation');
 Route::any('/employeeRellocation','employeeRellocation')->name('project.employeeRellocation');
 Route::any('/fetchActivity','fetchActivity')->name('project.fetchActivity');
