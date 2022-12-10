@@ -94,12 +94,12 @@ class ImprestController extends Controller
 
   public function imprest_info(Request $request)
   {
-    $imprestID =  base64_decode($this->input->get('id'));
+    $imprestID =  base64_decode($request->id);
 
-    $data['imprest_details'] =  $this->imprest_model->getImprest($imprestID);
-    $data['requirements'] =  $this->imprest_model->getImprestRequirements($imprestID);
-    $data['title'] = "Imprest";
-    return view('app.imprest_info', $data);
+    $imprest_details =  $this->imprest_model->getImprest($imprestID);
+    $requirements =  $this->imprest_model->getImprestRequirements($imprestID);
+    $title = "Imprest";
+    return view('app.imprest_info',compact('title','imprest_details','requirements'));
   }
 
 

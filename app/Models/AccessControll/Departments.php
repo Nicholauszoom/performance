@@ -12,7 +12,8 @@ class Departments extends Model
 {
     use HasFactory;
     protected $table = 'department';
-
+    public $timestamps = false;
+    
     protected $fillable = [
         'name',
         'code',
@@ -23,7 +24,6 @@ class Departments extends Model
         'department_pattern',
         'parent_pattern',
         'level',
-        'created_by',
     ];
 
     function department($id)

@@ -130,9 +130,9 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/costCenter') }}">Cost Center </a></li>
+                        
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/department') }}">Departments </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/costCenter') }}">Cost Center </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/branch') }}">Company Branches </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/position') }}">Positions</a></li>
                         @if (session('mng_emp'))

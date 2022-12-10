@@ -229,13 +229,10 @@ class Payroll extends Model
 
 
      public function pendingPayroll_month(){
-        $query = "payroll_date as payroll_month  WHERE state = 1 OR state = 2  LIMIT 1";
-        $record = DB::table('payroll_months')
-        ->select(DB::raw($query));
-
-        $records = $record->count();
-        if ($records==1) {
-            $row = $record->row();
+        $query ="SELECT payroll_date as payroll_month FROM payroll_months WHERE state = 1 OR state = 2  LIMIT 1";
+        $records = DB::select(DB::raw($query));
+        if (count($records)==1) {
+            $row = $records[0];
             return $row->payroll_month;
         } else return 0;
     }

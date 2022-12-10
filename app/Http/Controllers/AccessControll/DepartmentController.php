@@ -39,7 +39,6 @@ class DepartmentController extends Controller
             'name' => $request->name,
             'code' => 1,
             'type' => 1,
-            'department_head_id' => 1,
             'reports_to' => 1,
             'State' => 1,
             'department_pattern' => 'UNKNOWN',
@@ -48,7 +47,7 @@ class DepartmentController extends Controller
             'created_by' => Auth::user()->name,
         ]);
 
-        SysHelpers::AuditLog(3, 'Employee Created', $request);
+        // SysHelpers::AuditLog(3, 'Employee Created', $request);
 
         return redirect(route('departments.index'));
     }

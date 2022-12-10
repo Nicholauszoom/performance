@@ -16,6 +16,9 @@ use App\CustomModels\flexFerformanceModel;
 use App\CustomModels\ReportsModel;
 use App\Models\AttendanceModel;
 use App\Models\ProjectModel;
+use Illuminate\Support\Facades\DB;
+use App\Models\AccessControll\Departments;
+
 
 class GeneralController extends Controller
 {
@@ -284,13 +287,18 @@ class GeneralController extends Controller
   public function department(Request $request)
       {
        $id =session('emp_id');
-       $data['employee'] =  $this->flexperformance_model->customemployee();
+       $data['employee'] = $this->flexperformance_model->customemployee() ;
        $data['cost_center'] =  $this->flexperformance_model->costCenter();
        $data['parent_department'] =  $this->flexperformance_model->departmentdropdown();
        $data['department'] = $this->flexperformance_model->alldepartment();
        $data['inactive_department'] = $this->flexperformance_model->inactive_department();
-      $data['title']="Department";
-      return view('app.department', $data);
+       $data['departments'] = Departments::all();
+       $data['title']="Department";
+
+       
+      return view('app.department', [
+          'data' => $data,
+      ]);
    }
 
 
@@ -2009,7 +2017,7 @@ public function activatePosition(Request $request)
 
             $title = "Pending Payments";$parent = 'Payroll';$child = "pending-payments";
 
-            return view('payroll.financial_payment',compact('title','parent','child','data'));
+            return view('app.financial_payment',compact('title','parent','child','data'));
 
 
         // }else{
