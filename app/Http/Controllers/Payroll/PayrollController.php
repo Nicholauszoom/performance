@@ -119,7 +119,7 @@ class PayrollController extends Controller
 
                         $description  = "Run payroll of date " . $payroll_date;
 
-                        $result = SysHelpers::auditLog(1,$description,$request);
+                        //$result = SysHelpers::auditLog(1,$description,$request);
 
                         echo "<p class='alert alert-info text-center'>Payroll was Successifully Run,(Loans and Salaries Updated!)</p>";
                     } else {
@@ -762,9 +762,9 @@ class PayrollController extends Controller
 
     }
 
-    function runpayroll()
+    function runpayroll($pdate)
     {
-        $payrollMonth = $this->uri->segment(3);
+        $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
             // DATE MANIPULATION
@@ -786,15 +786,10 @@ class PayrollController extends Controller
                     $result = $this->partial_payment_manipulation($payroll_date);
                     if ($result) {
 
-                        $logData = array(
-                            'empID' => session('emp_id'),
-                            'description' => "Approved payment of payroll of date " . $payroll_date,
-                            'agent' => session('agent'),
-                            'platform' => $this->agent->platform(),
-                            'ip_address' => $this->input->ip_address()
-                        );
+                
+                        $description ="Approved payment of payroll of date " . $payroll_date;
 
-                        $result = $this->flexperformance_model->insertAuditLog($logData);
+                  //  $result = SysHelpers::auditLog(1,$description,$request);
 
                         $response_array['status'] = "OK";
                         $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Run and Approved Successifully (Loans, Deductions and Salaries Updated!)</p>";
