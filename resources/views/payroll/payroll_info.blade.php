@@ -87,90 +87,83 @@
                 </div>
 
                 <div class="card-body shadow-none border-0">
-                    <table class="table border-0">
-                        <tbody>
-                            <tr>
-                                <td><h5>Salaries : </h5></td>
-                                <td>{{ number_format($salary,2) }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="x_content">
+                        <h5> Salaries:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($salary,2); ?></b></h5>
+                        <h5>Total Allowances:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($allowances,2); ?></b></h5>
+                        <h5> Pension(Employer):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($pension_employer,2); ?></b>
+                        </h5>
+                        <h5> Pension (Employee):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($pension_employee,2); ?></b>
+                        </h5>
+
+
+                        <?php if ($meals) { ?>
+                        <h5> Meals:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($meals,2); ?></b></h5>
+                        <?php } ?>
+                        <h5> Taxdue (PAYE):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($taxdue,2); ?></b></h5>
+                        <h5> WCF:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($wcf,2); ?></b></h5>
+                        <h5> SDL:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($sdl,2); ?></b></h5>
+
+                    </div>
                 </div>
             </div>
-            <div class="text-center">
 
-            </div>
-
-            <div class="content"></div>
-
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                    <h5> Salaries:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($salary,2); ?></b></h5>
-                    <h5>Total Allowances:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($allowances,2); ?></b></h5>
-                    <h5> Pension(Employer):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($pension_employer,2); ?></b>
-                    </h5>
-                    <h5> Pension (Employee):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($pension_employee,2); ?></b>
-                    </h5>
-
-
-                    <?php if ($meals) { ?>
-                    <h5> Meals:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($meals,2); ?></b></h5>
-                    <?php } ?>
-                    <h5> Taxdue (PAYE):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($taxdue,2); ?></b></h5>
-                    <h5> WCF:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($wcf,2); ?></b></h5>
-                    <h5> SDL:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($sdl,2); ?></b></h5>
-
-                </div>
-            </div>
         </div>
 
+        <hr>
+
         <?php if($payrollState == 0){ ?>
-        <div class="col-md-6 col-sm-6 col-xs-12 offset-4">
-            <div class="x_panel">
+        <div class="col-md-6 col-sm-6 col-xs-12 offset-3">
+            <div class="card border-0 shadow-none">
+
                 <div id="resultConfirmation"></div>
-                <div class="x_title">
-                    <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>More Details</b></h2>
-                    <div class="clearfix"></div>
+
+                <div class="card-header border-0">
+                    <h4 class="ms-2">More Details</h4>
                 </div>
+
+            </div>
+
+            <div class="x_panel">
+
+
                 <div class="x_content">
                     <?php if($payrollState == 1){ ?>
-                    <h5> Normal Allowances:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(($total_allowances-$total_overtimes-$total_bonuses),2); ?></b>
-                    </h5>
-                    <h5> Overtime:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($total_overtimes,2); ?></b></h5>
-                    <h5> Incentives:
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($total_bonuses,2); ?></b></h5>
-                    <?php } ?>
-                    <?php if ($paid_heslb) {?>
-                    <h5> HESLB (Total Repayment):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($paid_heslb,2); ?></b></h5>
-                    <?php if ($remained_heslb>0) {?>
-                    <h5> HESLB (Total Outstanding):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($remained_heslb,2); ?></b></h5>
-                    <?php }else {?>
-                    <h5> HESLB (Total Outstanding):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(0,2); ?></b></h5>
-                    <?php } ?>
+                        <h5> Normal Allowances:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(($total_allowances-$total_overtimes-$total_bonuses),2); ?></b>
+                        </h5>
+                        <h5> Overtime:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($total_overtimes,2); ?></b></h5>
+                        <h5> Incentives:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($total_bonuses,2); ?></b></h5>
+                        <?php } ?>
+
+                        <?php if ($paid_heslb) {?>
+                        <h5> HESLB (Total Repayment):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($paid_heslb,2); ?></b></h5>
+                        <?php if ($remained_heslb>0) {?>
+                        <h5> HESLB (Total Outstanding):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($remained_heslb,2); ?></b></h5>
+                        <?php }else {?>
+
+                        <h5> HESLB (Total Outstanding):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(0,2); ?></b></h5>
+                        <?php } ?>
                     <?php }?>
-                    <?php if ($paid) {?>
-                    <h5> Loans (Total Returns):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($paid,2); ?></b></h5>
-                    <h5> Loans (Total Outstanding):
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($remained,2); ?></b></h5>
-                    <?php }?>
+
+                        <?php if ($paid) {?>
+                        <h5> Loans (Total Returns):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($paid,2); ?></b></h5>
+                        <h5> Loans (Total Outstanding):
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($remained,2); ?></b></h5>
+                        <?php }?>
                     <!--                      <h5> Other Deductions:-->
                     <!--                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>--><?php //echo number_format($total_deductions,2); ?>
                     <!--</b></h5> -->
@@ -180,10 +173,9 @@
 
                 <div class="x_content">
                     <?php if($payrollState == 0 /*&&  session('mng_emp')*/){ ?>
-                    <a href="javascript:void(0)" onclick="generate_checklist()"><button type="button"
-                            class="btn btn-success"><b>Run Full Payment <br>
-                                <!-- <small>Full Payment</b></small></button></a> -->
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="javascript:void(0)" onclick="generate_checklist()">
+                            <button type="button" class="btn btn-default text-white"><b>Full Payment <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php if($state==2 || $state==1){ ?>
                     <!-- <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}"><button
                             type="button" name="print" value="print" class="btn btn-warning"><b>PAY CHECKLIST<br>

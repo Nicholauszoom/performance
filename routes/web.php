@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
         'users' => UsersController::class,
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
+        'skill' => SkillsController::class,
+        'trainingApp'=>TrainingAppController::class,
     ]);
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
@@ -67,6 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
         Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
         Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
+        Route::get('/profile', 'profile')->name('employee.profile');
 
         // Imprest
         Route::get('/workforce-management/imprest', 'imprest')->name('imprest.index');
@@ -79,6 +82,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
+ //route for learning and development
+ Route::get('/skill', [SkillsController::class, 'skill'])->name('skill');
+ Route::get('/skillsList', [SkillsController::class, 'skillsList'])->name('skillsList');
+ Route::post('/addSkills', [SkillsController::class, 'skills'])->name('skills');
+ Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
+ Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
+ //end learning and development
     Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
     Route::post('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
     Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');

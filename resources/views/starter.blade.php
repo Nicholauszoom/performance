@@ -13,7 +13,7 @@
 
 <div class="card">
     <div class="card-header border-0">
-        <h5 class="mb-0 text-muted">Audit Trail</h5>
+        <h5 class="mb-0 text-muted">Starter</h5>
     </div>
 
 
