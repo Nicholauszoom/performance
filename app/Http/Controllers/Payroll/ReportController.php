@@ -11,6 +11,8 @@ use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
+use Elibyy\TCPDF\Facades\TCPDF;
+
 // use PDF;
 // use App\Helpers\SysHelpers;
 class ReportController extends Controller
@@ -105,7 +107,7 @@ class ReportController extends Controller
 
    function p9(Request $request)  {
 
-    dd($request->all());
+
       if ($request->input('run')) {
         $payrolldate =$request->input('payrolldate');
           $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -119,11 +121,23 @@ class ReportController extends Controller
         $data['info']= $this->reports_model->company_info();
         $data['payroll_date']= $payrolldate;
         // dd("here");
-         return view('app.reports/p9', $data); 
+
+        $paye=$data['paye'];
+        $total=$data['total'];
+        $info=$data['info'];
+        $payroll_date=$data['payroll_date'];
+
+        // dd(app_path());
+
+        include(app_path() . '\reports\p9.php');
+        
+        //  return view('app.reports/p9', $data); 
     }    
 }
 
 function p10(Request $request)  {
+
+    dd("here");
 
     $period =$request->input('period');
     $year =$request->input('payrolldate');
@@ -165,7 +179,14 @@ function p10(Request $request)  {
         }
         $data['info']= $this->reports_model->company_info();
 
-         return view('app.reports/p10', $data);
+
+$paye=$data['paye'];
+$sdl=$data['sdl'];
+$total=$data['total'];
+$info=$data['info'];
+
+        include(app_path() . '\reports\p10.php');
+        //  return view('app.reports/p10', $data);
     }
     else{
         exit('NO PAYROLL');
@@ -187,7 +208,15 @@ function heslb(Request $request)  {
     }
     $data['info']= $this->reports_model->company_info();
     $data['payrolldate'] = $payrolldate;
-     return view('app.reports/heslb', $data);
+    $payrolldate=$data['payrolldate'];
+    $heslb=$data['heslb'];
+    $total=$data['total'];
+    $info=$data['info'];
+
+
+    include(app_path() . '\reports\heslb.php');
+    
+    //  return view('app.reports/heslb', $data);
 
 }
 
@@ -213,7 +242,15 @@ function pension(Request $request)  {
     $data['info']= $this->reports_model->company_info();
     $data['payroll_month'] = $payrollMonth;
     $data['pension_fund'] = $pensionFund;
-     return view('app.reports/pension', $data);
+
+$pension=$data['pension'];
+$total=$data['total'];
+$info=$data['info'];
+$payroll_month=$data['payroll_month'];
+$pension_fund=$data['pension_fund'];
+
+include(app_path() . '\reports\pension.php');
+    //  return view('app.reports/pension', $data);
 
 }
 
@@ -240,7 +277,14 @@ function wcf(Request $request)  {
 
         $data['info']= $this->reports_model->company_info();
         $data['payroll_month'] = $yyyy."-".$mm."-".$dd;
-         return view('app.reports/wcf', $data);
+
+        $wcf=$data['wcf'];
+        $totalwcf=$data['totalwcf'];
+        $info=$data['info'];
+        $payroll_month=$data['payroll_month'];
+
+        include(app_path() . '\reports\wcf.php');
+        //  return view('app.reports/wcf', $data);
     }
 
 }
@@ -287,8 +331,23 @@ function employment_cost(Request $request)  {
         $data['total_overtimes'] =  $this->payroll_model->total_overtimes($payrollMonth);
         $data['payroll_date']= $payrollMonth;
         $data['payroll_month'] = $payrollMonth;
-        echo json_encode($data);
-         return view('app.reports/employment_cost', $data);
+        // echo json_encode($data);
+
+$info=$data['info'];
+$authorization=$data['authorization'];
+$employee_list=$data['employee_list'];
+$take_home=$data['take_home'];
+$payroll_totals=$data['payroll_totals'];
+$total_allowances=$data['total_allowances'];
+$total_bonuses=$data['total_bonuses'];
+$total_loans=$data['total_loans'];
+$total_deductions=$data['total_deductions'];
+$total_overtimes=$data['total_overtimes'];
+$payroll_date=$data['payroll_date'];
+$payroll_month=$data['payroll_month'];
+
+include(app_path() . '\reports\employment_cost.php');
+        //  return view('app.reports/employment_cost', $data);
     //}
 
 }
@@ -330,7 +389,12 @@ public function loanreport(Request $request)
     $data['loan'] =  $this->reports_model->loanreport3($dates, $datee);
     $data['title']="List of COMPLETED Loans From ".$dates. " to ".$datee;
   }
-     return view('app.reports/loan_report', $data);
+
+  $loan=$data['loan'];
+$title=$data['title'];
+include(app_path() . '\reports\loan_report.php');
+
+    //  return view('app.reports/loan_report', $data);
   }
 
   }
@@ -358,7 +422,13 @@ public function loanreport(Request $request)
     $data['leave'] =  $this->attendance_model->leavereport1($dates, $datee);
     $data['title']="List of Employees Who went to Leave From ".$dates. " to ".$datee;
       $data['showbox'] = 1;
-     return view('app.customleave_report', $data);
+        
+      $showbox=$data['showbox'];
+      $leave=$data['leave'];
+      $title=$data['title'];
+
+      include(app_path() . '\reports\customleave_report.php');
+    //  return view('app.customleave_report', $data);
   }
 
   elseif($request->input('viewindividual')){
@@ -371,14 +441,26 @@ public function loanreport(Request $request)
       $data['showbox'] = 0;
       $data['customleave'] =  $this->attendance_model->customleave();
       $data['leave'] =  $this->attendance_model->leavereport2($id);
-       return view('app.customleave_report', $data);
+    //    return view('app.customleave_report', $data);
+
+     $showbox=$data['showbox'];
+      $leave=$data['leave'];
+      $title=$data['title'];
+
+      include(app_path() . '\reports\customleave_report.php');
 
     }
 
       $data['showbox'] = 0;
     $data['leave'] =  $this->attendance_model->leavereport2(session('emp_id'));
       $data['customleave'] =  $this->attendance_model->customleave();
-       return view('app.customleave_report', $data);
+    //    return view('app.customleave_report', $data);
+
+     $showbox=$data['showbox'];
+      $leave=$data['leave'];
+      $title=$data['title'];
+
+      include(app_path() . '\reports\customleave_report.php');
 
       }
 
@@ -430,7 +512,28 @@ public function loanreport(Request $request)
                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID,$payroll_date);
                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID,$payroll_date);
                 $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
-                 return view('app.reports/payslip', $data);
+
+
+                $slipinfo=$data['slipinfo'];
+                $leaves=$data['leaves'];
+                $annualLeaveSpent=$data['annualLeaveSpent'];
+                $allowances=$data['allowances'];
+                $deductions=$data['deductions'];
+                $loans=$data['loans'];
+                $salary_advance_loan=$data['salary_advance_loan'];
+                $total_allowances=$data['total_allowances'];
+                $total_pensions=$data['total_pensions'];
+                $total_deductions=$data['total_deductions'];
+                $companyinfo=$data['companyinfo'];
+                $arrears_paid=$data['arrears_paid'];
+                $arrears_paid_all=$data['arrears_paid_all'];
+                $arrears_all=$data['arrears_all'];
+                $arrears_paid=$data['arrears_paid'];
+                $paid_with_arrears=$data['paid_with_arrears'];
+                $paid_with_arrears_d=$data['paid_with_arrears_d'];
+                $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
+
+                 include(app_path() . '\reports\customleave_report.php');
 
             }
         }else{
@@ -483,6 +586,27 @@ public function loanreport(Request $request)
                     $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID,$payroll_date);
                     $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                     $data_all['dat'][$payroll_emp_id->empID]= $data;
+
+                        $slipinfo=$data['slipinfo'];
+                        $leaves=$data['leaves'];
+                        $annualLeaveSpent=$data['annualLeaveSpent'];
+                        $allowances=$data['allowances'];
+                        $deductions=$data['deductions'];
+                        $loans=$data['loans'];
+                        $salary_advance_loan=$data['salary_advance_loan'];
+                        $total_allowances=$data['total_allowances'];
+                        $total_pensions=$data['total_pensions'];
+                        $total_deductions=$data['total_deductions'];
+                        $companyinfo=$data['companyinfo'];
+                        $arrears_paid=$data['arrears_paid'];
+                        $arrears_paid_all=$data['arrears_paid_all'];
+                        $arrears_all=$data['arrears_all'];
+                        $arrears_paid=$data['arrears_paid'];
+                        $paid_with_arrears=$data['paid_with_arrears'];
+                        $paid_with_arrears_d=$data['paid_with_arrears_d'];
+                        $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
+
+                        include(app_path() . '\reports\payslip.php');
                 }
 
                 $data_all['emp_id'] = $payroll_emp_ids;
@@ -539,7 +663,29 @@ public function loanreport(Request $request)
                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID,$payroll_date);
                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID,$payroll_date);
                 $data['salary_advance_loan_remained'] = $this->reports_model->temp_loansAmountRemained($empID, $payroll_date);
-                 return view('app.reports/payslip', $data);
+
+
+                $slipinfo=$data['slipinfo'];
+                $leaves=$data['leaves'];
+                $annualLeaveSpent=$data['annualLeaveSpent'];
+                $allowances=$data['allowances'];
+                $deductions=$data['deductions'];
+                $loans=$data['loans'];
+                $salary_advance_loan=$data['salary_advance_loan'];
+                $total_allowances=$data['total_allowances'];
+                $total_pensions=$data['total_pensions'];
+                $total_deductions=$data['total_deductions'];
+                $companyinfo=$data['companyinfo'];
+                $arrears_paid=$data['arrears_paid'];
+                $arrears_paid_all=$data['arrears_paid_all'];
+                $arrears_all=$data['arrears_all'];
+                $arrears_paid=$data['arrears_paid'];
+                $paid_with_arrears=$data['paid_with_arrears'];
+                $paid_with_arrears_d=$data['paid_with_arrears_d'];
+                $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
+
+                include(app_path() . '\reports\payslip.php');
+                //  return view('app.reports/payslip', $data);
 
             }
 
@@ -576,7 +722,12 @@ function backup_payslip(Request $request)  {
             } else{
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $datee, $year_month, $date_one_year_back);
                 $data['companyinfo']= $this->reports_model->company_info();
-                 return view('app.reports/payslip_test', $data);
+
+
+                $slipinfo=$data['slipinfo'];
+                $companyinfo=$data['companyinfo'];
+
+                include(app_path() . '\reports\payslip_test.php');
 
             }
 
@@ -591,7 +742,14 @@ function backup_payslip(Request $request)  {
         $data['adhocs'] = $this->reports_model->adhocTasks($empID);
         $data['empInfo'] = $this->reports_model->employeeInfo($empID);
         $data['empID'] = $empID;
-         return view('app.reports/kpi', $data);
+
+        $strategies=$data['strategies'];
+        $adhocs=$data['adhocs'];
+        $empInfo=$data['empInfo'];
+        $empID=$data['empID'];
+
+        include(app_path() . '\reports\payslip_test.php');
+        //  return view('app.reports/kpi', $data);
 
     }
 
@@ -611,7 +769,13 @@ function backup_payslip(Request $request)  {
             $toDate = date('Y-m-d');
             $data['employee_list'] = $this->reports_model-> attendance_list($attendance_date);
             $data['payroll_month'] = $attendance_date;
-             return view('app.reports/attendance_report', $data);
+
+            $info=$data['info'];
+            $employee_list=$data['employee_list'];
+            $payroll_month=$data['payroll_month'];
+
+            include(app_path() . '\reports\attendance_report.php');
+            //  return view('app.reports/attendance_report', $data);
         }
 
     }
