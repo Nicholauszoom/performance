@@ -10,12 +10,11 @@ class AuditTrail extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_name',
-        'user_email',
-        'user_id',
-        'action_performed',
+        'empID',
+        'platform',
+        'description',
         'ip_address',
-        'user_agent',
-        'risk',
+        'agent',
+        'due_date',
     ];
 }

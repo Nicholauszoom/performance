@@ -19,7 +19,7 @@
             <h3 class="text-muted">Roles and Permission Groups</h3>
 
             @if (session('mng_roles_grp'))
-            <button class="btn btn-main"> <i class="ph-plus me-2"></i>Create New Group</button>
+            <button class="btn btn-main"> <i class="ph-plus me-2"></i> New Group</button>
             @endif
         </div>
       </div>
@@ -36,23 +36,25 @@
         </thead>
 
         <tbody>
-            @foreach ($rolesgroups as $row)
-            <tr id = "{{ "recordRoleGroup" .$row->id }}">
-              <td width="1px">{{ $row->SNo }}</td>
+          <?php foreach ($rolesgroups as $row) { ?>
+            <tr id = "recordRoleGroup<?php echo $row->id; ?>">
+              <td width="1px"><?php echo $row->SNo; ?></td>
               <td>{{ $row->name}}</td>
-              @if( session('mng_roles_grp'))
+              <?php if( session('mng_roles_grp')){ ?>
                 <td class="options-width">
-                    @if($row->type>0)
-                      <a  href="{{ url('/flex/groups/?id="' .base64_encode($row->id)) }}" title="Info and Details" class="icon-2 info-tooltip">
-                        <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
-                      </a>
+                  <?php if($row->type>0){ ?>
+                    <a  href="<?php echo  url('').'/flex/groups/?id='.base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip">
+                      <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                    </a>
 
-             <a href="javascript:void(0)" onclick="deleteRoleGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-             <?php }  ?>
-             </td>
-            <?php }  ?>
-              </tr>
-            <?php }  ?>
+                    <a href="javascript:void(0)" onclick="deleteRoleGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip">
+                      <button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button>
+                    </a>
+                  <?php }  ?>
+                </td>
+              <?php }  ?>
+            </tr>
+          <?php }  ?>
         </tbody>
       </table>
 
@@ -60,7 +62,52 @@
   </div>
   {{-- /col --}}
 
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between">
+          <h3 class="text-muted">Roles </h3>
 
+          @if (session('mng_roles_grp'))
+          <button class="btn btn-main"> <i class="ph-plus me-2"></i> New Role</button>
+          @endif
+        </div>
+      </div>
+
+      <table  class="table table-bordered">
+        <thead>
+          <tr>
+            <th>S/N</th>
+            <th>Name</th>
+            <?php if( session('mng_roles_grp')){ ?>
+            <th>Option</th>
+          <?php } ?>
+          </tr>
+        </thead>
+
+
+        <tbody>
+          <?php
+          // if ($department->num_rows() > 0){
+            foreach ($role as $row) { ?>
+            <tr id = "recordRole<?php echo $row->id; ?>">
+              <td width="1px"><?php echo $row->SNo; ?></td>
+              <td><?php echo $row->name; ?></td>
+            <?php if( session('mng_roles_grp')){ ?>
+              <td class="options-width">
+              <a  href="<?php echo  url(''); ?>/flex/role_info/?id=".base64_encode($row->id); ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+
+             <a href="javascript:void(0)" onclick="deleteRole(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+
+             <!-- <a href="<?php echo  url(''); ?>/flex/deleterole/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a> -->
+             </td>
+           <?php } ?>
+              </tr>
+            <?php } //} ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 
