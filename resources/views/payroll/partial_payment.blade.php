@@ -126,7 +126,7 @@ $partial_payments = $data['partial_payments'];
                                     </option> <?php } ?>
                                 </select>
                             </div>
-                            <span class="text-danger"><?php echo form_error("linemanager"); ?></span>
+                            <span class="text-danger"><?php //echo form_error("linemanager"); ?></span>
                         </div>
 
                         <div class="form-group">
