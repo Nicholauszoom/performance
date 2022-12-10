@@ -51,7 +51,7 @@ class ProjectController extends Controller
 
 
     // $this->flexperformance_model = new flexperformance_model();
-    $this->performance_model = new FlexPerformanceModel();
+    $this->performance_model = new PerformanceModel();
     $this->imprest_model = new ImprestModel();
     $this->reports_model = new ReportModel();
     $this->attendance_model = new AttendanceModel();
