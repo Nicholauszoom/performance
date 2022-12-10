@@ -19,12 +19,12 @@
 <div class="card">
 
     <div class="card-header">
-        Employee Payslip
+        Employee
     </div>
 
     <div class="card-body">
         <div class="mb-3">
-            <label class="form-label">Employee Type:</label>
+            <label class="form-label">Employee Type hjjj:</label>
             <select class="form-control select">
                 <option value="AZ">Active</option>
                 <option value="CO">Exited</option>
@@ -82,7 +82,16 @@
 <div class="card">
 
     <div class="card-body">
-        Payslip Mail Delivery List
+        <div class="card-header">
+            <div class="d-flex justify-content-center align-items-center">
+                <h5>Payslip Mail Delivery List</h5>
+
+                <button class="btn btn-main">
+                    <i class="ph-plus me-2"></i> Apply Overtime
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <table class="table datatable-basic">
