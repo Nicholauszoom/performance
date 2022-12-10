@@ -12,8 +12,8 @@
 
 <?php
 
-   $CI_Model = get_instance();
-   $CI_Model = $this->load->model('flexperformance_model');
+   //$CI_Model = get_instance();
+   //$CI_Model = $this->load->model('flexperformance_model');
   ?>
 
 

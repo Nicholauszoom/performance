@@ -30,7 +30,7 @@ class AttendanceModel extends Model
 
 	function attendees($date)
 	{
-		$query ="SELECT @s:=@s+1 as SNo, e.emp_id, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(att.due_in as date) as DATE_IN,   CAST(att.due_in as time) as time_in, IF( CAST(att.due_out as time)= CAST(att.due_in as time), 'NOT SIGNED OUT', CAST(att.due_out as time) ) as time_out FROM employee e, attendance att, position p, department d, (SELECT @s:=0) as s WHERE att.empID = e.emp_id and e.department = d.id and e.position = p.id and  CAST(att.due_in as date) = '".$date."' and d.id = '".$this->session->userdata('departmentID')."'";
+		$query ="SELECT @s:=@s+1 as SNo, e.emp_id, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(att.due_in as date) as DATE_IN,   CAST(att.due_in as time) as time_in, IF( CAST(att.due_out as time)= CAST(att.due_in as time), 'NOT SIGNED OUT', CAST(att.due_out as time) ) as time_out FROM employee e, attendance att, position p, department d, (SELECT @s:=0) as s WHERE att.empID = e.emp_id and e.department = d.id and e.position = p.id and  CAST(att.due_in as date) = '".$date."' and d.id = '".session('departmentID')."'";
 
 		return DB::select(DB::raw($query));
 	}
@@ -54,7 +54,7 @@ class AttendanceModel extends Model
 	{
 		$query =" SELECT @s:=@s+1 SNo, lt.type as TYPE, p.name as POSITION, d.name as DEPARTMENT,  l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l,position p, leave_type lt, department d, employee e,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id  and e.line_manager = '".$id."'" ;
 		
-		return $query;
+		return DB::select(DB::raw($query));
 	}
 
 
@@ -62,35 +62,35 @@ class AttendanceModel extends Model
 	{
 		$query =" SELECT @s:=@s+1 SNo, lt.type as TYPE, p.name as POSITION, d.name as DEPARTMENT,  l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l,position p, leave_type lt, department d, employee e,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id  and e.line_manager = '".$id."' UNION SELECT @s:=@s+1 SNo, p.name as POSITION, lt.type as TYPE, d.name as DEPARTMENT,   l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l, leave_type lt,position p, department d, employee e, (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id and not l.status = '2' and not l.status = '0' and not e.emp_id = '".$id."'" ;
 		
-		return $query;
+		return DB::select(DB::raw($query));
 	}
 
 
 	function leaveconfirm($id)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo, p.name as POSITION, lt.type as TYPE, d.name as DEPARTMENT,   l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l, leave_type lt,position p, department d, employee e, (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id and not l.status = '2' and not l.status = '0' and not e.emp_id = '".$id."' ");
+		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, lt.type as TYPE, d.name as DEPARTMENT,   l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l, leave_type lt,position p, department d, employee e, (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id and not l.status = '2' and not l.status = '0' and not e.emp_id = '".$id."' ";
 		
-		return $query;
+		return DB::select(DB::raw($query));
 	}
 
 
 	function myleave($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as type, l.* FROM leave_application l, leave_type lt,  (SELECT @s:=0) as s WHERE l.nature=lt.id and l.empID='".$empID."' ORDER BY l.id DESC");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as type, l.* FROM leave_application l, leave_type lt,  (SELECT @s:=0) as s WHERE l.nature=lt.id and l.empID='".$empID."' ORDER BY l.id DESC";
 		
 		return DB::select(DB::raw($query));
 	}
 	
 	function leave_line($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager = '".$empID."' AND NOT e.emp_id =  '".$empID."'  ");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager = '".$empID."' AND NOT e.emp_id =  '".$empID."'  ";
 		
 		return DB::select(DB::raw($query));
 	}
 
 	function other_leaves($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND NOT e.emp_id =  '".$empID."'  ");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND NOT e.emp_id =  '".$empID."'  ";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -98,14 +98,14 @@ class AttendanceModel extends Model
 	
 	function leave_hr()
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND l.status IN(1,2,5) ");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND l.status IN(1,2,5) ";
 		
 		return DB::select(DB::raw($query));
 	}
 	
 	function leave_line_hr($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND (e.line_manager =  '".$empID."' OR l.status IN(1,2,5))  ORDER BY l.id DESC ");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND (e.line_manager =  '".$empID."' OR l.status IN(1,2,5))  ORDER BY l.id DESC ";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -159,7 +159,7 @@ class AttendanceModel extends Model
 
 	function get_leave_application($leaveID)
 	{
-		$query=$this->db->query("SELECT  lt.type as leave_type, l.* FROM leave_application l, leave_type lt WHERE l.nature=lt.id and l.id=".$leaveID."");
+		$query="SELECT  lt.type as leave_type, l.* FROM leave_application l, leave_type lt WHERE l.nature=lt.id and l.id=".$leaveID."";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -174,10 +174,10 @@ class AttendanceModel extends Model
 
 	function getLeaveBalance($empID, $hireDate, $today)
 	{
-		$query=$this->db->query("SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued");		
-		$row = $query->row();
-		$spent = $row->days_spent;	
-		$accrued = $row->days_accrued;
+		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
+		$row = DB::select(DB::raw($query));
+		$spent = $row[0]->days_spent;	
+		$accrued = $row[0]->days_accrued;
 
 		$accrual= 7*$accrued/90;
 		$maximum_days = $accrual - $spent;
@@ -185,7 +185,7 @@ class AttendanceModel extends Model
 	}
 	function myleave_current($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as type, l.* FROM leave_application l, leave_type lt,  (SELECT @s:=0) as s WHERE l.nature=lt.id and l.empID='".$empID."' AND l.notification IN(1, 3) ORDER BY l.id DESC");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as type, l.* FROM leave_application l, leave_type lt,  (SELECT @s:=0) as s WHERE l.nature=lt.id and l.empID='".$empID."' AND l.notification IN(1, 3) ORDER BY l.id DESC";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -193,8 +193,8 @@ class AttendanceModel extends Model
 	
 	function leave_line_hr_current($empID)
 	{
-		// $query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND (e.line_manager =  '".$empID."' OR l.status IN(1,2,5)) AND l.notification IN(2,3,4)  ORDER BY l.id DESC ");
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND (e.line_manager =  '".$empID."' OR l.notification IN(2,3,4))  ORDER BY l.id DESC ");
+		// $query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND (e.line_manager =  '".$empID."' OR l.status IN(1,2,5)) AND l.notification IN(2,3,4)  ORDER BY l.id DESC ";
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND (e.line_manager =  '".$empID."' OR l.notification IN(2,3,4))  ORDER BY l.id DESC ";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -203,7 +203,7 @@ class AttendanceModel extends Model
 	
 	function leave_line_current($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager =  '".$empID."' AND l.notification = 2 ORDER BY l.id DESC ");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager =  '".$empID."' AND l.notification = 2 ORDER BY l.id DESC ";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -211,7 +211,7 @@ class AttendanceModel extends Model
 	
 	function leave_hr_current()
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND l.status IN(1,2,5) AND l.notification IN(3, 4)  ORDER BY l.id DESC  ");
+		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND l.status IN(1,2,5) AND l.notification IN(3, 4)  ORDER BY l.id DESC  ";
 		
 		return DB::select(DB::raw($query));
 	}
@@ -270,8 +270,8 @@ class AttendanceModel extends Model
 	
 	function leave_line_manager_hr_current($empID)
 	{
-		$query=$this->db->query("SELECT @s:=@s+1 SNo, p.name as POSITION, lt.type as TYPE, d.name as DEPARTMENT,   l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l, leave_type lt,position p, department d, employee e, (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id AND l.notification = 3 AND l.status =1 UNION 
-		SELECT @s:=@s+1 SNo, lt.type as TYPE, p.name as POSITION, d.name as DEPARTMENT,  l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l,position p, leave_type lt, department d, employee e,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id AND l.status = 0 AND l.notification = 2 AND e.line_manager = '".$empID."'");
+		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, lt.type as TYPE, d.name as DEPARTMENT,   l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l, leave_type lt,position p, department d, employee e, (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id AND l.notification = 3 AND l.status =1 UNION 
+		SELECT @s:=@s+1 SNo, lt.type as TYPE, p.name as POSITION, d.name as DEPARTMENT,  l.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM leave_application l,position p, leave_type lt, department d, employee e,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id and l.nature=lt.id  and e.position = p.id and e.department=d.id AND l.status = 0 AND l.notification = 2 AND e.line_manager = '".$empID."'";
 		
 		return DB::select(DB::raw($query));
 	}

@@ -126,7 +126,7 @@ foreach ($take_home as $row) {
 } 
 if ($net>=$net_less) {
   $amount_takehome = $net;
-  if($arrears>0) $hint = "(Including Arrears Payments)"; else $hint=""; 
+  if($arrears>0) $hint = "(Including Arrears Payments)"; else $hint="; 
 
 }else{
  $amount_takehome = $net_less; 
