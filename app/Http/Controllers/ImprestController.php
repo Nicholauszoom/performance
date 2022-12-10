@@ -16,7 +16,7 @@ use App\Models\ProjectModel;
 use App\Models\PerformanceModel;
 use App\Helpers\SysHelpers;
 
-class Imprest extends Controller
+class ImprestController extends Controller
 {
 
   // public function __construct(Request $request) {

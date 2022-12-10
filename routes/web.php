@@ -14,6 +14,7 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\ImprestController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\PerformanceController;
