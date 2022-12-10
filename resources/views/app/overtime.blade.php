@@ -262,8 +262,7 @@
         </div>
       <!-- /page content -->
 
-       <?php
-        
+       
        @include("app/includes/overtime_operations")
 <script type="text/javascript">
   $(".select_category").select2({

@@ -30,7 +30,7 @@ class GeneralController extends Controller
       $this->project_model = new ProjectModel();
       $this->performanceModel = new PerformanceModel();
       $this->payroll_model = new Payroll;
-  
+
     }
 
 //    public function index()
@@ -3518,6 +3518,7 @@ public function updateLevel(Request $request) {
         $this->login_info();
       }else{
         $data['parent'] = 'Dashboard';
+        $data['child'] = 'Work';
         return view('app.home', $data);
       }
 
