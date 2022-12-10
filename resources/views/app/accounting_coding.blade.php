@@ -1,64 +1,50 @@
-
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Organisation'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
-@endpush
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 
-@push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
-@endpush
+    @endpush
+
+    @push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    @endpush
 
 @section('content')
 
-<?php
-
-?>
-
-<!-- page content -->
-<div class="right_col" role="main">
-    <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3>Accounting Coding </h3>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_content">
-                        <table id="datatable" class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Code</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            foreach ($accounting_coding as $row) { ?>
-                                <tr>
-                                    <td><?php echo $row->name; ?></td>
-                                    <td><?php echo $row->code; ?></td>
-                                </tr>
-                            <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-
+<div class="card">
+    <div class="card-header">
+        <h3>Account Coding </h3>
     </div>
+    <table class="table datatable-basic">
+        <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+                <th>action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+                @foreach ($accounting_coding as $row)
+            <tr>
+                <td>{{ $row->id }}</td>
+                <td>{{ $row->code }}</td>
+                <td>{{ $row->name }}</td>
+                <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
+                <td>Actino</td>
+                <td></td>
+
+            </tr>
+            @endforeach
+
+        </tbody>
+    </table>
 </div>
-<!-- /page content -->
 
 
 
-<?php
-?>
-    
+
  @endsection

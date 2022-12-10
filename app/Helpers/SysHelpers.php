@@ -22,16 +22,16 @@ class SysHelpers
      * @param string $ip
      * @return void
      */
-    public static function AuditLog($risk, $action, Request $request)
+    public static function AuditLog( $action, Request $request)
     {
+
         AuditTrail::create([
-            'user_id' => Auth::user()->id,
-            'user_email' => Auth::user()->email,
-            'user_name' => Auth::user()->name,
-            'action_performed' => $action,
+            'empID' => Auth::user()->emp_id,
+            'platform' => 'Windows 10',
+            'description' => $action,
             'ip_address' =>  $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'risk' => $risk
+            'agent' => 'Chrome',
+            'due_date' => date('Y-m-d H:i:s'),
         ]);
     }
 }

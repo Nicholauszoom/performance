@@ -2017,7 +2017,7 @@ public function activatePosition(Request $request)
 
             $title = "Pending Payments";$parent = 'Payroll';$child = "pending-payments";
 
-            return view('payroll.financial_payment',compact('title','parent','child','data'));
+            return view('app.financial_payment',compact('title','parent','child','data'));
 
 
         // }else{

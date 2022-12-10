@@ -58,7 +58,7 @@
                     <div class="x_panel">
                       <div class="x_title">
                           <h3 class="green"><i class="fa fa-info-circle"></i> Info and Details</h3>
-                            @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                            @if(Session::has('note'))      {{ session('note') }}  @endif  
                             <div id ="resultFeed"></div>
 
                         <div class="clearfix"></div>
@@ -493,7 +493,7 @@
 </div>
         <!-- /page content -->
 
-@include("app/includes/imprest_operations
+@include("app/includes/imprest_operations")
 
 
  @endsection
