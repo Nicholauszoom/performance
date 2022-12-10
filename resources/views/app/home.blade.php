@@ -1,11 +1,11 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Home'])
 
 @push('head-script')
-  <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  {{-- <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
-  <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  {{-- <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script> --}}
 @endpush
 
 @section('content')
@@ -73,6 +73,171 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
 ?>
 
+
+  <div class="row">
+    <div class="@if (session('vw_emp_sum')) col-md-8 @else col-md-12 @endif">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-muted">
+            Welcome to Fléx Performance!  <strong> {{ session('fname')." ".session('lname') }} </strong>
+          </h3>
+        </div>
+
+        <div class="card-body">
+          <p>To navigate through the system use the menu on left. To logout check the menu on top right.</p>
+          <p>For further help,  contact the system Vendor.</p>
+        </div>
+      </div>
+    </div>
+    {{-- /col --}}
+
+    @if (session('vw_emp_sum'))
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <h4 class="col-md-6 text-muted">Active Employess :</h4>
+            <h4 class="col-md-6 text-muted">{{ $employees }}</h4>
+          </div>
+
+          <div class="row">
+            <h4 class="col-md-6 text-muted">Males :</h4>
+            <h4 class="col-md-6 text-muted">{{ $males }}</h4>
+          </div>
+
+          <div class="row">
+            <h4 class="col-md-6 text-muted">Females :</h4>
+            <h4 class="col-md-6 text-muted">{{ $females }}</h4>
+          </div>
+
+          <div class="row">
+            <h4 class="col-md-6 text-muted">Local Employees :</h4>
+            <h4 class="col-md-6 text-muted">{{ $local_employee }}</h4>
+          </div>
+
+          <div class="row">
+            <h4 class="col-md-6 text-muted">Expatriates :</h4>
+            <h4 class="col-md-6 text-muted">{{ $expatriate }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    @endif
+    {{-- /col --}}
+
+
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body"></div>
+      </div>
+    </div>
+
+
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="text-muted">Payroll Reconciliation Summary (Current & Previous)</h4>
+        </div>
+
+        <?php
+                              foreach ($s_net_c as $c){
+                                  $s_net_c_ = $c->takehome;
+                              }
+
+                              foreach ($s_net_p as $p){
+                                  $s_net_p_ = $p->takehome;
+                              }
+
+                              foreach ($v_net_c as $vc){
+                                  $v_net_c_ = $vc->takehome;
+                              }
+
+                              foreach ($v_net_p as $vp){
+                                  $v_net_p_ = $vp->takehome;
+                              }
+
+                              ?>
+
+                              <?php
+                              $staff = 0;
+                              $volunteer = 0;
+
+                              $staff_p = 0;
+                              $volunteer_p = 0;
+
+                              foreach ($s_staff as $s){
+                                  $staff++;
+                              }
+
+                              foreach ($s_staff_p as $sp){
+                                  $staff_p++;
+                              }
+
+                              foreach ($v_staff as $v){
+                                  $volunteer++;
+                              }
+
+                              foreach ($v_staff_p as $vp){
+                                  $volunteer_p++;
+                              }
+
+                              ?>
+
+        <table class="table table-striped table-bordered" style="width:100%">
+          <tr>
+              <th></th>
+              <th><b>Contract type</b></th>
+              <th class="text-center"><b>Current</b></th>
+              <th class="text-center"><b>Previous</b></th>
+              <th class="text-center"><b>Movement</b></th>
+          </tr>
+          <tr>
+              <td rowspan="2"><b>Gross Salary</b></td>
+              <td><b>Staff</b></td>
+              <td align="right">{{ number_format($s_gross_c,2) }}</td>
+              <td align="right">{{ number_format($s_gross_p,2) }}</td>
+              <td align="right">{{ number_format($s_gross_c-$s_gross_p,2) }} </td>
+          </tr>
+          <tr>
+              <td><b>Volunteer</b></td>
+              <td align="right">{{ number_format($v_gross_c,2) }}</td>
+              <td align="right">{{ number_format($v_gross_p,2) }}</td>
+              <td align="right">{{ number_format($v_gross_c-$v_gross_p,2) }}</td>
+          </tr>
+          <tr>
+              <td rowspan="2"><b>Net Salary</b></td>
+              <td><b>Staff</b></td>
+              <td align="right">{{ number_format($s_net_c_,2) }}</td>
+              <td align="right">{{ number_format($s_net_p_,2) }}</td>
+              <td align="right">{{ number_format($s_net_c_-$s_net_p_,2) }}</td>
+          </tr>
+          <tr>
+              <td><b>Volunteer</b></td>
+              <td align="right">{{ number_format($v_net_c_,2) }}</td>
+              <td align="right">{{ number_format($v_net_p_,2) }}</td>
+              <td align="right">{{ number_format($v_net_c_-$v_net_p_,2) }}</td>
+          </tr>
+          <tr>
+              <td rowspan="2"><b>Head Count</b></td>
+              <td><b>Staff</b></td>
+              <td align="right">{{ $staff }}</td>
+              <td align="right">{{ $staff_p }}</td>
+              <td align="right">{{ $staff-$staff_p }}</td>
+          </tr>
+          <tr>
+              <td><b>Volunteer</b></td>
+              <td align="right">{{ $volunteer }}</td>
+              <td align="right">{{ $volunteer_p }} </td>
+              <td align="right">{{ $volunteer-$volunteer_p }}</td>
+          </tr>
+      </table>
+
+      </div>
+    </div>
+
+  </div>
+  {{-- /row --}}
+
         <!-- page content -->
         <div class="right_col" role="main">
 
@@ -121,18 +286,18 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                       </div> -->
                       <!-- Appreciation --> --}}
 
-                 <div class="<?php if(session('vw_emp_sum')) { ?> col-md-8 <?php }else{ ?> col-md-12 <?php }?>">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h3>Welcome to Fléx Performance!  <b><?php echo session('fname')." ".session('lname'); ?> </b> </h3>
-                    <div class="clearfix"></div>
+                <div class="<?php if(session('vw_emp_sum')) { ?> col-md-8 <?php }else{ ?> col-md-12 <?php }?>">
+                    <div class="x_panel">
+                      <div class="x_title">
+                        <h3>Welcome to Fléx Performance!  <b><?php echo session('fname')." ".session('lname'); ?> </b> </h3>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="row x_content">
+                            <p>To navigate through the system use the menu on left. To logout check the menu on top right.</p>
+                            <p>For further help,  contact the system Vendor.</p>
+                      </div>
                   </div>
-                  <div class="row x_content">
-                        <p>To navigate through the system use the menu on left. To logout check the menu on top right.</p>
-                        <p>For further help,  contact the system Vendor.</p>
-                  </div>
-                </div>
-              </div>
+                 </div>
 
               <?php if(session('vw_emp_sum')) { ?>
 
