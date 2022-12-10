@@ -1135,9 +1135,9 @@
 
 
 
-@include("app/includes/imprest_operations.php";
-@include("app/includes/overtime_operations.php";
-@include("app/includes/update_allowances.php";
+@include("app/includes/imprest_operations");
+@include("app/includes/overtime_operations");
+@include("app/includes/update_allowances");
 @include("app/includes/loan_operations
 
 <!-- fstdropdown -->

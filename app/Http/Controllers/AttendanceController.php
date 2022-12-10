@@ -63,7 +63,7 @@ class AttendanceController extends Controller
               $date = date('Y-m-d');
               $data['attendee'] =  $this->attendance_model->attendees($date);
               $data['title']="Attendances";
-              $this->load->view('attendees', $data);
+              return view('app.attendees', $data);
           }else{
               echo 'Unauthorized Access';
           }
@@ -128,7 +128,7 @@ class AttendanceController extends Controller
       $data['title'] = 'Leave';
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
       $data['leave_type'] = $this->attendance_model->leave_type();
-      $this->load->view('leave', $data);
+      return view('app.leave', $data);
 
    }
     
@@ -293,7 +293,7 @@ class AttendanceController extends Controller
       }
       $data['title']="Leaves";
       $data['today'] = date('Y-m-d');
-      $this->load->view('leave_report', $data);
+      return view('app.leave_report', $data);
              
     }
 
@@ -329,7 +329,7 @@ class AttendanceController extends Controller
 
         $data['title']="Leave";
         $data['showbox'] = 1;
-        $this->load->view('customleave_report', $data); 
+        return view('app.customleave_report', $data); 
   } 
 
   elseif (isset($_POST['print'])) {  
@@ -363,7 +363,7 @@ class AttendanceController extends Controller
         }
         
         $data['title']="List of Employees Who went to Leave From ".$dates. " to ".$datee;
-        $this->load->view('reports/general_leave', $data); 
+        return view('app.reports/general_leave', $data); 
   } 
   
   
@@ -379,7 +379,7 @@ class AttendanceController extends Controller
       }
     $data['title']="List of Leaves for ".$empname;
       $data['leave'] =  $this->reports_model->leavereport2($id);      
-      $this->load->view('reports/general_leave', $data);
+      return view('app.reports/general_leave', $data);
 
     }
 
@@ -397,7 +397,7 @@ class AttendanceController extends Controller
       $data['customleave'] = $this->attendance_model->leavedropdown(session('emp_id'));}
 
       $data['leave'] =  $this->attendance_model->leavereport2($id);      
-      $this->load->view('customleave_report', $data);
+      return view('app.customleave_report', $data);
 
     }
 
@@ -406,7 +406,7 @@ class AttendanceController extends Controller
     $data['customleave'] =  $this->attendance_model->leave_employees();  
     $data['title'] =  "Leave Reports";        
        
-    $this->load->view('customleave_report', $data);
+    return view('app.customleave_report', $data);
          
     }
 
@@ -419,7 +419,7 @@ class AttendanceController extends Controller
       
       $data['data'] =  $this->attendance_model->get_leave_application($id);
       $data['title']="Leave";
-      $this->load->view('leave_remarks', $data);
+      return view('app.leave_remarks', $data);
 
       if (isset($_POST['edit_remarks'])) {      
     
@@ -443,7 +443,7 @@ class AttendanceController extends Controller
 
     $data['title']="Leave";
     $data['leave_type'] = $this->attendance_model->leave_type();
-    $this->load->view('leave_application_info', $data); 
+    return view('app.leave_application_info', $data); 
    }
 
 
@@ -572,7 +572,7 @@ class AttendanceController extends Controller
       
       $data['title'] = 'Leave';
       $data['leave_type'] = $this->attendance_model->leave_type();
-      $this->load->view('leave', $data);
+      return view('app.leave', $data);
 
    }  
    

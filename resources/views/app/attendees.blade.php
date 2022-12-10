@@ -112,8 +112,7 @@
 
 
 
-<?php 
-      @include("app/includes/dropdown")
+       @include("app/includes/dropdown")
 
       <script>
 
