@@ -295,7 +295,7 @@ class GeneralController extends Controller
        $data['departments'] = Departments::all();
        $data['title']="Department";
 
-       
+
       return view('app.department', [
           'data' => $data,
       ]);
