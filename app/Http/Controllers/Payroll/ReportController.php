@@ -14,23 +14,23 @@ use App\Models\Payroll\ReportModel;
 // use PDF;
 // use App\Helpers\SysHelpers;
 class ReportController extends Controller
-{  
+{
     public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null)
-    {   
+    {
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
     }
-   
+
  function payroll_report(Request $request){
       if ($request->pdate) {
         $payrollMonth = base64_decode($request->pdate);
-    
+
         $data['info']= $this->reports_model->company_info();
         $data['authorization']= $this->reports_model->payrollAuthorization($payrollMonth);
         $toDate = date('Y-m-d');
-        $data['employee_list'] = $this->reports_model-> pay_checklist($payrollMonth);        
-        $data['take_home'] = $this->reports_model-> sum_take_home($payrollMonth);        
+        $data['employee_list'] = $this->reports_model-> pay_checklist($payrollMonth);
+        $data['take_home'] = $this->reports_model-> sum_take_home($payrollMonth);
         $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
         $data['total_allowances'] =  $this->payroll_model->total_allowances("allowance_logs",$payrollMonth);
         $data['total_bonuses'] =  $this->payroll_model->total_bonuses($payrollMonth);
@@ -43,17 +43,17 @@ class ReportController extends Controller
 
 
       return view('reports.payroll_report',compact('data'));
-       
-       
+
+
     }
  }
-   
+
  function pay_checklist(Request $request)  {
       if ($request->input('run')) {
-        $payroll_date =$request->input('payrolldate'); 
+        $payroll_date =$request->input('payrolldate');
         $isReady = $this->reports_model->payCheklistStatus($payroll_date);
         $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
-        if($isReady==true){   
+        if($isReady==true){
             $data['info']= $this->reports_model->company_info();
             $toDate = date('Y-m-d');
             $data["strategyProgress"] = 23;
@@ -70,17 +70,17 @@ class ReportController extends Controller
         } else {
             session('note', "<p class='alert alert-warning text-center'>Sorry the Pay Checklist for the Selected Payroll Month is Not Ready</font></p>");
             return redirect('/flex/cipay/financial_reports/');
-            
-        } 
+
+        }
     }
  }
 
-   
- function all_arrears(Request $request)  {  
+
+ function all_arrears(Request $request)  {
     if ($request->input('print')) {
         $start = $request->input('start');
         $finish = $request->input('finish');
-       
+
         $data['info']= $this->reports_model->company_info();
         $data['dateStart']= $start;
         $data['dateFinish']= $finish;
@@ -99,13 +99,13 @@ class ReportController extends Controller
         $data['info']= $this->reports_model->company_info();
         $data['arrears'] = $this->payroll_model->employee_arrears($empID);
         $data['employee'] = $this->reports_model->employeeInfo($empID);
-         return view('app.reports/employee_arrears', $data); 
+         return view('app.reports/employee_arrears', $data);
     }
  }
 
    function p9(Request $request)  {
 
-    // dd($request->all());
+    dd($request->all());
       if ($request->input('run')) {
         $payrolldate =$request->input('payrolldate');
           $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -124,8 +124,8 @@ class ReportController extends Controller
 }
 
 function p10(Request $request)  {
-    
-    $period =$request->input('period'); 
+
+    $period =$request->input('period');
     $year =$request->input('payrolldate');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -135,7 +135,7 @@ function p10(Request $request)  {
     $period2start = $year."-07-01";
     $period2end = $year."-12-31";
 
-    
+
     $checkup1= $this->reports_model->p10check($year,$year);
     $checkup2= $this->reports_model->p10check($year,$year);
     if($period==1 && $checkup1>=1){
@@ -170,8 +170,8 @@ function p10(Request $request)  {
     else{
         exit('NO PAYROLL');
     }
-       
-    
+
+
 
 }
 
@@ -192,14 +192,14 @@ function heslb(Request $request)  {
 }
 
 function pension(Request $request)  {
-    $payrollMonth =$request->input('payrolldate'); 
+    $payrollMonth =$request->input('payrolldate');
     $pensionFund =$request->input('fund');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
     $datewell = explode("-",$payrollMonth);
     $mm = $datewell[1];
     $dd = $datewell[2];
-    $yyyy = $datewell[0];  
+    $yyyy = $datewell[0];
     $date = $yyyy."-".$mm;
 
     if ($reportType == 1) {
@@ -221,13 +221,13 @@ function pension(Request $request)  {
 
 function wcf(Request $request)  {
     if ($request->input('run')) {
-        $calendar =$request->input('payrolldate'); 
+        $calendar =$request->input('payrolldate');
         $datewell = explode("-",$calendar);
         $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
         $mm = $datewell[1];
         $dd = $datewell[2];
-        $yyyy = $datewell[0];  
+        $yyyy = $datewell[0];
         $date = $yyyy."-".$mm;
 
         if ($reportType == 1) {
@@ -248,22 +248,22 @@ function wcf(Request $request)  {
 
 // function employment_cost_old(Request $request)  {
 //     //if ($request->input('run')) {
-        
+
 //         //DATE MANIPULATION
-//         $calendar =$request->input('payrolldate'); 
+//         $calendar =$request->input('payrolldate');
 //         $datewell = explode("-",$calendar);
 //         $mm = $datewell[1];
 //         $dd = $datewell[2];
-//         $yyyy = $datewell[0];  
-//         $date = $yyyy."-".$mm; 
-//         $payrollDate = '2019-09-28'; // $yyyy."-".$mm."-".$dd; 
-        
-        
+//         $yyyy = $datewell[0];
+//         $date = $yyyy."-".$mm;
+//         $payrollDate = '2019-09-28'; // $yyyy."-".$mm."-".$dd;
+
+
 //         $check = $this->reports_model->employmentCostCheck($date);
-        
+
 //         if($check>0){
-//             $data['cost']= $this->reports_model->employmentCost($date); 
-//             $data['total_cost']= $this->reports_model->totalEmploymentCost($date);    
+//             $data['cost']= $this->reports_model->employmentCost($date);
+//             $data['total_cost']= $this->reports_model->totalEmploymentCost($date);
 //             $data['info']= $this->reports_model->company_info();
 //             $data['payrollMonth'] = $payrollDate;
 //              return view('app.reports/employment_cost_old', $data);
@@ -277,7 +277,7 @@ function employment_cost(Request $request)  {
         $data['info']= $this->reports_model->company_info();
         $data['authorization']= $this->reports_model->payrollAuthorization($payrollMonth);
         $toDate = date('Y-m-d');
-        $data['employee_list'] = $this->reports_model-> new_employment_cost_employee_list($payrollMonth);        
+        $data['employee_list'] = $this->reports_model-> new_employment_cost_employee_list($payrollMonth);
         $data['take_home'] = $this->reports_model-> sum_take_home($payrollMonth);
         $data['payroll_totals'] =  $this->payroll_model->payrollTotals("payroll_logs",$payrollMonth);
         $data['total_allowances'] =  $this->payroll_model->total_allowances("allowance_logs",$payrollMonth);
@@ -300,9 +300,9 @@ function employment_cost(Request $request)  {
 
 public function loanreport(Request $request)
       {
-        if ($request->input('print')) { 
+        if ($request->input('print')) {
 
-        $type = $request->input("type"); 
+        $type = $request->input("type");
 
      // DATE MANIPULATION
         $start = $request->input("from");
@@ -312,12 +312,12 @@ public function loanreport(Request $request)
         $mms = $datewells[1];
         $dds = $datewells[0];
         $yyyys = $datewells[2];
-        $dates = $yyyys."-".$mms."-".$dds; 
+        $dates = $yyyys."-".$mms."-".$dds;
 
         $mme = $datewelle[1];
         $dde = $datewelle[0];
-        $yyyye = $datewelle[2];  
-        $datee = $yyyye."-".$mme."-".$dde; 
+        $yyyye = $datewelle[2];
+        $datee = $yyyye."-".$mme."-".$dde;
 
     $data['info']= $this->reports_model->company_info();
     if($type==3){
@@ -330,14 +330,14 @@ public function loanreport(Request $request)
     $data['loan'] =  $this->reports_model->loanreport3($dates, $datee);
     $data['title']="List of COMPLETED Loans From ".$dates. " to ".$datee;
   }
-     return view('app.reports/loan_report', $data); 
-  } 
+     return view('app.reports/loan_report', $data);
+  }
 
   }
 
   public function customleavereport(Request $request)
       {
-        if ($request->input('print')) {  
+        if ($request->input('print')) {
 
      // DATE MANIPULATION
         $start = $request->input("from");
@@ -347,19 +347,19 @@ public function loanreport(Request $request)
         $mms = $datewells[1];
         $dds = $datewells[0];
         $yyyys = $datewells[2];
-        $dates = $yyyys."-".$mms."-".$dds; 
+        $dates = $yyyys."-".$mms."-".$dds;
 
         $mme = $datewelle[1];
         $dde = $datewelle[0];
-        $yyyye = $datewelle[2];  
-        $datee = $yyyye."-".$mme."-".$dde; 
+        $yyyye = $datewelle[2];
+        $datee = $yyyye."-".$mme."-".$dde;
 
     $this->load->model("attendance_model");
     $data['leave'] =  $this->attendance_model->leavereport1($dates, $datee);
     $data['title']="List of Employees Who went to Leave From ".$dates. " to ".$datee;
       $data['showbox'] = 1;
-     return view('app.customleave_report', $data); 
-  } 
+     return view('app.customleave_report', $data);
+  }
 
   elseif($request->input('viewindividual')){
 
@@ -370,38 +370,38 @@ public function loanreport(Request $request)
 
       $data['showbox'] = 0;
       $data['customleave'] =  $this->attendance_model->customleave();
-      $data['leave'] =  $this->attendance_model->leavereport2($id);      
+      $data['leave'] =  $this->attendance_model->leavereport2($id);
        return view('app.customleave_report', $data);
 
     }
 
       $data['showbox'] = 0;
     $data['leave'] =  $this->attendance_model->leavereport2(session('emp_id'));
-      $data['customleave'] =  $this->attendance_model->customleave();    
+      $data['customleave'] =  $this->attendance_model->customleave();
        return view('app.customleave_report', $data);
-         
+
       }
 
-    function payslip(Request $request)  {    
-        if ($request->input('print')) {    
-         
+    function payslip(Request $request)  {
+        if ($request->input('print')) {
+
       // DATE MANIPULATION
             $empID = $request->input("employee");
             $start = $request->input("payrolldate");
             $profile = $request->input("profile"); //For redirecting Purpose
             $date_separate = explode("-",$start);
-    
+
             $mm = $date_separate[1];
             $yyyy = $date_separate[0];
             $dd = $date_separate[2];
             $one_year_back = $date_separate[0]-1;
-            
+
             $payroll_date = $yyyy."-".$mm."-".$dd;
-            $payroll_month_end = $yyyy."-".$mm."-31";            
-            $payroll_month = $yyyy."-".$mm;           
-            
+            $payroll_month_end = $yyyy."-".$mm."-31";
+            $payroll_month = $yyyy."-".$mm;
+
             $check = $this->reports_model->payslipcheck($payroll_month, $empID);
-            
+
             if ($check == 0){
                 if($profile == 0){
                     session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
@@ -432,7 +432,7 @@ public function loanreport(Request $request)
                 $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
                  return view('app.reports/payslip', $data);
 
-            }        
+            }
         }else{
             // DATE MANIPULATION
             $start = $request->input("payrolldate");
@@ -546,29 +546,29 @@ public function loanreport(Request $request)
     }
 
 function backup_payslip(Request $request)  {
-    
-      if ($request->input('print')) { 
-    
-         
+
+      if ($request->input('print')) {
+
+
       // DATE MANIPULATION
             $empID = $request->input("employee");
             $start = $request->input("payrolldate");
             $date_separate = explode("-",$start);
-            
+
             // exit($start);
-    
+
             $mm = $date_separate[1];
             $yyyy = $date_separate[0];
             $one_year_back = $date_separate[0]-1;
-            
+
             $dates = $yyyy."-".$mm."-01";
             $datee = $yyyy."-".$mm."-31";
-            
+
             $year_month = $yyyy."-".$mm;
-            $date_one_year_back = $one_year_back."-".$mm."-01";            
-            
+            $date_one_year_back = $one_year_back."-".$mm."-01";
+
             $check = $this->reports_model->payslipcheck($year_month, $empID);
-            
+
             if ($check == 0){
                 exit("No Payroll Records Found For This Employee under This Month");
                 // session('note', "<p class='alert alert-warning text-center'>Sorry There is No Payroll or any Payment Informations to Appear in Your Salary Slip For the Year and Month Selected</font></p>");
@@ -577,48 +577,48 @@ function backup_payslip(Request $request)  {
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $datee, $year_month, $date_one_year_back);
                 $data['companyinfo']= $this->reports_model->company_info();
                  return view('app.reports/payslip_test', $data);
-                
-            } 
-        
+
+            }
+
       }
 
     }
 
     function kpi(Request $request)  {
         $empID = $request->input('empID');
-        
+
         $data['strategies'] = $this->reports_model->allStrategies($empID);
         $data['adhocs'] = $this->reports_model->adhocTasks($empID);
         $data['empInfo'] = $this->reports_model->employeeInfo($empID);
         $data['empID'] = $empID;
          return view('app.reports/kpi', $data);
-    
-    }   
-    
-   
+
+    }
+
+
     function attendance(Request $request)  {
           if ($request->input('print')) {
 
         // DATE MANIPULATION
-            $calendar =$request->input('start'); 
+            $calendar =$request->input('start');
             $datewell = explode("/",$calendar);
             $mm = $datewell[1];
             $dd = $datewell[0];
-            $yyyy = $datewell[2];  
-            $attendance_date = $yyyy."-".$mm."-".$dd; 
-        
+            $yyyy = $datewell[2];
+            $attendance_date = $yyyy."-".$mm."-".$dd;
+
             $data['info']= $this->reports_model->company_info();
-            $toDate = date('Y-m-d'); 
+            $toDate = date('Y-m-d');
             $data['employee_list'] = $this->reports_model-> attendance_list($attendance_date);
             $data['payroll_month'] = $attendance_date;
-             return view('app.reports/attendance_report', $data); 
-        } 
-     
+             return view('app.reports/attendance_report', $data);
+        }
+
     }
 
     ##############################################################################
     #################################END PROJECT REPORTS##############################
-    
+
     public function payrollInputJournalExport(Request $request) {
         if ($request->input('run') && $request->input('payrolldate')!='' ) {
             $payroll_date =$request->input('payrolldate');
@@ -644,10 +644,10 @@ function backup_payslip(Request $request)  {
 
             // $object->getActiveSheet()->getCell('A1')->setValue('Some text');
 
-            
+
             $table_columns = array(
                 "", "","Transaction Reference", "Transaction Date", "Account Code","Period", "Staff Names",
-                 "Transaction Amount", "Currency Code","Job Position", "Employee Total Gross", "Percentage Allocation",  "SDL", "WCF", "NSSF",  "Cost Centre", "Project", "Grant", "Activity", 
+                 "Transaction Amount", "Currency Code","Job Position", "Employee Total Gross", "Percentage Allocation",  "SDL", "WCF", "NSSF",  "Cost Centre", "Project", "Grant", "Activity",
                  "Individual Identity", "VSO Office", "Match Fund"
              );
             //23 columns
@@ -700,16 +700,16 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getCell("H3")->setValue("");
 
             $from = "B9";
-            $to = "U9"; 
+            $to = "U9";
             $object->getActiveSheet()->getStyle("$from:$to")->getFont()->setBold( true );
             $object->getActiveSheet()->setCellValueByColumnAndRow(1, 8, "1;3");
-            
+
             //Set Row Width
-            $object->getActiveSheet()->getRowDimension("9")->setRowHeight(25); 
+            $object->getActiveSheet()->getRowDimension("9")->setRowHeight(25);
             foreach(range('A','U') as $columnID) {
             $object->getActiveSheet()->getColumnDimension($columnID)
                 ->setAutoSize(true);
-        }      
+        }
 
 
             //Set ACTIVE SHEET
@@ -929,10 +929,10 @@ function backup_payslip(Request $request)  {
                 $countSummaryRows++;
             }
 
-           
-                    
+
+
             $startRow = $data_row+1;
-            $endRow = $startRow+6;            
+            $endRow = $startRow+6;
             $count = $startRow;
             for ($n=$startRow; $n<=$endRow; $n++) {
                 $repeated = $n-2;
@@ -980,7 +980,7 @@ function backup_payslip(Request $request)  {
             $writer->save('php://output');	// download file
             //$object_writer->save($save_path);
             //chmod($save_path, 0777);
-            
+
             // if($result==true) {
             //     echo "<p class='alert alert-success text-center'>Audit Trails Cleared Successifully!</p>";
             //     } else { echo "<p class='alert alert-danger text-center'>FAILED to clear audit logs, Try Again</p>"; }
@@ -988,7 +988,7 @@ function backup_payslip(Request $request)  {
             //end
         } else{
             exit("Invalid Resource Access");
-        }    
+        }
     }
 
     public function payrollInputJournalExportTime(Request $request) {
@@ -1016,10 +1016,10 @@ function backup_payslip(Request $request)  {
 
             // $object->getActiveSheet()->getCell('A1')->setValue('Some text');
 
-            
+
             $table_columns = array(
                 "","","Transaction Reference", "Transaction Date", "Account Code","Period", "Staff Names",
-                 "Transaction Amount", "Currency Code","Job Position", "Employee Total Gross", "Time Allocation",  "SDL", "WCF", "NSSF",  "Cost Centre", "Project", "Grant", "Activity", 
+                 "Transaction Amount", "Currency Code","Job Position", "Employee Total Gross", "Time Allocation",  "SDL", "WCF", "NSSF",  "Cost Centre", "Project", "Grant", "Activity",
                  "Individual Identity", "VSO Office", "Match Fund"
              );
             //23 columns
@@ -1072,16 +1072,16 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getCell("H3")->setValue("");
 
             $from = "B9";
-            $to = "U9"; 
+            $to = "U9";
             $object->getActiveSheet()->getStyle("$from:$to")->getFont()->setBold( true );
             $object->getActiveSheet()->setCellValueByColumnAndRow(1, 8, "1;3");
-            
+
             //Set Row Width
-            $object->getActiveSheet()->getRowDimension("9")->setRowHeight(25); 
+            $object->getActiveSheet()->getRowDimension("9")->setRowHeight(25);
             foreach(range('A','U') as $columnID) {
             $object->getActiveSheet()->getColumnDimension($columnID)
                 ->setAutoSize(true);
-        }      
+        }
 
 
             //Set ACTIVE SHEET
@@ -1184,10 +1184,10 @@ function backup_payslip(Request $request)  {
                 $project_activity = $this->reports_model->employeeProjectActivity($payroll_date, $row->empID);
 
                 if ($project_activity) {
-                   
-                    
+
+
                     foreach ($project_activity as $p_a) {
-                      
+
                         $total_hour = 0;
                         $total_min = 0;
 
@@ -1195,9 +1195,9 @@ function backup_payslip(Request $request)  {
                         $total_min_p = 0;
 
                         $project_activity_time = $this->reports_model->employeeProjectActivityTime($payroll_date, $row->empID, $p_a->project, $p_a->activity);
-                        
+
                         if ($project_activity_time) {
-                           
+
                             foreach ($project_activity_time as $p_a_t) {
                                 try {
                                         $d1 = new DateTime($p_a_t->start_date);
@@ -1227,7 +1227,7 @@ function backup_payslip(Request $request)  {
 
                                     } catch (Exception $e) {
                                         echo 'error';
-                                    }        
+                                    }
                             }
                         }
 
@@ -1414,7 +1414,7 @@ function backup_payslip(Request $request)  {
             ob_end_clean();
             ob_start();
             $writer->save('php://output');	// download file
-            
+
             // if($result==true) {
             //     echo "<p class='alert alert-success text-center'>Audit Trails Cleared Successifully!</p>";
             //     } else { echo "<p class='alert alert-danger text-center'>FAILED to clear audit logs, Try Again</p>"; }
@@ -1422,8 +1422,8 @@ function backup_payslip(Request $request)  {
             //end
         } else{
             exit("Invalid Resource Access");
-        }    
-    } 
+        }
+    }
 
     public function staffPayrollBankExport(Request $request) {
         if ($request->input('run') && $request->input('payrolldate')!='' ) {
@@ -1438,13 +1438,13 @@ function backup_payslip(Request $request)  {
                 $filename = "volunteerPayrollBankExport".date('Y_m_d_H_i_s').".xls";
             }
 
-            
+
 
             //start
             $todayDate = date('d/m/Y');
             $object = new Spreadsheet();
             $object->setActiveSheetIndex(0);
-            
+
             $table_columns = array(
                 "","Payment Type","Payment Date","Debit Account Number","Beneficiary Name"  ,"Payment Amount", "Payment Details",  "Beneficiary Account Number","Beneficiary Bank Name",   "Beneficiary Bank Code" ,"Beneficiary Bank Local Clearing Branch Code"   ,"Debit Account City code"  ,"Debit Account Country Code",  "Payment Currency", "Beneficiary Email ID"
              );
@@ -1459,7 +1459,7 @@ function backup_payslip(Request $request)  {
              $column++;
             }
             $j=2;
-            for($i='A'; $i<='N'; $i++){ 
+            for($i='A'; $i<='N'; $i++){
                 $object->getActiveSheet()->getColumnDimension("$i")->setAutoSize(true);
                 $object->getActiveSheet()->getStyle("$i$j")->getFont()->setBold( true );
                 $object->getActiveSheet()->getStyle("$i$j")->applyFromArray(
@@ -1511,8 +1511,8 @@ function backup_payslip(Request $request)  {
              $object->getActiveSheet()->setCellValueByColumnAndRow(12, $data_row, $row->debitAccountCountryCode);
              $object->getActiveSheet()->setCellValueByColumnAndRow(13, $data_row, $row->paymentCurrency);
              $object->getActiveSheet()->setCellValueByColumnAndRow(14, $data_row, $row->email);
-            
-            for($i='A'; $i<='N'; $i++){ 
+
+            for($i='A'; $i<='N'; $i++){
                 $object->getActiveSheet()->getStyle("$i$data_row")->applyFromArray(
                     array(
                         'borders' => array(
@@ -1538,8 +1538,8 @@ function backup_payslip(Request $request)  {
             //end
         } else{
             exit("Invalid Resource Access");
-        }    
-    } 
+        }
+    }
 
 
 
@@ -1635,8 +1635,8 @@ function backup_payslip(Request $request)  {
 //            end
         } else{
             exit("Invalid Resource Access");
-        }    
-    } 
+        }
+    }
 
     #################################END PROJECT REPORTS##############################
 
@@ -1646,22 +1646,22 @@ function backup_payslip(Request $request)  {
 function dynamic_pdf(Request $request)  {
     $this->load->library('phpmailer_lib');
     $mail = $this->phpmailer_lib->load();
-    $payrolldate ="2019-06-05";  
-    $heslb= $this->reports_model->heslb($payrolldate);    
-    $info= $this->reports_model->company_info();  
+    $payrolldate ="2019-06-05";
+    $heslb= $this->reports_model->heslb($payrolldate);
+    $info= $this->reports_model->company_info();
     $payrolldate = $payrolldate;
     $total= $this->reports_model->totalheslb($payrolldate);
 
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
- 
+
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Cits');
 $pdf->SetTitle('P9-'.date('d/m/Y'));
 $pdf->SetSubject('PAYE');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
- 
+
 // set default header data
 
 // $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
@@ -1671,36 +1671,36 @@ $pdf->setFooterData(array(0,64,0), array(0,64,128));
 // remove default header/footer
 $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(true);
- 
+
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
- 
+
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
- 
+
 // set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
- 
+
 // set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
- 
+
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
- 
+
 // set some language-dependent strings (optional)
 if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
                require_once(dirname(__FILE__).'/lang/eng.php');
                $pdf->setLanguageArray($l);
 }
- 
+
 // ---------------------------------------------------------
- 
+
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
- 
+
 // Set font
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
@@ -1723,7 +1723,7 @@ foreach($info as $key){
     $block_no = $key->block_no;
     $branch = $key->branch;
     $street = $key->street;
-     
+
 }
 
 
@@ -1756,7 +1756,7 @@ foreach($info as $key){
     $branch = $key->branch;
     $street = $key->street;
     $heslbcode = $key->heslb_code_no;
-     
+
 }
 $payrollmonth = date('F, Y', strtotime($payrolldate));
 
@@ -1784,14 +1784,14 @@ $header2 = "<p><b>EMPLOYER HESLB CODE NO:&nbsp;&nbsp;</b>&nbsp;&nbsp;&nbsp;".$he
 $pdf->writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
 
 
- 
+
 $pdf->SetFont('times', '', 12, '', true);
 // Set some content to print
 $pdf->SetXY(38, 30);
 
 $html = '<table align="center" border="1px">';
 
-$html .='<tr> 
+$html .='<tr>
         <th colspan="5"><br><br><br><br><br><br><br><br></th>
     </tr>';
 
@@ -1839,7 +1839,7 @@ $html .= "<tr>
           <td>".number_format($sum1,2)."</td>
           <td>".number_format($sum2,2)."</td>
           </tr>";
-      
+
 
 
 $html .= '</table>
@@ -1854,12 +1854,12 @@ $html .= '</table>
       </tr>
       </table>';
 // MYSQL DATA
- 
+
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
- 
+
 // ---------------------------------------------------------
- 
+
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
 // $pdf->Output('heslb-'.date('d/m/Y').'.pdf', 'I');
@@ -1874,29 +1874,29 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         $mail->Password = 'Mirajissa1@1994';
         $mail->SMTPSecure = 'ssl';
         $mail->Port     = 465;
-        
+
         $mail->setFrom('mirajissa1@gmail.com', 'CodexWorld');
         $mail->addReplyTo('mirajissa1@gmail.com', 'CodexWorld');
-        
+
         // Add a recipient
         $mail->addAddress('mirajissa1@gmail.com');
-        
-        // Add cc or bcc 
+
+        // Add cc or bcc
         //$mail->addCC('cc@example.com');
         //$mail->addBCC('bcc@example.com');
-        
+
         // Email subject
         $mail->Subject = 'SUCCESS:Send Email via SMTP using PHPMailer in CodeIgniter';
-        
+
         // Set email format to HTML
         $mail->isHTML(true);
-        
+
         // Email body content
         $mailContent = "<h1>Send HTML Email using SMTP in CodeIgniter</h1>
             <p>This is a test email sending using SMTP mail server with PHPMailer.</p>";
         $mail->Body = $mailContent;
         $mail->AddStringAttachment($pdfString, 'some_filename.pdf');
-        
+
         // Send email
         if(!$mail->send()){
             echo 'Message could not be sent.';
@@ -1904,9 +1904,9 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }else{
             echo 'Message has been sent SUCCESSIFULLY';
         }
-    
+
 // SEND EMAIL
- 
+
 //============================================================+
 // END OF FILE
 //============================================================+
