@@ -136,7 +136,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/branch') }}">Company Branches </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/position') }}">Positions</a></li>
                         @if (session('mng_emp'))
-                            <li class="nav-item"><a class="nav-link" href="/flex/contract">Employee Contracts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/contract') }}">Employee Contracts</a></li>
                         @endif
                         {{-- <li  class="nav-item"><a class="nav-link"  href="{{ url('/flex/accountCoding') }}">Account Coding</a></li> --}}
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/organization_level') }}">Organisation Levels </a></li>

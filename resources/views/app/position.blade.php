@@ -217,7 +217,7 @@
                                 <option></option>
                                                 
                                        <?php foreach ($all_position as $row){ 
-                                       if ($row->name == $parent) continue;?>
+                                      if(isset($parent)){ if ($row->name == $parent) continue; }?>
                                     <option value="<?php echo $row->position_code."|".$row->level; ?>"><?php echo $row->name; ?></option> <?php } ?>
                                 </select>
                                 </div>
