@@ -255,10 +255,10 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
               <div class="page-title">
                 <div class="title_right" >
                   <h4>HOME
-                      <!-- <?php if( session('manage_strat') != ''){ ?>
+                      {{-- <?php if( session('manage_strat') != ''){ ?>
                         <a href ="<?php echo  url(''); ?>/flex/performance/strategy_dashboard" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
                         Switch to Performance Dasshboard
-                        </button></a> <?php } ?> -->
+                        </button></a> <?php } ?>  --}}
                   </h4>
                       <h6> <p   <?php if(session('pass_age')>84){?> style="color:red" <?php } ?>>Password Expires in <?php echo (90 - session('pass_age')); ?> Days</p> </h6>
                 </div>
@@ -307,36 +307,37 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
                             <p>For further help,  contact the system Vendor.</p>
                       </div>
                   </div>
-                 </div>
+                </div>
 
-              <?php if(session('vw_emp_sum')) { ?>
+                <?php if(session('vw_emp_sum')) { ?>
 
-              <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
-              {{-- <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo  url(''); ?>/flex/employee"><?php //} ?> --}}
-                <div class="tile-stats">
-<!--                  <div class="icon"><i class="fa fa-users"></i></div>-->
-                  <div class="count"><?php echo $employees; ?></div>
+                <div class="animated flipInY col-lg-4 col-md-3 col-sm-6 col-xs-12">
+                  {{-- <?php //if(session('regemp')!='' || session('line')!='' ){ ?><a href="<?php echo  url(''); ?>/flex/employee"><?php //} ?> --}}
+                  <div class="tile-stats">
+                    {{-- <div class="icon"><i class="fa fa-users"></i></div>--> --}}
+                    <div class="count"><?php echo $employees; ?></div>
 
-                  <h2 style="margin-left: 3%">Active Employees</h2>
-                  <p><b>Male</b> <?php echo $males; ?></p>
-                  <p><b>Female</b> <?php echo $females; ?>.</p>
-                  <p><b>Local Employees</b> <?php echo $local_employee; ?></p>
-                  <p><b>Expatriates</b> <?php echo $expatriate; ?></p>
-                </div></a>
-              </div>
-
-
-
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Current Payroll Summary(<?php echo date("F, Y", strtotime($payroll_date)); ?>)</small></h2>
-                    <div class="clearfix"></div>
+                    <h2 style="margin-left: 3%">Active Employees</h2>
+                    <p><b>Male</b> <?php echo $males; ?></p>
+                    <p><b>Female</b> <?php echo $females; ?>.</p>
+                    <p><b>Local Employees</b> <?php echo $local_employee; ?></p>
+                    <p><b>Expatriates</b> <?php echo $expatriate; ?></p>
                   </div>
+                  {{-- </a> --}}
+                </div>
+
+
+
+                <div class="col-md-12">
+                  <div class="x_panel">
+                    <div class="x_title">
+                      <h2>Current Payroll Summary(<?php echo date("F, Y", strtotime($payroll_date)); ?>)</small></h2>
+                      <div class="clearfix"></div>
+                    </div>
                   <div class="row x_content">
 
-                    <h5><?php echo number_format($salary,2); ?>
-                      <b class="col-md-4">Basic Salaries:</b></h5>
+                  <h5><?php echo number_format($salary,2); ?>
+                    <b class="col-md-4">Basic Salaries:</b></h5>
                       <?php if($allowances > 0 ){ ?> <b class="col-md-4">Allowances:</b>
                           <h5><?php echo number_format($allowances,2); ?></h5> <?php } ?>
 

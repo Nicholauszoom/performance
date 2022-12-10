@@ -1,10 +1,7 @@
-<!-- Main sidebar -->
 <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg bg-main-nav">
 
-    <!-- Sidebar content -->
     <div class="sidebar-content">
 
-        <!-- Sidebar header -->
         <div class="sidebar-section">
             <div class="sidebar-section-body d-flex justify-content-center">
                 <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
@@ -20,30 +17,23 @@
                 </div>
             </div>
         </div>
-        <!-- /sidebar header -->
 
 
-        <!-- Main navigation -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
-
-                {{-- Dashboard --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}" class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null }}">
                         <i class="ph-house"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                {{-- /Dashboard --}}
 
-                <!-- {{-- Projects --}} -->
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo url(''); ?>/flex/project/">
+                    <a class="nav-link" href="{{ url('/flex/project/') }}">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
                 </li>
-                <!-- {{-- /projects --}} -->
 
 
                 <li class="nav-item nav-item-submenu">
@@ -53,61 +43,60 @@
                     </a>
 
                     <ul class="nav-group-sub collapse">
+                        @if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/flex/employee') }}">Active Employees</a>
+                            </li>
+                        @endif
 
-                        <?php if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {  ?>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/employee">Active Employees</a></li>
-                            <?php if (session('mng_emp') || session('appr_emp')) {  ?>
-                                <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/inactive_employee">Suspended Employees</a></li>
-                        <?php }
-                        } ?>
-                        <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/overtime">Overtime </a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/imprest/imprest">Imprest</a></li>
+                        @if (session('mng_emp') || session('appr_emp'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/flex/inactive_employee') }}">Suspended Employees</a>
+                            </li>
+                        @endif
 
-                        <?php if (session('mng_emp')) { ?>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/transfers">Employee Approval</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/flex/overtime') }}">Overtime </a>
+                        </li>
 
-                        <?php } ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/flex/imprest/imprest') }}">Imprest</a>
+                        </li>
 
-
-
+                        @if (session('mng_emp'))
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/transfers') }}">Employee Approval</a></li>
+                        @endif
                     </ul>
                 </li>
 
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-users-three"></i>
+                        <i class="ph-calendar-check"></i>
                         <span> Leave and Attendance</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
-                        <?php if (session('mng_attend')) { ?>
-                            <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/attendance/attendees">Attendance</a></li>
-                        <?php } ?>
-                        <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/attendance/leave">Leave Applications</a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/attendance/leavereport">Leave Reports</a></li>
+                        @if (session('mng_attend'))
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li>
+                        @endif
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leave') }}">Leave Applications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leavereport') }}">Leave Reports</a></li>
                     </ul>
                 </li>
-
-
-
-
 
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
-                        <i class="ph-users-three"></i>
+                        <i class="ph-bank"></i>
                         <span> Salary Advance</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
-
-                        <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/salary_advance">Applications</a></li>
-
-
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Applications</a></li>
                     </ul>
                 </li>
-                {{-- Payroll management --}}
+
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-calculator"></i>
@@ -116,11 +105,11 @@
 
                     <ul class="nav-group-sub collapse">
                         <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/payroll"> Payroll </a></li>
-                        <?php if (session('mng_paym')) { ?>
+                        @if (session('mng_paym'))
                             <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/employee_payslip"> Payslip </a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/comission_bonus">Incentives</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/partial_payment">Partial Payment</a></li>
-                        <?php } ?>
+                        @endif
                         <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/approved_financial_payments">Pending Payments </a></li>
                         <?php if (session('mng_stat_rpt')) { ?>
                             <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/financial_reports">Statutory Reports </a></li>
@@ -129,56 +118,12 @@
                         <?php if (session('mng_paym')) { ?>
                             <li class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/salary_calculator"> Salary Calculator </a></li>
                         <?php } ?>
-
-
                     </ul>
                 </li>
-                {{-- /Payroll management --}}
-
-
-                {{-- <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-stack"></i>
-                        <span>Learning & Development</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-                class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                Training Budgeting
-                </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('members.active') }}" class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-                        Training Application
-                    </a>
-                </li>
-            </ul>
-            </li> --}}
 
 
 
-            {{-- <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-trophy"></i>
-                        <span>Talent Management</span>
-                    </a>
 
-                    <ul class="nav-group-sub collapse">
-
-                        <li class="nav-item">
-                            <a
-                                href="{{ route('members.active') }}"
-            class="nav-link {{ request()->routeIs('members.active') ? 'active' : null  }}">
-            Talent Management
-            </a>
-            </li>
-            </ul>
-            </li> --}}
-
-            {{-- /workforce management --}}
 
 
 
@@ -197,7 +142,7 @@
                     <?php if (session('mng_emp')) { ?>
                         <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/contract">Employee Contracts</a></li>
                     <?php } ?>
-                    <!-- <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/accountCoding">Account Coding</a></li> -->
+                    {{-- <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/accountCoding">Account Coding</a></li> --}}
                     <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/organization_level">Organisation Levels </a></li>
                     <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/organization_structure">Organisation Structure</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?php echo url(""); ?>/flex/accounting_coding">Accounting Coding</a></li>
@@ -293,8 +238,8 @@
 
             </ul>
         </div>
-        <!-- /main navigation -->
+        {{-- /main navigation --}}
 
     </div>
 </div>
-<!-- /main sidebar -->
+{{-- /main sidebar --}}
