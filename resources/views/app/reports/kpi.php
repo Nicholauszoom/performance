@@ -89,8 +89,8 @@ $pdf->AddPage('L', 'A4');
 // $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
 
-  $CI_Model = get_instance();
-  $CI_Model->load->model('flexperformance_model');
+  ////$CI_Model = get_instance();
+  //$CI_Model->load->model('flexperformance_model');
   $employeeID = $empID;
   
   $duration = $CI_Model->reports_model->taskDuration($employeeID);
@@ -223,7 +223,7 @@ $html .='<tr>
                         $submission_date =  date('d/m/Y', strtotime($key->date_completed));
                         $statusTag = "Completed"; 
                     } else{
-                        $submission_date = "";
+                        $submission_date = ";
                         
                         if($finish > date('Y-m-d')){
                             if($progress==0){ $statusTag = "Not Started"; 
@@ -277,7 +277,7 @@ $html .='<tr>
                         $submission_date =  date('d/m/Y', strtotime($key->date_completed));
                         $statusTag = "Completed"; 
                     } else{
-                        $submission_date = "";
+                        $submission_date = ";
                         
                         if($finish > date('Y-m-d')){
                             if($progress==0){ $statusTag = "Not Started"; 

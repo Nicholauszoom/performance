@@ -28,8 +28,9 @@ class GeneralController extends Controller
       $this->reports_model = new ReportModel();
       $this->attendance_model = new AttendanceModel();
       $this->project_model = new ProjectModel();
-      $this->performance_model = new PerformanceModel();
-  
+      $this->performanceModel = new PerformanceModel();
+      $this->payroll_model = new Payroll;
+
     }
 
 //    public function index()
@@ -3517,6 +3518,7 @@ public function updateLevel(Request $request) {
         $this->login_info();
       }else{
         $data['parent'] = 'Dashboard';
+        $data['child'] = 'Work';
         return view('app.home', $data);
       }
 
@@ -5892,7 +5894,7 @@ function password_generator($size){
     public function organization_structure(Request $request)
       {
         $id = 1;
-       
+
        $data['details'] = $this->flexperformance_model->employerdetails($id);
 
        $data['allpositioncodes'] = $this->flexperformance_model->allpositioncodes();
@@ -5910,7 +5912,7 @@ function password_generator($size){
     public function accounting_coding()
     {
 
-        
+
         $data['accounting_coding'] = $this->flexperformance_model->accounting_coding();
         return view('app.accounting_coding', $data);
     }
@@ -5918,7 +5920,7 @@ function password_generator($size){
     public function department_structure(Request $request)
       {
         $id = 1;
-       
+
        $data['details'] = $this->flexperformance_model->employerdetails($id);
 
        $data['allpositioncodes'] = $this->flexperformance_model->allpositioncodes();
@@ -5937,7 +5939,7 @@ function password_generator($size){
     public function Oldorganization_structure(Request $request)
       {
         $id = 1;
-       
+
        $data['details'] = $this->flexperformance_model->employerdetails($id);
 
        $data['allpositioncodes'] = $this->flexperformance_model->allpositioncodes();

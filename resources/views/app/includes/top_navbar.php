@@ -2,7 +2,7 @@
 
 <?php 
 
-    $CI_Model = get_instance();
+    //$CI_Model = get_instance();
     $CI_Model->load->model('attendance_model');
     $attendanceState = $CI_Model->attendance_model->checkAttendanceState(session('emp_id'), date('Y-m-d'));
     if($attendanceState){
@@ -15,7 +15,7 @@
 <?php 
   if(session('appr_leave') || session('mng_emp') || session('recom_paym') || session('appr_paym')){
 
-  $CI_Model = get_instance();
+  //$CI_Model = get_instance();
   $CI_Model->load->model('payroll_model');
   $CI_Model->load->model('flexperformance_model');
   $CI_Model->load->model('imprest_model');

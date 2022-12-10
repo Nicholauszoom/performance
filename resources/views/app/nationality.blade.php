@@ -11,8 +11,8 @@
 @section('content')
 
 <?php 
-  $CI_Model = get_instance();
-  $CI_Model->load->model('flexperformance_model'); 
+  ////$CI_Model = get_instance();
+  //$CI_Model->load->model('flexperformance_model'); 
 ?>
 
 
@@ -60,7 +60,8 @@
                             <?php if(session('mng_org')){ ?>
                             <td class="options-width">
                             <?php
-                            $checkEmployee = $CI_Model->flexperformance_model->checkEmployeeNationality($row->code); 
+                            // $checkEmployee = $CI_Model->flexperformance_model->checkEmployeeNationality($row->code); 
+                            $checkEmployee = [];
                             if($checkEmployee>0){ ?>
                                 <a title="Country Can Not Be Deleted, Some Employee Have Nationality From This Country" class="icon-2 info-tooltip"><button disabled="" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                             <?php } else { ?>

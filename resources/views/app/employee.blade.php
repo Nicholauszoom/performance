@@ -47,7 +47,7 @@
                   </div>
                   <div class="x_content">
                   
-<!--                   --><?php //echo $this->session->flashdata("note");  ?>
+<!--                   --><?php //echo session("note");  ?>
                    <div id="feedBack"></div>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
@@ -231,7 +231,7 @@
         alert("hello world");
     }
 
-    <?php if ($this->session->flashdata("note")){
+    <?php if (session("note")){
         echo "notify('Employee state changed successfuly!!', 'top', 'right', 'success');";
 
     } ?>

@@ -1,86 +1,108 @@
 @extends('layouts.vertical', ['title' => 'Payroll'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="../../../../global_assets/js/plugins/forms/selects/select2.min.js"></script>
+
 @endpush
 
 @push('head-scriptTwo')
 
-<script src="{{ asset('assets/js/form_layouts.js') }}"></script>
-<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
-
-@section('page-header')
-@include('layouts.shared.page-header')
-@endsection
 
 @section('content')
 @php
-$payroll_details = $data['payroll_details'];
-$payroll_month_info =$data['payroll_month_info'];
-$payroll_list = $data['payroll_list'];
-$payroll_date = $data['payroll_date'];
-$payroll_totals = $data['payroll_totals'];
+    $payroll_details = $data['payroll_details'];
+    $payroll_month_info =$data['payroll_month_info'];
+    $payroll_list = $data['payroll_list'];
+    $payroll_date = $data['payroll_date'];
+    $payroll_totals = $data['payroll_totals'];
 
-$total_allowances = $data['total_allowances'];
-$total_bonuses = $data['total_bonuses'];
-$total_loans = $data['total_loans'];
-$total_overtimes = $data['total_overtimes'];
-$total_deductions = $data['total_deductions'];
-$payroll_state = $data['payroll_state'];
+    $total_allowances = $data['total_allowances'];
+    $total_bonuses = $data['total_bonuses'];
+    $total_loans = $data['total_loans'];
+    $total_overtimes = $data['total_overtimes'];
+    $total_deductions = $data['total_deductions'];
+    $payroll_state = $data['payroll_state'];
 
-$payrollMonth = $payroll_date;
-$payrollState = $payroll_state;
-foreach ($payroll_totals as $row) {
-$salary = $row->salary;
-$pension_employee = $row->pension_employee;
-$pension_employer = $row->pension_employer;
-$medical_employee = $row->medical_employee;
-$medical_employer = $row->medical_employer;
-$sdl = $row->sdl;
-$wcf = $row->wcf;
-$allowances = $row->allowances;
-$taxdue = $row->taxdue;
-$meals = $row->meals;
-}
-$paid_heslb = null;
-$remained_heslb = null;
-$paid = null;
-$remained = null;
-foreach ($total_loans as $key) {
-if ($key->description == "HESLB"){
-$paid_heslb = $key->paid;
-$remained_heslb = $key->remained;
+    $payrollMonth = $payroll_date;
+    $payrollState = $payroll_state;
 
-}else{
-$paid = $key->paid;
-$remained = $key->remained;
-}
-}
-foreach ($payroll_month_info as $key) {
-// $paid = $key->payroll_date;
-$cheklist = $key->pay_checklist;
-$state = $key->state;
-}
+    foreach ($payroll_totals as $row) {
+        $salary = $row->salary;
+        $pension_employee = $row->pension_employee;
+        $pension_employer = $row->pension_employer;
+        $medical_employee = $row->medical_employee;
+        $medical_employer = $row->medical_employer;
+        $sdl = $row->sdl;
+        $wcf = $row->wcf;
+        $allowances = $row->allowances;
+        $taxdue = $row->taxdue;
+        $meals = $row->meals;
+    }
+
+    $paid_heslb = null;
+    $remained_heslb = null;
+    $paid = null;
+    $remained = null;
+
+    foreach ($total_loans as $key) {
+        if ($key->description == "HESLB"){
+            $paid_heslb = $key->paid;
+            $remained_heslb = $key->remained;
+        }else{
+            $paid = $key->paid;
+            $remained = $key->remained;
+        }
+    }
+
+    foreach ($payroll_month_info as $key) {
+        // $paid = $key->payroll_date;
+        $cheklist = $key->pay_checklist;
+        $state = $key->state;
+    }
 
 @endphp
 
 <div class="card">
     <div class="card-header border-0">
-        <h3>Payroll Info <?php if($payrollState == 1){ ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-                href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>"
-                target="blank"><button type="button" name="print" value="print" class="btn btn-info">EXPORT
-                    INFO</button></a><?php } ?></h3>
+        <div class="d-flex">
+
+            <h3 class="me-4">Payroll Info</h3>
+
+            @if($payrollState == 1)
+            <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
+                <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> EXPORT INFO</button>
+            </a>
+            @endif
+        </div>
+
     </div>
-
-
 
 
     <div class="card-body">
 
-        <div class="col-md-6 col-sm-6 col-xs-12 offset-4">
+        <div class="col-md-6 col-sm-6 col-xs-12 offset-3 bg-danger">
+            <div class="card border-0 shadow-none">
+                <div class="card-header border-0 shadow-none text-center">
+                    <h2>Details</h2>
+                </div>
+
+                <div class="card-body shadow-none border-0">
+                    <table class="table border-0">
+                        <tbody>
+                            <tr>
+                                <td><h5>Salaries : </h5></td>
+                                <td>{{ number_format($salary,2) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="text-center">
+
+            </div>
+
+            <div class="content"></div>
+
             <div class="x_panel">
                 <div class="x_title">
                     <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>

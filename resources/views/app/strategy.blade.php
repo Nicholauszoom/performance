@@ -10,11 +10,11 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php 
   
-  $CI_Model = get_instance();
+  //$CI_Model = get_instance();
   $CI_Model->load->model('performance_model');
   $adhoc = 0;
   $strategyID = session('current_strategy');
@@ -518,7 +518,7 @@
             
                               <?php
             
-                                 echo $this->session->flashdata("note");  ?>
+                                 echo session("note");  ?>
                               
                                 <table id="datatable-task-table" class="table table-striped table-bordered">
                                   <thead>

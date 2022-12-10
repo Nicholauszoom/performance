@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php
 
@@ -67,7 +67,7 @@
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                   <div id="resultFeedback"></div>
-                  <?php if ($this->session->flashdata("note")){
+                  <?php if (session("note")){
 //                      echo '<script> showMessage("yes"); </script>';
                   } ?>
                 <div class="x_panel">
@@ -933,18 +933,18 @@
         alert("hello world");
     }
 
-    <?php if ($this->session->flashdata("note")){
+    <?php if (session("note")){
         echo "notify('Employee exited successfuly!!', 'top', 'right', 'success');";
 
     } ?>
 
-    <?php if ($this->session->flashdata("retired")){
+    <?php if (session("retired")){
         echo "notify('Employee retired successfuly!!', 'top', 'right', 'success');";
 
     } ?>
 
 
-    <?php if ($this->session->flashdata("loginuser")){
+    <?php if (session("loginuser")){
         echo "notify('Employee login user!!', 'top', 'right', 'success');";
 
     } ?>

@@ -434,7 +434,7 @@
 
     <?php  
         
-       @include("app/includes/unrefresh_form_submit.php";
+       @include("app/includes/unrefresh_form_submit");
      ?>
 
      <!-- DATE SCRIPTS  -->

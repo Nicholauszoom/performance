@@ -38,7 +38,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                   <?php echo $this->session->flashdata("notepack");  ?>
+                   <?php echo session("notepack");  ?>
                     <table  class="table ">
                       <thead>
                         <tr>

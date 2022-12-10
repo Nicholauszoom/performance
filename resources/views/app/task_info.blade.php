@@ -87,7 +87,7 @@
   <div class="page-title">
     <div class="title_left">
       <h3>Task Info and Details</h3>
-      <?php //echo $this->session->flashdata("note");  ?>
+      <?php //echo session("note");  ?>
     </div>
   </div>            
   <div class="clearfix"></div>
@@ -381,7 +381,7 @@
             
                               <?php
             
-                                 echo $this->session->flashdata("note");  ?>
+                                 echo session("note");  ?>
                                  <div id="resultFeedback"></div>
                               
                                 <table id="" class="table table-striped table-bordered">
@@ -506,7 +506,7 @@
             format: 'DD/MM/YYYY'
           },
           singleClasses: "picker_1",
-          startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>",
+          startDate: "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>",
           minDate:minStartDate,
           maxDate:maxEndDate
         }, function(start, end, label) {
@@ -527,7 +527,7 @@
             format: 'DD/MM/YYYY'
           },
           singleClasses: "picker_1",
-          startDate: "<?php echo date('d/m/Y', strtotime($endDate)); ?>",
+          startDate: "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>",
           minDate:minStartDate,
           maxDate:maxEndDate
         }, function(start, end, label) {
@@ -549,7 +549,7 @@
             format: 'DD/MM/YYYY'
           },
           singleClasses: "picker_1",
-          startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>"
+          startDate: "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>""
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
@@ -566,7 +566,7 @@
             format: 'DD/MM/YYYY'
           },
           singleClasses: "picker_1",
-          startDate: "<?php echo date('d/m/Y', strtotime($endDate)); ?>"
+          startDate: "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>""
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });

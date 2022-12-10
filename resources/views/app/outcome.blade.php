@@ -42,7 +42,7 @@
 
                   <?php
 
-                     echo $this->session->flashdata("note");  ?>
+                     echo session("note");  ?>
                   <div id="resultfeed"></div>
                     <table  id="datatable" class="table table-striped table-bordered">
                       <thead>

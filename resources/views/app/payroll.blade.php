@@ -1,37 +1,31 @@
 
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Payroll'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
-<?php ?>
-
-<!-- /top navigation -->
-
-
-<!-- page content -->
 <div class="right_col" role="main">
-    <div class="clearfix"></div>
+
     <div class="page-title">
         <div class="title_left">
             <h3>Payroll</h3>
         </div>
     </div>
-    <div class="clearfix"></div>
+
     <div class="row">
         <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
             <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2>Run Payroll</h2>
-                        <div class="clearfix"></div>
+
                     </div>
                     <div class="x_content">
                         <div id="payrollFeedback"></div>
@@ -63,7 +57,7 @@
 
 
                     </h2>
-                    <div class="clearfix"></div>
+
                 </div>
                 <div class="x_content">
                     <div id="feedBackMail"></div>
@@ -97,7 +91,7 @@
                                             }, 1000)
                                         </script>
                                     <?php  }?>
-                                    
+
                                     <?php } else { ?>
                                         <span class="label label-success">APPROVED</span><br>
                                     <?php  } ?>
@@ -144,209 +138,213 @@
         </div>
     </div>
 </div>
-<!-- /page content -->
-<!-- NEW PAGE CONTENT -->
+
 
 @include ("app/includes/update_allowances")
 
-<script type="text/javascript">
-    $('#initPayroll').submit(function(e){
-        e.preventDefault();
-        $('#initPayroll').hide();
-        $.ajax({
-            url:"<?php echo  url(''); ?>/flex/payroll/initPayroll",
-            type:"post",
-            data:new FormData(this),
-            processData:false,
-            contentType:false,
-            cache:false,
-            async:false
-        })
-            .done(function(data){
-                $('#payrollFeedback').fadeOut('fast', function(){
-                    $('#payrollFeedback').fadeIn('fast').html(data);
-                });
-                setTimeout(function(){
-                    location.reload();
-                }, 1000)
-            })
-            .fail(function(){
-                alert('Payroll Failed!! ...');
-            });
 
+@endsection
 
-    });
-</script>
-
-<script >
-    function approvePayroll() {
-        if (confirm("Are You Sure You Want To Approve This Payroll") == true) {
-            // var id = id;
-            $('#hideList').hide();
+@push('footer-script')
+    <script type="text/javascript">
+        $('#initPayroll').submit(function(e){
+            e.preventDefault();
+            $('#initPayroll').hide();
             $.ajax({
-                url:"<?php echo url('flex/payroll/runpayroll');?>/<?php echo $pendingPayroll_month; ?>",
-                success:function(data)
-                {
-                    if(data.status == 'OK'){
-                        alert("Payroll Approved Successifully");
+                url:"<?php echo  url(''); ?>/flex/payroll/initPayroll",
+                type:"post",
+                data:new FormData(this),
+                processData:false,
+                contentType:false,
+                cache:false,
+                async:false
+            })
+                .done(function(data){
+                    $('#payrollFeedback').fadeOut('fast', function(){
+                        $('#payrollFeedback').fadeIn('fast').html(data);
+                    });
+                    setTimeout(function(){
+                        location.reload();
+                    }, 1000)
+                })
+                .fail(function(){
+                    alert('Payroll Failed!! ...');
+                });
 
-                        // SEND EMAILS
-                        if (confirm("Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??") == true) {
-                            $.ajax({
-                                url:"<?php echo url('flex/payroll/send_payslips');?>/<?php echo $pendingPayroll_month; ?>",
-                                success:function(data) { }
-                            });
+
+        });
+    </script>
+
+    <script >
+        function approvePayroll() {
+            if (confirm("Are You Sure You Want To Approve This Payroll") == true) {
+                // var id = id;
+                $('#hideList').hide();
+                $.ajax({
+                    url:"<?php echo url('flex/payroll/runpayroll');?>/<?php echo $pendingPayroll_month; ?>",
+                    success:function(data)
+                    {
+                        if(data.status == 'OK'){
+                            alert("Payroll Approved Successifully");
+
                             // SEND EMAILS
+                            if (confirm("Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??") == true) {
+                                $.ajax({
+                                    url:"<?php echo url('flex/payroll/send_payslips');?>/<?php echo $pendingPayroll_month; ?>",
+                                    success:function(data) { }
+                                });
+                                // SEND EMAILS
+                            }
+
+                            $('#payrollFeedback').fadeOut('fast', function(){
+                                $('#payrollFeedback').fadeIn('fast').html(data.message);
+                            });
+                            setTimeout(function(){// wait for 2 secs(2)
+                                location.reload(); // then reload the div to clear the success notification
+                            }, 1500);
+                        } else {
+                            alert("Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin.");
+
+                            $('#payrollFeedback').fadeOut('fast', function(){
+                                $('#payrollFeedback').fadeIn('fast').html(data.message);
+                            });
                         }
 
-                        $('#payrollFeedback').fadeOut('fast', function(){
-                            $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        });
-                        setTimeout(function(){// wait for 2 secs(2)
-                            location.reload(); // then reload the div to clear the success notification
-                        }, 1500);
-                    } else {
-                        alert("Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin.");
-
-                        $('#payrollFeedback').fadeOut('fast', function(){
-                            $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        });
                     }
 
-                }
-
-            });
+                });
+            }
         }
-    }
-</script>
-<script >
-    function recomendPayroll() {
-        if (confirm("Are You Sure You Want To Recommend This Payroll") == true) {
-            // var id = id;
-            $('#hideList').hide();
-            $.ajax({
-                url:"<?php echo url('flex/payroll/recommendpayroll');?>/<?php echo $pendingPayroll_month; ?>",
-                success:function(data)
-                {
-                    if(data.status == 'OK'){
-                        alert("Payroll Recommend Successifully");
+    </script>
+
+    <script >
+        function recomendPayroll() {
+            if (confirm("Are You Sure You Want To Recommend This Payroll") == true) {
+                // var id = id;
+                $('#hideList').hide();
+                $.ajax({
+                    url:"<?php echo url('flex/payroll/recommendpayroll');?>/<?php echo $pendingPayroll_month; ?>",
+                    success:function(data)
+                    {
+                        if(data.status == 'OK'){
+                            alert("Payroll Recommend Successifully");
 
 
-                        $('#payrollFeedback').fadeOut('fast', function(){
-                            $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        });
-                        setTimeout(function(){// wait for 2 secs(2)
-                            location.reload(); // then reload the div to clear the success notification
-                        }, 1500);
-                    } else {
-                        alert("Payroll Recommendation FAILED, Try again,  If the Error persists Contact Your System Admin.");
+                            $('#payrollFeedback').fadeOut('fast', function(){
+                                $('#payrollFeedback').fadeIn('fast').html(data.message);
+                            });
+                            setTimeout(function(){// wait for 2 secs(2)
+                                location.reload(); // then reload the div to clear the success notification
+                            }, 1500);
+                        } else {
+                            alert("Payroll Recommendation FAILED, Try again,  If the Error persists Contact Your System Admin.");
 
-                        $('#payrollFeedback').fadeOut('fast', function(){
-                            $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        });
+                            $('#payrollFeedback').fadeOut('fast', function(){
+                                $('#payrollFeedback').fadeIn('fast').html(data.message);
+                            });
+                        }
+
                     }
 
-                }
-
-            });
+                });
+            }
         }
-    }
-</script>
+    </script>
 
+    <script >
+        function cancelPayroll() {
+            if (confirm("Are You Sure You Want To Cancel This Payroll") == true) {
+                // var id = id;
+                $('#hideList').hide();
+                $.ajax({
+                    url:"<?php echo url('flex/payroll/cancelpayroll');?>",
+                    success:function(data)
+                    {
+                        if(data.status == 'OK'){
+                            alert("Payroll was Cancelled Successifully!");
 
-<script >
-    function cancelPayroll() {
-        if (confirm("Are You Sure You Want To Cancel This Payroll") == true) {
-            // var id = id;
-            $('#hideList').hide();
-            $.ajax({
-                url:"<?php echo url('flex/payroll/cancelpayroll');?>",
-                success:function(data)
-                {
-                    if(data.status == 'OK'){
-                        alert("Payroll was Cancelled Successifully!");
+                            $('#payrollFeedback').fadeOut('fast', function(){
+                                $('#payrollFeedback').fadeIn('fast').html(data.message);
+                            });
+                            setTimeout(function(){// wait for 2 secs(2)
+                                location.reload(); // then reload the div to clear the success notification
+                            }, 1500);
+                        } else {
+                            alert("FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin.");
 
-                        $('#payrollFeedback').fadeOut('fast', function(){
-                            $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        });
-                        setTimeout(function(){// wait for 2 secs(2)
-                            location.reload(); // then reload the div to clear the success notification
-                        }, 1500);
-                    } else {
-                        alert("FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin.");
+                            $('#payrollFeedback').fadeOut('fast', function(){
+                                $('#payrollFeedback').fadeIn('fast').html(data.message);
+                            });
+                        }
 
-                        $('#payrollFeedback').fadeOut('fast', function(){
-                            $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        });
                     }
 
-                }
+                });
+            }
+        }
+    </script>
+
+    <script>
+        $(function() {
+            var minStartDate = "<?php echo date("d/m/Y", strtotime("-1 month") ); ?>";
+            var dateToday = "<?php echo date("d/m/Y"); ?>";
+            var maxEndDate = "<?php echo date("d/m/Y", strtotime("+1 month") ); ?>";
+            $('#payrollDate').daterangepicker({
+                drops: 'down',
+                singleDatePicker: true,
+                autoUpdateInput: false,
+                startDate:dateToday,
+                // minDate:minStartDate,
+                maxDate:maxEndDate,
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+                singleClasses: "picker_1"
+            }, function(start, end, label) {
+                // var years = moment().diff(start, 'years');
+                // alert("The Employee is " + years+ " Years Old!");
 
             });
-        }
-    }
-</script>
-<script>
-    $(function() {
-        var minStartDate = "<?php echo date("d/m/Y", strtotime("-1 month") ); ?>";
-        var dateToday = "<?php echo date("d/m/Y"); ?>";
-        var maxEndDate = "<?php echo date("d/m/Y", strtotime("+1 month") ); ?>";
-        $('#payrollDate').daterangepicker({
-            drops: 'down',
-            singleDatePicker: true,
-            autoUpdateInput: false,
-            startDate:dateToday,
-            // minDate:minStartDate,
-            maxDate:maxEndDate,
-            locale: {
-                format: 'DD/MM/YYYY'
-            },
-            singleClasses: "picker_1"
-        }, function(start, end, label) {
-            // var years = moment().diff(start, 'years');
-            // alert("The Employee is " + years+ " Years Old!");
-
+            $('#payrollDate').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY'));
+            });
+            $('#payrollDate').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
         });
-        $('#payrollDate').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY'));
-        });
-        $('#payrollDate').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        });
-    });
-</script>
-<script>
-    function sendEmail(payrollDate) {
+    </script>
 
-        if (confirm("Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??") == true) {
+    <script>
+        function sendEmail(payrollDate) {
 
-            $.ajax({
-                url:"<?php echo url('flex/payroll/send_payslips');?>/"+payrollDate,
-                success:function(data)
-                {
-                    let jq_json_obj = $.parseJSON(data);
-                    let jq_obj = eval (jq_json_obj);
-                    if (jq_obj.status === 'SENT'){
-                        $('#feedBackMail').fadeOut('fast', function(){
-                            $('#feedBackMail').fadeIn('fast').html("<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>");
-                        });
-                        setTimeout(function(){// wait for 2 secs(2)
-                        location.reload(); // then reload the div to clear the success notification
-                        }, 1500);
-                    }else{
-                        $('#feedBackMail').fadeOut('fast', function(){
-                            $('#feedBackMail').fadeIn('fast').html("<p class='alert alert-danger text-center'>Emails sent error</p>");
-                        });
-                        setTimeout(function(){// wait for 2 secs(2)
+            if (confirm("Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??") == true) {
+
+                $.ajax({
+                    url:"<?php echo url('flex/payroll/send_payslips');?>/"+payrollDate,
+                    success:function(data)
+                    {
+                        let jq_json_obj = $.parseJSON(data);
+                        let jq_obj = eval (jq_json_obj);
+                        if (jq_obj.status === 'SENT'){
+                            $('#feedBackMail').fadeOut('fast', function(){
+                                $('#feedBackMail').fadeIn('fast').html("<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>");
+                            });
+                            setTimeout(function(){// wait for 2 secs(2)
                             location.reload(); // then reload the div to clear the success notification
-                        }, 1500);                    }
-                }
+                            }, 1500);
+                        }else{
+                            $('#feedBackMail').fadeOut('fast', function(){
+                                $('#feedBackMail').fadeIn('fast').html("<p class='alert alert-danger text-center'>Emails sent error</p>");
+                            });
+                            setTimeout(function(){// wait for 2 secs(2)
+                                location.reload(); // then reload the div to clear the success notification
+                            }, 1500);                    }
+                    }
 
 
-            });
+                });
 
+            }
         }
-    }
-</script>
-
- @endsection
+    </script>
+ @endpush

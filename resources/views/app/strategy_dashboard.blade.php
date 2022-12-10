@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 
 @include ("app/includes/strategy_charts");

@@ -113,7 +113,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                   <?php echo $this->session->flashdata("notegroup");  ?>
+                   <?php echo session("notegroup");  ?>
                    <div id="feedBackAdd"></div>
                     <form id="addToGroup" method="post">
 

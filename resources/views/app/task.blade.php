@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php
   $adhoc =0;
@@ -44,7 +44,7 @@
 
                   <?php
 
-                     echo $this->session->flashdata("note");  ?>
+                     echo session("note");  ?>
                   <div id="resultfeed"></div>
                     <table id="datatable-keytable" class="table table-striped table-bordered">
                       <thead>
@@ -236,7 +236,7 @@
 
                   <?php
 
-                     echo $this->session->flashdata("note");  ?>
+                     echo session("note");  ?>
                   <div id="resultfeed"></div>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>

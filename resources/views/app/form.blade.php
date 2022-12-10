@@ -16,7 +16,7 @@
 
             <?php 
             //if ($this->uri->segment(2) == "inserted") { 
-              echo $this->session->flashdata("note"); 
+              echo session("note"); 
               
             //}  
              ?>

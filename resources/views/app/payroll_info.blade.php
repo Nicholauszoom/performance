@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php
   $payrollMonth = $payroll_date;
@@ -224,7 +224,6 @@ $remained = null;
         </div>
 <!-- /page content -->   
 
-<?php
 
 @include("app/includes/update_allowances
 

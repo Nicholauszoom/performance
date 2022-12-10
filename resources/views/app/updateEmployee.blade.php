@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php
 ?>
@@ -80,7 +80,7 @@
                     <div class="x_content"> <br>
                         <?php
 
-                     echo $this->session->flashdata("note");  ?>
+                     echo session("note");  ?>
 
                         <div class="col-lg-12">
                             <div class="col-lg-6">
