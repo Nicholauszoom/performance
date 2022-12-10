@@ -118,7 +118,7 @@ class ReportController extends Controller
           }
         $data['info']= $this->reports_model->company_info();
         $data['payroll_date']= $payrolldate;
-        dd("here");
+        // dd("here");
          return view('app.reports/p9', $data); 
     }    
 }
