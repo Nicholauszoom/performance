@@ -1,302 +1,202 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Contracts'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
 @endpush
 
 @section('content')
-
-
-
-<!-- page content -->
-<div class="right_col" role="main">
-    <div class="">
-        <div class="page-title">
-            <div class="title_left">
-                <h3>Company Branch </h3>
-            </div>
-        </div>
-
-        <div class="clearfix"></div>
-
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Branchs
-                            <?php if(session('mng_org')){ ?><a href="#bottom"><button type="button"
-                                    id="modal" data-toggle="modal" data-target="#departmentModal"
-                                    class="btn btn-primary">ADD NEW</button></a> <?php } ?></h2>
-
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                        <table id="" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>S/N</th>
-                                    <th>Name</th>
-                                    <th>Department</th>
-                                    <th>Location</th>
-                                    <?php if(session('mng_org')){ ?>
-                                    <th>Option</th>
-                                    <?php } ?>
-                                </tr>
-                            </thead>
-
-
-                            <tbody>
-                                <?php
-                          foreach ($branch as $row) { ?>
-                                <tr id="domain<?php echo $row->id;?>">
-                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                    <td><?php echo $row->name; ?></td>
-                                    <td><?php echo $row->department_name; ?></td>
-                                    <td><b>Country:</b> <?php echo $row->country; ?><br>
-                                        <b>Region:</b> <?php echo $row->region; ?><br>
-                                        <b>Street:</b> <?php echo $row->street; ?><br>
-                                    </td>
-
-                                    <?php if(session('mng_org')){ ?>
-                                    <td class="options-width">
-                                        <a title="Update" class="icon-2 info-tooltip"><button type="button" id="modal"
-                                                data-toggle="modal" data-target="#updateModal<?php echo $row->id; ?>"
-                                                class="btn btn-info btn-xs"> <i class="fa fa-edit"></i></button></a>
-
-                                        <a href="<?php echo  url(''); ?>/flex/company_branch_info/?id=".base64_encode($row->id); ?>"
-                                            title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button>
-                                        </a>
-                                        <a href="javascript:void(0)" onclick="closeBranch(<?php echo $row->id; ?>)"
-                                            title="Delete Deduction" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
-                                        </a>
-
-
-                                        <!--update Modal -->
-                                        <div class="modal fade" id="updateModal<?php echo $row->id; ?>" tabindex="-1"
-                                            role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title" id="myModalLabel">Update Branch</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <!-- Modal Form -->
-                                                        <form id="demo-form2" enctype="multipart/form-data"
-                                                            method="post"
-                                                            action="<?php echo  url(''); ?>/flex/updateCompanyBranch"
-                                                            data-parsley-validate
-                                                            class="form-horizontal form-label-left">
-
-                                                            <input type="text" name="branchID" hidden=""
-                                                                value="<?php echo $row->id;?>">
-
-                                                            <div class="form-group">
-                                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                    for="last-name">Name
-                                                                </label>
-                                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                    <textarea class="form-control col-md-7 col-xs-12"
-                                                                        required name="name" placeholder="Name"
-                                                                        rows="3"> <?php   echo $row->name; ?></textarea>
-                                                                </div>
-                                                            </div>
-
-
-                                                            <div class="form-group">
-                                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                    for="last-name">Department
-                                                                </label>
-                                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                    <select class="form-control col-md-7 col-xs-12"
-                                                                        required name="department_id"><?php  foreach ($department as $data) {
-                                 # code... ?>
-                                                                        <option value="<?php echo $data->id; ?>">
-                                                                            <?php echo $data->name; ?></option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                         
-
-                                                            <div class="form-group">
-                                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                    for="last-name">Region
-                                                                </label>
-                                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                    <input required type="text" name="region"
-                                                                        value="<?php echo $row->region; ?>"
-                                                                        class="form-control col-md-7 col-xs-12">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                                    for="last-name">Street
-                                                                </label>
-                                                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                    <input required type="text" name="street"
-                                                                        value="<?php echo $row->street; ?>"
-                                                                        class="form-control col-md-7 col-xs-12">
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default"
-                                                                    data-dismiss="modal">Close</button>
-                                                                <input type="submit" value="UPDATE" name="update"
-                                                                    class="btn btn-primary" />
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <!-- /.modal-content -->
-                                                </div>
-                                                <!-- /.modal-dialog -->
-                                            </div>
-                                            <!-- Modal Form -->
-                                        </div>
-                                        <!-- /.modal -->
-                                        <!-- Update Modal-->
-                                        <!--ACTIONS-->
-                                    </td>
-                                    <?php } ?>
-                                </tr>
-                                <?php } //} ?>
-                            </tbody>
-                        </table>
-                    </div>
+ <div class="right_col" role="main">    
+     <div class="page-title">
+                <div class="title_left">
+                    <h3>Organisation</h3>
                 </div>
             </div>
+  <!-- Basic datatable -->
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex justify-content-between">
+            <h5 class="mb-0">Company Branches</h5>
+            <button   type="button"
+                    class="btn btn-perfrom"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addPermissionModal">
+                    <i class="ph-plus me-2"></i>Add New
+            </button>
+          </div>
+          
+        </div>
+        <table class="table datatable-basic">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Location</th>
+              <th class="text-center">Option</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Marth</td>
+              <td>Enright</td>
+              
+              <td>
+                <span class="badge bg-success bg-opacity-10 text-success"
+                  >Active</span
+                >
+              </td>
+              <td class="text-center">
+                <div class="d-inline-flex">
+                  <div class="dropdown">
+                    <a
+                      href="#"
+                      class="text-body"
+                      data-bs-toggle="dropdown"
+                    >
+                      <i class="ph-list"></i>
+                    </a>
 
-
-            <?php if(session('mng_org')){ ?>
-            <div id="bottom" class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2><i class="fa fa-tasks"></i> Add Company Branch</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a href="#" class="dropdown-item">
+                        <i class="ph-file-pdf me-2"></i>
+                        Export to .pdf
+                      </a>
+                      <a href="#" class="dropdown-item">
+                        <i class="ph-file-xls me-2"></i>
+                        Export to .csv
+                      </a>
+                      <a href="#" class="dropdown-item">
+                        <i class="ph-file-doc me-2"></i>
+                        Export to .doc
+                      </a>
                     </div>
-                    <div class="x_content">
-                        <div id="feedBack"></div>
-                        <form autocomplete="off" id="addBranch" enctype="multipart/form-data" method="post"
-                            data-parsley-validate class="form-horizontal form-label-left">
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  <!-- /basic datatable -->
 
-                            <!-- START -->
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Branch
-                                    Name</label>
-                                </label>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                    <textarea required="" class="form-control col-md-7 col-xs-12" name="name"
-                                        placeholder="Branch Name" rows="2"></textarea>
+
+@endsection
+
+@section('modal')
+
+@include('organisation.branch.add')
+
+@endsection
+
+
+{{-- @section('content')
+<section class="section">
+    <div class="section-body">
+        @include('layouts.alerts.message')
+        <div class="row">
+            <div class="col-12 col-sm-6 col-lg-12">
+                <div class="card">
+                     <div class="card-header header-elements-sm-inline">
+                <h4 class="card-title"> List of Positions</h4>
+                <div class="header-elements">
+
+
+                       <button type="button" class="btn btn-outline-info btn-xs px-4 pull-right"
+                            data-toggle="modal" data-target="#addPermissionModal">
+                        <i class="fa fa-plus-circle"></i>
+                        Add
+                    </button>
+
+                          </div>
+
+              </div>
+
+
+                    <div class="card-body">
+
+
+                        <div class="tab-content tab-bordered" id="myTab3Content">
+                            <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
+                                aria-labelledby="home-tab2">
+                                <div class="table-responsive">
+
+
+
+
+
+                                    <table class="table datatable-basic table-striped" id="table-1">
+                                    <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if(isset($departments))
+                    @foreach($departments as $departments)
+
+                        <tr>
+                            <th>{{ $loop->iteration }}</th>
+                            <td>{{ $permission->name }}</td>
+
+                            <td align="center">
+                                {!! Form::open(['route' => ['departments.destroy', $permission->id], 'method' => 'delete']) !!}
+                                <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
+                                        data-toggle="modal"
+                                        data-id="{{$permission->id}}"
+                                 data-name="{{$permission->name}}"
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+                                {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                                {{ Form::close() }}
+                            </td>
+                        </tr>
+
+                    @endforeach
+                    @endif
+                    </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3  col-xs-6">Department
-                                </label>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                    <select required="" name="department_id" class="select4_single form-control"
-                                        tabindex="-1">
-                                        <option>select Department</option>
-                                        <?php  foreach ($department as $row) {
-                                 # code... ?>
-                                        <option value="<?php echo $row->id; ?>">
-                                            <?php echo $row->name; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3  col-xs-6">Country</label>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                    <select required name="country" class="select_country form-control" tabindex="-1">
-                                        <option></option>
-                                        <?php foreach ($countrydrop as $row){ ?>
-                                        <option value="<?php echo $row->code; ?>"><?php echo $row->name; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Region</label>
-                                </label>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                    <input required="" class="form-control col-md-7 col-xs-12" name="region"
-                                        placeholder="Branch Region" rows="2" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Street</label>
-                                </label>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                    <input required="" class="form-control col-md-7 col-xs-12" name="street"
-                                        placeholder="Branch Street" rows="2" />
-                                </div>
-                            </div>
-                    </div>
-                    <!-- END -->
-                    <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <button class="btn btn-primary">ADD</button>
+
+
                         </div>
                     </div>
-                    </form>
-
                 </div>
             </div>
-            <?php } ?>
-
         </div>
 
     </div>
+</section>
+
 </div>
-</div>
 
 
+@include('access-controll.department.add')
+@include('access-controll.department.edit')
 
+@endsection --}}
 
-<!-- /page content -->
+{{-- @section('scripts')
 
+<script>
+       $('.datatable-basic').DataTable({
+            autoWidth: false,
+            "columnDefs": [
+                {"targets": [1]}
+            ],
+           dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+            "language": {
+               search: '<span>Filter:</span> _INPUT_',
+                searchPlaceholder: 'Type to filter...',
+                lengthMenu: '<span>Show:</span> _MENU_',
+             paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
+            },
 
-
-
-<script type="text/javascript">
-$('#addBranch').submit(function(e) {
-    e.preventDefault();
-    $.ajax({
-            url: "<?php echo  url(''); ?>/flex/addCompanyBranch",
-            type: "post",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false
-        })
-        .done(function(data) {
-            $('#feedBack').fadeOut('fast', function() {
-                $('#feedBack').fadeIn('fast').html(data);
-            });
-            setTimeout(function() { // wait for 2 secs(2)
-                location.reload(); // then reload the page.(3)
-            }, 2000);
-            //   $('#updateMiddleName')[0].reset();
-        })
-        .fail(function() {
-            alert('Request Failed!! ...');
         });
-});
-</script>
- @endsection
+    </script>
+@endsection --}}
