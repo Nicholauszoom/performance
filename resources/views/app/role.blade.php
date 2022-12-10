@@ -1,26 +1,79 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Settings'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
 
-<?php $car = 0; ?>
+<div class="row">
 
-@php $car=0; @endphp
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <h3 class="text-muted">Roles and Permission Groups</h3>
+
+            @if (session('mng_roles_grp'))
+            <button class="btn btn-main"> <i class="ph-plus me-2"></i>Create New Group</button>
+            @endif
+        </div>
+      </div>
+
+      <table  class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>S/N</th>
+            <th>Name</th>
+            @if( session('mng_roles_grp'))
+            <th>Option</th>
+            @endif
+          </tr>
+        </thead>
+
+        <tbody>
+            @foreach ($rolesgroups as $row)
+            <tr id = "{{ "recordRoleGroup" .$row->id }}">
+              <td width="1px">{{ $row->SNo }}</td>
+              <td>{{ $row->name}}</td>
+              @if( session('mng_roles_grp'))
+                <td class="options-width">
+                    @if($row->type>0)
+                      <a  href="{{ url('/flex/groups/?id="' .base64_encode($row->id)) }}" title="Info and Details" class="icon-2 info-tooltip">
+                        <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                      </a>
+
+             <a href="javascript:void(0)" onclick="deleteRoleGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+             <?php }  ?>
+             </td>
+            <?php }  ?>
+              </tr>
+            <?php }  ?>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+  {{-- /col --}}
 
 
-        <!-- page content -->
-        <div class="right_col" role="main">
+</div>
+
+
+
+
+  <div class="card" role="main">
+
+
+    <
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Roles and Groups</h3>
+
               </div>
             </div>
             <div class="clearfix"></div>
@@ -303,93 +356,97 @@
         <!-- /page content -->
 
 
+@endsection
+
+@push('footer-script')
+
 <script type="text/javascript">
 
-function deleteRole(id)
+  function deleteRole(id)
     {
-        if (confirm("Are You Sure You Want To Delete This Role?") == true) {
-        var id = id;
+          if (confirm("Are You Sure You Want To Delete This Role?") == true) {
+          var id = id;
 
-        $.ajax({
-            url:"<?php echo url('flex/deleteRole');?>/"+id,
-            success:function(data)
-            {
-              if(data.status == 'OK'){
-              alert("DELETED Successifully");
-               $('#feedBackRole').fadeOut('fast', function(){
-                  $('#feedBackRole').fadeIn('fast').html(data.message);
-                });
-              $('#recordRole'+id).hide();
-              }else{
-              alert("FAILED: Delete failed Please Try again");
+          $.ajax({
+              url:"<?php echo url('flex/deleteRole');?>/"+id,
+              success:function(data)
+              {
+                if(data.status == 'OK'){
+                alert("DELETED Successifully");
+                 $('#feedBackRole').fadeOut('fast', function(){
+                    $('#feedBackRole').fadeIn('fast').html(data.message);
+                  });
+                $('#recordRole'+id).hide();
+                }else{
+                alert("FAILED: Delete failed Please Try again");
+                }
+
+
+
               }
 
-
-
-            }
-
-            });
-        }
-    }
+              });
+          }
+      }
 
 
 
-function deleteRoleGroup(id)
-    {
-        if (confirm("Are You Sure You Want To Delete This Group?") == true) {
-        var id = id;
+  function deleteRoleGroup(id)
+      {
+          if (confirm("Are You Sure You Want To Delete This Group?") == true) {
+          var id = id;
 
-        $.ajax({
-            url:"<?php echo url('flex/deleteGroup');?>/"+id,
-            success:function(data)
-            {
-              if(data.status == 'OK'){
-              alert("Group DELETED Successifully");
-               $('#feedBackRoleGroup').fadeOut('fast', function(){
-                  $('#feedBackRoleGroup').fadeIn('fast').html(data.message);
-                });
-              $('#recordRoleGroup'+id).hide();
-              }else{
-              alert("FAILED: Delete failed Please Try again");
+          $.ajax({
+              url:"<?php echo url('flex/deleteGroup');?>/"+id,
+              success:function(data)
+              {
+                if(data.status == 'OK'){
+                alert("Group DELETED Successifully");
+                 $('#feedBackRoleGroup').fadeOut('fast', function(){
+                    $('#feedBackRoleGroup').fadeIn('fast').html(data.message);
+                  });
+                $('#recordRoleGroup'+id).hide();
+                }else{
+                alert("FAILED: Delete failed Please Try again");
+                }
+
+
+
               }
 
+              });
+          }
+      }
 
 
-            }
+  function deleteFinanceGroup(id)
+      {
+          if (confirm("Are You Sure You Want To Delete This Group?") == true) {
+          var id = id;
 
-            });
-        }
-    }
+          $.ajax({
+              url:"<?php echo url('flex/deleteGroup');?>/"+id,
+              success:function(data)
+              {
+                if(data.status == 'OK'){
+                alert("Group DELETED Successifully");
+                 $('#feedBackFinanceGroup').fadeOut('fast', function(){
+                    $('#feedBackFinanceGroup').fadeIn('fast').html(data.message);
+                  });
+                $('#recordFinanceGroup'+id).hide();
+                }else{
+                alert("FAILED: Delete failed Please Try again");
+                }
 
 
-function deleteFinanceGroup(id)
-    {
-        if (confirm("Are You Sure You Want To Delete This Group?") == true) {
-        var id = id;
 
-        $.ajax({
-            url:"<?php echo url('flex/deleteGroup');?>/"+id,
-            success:function(data)
-            {
-              if(data.status == 'OK'){
-              alert("Group DELETED Successifully");
-               $('#feedBackFinanceGroup').fadeOut('fast', function(){
-                  $('#feedBackFinanceGroup').fadeIn('fast').html(data.message);
-                });
-              $('#recordFinanceGroup'+id).hide();
-              }else{
-              alert("FAILED: Delete failed Please Try again");
               }
 
+              });
+          }
+      }
 
 
-            }
-
-            });
-        }
-    }
-
-
-</script>
- @endsection
+  </script>
+@endpush
 
