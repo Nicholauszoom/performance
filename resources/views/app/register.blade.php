@@ -61,7 +61,7 @@ filter: progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=135, Colo
                                         <span><font color="red"><?php// echo form_error("password_conf");?></font></span>
                                     </p>
                                     <p><font color="red">
-                                        <?php echo $this->session->flashdata("error");  ?>
+                                        <?php echo session("error");  ?>
                                         </font>
                                     </p>
 

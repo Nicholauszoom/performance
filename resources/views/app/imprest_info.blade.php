@@ -41,7 +41,7 @@
   <div class="page-title">
     <div class="title_left">
       <h3>Imprest Info and Details</h3>
-      <?php //echo $this->session->flashdata("note");  ?>
+      <?php //echo session("note");  ?>
     </div>
   </div>            
   <div class="clearfix"></div>
@@ -249,7 +249,7 @@
             
                               <?php
             
-                                 // echo $this->session->flashdata("note");  ?>
+                                 // echo session("note");  ?>
                                  <div id="resultFeedback"></div>
                               
                                 <table id="" class="table table-striped table-bordered">

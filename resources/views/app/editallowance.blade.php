@@ -40,7 +40,7 @@
                   </div>
                   <div class="x_content">
                   
-                   <?php //echo $this->session->flashdata("note");  ?>
+                   <?php //echo session("note");  ?>
 
                      <?php
             if (isset($allowance)){

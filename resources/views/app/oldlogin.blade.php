@@ -26,7 +26,7 @@
                                     </p>
                                     <p><font color="red">
                                         @if(Session::has('note'))      {{ session('note') }}  @endif
-                                        echo $this->session->flashdata("error"); ?>
+                                        echo session("error"); ?>
                                         </font>
                                     </p>
 

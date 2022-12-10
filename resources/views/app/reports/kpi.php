@@ -89,8 +89,8 @@ $pdf->AddPage('L', 'A4');
 // $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
 
-  $CI_Model = get_instance();
-  $CI_Model->load->model('flexperformance_model');
+  //$CI_Model = get_instance();
+  //$CI_Model->load->model('flexperformance_model');
   $employeeID = $empID;
   
   $duration = $CI_Model->reports_model->taskDuration($employeeID);

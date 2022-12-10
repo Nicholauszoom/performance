@@ -518,7 +518,7 @@
             
                               <?php
             
-                                 echo $this->session->flashdata("note");  ?>
+                                 echo session("note");  ?>
                               
                                 <table id="datatable-task-table" class="table table-striped table-bordered">
                                   <thead>

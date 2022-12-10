@@ -28,7 +28,8 @@ class GeneralController extends Controller
       $this->reports_model = new ReportModel();
       $this->attendance_model = new AttendanceModel();
       $this->project_model = new ProjectModel();
-      $this->performance_model = new PerformanceModel();
+      $this->performanceModel = new PerformanceModel();
+      $this->payroll_model = new Payroll;
   
     }
 

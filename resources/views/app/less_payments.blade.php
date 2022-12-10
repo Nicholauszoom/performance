@@ -131,7 +131,6 @@
         </div>
 <!-- /page content -->
 
-<?php
 
 @include("app/includes/update_allowances
 

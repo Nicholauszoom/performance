@@ -1134,7 +1134,6 @@
 </div>
 
 
-<?php
 
 @include("app/includes/imprest_operations.php";
 @include("app/includes/overtime_operations.php";

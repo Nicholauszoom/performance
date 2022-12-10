@@ -21,15 +21,15 @@ class PerformanceController extends Controller
 {
 
   public function __construct(Request $request) {
-    parent::__construct();
+    // parent::__construct();
 
 
-    $this->load->helper('url');
-    $this->load->library('form_validation');
-    $this->load->library('encryption');
-    $this->load->library('Pdf');
-    $this->load->library('user_agent');
-    $this->load->model('project_model');
+    // $this->load->helper('url');
+    // $this->load->library('form_validation');
+    // $this->load->library('encryption');
+    // $this->load->library('Pdf');
+    // $this->load->library('user_agent');
+    // $this->load->model('project_model');
 
 
     $this->flexperformance_model = new FlexPerformanceModel();
@@ -50,7 +50,7 @@ class PerformanceController extends Controller
         $this->register();
       } else {
         session('error', 'Sorry! You Have to Login Before any Attempt');
-        redirect(base_url()."index.php/base_controller/",'refresh');
+        // redirect(base_url()."index.php/base_controller/",'refresh');
       }
     }
 

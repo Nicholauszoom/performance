@@ -22,9 +22,9 @@
             </div>
             <div class="clearfix"></div>
             
-               <?php echo $this->session->flashdata("notegroup"); 
+               <?php echo session("notegroup"); 
                
-               echo $this->session->flashdata("note");  ?>
+               echo session("note");  ?>
 
             <div class="row">
 

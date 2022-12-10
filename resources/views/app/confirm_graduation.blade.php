@@ -13,8 +13,8 @@
 
 <?php
   
-  $CI_Model = get_instance();
-  $CI_Model->load->model('flexperformance_model');
+  //$CI_Model = get_instance();
+  //$CI_Model->load->model('flexperformance_model');
   
   if($mode == 1){
           $header = "Employee Qualifications";}

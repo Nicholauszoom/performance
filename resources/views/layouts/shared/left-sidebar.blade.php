@@ -39,14 +39,14 @@
                 </li>
                 {{-- /Dashboard --}}
 
-                {{-- Projects --}}
+                <!-- {{-- Projects --}} -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link" href="<?php echo url(''); ?>/flex/project/" >
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
                 </li>
-                {{-- /projects --}}
+                <!-- {{-- /projects --}} -->
 
 
                 <li class="nav-item nav-item-submenu">
@@ -98,6 +98,21 @@
                     </ul>
                 </li>
 
+
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-users-three"></i>
+                        <span> Leave and Attendance</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+                    <?php if( session('mng_attend')){ ?>
+                      <li class="nav-item"  ><a class="nav-link" href="<?php echo url(''); ?>/flex/attendance/attendees">Attendance</a></li> 
+                  <?php } ?>
+                      <li class="nav-item"  ><a class="nav-link" href="<?php echo url(''); ?>/flex/attendance/leave">Leave Applications</a></li>
+                      <li class="nav-item"  ><a class="nav-link" href="<?php echo url(''); ?>/flex/attendance/leavereport">Leave Reports</a></li>
+                    </ul>
+                </li>
                 {{-- Payroll management --}}
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
@@ -174,6 +189,8 @@
                       <?php if(session('mng_paym')){ ?>
                           <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/salary_calculator" > Salary Calculator </a></li>
                       <?php } ?>
+
+
                   </ul>
                 </li>
                 {{-- /Payroll management --}}
@@ -368,7 +385,7 @@
                         <span>Settings</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="{{ route('system.index') }}"
                                 class="nav-link {{ request()->routeIs('system.index') ? 'active' : null }}">
                                 Company Setting
@@ -400,7 +417,28 @@
                                 class="nav-link {{ request()->routeIs('audit') ? 'active' : null }}">
                                 Audit Trail
                             </a>
-                        </li>
+                        </li> -->
+
+                        <?php if( session('mng_roles_grp')){ ?>
+                      <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/role">Roles and Groups</a></li>
+                      <?php } ?>
+                      <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/allowance">Allowances</a></li>
+                      <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/allowance_overtime">Overtime</a></li>
+                      <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/statutory_deductions">Statutory Deductions</a></li>
+                      <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/non_statutory_deductions">Non-Statutory Deductions</a></li>
+                 
+                      <?php if( session('mng_bank_info')){ ?>
+                      <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/bank">Banking Information</a></li>
+                      
+                      <?php } if( session('mng_audit')){ ?>
+                        <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/audit_logs">Audit Trail</a></li>
+                      <?php } ?>
+                      <!-- <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/performance/tasksettings">Task Settings</a></li> 
+                       <?php //} ?>-->
+                        <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/performance/funder"></i> Funders  </a></li>
+                        <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/nationality">Nationality</a></li>
+                        <li   class="nav-item" ><a class="nav-link"  href="<?php echo url(''); ?>/flex/payroll/mailConfiguration"></i> Mail Configuration  </a></li>
+
 
                     </ul>
                 </li>

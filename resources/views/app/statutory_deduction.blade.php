@@ -37,7 +37,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                  <?php echo $this->session->flashdata("notepack");  ?>
+                  <?php echo session("notepack");  ?>
                     <table class="table table-bordered">
                       <thead>
                         <tr>
@@ -403,7 +403,7 @@ jQuery(document).ready(function($){
         var id = id;
         $('#hide'+id).show();
         $.ajax({
-            url:"<?php echo site_url('/cipay/deleteemployee');?>/"+id,
+            url:"<?php echo url('/flex/deleteemployee');?>/"+id,
             success:function(data)
             {
               // success :function(result){
