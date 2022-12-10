@@ -70,7 +70,7 @@ $state = $key->state;
 <div class="card">
     <div class="card-header border-0">
         <h3>Payroll Info <?php if($payrollState == 1){ ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-                href="<?php echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($payrollMonth); ?>"
+                href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>"
                 target="blank"><button type="button" name="print" value="print" class="btn btn-info">EXPORT
                     INFO</button></a><?php } ?></h3>
     </div>
@@ -157,7 +157,7 @@ $state = $key->state;
 
 
                 <div class="x_content">
-                    <?php if($payrollState == 0 /*&&  $this->session->userdata('mng_emp')*/){ ?>
+                    <?php if($payrollState == 0 /*&&  session('mng_emp')*/){ ?>
                     <a href="javascript:void(0)" onclick="generate_checklist()"><button type="button"
                             class="btn btn-success"><b>Run Full Payment <br>
                                 <!-- <small>Full Payment</b></small></button></a> -->
@@ -245,13 +245,13 @@ function notify(message, from, align, type) {
     });
 }
 
-let check = <?php /*echo $this->session->userdata("email_sent"); */ ?>;
+let check = <?php /*echo session("email_sent"); */ ?>;
 
 if (check) {
-    <?php /*unset($this->session->userdata['email_sent']); */ ?>
+    <?php /*unset(session['email_sent']); */ ?>
     notify('Reviewed added successfuly!', 'top', 'right', 'success');
 } else {
-    <?php/* unset($this->session->userdata['email_sent']); */ ?>
+    <?php/* unset(session['email_sent']); */ ?>
     notify('Reviewed added successfuly!', 'top', 'right', 'warning');
 }
 </script>

@@ -77,7 +77,7 @@ IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  
 //EMPLOYEE BIO DATA
     function s_employee_bio_data_active($date){
 
-        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary	
+        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary
 FROM employee e, department dpt, position p, branch br, contract ct, pension_fund pn, bank b WHERE e.bank = b.id and pn.id = e.pension_fund and e.contract_type = ct.id and e.branch = br.code and e.position = p.id and dpt.id = e.department and e.contract_type != 2 and e.state != 4 ";
 
         return DB::select(DB::raw($query));
@@ -85,7 +85,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function s_employee_bio_data_inactive($date){
 
-        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary	
+        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary
 FROM employee e, department dpt, position p, branch br, contract ct, pension_fund pn, bank b WHERE e.bank = b.id and pn.id = e.pension_fund and e.contract_type = ct.id and e.branch = br.code and e.position = p.id and dpt.id = e.department and e.contract_type != 2 and e.state = 4 ";
 
         return DB::select(DB::raw($query));
@@ -93,7 +93,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function v_employee_bio_data_active($date){
 
-        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary	
+        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary
 FROM employee e, department dpt, position p, branch br, contract ct, pension_fund pn, bank b WHERE e.bank = b.id and pn.id = e.pension_fund and e.contract_type = ct.id and e.branch = br.code and e.position = p.id and dpt.id = e.department and e.contract_type = 2 and e.state != 4 ";
 
         return DB::select(DB::raw($query));
@@ -101,7 +101,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function v_employee_bio_data_inactive($date){
 
-        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary	
+        $query = "SELECT e.emp_id as empID, dpt.name as department, p.name as position,dpt.code, e.birthdate, e.fname, e.mname, e.lname,e.hire_date as hire_date, e.gender, e.contract_end, br.name as branch, ct.name as contract, pn.name as pension, e.pf_membership_no, b.name as bank, e.account_no, e.mobile, e.salary
 FROM employee e, department dpt, position p, branch br, contract ct, pension_fund pn, bank b WHERE e.bank = b.id and pn.id = e.pension_fund and e.contract_type = ct.id and e.branch = br.code and e.position = p.id and dpt.id = e.department and e.contract_type = 2 and e.state = 4 ";
 
         return DB::select(DB::raw($query));
@@ -1189,7 +1189,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
          ->select(DB::raw($query))
          ->first();
         if ($row) {
-          
+
             return $row->payroll_date;
         }else {
             return null;
@@ -1265,15 +1265,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function s_grossMonthly($payroll_date){
-        $query = "SUM(pl.salary+pl.allowances) as total_gross
-            WHERE e.emp_id = pl.empID and e.contract_type != 2 and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
+        $query = "SELECT SUM(pl.salary+pl.allowances) as total_gross FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID and e.contract_type != 2 and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
 
-        $row = DB::table('payroll_logs pl, employee e')
-        ->select(DB::raw($query))
-        ->first();
+        $row = DB::select(DB::raw($query));
 
         if ($row){
-            return $row->total_gross;
+            return $row[0]->total_gross;
         }else{
             return null;
         }
@@ -1282,7 +1280,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function grossMonthly_temp($payroll_date){
         $query = "SUM(pl.salary+pl.allowances) as total_gross
             WHERE e.emp_id = pl.empID and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
-             
+
              $row = DB::table('payroll_logs pl, employee e')
              ->select(DB::raw($query))
              ->first();
@@ -1295,8 +1293,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function grossMonthly_temp1($payroll_date){
         $query = "SUM(pl.salary+pl.allowances) as total_gross";
-                    
-        
+
+
         $row = DB::table('payroll_logs as pl')
         ->join('employee as e', 'e.emp_id', '=', 'pl.empID')
         ->where('pl.payroll_date',$payroll_date)
@@ -1312,14 +1310,12 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function v_grossMonthly($payroll_date){
-        $query = "SUM(pl.salary+pl.allowances) as total_gross 
-            WHERE e.emp_id = pl.empID and e.contract_type = 2 and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
-        
-        $row = DB::table('payroll_logs pl, employee e')
-        ->select(DB::raw($query))
-        ->first();
-        if ($row){
-            return $row->total_gross;
+        $query = "SELECT SUM(pl.salary+pl.allowances) as total_gross FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID and e.contract_type = 2 and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
+
+        $row = DB::select(DB::raw($query));
+        if ($row[0]){
+            return $row[0]->total_gross;
         }else{
             return null;
         }
@@ -1349,7 +1345,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         IF((SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = pl.payroll_date GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = pl.payroll_date GROUP BY dl.empID),0) AS deductions,
      pl.account_no
         FROM employee e, temp_payroll_logs pl, department dpt WHERE dpt.id = pl.department AND pl.empID = e.emp_id AND pl.payroll_date = '".$date."' and pl.empID = '".$empID."' ";
-    
+
             return DB::select(DB::raw($query));
     }
 
@@ -1452,21 +1448,21 @@ and pl.payroll_date = '".$payroll_date."' and ll.payment_date = '".$payroll_date
     }
 
     function employeeProjectActivityTime($payrolldate,$empID, $project, $activity){
-        $query = "select atl.*, a.project, a.activity from assignment_task_logs atl, assignment a 
+        $query = "select atl.*, a.project, a.activity from assignment_task_logs atl, assignment a
 where a.id = atl.assignment_employee_id and atl.emp_id = '".$empID."' and a.project = '".$project."' and a.activity = '".$activity."' and atl.payroll_date = '".$payrolldate."' ";
         return DB::select(DB::raw($query));
     }
 
     function projectTime($code, $from, $to){
-        $query = "select concat(trim(e.fname),' ',trim(e.mname),' ',trim(e.lname)) as name, e.emp_id, a.activity, ast.task_name, ast.start_date,ast.end_date 
-from assignment a, assignment_employee ae, assignment_task ast, employee e where a.id = ae.assignment_id 
+        $query = "select concat(trim(e.fname),' ',trim(e.mname),' ',trim(e.lname)) as name, e.emp_id, a.activity, ast.task_name, ast.start_date,ast.end_date
+from assignment a, assignment_employee ae, assignment_task ast, employee e where a.id = ae.assignment_id
 and ast.assignment_employee_id = ae.id and e.emp_id = ae.emp_id and a.project = '".$code."' and (date(ast.start_date) between '".$from."' and '".$to."') ";
         return DB::select(DB::raw($query));
     }
 
     function projectCost($code, $from, $to){
-        $query = "select concat(trim(e.fname),' ',trim(e.mname),' ',trim(e.lname)) as name, ac.* 
-from assignment a, activity_cost ac, employee e where a.id = ac.assignment 
+        $query = "select concat(trim(e.fname),' ',trim(e.mname),' ',trim(e.lname)) as name, ac.*
+from assignment a, activity_cost ac, employee e where a.id = ac.assignment
 and e.emp_id = ac.emp_id and a.project = '".$code."' and (date(ac.created_at) between '".$from."' and '".$to."') ";
         return DB::select(DB::raw($query));
     }

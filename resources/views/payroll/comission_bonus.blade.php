@@ -51,7 +51,7 @@ $employee = $data['employee'];
                             <p class='alert alert-warning text-center'>No Incentive Payments Can Be Scheduled until the
                                 Pending Payoll is Responded</p>
                             <?php } ?>
-                            <?php if($pendingPayroll==0 /* && $this->session->userdata('mng_paym')*/){ ?>
+                            <?php if($pendingPayroll==0 /* && session('mng_paym')*/){ ?>
                             <div class="x_title">
                                 <h2> Incentives Tag</h2>
                                 <form autocomplete="off" id="addBonusTag" class="form-horizontal form-label-left">
@@ -143,7 +143,7 @@ $employee = $data['employee'];
                                 <!--<div class="ln_solid"></div>-->
                                 <div class="form-group">
                                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                                        <?php if($pendingPayroll==0 /*&& $this->session->userdata('mng_paym')*/){ ?>
+                                        <?php if($pendingPayroll==0 /*&& session('mng_paym')*/){ ?>
                                         <button type="reset" class="btn btn-default">Cancel</button>
                                         <button class="btn btn-primary">Add To Incentive</button>
                                         <?php }else { ?>
@@ -188,7 +188,7 @@ $employee = $data['employee'];
                                                 <?php  } else { ?>
                                                 <span class="label label-warning">NOT APPROVED</span><br>
                                                 <?php  } ?>
-                                                <?php if($row->state==0 /*&& $this->session->userdata('mng_paym')*/){ ?>
+                                                <?php if($row->state==0 /*&& session('mng_paym')*/){ ?>
                                                 <a href="javascript:void(0)"
                                                     onclick="deleteBonus(<?php echo $row->id; ?>)"
                                                     title="Delete Incentive" class="icon-2 info-tooltip"><button

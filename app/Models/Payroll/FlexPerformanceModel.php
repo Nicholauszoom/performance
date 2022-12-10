@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FlexPerformanceModel extends Model
 {
-   
+
 	public function audit_log($description){
 		$logData = array(
 	       'empID' => auth()->user()->id,
@@ -25,9 +25,9 @@ class FlexPerformanceModel extends Model
 	function audit_logs()
 	{
 		$query = "SELECT  d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated,   CAST(al.due_date as time) as timed, p.name as position,  d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_logs al, employee e, position p, department d  WHERE al.empID = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.due_date DESC";
-        
+
         return DB::select(DB::raw($query));
-		
+
 	}
 
 	function audit_purge_logs()
@@ -39,16 +39,16 @@ class FlexPerformanceModel extends Model
 
 	public function clear_audit_logs() {
         DB::table('audit_logs')->truncate();
-        
+
         return true;
     }
 
     function getCurrentStrategy()
 	{
 		$query = "id as strategyID  ORDER BY id DESC limit 1";
-		
+
         $row =  DB::table('strategy')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
     	return $row->strategyID;
 	}
@@ -58,7 +58,7 @@ class FlexPerformanceModel extends Model
 	{
 		$query = $attribute." AS attributeValue   WHERE ".$referenceName." = '".$referenceValue."' ";
 		$row =  DB::table($table)
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
 
 		return $row->attributeValue;
@@ -120,23 +120,23 @@ class FlexPerformanceModel extends Model
 
 	function addCompanyBranch($data)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($data)
        {
         DB::table('branch')->insert($data);
-		
+
         $query = " id ORDER BY id DESC LIMIT 1";
         $row =  DB::table('branch')
-        ->select(DB::raw(query))
+        ->select(DB::raw($query))
         ->first();
-		
+
 		});
-		
+
     	return $row->id;
 	}
 
 	function addCostCenter($data)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($data)
        {
 		DB::table('cost_center')->insert($data);
 		$query = "id  ORDER BY id DESC LIMIT 1";
@@ -195,7 +195,7 @@ class FlexPerformanceModel extends Model
         Db::table('employee')
 		->select(DB::raw($query))
 		->first();
-		
+
 		return $row->counts;
 	}
 
@@ -234,7 +234,7 @@ class FlexPerformanceModel extends Model
 		$row = DB::table('company_info')
 		->select(DB::raw($query))
 		->first();
-		
+
     	return $row->logo;
 	}
 
@@ -426,7 +426,7 @@ class FlexPerformanceModel extends Model
 
     function deny_overtime($id)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($id)
        {
 
 	    $query = "UPDATE employee_overtime SET status = 4 WHERE id ='".$id."'";
@@ -481,7 +481,7 @@ class FlexPerformanceModel extends Model
 
 
     function approveOvertime($id, $signatory, $time_approved) {
-	     DB::transaction(function()
+	     DB::transaction(function() use($id,$signatory, $time_approved)
        {
 		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/240)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
          DB::insert(DB::raw($query));
@@ -493,7 +493,7 @@ class FlexPerformanceModel extends Model
 	}
 
 	function lineapproveOvertime($id, $time_approved) {
-	     DB::transaction(function()
+	     DB::transaction(function() use($id, $time_approved)
        {
 	    $query = "UPDATE employee_overtime SET status = 1,time_recommended_line ='".$time_approved."'  WHERE id ='".$id."'";
 		DB::insert(DB::raw($query));
@@ -502,19 +502,19 @@ class FlexPerformanceModel extends Model
 		return true;
 	}
 	function hrapproveOvertime($id,$signatory, $time_approved) {
-	     DB::transaction(function()
+	     DB::transaction(function() use($id,$signatory, $time_approved)
        {
 	    $query = "UPDATE employee_overtime SET status = 3, hr ='".$signatory."',time_approved_hr ='".$time_approved."'  WHERE id ='".$id."'";
-		DB::insert(DB::raw($query));    
+		DB::insert(DB::raw($query));
 	});
 
 		return true;
 	}
 	function fin_approveOvertime($id,$signatory, $time_approved) {
-	     DB::transaction(function()
+	     DB::transaction(function() use($id,$signatory, $time_approved)
        {
 	    $query = "UPDATE employee_overtime SET status = 4, finance='".$signatory."',time_approved_fin ='".$time_approved."'  WHERE id ='".$id."'";
-		DB::insert(DB::raw($query));    
+		DB::insert(DB::raw($query));
 	});
 
 		return true;
@@ -535,7 +535,7 @@ class FlexPerformanceModel extends Model
 	{
 		$data = DB::table('contract')->where('id', $id)
 		->select(DB::raw('*'));
-		
+
 		return $data;
 	}
 
@@ -689,7 +689,7 @@ function retire_list()
 
 	function confirmTransfer($empUpdates, $transferUpdates, $empID, $transferID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($empUpdates, $transferUpdates, $empID, $transferID)
        {
 
 		DB::table('employee as em')->where('em.emp_id', $empID)
@@ -712,19 +712,22 @@ function retire_list()
 
 	function departmentAdd($departmentData)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($departmentData)
        {
 		DB::table('department')->insert($departmentData);
 // 		->insert("position", $positionData);
-		$query = "SELECT id as depID FROM department ORDER BY id DESC LIMIT 1";
-		});
-    	return DB::select(DB::raw($query));
+
+	});
+
+	$query = "SELECT id as depID FROM department ORDER BY id DESC LIMIT 1";
+
+    return DB::select(DB::raw($query));
 	}
 
 
 	function updateDepartmentPosition($code, $departmentID )
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($code, $departmentID)
        {
 		$query = "UPDATE department SET code = '".$code."' WHERE id ='".$departmentID."'";
 		DB::insert(DB::raw($query));
@@ -844,7 +847,7 @@ function retire_list()
 
 	function confirmTrainingRequest($data, $requestID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($data, $requestID)
        {
 		DB::table('training_application')->where('id', $requestID)
 		->update($data);
@@ -857,7 +860,7 @@ function retire_list()
 
 	function unconfirmTrainingRequest($data, $requestID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($data, $requestID)
        {
 		DB::table('training_application')->where('id', $requestID)
 		->update($data);
@@ -928,7 +931,7 @@ function retire_list()
 
 	function updateBudget($data, $budgetID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($data, $budgetID)
        {
 		DB::table('training_budget')->where('id', $budgetID)
 		->update($data);
@@ -949,7 +952,7 @@ function retire_list()
 	{
 		$query = "name  WHERE id = ".$skillsID."";
 		$row = DB::table('skills')
-		->select(DB::raw(query))
+		->select(DB::raw($query))
 		->first();
 		return $row->name;
 	}
@@ -1091,7 +1094,7 @@ function retire_list()
 		$row = DB::table('employee')
 		->select(DB::raw($query))
 		->count();
-		
+
 		if($row>0) {
 			$query = "SELECT CONCAT(fname,' ', mname,' ', lname) as name, email,birthdate from employee  WHERE emp_id = '".$empID."'  ";
 			return DB::select(DB::raw($query));
@@ -1252,7 +1255,7 @@ function getMeaslById($deductionID)
 
 
 	function updateDeductions($updates, $deductionID)
-	{   
+	{
 		DB::table('deductions')->where('id', $deductionID)
 		->update($updates);
 	;
@@ -1264,7 +1267,7 @@ function getMeaslById($deductionID)
 	{
 		DB::table('deduction')->where('id', $id)
 		->update($data);
-	
+
 		return true;
 
 	}
@@ -1461,7 +1464,7 @@ function meals_deduction()
 	function allowance_groupsCount($allowance)
 	{
 		$query = "COUNT(ea.id) members FROM  emp_allowances ea WHERE ea.allowance = ".$allowance."  ";
-		$row = BD::table('emp_allowances as ea')
+		$row = DB::table('emp_allowances as ea')
 		->select(DB::raw($query))
 		->first();
     	return $row->members;
@@ -1580,7 +1583,7 @@ function OvertimeCategoryInfo($id)
 		$this->load->database();
 		$data = DB::table('paye')->where('id', $id);
 
-		 
+
 		return $data->get();
 	}
 
@@ -1637,7 +1640,7 @@ function payrollcheck($date){
 
 function run_payroll($payroll_date, $payroll_month){
 
-     DB::transaction(function()
+     DB::transaction(function() use($payroll_date, $payroll_month)
        {
 
     //INSERT ALLOWANCES
@@ -1995,7 +1998,7 @@ function run_payroll($payroll_date, $payroll_month){
 		->first();
 		return $row->margin;
 	}
-	
+
 
 
 	function mysalary_advance($empID)
@@ -2074,7 +2077,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function update_salary_advance_notification_staff($empID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($empID)
        {
 		$query = "UPDATE loan_application SET notification = 0 WHERE empID = '".$empID."' AND notification =1";
 		DB::insert(DB::raw($query));
@@ -2124,7 +2127,7 @@ function run_payroll($payroll_date, $payroll_month){
 	{
 		//$this->load->database();
 		$data = DB::table('loan_application')->where('id', $id);
-		 
+
 		return $data->get();
 	}
 
@@ -2208,7 +2211,7 @@ function run_payroll($payroll_date, $payroll_month){
 
     function approve_loan($loanID, $signatory, $todate)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function()  use ($loanID, $signatory, $todate)
        {
 		$query = "INSERT INTO loan(
 
@@ -2379,7 +2382,7 @@ function allLevels()
 	function addBankBranch($data)
 	{
 		DB::table('bank_branch')->insert($data);
-		
+
 		return true;
 	}
 	function getbank($id)
@@ -2428,7 +2431,7 @@ function allLevels()
 
 	function employeeAdd($employee)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($employee)
        {
 		DB::table('employee')->insert($employee);
         // ->insert("company_property", $property);
@@ -2443,7 +2446,7 @@ function allLevels()
 
 	function updateEmployeeID($recordID, $empID, $property, $datagroup)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function()  use ($recordID, $empID, $property, $datagroup)
        {
 		$query = "UPDATE employee SET emp_id = '".$empID."' WHERE id ='".$recordID."'";
         DB::insert(DB::raw($query));
@@ -2493,7 +2496,7 @@ function allLevels()
 
 	function activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function()  use($property, $datagroup, $datalog, $empID, $logID, $todate)
        {
         DB::table('company_property')->insert($property);
         DB::table('company_property')->insert($datagroup);
@@ -2591,6 +2594,15 @@ function allLevels()
 		} else{
 		    return false;
 		}
+	}
+
+	public function get_login_user($username){
+		// $query = "SELECT e.*, d.name as dname, c.name as CONTRACT, d.id as departmentID, p.id as positionID, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as lineManager from employee e, contract c, department d, position p WHERE d.id=e.department and e.contract_type = c.id and p.id=e.position and (e.state = '1' or e.state = '3')  and e.fname ='".$username."'";
+		// $row = DB::select(DB::raw($query));
+		// if(count($row)>0) {
+		// 	return $row;
+
+		// }
 	}
 
 
@@ -2857,13 +2869,13 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	     DB::transaction(function()
        {
 	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
-        DB::insert(DB::raw($query));  
+        DB::insert(DB::raw($query));
 	    $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    DB::insert(DB::raw($query));  
+	    DB::insert(DB::raw($query));
 		$query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    DB::insert(DB::raw($query));  
+	    DB::insert(DB::raw($query));
 		$query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
-		DB::insert(DB::raw($query));  
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -2876,7 +2888,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	     DB::transaction(function()
        {
 	    $query = "DELETE FROM emp_role WHERE id ='".$refID."'";
-		DB::insert(DB::raw($query));  
+		DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -3270,7 +3282,7 @@ DB::insert(DB::raw($query));
 		->select(DB::raw($query))
 		->first();
     	return !empty($row)? $row->output:"";
-    	
+
 	}
 
 
@@ -3350,7 +3362,7 @@ function my_grievances($empID)
 
 	function addPartialPayment($data)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use($data)
        {
 		DB::table('partial_payment')->insert($data);
 		});
@@ -3358,7 +3370,7 @@ function my_grievances($empID)
 	}
 
 	function updatePartialPayment($date){
-		 DB::transaction(function()
+		 DB::transaction(function()  use($date)
        {
 		$query = "update partial_payment set status = 1, payroll_date = '".$date."' where status = 0 ";
 		DB::insert(DB::raw($query));
@@ -3460,7 +3472,7 @@ function my_grievances($empID)
        {
 		$query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
 select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
-ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast 
+ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast
 where ae.id = ast.assignment_employee_id and ast.status = 1 and ast.date is null;";
         DB::insert(DB::raw($query));
 		$query = "update assignment_task set date = '".$payroll_date."' where date is null ";

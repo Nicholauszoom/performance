@@ -12,9 +12,9 @@
     <!-- Page content -->
     <div class="page-content">
 
-        {{-- @if (auth()->user()->hasRole('jobSeeker'))
-        @include('recruitment.jobseeker.left-sidebar')
-        @else --}}
+        {{-- @if (auth()->user()->hasRole('jobSeeker')) --}}
+        {{-- @include('recruitment.jobseeker.left-sidebar') --}}
+        {{-- @else --}}
         @include('layouts.shared.left-sidebar')
         {{-- @endif --}}
         <!-- Main content -->

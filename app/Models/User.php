@@ -77,9 +77,5 @@ class User extends Authenticatable
 
 //         return $this->belongsTo('App\Models\Departments','department_id');
 //       }
-//       public function employee(){
-
-//         return $this->belongsTo('App\Models\Employee','employee_id');
-//       }
 //     use HasPermissionsTrait; //Import The Trait
 }

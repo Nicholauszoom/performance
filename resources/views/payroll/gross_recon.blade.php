@@ -35,7 +35,7 @@ $payroll_state = $data['payroll_state'];
 
 
     <div class="card-body">
-        <?php //if($pendingPayroll==0 && $this->session->userdata('mng_paym')){ ?>
+        <?php //if($pendingPayroll==0 && session('mng_paym')){ ?>
         <div class="col-lg-6 offset-3">
             <!-- Basic layout-->
             <div class="card">
@@ -324,7 +324,7 @@ $payroll_state = $data['payroll_state'];
                                 <th>Arreas</th>
                                 <th>Expected</th>
                                 <th>Confirmed</th>
-                                <?php //if($this->session->userdata('mng_emp')){  ?>
+                                <?php //if(session('mng_emp')){  ?>
                                 <form method="post" id="lessPaymentForm">
                                     <input name="payroll_date" value="<?php echo $payrollMonth; ?>" type="hidden">
                                     <th>&nbsp;
@@ -357,7 +357,7 @@ $payroll_state = $data['payroll_state'];
                                 <td><?php echo number_format($row->arrear_amount,2); ?></td>
                                 <td><?php echo number_format($amount,2); ?></td>
                                 <td><?php echo number_format($amount - $row->arrear_amount,2); ?></td>
-                                <?php if($this->session->userdata('mng_emp')){  ?>
+                                <?php if(session('mng_emp')){  ?>
                                 <td>
 
                                     <div class="form-group">
