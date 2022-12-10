@@ -549,7 +549,7 @@ Route::any('/partial_payment','partial_payment')->name('pyaroll.partial_payment'
 Route::any('/salary_calculator','salary_calculator')->name('pyaroll.salary_calculator');
 Route::any('/calculateSalary','calculateSalary')->name('pyaroll.calculateSalary');
 Route::any('/recommendpayroll','recommendpayroll')->name('pyaroll.recommendpayroll');
-Route::any('/runpayroll','runpayroll')->name('pyaroll.runpayroll');
+Route::any('/runpayroll/{pdate}','runpayroll')->name('pyaroll.runpayroll');
 Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('pyaroll.partial_payment_manipulation');
 Route::any('/generate_checklist','generate_checklist')->name('pyaroll.generate_checklist');
 Route::any('/arrearsPayment','arrearsPayment')->name('pyaroll.arrearsPayment');

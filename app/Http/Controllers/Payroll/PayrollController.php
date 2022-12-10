@@ -730,9 +730,9 @@ class PayrollController extends Controller
         }
     }
 
-    function recommendpayroll()
+    function recommendpayroll(Request $request)
     {
-        $payrollMonth = $this->uri->segment(3);
+        $payrollMonth = $request->pdate;
         if ($payrollMonth != "") {
             $empID = session('emp_id');
             $todate = date('Y-m-d');
@@ -741,15 +741,10 @@ class PayrollController extends Controller
             if ($check > 0) {
                 $result = $this->payroll_model->recommendPayroll($empID, $todate);
                 if ($result == true) {
-                    $logData = array(
-                        'empID' => session('emp_id'),
-                        'description' => "Recommendation of payroll of date " . $todate,
-                        'agent' => session('agent'),
-                        'platform' => $this->agent->platform(),
-                        'ip_address' => $this->input->ip_address()
-                    );
+                    
+                    $description ="Recommendation of payroll of date " . $todate;
 
-                    $result = $this->flexperformance_model->insertAuditLog($logData);
+                  //  $result = SysHelpers::auditLog(1,$description,$request);
 
                     $response_array['status'] = "OK";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Recommended Successifully </p>";
