@@ -10,6 +10,9 @@
 
 @section('content')
 
+<?php $car = 0; ?>
+
+@php $car=0; @endphp
 
 
         <!-- page content -->
@@ -21,9 +24,9 @@
               </div>
             </div>
             <div class="clearfix"></div>
-            
-               <?php echo session("notegroup"); 
-               
+
+               <?php echo session("notegroup");
+
                echo session("note");  ?>
 
             <div class="row">
@@ -33,8 +36,11 @@
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Roles and Permission Groups &nbsp;&nbsp;
-                      <?php if( session('mng_roles_grp')){ ?>
+                      @if (session('mng_roles_grp'))
                       <a><button type="button" id="modal" data-toggle="modal" data-target="#rolesgroupModal" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;Create New Group</button></a>
+
+                      @endif
+                      <?php if( session('mng_roles_grp')){ ?>
                       <?php } ?>
                     </h2>
 
@@ -59,7 +65,7 @@
                           foreach ($rolesgroups as $row) { ?>
                           <tr id = "recordRoleGroup<?php echo $row->id; ?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->name; ?></td>
+                            <td>{{ $row->name}}</td>
                           <?php if( session('mng_roles_grp')){ ?>
                             <td class="options-width">
                             <?php if($row->type>0){ ?>
@@ -87,7 +93,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">                  
+                  <div class="x_content">
                   <div id="feedBackFinanceGroup"></div>
                     <table  class="table table-bordered table-striped">
                       <thead>
@@ -125,10 +131,10 @@
                 </div>
               </div>
               <!-- Groups -->
-              
+
               <!--Roles-->
-              
-              
+
+
               <div class="col-md-6 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -173,7 +179,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <!--Roles-->
             </div>
             <br><br><br><br><br>
@@ -190,15 +196,15 @@
                           <!-- Modal Form -->
                     <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Role Name 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Role Name
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12">
                             <span class="text-danger"><?php // echo form_error("fname");?></span>
                           </div>
-                      </div> 
+                      </div>
 
-                                           
+
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <input type="submit"  value="Add" name="addrole" class="btn btn-primary"/>
@@ -209,8 +215,8 @@
             </div>
               <!-- /.modal-dialog -->
           </div>
-          <!-- Modal Form -->          
-        </div>           
+          <!-- Modal Form -->
+        </div>
           <!-- /.modal -->
 
         <!-- Finencial Group Modal -->
@@ -225,17 +231,17 @@
                           <!-- Modal Form -->
                     <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12">
                             <span class="text-danger"><?php // echo form_error("fname");?></span>
                           </div>
                       </div>
-                      
+
                             <input type="text" hidden name="type"value = "1">
 
-                                           
+
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
@@ -246,11 +252,11 @@
             </div>
               <!-- /.modal-dialog -->
           </div>
-          <!-- Modal Form -->          
-        </div>           
+          <!-- Modal Form -->
+        </div>
          <!-- /.modal -->
-         
-         
+
+
         <!--Roles Group Modal-->
         <div class="modal fade" id="rolesgroupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -263,17 +269,17 @@
                           <!-- Modal Form -->
                     <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name
                           </label>
-                          
+
                           <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12">
                             <span class="text-danger"><?php // echo form_error("fname");?></span>
                           </div>
-                      </div> 
-                      
+                      </div>
+
                             <input type="text" hidden name="type"  value ="2">
-                                           
+
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
@@ -284,8 +290,8 @@
             </div>
               <!-- /.modal-dialog -->
           </div>
-          <!-- Modal Form -->          
-        </div>           
+          <!-- Modal Form -->
+        </div>
          <!-- /.modal -->
         <?php } ?>
         <!--Roles Group Modal-->
@@ -294,16 +300,16 @@
         </div>
 
 
-        <!-- /page content -->   
+        <!-- /page content -->
 
 
 <script type="text/javascript">
-    
+
 function deleteRole(id)
     {
         if (confirm("Are You Sure You Want To Delete This Role?") == true) {
         var id = id;
-        
+
         $.ajax({
             url:"<?php echo url('flex/deleteRole');?>/"+id,
             success:function(data)
@@ -317,22 +323,22 @@ function deleteRole(id)
               }else{
               alert("FAILED: Delete failed Please Try again");
               }
-          
-            
-               
+
+
+
             }
-               
+
             });
         }
     }
 
 
-    
+
 function deleteRoleGroup(id)
     {
         if (confirm("Are You Sure You Want To Delete This Group?") == true) {
         var id = id;
-        
+
         $.ajax({
             url:"<?php echo url('flex/deleteGroup');?>/"+id,
             success:function(data)
@@ -346,21 +352,21 @@ function deleteRoleGroup(id)
               }else{
               alert("FAILED: Delete failed Please Try again");
               }
-          
-            
-               
+
+
+
             }
-               
+
             });
         }
     }
 
-    
+
 function deleteFinanceGroup(id)
     {
         if (confirm("Are You Sure You Want To Delete This Group?") == true) {
         var id = id;
-        
+
         $.ajax({
             url:"<?php echo url('flex/deleteGroup');?>/"+id,
             success:function(data)
@@ -374,11 +380,11 @@ function deleteFinanceGroup(id)
               }else{
               alert("FAILED: Delete failed Please Try again");
               }
-          
-            
-               
+
+
+
             }
-               
+
             });
         }
     }
@@ -386,3 +392,4 @@ function deleteFinanceGroup(id)
 
 </script>
  @endsection
+
