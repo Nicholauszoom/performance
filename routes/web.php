@@ -11,6 +11,7 @@ use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
         'users' => UsersController::class,
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
+        'skill' => SkillsController::class,
+        'trainingApp'=>TrainingAppController::class,
     ]);
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
@@ -66,6 +69,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
         Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
         Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
+        Route::get('/profile', 'profile')->name('employee.profile');
 
         // Imprest
         Route::get('/workforce-management/imprest', 'imprest')->name('imprest.index');
@@ -78,6 +82,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
+ //route for learning and development
+ Route::get('/skill', [SkillsController::class, 'skill'])->name('skill');
+ Route::get('/skillsList', [SkillsController::class, 'skillsList'])->name('skillsList');
+ Route::post('/addSkills', [SkillsController::class, 'skills'])->name('skills');
+ Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
+ Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
+ //end learning and development
     Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
     Route::post('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
     Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
@@ -116,13 +127,6 @@ Route::middleware('auth')->group(function () {
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
         Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
         Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
-        Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
-        Route::any('p10', [ReportController::class, 'p10'])->name('reports.p10');
-        Route::any('pension', [ReportController::class, 'pension'])->name('reports.pension');
-        Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
-        Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
-        Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
-        Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
         Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
         Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
         Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
@@ -133,6 +137,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
     });
 });
+
+
 //Routes for Recruitment Module
 
 // Route::group(['prefix' => 'recruitment'], function () {
@@ -757,7 +763,7 @@ Route::any('/addCost','addCost')->name('project.addCost');
 
 
 
-Route::prefix('flex/project')->controller(ProjectController::class)->group(function (){
+Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
 Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
 Route::any('/pay_checklist','pay_checklist')->name('reports.pay_checklist');

@@ -3,7 +3,7 @@
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="../../../../global_assets/js/plugins/forms/selects/select2.min.js"></script>
+<script src="{{ asset('assets/js/pages/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
@@ -62,6 +62,7 @@ $year_list = $data['year_list'];
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                     action="{{ route('reports.p9')}}" target="_blank"
                                     data-parsley-validate class="form-horizontal form-label-left">
+                                    @csrf
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6">Payroll Month</label>

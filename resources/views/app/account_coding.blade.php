@@ -63,8 +63,8 @@
                   </div>
                 </div>
               </div>
-              
-               <div id="bottom" class="col-md-4 col-sm-6 col-xs-6">                            
+
+               <div id="bottom" class="col-md-4 col-sm-6 col-xs-6">
                     <div class="x_panel">
                       <div class="x_title">
                         <h2><i class="fa fa-tasks"></i> Add New Account Code</h2>
@@ -79,7 +79,7 @@
                       <div class="x_content">
                         <div id="feedBackAddCode"></div>
                         <form autocomplete="off" id="addAccountCode" enctype="multipart/form-data"  method="post" data-parsley-validate class="form-horizontal form-label-left">
-            
+
                           <!-- START -->
 
                            <div id ="percent" class="form-group">
@@ -88,7 +88,7 @@
                             <div >
                               <input required=""  type="text" name="name" placeholder="Name" class="form-control col-md-7 col-xs-12">
                             </div>
-                          </div> 
+                          </div>
                            <div id ="amount" class="form-group">
                             <label  for="first-name">Code
                             </label>
@@ -100,9 +100,9 @@
                           <div class="form-group">
                                <button type="reset" class="btn btn-warning" >CANCEL</button>
                                <button class="btn btn-primary" >ADD</button>
-                          </div> 
+                          </div>
                           </form>
-            
+
                       </div>
                     </div>
                 </div>
@@ -111,18 +111,18 @@
           </div>
         </div>
 
-        
+
 
 
         <!-- /page content -->
- 
+
 
 
 
 
 <script type="text/javascript">
     $('#addAccountCode').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addAccountCode",
                  type:"post",
@@ -138,13 +138,13 @@
             });
     setTimeout(function(){// wait for 2 secs(2)
           location.reload(); // then reload the page.(3)
-      }, 1000); 
+      }, 1000);
       $('#addNationality')[0].reset();
         })
         .fail(function(){
-     alert('Request Failed!! ...'); 
+     alert('Request Failed!! ...');
         });
-    }); 
+    });
 
 function deleteAccountCode(id)
     {
@@ -161,9 +161,9 @@ function deleteAccountCode(id)
             setTimeout(function() {
               location.reload();
             }, 1000);
-               
+
             }
-               
+
             });
         }
     }

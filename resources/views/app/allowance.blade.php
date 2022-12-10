@@ -65,8 +65,10 @@
                                 <?php echo 100*($row->percent)."%"; } ?>
                                 
                             </td>
-                            <td><?php echo $row->taxable; ?></td>
-                            <td><?php echo $row->pentionable; ?></td>
+                            <td><?php  if(isset($row->taxable)){ echo $row->taxable; } ?></td>
+
+    
+                            <td><?php  if(isset($row->pentionable)){ echo $row->pentionable; } ?></td>
 
 
                             <?php if($pendingPayroll==0){ ?> 
