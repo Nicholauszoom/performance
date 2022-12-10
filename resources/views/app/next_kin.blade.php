@@ -59,7 +59,7 @@
                   <div class="x_content"> <br>
                   <?php
 
-                     echo $this->session->flashdata("note");  ?>
+                     echo session("note");  ?>
 
                     <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/employeeAdd" method="post" data-parsley-validate class="form-horizontal form-label-left">
                     <!-- test -->

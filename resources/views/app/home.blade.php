@@ -75,7 +75,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
 
   <div class="row">
-    <div class="@if (session('vw_emp_sum')) col-md-8 @else col-md-12 @endif">
+    <div class="@if (session('vw_emp_sum')) col-md-7 @else col-md-12 @endif">
       <div class="card">
         <div class="card-header">
           <h3 class="text-muted">
@@ -92,7 +92,7 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
     {{-- /col --}}
 
     @if (session('vw_emp_sum'))
-    <div class="col-xl-4">
+    <div class="col-xl-5">
       <div class="card">
         <div class="card-body">
           <div class="row">
@@ -126,11 +126,15 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
     {{-- /col --}}
 
 
-    <div class="col-md-12">
+    {{-- <div class="col-md-12">
       <div class="card">
-        <div class="card-body"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <h4>Current Payroll Summary{{ "( " .date("F, Y", strtotime($payroll_date). " )") }}</small></h2>
+          </div>
+        </div>
       </div>
-    </div>
+    </div> --}}
 
 
     <div class="col-md-12">
@@ -139,49 +143,53 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
           <h4 class="text-muted">Payroll Reconciliation Summary (Current & Previous)</h4>
         </div>
 
-        <?php
-                              foreach ($s_net_c as $c){
-                                  $s_net_c_ = $c->takehome;
-                              }
 
-                              foreach ($s_net_p as $p){
-                                  $s_net_p_ = $p->takehome;
-                              }
+        @foreach ( $s_net_c as $c)
+          @php
+              $s_net_c_ = $c->takehome;
+          @endphp
+        @endforeach
 
-                              foreach ($v_net_c as $vc){
-                                  $v_net_c_ = $vc->takehome;
-                              }
+        @foreach ( $s_net_p as $p)
+          @php
+              $s_net_p_ = $p->takehome;
+          @endphp
+        @endforeach
 
-                              foreach ($v_net_p as $vp){
-                                  $v_net_p_ = $vp->takehome;
-                              }
+        @foreach ($v_net_c as $vc)
+          @php
+            $v_net_c_ = $vc->takehome; @endphp
+        @endforeach
 
-                              ?>
+        @foreach ( $v_net_p as $vp)
+          @php
+              $v_net_p_ = $vp->takehome;
+          @endphp
+        @endforeach
 
-                              <?php
-                              $staff = 0;
-                              $volunteer = 0;
+        @php
+          $staff = 0;
+          $volunteer = 0;
 
-                              $staff_p = 0;
-                              $volunteer_p = 0;
+          $staff_p = 0;
+          $volunteer_p = 0;
+        @endphp
 
-                              foreach ($s_staff as $s){
-                                  $staff++;
-                              }
+        @foreach ($s_staff as $s)
+          @php $staff++; @endphp
+        @endforeach
 
-                              foreach ($s_staff_p as $sp){
-                                  $staff_p++;
-                              }
+        @foreach ($s_staff_p as $sp)
+          @php  $staff_p++; @endphp
+        @endforeach
 
-                              foreach ($v_staff as $v){
-                                  $volunteer++;
-                              }
+        @foreach ($v_staff as $v)
+          @php  $volunteer++; @endphp
+        @endforeach
 
-                              foreach ($v_staff_p as $vp){
-                                  $volunteer_p++;
-                              }
-
-                              ?>
+        @foreach ($v_staff_p as $vp)
+          @php $volunteer_p++; @endphp
+        @endforeach
 
         <table class="table table-striped table-bordered" style="width:100%">
           <tr>
@@ -237,6 +245,8 @@ if(session('pass_age')>89 || 90-session('pass_age')==0 || 90-session('pass_age')
 
   </div>
   {{-- /row --}}
+
+
 
         <!-- page content -->
         <div class="right_col" role="main">

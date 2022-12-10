@@ -33,7 +33,7 @@
         <div class="right_col" role="main">
             <div class="clearfix"></div>
 
-                  <?php  echo $this->session->flashdata("note");  ?>
+                  <?php  echo session("note");  ?>
 
             <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">

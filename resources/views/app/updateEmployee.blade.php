@@ -80,7 +80,7 @@
                     <div class="x_content"> <br>
                         <?php
 
-                     echo $this->session->flashdata("note");  ?>
+                     echo session("note");  ?>
 
                         <div class="col-lg-12">
                             <div class="col-lg-6">

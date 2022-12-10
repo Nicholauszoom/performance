@@ -30,7 +30,7 @@
                   <div class="x_title">
                     <h2><?php echo session('fname')." ".session('mname')." ".session('lname'); ?> <small>User Details</small></h2><br>
 
-                   <?php echo "<br>".$this->session->flashdata("note");  ?>
+                   <?php echo "<br>".session("note");  ?>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>

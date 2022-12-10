@@ -1,11 +1,14 @@
-<?php
-@include("app/includes/header")
+@extends('layouts.vertical', ['title' => 'Dashboard'])
 
-<!-- Font Awesome -->
-<link href="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
-<?php
-@include("app/includes/sidebar.php";
-@include("app/includes/top_navbar<!-- /top navigation -->
+@push('head-script')
+<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+@endpush
+
+@section('content')
 
 <!-- page content -->
 <div class="right_col" role="main">

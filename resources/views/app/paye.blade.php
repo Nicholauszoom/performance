@@ -162,7 +162,7 @@
         var id = id;
         $('#hide'+id).show();
         $.ajax({
-            url:"<?php echo site_url('/cipay/deleteemployee');?>/"+id,
+            url:"<?php echo url('/flex/deleteemployee');?>/"+id,
             success:function(data)
             {
               // success :function(result){

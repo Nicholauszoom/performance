@@ -23,16 +23,14 @@ class GeneralController extends Controller
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
-      $this->flexperformance_model = $flexperformance_model;
-      $this->imprest_model = $imprest_model;
-      $this->reports_model = $reports_model;
-      $this->payroll_model = $payroll_model;
-    //   $this->attendance_model = new AttendanceModel();
-    //   $this->project_model = $project_model;
-      $this->performanceModel = $performanceModel;
-
-
-
+      $this->flexperformance_model = new FlexPerformanceModel();
+      $this->imprest_model = new ImprestModel();
+      $this->reports_model = new ReportModel();
+      $this->attendance_model = new AttendanceModel();
+      $this->project_model = new ProjectModel();
+      $this->performanceModel = new PerformanceModel();
+      $this->payroll_model = new Payroll;
+  
     }
 
 //    public function index()

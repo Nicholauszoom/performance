@@ -14,8 +14,9 @@ use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\GeneralController;
-
+use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\setting\PositionController;
@@ -203,7 +204,7 @@ Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
 
 
-Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
+Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
 
     Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
     Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
