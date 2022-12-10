@@ -159,28 +159,45 @@
                     </td>
 
                     <td class="options-width">
+                        <div class="d-inline-flex">
+
+
                         <?php if($row->state==1 || $row->state==2){ ?>
 
-                            <a href="javascript:void(0)" onclick="cancelPayroll()"  title="Cancel Payroll" class="icon-2 info-tooltip">
-                                <button type="button" class="btn btn-danger btn-xs"> <i class="fa fa-times"></i></button></a>
+                            <a href="javascript:void(0)" onclick="cancelPayroll()"  title="Cancel Payroll" class="me-2">
+                                <button class="btn bg-danger text-white btn-xs"> <i class="ph-x"></i></button>
+                            </a>
 
-                            <a href="<?php echo url('flex/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                            <a href="<?php echo url('flex/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>" title="Info and Details" class="me-2">
+                                <button class="btn bg-secondary text-white btn-xs"> <i class="ph-info"></i></button>
+                            </a>
                         <?php } else {  ?>
-                            <a href="<?php echo url('flex/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                            <a href="<?php echo url('flex/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>" title="Info and Details" class="me-2">
+                                <button class="btn bg-secondary text-white btn-xs"> <i class="ph-info"></i></button>
+                            </a>
 
                             <?php if($row->state==0){ ?>
                                 <?php if($row->pay_checklist==1){ ?>
-                                    <a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
+                                    <a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="me-2">
+                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-file"></i></button>
+                                    </a>
                                 <?php } else {  ?>
-                                    <a title="Checklist Report Not Ready" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-file"></i></button> </a>
+                                    <a title="Checklist Report Not Ready" class="me-2">
+                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-file"></i></button>
+                                    </a>
                                 <?php } ?>
 
                                 <?php if($row->email_status==0){ ?>
-                                    <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-envelope"></i></button> </a>
+                                    <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
+                                         <button class="btn bg-warning text-white btn-xs"> <i class="ph-envelope"></i></button>
+                                    </a>
                                 <?php } else { ?>
-                                    <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Resend Pay Slip as Email" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i>&nbsp;&nbsp;<i class="fa fa-envelope"></i></button> </a>
+                                    <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Resend Pay Slip as Email" class="me-2">
+                                       <button class="btn bg-warning text-white btn-xs"> <i class="ph-repeat"></i>&nbsp;&nbsp;<i class="ph-envelope"></i> </button>
+                                    </a>
                                 <?php } } ?>
                         <?php } ?>
+                    </div>
 
                     </td>
                 </tr>
