@@ -78,24 +78,17 @@
                 </div> --}}
 
                 <div class="card">
-                  {{-- <div class="card-header">
-                    <h5 class="mb-0">Organization Levels</h5>
-                </div> --}}
-                   
+
                     <div class="card-body">
-                      <div class="d-flex justify-content-between">
-                          <h5>List of employees</h5>
-          
-                          <button
-                    type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#save_department"
-                >
-                    <i class="ph-plus me-2"></i> Organization Level
-                </button>
-                      </div>
-                  </div>
+                        <div class="d-flex justify-content-between">
+                            <h5>Organisation Levels</h5>
+
+                            <button type="button" class="btn btn-perfrom" data-bs-toggle="modal"
+                                data-bs-target="#add-organizational">
+                                <i class="ph-plus me-2"></i> Organization Level
+                            </button>
+                        </div>
+                    </div>
                     @if (Session::has('note'))
                         {{ session('note') }}
                     @endif
@@ -159,11 +152,11 @@
 
 
 
-                <?php if(session('mng_org')){ ?>
+                {{-- <?php if(session('mng_org')){ ?>
                 <div id="bottom" class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2><i class="fa fa-tasks"></i> Add Organization Levels</h2>
+                            <h2><i class="fa fa-tasks"></i> Add Organization Level</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                 </li>
@@ -219,7 +212,7 @@
                         </div>
                     </div>
                 </div>
-                <?php } ?>
+                <?php } ?> --}}
             </div>
         </div>
     </div>
@@ -229,3 +222,4 @@
 
     <!-- /page content -->
 @endsection
+@include('organisation.department.inc.add-level')

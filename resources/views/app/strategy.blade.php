@@ -14,7 +14,7 @@
 
 <?php 
   
-  $CI_Model = get_instance();
+  //$CI_Model = get_instance();
   $CI_Model->load->model('performance_model');
   $adhoc = 0;
   $strategyID = session('current_strategy');

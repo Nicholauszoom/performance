@@ -11,6 +11,7 @@ use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
+use PDF;
 use App\Helpers\SysHelpers;
 class ReportController extends Controller
 {  

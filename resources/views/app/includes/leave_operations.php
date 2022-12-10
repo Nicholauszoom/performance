@@ -173,7 +173,7 @@
         format: 'DD/MM/YYYY'
       },
       singleClasses: "picker_1",
-      startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>"
+      startDate: "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>""
     }, function(start, end, label) {
       console.log(start.toISOString(), end.toISOString(), label);
     });
@@ -190,7 +190,7 @@
         format: 'DD/MM/YYYY'
       },
       singleClasses: "picker_1",
-      startDate: "<?php echo date('d/m/Y', strtotime($endDate)); ?>"
+      startDate: "<?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>""
     }, function(start, end, label) {
       console.log(start.toISOString(), end.toISOString(), label);
     });
