@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -12,7 +12,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -69,7 +69,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1"  value="<?php echo $minimum; ?>" name="minimum"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
 
@@ -79,7 +79,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" value="<?php echo $maximum; ?>" name="maximum" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -87,7 +87,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" value="<?php echo $excess; ?>" name="excess"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employee");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employee");?></span>
                         </div>
                       </div>
 
@@ -96,7 +96,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="99" step="0.1" value="<?php echo 100*($rate); ?>" name="rate"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employee");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employee");?></span>
                         </div>
                       </div>
                       <!-- <div class="ln_solid"></div> -->
@@ -127,7 +127,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/updatepaye",
+ url: "<?php echo  url(''); ?>/flex/updatepaye",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

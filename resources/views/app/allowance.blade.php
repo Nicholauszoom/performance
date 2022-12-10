@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -71,7 +71,7 @@
 
                             <?php if($pendingPayroll==0){ ?> 
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/allowance_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/allowance_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <?php if($row->state ==1){ ?>
                                 <a href="javascript:void(0)" onclick="deleteAllowance(<?php echo $row->id; ?>)" title="Delete Allowance" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                                 <?php } else{ ?>
@@ -102,7 +102,7 @@
                         </label>
                         <div >
                           <textarea required="" type="text" name="name" class="form-control col-md-7 col-xs-12"></textarea> 
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -148,7 +148,7 @@
                         </label>
                         <div >
                           <input required="" id ="amountf" type="number" step="1" placeholder="Fixed Amount" name="amount" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <div class="ln_solid"></div>
@@ -170,7 +170,7 @@
 
 
   
-@include( "app/includes/update_allowances")
+@include("app/includes/update_allowances")
 <script>
 
 jQuery(document).ready(function($){
@@ -233,7 +233,7 @@ jQuery(document).ready(function($){
     $('#addAllowance').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addAllowance",
+                 url:"<?php echo  url(''); ?>/flex/addAllowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -258,7 +258,7 @@ jQuery(document).ready(function($){
     $('#addOvertime').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addOvertimeCategory",
+                 url:"<?php echo  url(''); ?>/flex/addOvertimeCategory",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -282,7 +282,7 @@ jQuery(document).ready(function($){
     $('#addDeduction').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addDeduction",
+                 url:"<?php echo  url(''); ?>/flex/addDeduction",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

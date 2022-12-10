@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
         <?php if(session('mng_emp') || session('vw_emp') || session('appr_emp')){  ?> 
@@ -35,9 +35,9 @@
                           <div class="col-md-3">
                               <?php  if( session('mng_emp')){ ?>
 
-                                  <a href="<?php echo url(); ?>flex/addEmployee"><button type="button" class="btn btn-primary">Register New Employee</button></a>
+                                  <a href="<?php echo  url(''); ?>/flex/addEmployee"><button type="button" class="btn btn-primary">Register New Employee</button></a>
 
-                                  <!-- <a href="<?php echo url(); ?>flex/appreciation"><button type="button" class="btn btn-success"><i class="fa fa-user"></i>&nbsp; Employee Of The Month</button></a> <?php //} ?>
+                                  <!-- <a href="<?php echo  url(''); ?>/flex/appreciation"><button type="button" class="btn btn-success"><i class="fa fa-user"></i>&nbsp; Employee Of The Month</button></a> <?php //} ?>
                     -->
                               <?php } ?>
                           </div>
@@ -69,7 +69,7 @@
                             $empid= $row->emp_id; ?>
                           <tr>
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>">
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>">
                             <font color="blue"><?php echo $row->NAME; ?></font></a></td>
                             <td ><?php echo $row->gender; ?></td>
                             <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
@@ -78,13 +78,13 @@
                             
 
                             <td class="options-width">
-                                <a  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 
                                 <?php if( session('mng_emp')){ ?>
                                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></button> </a>
 
-                                <a href="<?php echo url(); ?>flex/updateEmployee/?id=".$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button> </a>
-                                <a href="<?php echo url()."flex/project/evaluateEmployee/?id=".$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateEmployee/?id=".$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/project/evaluateEmployee/?id=".$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button> </a>
                                 <?php } ?>
                             </tr>
                           <?php } ?>

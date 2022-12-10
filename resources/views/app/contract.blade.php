@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -58,7 +58,7 @@
                             <td><?php echo $row->reminder; ?></td>
 
                             <td class="options-width">
-                                <a   href="<?php echo url(); ?>flex/updatecontract/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a   href="<?php echo  url(''); ?>/flex/updatecontract/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 
                                 <a href="javascript:void(0)" onclick="deletecontract(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                             
@@ -82,13 +82,13 @@
                   </div>
                   <div class="x_content">
                   <div id="feedBack"></div>
-                    <form autocomplete="off" id="addContract" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/contractAdd"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="addContract" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/contractAdd"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Contract Name 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" required="" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>
                        <div class="form-group">
@@ -170,7 +170,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/addContract",
+ url: "<?php echo  url(''); ?>/flex/addContract",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

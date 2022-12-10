@@ -140,7 +140,7 @@ class PayrollController extends Controller
         $data['year_list'] = $this->payroll_model->payroll_year_list();
         $data['employee'] = $this->payroll_model->customemployee();
         $data['title'] = "Financial Reports";
-        $this->load->view('financial_reports', $data);
+         return view('app.financial_reports', $data);
 
     }
 
@@ -262,13 +262,13 @@ class PayrollController extends Controller
         $this->load->view('payroll_info', $data);
     }
 
-    // public function temp_less_payments(){
+    // public function temp_less_payments(Request $request)  {
     //   $payrollMonth = base64_decode($this->input->get('pdate'));
     //   $data['payroll_list'] =  $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");
     //   $data['confirmed'] =1;
     //   $data['payroll_date']= $payrollMonth;
     //   $data['title']="Payroll Info";
-    //   $this->load->view('less_payments', $data);
+    //    return view('app.less_payments', $data);
 
     // }
 
@@ -319,7 +319,7 @@ class PayrollController extends Controller
             $data['payroll_date'] = $payrollMonth;
             $data['title'] = "Payroll Info";
         }
-        $this->load->view('less_payments', $data);
+         return view('app.less_payments', $data);
     }
 
 
@@ -367,7 +367,7 @@ class PayrollController extends Controller
             $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
         }
 
-        $this->load->view('reports/payroll_info_view', $data);
+         return view('app.reports/payroll_info_view', $data);
 
     }
 
@@ -446,7 +446,7 @@ class PayrollController extends Controller
 
 //            echo json_encode($data);
 
-            $this->load->view('net_recon', $data);
+             return view('app.net_recon', $data);
 
 
         }
@@ -595,13 +595,17 @@ class PayrollController extends Controller
         if (!$mail->send()) {
 //            echo 'Mail error';
 //            echo 'Mailer Error: ' . $mail->ErrorInfo;
-            $this->session->userdata['email_sent'] = 'false';
-            redirect($_SERVER['HTTP_REFERER']);
+            // session::put('email_sent') = 'false';
+            session(['email_sent' => 'false']);
+        //    return redirect(Request::server('HTTP_REFERER'));
+        return redirect()->back();
         } else {
 //            $response_array['status'] = 'SENT';
 //            echo json_encode($response_array);
-            $this->session->userdata['email_sent'] = 'true';
-            redirect($_SERVER['HTTP_REFERER']);
+            // session::put('email_sent') = 'true';
+            session(['email_sent' => 'true']);
+            // return redirect(Request::server('HTTP_REFERER'));
+            return redirect()->back();
 
         }
 
@@ -650,7 +654,7 @@ class PayrollController extends Controller
             $data['allowances'] = $this->payroll_model->selectAllowances();
             $data['pensions'] = $this->payroll_model->pensionAll();
             $data['title'] = "Salary Calculator";
-            $this->load->view('salary_calculator', $data);
+             return view('app.salary_calculator', $data);
         } else {
             echo 'Unauthorised Access';
         }
@@ -661,11 +665,11 @@ class PayrollController extends Controller
     {
         if ($_POST) {
 
-            $type = $this->input->post('pay_type');
+            $type = $request->input('pay_type');
             $gross = $allowancePayment = $pension = $rate = $excess_added = $minimum = $totalPay = 0;
-            $allowances = $this->input->post('allowances');
-            $pensionFund = $this->input->post('pension');
-            $salary = $this->input->post('basic_salary');
+            $allowances = $request->input('allowances');
+            $pensionFund = $request->input('pension');
+            $salary = $request->input('basic_salary');
 
             foreach ($allowances as $key => $value) {
                 $allowancePayment += $this->payroll_model->getAllowanceAmount($salary, $value);
@@ -926,8 +930,8 @@ class PayrollController extends Controller
     {
         if ($_POST) {
             $result = false;
-            $empID = $this->input->post('empID');
-            $counts = $this->input->post('arrears_counts');
+            $empID = $request->input('empID');
+            $counts = $request->input('arrears_counts');
             $payment_date = date('Y-m-d');
             $arrears = $this->payroll_model->approved_arrears();
 
@@ -967,7 +971,7 @@ class PayrollController extends Controller
 
     function temp_submitLessPayments()
     {
-        $payrollMonth = $this->input->post('payroll_date');
+        $payrollMonth = $request->input('payroll_date');
         $result = false;
         $updates = array(
             'arrears' => 1,
@@ -976,8 +980,8 @@ class PayrollController extends Controller
         $empList = $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");
         foreach ($empList as $row) {
             $empID = $row->empID;
-            $expected_takehome = $this->input->post('expected_takehome' . $empID);
-            $actual_takehome = $this->input->post('actual_takehome' . $empID);
+            $expected_takehome = $request->input('expected_takehome' . $empID);
+            $actual_takehome = $request->input('actual_takehome' . $empID);
             if ($expected_takehome == $actual_takehome) continue;
             $update_arrears = array(
                 'empID' => $empID,
@@ -1021,7 +1025,7 @@ class PayrollController extends Controller
 
     function submitLessPayments()
     {
-        $payrollMonth = $this->input->post('payroll_date');
+        $payrollMonth = $request->input('payroll_date');
         $result = false;
         $updates = array(
             'arrears' => 1,
@@ -1030,8 +1034,8 @@ class PayrollController extends Controller
         $empList = $this->payroll_model->employeePayrollList($payrollMonth, "allowance_logs", "deduction_logs", "loan_logs", "payroll_logs");
         foreach ($empList as $row) {
             $empID = $row->empID;
-            $expected_takehome = $this->input->post('expected_takehome' . $empID);
-            $actual_takehome = $this->input->post('actual_takehome' . $empID);
+            $expected_takehome = $request->input('expected_takehome' . $empID);
+            $actual_takehome = $request->input('actual_takehome' . $empID);
             if ($expected_takehome == $actual_takehome) continue;
             $update_arrears = array(
                 'empID' => $empID,
@@ -1077,14 +1081,14 @@ class PayrollController extends Controller
     {
         if ($_POST) {
             $result = false;
-            $empID = $this->input->post('empID');
-            $counts = $this->input->post('arrears_counts');
+            $empID = $request->input('empID');
+            $counts = $request->input('arrears_counts');
             $payment_date = date('Y-m-d');
             for ($i = 1; $i <= $counts; $i++) {
-                $amountPaid = $this->input->post('amount_pay' . $i);
-                $amountAlreadyPaid = $this->input->post('amount_already_paid' . $i);
-                $max_amount = $this->input->post('max_amount' . $i);
-                $arrearID = $this->input->post('arrearID' . $i);
+                $amountPaid = $request->input('amount_pay' . $i);
+                $amountAlreadyPaid = $request->input('amount_already_paid' . $i);
+                $max_amount = $request->input('max_amount' . $i);
+                $arrearID = $request->input('arrearID' . $i);
 
                 if ($amountPaid > 0) {
                     $isExists = $this->payroll_model->checkPendingArrearPayment($arrearID);
@@ -1121,7 +1125,7 @@ class PayrollController extends Controller
 
     public function monthlyArrearsPayment_schedule()
     {
-        $payroll_month = $this->input->get('payroll_month');
+        $payroll_month = $request->input('payroll_month');
         $payment_date = date('Y-m-d');
         $employees = $this->payroll_model->monthly_arrears($payroll_month);
         $result = false;
@@ -1333,7 +1337,7 @@ class PayrollController extends Controller
             $data['total_deductions'] = $this->payroll_model->total_deductions_review($empID, "temp_deduction_logs", $payrollMonth);
             $data['total_loans'] = $this->payroll_model->total_loans_review($empID, "temp_loan_logs", $payrollMonth);
             $data['title'] = "Payroll Preview";
-            $this->load->view('payroll_review', $data);
+             return view('app.payroll_review', $data);
         }
     }
 
@@ -1355,7 +1359,7 @@ class PayrollController extends Controller
             $data['total_deductions'] = $this->payroll_model->total_deductions_review($empID, "deduction_logs", $payrollMonth);
             $data['total_loans'] = $this->payroll_model->total_loans_review($empID, "loan_logs", $payrollMonth);
             $data['title'] = "Payroll Preview";
-            $this->load->view('payroll_review', $data);
+             return view('app.payroll_review', $data);
         }
     }
 
@@ -1981,7 +1985,7 @@ class PayrollController extends Controller
         if ($this->session->userdata('vw_settings')) {
             $data['mails'] = $this->payroll_model->mailConfig();
             $data['title'] = "Mail Configuration";
-            $this->load->view('mail_config', $data);
+             return view('app.mail_config', $data);
         } else {
             echo "Unauthorized Access";
         }
@@ -1990,21 +1994,21 @@ class PayrollController extends Controller
     public function saveMail()
     {
         if ($_POST) {
-            $id = $this->input->post('id');
+            $id = $request->input('id');
             $data = array(
-                'host' => $this->input->post('host'),
-                'username' => $this->input->post('username'),
-                'password' => $this->input->post('password'),
-                'name' => $this->input->post('name'),
-                'secure' => $this->input->post('encryption'),
-                'port' => $this->input->post('port'),
-                'email' => $this->input->post('username')
+                'host' => $request->input('host'),
+                'username' => $request->input('username'),
+                'password' => $request->input('password'),
+                'name' => $request->input('name'),
+                'secure' => $request->input('encryption'),
+                'port' => $request->input('port'),
+                'email' => $request->input('username')
             );
 
             try{
-                $transport = new Swift_SmtpTransport($this->input->post('host'), $this->input->post('port'), $this->input->post('encryption'));
-                $transport->setUsername($this->input->post('username'));
-                $transport->setPassword($this->input->post('password'));
+                $transport = new Swift_SmtpTransport($request->input('host'), $request->input('port'), $request->input('encryption'));
+                $transport->setUsername($request->input('username'));
+                $transport->setPassword($request->input('password'));
                 $mailer = new Swift_Mailer($transport);
                 $mailer->getTransport()->start();
 

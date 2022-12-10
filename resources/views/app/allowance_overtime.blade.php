@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -60,7 +60,7 @@
 
                             <?php if($pendingPayroll==0){ ?>
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/overtime_category_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/overtime_category_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                             </td>
                             <?php  } ?>
@@ -92,7 +92,7 @@
                         </label>
                         <div >
                           <textarea required="" type="text" name="name" class="form-control col-md-7 col-xs-12"></textarea> 
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>
                       <div id ="percent" class="form-group">
@@ -133,7 +133,7 @@
 
         <!-- /page content -->   
 
-@include( "app/includes/update_allowances")
+@include("app/includes/update_allowances")
 <script>
 
 jQuery(document).ready(function($){
@@ -194,7 +194,7 @@ jQuery(document).ready(function($){
     $('#addAllowance').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addAllowance",
+                 url:"<?php echo  url(''); ?>/flex/addAllowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -219,7 +219,7 @@ jQuery(document).ready(function($){
     $('#addOvertime').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addOvertimeCategory",
+                 url:"<?php echo  url(''); ?>/flex/addOvertimeCategory",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -243,7 +243,7 @@ jQuery(document).ready(function($){
     $('#addDeduction').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addDeduction",
+                 url:"<?php echo  url(''); ?>/flex/addDeduction",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

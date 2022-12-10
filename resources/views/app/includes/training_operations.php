@@ -219,7 +219,7 @@
     $('#update_budgetDescription').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateBudgetDescription",
+                 url:"<?php echo  url(''); ?>/flex/updateBudgetDescription",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -243,7 +243,7 @@
     $('#update_budgetDateRange').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateBudgetDateRange",
+                 url:"<?php echo  url(''); ?>/flex/updateBudgetDateRange",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -268,7 +268,7 @@
     $('#update_budgetAmount').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateBudgetAmount",
+                 url:"<?php echo  url(''); ?>/flex/updateBudgetAmount",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -293,7 +293,7 @@
     $('#applyTraining').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/requestTraining2",
+                 url:"<?php echo  url(''); ?>/flex/requestTraining2",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

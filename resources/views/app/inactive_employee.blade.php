@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -65,7 +65,7 @@
                             $empid= $row->emp_id; ?>
                           <tr id="emp<?php echo $empid; ?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>">
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>">
                             <font color="blue"><?php echo $row->NAME; ?></font></a></td>
                             <td ><?php echo $row->gender; ?></td>
                               <td hidden><?php echo $row->emp_id; ?></td>
@@ -136,7 +136,7 @@
                             $empid= $row->emp_id; ?>
                           <tr id="activeRecord<?php echo $row->logID; ?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>">
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>">
                             <font color="blue"><?php echo $row->NAME; ?></font></a></td>
                             <td ><?php echo $row->gender; ?></td>
                             <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>

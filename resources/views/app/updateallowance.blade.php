@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -12,7 +12,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -74,14 +74,14 @@
 
                           ?>
 
-                    <form id="demo-form2" action="<?php echo url(); ?>flex/updateallowance/?id=<?php echo $id; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" action="<?php echo  url(''); ?>/flex/updateallowance/?id=<?php echo $id; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Name<span class="required">*</span>
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input  type="text" size="3"  value="<?php echo $name; ?>" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -90,7 +90,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input type="text" size="3"  value="<?php echo 100*($rate); ?>" name="rate" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <!-- <div class="ln_solid"></div> -->

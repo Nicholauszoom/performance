@@ -104,13 +104,13 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?php echo base_url('uploads/userprofile/').session('photo'); ?>" alt=""><?php echo session('fname')." ".session('lname'); ?>
+                    <img src="<?php echo url('uploads/userprofile/').session('photo'); ?>" alt=""><?php echo session('fname')." ".session('lname'); ?>
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="<?php echo url(); ?>flex/userprofile/?id=".session('emp_id'); ?>"> Profile</a></li>
+                    <li><a href="<?php echo  url(''); ?>/flex/userprofile/?id=".session('emp_id'); ?>"> Profile</a></li>
                     <li>
-                      <a href="<?php echo url(); ?>flex/login_info"; ?>">
+                      <a href="<?php echo  url(''); ?>/flex/login_info"; ?>">
                         <span>Account Setting</span>
                       </a>
                     </li> 
@@ -131,7 +131,7 @@
                       <?php } ?>
                       </a>
                     </li> 
-                    <li><a href="<?php echo url(); ?>flex/base_controller/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    <li><a href="<?php echo  url(''); ?>/flex/base_controller/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
 
                   </ul>
                 </li>
@@ -147,7 +147,7 @@
                   <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                    <?php  if (session('mng_emp')){ ?>
                     <li>
-                      <a href="<?php echo url(); ?>flex/contract_expire">
+                      <a href="<?php echo  url(''); ?>/flex/contract_expire">
                         <span class="image">
                     <i class="fa fa-suitcase"></i></span>
                         <span>
@@ -161,7 +161,7 @@
                     </li>
 
                     <li>
-                      <a href="<?php echo url(); ?>flex/retire">
+                      <a href="<?php echo  url(''); ?>/flex/retire">
                         <span class="image">
                     <i class="fa fa-calendar"></i></span>
                         <span>
@@ -175,7 +175,7 @@
                     </li>
                     <?php } if(session('mng_emp')){ ?>
                     <li>
-                      <a href="<?php echo url(); ?>flex/inactive_employee">
+                      <a href="<?php echo  url(''); ?>/flex/inactive_employee">
                         <span class="image">
                     <i class="fa fa-calendar"></i></span>
                         <span>
@@ -211,7 +211,7 @@
                     <?php
                         if(count($imprest)>0) { ?>
                     <li>
-                      <a href="<?php echo url(); ?>flex/approved_financial_payments">
+                      <a href="<?php echo  url(''); ?>/flex/approved_financial_payments">
                         <span class="image">
                       <i class="fa fa-money"></i></span>
                         <span>
@@ -228,7 +228,7 @@
                     <?php
                         if(count($notifications)>0) { ?>
                     <li>
-                      <a href="<?php echo url(); ?>flex/approved_financial_payments">
+                      <a href="<?php echo  url(''); ?>/flex/approved_financial_payments">
                         <span class="image">
                       <i class="fa fa-money"></i></span>
                         <span>
@@ -245,9 +245,9 @@
                         if(count($overtimes)>0) { ?>
                     <li>
                     <?php   if(session('appr_leave') && !session('appr_leave') || !session('mng_emp')){ ?>
-                      <a href="<?php echo url(); ?>flex/overtime">
+                      <a href="<?php echo  url(''); ?>/flex/overtime">
                       <?php }else{ ?>
-                      <a href="<?php echo url(); ?>flex/approved_financial_payments">
+                      <a href="<?php echo  url(''); ?>/flex/approved_financial_payments">
                       <?php } ?>
                         <span class="image">
                       <i class="fa fa-money"></i></span>
@@ -265,7 +265,7 @@
                     <?php
                         if(count($incs)>0) { ?>
                     <li>
-                      <a href="<?php echo url(); ?>flex/approved_financial_payments">
+                      <a href="<?php echo  url(''); ?>/flex/approved_financial_payments">
                         <span class="image">
                       <i class="fa fa-money"></i></span>
                         <span>
@@ -282,7 +282,7 @@
                     <?php
                         if(count($salary)>0) { ?>
                     <li>
-                      <a href="<?php echo url(); ?>flex/approved_financial_payments">
+                      <a href="<?php echo  url(''); ?>/flex/approved_financial_payments">
                         <span class="image">
                       <i class="fa fa-money"></i></span>
                         <span>

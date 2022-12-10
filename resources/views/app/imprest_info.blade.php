@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
   foreach($imprest_details as $detail){        
@@ -213,7 +213,7 @@
                                         </label>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                           <textarea required="" id="textdescription" class="form-control col-md-7 col-xs-12" required name="description" placeholder="Description" rows="3"></textarea> 
-                                          <!-- <span class="text-danger"><?php echo form_error("lname");?></span> -->
+                                          <!-- <span class="text-danger"><?php// echo form_error("lname");?></span> -->
                                         </div>
                                       </div>
                                       <div class="form-group">
@@ -292,7 +292,7 @@
                                                   </div>
                                                   <div class="modal-body">
                                                   <!-- Modal Form -->
-                                                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/imprest/uploadRequirementEvidence"  data-parsley-validate class="form-horizontal form-label-left">
+                                                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/imprest/uploadRequirementEvidence"  data-parsley-validate class="form-horizontal form-label-left">
 
                                               
                                                   <div class="form-group">
@@ -337,7 +337,7 @@
                                         <?php if( $row->status==3) {
 
                                         if($row->evidence!="0") { ?>
-                                        <a download= '' href ="<?php echo base_url('uploads/imprests/').$row->evidence; ?>"> <div class='col-md-12'>
+                                        <a download= '' href ="<?php echo url('uploads/imprests/').$row->evidence; ?>"> <div class='col-md-12'>
                                         <span class='label label-info'>DOWNLOAD</span></div></a> 
                                         <?php } else { ?>
                                         <div class="col-md-12"><span class="label label-warning">NO EVIDENCE</span></div>
@@ -428,7 +428,7 @@
                                                   </div>
                                                   <div class="modal-body">
                                                   <!-- Modal Form -->
-                                                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/imprest/update_imprestRequirement"  data-parsley-validate class="form-horizontal form-label-left">
+                                                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/imprest/update_imprestRequirement"  data-parsley-validate class="form-horizontal form-label-left">
 
                                                   <input type="text" name="imprestID" hidden="" value="<?php echo $imprestID;?>">
                                                   <input type="text" name="requirementID" hidden="" value="<?php echo $row->id; ?>">
@@ -493,7 +493,7 @@
 </div>
         <!-- /page content -->
 
-@include( "app/includes/imprest_operations
+@include("app/includes/imprest_operations
 
 
  @endsection

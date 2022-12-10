@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -57,7 +57,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                      <form  align="center" enctype="multipart/form-data" method="post" action="<?php echo url(); ?>flex/updaterole/?id=<?php echo $roleID; ?>"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
+                      <form  align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/updaterole/?id=<?php echo $roleID; ?>"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
                             
 
                       <div class="form-group">
@@ -65,7 +65,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" value="<?php echo $row->name; ?>" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
 
@@ -74,7 +74,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input disabled="disabled"  value="<?php echo $row->permissions; ?>" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -103,7 +103,7 @@
                   <div class="x_content">
 
 
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/assignrole2"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/assignrole2"  data-parsley-validate class="form-horizontal form-label-left">
                         
                       
                       <div class="form-group">
@@ -131,7 +131,7 @@
                     <!-- <h4><b>OR</b></h4> <br> -->
 
 
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/assignrole2"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/assignrole2"  data-parsley-validate class="form-horizontal form-label-left">
                         
                       
                       <div class="form-group">
@@ -189,7 +189,7 @@
 
                     <div class="col-xs-9">
                       <!-- Tab panes -->
-                      <form action="<?php echo url(); ?>flex/updaterole/" method="post">
+                      <form action="<?php echo  url(''); ?>/flex/updaterole/" method="post">
                       <input type="hidden" name="roleID" value="<?php echo $roleID; ?>">
                       
                       <div class="tab-content">
@@ -467,7 +467,7 @@
         if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Role?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/removeEmployeeFromRole",
+                 url:"<?php echo  url(''); ?>/flex/removeEmployeeFromRole",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

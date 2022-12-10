@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -439,7 +439,7 @@
                                             </div>
                                         </div>
                                         <img height="250px" width="250px" style="border-radius: 50%;" id="blah"
-                                            src="<?php echo base_url('uploads/userprofile/').$photo; ?>"
+                                            src="<?php echo url('uploads/userprofile/').$photo; ?>"
                                             alt="Current Employee Picture" />
                                     </div>
                                 </form>
@@ -824,8 +824,8 @@
 
 <?php 
       
-     include_once "app/includes/dropdown.php"; 
-     include_once "app/includes/update_employee.php"; 
+     @include("app/includes/dropdown")
+     @include("app/includes/update_employee")
      
 ?>
 <script>
@@ -836,7 +836,7 @@ $(document).ready(function() {
         if (bankID) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/bankBranchFetcher/',
+                url: '<?php echo  url(''); ?>/flex/bankBranchFetcher/',
                 data: 'bank=' + bankID,
                 success: function(html) {
                     $('#bank_branch').html(html);
@@ -935,7 +935,7 @@ $(function() {
 $('#updateContractStart').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/updateContractStart",
+            url: "<?php echo  url(''); ?>/flex/updateContractStart",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -961,7 +961,7 @@ $('#updateContractStart').submit(function(e) {
 $('#updateContractEnd').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/updateContractEnd",
+            url: "<?php echo  url(''); ?>/flex/updateContractEnd",
             type: "post",
             data: new FormData(this),
             processData: false,

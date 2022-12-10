@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 <!-- /top navigation -->
       
         <!-- page content -->
@@ -162,7 +162,7 @@
                                           <td class="options-width">
                                           <?php //if($row->status==1 || session('line') !=0 ){ ?> <?php //} ?>
                                           <?php //if ($row->status==2) {   ?>
-                                          <a href="<?php echo url(); ?>flex/fetchOvertimeComment/".$row->eoid; ?>"><button  class='btn btn-primary btn-xs'>Comment</i></button></a>
+                                          <a href="<?php echo  url(''); ?>/flex/fetchOvertimeComment/".$row->eoid; ?>"><button  class='btn btn-primary btn-xs'>Comment</i></button></a>
                                           <?php //}  ?>
                                           </td>
                                           </tr>
@@ -264,7 +264,7 @@
 
        <?php
         
-       include_once "app/includes/overtime_operations")
+       @include("app/includes/overtime_operations")
 <script type="text/javascript">
   $(".select_category").select2({
           placeholder: "Select Category",
@@ -384,7 +384,7 @@ $(function() {
     $('#applyOvertime').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/applyOvertime",
+                 url:"<?php echo  url(''); ?>/flex/applyOvertime",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

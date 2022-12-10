@@ -19,7 +19,7 @@ $(document).ready(function(){
         if(formValue){
             $.ajax({
                 type:'POST',
-                url:'<?php echo url(); ?>flex/attendance/attendeesFetcher/',
+                url:'<?php echo  url(''); ?>/flex/attendance/attendeesFetcher/',
                 data:'due_date='+formValue,
                 success:function(html){
                   let jq_json_obj = $.parseJSON(html);
@@ -46,7 +46,7 @@ $(document).ready(function(){
         if(stateID){
             $.ajax({
                 type:'POST',
-                url:'<?php echo url(); ?>flex/positionFetcher/',
+                url:'<?php echo  url(''); ?>/flex/positionFetcher/',
                 data:'dept_id='+stateID,
                 success:function(html){
                     // $('#pos').html(html);

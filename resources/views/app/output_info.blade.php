@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
   foreach($output as $detail){
@@ -182,7 +182,7 @@
                                         </label>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                           <textarea required="" id="title" class="form-control col-md-7 col-xs-12" required name="title" placeholder="Title" rows="2"></textarea> 
-                                          <!-- <span class="text-danger"><?php echo form_error("lname");?></span> -->
+                                          <!-- <span class="text-danger"><?php// echo form_error("lname");?></span> -->
                                         </div>
                                       </div>
                                       <div class="form-group">
@@ -190,7 +190,7 @@
                                         </label>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                           <textarea required="" id="textdescription" class="form-control col-md-7 col-xs-12" required name="description" placeholder="Description" rows="3"></textarea> 
-                                          <!-- <span class="text-danger"><?php echo form_error("lname");?></span> -->
+                                          <!-- <span class="text-danger"><?php// echo form_error("lname");?></span> -->
                                         </div>
                                       </div>
                                         <div class="form-group">
@@ -529,9 +529,9 @@
                                             </td>
                                             <td class="options-width">
                                                 <?php if($row->output_ref==0) {?>
-                                                <a href="<?php echo url()."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                                <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
                                                 <?php } else { ?>
-                                                <a href="<?php echo url()."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"    title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                                <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"    title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
                                                 <?php }  ?>
 
                                                 <!--ACTIONS-->
@@ -541,7 +541,7 @@
                                             if($row->status==1){ ?>
                                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button>
                 
-                                            <a href="<?php echo url()."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
+                                            <a href="<?php echo  url('')."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
                 
                 
                                             <?php } if($row->status==0){ ?>
@@ -555,7 +555,7 @@
                                                 <!--ACTIONS-->
                                                 </td>
                 
-                                            <td><a href="<?php echo url()."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                                            <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
 
                                             
                                             
@@ -602,9 +602,9 @@
 
 <?php 
 
-// include_once "app/includes/projectchart.php"; 
+// @include("app/includes/projectchart")
 
-include_once "app/includes/unrefresh_form_submit.php";
+@include("app/includes/unrefresh_form_submit.php";
 
  ?>
 

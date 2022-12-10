@@ -8,12 +8,12 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 
 <!-- /top navigation -->
 
-<link href="<?php echo url(); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
+<link href="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
 
 
 <!-- page content -->
@@ -1158,7 +1158,7 @@ $('#edit').on('show.bs.modal', function(event) {
 
     $.ajax({
         type: 'POST',
-        url: '<?php echo url(); ?>flex/project/employeeTotalPercentAllocation',
+        url: '<?php echo  url(''); ?>/flex/project/employeeTotalPercentAllocation',
         data: 'projectCode=' + button.data('id'),
         success: function(html) {
             let jq_json_obj = $.parseJSON(html);
@@ -1201,7 +1201,7 @@ $('#re-allocation').submit(function(e) {
     e.preventDefault();
 
     $.ajax({
-        url: '<?php echo url(); ?>flex/project/employeeRellocation',
+        url: '<?php echo  url(''); ?>/flex/project/employeeRellocation',
         type: "post",
         dataType: "json",
         data: $('#re-allocation').serialize(),
@@ -1255,7 +1255,7 @@ $(document).ready(function() {
         if (projectCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchActivity',
+                url: '<?php echo  url(''); ?>/flex/project/fetchActivity',
                 data: 'projectCode=' + projectCode,
                 success: function(html) {
                     $('#activitySelectList').html(html);
@@ -1271,7 +1271,7 @@ $(document).ready(function() {
         if (projectCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchActivity',
+                url: '<?php echo  url(''); ?>/flex/project/fetchActivity',
                 data: 'projectCode=' + projectCode,
                 success: function(html) {
                     $('#activitySelectList1').html(html);
@@ -1287,7 +1287,7 @@ $(document).ready(function() {
         if (projectCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchActivity',
+                url: '<?php echo  url(''); ?>/flex/project/fetchActivity',
                 data: 'projectCode=' + projectCode,
                 success: function(html) {
                     $('#activitySelectList2').html(html);
@@ -1303,7 +1303,7 @@ $(document).ready(function() {
         if (activityCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchGrant',
+                url: '<?php echo  url(''); ?>/flex/project/fetchGrant',
                 data: 'activityCode=' + activityCode,
                 success: function(html) {
                     $('#grantList').html(html);
@@ -1319,7 +1319,7 @@ $(document).ready(function() {
         if (activityCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchGrant',
+                url: '<?php echo  url(''); ?>/flex/project/fetchGrant',
                 data: 'activityCode=' + activityCode,
                 success: function(html) {
                     $('#grantList1').html(html);
@@ -1335,7 +1335,7 @@ $(document).ready(function() {
         if (activityCode) {
             $.ajax({
                 type: 'POST',
-                url: '<?php echo url(); ?>flex/project/fetchEmployee',
+                url: '<?php echo  url(''); ?>/flex/project/fetchEmployee',
                 data: 'activityCode=' + activityCode,
                 success: function(html) {
                     let jq_json_obj = $.parseJSON(html);
@@ -1363,7 +1363,7 @@ $(document).ready(function() {
 $('#allocateActivity').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/allocateActivity",
+            url: "<?php echo  url(''); ?>/flex/project/allocateActivity",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -1398,7 +1398,7 @@ $('#allocateActivity').submit(function(e) {
 $('#assignActivity').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/assignActivity",
+            url: "<?php echo  url(''); ?>/flex/project/assignActivity",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -1426,7 +1426,7 @@ $('#assignActivity').submit(function(e) {
 $('#progressActivity').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateAssignment",
+            url: "<?php echo  url(''); ?>/flex/project/updateAssignment",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -1631,7 +1631,7 @@ $('#addCost').submit(function(e) {
     e.preventDefault(); // Prevent Default Submission
 
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/addCost",
+            url: "<?php echo  url(''); ?>/flex/project/addCost",
             type: 'POST',
             data: new FormData(this),
             processData: false,

@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -49,7 +49,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/volunteerAllowanceMWPExport" data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/volunteerAllowanceMWPExport" data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/staffPayrollBankExport" data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/staffPayrollBankExport" data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -112,7 +112,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
                                 </form>
@@ -129,7 +129,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/payrollInputJournalExport" data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/payrollInputJournalExport" data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -160,7 +160,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -177,7 +177,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/pay_checklist" target="_blank" data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/pay_checklist" target="_blank" data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -207,7 +207,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -223,7 +223,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/employeeCostExport"  data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/employeeCostExport"  data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -253,7 +253,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -269,7 +269,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/employeeBioDataExport"  data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/employeeBioDataExport"  data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <div class="row">
@@ -300,7 +300,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -316,7 +316,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/grossReconciliation"  data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/grossReconciliation"  data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -346,7 +346,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -362,7 +362,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/netReconciliation"  data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/netReconciliation"  data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -392,7 +392,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -408,7 +408,7 @@
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/loanReports"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/loanReports"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -438,7 +438,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -455,7 +455,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/payrollInputJournalExportTime" data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/payrollInputJournalExportTime" data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
@@ -486,7 +486,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -504,7 +504,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/projectTime" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/projectTime" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Project</label>
@@ -546,7 +546,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname");?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname");?></span>
                                         </div>
                                     </div>
 
@@ -564,7 +564,7 @@
                             </div>
                             <div class="x_content">
                                 @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/funder" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
+                                <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/funder" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Project</label>

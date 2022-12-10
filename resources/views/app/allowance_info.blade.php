@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php 
   foreach ($allowance as $key) {
@@ -237,14 +237,14 @@
                       
                       
                       
-                      <!--<form autocomplete="off" id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo url(); ?>flex/updaterole/?id=<?php //echo $id; ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                      <!--<form autocomplete="off" id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/updaterole/?id=<?php //echo $id; ?>"  data-parsley-validate class="form-horizontal form-label-left">
                           
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Role Name 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input  value="<?php //echo $row->name; ?>" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
 
@@ -253,7 +253,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input disabled="disabled"  value="<?php //echo $row->activity; ?>" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">

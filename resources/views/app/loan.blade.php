@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -132,7 +132,7 @@
                               <a href="javascript:void(0)" onclick="pauseLoan(<?php echo $row->id;?>)">
                                   <button  class="btn btn-warning btn-xs">PAUSE</button></a>
 
-                              <a href="<?php echo url(); ?>flex/loan_advanced_payments/?key=<?php echo base64_encode($row->id);?>" title="Advanced Loan Payment" >
+                              <a href="<?php echo  url(''); ?>/flex/loan_advanced_payments/?key=<?php echo base64_encode($row->id);?>" title="Advanced Loan Payment" >
                                   <button  class="btn btn-success btn-xs">ADV PAYMENT</button></a>
                               <?php } 
                                if($row->state==2){ ?>
@@ -162,7 +162,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data" target="_blank"  method="post" action="<?php echo url(); ?>flex/reports/loanreport"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data" target="_blank"  method="post" action="<?php echo  url(''); ?>/flex/reports/loanreport"  data-parsley-validate class="form-horizontal form-label-left">
                         
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Type</label>

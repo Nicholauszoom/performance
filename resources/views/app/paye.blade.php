@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -74,9 +74,9 @@
                             <td><?php echo 100*($row->rate)."%"; ?></td>
                             <?php if($pendingPayroll==0){ ?>
                             <td class="options-width">
-                           <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo url(); ?>flex/deletepaye/?id=".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='fa fa-trash'></i></button></a>&nbsp;&nbsp; -->
+                           <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye/?id=".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='fa fa-trash'></i></button></a>&nbsp;&nbsp; -->
 
-                           <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo url(); ?>flex/paye_info/?id=".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
+                           <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo  url(''); ?>/flex/paye_info/?id=".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
 
                             </td>
                             <?php } ?>
@@ -104,7 +104,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" name="minimum" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
 
@@ -113,7 +113,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" name="maximum" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
 
@@ -122,7 +122,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" name="excess" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -130,7 +130,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="99" step="1" name="rate" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <!-- END -->
@@ -193,7 +193,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/addpaye",
+ url: "<?php echo  url(''); ?>/flex/addpaye",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

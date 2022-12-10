@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -192,7 +192,7 @@
                         <?php if ($document) { ?>
                         <h5> Document:
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-                                href="<?php echo base_url() . 'uploads/' . $document; ?>">Document
+                                href="<?php echo  url('') . 'uploads/' . $document; ?>">Document
                                 link</a> </b></h5>
                         <?php } ?>
                         <h5>Description: &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $description; ?></b>
@@ -448,7 +448,7 @@
 $('#saveActivity').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/saveActivity",
+            url: "<?php echo  url(''); ?>/flex/project/saveActivity",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -473,7 +473,7 @@ $('#saveActivity').submit(function(e) {
 $('#addProject').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/addProject",
+            url: "<?php echo  url(''); ?>/flex/project/addProject",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -498,7 +498,7 @@ $('#addProject').submit(function(e) {
 $('#updateName').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateProjectName",
+            url: "<?php echo  url(''); ?>/flex/project/updateProjectName",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -523,7 +523,7 @@ $('#updateName').submit(function(e) {
 $('#updateCode').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateProjectCode",
+            url: "<?php echo  url(''); ?>/flex/project/updateProjectCode",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -547,7 +547,7 @@ $('#updateCode').submit(function(e) {
 $('#updateDescription').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateProjectDescription",
+            url: "<?php echo  url(''); ?>/flex/project/updateProjectDescription",
             type: "post",
             data: new FormData(this),
             processData: false,

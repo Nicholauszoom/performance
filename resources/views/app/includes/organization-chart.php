@@ -40,7 +40,7 @@
             
         },
         link: {
-            href: '".url()."flex/cipay/position_info/?id=".$rowother->positionID."'
+            href: '". url('')."flex/cipay/position_info/?id=".$rowother->positionID."'
         }
     },"; }
 
@@ -101,7 +101,7 @@ foreach ($allpositioncodes as $rowall) {
             
         },
         link: {
-            href: '".url()."flex/cipay/department_info/?id=".base64_encode($rowother->deptID)."'
+            href: '". url('')."flex/cipay/department_info/?id=".base64_encode($rowother->deptID)."'
         }
     },"; }
 

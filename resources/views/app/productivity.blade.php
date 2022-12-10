@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
   $CI_Model = get_instance();
@@ -63,7 +63,7 @@
                   </div>
                   <div class="x_content">
                     
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/kpi"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/kpi"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                       <div class="form-group">
                         <label class="control-label col-md-3  col-xs-6" >Select Employee</label>
                         <div class="col-sm-5">
@@ -128,7 +128,7 @@
                           <tr id="domain<?php echo $row->name;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td width="1px"><?php echo $row->empID; ?></td>
-                            <td><a title="More Details"  href="<?php echo url()."flex/performance/userprofile/?id=".$row->empID; ?>"><?php echo $row->name; ?></a></td>
+                            <td><a title="More Details"  href="<?php echo  url('')."flex/performance/userprofile/?id=".$row->empID; ?>"><?php echo $row->name; ?></a></td>
                             <td>Department:  <b> <?php echo $row->department."</b><br>Position: <b> ".$row->position;?></b></td>
                             <td><?php echo $row->number_of_tasks; ?></td>
 
@@ -400,7 +400,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/performance/productivity"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/productivity"  data-parsley-validate class="form-horizontal form-label-left">
                         
 
                         <div class="form-group">
@@ -452,7 +452,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/performance/productivity_report" target="_blank" data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/productivity_report" target="_blank" data-parsley-validate class="form-horizontal form-label-left">
                             <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">From
                             </label>

@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
   foreach($task_details as $detail){
@@ -421,7 +421,7 @@
                                                   </div>
                                                   <div class="modal-body">
                                                   <!-- Modal Form -->
-                                                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/performance/update_taskResource"  data-parsley-validate class="form-horizontal form-label-left">
+                                                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/update_taskResource"  data-parsley-validate class="form-horizontal form-label-left">
 
                                                   <input type="text" name="taskID" hidden="" value="<?php echo $taskID;?>">
                                                   <input type="text" name="resourceID" hidden="" value="<?php echo $row->id; ?>">
@@ -492,7 +492,7 @@
 
 
 
-@include( "app/includes/unrefresh_form_submit
+@include("app/includes/unrefresh_form_submit
  <?php if ($referenceOutputID>=1 ) { ?>
       <script type="text/javascript">
 

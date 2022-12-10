@@ -6,8 +6,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
         <meta name="description" content="Cipay Login"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo url(); ?>includes/css/demo.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo url(); ?>includes/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo  url(''); ?>includes/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo  url(''); ?>includes/css/style.css" />
 </he    ad>
 <style type="text/css">
 
@@ -20,7 +20,7 @@ margin: 0 auto;
 top: -10px;
 height: 160px;
 width: 160px;
-/*background: url('<?php echo url(); ?>uploads/logo/organization_logo.png') center center no-repeat, #FFF;*/
+/*background: url('<?php echo  url(''); ?>uploads/logo/organization_logo.png') center center no-repeat, #FFF;*/
 border-radius: 50%;
 -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=5, Direction=0, Color=#000000)";/*IE 8*/
 -moz-box-shadow: 0 0 5px 2px rgba(0,0,0,0.3);/*FF 3.5+*/

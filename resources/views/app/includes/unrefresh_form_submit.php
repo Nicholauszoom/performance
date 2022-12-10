@@ -6,7 +6,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutcome",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutcome",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -32,7 +32,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutcome",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutcome",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -57,7 +57,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutcome",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutcome",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -84,7 +84,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutcomeDateRange",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutcomeDateRange",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -118,7 +118,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateoutputDescription",
+ url: "<?php echo  url(''); ?>/flex/performance/updateoutputDescription",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -143,7 +143,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutputDateRange",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutputDateRange",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -169,7 +169,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performancey/updateOutputTitle",
+ url: "<?php echo  url(''); ?>/flex/performancey/updateOutputTitle",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -201,7 +201,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateStrategy",
+ url: "<?php echo  url(''); ?>/flex/performance/updateStrategy",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -227,7 +227,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateStrategy",
+ url: "<?php echo  url(''); ?>/flex/performance/updateStrategy",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -252,7 +252,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateStrategyDateRange",
+ url: "<?php echo  url(''); ?>/flex/performance/updateStrategyDateRange",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -282,7 +282,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/addOutcome",
+ url: "<?php echo  url(''); ?>/flex/performance/addOutcome",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
  dataType: 'json'
@@ -324,7 +324,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskDescription",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskDescription",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -351,7 +351,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskTitle",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskTitle",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -376,7 +376,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskCost",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskCost",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -404,7 +404,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskDateRange",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskDateRange",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -434,7 +434,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskAdvanced",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskAdvanced",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -459,7 +459,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskAdvanced2",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskAdvanced2",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -487,7 +487,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/createNewTask",
+ url: "<?php echo  url(''); ?>/flex/performance/createNewTask",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
@@ -526,7 +526,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/assign_output",
+ url: "<?php echo  url(''); ?>/flex/performance/assign_output",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -549,7 +549,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/reference_output",
+ url: "<?php echo  url(''); ?>/flex/performance/reference_output",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -573,7 +573,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/addOutput",
+ url: "<?php echo  url(''); ?>/flex/performance/addOutput",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json' 
@@ -612,7 +612,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/addtask",
+ url: "<?php echo  url(''); ?>/flex/performance/addtask",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -649,7 +649,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutcomeAssign",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutcomeAssign",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -677,7 +677,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateOutcomeStrategy_ref",
+ url: "<?php echo  url(''); ?>/flex/performance/updateOutcomeStrategy_ref",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -708,7 +708,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/addBudget",
+ url: "<?php echo  url(''); ?>/flex/addBudget",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -742,7 +742,7 @@
     $('#addEmployee').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/confirmGraduation",
+                 url:"<?php echo  url(''); ?>/flex/confirmGraduation",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

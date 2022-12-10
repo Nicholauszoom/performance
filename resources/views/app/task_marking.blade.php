@@ -11,7 +11,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
         <!-- page content -->
@@ -59,7 +59,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="1" max="100"  value="<?php echo $quantity; ?>" name="quantity" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -67,7 +67,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input type="number" min="1" max="100" required="required" value="<?php echo $behaviour; ?>" name="behaviour"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employee");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employee");?></span>
                         </div>
                       </div>
                       <!-- <div class="ln_solid"></div> -->
@@ -326,7 +326,7 @@
                   </div>
                   <div class="modal-body">
                   <!-- Modal Form -->
-                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/performance/add_behaviour"  data-parsley-validate class="form-horizontal form-label-left">
+                  <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/add_behaviour"  data-parsley-validate class="form-horizontal form-label-left">
                     <div class="form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Title</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -338,7 +338,7 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea class="form-control col-md-7 col-xs-12"  name="description"  rows="3"></textarea>
-                      <span class="text-danger"><?php //echo form_error("fname");?></span>
+                      <span class="text-danger"><?php // echo form_error("fname");?></span>
                     </div>
                   </div>                 
                   <div class="modal-footer">
@@ -365,7 +365,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskMarkingBasics/",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskMarkingBasics/",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -394,7 +394,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/updateTaskTimeElapse",
+ url: "<?php echo  url(''); ?>/flex/performance/updateTaskTimeElapse",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -422,7 +422,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/add_behaviour",
+ url: "<?php echo  url(''); ?>/flex/performance/add_behaviour",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -482,7 +482,7 @@
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/update_task_behaviour/",
+ url: "<?php echo  url(''); ?>/flex/performance/update_task_behaviour/",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -572,7 +572,7 @@ $(document).ready(function(){
     e.preventDefault(); // Prevent Default Submission
   
     $.ajax({
- url: "<?php echo url(); ?>flex/performance/update_task_ratings/",
+ url: "<?php echo  url(''); ?>/flex/performance/update_task_ratings/",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'

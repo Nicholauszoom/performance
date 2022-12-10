@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 
@@ -78,8 +78,8 @@
                             <td><?php echo date('d-F-Y', strtotime($row->last_paid_date)); ?></td>
                             <?php if(session('mng_paym')|| session('recom_paym')||session('appr_paym')){ ?>
                               <td>
-                              <a href ="<?php echo url(); ?>flex/reports/employee_arrears/?empid=<?php echo base64_encode($row->empID); ?>" target = "blank" title="Print Employee Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
-                              <a  href="<?php echo url(); ?>flex/individual_arrears_info/?id=".base64_encode($row->empID.'@'.$payroll_month); ?>" title="Payments and Info" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                              <a href ="<?php echo  url(''); ?>/flex/reports/employee_arrears/?empid=<?php echo base64_encode($row->empID); ?>" target = "blank" title="Print Employee Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
+                              <a  href="<?php echo  url(''); ?>/flex/individual_arrears_info/?id=".base64_encode($row->empID.'@'.$payroll_month); ?>" title="Payments and Info" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                               </td>
                           <?php }  ?>
                             </tr>

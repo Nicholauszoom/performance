@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -39,13 +39,13 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addposition"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off" >
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addposition"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off" >
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Position Name 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="text" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       

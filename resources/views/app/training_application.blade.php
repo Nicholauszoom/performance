@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -76,7 +76,7 @@
 
                             <td class="options-width">
 
-                              <a href="<?php echo url(); ?>flex/budget_info/?id=".base64_encode($row->id); ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                              <a href="<?php echo  url(''); ?>/flex/budget_info/?id=".base64_encode($row->id); ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                              <?php if($row->status==0){ ?> 
 
@@ -148,7 +148,7 @@
                               </div>
                               <div class="x_content">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                               <form action="<?php echo url(); ?>flex/approve_training/" method="post">
+                               <form action="<?php echo  url(''); ?>/flex/approve_training/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
                                 <table id="datatable" class="table table-striped table-bordered">
                                   <thead>
@@ -170,7 +170,7 @@
                                       foreach ($applications_hr as $row) { ?>
                                       <tr id="domain<?php echo $row->SKID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->SKILLS_NAME; ?></td>
                                         <td><?php if($row->mandatory == 1){ ?>
@@ -220,7 +220,7 @@
                               </div>
                               <div class="x_content">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                               <form action="<?php echo url(); ?>flex/response_training_linemanager/" method="post">
+                               <form action="<?php echo  url(''); ?>/flex/response_training_linemanager/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
                                 <table id="datatable" class="table table-striped table-bordered">
                                   <thead>
@@ -242,7 +242,7 @@
                                       foreach ($applications as $row) { ?>
                                       <tr id="domain<?php echo $row->SKID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->SKILLS_NAME; ?></td>
                                         <td><?php if($row->mandatory == 1){ ?>
@@ -296,7 +296,7 @@
                               </div>
                               <div class="x_content">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                               <form action="<?php echo url(); ?>flex/approve_training/" method="post">
+                               <form action="<?php echo  url(''); ?>/flex/approve_training/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
                                 <table id="datatable" class="table table-striped table-bordered">
                                   <thead>
@@ -318,7 +318,7 @@
                                       foreach ($skill_gap as $row) { ?>
                                       <tr id="domain<?php echo $row->SKID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->SKILLS_NAME; ?></td>
                                         <td><?php if($row->mandatory == 1){ ?>
@@ -370,7 +370,7 @@
                               </div>
                               <div class="x_content">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                               <!--<form action="<?php echo url(); ?>flex/confirm_graduation/" method="post">-->
+                               <!--<form action="<?php echo  url(''); ?>/flex/confirm_graduation/" method="post">-->
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
                                 <table id="datatable" class="table table-striped table-bordered">
                                   <thead>
@@ -392,7 +392,7 @@
                                       foreach ($trainees_accepted as $row) { ?>
                                       <tr id="domain<?php echo $row->id;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->COURSE; ?></td>
                                         <td><?php if($row->state == 0){ ?>
@@ -404,7 +404,7 @@
                                             <span class="label label-info">GRADUATED</span></div><?php } ?></td>
                                         <td><?php echo number_format($row->cost, 2);  ?></td>
                                         <td class="options-width">
-                                            <a href = "<?php echo url(); ?>flex/confirm_graduation/?key=".$row->empID."|".$row->skills_ID."|".$row->id; ?>"><button type="button" class="btn btn-info btn-xs">CONFIRM<br>GRADUATION</button></a>
+                                            <a href = "<?php echo  url(''); ?>/flex/confirm_graduation/?key=".$row->empID."|".$row->skills_ID."|".$row->id; ?>"><button type="button" class="btn btn-info btn-xs">CONFIRM<br>GRADUATION</button></a>
             
                                        </td>
                                         </tr>
@@ -430,7 +430,7 @@
                               </div>
                               <div class="x_content">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                               <form action="<?php echo url(); ?>flex/confirm_graduation/" method="post">
+                               <form action="<?php echo  url(''); ?>/flex/confirm_graduation/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
                                 <table id="datatable" class="table table-striped table-bordered">
                                   <thead>
@@ -452,7 +452,7 @@
                                       foreach ($trainees_graduated as $row) { ?>
                                       <tr id="domain<?php echo $row->id;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo url(); ?>flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->COURSE; ?></td>
                                         <td><?php if($row->state == 0){ ?>
@@ -462,7 +462,7 @@
                                         else { ?>
                                         <div class="col-md-12">
                                             <span class="label label-info">GRADUATED</span></div><br><br>
-                                            <?php if($row->certificate != NULL) echo "<a download= '' href ='".base_url()."uploads/graduation/".$row->certificate."'>"."<div class='col-md-12'>
+                                            <?php if($row->certificate != NULL) echo "<a download= '' href ='". url('')."uploads/graduation/".$row->certificate."'>"."<div class='col-md-12'>
                                             <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NO CERTIFICATE"; ?>
                                             <?php } ?></td>
                                         <td><?php echo number_format($row->cost, 2);  ?></td>
@@ -508,7 +508,7 @@
                       <div class="x_content">
             
             
-                        <form autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/training_request"  data-parsley-validate class="form-horizontal form-label-left" >
+                        <form autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/training_request"  data-parsley-validate class="form-horizontal form-label-left" >
             
                           <!-- START -->
                           
@@ -560,7 +560,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addBudget"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addBudget"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Description 
                         </label>
@@ -593,7 +593,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input type="number" required="" name="amount" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       
@@ -614,5 +614,5 @@
 
         <!-- /page content -->
 
-@include( "app/includes/training_operations
+@include("app/includes/training_operations
  @endsection

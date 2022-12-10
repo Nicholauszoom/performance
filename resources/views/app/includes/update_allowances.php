@@ -134,7 +134,7 @@ function deleteBonus(id)
     $('#updateName').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAllowanceName",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowanceName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -158,7 +158,7 @@ function deleteBonus(id)
     $('#updateTaxable').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAllowanceTaxable",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowanceTaxable",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -181,7 +181,7 @@ function deleteBonus(id)
     $('#updatePentionable').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAllowancePentionable",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowancePentionable",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -207,7 +207,7 @@ function deleteBonus(id)
     $('#updateAmount').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAllowanceAmount",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowanceAmount",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -231,7 +231,7 @@ function deleteBonus(id)
     $('#updatePercent').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAllowancePercent",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowancePercent",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -256,7 +256,7 @@ function deleteBonus(id)
     $('#updatePolicy').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAllowancePolicy",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowancePolicy",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -283,7 +283,7 @@ function deleteBonus(id)
     $('#assignIndividual').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/assign_allowance_individual",
+                 url:"<?php echo  url(''); ?>/flex/assign_allowance_individual",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -311,7 +311,7 @@ function deleteBonus(id)
     $('#assignGroup').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/assign_allowance_group",
+                 url:"<?php echo  url(''); ?>/flex/assign_allowance_group",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -338,7 +338,7 @@ function deleteBonus(id)
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/remove_individual_from_allowance",
+                 url:"<?php echo  url(''); ?>/flex/remove_individual_from_allowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -367,7 +367,7 @@ function deleteBonus(id)
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/remove_group_from_allowance",
+                 url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -449,7 +449,7 @@ function deleteAllowance(id)
     $('#addToBonus').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addToBonus",
+                 url:"<?php echo  url(''); ?>/flex/addToBonus",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -483,7 +483,7 @@ function deleteAllowance(id)
     $('#addBonusTag').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addBonusTag",
+                 url:"<?php echo  url(''); ?>/flex/addBonusTag",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

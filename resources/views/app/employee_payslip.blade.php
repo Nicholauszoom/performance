@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 <!-- /top navigation -->
       
         <!-- page content -->
@@ -24,7 +24,7 @@
                   </div>
                   <div class="x_content">                                  
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/reports/payslip" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/payslip" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
                       
                     <div class="form-group">
                         <label class="control-label col-md-3  col-xs-6" >Employee Type</label>
@@ -82,7 +82,7 @@
                                         <input type="radio" name="type" value="2">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <span class="text-danger"><?php echo form_error("fname");?></span>
+                                    <span class="text-danger"><?php// echo form_error("fname");?></span>
                                 </div>
                             </div>
 
@@ -161,7 +161,7 @@
 
                                         <?php if($row->state==0){ ?>
                                             <?php if($row->pay_checklist==1){ ?>
-                                                <a href ="<?php echo url(); ?>flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
+                                                <a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
                                             <?php } else {  ?>
                                                 <a title="Checklist Report Not Ready" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-file"></i></button> </a>
                                             <?php } ?>

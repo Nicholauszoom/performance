@@ -1,4 +1,4 @@
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 
@@ -283,9 +283,9 @@
                             </td>
                             <td class="options-width">
                                 <?php if($row->output_ref==0) { ?>
-                                <a href="<?php echo url()."flex/performance/adhoc_task_info/".base64_encode($row->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/adhoc_task_info/".base64_encode($row->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
                                 <?php } else { ?>
-                                <a href="<?php echo url()."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
                                 <?php }  ?>
 
                           <!-- Line Manager WHO  ASSIGNED The Task -->
@@ -293,7 +293,7 @@
                             if($row->status==1){ ?>
                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button>
 
-                            <a href="<?php echo url()."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
+                            <a href="<?php echo  url('')."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
 
 
                             <?php } if($row->status==0){ ?>
@@ -307,7 +307,7 @@
                                 <!--ACTIONS-->
                                 </td>
 
-                            <td><a href="<?php echo url()."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                            <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
 
 
                             
@@ -331,7 +331,7 @@
 
        <?php
        
-       include_once "app/includes/unrefresh_form_submit")
+       @include("app/includes/unrefresh_form_submit")
 
       <?php if ($referenceOutputID>=1 ) { ?>
       <script>

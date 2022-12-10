@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
   foreach($info as $detail){    
@@ -197,7 +197,7 @@
 
 <?php  
    
-  include_once "app/includes/training_operations
+  @include("app/includes/training_operations
 
      <!-- DATE SCRIPTS  -->
 

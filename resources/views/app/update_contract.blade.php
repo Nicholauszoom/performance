@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -12,7 +12,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -49,14 +49,14 @@
 
                           ?>
 
-                    <form autocomplete="off" id="demo-form2" action="<?php echo url(); ?>flex/updatecontract/?id=<?php echo $id; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" action="<?php echo  url(''); ?>/flex/updatecontract/?id=<?php echo $id; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >Name<span class="required">*</span>
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="text" size="3"  value="<?php echo $name; ?>" name="name" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -65,7 +65,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0.5" max="100" step="0.5" value="<?php echo $duration; ?>" name="duration"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employee");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employee");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -74,7 +74,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input required="" type="number" min="1" max="12" step="1" value="<?php echo $reminder; ?>" name="alert"  class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employee");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employee");?></span>
                         </div>
                       </div>
                       <!-- <div class="ln_solid"></div> -->

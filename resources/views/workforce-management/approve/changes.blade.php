@@ -67,7 +67,7 @@
 
                                                 <td> <?php
                                                     if($row->parameterID==1){
-                                                        if($this->session->userdata('mng_paym') ){
+                                                        if(session('mng_paym') ){
                                                             echo "<b>FROM: </b> ".number_format($row->old,2)."/=<br><b>TO: </b>".number_format($row->new,2)."/=";
                                                         }
                                                     }elseif ($row->parameterID==2) {
@@ -97,7 +97,7 @@
                                                         <a href="javascript:void(0)" onclick="disapproveRequest(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button> </a>
 
                                                         <?php if($row->parameterID==1){
-                                                            if($this->session->userdata('mng_paym')){  ?>
+                                                            if(session('mng_paym')){  ?>
                                                                 <a href="javascript:void(0)" onclick="approveSalaryTransfer(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
 
                                                             <?php } } elseif($row->parameterID==2){ ?>

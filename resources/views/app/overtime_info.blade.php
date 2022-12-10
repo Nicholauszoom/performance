@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -46,7 +46,7 @@
                         $commit = $row->commit; 
                       }
                 ?>
-                    <form  align="center" enctype="multipart/form-data"  method="post" action="<?php echo base_url().'flex/commentOvertime/'; ?>"     data-parsley-validate class="form-horizontal form-label-left">
+                    <form  align="center" enctype="multipart/form-data"  method="post" action="<?php echo  url('').'flex/commentOvertime/'; ?>"     data-parsley-validate class="form-horizontal form-label-left">
                     <input type="text" name = "overtimeID" hidden value = "<?php echo $id; ?>">
                       
                       <div class="form-group">
@@ -54,7 +54,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea <?php if($commit ==1){ ?> disabled <?php } ?>  cols="10" class="form-control col-md-7 col-xs-12"  name="comment"  rows="5"><?php echo $commentValue;  ?></textarea>
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="text-center mtop20">
@@ -95,7 +95,7 @@
                         $completeValue = $start." - ".$end;
                       }?>
                     <!--UPDATE OVERTIME-->
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/overtime_info"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/overtime_info"  data-parsley-validate class="form-horizontal form-label-left">
                        
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Time Range

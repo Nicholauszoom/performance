@@ -9,7 +9,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php ?>
 
@@ -122,7 +122,7 @@
 
                                         <?php if($row->state==0){ ?>
                                             <?php if($row->pay_checklist==1){ ?>
-                                                <a href ="<?php echo url(); ?>flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
+                                                <a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-file"></i></button> </a>
                                             <?php } else {  ?>
                                                 <a title="Checklist Report Not Ready" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-file"></i></button> </a>
                                             <?php } ?>
@@ -154,7 +154,7 @@
         e.preventDefault();
         $('#initPayroll').hide();
         $.ajax({
-            url:"<?php echo url(); ?>flex/payroll/initPayroll",
+            url:"<?php echo  url(''); ?>/flex/payroll/initPayroll",
             type:"post",
             data:new FormData(this),
             processData:false,

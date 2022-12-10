@@ -1,7 +1,7 @@
 
         
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -12,7 +12,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 ?>
@@ -65,7 +65,7 @@
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <input type="number" min='1000' max="10000000"  value="<?php echo $amount; ?>" name="amount" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("rate_employer");?></span>
+                          <span class="text-danger"><?php // echo form_error("rate_employer");?></span>
                         </div>
                       </div>
                           <input type="number" hidden value="<?php echo $id; ?>" name="loanID">
@@ -81,7 +81,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason(Optional)" rows="3"><?php echo $reason; ?></textarea> 
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                       <?php if($status==0 || $status==3 || $status==4){ ?>
@@ -111,7 +111,7 @@
     $('#updateLoan').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateloan_info",
+                 url:"<?php echo  url(''); ?>/flex/updateloan_info",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -41,7 +41,7 @@
                   
                      
             <div class="col-lg-6">
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo url(); ?>flex/loan_application_info/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/loan_application_info/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
                       
                       
                       <div class="form-group">
@@ -50,7 +50,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                         <textarea  cols="7" class="form-control col-md-7 col-xs-12"  name="remarks"  rows="5"><?php if (session('recomloan')!=0) { echo $row->reason_hr;}
                         elseif(session('confloan')!=0) { echo $row->reason_finance; } ?></textarea>
-                          <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                          <span class="text-danger"><?php // echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">

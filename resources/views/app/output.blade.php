@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -136,9 +136,9 @@
                               </ul>
                             </td>
                             <td class="options-width">
-                                <a href="<?php echo url()."flex/performance/output_info/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $row->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                <a href="<?php echo url()."flex/performance/assigntask/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>" ><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
+                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>" ><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
                             </td>
                         </tr> 
                     <?php  }  ?>

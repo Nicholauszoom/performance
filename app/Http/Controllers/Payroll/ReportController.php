@@ -47,11 +47,11 @@ class ReportController extends Controller
     }
  }
    
- function pay_checklist(){
+ function pay_checklist(Request $request)  {
       if (isset($_POST['run'])) {
-        $payroll_date =$this->input->post('payrolldate'); 
+        $payroll_date =$request->input('payrolldate'); 
         $isReady = $this->reports_model->payCheklistStatus($payroll_date);
-        $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+        $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
         if($isReady==true){   
             $data['info']= $this->reports_model->company_info();
             $toDate = date('Y-m-d');
@@ -64,33 +64,33 @@ class ReportController extends Controller
                 $data['employee_list'] = $this->reports_model-> volunteer_pay_checklist($payroll_date);
                 $data['take_home'] = $this->reports_model-> volunteer_sum_take_home($payroll_date);
             }
-            $this->load->view('reports/pay_checklist', $data);
+             return view('app.reports/pay_checklist', $data);
 
         } else {
-            $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry the Pay Checklist for the Selected Payroll Month is Not Ready</font></p>");
-            redirect('/cipay/financial_reports/', 'refresh');
+            session('note', "<p class='alert alert-warning text-center'>Sorry the Pay Checklist for the Selected Payroll Month is Not Ready</font></p>");
+            return redirect('/flex/cipay/financial_reports/');
             
         } 
     }
  }
 
    
- function all_arrears(){  
+ function all_arrears(Request $request)  {  
     if (isset($_POST['print'])) {
-        $start = $this->input->post('start');
-        $finish = $this->input->post('finish');
+        $start = $request->input('start');
+        $finish = $request->input('finish');
        
         $data['info']= $this->reports_model->company_info();
         $data['dateStart']= $start;
         $data['dateFinish']= $finish;
         $data['arrears'] = $this->payroll_model->arrears($start, $finish);
-        $this->load->view('reports/all_arrears', $data);
+         return view('app.reports/all_arrears', $data);
     } else{
         exit("Invalid Method Access");
     }
  }
 
- function employee_arrears(){
+ function employee_arrears(Request $request)  {
     $empID = base64_decode($this->input->get('empid'));
     if($empID=='' || ($this->reports_model->employeeInfo($empID))==false){
         exit("Employee ID Not Found");
@@ -98,14 +98,14 @@ class ReportController extends Controller
         $data['info']= $this->reports_model->company_info();
         $data['arrears'] = $this->payroll_model->employee_arrears($empID);
         $data['employee'] = $this->reports_model->employeeInfo($empID);
-        $this->load->view('reports/employee_arrears', $data); 
+         return view('app.reports/employee_arrears', $data); 
     }
  }
 
-   function p9(){
+   function p9(Request $request)  {
       if (isset($_POST['run'])) {
-        $payrolldate =$this->input->post('payrolldate');
-          $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+        $payrolldate =$request->input('payrolldate');
+          $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
           if ($reportType == 1) {
               $data['paye']= $this->reports_model->s_p9($payrolldate);
               $data['total']= $this->reports_model->s_totalp9($payrolldate);
@@ -115,15 +115,15 @@ class ReportController extends Controller
           }
         $data['info']= $this->reports_model->company_info();
         $data['payroll_date']= $payrolldate;
-        $this->load->view('reports/p9', $data); 
+         return view('app.reports/p9', $data); 
     }    
 }
 
-function p10(){
+function p10(Request $request)  {
     
-    $period =$this->input->post('period'); 
-    $year =$this->input->post('payrolldate');
-    $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+    $period =$request->input('period'); 
+    $year =$request->input('payrolldate');
+    $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
 
     $period1start = $year."-01-01";
@@ -146,7 +146,7 @@ function p10(){
             $data['sdl']= $this->reports_model->v_p10($year,$year);
             $data['total']= $this->reports_model->v_totalp10($year,$year);
         }
-        $this->load->view('reports/p10', $data);
+         return view('app.reports/p10', $data);
     }
     elseif($period==2 && $checkup2>=1){
         // exit($date2start."<br>".$date2end);
@@ -161,7 +161,7 @@ function p10(){
         }
         $data['info']= $this->reports_model->company_info();
 
-        $this->load->view('reports/p10', $data);
+         return view('app.reports/p10', $data);
     }
     else{
         exit('NO PAYROLL');
@@ -171,9 +171,9 @@ function p10(){
 
 }
 
-function heslb(){
-    $payrolldate =$this->input->post('payrolldate');
-    $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+function heslb(Request $request)  {
+    $payrolldate =$request->input('payrolldate');
+    $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
     if ($reportType == 1){
         $data['heslb']= $this->reports_model->s_heslb($payrolldate);
         $data['total']= $this->reports_model->s_totalheslb($payrolldate);
@@ -183,14 +183,14 @@ function heslb(){
     }
     $data['info']= $this->reports_model->company_info();
     $data['payrolldate'] = $payrolldate;
-    $this->load->view('reports/heslb', $data);
+     return view('app.reports/heslb', $data);
 
 }
 
-function pension(){
-    $payrollMonth =$this->input->post('payrolldate'); 
-    $pensionFund =$this->input->post('fund');
-    $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+function pension(Request $request)  {
+    $payrollMonth =$request->input('payrolldate'); 
+    $pensionFund =$request->input('fund');
+    $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
     $datewell = explode("-",$payrollMonth);
     $mm = $datewell[1];
@@ -209,17 +209,17 @@ function pension(){
     $data['info']= $this->reports_model->company_info();
     $data['payroll_month'] = $payrollMonth;
     $data['pension_fund'] = $pensionFund;
-    $this->load->view('reports/pension', $data);
+     return view('app.reports/pension', $data);
 
 }
 
 
 
-function wcf(){
+function wcf(Request $request)  {
     if (isset($_POST['run'])) {
-        $calendar =$this->input->post('payrolldate'); 
+        $calendar =$request->input('payrolldate'); 
         $datewell = explode("-",$calendar);
-        $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+        $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
         $mm = $datewell[1];
         $dd = $datewell[2];
@@ -236,17 +236,17 @@ function wcf(){
 
         $data['info']= $this->reports_model->company_info();
         $data['payroll_month'] = $yyyy."-".$mm."-".$dd;
-        $this->load->view('reports/wcf', $data);
+         return view('app.reports/wcf', $data);
     }
 
 }
 
 
-// function employment_cost_old(){
+// function employment_cost_old(Request $request)  {
 //     //if (isset($_POST['run'])) {
         
 //         //DATE MANIPULATION
-//         $calendar =$this->input->post('payrolldate'); 
+//         $calendar =$request->input('payrolldate'); 
 //         $datewell = explode("-",$calendar);
 //         $mm = $datewell[1];
 //         $dd = $datewell[2];
@@ -262,13 +262,13 @@ function wcf(){
 //             $data['total_cost']= $this->reports_model->totalEmploymentCost($date);    
 //             $data['info']= $this->reports_model->company_info();
 //             $data['payrollMonth'] = $payrollDate;
-//             $this->load->view('reports/employment_cost_old', $data);
+//              return view('app.reports/employment_cost_old', $data);
 //         } else exit("No Payroll Available in This Month and Year");
 //     //}
 
 // }
 
-function employment_cost(){
+function employment_cost(Request $request)  {
         $payrollMonth = '2009-01-22'; //base64_decode($this->input->get("pdate"));
         $data['info']= $this->reports_model->company_info();
         $data['authorization']= $this->reports_model->payrollAuthorization($payrollMonth);
@@ -284,7 +284,7 @@ function employment_cost(){
         $data['payroll_date']= $payrollMonth;
         $data['payroll_month'] = $payrollMonth;
         echo json_encode($data);
-        $this->load->view('reports/employment_cost', $data);
+         return view('app.reports/employment_cost', $data);
     //}
 
 }
@@ -294,15 +294,15 @@ function employment_cost(){
 
 
 
-public function loanreport()
+public function loanreport(Request $request)
       {
         if (isset($_POST['print'])) { 
 
-        $type = $this->input->post("type"); 
+        $type = $request->input("type"); 
 
      // DATE MANIPULATION
-        $start = $this->input->post("from");
-        $end =$this->input->post("to");
+        $start = $request->input("from");
+        $end =$request->input("to");
         $datewells = explode("/",$start);
         $datewelle = explode("/",$end);
         $mms = $datewells[1];
@@ -326,18 +326,18 @@ public function loanreport()
     $data['loan'] =  $this->reports_model->loanreport3($dates, $datee);
     $data['title']="List of COMPLETED Loans From ".$dates. " to ".$datee;
   }
-    $this->load->view('reports/loan_report', $data); 
+     return view('app.reports/loan_report', $data); 
   } 
 
   }
 
-  public function customleavereport()
+  public function customleavereport(Request $request)
       {
         if (isset($_POST['print'])) {  
 
      // DATE MANIPULATION
-        $start = $this->input->post("from");
-        $end =$this->input->post("to");
+        $start = $request->input("from");
+        $end =$request->input("to");
         $datewells = explode("/",$start);
         $datewelle = explode("/",$end);
         $mms = $datewells[1];
@@ -354,12 +354,12 @@ public function loanreport()
     $data['leave'] =  $this->attendance_model->leavereport1($dates, $datee);
     $data['title']="List of Employees Who went to Leave From ".$dates. " to ".$datee;
       $data['showbox'] = 1;
-    $this->load->view('customleave_report', $data); 
+     return view('app.customleave_report', $data); 
   } 
 
   elseif(isset($_POST['viewindividual'])){
 
-      $id = $this->input->post("employee");
+      $id = $request->input("employee");
       //
 
       $this->load->model("attendance_model");
@@ -367,24 +367,24 @@ public function loanreport()
       $data['showbox'] = 0;
       $data['customleave'] =  $this->attendance_model->customleave();
       $data['leave'] =  $this->attendance_model->leavereport2($id);      
-      $this->load->view('customleave_report', $data);
+       return view('app.customleave_report', $data);
 
     }
 
       $data['showbox'] = 0;
-    $data['leave'] =  $this->attendance_model->leavereport2($this->session->userdata('emp_id'));
+    $data['leave'] =  $this->attendance_model->leavereport2(session('emp_id'));
       $data['customleave'] =  $this->attendance_model->customleave();    
-      $this->load->view('customleave_report', $data);
+       return view('app.customleave_report', $data);
          
       }
 
-    function payslip(){    
+    function payslip(Request $request)  {    
         if (isset($_POST['print'])) {    
          
       // DATE MANIPULATION
-            $empID = $this->input->post("employee");
-            $start = $this->input->post("payrolldate");
-            $profile = $this->input->post("profile"); //For redirecting Purpose
+            $empID = $request->input("employee");
+            $start = $request->input("payrolldate");
+            $profile = $request->input("profile"); //For redirecting Purpose
             $date_separate = explode("-",$start);
     
             $mm = $date_separate[1];
@@ -400,12 +400,12 @@ public function loanreport()
             
             if ($check == 0){
                 if($profile == 0){
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                    redirect('/cipay/employee_payslip/', 'refresh');
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    return redirect('/flex/cipay/employee_payslip/');
 
                 } else{
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                    redirect('/cipay/userprofile/?id='.$empID, 'refresh');
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    return redirect('/flex/cipay/userprofile/?id='.$empID);
                 }
             } else{
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
@@ -426,14 +426,14 @@ public function loanreport()
                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID,$payroll_date);
                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID,$payroll_date);
                 $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
-                $this->load->view('reports/payslip', $data);
+                 return view('app.reports/payslip', $data);
 
             }        
         }else{
             // DATE MANIPULATION
-            $start = $this->input->post("payrolldate");
+            $start = $request->input("payrolldate");
             $date_separate = explode("-",$start);
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
 
 
@@ -449,8 +449,8 @@ public function loanreport()
             $check = $this->reports_model->payslipcheckAll($payroll_month);
 
             if ($check == 0){
-                $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                redirect('/cipay/employee_payslip/', 'refresh');
+                session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                return redirect('/flex/cipay/employee_payslip/');
             } else{
                 /*print all*/
                 if ($reportType == 1) {
@@ -483,17 +483,17 @@ public function loanreport()
 
                 $data_all['emp_id'] = $payroll_emp_ids;
 
-                    $this->load->view('reports/payslip_all', $data_all);
+                     return view('app.reports/payslip_all', $data_all);
             }
         }
     }
 
-    function temp_payslip(){
+    function temp_payslip(Request $request)  {
 
             // DATE MANIPULATION
-            $empID = $this->input->post("employee");
-            $start = $this->input->post("payrolldate");
-            $profile = $this->input->post("profile"); //For redirecting Purpose
+            $empID = $request->input("employee");
+            $start = $request->input("payrolldate");
+            $profile = $request->input("profile"); //For redirecting Purpose
             $date_separate = explode("-",$start);
 
             $mm = $date_separate[1];
@@ -509,12 +509,12 @@ public function loanreport()
 
             if ($check == 0){
                 if($profile == 0){
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                    redirect('/cipay/employee_payslip/', 'refresh');
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    return redirect('/flex/cipay/employee_payslip/');
 
                 } else{
-                    $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                    redirect('/cipay/userprofile/?id='.$empID, 'refresh');
+                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    return redirect('/flex/cipay/userprofile/?id='.$empID);
                 }
             } else{
                 $data['slipinfo'] = $this->reports_model->temp_payslip_info($empID, $payroll_month_end, $payroll_month);
@@ -535,20 +535,20 @@ public function loanreport()
                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID,$payroll_date);
                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID,$payroll_date);
                 $data['salary_advance_loan_remained'] = $this->reports_model->temp_loansAmountRemained($empID, $payroll_date);
-                $this->load->view('reports/payslip', $data);
+                 return view('app.reports/payslip', $data);
 
             }
 
     }
 
-function backup_payslip(){
+function backup_payslip(Request $request)  {
     
       if (isset($_POST['print'])) { 
     
          
       // DATE MANIPULATION
-            $empID = $this->input->post("employee");
-            $start = $this->input->post("payrolldate");
+            $empID = $request->input("employee");
+            $start = $request->input("payrolldate");
             $date_separate = explode("-",$start);
             
             // exit($start);
@@ -567,12 +567,12 @@ function backup_payslip(){
             
             if ($check == 0){
                 exit("No Payroll Records Found For This Employee under This Month");
-                // $this->session->set_flashdata('note', "<p class='alert alert-warning text-center'>Sorry There is No Payroll or any Payment Informations to Appear in Your Salary Slip For the Year and Month Selected</font></p>");
-                // redirect('/cipay/employee/', 'refresh');
+                // session('note', "<p class='alert alert-warning text-center'>Sorry There is No Payroll or any Payment Informations to Appear in Your Salary Slip For the Year and Month Selected</font></p>");
+                // return redirect('/flex/cipay/employee/');
             } else{
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $datee, $year_month, $date_one_year_back);
                 $data['companyinfo']= $this->reports_model->company_info();
-                $this->load->view('reports/payslip_test', $data);
+                 return view('app.reports/payslip_test', $data);
                 
             } 
         
@@ -580,23 +580,23 @@ function backup_payslip(){
 
     }
 
-    function kpi(){
-        $empID = $this->input->post('empID');
+    function kpi(Request $request)  {
+        $empID = $request->input('empID');
         
         $data['strategies'] = $this->reports_model->allStrategies($empID);
         $data['adhocs'] = $this->reports_model->adhocTasks($empID);
         $data['empInfo'] = $this->reports_model->employeeInfo($empID);
         $data['empID'] = $empID;
-        $this->load->view('reports/kpi', $data);
+         return view('app.reports/kpi', $data);
     
     }   
     
    
-    function attendance(){
+    function attendance(Request $request)  {
           if (isset($_POST['print'])) {
 
         // DATE MANIPULATION
-            $calendar =$this->input->post('start'); 
+            $calendar =$request->input('start'); 
             $datewell = explode("/",$calendar);
             $mm = $datewell[1];
             $dd = $datewell[0];
@@ -607,7 +607,7 @@ function backup_payslip(){
             $toDate = date('Y-m-d'); 
             $data['employee_list'] = $this->reports_model-> attendance_list($attendance_date);
             $data['payroll_month'] = $attendance_date;
-            $this->load->view('reports/attendance_report', $data); 
+             return view('app.reports/attendance_report', $data); 
         } 
      
     }
@@ -615,10 +615,10 @@ function backup_payslip(){
     ##############################################################################
     #################################END PROJECT REPORTS##############################
     
-    public function payrollInputJournalExport() {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $payroll_date =$this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+    public function payrollInputJournalExport(Request $request) {
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $payroll_date =$request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
             //start
             $todayDate = date('d/m/Y');
@@ -987,10 +987,10 @@ function backup_payslip(){
         }    
     }
 
-    public function payrollInputJournalExportTime() {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $payroll_date =$this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+    public function payrollInputJournalExportTime(Request $request) {
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $payroll_date =$request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
             //start
             $todayDate = date('d/m/Y');
@@ -1421,10 +1421,10 @@ function backup_payslip(){
         }    
     } 
 
-    public function staffPayrollBankExport() {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $payroll_date = $this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+    public function staffPayrollBankExport(Request $request) {
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $payroll_date = $request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -1539,9 +1539,9 @@ function backup_payslip(){
 
 
 
-    public function volunteerAllowanceMWPExport() {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $payroll_date = $this->input->post('payrolldate');
+    public function volunteerAllowanceMWPExport(Request $request) {
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $payroll_date = $request->input('payrolldate');
             //start
             $todayDate = date('d/m/Y');
             $object  = new Spreadsheet();
@@ -1639,7 +1639,7 @@ function backup_payslip(){
 
     ############################################################################
     ################################  PHP MAILER ################################
-function dynamic_pdf(){
+function dynamic_pdf(Request $request)  {
     $this->load->library('phpmailer_lib');
     $mail = $this->phpmailer_lib->load();
     $payrolldate ="2019-06-05";  
@@ -1908,18 +1908,18 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 //============================================================+
     }
 
-    function employeeReport(){
+    function employeeReport(Request $request)  {
         if (isset($_POST['print'])) {
-            $empID = $this->input->post("employee");
+            $empID = $request->input("employee");
             $data['employee_info'] = $this->reports_model->employeeProfile($empID);
-            $this->load->view('reports/employee_profile', $data);
+             return view('app.reports/employee_profile', $data);
         }
     }
 
-    public function employeeCostExport() {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $payroll_date = $this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+    public function employeeCostExport(Request $request) {
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $payroll_date = $request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -2055,9 +2055,9 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function employeeCostExport_temp() {
-        if ($this->input->post('payrolldate')) {
-            $payroll_date = $this->input->post('payrolldate');
+    public function employeeCostExport_temp(Request $request) {
+        if ($request->input('payrolldate')) {
+            $payroll_date = $request->input('payrolldate');
             $filename = "employeeCostExport".date('Y_m_d_H_i_s').".xls";
 
 
@@ -2184,11 +2184,11 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function employeeBioDataExport() {
-        if (isset($_POST['run']) && $this->input->post('status')!='' ) {
-            $payroll_date = $this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
-            $status = $this->input->post('status'); //active = 1, exited = 4
+    public function employeeBioDataExport(Request $request) {
+        if (isset($_POST['run']) && $request->input('status')!='' ) {
+            $payroll_date = $request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $status = $request->input('status'); //active = 1, exited = 4
             $suffix = "";
 
             if ($reportType == 1) {
@@ -2311,9 +2311,9 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     public function grossReconciliation()
     {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $current_payroll_month = $this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $current_payroll_month = $request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
@@ -2341,7 +2341,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
             $data['emp_ids'] = $payroll_employees;
             $data['total_previous_gross'] = $total_previous_gross;
             $data['total_current_gross'] = $total_current_gross;
-            $this->load->view('gross_recon', $data);
+             return view('app.gross_recon', $data);
 
 
         }
@@ -2350,9 +2350,9 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     public function netReconciliation()
     {
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
-            $current_payroll_month = $this->input->post('payrolldate');
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $current_payroll_month = $request->input('payrolldate');
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
             if ($reportType == 1){
@@ -2379,17 +2379,17 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
             $data['emp_ids'] = $payroll_employees;
             $data['total_previous_net'] = $total_previous_net;
             $data['total_current_net'] = $total_current_net;
-            $this->load->view('net_recon', $data);
+             return view('app.net_recon', $data);
 
 
         }
 
     }
 
-    public function loanReports(){
-        if (isset($_POST['run']) && $this->input->post('payrolldate')!='' ) {
-            $payroll_date = $this->input->post('payrolldate');
-            $reportType = $this->input->post('type'); //Staff = 1, Volunteer = 2
+    public function loanReports(Request $request)  {
+        if (isset($_POST['run']) && $request->input('payrolldate')!='' ) {
+            $payroll_date = $request->input('payrolldate');
+            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -2401,32 +2401,32 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
             $data['info']= $this->reports_model->company_info();
             $data['payroll_date'] = $payroll_date;
 
-            $this->load->view('reports/loan_report_new', $data);
+             return view('app.reports/loan_report_new', $data);
 
 
         }
     }
 
-    public function projectTime(){
-        if (isset($_POST['run']) && $this->input->post('project')!='' ) {
-            $project = $this->input->post('project');
+    public function projectTime(Request $request)  {
+        if (isset($_POST['run']) && $request->input('project')!='' ) {
+            $project = $request->input('project');
             $project_code = explode('~',$project)[0];
-            $duration = explode('-',$this->input->post('duration'));
-            $reportType = $this->input->post('type'); //time = 1, expense = 2
+            $duration = explode('-',$request->input('duration'));
+            $reportType = $request->input('type'); //time = 1, expense = 2
 
             $data['info']= $this->reports_model->company_info();
             $data['project_info'] = $this->project_model->projectInfoCode($project_code);
             $data['project'] = explode('~',$project)[1];
-            $data['duration'] = $this->input->post('duration');
+            $data['duration'] = $request->input('duration');
 
             if ($reportType == 1){
                 $data['project_time'] = $this->reports_model->projectTime($project_code
                     ,date('Y-m-d',strtotime($duration[0])),date('Y-m-d',strtotime($duration[1])));
-                $this->load->view('reports/project_time', $data);
+                 return view('app.reports/project_time', $data);
             }else{
                 $data['project_time'] = $this->reports_model->projectCost($project_code
                     ,date('Y-m-d',strtotime($duration[0])),date('Y-m-d',strtotime($duration[1])));
-                $this->load->view('reports/project_cost', $data);
+                 return view('app.reports/project_cost', $data);
             }
 
 
@@ -2435,19 +2435,19 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function funder(){
-        if (isset($_POST['run']) && $this->input->post('project')!='' ) {
-            $project = $this->input->post('project');
+    public function funder(Request $request)  {
+        if (isset($_POST['run']) && $request->input('project')!='' ) {
+            $project = $request->input('project');
             $project_code = explode('~',$project)[0];
-            $duration = explode('-',$this->input->post('duration'));
+            $duration = explode('-',$request->input('duration'));
 
             $data['info']= $this->reports_model->company_info();
             $data['project_info'] = $this->project_model->projectInfoCode($project_code);
             $data['project'] = explode('~',$project)[1];
-            $data['duration'] = $this->input->post('duration');
+            $data['duration'] = $request->input('duration');
             $data['funder_funds'] = $this->reports_model->funderFunds(date('Y-m-d',strtotime($duration[0]))
                 ,date('Y-m-d',strtotime($duration[1])));
-            $this->load->view('reports/funder_project',$data);
+             return view('app.reports/funder_project',$data);
 
         }
     }

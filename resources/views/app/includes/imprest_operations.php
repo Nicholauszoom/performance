@@ -281,7 +281,7 @@
     $('#addRequirement').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/imprest/add_imprest_requirement",
+                 url:"<?php echo  url(''); ?>/flex/imprest/add_imprest_requirement",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -311,7 +311,7 @@
     $('#update_imprestTitle').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/imprest/updateImprestTitle",
+                 url:"<?php echo  url(''); ?>/flex/imprest/updateImprestTitle",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -342,7 +342,7 @@
     $('#update_imprestDescription').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/imprest/updateImprestDescription",
+                 url:"<?php echo  url(''); ?>/flex/imprest/updateImprestDescription",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -373,7 +373,7 @@
     $('#updateImprestDateRange').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/imprest/updateImprestDateRange",
+                 url:"<?php echo  url(''); ?>/flex/imprest/updateImprestDateRange",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

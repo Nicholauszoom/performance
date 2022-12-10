@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
 ?>
@@ -123,13 +123,13 @@
         <!-- /page content -->   
 
 <?php 
-//include_once "app/includes/update_deductions")
+//@include("app/includes/update_deductions")
 
 <script type="text/javascript">
     $('#updateLevelName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateOrganizationLevelName",
+                 url:"<?php echo  url(''); ?>/flex/updateOrganizationLevelName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -156,7 +156,7 @@
     $('#updateMinSalary').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMinSalary",
+                 url:"<?php echo  url(''); ?>/flex/updateMinSalary",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -183,7 +183,7 @@
     $('#updateMaxSalary').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMaxSalary",
+                 url:"<?php echo  url(''); ?>/flex/updateMaxSalary",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

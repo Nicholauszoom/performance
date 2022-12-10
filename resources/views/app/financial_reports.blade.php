@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -52,7 +52,7 @@
                             </div>
                             <div class="x_content">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                      action="<?php echo url(); ?>flex/reports/p9" target="_blank"
+                                      action="<?php echo  url(''); ?>/flex/reports/p9" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
@@ -85,7 +85,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -103,7 +103,7 @@
                             </div>
                             <div class="x_content">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                      action="<?php echo url(); ?>flex/reports/p10" target="_blank"
+                                      action="<?php echo  url(''); ?>/flex/reports/p10" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
 <!--                                    <div class="form-group">-->
@@ -152,7 +152,7 @@
                                                 <input type="radio" name="period" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -169,7 +169,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -187,7 +187,7 @@
                             </div>
                             <div class="x_content">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                      action="<?php echo url(); ?>flex/reports/pension" target="_blank"
+                                      action="<?php echo  url(''); ?>/flex/reports/pension" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
@@ -222,7 +222,7 @@
                                               <span class="checkmark"></span>
                                             </label> -->
 
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -239,7 +239,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -257,7 +257,7 @@
                             </div>
                             <div class="x_content">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                      action="<?php echo url(); ?>flex/reports/wcf" target="_blank"
+                                      action="<?php echo  url(''); ?>/flex/reports/wcf" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
                                     <div class="form-group">
@@ -288,7 +288,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 
@@ -306,7 +306,7 @@
                             </div>
                             <div class="x_content">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                      action="<?php echo url(); ?>flex/reports/heslb" target="_blank"
+                                      action="<?php echo  url(''); ?>/flex/reports/heslb" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
 
@@ -338,7 +338,7 @@
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
-                                            <span class="text-danger"><?php echo form_error("fname"); ?></span>
+                                            <span class="text-danger"><?php// echo form_error("fname"); ?></span>
                                         </div>
                                     </div>
 

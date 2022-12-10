@@ -16,7 +16,7 @@ $("#insertDirect").click(function() {
     $('#directLoan').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/insert_directLoan",
+                 url:"<?php echo  url(''); ?>/flex/insert_directLoan",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -44,7 +44,7 @@ $("#insertDirect").click(function() {
     $('#applyLoan').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/apply_salary_advance",
+                 url:"<?php echo  url(''); ?>/flex/apply_salary_advance",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

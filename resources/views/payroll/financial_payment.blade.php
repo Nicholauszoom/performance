@@ -120,7 +120,7 @@ $adv_overtime = $data['adv_overtime'];
 
                     <div role="tabpanel" role="tabpanel" class="tab-pane fade active in" id="payrollReportTab"
                         aria-labelledby="home-tab">
-                        <?php if ($pendingPayroll == 0 && $this->session->userdata('mng_paym')) { ?>
+                        <?php if ($pendingPayroll == 0 && session('mng_paym')) { ?>
                         <!-- <div class="col-md-12 col-sm-6 col-xs-12">
                                       <div class="x_panel">
                                         <div class="x_title">
@@ -158,7 +158,7 @@ $adv_overtime = $data['adv_overtime'];
 
                                         <?php
 
-                                                if ($pendingPayroll == 1 && $payroll->state == 1 && $this->session->userdata('appr_paym')) { ?>&nbsp;&nbsp;&nbsp;
+                                                if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym')) { ?>&nbsp;&nbsp;&nbsp;
                                         <a href="javascript:void(0)" onclick="approvePayroll()" title="Approve Payroll"
                                             class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-success"><i class="fa fa-check"></i>
@@ -178,7 +178,7 @@ $adv_overtime = $data['adv_overtime'];
 
 
                                         <?php } ?>
-                                        <?php if ($pendingPayroll == 1 && $payroll->state == 2 /* && $this->session->userdata('recom_paym')*/) { ?>&nbsp;&nbsp;&nbsp;
+                                        <?php if ($pendingPayroll == 1 && $payroll->state == 2 /* && session('recom_paym')*/) { ?>&nbsp;&nbsp;&nbsp;
                                         <a href="javascript:void(0)" onclick="recomendPayroll()" title="Approve Payroll"
                                             class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-success"><i class="fa fa-check"></i>
@@ -392,7 +392,7 @@ $adv_overtime = $data['adv_overtime'];
                                                     <br><br>
 
 
-                                                    <?php if ($row->status == 1 && /*$this->session->userdata('mng_emp') &&*/ $pendingPayroll == 0) { ?>
+                                                    <?php if ($row->status == 1 && /*session('mng_emp') &&*/ $pendingPayroll == 0) { ?>
 
                                                     <a href="javascript:void(0)" title="Approve"
                                                         class="icon-2 info-tooltip"
@@ -410,7 +410,7 @@ $adv_overtime = $data['adv_overtime'];
 
 
                                                     <?php }
-                                                            if ($row->status == 3 && $this->session->userdata('recom_paym')) { ?>
+                                                            if ($row->status == 3 && session('recom_paym')) { ?>
                                                     <a href="javascript:void(0)" title="Recommend"
                                                         class="icon-2 info-tooltip"
                                                         onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
@@ -426,7 +426,7 @@ $adv_overtime = $data['adv_overtime'];
                                                     </a>
 
                                                     <?php }
-                                                            if ($row->status == 4 && $this->session->userdata('appr_paym')) { ?>
+                                                            if ($row->status == 4 && session('appr_paym')) { ?>
                                                     <a href="javascript:void(0)" title="Approve"
                                                         class="icon-2 info-tooltip"
                                                         onclick="approveOvertime(<?php echo $row->eoid; ?>)">
@@ -492,7 +492,7 @@ $adv_overtime = $data['adv_overtime'];
                                         <tbody>
                                             <?php
                                                 foreach ($otherloan as $row) { ?>
-                                            <?php if ($row->status == 2 || !$row->status == 6 && $this->session->userdata('recom_paym')) {
+                                            <?php if ($row->status == 2 || !$row->status == 6 && session('recom_paym')) {
                                                         continue;
                                                     } ?>
                                             <tr id="domain<?php echo $row->id; ?>">
@@ -535,7 +535,7 @@ $adv_overtime = $data['adv_overtime'];
                                                     </div>
 
                                                     <div style="margin: 10px;">
-                                                        <?php if (/*$this->session->userdata('mng_emp') &&*/ $row->status == 0) { ?>
+                                                        <?php if (/*session('mng_emp') &&*/ $row->status == 0) { ?>
                                                         <a href="javascript:void(0)"
                                                             onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
                                                             title="Recommend">
@@ -543,7 +543,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                     class="fa fa-check"></i></button>
                                                         </a>
 
-                                                        <?php } else if ($row->status == 6 && $this->session->userdata('recom_paym')) { ?>
+                                                        <?php } else if ($row->status == 6 && session('recom_paym')) { ?>
                                                         <a href="javascript:void(0)"
                                                             onclick="recommendLoan(<?php echo $row->id; ?>)"
                                                             title="Recommend">
@@ -552,7 +552,7 @@ $adv_overtime = $data['adv_overtime'];
                                                         </a>
                                                         <?php } ?>
 
-                                                        <?php if (/*$this->session->userdata('appr_paym') &&*/ $row->status == 1 && $pendingPayroll == 0) { ?>
+                                                        <?php if (/*session('appr_paym') &&*/ $row->status == 1 && $pendingPayroll == 0) { ?>
 
                                                         <a href="javascript:void(0)"
                                                             onclick="approveLoan(<?php echo $row->id; ?>)">
@@ -767,7 +767,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                     <div style="padding: 10px;">
                                                                         <?php
                                                                 $pendings = $imprest_model->notApprovedRequirement($row->id);
-                                                                if (/*$this->session->userdata('mng_emp') &&*/ $row->status == 0 && $pendingPayroll == 0 && !$pendings > 0){ ?>
+                                                                if (/*session('mng_emp') &&*/ $row->status == 0 && $pendingPayroll == 0 && !$pendings > 0){ ?>
 
                                                                         <a href="javascript:void(0)"
                                                                             onclick="hr_recommendImprest(<?php echo $row->id; ?>)"
@@ -776,7 +776,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                                     class="fa fa-check"></i></button>
                                                                         </a>
 
-                                                                        <?php }else if (/*$this->session->userdata('mng_emp') &&*/ $pendings > 0){ ?>
+                                                                        <?php }else if (/*session('mng_emp') &&*/ $pendings > 0){ ?>
 
                                                                         <a href="javascript:void(0)"
                                                                             onclick="pendingApprovalAlert()"
@@ -787,7 +787,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                                     class="fa fa-check"></i></button>
                                                                         </a>
                                                                         <?php }else{ ?>
-                                                                        <?php if (/*$this->session->userdata('mng_emp') &&*/ $row->status == 2){
+                                                                        <?php if (/*session('mng_emp') &&*/ $row->status == 2){
                                                                 $pending = $imprest_model->notRetiredRequirement($row->id);
                                                                 if ($pending == 0){
                                                                 ?>
@@ -801,7 +801,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                     }
                                                                     }
 
-                                                                    if (/*$this->session->userdata('appr_paym') &&*/ $pendingPayroll == 0) {
+                                                                    if (/*session('appr_paym') &&*/ $pendingPayroll == 0) {
                                                                         if ($row->status == 1 || $row->status == 5) { ?>
 
                                                                             <a href="javascript:void(0)"
@@ -817,7 +817,7 @@ $adv_overtime = $data['adv_overtime'];
                                 <button class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></a> -->
                                                                             <?php }
 
-                                                                    if (/*$this->session->userdata('recom_paym') && */ $row->status == 9){
+                                                                    if (/*session('recom_paym') && */ $row->status == 9){
 
                                                                     if ($row->status == 9) {
                                                                         $pendings = $imprest_model->notConfirmedRequirement($row->id);
@@ -945,7 +945,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                         APPROVED</span>
                                                                     <br>
                                                                     <?php } ?>
-                                                                    <?php if ($row->state == 0 && $this->session->userdata('mng_emp')) { ?>
+                                                                    <?php if ($row->state == 0 && session('mng_emp')) { ?>
                                                                     <a href="javascript:void(0)"
                                                                         onclick="deleteBonus(<?php echo $row->id; ?>)"
                                                                         title="Delete Incentive Incentive"
@@ -958,7 +958,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                 </td>
                                                                 <?php if ($pendingPayroll == 0) { ?>
                                                                 <td id="option<?php echo $row->id; ?>">
-                                                                    <?php if (/*$this->session->userdata('appr_paym') &&*/ $row->state == 2) { ?>
+                                                                    <?php if (/*session('appr_paym') &&*/ $row->state == 2) { ?>
                                                                     <a href="javascript:void(0)"
                                                                         onclick="confirmBonus(<?php echo $row->id; ?>)"
                                                                         title="Approve Incentive"
@@ -967,7 +967,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                             class="btn btn-success btn-xs"><i
                                                                                 class="fa fa-check"></i></button>
                                                                     </a>
-                                                                    <?php } else if (/*$this->session->userdata('recom_paym') && */ $row->state == 0) { ?>
+                                                                    <?php } else if (/*session('recom_paym') && */ $row->state == 0) { ?>
                                                                     <a href="javascript:void(0)"
                                                                         onclick="recommendBonus(<?php echo $row->id; ?>)"
                                                                         title="Recommend Incentive"
@@ -1013,7 +1013,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                 <th>Outstanding</th>
                                                                 <th>Amount Last Paid</th>
                                                                 <th>Last Payment Date</th>
-                                                                <?php //if ($this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) { ?>
+                                                                <?php //if (session('recom_paym') || session('appr_paym')) { ?>
                                                                 <th>Option</th>
                                                                 <?php //} ?>
                                                             </tr>
@@ -1023,8 +1023,8 @@ $adv_overtime = $data['adv_overtime'];
                                                         <tbody>
                                                             <?php
                                                 foreach ($pending_arrears as $row) { ?>
-                                                            <?php if ($row->status == 1 || /*$this->session->userdata('appr_paym') &&*/ !$row->status == 2 ||
-                                                        /*$this->session->userdata('recom_paym') && */ !$row->status == 0) {
+                                                            <?php if ($row->status == 1 || /*session('appr_paym') &&*/ !$row->status == 2 ||
+                                                        /*session('recom_paym') && */ !$row->status == 0) {
                                                         continue;
                                                     } ?>
                                                             <tr>
@@ -1045,9 +1045,9 @@ $adv_overtime = $data['adv_overtime'];
 
                                                                 <td><?php echo date('d-M-Y', strtotime($row->last_paid_date)); ?>
                                                                 </td>
-                                                                <?php// if ($this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) { ?>
+                                                                <?php// if (session('recom_paym') || session('appr_paym')) { ?>
                                                                 <td>
-                                                                    <?php if (/*$this->session->userdata('appr_paym') &&*/ $row->status == 2) { ?>
+                                                                    <?php if (/*session('appr_paym') &&*/ $row->status == 2) { ?>
                                                                     <a href="javascript:void(0)"
                                                                         onclick="confirmArrears(<?php echo $row->id; ?>)"
                                                                         title="Approve Payment"
@@ -1066,7 +1066,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                                 class="fa fa-times"></i></button>
                                                                     </a>
 
-                                                                    <?php } else if (/*$this->session->userdata('recom_paym') && */ $row->status == 0) { ?>
+                                                                    <?php } else if (/*session('recom_paym') && */ $row->status == 0) { ?>
                                                                     <a href="javascript:void(0)"
                                                                         onclick="recommendArrearsPayment(<?php echo $row->id; ?>)"
                                                                         title="Recommend Payment"
@@ -1128,7 +1128,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                 <th>Outstanding</th>
                                                                 <th>Amount Last Paid</th>
                                                                 <th>Last Payment Date</th>
-                                                                <?php //if ($this->session->userdata('mng_emp')) { ?>
+                                                                <?php //if (session('mng_emp')) { ?>
                                                                 <th>Option</th>
                                                                 <?php //} ?>
                                                             </tr>
@@ -1152,7 +1152,7 @@ $adv_overtime = $data['adv_overtime'];
                                                                 <td><?php echo date('d-F-Y', strtotime($row->last_paid_date)); ?>
                                                                 </td>
 
-                                                                <?php //if ($this->session->userdata('mng_emp')) { ?>
+                                                                <?php //if (session('mng_emp')) { ?>
                                                                 <td>
                                                                     <a href="<?php echo base_url() . "index.php/cipay/arrears_info/?pdate=" . base64_encode($row->payroll_date); ?>"
                                                                         title="Payments and Info"

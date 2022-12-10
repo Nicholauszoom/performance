@@ -21,6 +21,8 @@ use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
 use App\Http\Controllers\Payroll\ReportController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -29,7 +31,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
     // preoject
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
@@ -75,6 +77,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
 
     Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
+    Route::post('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
     Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
 
     // Employee overtime
@@ -110,25 +113,10 @@ Route::middleware('auth')->group(function () {
         Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
         Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
-    });
-    Route::group(['prefix' => 'recruitment'], function () {
-    Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
-    Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
-    Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
-    Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
 
-    Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
-// Password Resetting Routes...
-});
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password');
-})->middleware('guest')->name('password.request');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
 
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+
 
 
 
@@ -143,27 +131,103 @@ Route::get('/reset-password/{token}', function ($token) {
         Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
 
 
-        
-        Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
-    Route::any('/attendance' ,'attendance')->name('attendandance.attendance'); 
-    Route::any('/attendees' ,'attendees')->name('attendandance.attendees'); 
-    Route::any('/leave' ,'leave')->name('attendandance.leave'); 
-    Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave'); 
-    Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave'); 
-    Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave'); 
-    Route::any('/holdLeave' ,'holdLeave')->name('attendandance.holdLeave'); 
-    Route::any('/approveLeave' ,'approveLeave')->name('attendandance.approveLeave'); 
-    Route::any('/rejectLeave' ,'rejectLeave')->name('attendandance.rejectLeave'); 
-    Route::any('/leavereport' ,'leavereport')->name('attendandance.leavereport'); 
-    Route::any('/customleavereport' ,'customleavereport')->name('attendandance.customleavereport'); 
-    Route::any('/leave_remarks' ,'leave_remarks')->name('attendandance.leave_remarks'); 
-    Route::any('/leave_application_info' ,'leave_application_info')->name('attendandance.leave_application_info'); 
-    Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendandance.updateLeaveReason'); 
-    Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendandance.updateLeaveAddress'); 
-    Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendandance.updateLeaveMobile'); 
-    Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType'); 
-    Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange'); 
-    Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress'); 
+
+
+
+
+        Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
+
+
+
+
+        Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
+        Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
+        Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
+        Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
+        Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
+        Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
+    });
+});
+//Routes for Recruitment Module
+
+// Route::group(['prefix' => 'recruitment'], function () {
+//     Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
+//     Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
+//     Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
+//     Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
+// });
+
+// Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
+// // Password Resetting Routes...
+
+// Route::get('/forgot-password', function () {
+//     return view('auth.forgot-password');
+// })->middleware('guest')->name('password.request');
+
+// Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
+
+// Route::get('/reset-password/{token}', function ($token) {
+//     return view('auth.reset-password', ['token' => $token]);
+// })->middleware('guest')->name('password.reset');
+
+
+
+
+        Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
+        Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
+        Route::any('p10', [ReportController::class, 'p10'])->name('reports.p10');
+        Route::any('pension', [ReportController::class, 'pension'])->name('reports.pension');
+        Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
+        Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
+        Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
+        Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
+
+    Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
+    Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
+    Route::any('/leave' ,'leave')->name('attendandance.leave');
+    Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
+    Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
+    Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave');
+    Route::any('/holdLeave' ,'holdLeave')->name('attendandance.holdLeave');
+    Route::any('/approveLeave' ,'approveLeave')->name('attendandance.approveLeave');
+    Route::any('/rejectLeave' ,'rejectLeave')->name('attendandance.rejectLeave');
+    Route::any('/leavereport' ,'leavereport')->name('attendandance.leavereport');
+    Route::any('/customleavereport' ,'customleavereport')->name('attendandance.customleavereport');
+    Route::any('/leave_remarks' ,'leave_remarks')->name('attendandance.leave_remarks');
+    Route::any('/leave_application_info' ,'leave_application_info')->name('attendandance.leave_application_info');
+    Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendandance.updateLeaveReason');
+    Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendandance.updateLeaveAddress');
+    Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendandance.updateLeaveMobile');
+    Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType');
+    Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange');
+    Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress');
 
 });
 
@@ -176,10 +240,10 @@ Route::prefix('')->controller(BaseController::class)->group(function (){
     Route::any('/register' ,'register')->name('register');
     Route::any('/register_submit' ,'register_submit')->name('register_submit');
     Route::any('/getPermissions' ,'getPermissions')->name('getPermissions');
-     
+
 });
 
-Route::prefix('flex')->controller(GenaralController::class)->group(function (){
+Route::prefix('flex')->controller(GeneralController::class)->group(function (){
 
 Route::any('/index','index')->name('flex.index');
 Route::any('/password_check/{$str}','password_check')->name('flex.password_check');

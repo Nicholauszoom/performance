@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 <!-- /top navigation -->
 
 
@@ -92,7 +92,7 @@
 
                     <?php if(session('mng_org')){ ?>
                     <td class="options-width">
-                        <a  href="<?php echo url(); ?>flex/position_info/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                        <a  href="<?php echo  url(''); ?>/flex/position_info/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                         <?php if($row->id!=1){ ?>
                         <a href="javascript:void(0)" onclick="deletePosition(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                         <?php } ?>
@@ -137,7 +137,7 @@
                     <td><b> <?php echo $row->department; ?></b></td>
 
                     <td class="options-width">
-                        <a  href="<?php echo url(); ?>flex/position_info/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                        <a  href="<?php echo  url(''); ?>/flex/position_info/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                         <a href="javascript:void(0)" onclick="activatePosition(<?php echo $row->id; ?>)" title="ACTIVATE" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
                     </td>
                     </tr>
@@ -287,7 +287,7 @@
           alert("Maximum Salary should be Greater Than Minimum salary");
         }else{
           $.ajax({
-               url:"<?php echo url(); ?>flex/addPosition",
+               url:"<?php echo  url(''); ?>/flex/addPosition",
                type:"post",
                data:new FormData(this),
                processData:false,

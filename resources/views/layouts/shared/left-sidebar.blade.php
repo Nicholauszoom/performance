@@ -40,12 +40,12 @@
                 {{-- /Dashboard --}}
 
                 {{-- Projects --}}
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li> -->
+                </li>
                 {{-- /projects --}}
 
 
@@ -76,6 +76,8 @@
                                 Overtime
                             </a>
                         </li>
+
+
                         <!-- <li class="nav-item">
                             <a
                                 href="{{ route('imprest.index') }}"
@@ -103,57 +105,76 @@
                         <span>Payroll Management</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse">
-                        <!-- <li class="nav-item">
+                    {{--     <ul class="nav-group-sub collapse">
+                      <!-- <li class="nav-item">
                             <a href="{{ route('payroll') }}"
                                 class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
                                 Additional Payments
                             </a>
-                        </li> -->
-                        <li class="nav-item">
+                        </li> --> --}}
+                        {{-- <li class="nav-item">
                             <a href="{{ route('payroll') }}"
                                 class="nav-link {{ request()->routeIs('payroll') ? 'active' : null }}">
                                 Payroll
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('payslip') }}"
                                 class="nav-link {{ request()->routeIs('payslip') ? 'active' : null }}">
                                 Payslip
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('incentives') }}"
                                 class="nav-link {{ request()->routeIs('incentives') ? 'active' : null }}">
                                 Incentives
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('partialPayment') }}"
                                 class="nav-link {{ request()->routeIs('partialPayment') ? 'active' : null }}">
                                 Partial Payment
                             </a>
-                        </li> -->
+                        </li> --> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{ route('cipay.approved_financial_payments') }}"
                                 class="nav-link {{ request()->routeIs('cipay.approved_financial_payments') ? 'active' : null  }}">
                                 Pending Payments
                             </a>
-                        </li>
+                        </li> --}}
 
 
-
+{{--
                         <!-- <li class="nav-item">
                 <a href="{{ route('payroll') }}"
                     class="nav-link {{ request()->routeIs('payroll') ? 'active' : null  }}">
                     Salary Calculator
                 </a>
             </li> -->
-                    </ul>
+                    </ul>  --}}
+
+
+                    
+                    <ul class="nav-group-sub collapse">
+                      <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/payroll" > Payroll </a></li>
+                      <?php if(session('mng_paym')){ ?>
+                      <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/employee_payslip" > Payslip </a></li>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/comission_bonus" >Incentives</a></li>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/partial_payment" >Partial Payment</a></li>
+                      <?php } ?>
+                      <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/approved_financial_payments" >Pending Payments </a></li>
+                      <?php if(session('mng_stat_rpt')){ ?>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/financial_reports" >Statutory Reports </a></li>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/organisation_reports" >Organisation Reports </a></li>
+                      <?php } ?>
+                      <?php if(session('mng_paym')){ ?>
+                          <li  class="nav-item"><a class="nav-link" href="<?php echo url(''); ?>/flex/payroll/salary_calculator" > Salary Calculator </a></li>
+                      <?php } ?>
+                  </ul>
                 </li>
                 {{-- /Payroll management --}}
 
@@ -230,32 +251,73 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        <li class="nav-item">
+
+                    <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/costCenter">Cost Center </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/department">Departments </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/branch">Company Branches </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/position">Positions</a></li> 
+                      <?php if( session('mng_emp')){ ?>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/contract">Employee Contracts</a></li>
+                      <?php } ?>
+                      <!-- <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/accountCoding">Account Coding</a></li> -->
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/organization_level">Organisation Levels </a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/organization_structure">Organisation Structure</a></li>
+                      <li  class="nav-item"><a class="nav-link"  href="<?php echo url(""); ?>/flex/accounting_coding">Accounting Coding</a></li>
+
+                        <!-- <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
-                                Company Registration
+                                Departments
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
-                                Organization structure Registration
+                                Positions
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.index') ? 'active' : null }}">
-                                Departments
+                                Employee Contracts
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a href="{{ route('designations.index') }}"
                                 class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
-                                Role Profile Registration(Position)
+                                Nationality
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Company Branches
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Organization Levels
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Organization Structure
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('designations.index') }}"
+                                class="nav-link {{ request()->routeIs('designations.index') ? 'active' : null }}">
+                                Accounting Coding
+                            </a>
+                        </li> -->
 
 
                 </ul>
@@ -267,19 +329,19 @@
                     <span>Reports</span>
                 </a>
                 <ul class="nav-group-sub collapse">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('cipay.financial_reports') }}"
                             class="nav-link {{ request()->routeIs('cipay.financial_reports') ? 'active' : null  }}">
                             Statutory Reports
                         </a>
-                    </li>
+                    </li> --}}
 
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('cipay.organisation_reports') }}"
                             class="nav-link {{ request()->routeIs('cipay.organisation_reports') ? 'active' : null  }}">
                             Organisation Reports
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </li>

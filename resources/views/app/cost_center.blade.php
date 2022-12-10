@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -62,7 +62,7 @@
                             <td class="options-width">
                             <a title="Update" class="icon-2 info-tooltip"><button type="button" id="modal" data-toggle="modal" data-target="#updateModal<?php echo $row->id; ?>" class="btn btn-info btn-xs"> <i class="fa fa-edit"></i></button></a>
 
-                                <a href="<?php echo url(); ?>flex/company_branch_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/company_branch_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <a href="javascript:void(0)" onclick="closeBranch(<?php echo $row->id; ?>)" title="Delete Deduction" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
 
 
@@ -76,7 +76,7 @@
                                           </div>
                                           <div class="modal-body">
                                           <!-- Modal Form -->
-                                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/updateCostCenter"  data-parsley-validate class="form-horizontal form-label-left">
+                                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/updateCostCenter"  data-parsley-validate class="form-horizontal form-label-left">
 
                                           <input type="text" name="costCenterID" hidden="" value="<?php echo $row->id;?>">
                                           
@@ -197,7 +197,7 @@
     $('#addCostCenter').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addCostCenter",
+                 url:"<?php echo  url(''); ?>/flex/addCostCenter",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

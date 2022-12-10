@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -257,7 +257,7 @@
     $('#addActivity').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo base_url(); ?>index.php/project/addActivity",
+                 url:"<?php echo  url(''); ?>index.php/project/addActivity",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -283,7 +283,7 @@
     $('#updateName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo base_url(); ?>index.php/project/updateActivityName",
+                 url:"<?php echo  url(''); ?>index.php/project/updateActivityName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -308,7 +308,7 @@
     $('#updateCode').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo base_url(); ?>index.php/project/updateActivityCode",
+                 url:"<?php echo  url(''); ?>index.php/project/updateActivityCode",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -332,7 +332,7 @@
     $('#updateDescription').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo base_url(); ?>index.php/project/updateActivityDescription",
+                 url:"<?php echo  url(''); ?>index.php/project/updateActivityDescription",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -355,7 +355,7 @@
     $('#updateGrant').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo base_url(); ?>index.php/project/allocateGrantToActivity",
+                 url:"<?php echo  url(''); ?>index.php/project/allocateGrantToActivity",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -382,7 +382,7 @@
         var id = id;
         $('#row'+id).show();
         $.ajax({
-            url:"<?php echo base_url('index.php/project/deleteActivityGrant');?>/"+id,
+            url:"<?php echo url('index.php/project/deleteActivityGrant');?>/"+id,
             success:function(data)
             {
               if(data.status == 'OK'){

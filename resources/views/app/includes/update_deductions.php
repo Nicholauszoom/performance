@@ -4,7 +4,7 @@
     $('#updateName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePensionName",
+                 url:"<?php echo  url(''); ?>/flex/updatePensionName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -30,7 +30,7 @@
     $('#percentEmployee').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePercentEmployee",
+                 url:"<?php echo  url(''); ?>/flex/updatePercentEmployee",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -54,7 +54,7 @@
     $('#percentEmployer').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePercentEmployer",
+                 url:"<?php echo  url(''); ?>/flex/updatePercentEmployer",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -79,7 +79,7 @@
     $('#deductionFrom').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePensionPolicy",
+                 url:"<?php echo  url(''); ?>/flex/updatePensionPolicy",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -106,7 +106,7 @@
     $('#updateDeductionName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateDeductionName",
+                 url:"<?php echo  url(''); ?>/flex/updateDeductionName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -134,7 +134,7 @@
     $('#updateDeductionAmount').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateDeductionAmount",
+                 url:"<?php echo  url(''); ?>/flex/updateDeductionAmount",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -160,7 +160,7 @@
     $('#updateDeductionPercent').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateDeductionPercent",
+                 url:"<?php echo  url(''); ?>/flex/updateDeductionPercent",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -186,7 +186,7 @@
     $('#updateDeductionPolicy').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateDeductionPolicy",
+                 url:"<?php echo  url(''); ?>/flex/updateDeductionPolicy",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -212,7 +212,7 @@
     $('#updateMealsName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMealsName",
+                 url:"<?php echo  url(''); ?>/flex/updateMealsName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -238,7 +238,7 @@
     $('#updateMealsMargin').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMealsMargin",
+                 url:"<?php echo  url(''); ?>/flex/updateMealsMargin",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -264,7 +264,7 @@
     $('#updateMealsLowerAmount').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMealsLowerAmount",
+                 url:"<?php echo  url(''); ?>/flex/updateMealsLowerAmount",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -290,7 +290,7 @@
     $('#updateMealsUpperAmount').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateMealsUpperAmount",
+                 url:"<?php echo  url(''); ?>/flex/updateMealsUpperAmount",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -319,7 +319,7 @@
     $('#MODIFIES').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateCompanyName",
+                 url:"<?php echo  url(''); ?>/flex/updateCompanyName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

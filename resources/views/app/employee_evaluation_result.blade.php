@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -173,7 +173,7 @@
 $('#saveActivityResult').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/saveActivityResult",
+            url: "<?php echo  url(''); ?>/flex/project/saveActivityResult",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -200,7 +200,7 @@ $('#saveActivityResult').submit(function(e) {
 $('#addProject').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/addProject",
+            url: "<?php echo  url(''); ?>/flex/project/addProject",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -225,7 +225,7 @@ $('#addProject').submit(function(e) {
 $('#updateName').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateProjectName",
+            url: "<?php echo  url(''); ?>/flex/project/updateProjectName",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -250,7 +250,7 @@ $('#updateName').submit(function(e) {
 $('#updateCode').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateProjectCode",
+            url: "<?php echo  url(''); ?>/flex/project/updateProjectCode",
             type: "post",
             data: new FormData(this),
             processData: false,
@@ -274,7 +274,7 @@ $('#updateCode').submit(function(e) {
 $('#updateDescription').submit(function(e) {
     e.preventDefault();
     $.ajax({
-            url: "<?php echo url(); ?>flex/project/updateProjectDescription",
+            url: "<?php echo  url(''); ?>/flex/project/updateProjectDescription",
             type: "post",
             data: new FormData(this),
             processData: false,

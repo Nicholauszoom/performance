@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
 ?>
@@ -123,13 +123,13 @@
         <!-- /page content -->   
 
 <?php 
-//include_once "app/includes/update_deductions")
+//@include("app/includes/update_deductions")
 
 <script type="text/javascript">
     $('#updateOvertimeName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateOvertimeName",
+                 url:"<?php echo  url(''); ?>/flex/updateOvertimeName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -156,7 +156,7 @@
     $('#updateRateDay').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateOvertimeRateDay",
+                 url:"<?php echo  url(''); ?>/flex/updateOvertimeRateDay",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -183,7 +183,7 @@
     $('#updateRateNight').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateOvertimeRateNight",
+                 url:"<?php echo  url(''); ?>/flex/updateOvertimeRateNight",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

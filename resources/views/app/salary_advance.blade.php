@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -103,7 +103,7 @@
                                 <a href="javascript:void(0)" onclick="cancelLoan(<?php echo $row->id;?>)">
                                 <button  class="btn btn-warning btn-xs">CANCEL</button></a>  <?php }  ?>
                                 
-                                <a href="<?php echo url(); ?>flex/updateloan/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateloan/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
                             
                             </td>
 
@@ -200,7 +200,7 @@
                             <!--Line Manager and HR -->
                             <td>
                                 
-                                <a href="<?php echo url(); ?>flex/updateloan/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateloan/?id=".$row->id; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> | <i class="fa fa-edit"></i></button> </a>
                             
                             
                             <?php if(session('mng_emp') && $row->status==0){ ?>
@@ -222,7 +222,7 @@
 
                             <td>
                                 <?php echo "<b>HR: </b>".$row->reason_hr."<br><b>Finance: </b>".$row->reason_finance; ?>
-                              <a href="<?php echo url(); ?>flex/loan_application_info/?id=".$row->id; ?>">
+                              <a href="<?php echo  url(''); ?>/flex/loan_application_info/?id=".$row->id; ?>">
                               <br>
                               <button type="submit" name="go" class="btn btn-info btn-xs">Add Remark</button></a> <?php //} ?>
                             </td>
@@ -278,7 +278,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="required" type="number" min="1" max="10000001" name="amount" id="amountf" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div  class="form-group" id="monthly_deduction">
@@ -286,7 +286,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="required" type="number" min="1" max="10000001"  name="deduction" id="monthly_deductionf" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                       <div class="form-group">
@@ -294,7 +294,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required rows="3"></textarea> 
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                           <!-- END -->
@@ -381,7 +381,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason(Optional)" rows="3"></textarea> 
-                          <span class="text-danger"><?php echo form_error("lname");?></span>
+                          <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
                           <!-- END -->

@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -60,7 +60,7 @@
                             <td><?php echo $row->maxSalary; ?></td>
                             <?php if(session('mng_org')){ ?>
                             <td class="options-width">
-                                <a href="<?php echo url(); ?>flex/organization_level_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/organization_level_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                             </td>
                             <?php } ?>
                            </tr>
@@ -138,7 +138,7 @@
     $('#organizationLevelAdd').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/addOrganizationLevel",
+            url:"<?php echo  url(''); ?>/flex/addOrganizationLevel",
              type:"post",
              data:new FormData(this),
              processData:false,

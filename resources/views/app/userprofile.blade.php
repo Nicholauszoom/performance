@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 
@@ -79,7 +79,7 @@
                     <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
                       <div class="profile_img">
                         <div id="crop-avatar">
-                          <img class="img-responsive avatar-view" src="<?php echo base_url('uploads/userprofile/').$photo; ?>"" alt="<?php echo $name; ?>">
+                          <img class="img-responsive avatar-view" src="<?php echo url('uploads/userprofile/').$photo; ?>"" alt="<?php echo $name; ?>">
                         </div>
                       </div>
                       <h3><?php echo $name; ?></h3>
@@ -97,12 +97,12 @@
                         </li>
                       </ul>
                         <?php if(session('mng_emp'))  { ?>
-                            <a href="<?php echo url(); ?>flex/updateEmployee/?id=".$empID."|".$departmentID; ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>&nbsp;&nbsp;UPDATE PROFILE</a>
+                            <a href="<?php echo  url(''); ?>/flex/updateEmployee/?id=".$empID."|".$departmentID; ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>&nbsp;&nbsp;UPDATE PROFILE</a>
 
 <!--                            --><?php //if ($retired != 2) { ?>
-<!--                                <a href="--><?php //echo url()."flex/cipay/retired/?id=".$empID; ?><!--" class="btn btn-warning"><i class="fa fa-minus"></i>&nbsp;&nbsp;RETIRED</a>-->
+<!--                                <a href="--><?php //echo  url('')."flex/cipay/retired/?id=".$empID; ?><!--" class="btn btn-warning"><i class="fa fa-minus"></i>&nbsp;&nbsp;RETIRED</a>-->
 <!--                            --><?php //} else { ?>
-<!--                                <a href="--><?php //echo url()."flex/cipay/retired/?id=".$empID; ?><!--" class="btn btn-warning" disabled=""><i class="fa fa-minus"></i>&nbsp;&nbsp;RETIRED</a>-->
+<!--                                <a href="--><?php //echo  url('')."flex/cipay/retired/?id=".$empID; ?><!--" class="btn btn-warning" disabled=""><i class="fa fa-minus"></i>&nbsp;&nbsp;RETIRED</a>-->
 <!--                            --><?php //} ?>
 
                         <?php }  ?>
@@ -113,7 +113,7 @@
                     <div class="col-md-9 col-sm-9 col-xs-12">
                                    <!-- Salary Slip -->
                       <?php if( session('mng_emp') || session('emp_id') == $empID ){ ?>
-                      <form method="post" action="<?php echo url(); ?>flex/reports/payslip" target="_blank" class="form-horizontal form-label-left">
+                      <form method="post" action="<?php echo  url(''); ?>/flex/reports/payslip" target="_blank" class="form-horizontal form-label-left">
                           <div class="col-sm-6">
                           <div id ="feedBackMeritalStatus"></div>
                             <div class="form-group">
@@ -308,7 +308,7 @@
                                       <td><?php echo $row->postal_address; ?></td>
 
                                       <td class="options-width">
-                                        <a href="<?php echo url(); ?>flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                        <a href="<?php echo  url(''); ?>/flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                                       </td>
                                     </tr>
                                     <?php }  ?>
@@ -328,13 +328,13 @@
                                         </div>
                                         <div class="modal-body">
                                         <!-- Modal Form -->
-                                        <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addkin/?id=<?php echo $empID; ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                                        <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addkin/?id=<?php echo $empID; ?>"  data-parsley-validate class="form-horizontal form-label-left">
                                       <div class="form-group">
                                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="fname" id="fname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
                                       <div class="form-group">
@@ -342,7 +342,7 @@
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="mname" id="fname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
                                       <div class="form-group">
@@ -350,7 +350,7 @@
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="lname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
                                     <div class="form-group">
@@ -371,7 +371,7 @@
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="mobile" id="fname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
                                       <div class="form-group">
@@ -379,7 +379,7 @@
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="postal_address" id="fname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
                                       <div class="form-group">
@@ -387,7 +387,7 @@
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="physical_address" id="fname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
                                       <div class="form-group">
@@ -395,7 +395,7 @@
                                       </label>
                                       <div class="col-md-6 col-sm-6 col-xs-12">
                                         <input type="text" name="office_no" id="fname"  class="form-control col-md-7 col-xs-12">
-                                        <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                        <span class="text-danger"><?php // echo form_error("fname");?></span>
                                       </div>
                                     </div>
 
@@ -426,7 +426,7 @@
                                   <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                  <form action="<?php echo url(); ?>flex/revokerole" method="post">
+                                  <form action="<?php echo  url(''); ?>/flex/revokerole" method="post">
                                   <input type="text" hidden="hidden" name="empID" value="<?php echo $empID; ?>" />
                                   <table  class="table table-striped table-bordered">
                                     <thead>
@@ -476,7 +476,7 @@
                                   <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
-                                  <form action="<?php echo url(); ?>flex/assignrole/" method="post">
+                                  <form action="<?php echo  url(''); ?>/flex/assignrole/" method="post">
                                   <input type="text" hidden="hidden" name="empID" value="<?php echo $empID; ?>" />
                                   <table  class="table table-striped table-bordered">
                                     <thead>
@@ -579,7 +579,7 @@
                                     </div>
                                     <div class="modal-body">
                                     <!-- Modal Form -->
-                                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addproperty/ ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addproperty/ ?>"  data-parsley-validate class="form-horizontal form-label-left">
 
                                 <div class="form-group">
                                   <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Property Type</label>
@@ -597,7 +597,7 @@
                                   </label>
                                   <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" name="type2" id="fname"  class="form-control col-md-7 col-xs-12">
-                                    <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                    <span class="text-danger"><?php // echo form_error("fname");?></span>
                                   </div>
                                 </div>
                                   <div class="form-group">
@@ -605,7 +605,7 @@
                                   </label>
                                   <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" name="name"  class="form-control col-md-7 col-xs-12">
-                                    <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                    <span class="text-danger"><?php // echo form_error("fname");?></span>
                                   </div>
                                 </div>
                                   <div class="form-group">
@@ -613,7 +613,7 @@
                                   </label>
                                   <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" name="serial"  class="form-control col-md-7 col-xs-12">
-                                    <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                    <span class="text-danger"><?php // echo form_error("fname");?></span>
                                   </div>
                                 </div>
 
@@ -721,7 +721,7 @@
                                           <?php if($row->status==9 ){ ?>
 
 
-                                        <a href = "<?php echo url(); ?>flex/employeeCertification/?val=<?php echo $empID."|".$row->id; ?>"><button class="btn btn-success btn-xs">ASSIGN SKILL</button></a>
+                                        <a href = "<?php echo  url(''); ?>/flex/employeeCertification/?val=<?php echo $empID."|".$row->id; ?>"><button class="btn btn-success btn-xs">ASSIGN SKILL</button></a>
                                         <?php } else{ ?>
                                         <div class="col-md-12"><span class="label label-default">REQUESTED</span></div>
 
@@ -806,7 +806,7 @@
                           <div role="tabpanel" class="tab-pane fade" id="exitInfo" aria-labelledby="profile-tab">
                             <!-- EXIT -->
                             <div class="col-lg-12">
-                                <form id="upload_form" method = "post" align="center" enctype="multipart/form-data" action="<?php echo url(); ?>flex/employeeDeactivationRequest" data-parsley-validate class="form-horizontal form-label-left">
+                                <form id="upload_form" method = "post" align="center" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/employeeDeactivationRequest" data-parsley-validate class="form-horizontal form-label-left">
 
 <!--                                    index.php/cipay/employee_exit-->
                                     <?php if ($state != 3): ?>
@@ -839,7 +839,7 @@
                                         </label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
                                             <textarea placeholder="Message or Reason  For Exit"  cols="10" class="form-control col-md-7 col-xs-12"  name="reason"  rows="5"></textarea>
-                                            <span class="text-danger"><?php ////echo form_error("lname");?></span>
+                                            <span class="text-danger"><?php // echo form_error("lname");?></span>
                                         </div>
                                     </div>
                                     <input type ="text" hidden name = "empID" value = "<?php echo $empID; ?>" />
@@ -861,9 +861,9 @@
                                 <hr>
                                 <div style="width:20%; margin:0 auto;">
                                     <?php if ($login_user != 1) { ?>
-                                        <a href="<?php echo url(); ?>flex/loginuser/?id=".$empID; ?>" class="btn btn-warning"><i class="fa fa-user"></i>&nbsp;&nbsp;LOGIN USER</a>
+                                        <a href="<?php echo  url(''); ?>/flex/loginuser/?id=".$empID; ?>" class="btn btn-warning"><i class="fa fa-user"></i>&nbsp;&nbsp;LOGIN USER</a>
                                     <?php } else { ?>
-                                        <a href="<?php echo url(); ?>flex/loginuser/?id=".$empID; ?>" class="btn btn-warning" disabled=""><i class="fa fa-user"></i>&nbsp;&nbsp;LOGIN USER</a>
+                                        <a href="<?php echo  url(''); ?>/flex/loginuser/?id=".$empID; ?>" class="btn btn-warning" disabled=""><i class="fa fa-user"></i>&nbsp;&nbsp;LOGIN USER</a>
                                     <?php } ?>
                                 </div>
 

@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php 
   $CI_Model = get_instance();
@@ -142,7 +142,7 @@
     $('#addNationality').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/addEmployeeNationality",
+                 url:"<?php echo  url(''); ?>/flex/addEmployeeNationality",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

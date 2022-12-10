@@ -3,9 +3,9 @@
     <!-- <script src="../vendors/echarts/dist/echarts.min.js"></script> -->
 
 
-    <script src="<?php echo url();?>style/charts/echarts.min.js"></script>
-    <script src="<?php echo url();?>style/charts/highcharts.js"></script>
-    <script src="<?php echo url();?>style/charts/exporting.js"></script>
+    <script src="<?php echo  url('');?>style/charts/echarts.min.js"></script>
+    <script src="<?php echo  url('');?>style/charts/highcharts.js"></script>
+    <script src="<?php echo  url('');?>style/charts/exporting.js"></script>
 <script>
       var theme = {
           color: [

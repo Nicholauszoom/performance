@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -64,7 +64,7 @@
                             <td class="options-width">
                             <?php if($row->type>0){ ?>
 
-                           <a  href="<?php echo url(); ?>flex/groups/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                           <a  href="<?php echo  url(''); ?>/flex/groups/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                            <a href="javascript:void(0)" onclick="deleteRoleGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                            <?php }  ?>
@@ -111,7 +111,7 @@
                             <td class="options-width">
                             <?php if($row->type>0){ ?>
 
-                            <a  href="<?php echo url(); ?>flex/groups/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                            <a  href="<?php echo  url(''); ?>/flex/groups/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                            <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
                            <?php } ?>
@@ -159,11 +159,11 @@
                             <td><?php echo $row->name; ?></td>
                           <?php if( session('mng_roles_grp')){ ?>
                             <td class="options-width">
-                            <a  href="<?php echo url(); ?>flex/role_info/?id=".base64_encode($row->id); ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                            <a  href="<?php echo  url(''); ?>/flex/role_info/?id=".base64_encode($row->id); ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                            <a href="javascript:void(0)" onclick="deleteRole(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
 
-                           <!-- <a href="<?php echo url(); ?>flex/deleterole/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a> -->
+                           <!-- <a href="<?php echo  url(''); ?>/flex/deleterole/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a> -->
                            </td>
                          <?php } ?>
                             </tr>
@@ -188,13 +188,13 @@
                 </div>
                   <div class="modal-body">
                           <!-- Modal Form -->
-                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/role"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Role Name 
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12">
-                            <span class="text-danger"><?php //echo form_error("fname");?></span>
+                            <span class="text-danger"><?php // echo form_error("fname");?></span>
                           </div>
                       </div> 
 
@@ -223,13 +223,13 @@
                 </div>
                   <div class="modal-body">
                           <!-- Modal Form -->
-                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/role"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name 
                           </label>
                           <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12">
-                            <span class="text-danger"><?php //echo form_error("fname");?></span>
+                            <span class="text-danger"><?php // echo form_error("fname");?></span>
                           </div>
                       </div>
                       
@@ -261,14 +261,14 @@
                 </div>
                   <div class="modal-body">
                           <!-- Modal Form -->
-                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/role"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name 
                           </label>
                           
                           <div class="col-md-6 col-sm-6 col-xs-12">
                             <input type="text" name="name" class="form-control col-md-7 col-xs-12">
-                            <span class="text-danger"><?php //echo form_error("fname");?></span>
+                            <span class="text-danger"><?php // echo form_error("fname");?></span>
                           </div>
                       </div> 
                       

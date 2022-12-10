@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
       <?php if($data){
@@ -87,7 +87,7 @@
     $('#updateAccountingCode').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/updateAccountCode",
+                 url:"<?php echo  url(''); ?>/flex/updateAccountCode",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

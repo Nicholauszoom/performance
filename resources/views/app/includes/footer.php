@@ -13,29 +13,29 @@
 
 
     <!-- jQuery -->
-    <script src="<?php echo url();?>style/jquery/jquery.min.js"></script>
+    <script src="<?php echo  url('');?>style/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="<?php echo url();?>style/css/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="<?php echo  url('');?>style/css/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Datatables -->
-    <script src="<?php echo url();?>style/datatables/js/jquery.dataTables.min.js"></script>
-    <script src="<?php echo url();?>style/datatables/js/dataTables.bootstrap.min.js"></script>
+    <script src="<?php echo  url('');?>style/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo  url('');?>style/datatables/js/dataTables.bootstrap.min.js"></script>
 
     <!-- bootstrap-daterangepicker -->
-    <script src="<?php echo url();?>style/date-picker/moment.min.js"></script>
-    <script src="<?php echo url();?>style/date-picker/daterangepicker.js"></script>
+    <script src="<?php echo  url('');?>style/date-picker/moment.min.js"></script>
+    <script src="<?php echo  url('');?>style/date-picker/daterangepicker.js"></script>
 
      <!-- Switchery -->
-    <script src="<?php echo url();?>style/select2/switchery.min.js"></script>
+    <script src="<?php echo  url('');?>style/select2/switchery.min.js"></script>
     <!-- Select2 -->
-    <script src="<?php echo url();?>style/select2/select2.full.min.js"></script>
+    <script src="<?php echo  url('');?>style/select2/select2.full.min.js"></script>
     <!-- bootstrap-progressbar -->
-    <script src="<?php echo url();?>style/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <script src="<?php echo  url('');?>style/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
 
     <!-- Datatables -->
 
     <!-- notification Js -->
-    <script src="<?php echo url();?>includes/notification/js/bootstrap-growl.min.js"></script>
+    <script src="<?php echo  url('');?>includes/notification/js/bootstrap-growl.min.js"></script>
 
     <script>
 
@@ -273,7 +273,7 @@
     e.preventDefault(); // Prevent Default Submission
 
     $.ajax({
- url: "<?php echo url(); ?>flex/home/"+id,
+ url: "<?php echo  url(''); ?>/flex/home/"+id,
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -603,7 +603,7 @@
     e.preventDefault(); // Prevent Default Submission
 
     $.ajax({
- url: "<?php echo url(); ?>flex/update_postaladdress",
+ url: "<?php echo  url(''); ?>/flex/update_postaladdress",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -664,7 +664,7 @@ function loadlink(){
     e.preventDefault(); // Prevent Default Submission
 
     $.ajax({
- url: "<?php echo url(); ?>flex/attendance/attendance",
+ url: "<?php echo  url(''); ?>/flex/attendance/attendance",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'html'
@@ -689,4 +689,4 @@ function loadlink(){
 
 
 <!-- Custom Theme Scripts -->
-<script src="<?php echo url();?>style/build/js/custom.min.js"></script>
+<script src="<?php echo  url('');?>style/build/js/custom.min.js"></script>

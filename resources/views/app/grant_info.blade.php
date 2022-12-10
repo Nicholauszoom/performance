@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 
@@ -221,7 +221,7 @@
     $('#addGrant').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/project/addGrant",
+                 url:"<?php echo  url(''); ?>/flex/project/addGrant",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -247,7 +247,7 @@
     $('#updateName').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/project/updateGrantName",
+                 url:"<?php echo  url(''); ?>/flex/project/updateGrantName",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -272,7 +272,7 @@
     $('#updateCode').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/project/updateGrantCode",
+                 url:"<?php echo  url(''); ?>/flex/project/updateGrantCode",
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -296,7 +296,7 @@
     $('#updateDescription').submit(function(e){
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo url(); ?>flex/project/updateGrantDescription",
+                 url:"<?php echo  url(''); ?>/flex/project/updateGrantDescription",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

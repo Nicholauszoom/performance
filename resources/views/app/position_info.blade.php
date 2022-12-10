@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php 
 
@@ -198,7 +198,7 @@
                                           <h4 class="modal-title" id="myModalLabel">Update This Requirement</h4>
                                       </div>
                                       <div class = "modal-body">
-                                        <form autocomplete="off"  enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/updateskills/"  data-parsley-validate class="form-horizontal form-label-left">
+                                        <form autocomplete="off"  enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/updateskills/"  data-parsley-validate class="form-horizontal form-label-left">
                                             <input type ="text" hidden name = "skillsID" value = "<?php echo $row->id; ?>">
                                             <input type ="text" hidden name = "positionref" value = "<?php echo $row->position_ref; ?>">
                                             
@@ -221,7 +221,7 @@
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                                   <input required="" type="number" minimum="0" maximum="100000009" step="1" name="amount" value = "<?php echo $row->amount; ?>" class="form-control col-md-7 col-xs-12">
-                                                  <span class="text-danger"><?php //echo form_error("fname");?></span>
+                                                  <span class="text-danger"><?php // echo form_error("fname");?></span>
                                                 </div>
                                               </div> 
                                                 <div class="form-group">
@@ -342,13 +342,13 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form autocomplete="off"  id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addskills"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form autocomplete="off"  id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addskills"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Requirement Title 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <textarea  required="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Skills Title" rows="1"></textarea> 
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       <input type = "text" hidden name = "positionID" value="<?php echo $positionId; ?>" >
@@ -357,7 +357,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <textarea required="" class="form-control col-md-7 col-xs-12" name="description" placeholder="Description" rows="2"></textarea> 
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -365,7 +365,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="integer" minimum="0" maximum="100000009" step="1" name="amount" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                         <div class="form-group">
@@ -426,13 +426,13 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo url(); ?>flex/addAccountability"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addAccountability"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Accountability Title 
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="text" name="title" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div>
                       
@@ -443,7 +443,7 @@
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" maximum = "99"  name="weighting" class="form-control col-md-7 col-xs-12">
-                          <span class="text-danger"><?php //echo form_error("fname");?></span>
+                          <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
                       </div> 
                       
@@ -481,7 +481,7 @@
           alert("Position ID Should not be Null");
         }else{
           $.ajax({
-               url:"<?php echo url(); ?>flex/updatePositionName",
+               url:"<?php echo  url(''); ?>/flex/updatePositionName",
                type:"post",
                data:new FormData(this),
                processData:false,
@@ -513,7 +513,7 @@
           alert("Position ID Should not be Null");
         }else{
           $.ajax({
-               url:"<?php echo url(); ?>flex/updatePositionReportsTo",
+               url:"<?php echo  url(''); ?>/flex/updatePositionReportsTo",
                type:"post",
                data:new FormData(this),
                processData:false,
@@ -544,7 +544,7 @@
           alert("Position ID Should not be Null");
         }else{
           $.ajax({
-               url:"<?php echo url(); ?>flex/updatePositionCode",
+               url:"<?php echo  url(''); ?>/flex/updatePositionCode",
                type:"post",
                data:new FormData(this),
                processData:false,
@@ -574,7 +574,7 @@
             alert("Position ID Should not be Null");
           }else{
             $.ajax({
-                 url:"<?php echo url(); ?>flex/updatePositionOrganizationLevel",
+                 url:"<?php echo  url(''); ?>/flex/updatePositionOrganizationLevel",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -162,7 +162,7 @@
     $('#updateName').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/performance/updateFunderName",
+            url:"<?php echo  url(''); ?>/flex/performance/updateFunderName",
             type:"post",
             data:new FormData(this),
             processData:false,
@@ -186,7 +186,7 @@
     $('#updateEmail').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/performance/updateFunderEmail",
+            url:"<?php echo  url(''); ?>/flex/performance/updateFunderEmail",
             type:"post",
             data:new FormData(this),
             processData:false,
@@ -210,7 +210,7 @@
     $('#updatePhone').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/performance/updateFunderPhone",
+            url:"<?php echo  url(''); ?>/flex/performance/updateFunderPhone",
             type:"post",
             data:new FormData(this),
             processData:false,
@@ -234,7 +234,7 @@
     $('#updateDescription').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:"<?php echo url(); ?>flex/performance/updateFunderDescription",
+            url:"<?php echo  url(''); ?>/flex/performance/updateFunderDescription",
             type:"post",
             data:new FormData(this),
             processData:false,

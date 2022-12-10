@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 <?php   
   foreach($strategy_details as $detail){
@@ -208,7 +208,7 @@
                                         </label>
                                         <div class="col-md-4 col-sm-6 col-xs-12">
                                           <textarea id="textdescription" class="form-control col-md-7 col-xs-12" name="description" required placeholder="Description" rows="3"></textarea> 
-                                          <!-- <span class="text-danger"><?php echo form_error("lname");?></span> -->
+                                          <!-- <span class="text-danger"><?php// echo form_error("lname");?></span> -->
                                         </div>
                                       </div>
                                       <div class="form-group">
@@ -371,9 +371,9 @@
                               </ul>
                             </td>
                             <td class="options-width">
-                                <a href="<?php echo url()."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                <!-- <a href = "<?php echo url()."flex/performance/output/".$rowOutcome->id; ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a> -->
+                                <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id; ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a> -->
                                 
                                 </td>
                                         </tr> 
@@ -434,7 +434,7 @@
 
     <?php  
         
-       include_once "app/includes/unrefresh_form_submit.php";
+       @include("app/includes/unrefresh_form_submit.php";
      ?>
 
      <!-- DATE SCRIPTS  -->

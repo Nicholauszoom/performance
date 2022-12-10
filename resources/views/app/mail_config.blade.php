@@ -1,11 +1,11 @@
 <?php
-include_once "app/includes/header")
+@include("app/includes/header")
 
 <!-- Font Awesome -->
-<link href="<?php echo url(); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
+<link href="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.css" rel="stylesheet">
 <?php
-include_once "app/includes/sidebar.php";
-include_once "app/includes/top_navbar<!-- /top navigation -->
+@include("app/includes/sidebar.php";
+@include("app/includes/top_navbar<!-- /top navigation -->
 
 <!-- page content -->
 <div class="right_col" role="main">
@@ -108,7 +108,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
  ?>
 
 <!-- fstdropdown -->
-<script src="<?php echo url(); ?>style/fstdropdown/fstdropdown.js"></script>
+<script src="<?php echo  url(''); ?>style/fstdropdown/fstdropdown.js"></script>
 
 <script>
     $(document).ready(function(){
@@ -164,7 +164,7 @@ include_once "app/includes/top_navbar<!-- /top navigation -->
         e.preventDefault(); // Prevent Default Submission
 
         $.ajax({
-            url: "<?php echo url(); ?>flex/payroll/saveMail",
+            url: "<?php echo  url(''); ?>/flex/payroll/saveMail",
             type: 'POST',
             data: $(this).serialize(), // it will serialize the form data
             dataType: 'json'

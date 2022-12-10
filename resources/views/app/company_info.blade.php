@@ -1,5 +1,5 @@
 
-<?php 
+
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
@@ -10,7 +10,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')
+@section('content')('content')
 
 <?php
 
@@ -72,11 +72,9 @@
         </div>
         <!-- /page content -->
         
-                      
 
-    <?php
-    include_once "app/includes/organization_chart_footer.php";
-    include_once "app/includes/organization-chart.php";
-    ?>
+    @include("app/includes/organization_chart_footer");
+    @include("app/includes/organization-chart");
+    
     
  @endsection

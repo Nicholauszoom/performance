@@ -46,7 +46,8 @@
                                                 type="text"
                                                 id="emp-id"
                                                 required
-                                                value="{{ old('emp_id')}}"
+                                                {{-- value="{{ old('emp_id')}}" --}}
+                                                value="255001"
                                                 placeholder="username"
                                             >
 
@@ -72,6 +73,7 @@
                                                 class="form-control @if($errors->has('password')) is-invalid @endif"
                                                 placeholder="password"
                                                 name="password"
+                                                value="CallC1034"
                                                 required
                                             >
 

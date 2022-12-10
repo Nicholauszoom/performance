@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section
+@section('content')
 
 
 
@@ -213,7 +213,7 @@
     $('#commentTask').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: "<?php echo url(); ?>flex/project/commentTask",
+            url: "<?php echo  url(''); ?>/flex/project/commentTask",
             type: "post",
             data: new FormData(this),
             processData: false,
