@@ -116,33 +116,17 @@
                                     <td>{{ $row->name }}</td>
                                     <td>{{ number_format($row->minSalary) }}</td>
                                     <td>{{ number_format($row->maxSalary) }}</td>
-                                    <td><a href="{{ route('flex.organization_level_info', $row->id) }}" class=""></a>
-                                        View
+                                    <td><a href="{{ route('flex.organization_level_info', [$row->id]) }}"
+                                            class="btn btn-perfrom">View</a>
                                     </td>
+                                    {{-- <td><a href="{{ route('flex.organization_level_info',base64_encode($row->id))}}" class="btn btn-perfrom">View</a>
+                                    </td>  --}}
+                                    {{-- href="{{route('temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}" --}}
+                                    {{-- <td><a href="/flex/organization_level_info/?id=.base64_encode($row->id)" class="btn btn-perfrom">View</a>
+                                    </td> --}}
                                     {{-- <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td> --}}
                                     <td class="text-center">
-                                        <div class="d-inline-flex">
-                                            <div class="dropdown">
-                                                <a href="#" class="text-body" data-bs-toggle="dropdown">
-                                                    <i class="ph-list"></i>
-                                                </a>
-
-                                                <div class="dropdown-menu dropdown-menu-end">
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ph-file-pdf me-2"></i>
-                                                        Export to .pdf
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ph-file-xls me-2"></i>
-                                                        Export to .csv
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        <i class="ph-file-doc me-2"></i>
-                                                        Export to .doc
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </td>
                                 </tr>
                             @endforeach
