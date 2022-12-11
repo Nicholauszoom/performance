@@ -309,10 +309,11 @@ class GeneralController extends Controller
       return view('app.organization_level', $data);
    }
 
-   public function organization_level_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+   public function organization_level_info(Request $request, $id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Organization Level';
       $data['category'] =  $this->flexperformance_model->organization_level_info($id);
+      
       return view('app.organization_level_info', $data);
     }
 
@@ -327,7 +328,8 @@ class GeneralController extends Controller
 
   public function updateOrganizationLevelName(Request $request) {
     $ID = $request->input('levelID');
-      if (Request::isMethod('post')&& $ID!='') {
+      $method= $request->method();
+      if ($method == 'POST'&& $ID!='') {
           $updates = array(
                       'name' =>$request->input('name')
                   );
@@ -340,7 +342,8 @@ class GeneralController extends Controller
    }
   public function updateMinSalary(Request $request) {
     $ID = $request->input('levelID');
-      if (Request::isMethod('post')&& $ID!='') {
+    $method= $request->method();
+    if ($method == 'POST'&& $ID!=''){
           $updates = array(
                       'minSalary' =>$request->input('minSalary')
                   );
@@ -353,7 +356,8 @@ class GeneralController extends Controller
    }
   public function updateMaxSalary(Request $request) {
     $ID = $request->input('levelID');
-      if (Request::isMethod('post')&& $ID!='') {
+    $method= $request->method();
+    if ($method == 'POST'&& $ID!='') {
           $updates = array(
                       'maxSalary' =>$request->input('maxSalary')
                   );
@@ -1653,7 +1657,8 @@ public function addAccountability(Request $request)
       }
 
     public function addOrganizationLevel(Request $request) {
-        if(Request::isMethod('post')){
+      $method = $request->method();
+        if($method == "POST" ){
 
             $data = array(
                  'name' => $request->input('name'),

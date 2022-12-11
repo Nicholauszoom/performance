@@ -9,81 +9,47 @@
 @endpush
 
 @section('content')
-
-  <!-- Basic datatable -->
-      <div class="card">
+    <!-- Basic datatable -->
+    <div class="card">
         <div class="card-header">
-          <div class="d-flex justify-content-between">
-            <h5 class="mb-0">List of Current Contract</h5>
-            <button   type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addPermissionModal">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-0">List of Current Contract</h5>
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
                     <i class="ph-plus me-2"></i>Add New Contract
-            </button>
-          </div>
-          
+                </button>
+            </div>
+
         </div>
         <table class="table datatable-basic">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Duration</th>
-              <th>Remind Me(Months)</th>
-              <th class="text-center">Option</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Marth</td>
-              <td>Enright</td>
-              
-              <td>
-                <span class="badge bg-success bg-opacity-10 text-success"
-                  >Active</span
-                >
-              </td>
-              <td class="text-center">
-                <div class="d-inline-flex">
-                  <div class="dropdown">
-                    <a
-                      href="#"
-                      class="text-body"
-                      data-bs-toggle="dropdown"
-                    >
-                      <i class="ph-list"></i>
-                    </a>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Duration</th>
+                    <th>Remind Me(Months)</th>
+                    <th class="text-center">Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Marth</td>
+                    <td>Enright</td>
 
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-pdf me-2"></i>
-                        Export to .pdf
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-xls me-2"></i>
-                        Export to .csv
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-doc me-2"></i>
-                        Export to .doc
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+                    <td>
+                        <span class="badge bg-success bg-opacity-10 text-success">Active</span>
+                    </td>
+                    <td class="text-center">
+                        
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
         </table>
-      </div>
-  <!-- /basic datatable -->
-
-
+    </div>
+    <!-- /basic datatable -->
 @endsection
 
 @section('modal')
-
-@include('organisation.contract.add')
-
+    @include('organisation.contract.add')
 @endsection
 
 
@@ -114,7 +80,7 @@
 
 
                         <div class="tab-content tab-bordered" id="myTab3Content">
-                            <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
+                            <div class="tab-pane fade @if (empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
 
@@ -131,8 +97,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(isset($departments))
-                    @foreach($departments as $departments)
+                    @if (isset($departments))
+                    @foreach ($departments as $departments)
 
                         <tr>
                             <th>{{ $loop->iteration }}</th>

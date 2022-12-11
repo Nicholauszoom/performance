@@ -220,7 +220,7 @@ Route::any('/deletecontract','deletecontract')->name('flex.deletecontract');
 Route::any('/bank','bank')->name('flex.bank');
 Route::any('/department','department')->name('flex.department');
 Route::any('/organization_level','organization_level')->name('flex.organization_level');
-Route::any('/organization_level_info','organization_level_info')->name('flex.organization_level_info');
+Route::any('/organization_level_info/{id}','organization_level_info')->name('flex.organization_level_info');
 Route::any('/alldepartment','alldepartment')->name('flex.alldepartment');
 Route::any('/updateOrganizationLevelName','updateOrganizationLevelName')->name('flex.updateOrganizationLevelName');
 Route::any('/updateMinSalary','updateMinSalary')->name('flex.updateMinSalary');
