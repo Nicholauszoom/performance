@@ -1043,13 +1043,13 @@ DB::insert(DB::raw($query));
         $query = " UPDATE payroll_months SET state = 0, appr_author = '".$empID."', appr_date = '".$todate."'  WHERE state = 1 ";
         DB::insert(DB::raw($query));
         //CLEAR TEMPORARY PAYROLL LOGS
-        DB::table('temp_allowance_logs')->truncate();
-        DB::table('temp_deduction_logs')->truncate();
-        DB::table('temp_loan_logs')->truncate();
-        DB::table('temp_payroll_logs')->truncate();
-        DB::table('bonus')->truncate();
-        DB::table('overtimes')->truncate();
-        DB::table('once_off_deduction')->truncate();
+        DB::table('temp_allowance_logs')->delete();
+        DB::table('temp_deduction_logs')->delete();
+        DB::table('temp_loan_logs')->delete();
+        DB::table('temp_payroll_logs')->delete();
+        DB::table('bonus')->delete();
+        DB::table('overtimes')->delete();
+        DB::table('once_off_deduction')->delete();
         });
         return true;
 

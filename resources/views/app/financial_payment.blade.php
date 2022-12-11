@@ -12,23 +12,6 @@
 @section('content')
 @php
     $imprest_model = new App\Models\Payroll\ImprestModel;
-    $overtime = $data['overtime'];
-    $imprests = $data['imprests'];
-    $pending_arrears = $data['pending_arrears'];
-    $monthly_arrears = $data['monthly_arrears'];
-    $month_list = $data['month_list'];
-    $bonus = $data['bonus'];
-    $pendingPayroll = $data['pendingPayroll'];
-    $incentives = $data['incentives'];
-    $employee = $data['employee'];
-    $otherloan = $data['otherloan'];
-
-    $pendingPayroll_month = $data['pendingPayroll_month'];
-    $pendingPayroll = $data['pendingPayroll'];
-    $payroll = $data['payroll'];
-    $payrollList = $data['payrollList'];
-    $other_imprests = $data['other_imprests'];
-    $adv_overtime = $data['adv_overtime'];
 @endphp
 
 
@@ -134,7 +117,7 @@
                                             </div>
                                             @elseif($pendingPayroll == 1 && $payroll->state == 2)
                                             <div>
-                                                <a href="javascript:void(0)" onclick="approvePayroll()" title="Approve Payroll" class="me-2">
+                                                <a href="javascript:void(0)" onclick="recomendPayroll()" title="Approve Payroll" class="me-2">
                                                     <button type="button" class="btn btn-success text-white">
                                                         <i class="ph-check me-2"></i>
                                                         RECOMMEND PENDING PAYROLL

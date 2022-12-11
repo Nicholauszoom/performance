@@ -392,7 +392,7 @@ class PayrollController extends Controller
     public function grossReconciliation(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
-        if (isset($payrollMonth)) {
+         if (isset($payrollMonth)) {
             $current_payroll_month = $payrollMonth;
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -414,20 +414,21 @@ class PayrollController extends Controller
             $data['emp_ids'] = $payroll_employees;
             $data['total_previous_gross'] = $total_previous_gross;
             $data['total_current_gross'] = $total_current_gross;
-            $title = "Gross Reconciliation";
-            $parent = "Payroll";
-            $child = "Gross Reconciliation";
+            $data['title'] = "Gross Reconciliation";
+            $data['parent'] = "Payroll";
+            $data['child'] = "Gross Reconciliation";
 
-            return view('payroll.gross_recon',compact('title','parent','child','data'));
+            return view('app.gross_recon',$data);
 
-
+    
 
         }
+        
     }
 
-    public function netReconciliation()
+    public function netReconciliation(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         if (isset($payrollMonth)) {
             $current_payroll_month = $payrollMonth;
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
@@ -453,7 +454,7 @@ class PayrollController extends Controller
 
 //            echo json_encode($data);
 
-             return view('app.net_recon', $data);
+             return view('app.net_recon',$data);
 
 
         }
@@ -904,7 +905,7 @@ class PayrollController extends Controller
             }
             if ($result == true) {
                 $description ="Generating checklist of full payment of payroll of date " . $payrollMonth;
-                $result = SysHelpers::auditLog(2,$description,$request);
+                //$result = SysHelpers::auditLog(2,$description,$request);
 
                 $response_array['status'] = 1;
                 $response_array['message'] = "<p class='alert alert-success text-center'>Pay Checklist Generated)</p>";
@@ -918,7 +919,7 @@ class PayrollController extends Controller
 
         }
         header('Content-type: application/json');
-        return  json_encode($response_array);
+        return  $response_array;
 
 
     }

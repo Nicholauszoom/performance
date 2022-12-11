@@ -2015,9 +2015,9 @@ public function activatePosition(Request $request)
 
             $data['adv_overtime'] = $this->flexperformance_model->allOvertimes(auth()->user()->emp_id);
 
-            $title = "Pending Payments";$parent = 'Payroll';$child = "pending-payments";
+            $data['title'] = "Pending Payments";$data['parent'] = 'Payroll';$data['child'] = "pending-payments";
 
-            return view('app.financial_payment',compact('title','parent','child','data'));
+            return view('app.financial_payment',$data);
 
 
         // }else{
