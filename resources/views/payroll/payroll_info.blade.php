@@ -66,7 +66,7 @@
     <div class="card-header border-0">
         <div class="d-flex">
 
-            <h3 class="me-4">Payroll Info</h3>
+            <h3 class="me-4">Payroll Details For The Date:: {{ $payrollMonth }}</h3>
 
             @if($payrollState == 1)
             <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
@@ -196,12 +196,12 @@
                         href="{{route('less_payments_print',['pdate',base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-primary"><b>PRINT<br></button></a>
                     <?php if($payrollState == 0) {?>
+                   <!-- <a target="_self"
+                        href="{{route('grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}"><button
+                            type="button" name="print_payroll" class="btn btn-info"><b>GROSS RECON<br></button></a> -->
                     <a target="_self"
-                        href="{{route('grossReconciliation',['pdate',base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print_payroll" class="btn btn-info"><b>GROSS RECON<br></button></a>
-                    <a target="_self"
-                        href="{{route('netReconciliation',['pdate',base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print_payroll" class="btn btn-info"><b>NET RECON<br></button></a>
+                        href="{{route('netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}"><button
+                            type="button" name="print_payroll" class="btn btn-info"><b>Net Reconsiliation<br></button></a>
                     <!-- <a target="_self" href="{{route('sendReviewEmail',['pdate',base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>

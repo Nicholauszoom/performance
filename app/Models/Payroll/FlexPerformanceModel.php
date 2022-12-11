@@ -3467,7 +3467,7 @@ function my_grievances($empID)
 	}
 
 	public function assignment_task_log($payroll_date){
-		 DB::transaction(function()
+		 DB::transaction(function() use($payroll_date)
        {
 		$query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
 select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,

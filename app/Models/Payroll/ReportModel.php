@@ -1278,14 +1278,12 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function grossMonthly_temp($payroll_date){
-        $query = "SUM(pl.salary+pl.allowances) as total_gross
+        $query = "SELECT SUM(pl.salary+pl.allowances) as total_gross FROM temp_payroll_logs pl, employee e
             WHERE e.emp_id = pl.empID and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
-
-             $row = DB::table('payroll_logs pl, employee e')
-             ->select(DB::raw($query))
-             ->first();
-        if ($row){
-            return $row->total_gross;
+      
+      $data = DB::select(DB::raw($query));
+       if ($data){
+            return $data[0]->total_gross;
         }else{
             return null;
         }

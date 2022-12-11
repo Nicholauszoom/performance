@@ -10,8 +10,6 @@
 
 @section('content')
 
-
-
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
@@ -104,6 +102,7 @@
                                         <td align="right">
                                             <?php 
                                                 $diff = number_format($total_current_net_ - $total_previous_net_,2);
+                                                
                                                 $num_check = intval(abs($diff));                                                
                                                 if($num_check == 0){
                                                     echo number_format(0,2); 
