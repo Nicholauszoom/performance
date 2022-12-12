@@ -39,13 +39,13 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" tabindex="-1">
-                                <option></option>
+                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                                <option selected disabled>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
                             </select>
-                            <button type="submit" class="btn btn-main" type="button"><i class="ph-printer me-2"></i> Print</button>
+                            <button type="submit" class="btn btn-main"> Print</button>
                         </div>
 
                         <div class="mt-2">
@@ -91,8 +91,8 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" tabindex="-1">
-                                <option></option>
+                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                                <option selected disabled>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -141,8 +141,8 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" tabindex="-1">
-                                <option></option>
+                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                                <option selected disabled>Select Month</option>
                                 <?php foreach ($month_list as $row) {?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo  date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -209,8 +209,8 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" tabindex="-1">
-                                <option></option>
+                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                                <option selected disabled>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"><?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -271,8 +271,8 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" tabindex="-1">
-                                <option></option>
+                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
+                                <option selected disabled>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -281,7 +281,7 @@
                         </div>
 
                         <div class="mt-2">
-                            <label class="form-label">Report Type:</label>
+                            <label class="form-label font-w-semibold">Report Type:</label>
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
