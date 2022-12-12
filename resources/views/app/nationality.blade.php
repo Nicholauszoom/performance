@@ -13,7 +13,10 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <h5 class="mb-0">Countries</h5>
-                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
+                <button type="button"
+                 class="btn btn-perfrom"
+                  data-bs-toggle="modal"
+                   data-bs-target="#addCountry">
                     <i class="ph-plus me-2"></i>Add Country
                 </button>
             </div>
@@ -74,5 +77,5 @@
     <!-- /page content -->
 @endsection
 @section('modal')
-    @include('app.modal.add-country')
+    @include('app.modal.addCountry')
 @endsection
