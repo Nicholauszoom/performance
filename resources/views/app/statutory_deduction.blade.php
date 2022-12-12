@@ -226,10 +226,6 @@
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
 
-
-
-
-
                                     <table class="table datatable-basic table-striped" id="table-1">
                                     <thead>
                     <tr>
