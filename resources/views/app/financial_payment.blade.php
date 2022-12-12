@@ -1105,7 +1105,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
-                            <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
+                            <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">
 
@@ -1130,7 +1130,7 @@
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
-                            <button type="button" id="yes_delete1" class="btn btn-danger btn-sm">Yes</button>
+                            <button type="button" id="yes_delete1" class="btn btn-main btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">
 
