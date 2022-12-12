@@ -1,11 +1,9 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
@@ -23,7 +21,7 @@
             </div>
 
             <div class="clearfix"></div>
-            
+
               <div class="col-md-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -53,9 +51,9 @@
 
                       <tbody>
                         <?php
-                          foreach ($pension as $row) { 
+                          foreach ($pension as $row) {
                             //if($row->id==0) continue; // Skip the default group
-                            ?> 
+                            ?>
                           <tr id="domain<?php echo $row->id;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td ><?php echo $row->name."(".$row->abbrv.")"; ?></td>
@@ -66,7 +64,7 @@
                                 <?php } else { ?>
                                 <span class="label label-success">Gross</span>
                                 <?php  } ?>
-                                
+
                             </td>
                             <td class="options-width">
                                 <a href="<?php echo  url(''); ?>/flex/deduction_info/?pattern=<?php echo $row->id; ?>|1" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
@@ -90,7 +88,7 @@
 
 
                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                  
+
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -121,7 +119,7 @@
 
                             </td>
                             <?php } ?>
-                                
+
                           </tr>
                           <?php } //} ?>
                       </tbody>
@@ -149,7 +147,7 @@
                   <div class="x_content">
 
                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                  
+
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -204,22 +202,22 @@
                   <div id="feedBackSubmission"></div>
                     <form autocomplete="off" id="addPAYE" enctype="multipart/form-data"  method="post"    data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Minimum Amount 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Minimum Amount
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" name="minimum" class="form-control col-md-7 col-xs-12">
                           <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
-                      </div> 
+                      </div>
 
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Maximum Amount 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Maximum Amount
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="100000000" step="1" name="maximum" class="form-control col-md-7 col-xs-12">
                           <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
-                      </div> 
+                      </div>
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Excess Added To an Amount Exceeding the Minimum Amount
@@ -230,19 +228,19 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Percentage Contribution to Amount that Exceed the Minimum Amount 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Percentage Contribution to Amount that Exceed the Minimum Amount
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <input required="" type="number" min="0" max="99" step="1" name="rate" class="form-control col-md-7 col-xs-12">
                           <span class="text-danger"><?php // echo form_error("fname");?></span>
                         </div>
-                      </div> 
+                      </div>
                       <!-- END -->
                       <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">                         
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button  class="btn btn-success">ADD</button>
                         </div>
-                      </div>  
+                      </div>
                     </form>
                   </div>
                 </div>
@@ -256,20 +254,20 @@
 
 
 
-            
+
         </div>
       </div>
 
 
 
-<!-- /page content -->   
+<!-- /page content -->
 @include("app/includes/update_allowances")
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#policy').change(function () {
-        
+
     $("#policy option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -277,17 +275,17 @@ jQuery(document).ready(function($){
             // $('#percent').hide();
             $("#percentf").attr("disabled", "disabled");
             $("#amountf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             // $('#percent').show();
             // $('#amount').hide();
             $("#amountf").attr("disabled", "disabled");
             $("#percentf").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });
@@ -295,34 +293,34 @@ jQuery(document).ready(function($){
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#deduction_policy').change(function () {
-        
+
     $("#deduction_policy option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
             $("#deduction_percentf").attr("disabled", "disabled");
             $("#deduction_amountf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $("#deduction_amountf").attr("disabled", "disabled");
             $("#deduction_percentf").removeAttr("disabled");
-           
+
         }else if(value == "3") {
             $("#deduction_amountf").attr("disabled", "disabled");
             $("#deduction_percentf").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });
 </script>
 <script>
     $('#addAllowance').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addAllowance",
                  type:"post",
@@ -336,18 +334,18 @@ jQuery(document).ready(function($){
          $('#resultSubmission').fadeOut('fast', function(){
               $('#resultSubmission').fadeIn('fast').html(data);
             });
-    
+
       $('#addAllowance')[0].reset();
         })
         .fail(function(){
-     alert('FAILED, Check Your Network Connection and Try Again! ...'); 
+     alert('FAILED, Check Your Network Connection and Try Again! ...');
         });
-    }); 
+    });
 </script>
 
 <script>
     $('#addOvertime').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addOvertimeCategory",
                  type:"post",
@@ -361,17 +359,17 @@ jQuery(document).ready(function($){
           $('#resultOvertimeSubmission').fadeOut('fast', function(){
               $('#resultOvertimeSubmission').fadeIn('fast').html(data);
             });
-    
+
           $('#addOvertime')[0].reset();
         })
         .fail(function(){
-     alert('FAILED, Check Your Network Connection and Try Again! ...'); 
+     alert('FAILED, Check Your Network Connection and Try Again! ...');
         });
-    }); 
+    });
 </script>
 <script>
     $('#addDeduction').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addDeduction",
                  type:"post",
@@ -385,13 +383,13 @@ jQuery(document).ready(function($){
          $('#resultSubmissionDeduction').fadeOut('fast', function(){
               $('#resultSubmissionDeduction').fadeIn('fast').html(data);
             });
-    
+
       $('#addDeduction')[0].reset();
         })
         .fail(function(){
-     alert('FAILED, Check Your Network Connection and Try Again! ...'); 
+     alert('FAILED, Check Your Network Connection and Try Again! ...');
         });
-    }); 
+    });
 
     $(document).ready(function(){
         $('.hide').hide();
@@ -408,21 +406,21 @@ jQuery(document).ready(function($){
             {
               // success :function(result){
               // $('#alert').show();
-           
+
             $('#domain'+id).hide();
-               
+
             }
-               
+
             });
         }
     }
-   
+
     function cancel()
     {
         alert("hello");
         Location.reload();
     }
-</script>    
+</script>
 
 
 
@@ -430,16 +428,16 @@ jQuery(document).ready(function($){
 
 <script type="text/javascript">
   $('#addPAYE').submit(function(e){
-  
+
     e.preventDefault(); // Prevent Default Submission
-  
+
     $.ajax({
  url: "<?php echo  url(''); ?>/flex/addpaye",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
     })
-    .done(function(data){      
+    .done(function(data){
         alert(data.title);
 
       if(data.status == 'OK'){
@@ -459,7 +457,7 @@ jQuery(document).ready(function($){
               }
     })
     .fail(function(){
- alert('Registration Failed, Review Your Network Connection...'); 
+ alert('Registration Failed, Review Your Network Connection...');
     });
 
 });

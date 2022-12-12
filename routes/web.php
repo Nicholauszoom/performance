@@ -11,6 +11,7 @@ use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AuditTrailController;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Payroll\PayrollController;
@@ -66,7 +67,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/workforce-management/employee-create',  'createEmployee')->name('employee.create');
         Route::post('/workforce-management/employee/store',  'storeEmployee')->name('employee.store');
         Route::get('/suspended-employee',  'inactiveEmployee')->name('employee.suspended');
-        Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
+        // Route::post('/getPositionSalaryRange', 'getPositionSalaryRange')->name('getPositionSalaryRange');
         Route::get('/workforce-management/overtime', 'overtime')->name('overtime');
         Route::get('/profile', 'profile')->name('employee.profile');
 
@@ -89,8 +90,8 @@ Route::middleware('auth')->group(function () {
  Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
  //end learning and development
     Route::get('/performance/bankBranchFetcher', [BranchController::class, 'fetchBranch'])->name('bankBranchFetcher');
-    Route::post('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
-    Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
+    // Route::post('/performance/getPositionSalaryRange', [EmployeeController::class, 'getPositionSalaryRange'])->name('getPositionSalaryRange');
+    // Route::get('/performance/positionFetcher', [PositionController::class, 'positionFetcher'])->name('positionFetcher');
 
     // Employee overtime
 
@@ -126,13 +127,6 @@ Route::middleware('auth')->group(function () {
         Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
         Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
         Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
-        Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
-        Route::any('p10', [ReportController::class, 'p10'])->name('reports.p10');
-        Route::any('pension', [ReportController::class, 'pension'])->name('reports.pension');
-        Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
-        Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
-        Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
-        Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
         Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
         Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
         Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
@@ -143,6 +137,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
     });
 });
+
+
 //Routes for Recruitment Module
 
 // Route::group(['prefix' => 'recruitment'], function () {
@@ -197,7 +193,7 @@ Route::prefix('flex/attendance')->controller(AttendanceController::class)->group
 Route::prefix('')->controller(BaseController::class)->group(function (){
 
     Route::any('/index' ,'index')->name('index');
-    Route::any('/' ,'index')->name('index');
+    //Route::any('/' ,'index')->name('index');
     Route::any('/netTotalSummation' ,'netTotalSummation')->name('netTotalSummation');
     Route::any('/register' ,'register')->name('register');
     Route::any('/register_submit' ,'register_submit')->name('register_submit');
@@ -208,7 +204,7 @@ Route::prefix('')->controller(BaseController::class)->group(function (){
 Route::prefix('flex')->controller(GeneralController::class)->group(function (){
 
 Route::any('/index','index')->name('flex.index');
-Route::any('/','index')->name('flex.index');
+//Route::any('/','index')->name('flex.index');
 Route::any('/password_check/{$str}','password_check')->name('flex.password_check');
 Route::any('/login_info','login_info')->name('flex.login_info');
 Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
@@ -224,7 +220,7 @@ Route::any('/deletecontract','deletecontract')->name('flex.deletecontract');
 Route::any('/bank','bank')->name('flex.bank');
 Route::any('/department','department')->name('flex.department');
 Route::any('/organization_level','organization_level')->name('flex.organization_level');
-Route::any('/organization_level_info','organization_level_info')->name('flex.organization_level_info');
+Route::any('/organization_level_info/{id}','organization_level_info')->name('flex.organization_level_info');
 Route::any('/alldepartment','alldepartment')->name('flex.alldepartment');
 Route::any('/updateOrganizationLevelName','updateOrganizationLevelName')->name('flex.updateOrganizationLevelName');
 Route::any('/updateMinSalary','updateMinSalary')->name('flex.updateMinSalary');
@@ -294,18 +290,18 @@ Route::any('/updateskills','updateskills')->name('flex.updateskills');
 Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
 Route::any('/overtime','overtime')->name('flex.overtime');
 Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
-Route::any('/confirmOvertime','confirmOvertime')->name('flex.confirmOvertime');
-Route::any('/recommendOvertime','recommendOvertime')->name('flex.recommendOvertime');
+Route::any('/confirmOvertime/{id}','confirmOvertime')->name('flex.confirmOvertime');
+Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
 Route::any('/approved_financial_payments','approved_financial_payments')->name('flex.approved_financial_payments');
 Route::any('/arrears_info','arrears_info')->name('flex.arrears_info');
 Route::any('/individual_arrears_info','individual_arrears_info')->name('flex.individual_arrears_info');
 Route::any('/holdOvertime','holdOvertime')->name('flex.holdOvertime');
-Route::any('/approveOvertime','approveOvertime')->name('flex.approveOvertime');
+Route::any('/approveOvertime/{id}','approveOvertime')->name('flex.approveOvertime');
 Route::any('/lineapproveOvertime','lineapproveOvertime')->name('flex.lineapproveOvertime');
-Route::any('/hrapproveOvertime','hrapproveOvertime')->name('flex.hrapproveOvertime');
-Route::any('/fin_approveOvertime','fin_approveOvertime')->name('flex.fin_approveOvertime');
-Route::any('/denyOvertime','denyOvertime')->name('flex.denyOvertime');
-Route::any('/cancelOvertime','cancelOvertime')->name('flex.cancelOvertime');
+Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
+Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
+Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
+Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
 Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
 Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
 Route::any('/fetchOvertimeComment','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
@@ -374,12 +370,12 @@ Route::any('/organisation_reports','organisation_reports')->name('flex.organisat
 Route::any('/not_logged_in','not_logged_in')->name('flex.not_logged_in');
 Route::any('/viewrecords','viewrecords')->name('flex.viewrecords');
 Route::any('/home','home')->name('flex.home');
-Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
+Route::any('/positionFetcher/{id}','positionFetcher')->name('flex.positionFetcher');
 Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
 Route::any('/addkin','addkin')->name('flex.addkin');
 Route::any('/deletekin','deletekin')->name('flex.deletekin');
 Route::any('/addproperty','addproperty')->name('flex.addproperty');
-Route::any('/employee_exit','employee_exit')->name('flex.employee_exit');
+Route::any('/employee_exit/{id}','employee_exit')->name('flex.employee_exit');
 Route::any('/deleteproperty/$id','deleteproperty')->name('flex.deleteproperty');
 Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->name('flex.employeeDeactivationRequest');
 Route::any('/employeeActivationRequest','employeeActivationRequest')->name('flex.employeeActivationRequest');
@@ -440,9 +436,9 @@ Route::any('/updateAllowancePolicy','updateAllowancePolicy')->name('flex.updateA
 Route::any('/addToBonus','addToBonus')->name('flex.addToBonus');
 Route::any('/addBonusTag','addBonusTag')->name('flex.addBonusTag');
 Route::any('/cancelBonus','cancelBonus')->name('flex.cancelBonus');
-Route::any('/confirmBonus','confirmBonus')->name('flex.confirmBonus');
-Route::any('/recommendBonus','recommendBonus')->name('flex.recommendBonus');
-Route::any('/deleteBonus','deleteBonus')->name('flex.deleteBonus');
+Route::any('/confirmBonus/{id}','confirmBonus')->name('flex.confirmBonus');
+Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
+Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
 Route::any('/role','role')->name('flex.role');
 Route::any('/groups','groups')->name('flex.groups');
 Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
@@ -492,8 +488,8 @@ Route::any('/updateGroupEdit','updateGroupEdit')->name('flex.updateGroupEdit');
 Route::any('/netTotalSummation/$payroll_date','netTotalSummation')->name('flex.netTotalSummation');
 Route::any('/updateContractStart','updateContractStart')->name('flex.updateContractStart');
 Route::any('/updateContractEnd','updateContractEnd')->name('flex.updateContractEnd');
-Route::any('/approveRegistration','approveRegistration')->name('flex.approveRegistration');
-Route::any('/disapproveRegistration','disapproveRegistration')->name('flex.disapproveRegistration');
+Route::any('/approveRegistration/{id}','approveRegistration')->name('flex.approveRegistration');
+Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
 
 
 });
@@ -559,7 +555,7 @@ Route::any('/partial_payment','partial_payment')->name('pyaroll.partial_payment'
 Route::any('/salary_calculator','salary_calculator')->name('pyaroll.salary_calculator');
 Route::any('/calculateSalary','calculateSalary')->name('pyaroll.calculateSalary');
 Route::any('/recommendpayroll','recommendpayroll')->name('pyaroll.recommendpayroll');
-Route::any('/runpayroll','runpayroll')->name('pyaroll.runpayroll');
+Route::any('/runpayroll/{pdate}','runpayroll')->name('pyaroll.runpayroll');
 Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('pyaroll.partial_payment_manipulation');
 Route::any('/generate_checklist','generate_checklist')->name('pyaroll.generate_checklist');
 Route::any('/arrearsPayment','arrearsPayment')->name('pyaroll.arrearsPayment');
@@ -767,7 +763,7 @@ Route::any('/addCost','addCost')->name('project.addCost');
 
 
 
-Route::prefix('flex/project')->controller(ProjectController::class)->group(function (){
+Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
 Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
 Route::any('/pay_checklist','pay_checklist')->name('reports.pay_checklist');

@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\CustomModels\PayrollModel;
-use App\CustomModels\flexFerformanceModel;
-use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
@@ -19,21 +16,6 @@ use App\Helpers\SysHelpers;
 class ImprestController extends Controller
 {
 
-  // public function __construct(Request $request) {
-  //   parent::__construct();
-
-  //   $this->load->model('imprest_model');    
-  //   $this->load->helper('url');
-  //   $this->load->library('form_validation');
-  //   $this->load->library('encryption');
-  //    $this->load->library('Pdf');
-  //   $this->load->library('user_agent');
-
-  //   date_default_timezone_set('Africa/Dar_es_Salaam');    
-
-
-
-  // }
 
   public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
   {
@@ -73,16 +55,16 @@ class ImprestController extends Controller
     //   if(session('appr_paym')){
     //     $data['other_imprests'] = $this->imprest_model->other_imprests_line_hr(session('emp_id'));
     //   } elseif(session('appr_paym')){
-    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line_fin(session('emp_id')); 
+    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line_fin(session('emp_id'));
     //   } elseif(session('appr_paym')){
-    //   $data['other_imprests'] = $this->imprest_model->other_imprests_hr(); 
+    //   $data['other_imprests'] = $this->imprest_model->other_imprests_hr();
     //   } elseif(session('appr_paym') ||session('mng_paym')){
-    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line(session('emp_id')); 
+    //   $data['other_imprests'] = $this->imprest_model->other_imprests_line(session('emp_id'));
     //   } elseif(session('appr_paym')){
-    //     $data['other_imprests'] = $this->imprest_model->other_imprests_hr(); 
+    //     $data['other_imprests'] = $this->imprest_model->other_imprests_hr();
     //   } elseif (session('appr_paym')) {
     //     $data['other_imprests'] = $this->imprest_model->other_imprests_fin();
-    //   }     
+    //   }
     // }
 
 
@@ -94,12 +76,12 @@ class ImprestController extends Controller
 
   public function imprest_info(Request $request)
   {
-    $imprestID =  base64_decode($this->input->get('id'));
+    $imprestID =  base64_decode($request->id);
 
-    $data['imprest_details'] =  $this->imprest_model->getImprest($imprestID);
-    $data['requirements'] =  $this->imprest_model->getImprestRequirements($imprestID);
-    $data['title'] = "Imprest";
-    return view('app.imprest_info', $data);
+    $imprest_details =  $this->imprest_model->getImprest($imprestID);
+    $requirements =  $this->imprest_model->getImprestRequirements($imprestID);
+    $title = "Imprest";
+    return view('app.imprest_info',compact('title','imprest_details','requirements'));
   }
 
 
@@ -527,7 +509,7 @@ class ImprestController extends Controller
         $initial_amount = $this->imprest_model->getInitialRequirementCost($imprestID);
       } else $initial_amount = 0;
       // if($final>0){
-      //   $final_amount = $this->imprest_model->getFinalRequirementCost($imprestID); 
+      //   $final_amount = $this->imprest_model->getFinalRequirementCost($imprestID);
       // } else $final_amount = 0;
 
       $data = array(

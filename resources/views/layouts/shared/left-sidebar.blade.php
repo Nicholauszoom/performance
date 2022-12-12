@@ -28,13 +28,13 @@
                     </a>
                 </li>
 
-
+{{--               
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/flex/project/') }}">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li>
+                </li>  --}}
 
 
                 <li class="nav-item nav-item-submenu">
@@ -71,6 +71,44 @@
                 </li>
 
 
+               
+
+              <!--
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-bank"></i>
+                        <span> Salary Advance</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Applications</a></li>
+                    </ul>
+                </li> -->
+
+
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-calculator"></i>
+                        <span>Payroll Management</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/payroll') }}"> Payroll </a></li>
+                        @if (session('mng_paym'))
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/employee_payslip') }}"> Payslip </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/comission_bonus') }}">Incentives</a></li>
+                          <!--  <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/partial_payment') }}">Partial Payment</a></li> -->
+                        @endif
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/approved_financial_payments') }}">Pending Payments </a></li>
+                        @if (session('mng_stat_rpt'))
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_reports') }}">Statutory Reports </a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/organisation_reports') }}">Organisation Reports </a></li>
+                        @endif
+                        @if (session('mng_paym'))
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/salary_calculator') }}"> Salary Calculator </a></li>
+                        @endif
+                    </ul>
+                </li>
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-calendar-check"></i>
@@ -86,53 +124,15 @@
                     </ul>
                 </li>
 
-
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-bank"></i>
-                        <span> Salary Advance</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Applications</a></li>
-                    </ul>
-                </li>
-
-
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-calculator"></i>
-                        <span>Payroll Management</span>
-                    </a>
-
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/payroll') }}"> Payroll </a></li>
-                        @if (session('mng_paym'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/employee_payslip') }}"> Payslip </a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/comission_bonus') }}">Incentives</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/partial_payment') }}">Partial Payment</a></li>
-                        @endif
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/approved_financial_payments') }}">Pending Payments </a></li>
-                        @if (session('mng_stat_rpt'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_reports') }}">Statutory Reports </a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/organisation_reports') }}">Organisation Reports </a></li>
-                        @endif
-                        @if (session('mng_paym'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/salary_calculator') }}"> Salary Calculator </a></li>
-                        @endif
-                    </ul>
-                </li>
-
-
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-buildings"></i>
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/costCenter') }}">Cost Center </a></li>
+                        
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/department') }}">Departments </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/costCenter') }}">Cost Center </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/branch') }}">Company Branches </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/position') }}">Positions</a></li>
                         @if (session('mng_emp'))
