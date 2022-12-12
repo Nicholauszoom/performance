@@ -102,8 +102,10 @@
                                     <div class="card-header border-0 shadow-none">
                                         <div class="d-flex justify-content-between">
                                             <div>
+                                                @if(count($payrollList) == 0)
                                                 <h5 class="text-muted">Payslip Mail Delivery List</h5>
                                                 <p class="lead"><small> Payroll Month: {{ $pendingPayroll_month; }} </small></p>
+                                                @endif
                                             </div>
 
                                             @if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym'))
@@ -265,7 +267,7 @@
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            {{-- <tbody>
                                                 <?php
                                                     foreach ($adv_overtime as $row) { ?>
                                                 <?php if ($row->status == 2) {
@@ -386,7 +388,7 @@
                                                 </tr>
 
                                                 <?php } ?>
-                                            </tbody>
+                                            </tbody> --}}
                                         </table>
                                     </div>
                                 </div>
@@ -546,7 +548,7 @@
                                             </tr>
                                         </thead>
 
-
+{{-- 
                                         <tbody>
                                             <?php
                                 foreach ($other_imprests as $row) { ?>
@@ -745,7 +747,7 @@
                                             </tr>
 
                                             <?php } ?>
-                                        </tbody>
+                                        </tbody> --}}
                                     </table>
                                 </div>
                             </div>
