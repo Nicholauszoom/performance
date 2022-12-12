@@ -31,7 +31,10 @@
                                 <div class="card-body">
                                     <div class="text-center mb-3">
                                         <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
-                                            <img src="{{ asset('login-assets/images/main-logo.png') }}" class="img-fluid rounded-circle" style="height: 10em" alt="logo">
+                                            <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid rounded-circle" style="height: 10em" alt="logo">
+                                            <!-- <br>
+                                            <br>
+                                            <h style="color:#001949" >Performance<h/> -->
                                         </div>
 
                                     </div>
