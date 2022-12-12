@@ -97,11 +97,11 @@
                                     <div class="d-md-flex">
                                         <div class="col-sm-8">
                                             <input type="hidden" name ='levelID' value="{{$levelID}}" class="form-control">
-                                            <input type="text" value="{{$name}}" name="name" class="form-control">
+                                            <input type="text" value="{{$name}}"  name="name" class="form-control">
                                         </div>
                                         <div class="btn-group flex-shrink-0 ms-md-3">
                                             <button type="submit"
-                                                class="btn btn-primary multiselect-order-options-button">Update Name</button>
+                                                class="btn btn-perfrom multiselect-order-options-button" id="updateLevelName">Update Name</button>
                                         </div>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@
                                         </div>
                                         <div class="btn-group flex-shrink-0 ms-md-3">
                                             <button type="submit"
-                                                class="btn btn-primary multiselect-order-options-button">Update Min Salary</button>
+                                                class="btn btn-perfrom multiselect-order-options-button">Update Min Salary</button>
                                         </div>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
                                         </div>
                                         <div class="btn-group flex-shrink-0 ms-md-3">
                                             <button type="submit"
-                                                class="btn btn-primary multiselect-order-options-button">Update Max Salary</button>
+                                                class="btn btn-perfrom multiselect-order-options-button">Update Max Salary</button>
                                         </div>
                                     </div>
                                 </div>

@@ -2,10 +2,14 @@
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
 @endpush
 
 @section('content')
@@ -13,55 +17,98 @@
 
 
 
-  <!-- Basic datatable -->
-      <div class="card">
+    <!-- Basic datatable -->
+    {{-- <div class="card">
+        <div class="card-header">
+                    <i class="ph-plus me-2"></i> Allowance
+
+                </button>
+            </div>
+
+        </div>
+        <table class="table datatable-basic">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th align="center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @php
+                    $SN = 1;
+                @endphp
+                @if (isset($data['allowance']))
+                    @foreach ($data['allowance'] as $row)
+                        <tr>
+                            <td>{{ $SN++ }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->amount }}</td>
+                            </td>
+                            <td align="center">
+
+
+                                <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
+                                    data-toggle="modal" data-id="" data-name="">
+                                    <i class="ph-note-pencil"></i> Edit
+                                </button>
+
+                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div> --}}
+
+
+    <div class="card">
         <div class="card-header">
           <div class="d-flex justify-content-between">
           <h5 class="mb-0">Allowances</h5>
           <button   type="button"
                     class="btn btn-perfrom"
                     data-bs-toggle="modal"
-                    data-bs-target="#save_department">
+                    data-bs-target="#save_allowance">
                     <i class="ph-plus me-2"></i> Allowance
-
           </button>
           </div>
-
+          @if (Session::has('success'))
+                                <div class="alert alert-success" role="alert">
+                                    <p>{{ Session::get('success') }}</p>
+                                </div>
+                            @endif
         </div>
        <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>S/N</th>
-                    <th>Name</th>
-                    <th>Amount</th>
-
-                    <th class="text-center">Action</th>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        
+                        <th>Action</th>
+                    </tr>
                 </tr>
             </thead>
 
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
+                @php
+                    $SN = 1;
+                @endphp
+                @if(isset($data['allowance']))
+                    @foreach($data['allowance'] as $row)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
-
-                            <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
-
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
+                            <td>{{ $SN++ }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->amount }}</td>
+                            <td>
+                                <a href="{{ route('flex.organization_level_info', [$row->id]) }}"
+                                    class="btn btn-perfrom">View</a>
                             </td>
                         </tr>
 
@@ -70,16 +117,14 @@
             </tbody>
         </table>
       </div>
-  <!-- /basic datatable -->
+    <!-- /basic datatable -->
 
 
 
 @endsection
 
 @section('modal')
-
-@include('setting.allowance.add')
-
+    @include('setting.allowance.add')
 @endsection
 
 
@@ -110,7 +155,7 @@
 
 
                         <div class="tab-content tab-bordered" id="myTab3Content">
-                            <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
+                            <div class="tab-pane fade @if (empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
 
@@ -127,8 +172,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(isset($departments))
-                    @foreach($departments as $departments)
+                    @if (isset($departments))
+                    @foreach ($departments as $departments)
 
                         <tr>
                             <th>{{ $loop->iteration }}</th>
