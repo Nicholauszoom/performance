@@ -17,7 +17,7 @@
 <div class="card">
   <div class="card-header">
 
-  <h4>Position Organization structure</h4>
+  <h5>Position Organization structure</h5>
   </div>
   <table class="table datatable-basic">
       <thead>
@@ -47,7 +47,7 @@
 </div>
   <div class="card">
     <div class="card-header">
-<h4>Department OrganizationStructure</h4>
+<h5>Department OrganizationStructure</h5>
 </div>
   <table class="table datatable-basic">
     <thead>

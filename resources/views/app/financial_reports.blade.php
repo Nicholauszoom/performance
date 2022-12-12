@@ -55,7 +55,8 @@
                                       action="<?php echo  url(''); ?>/flex/reports/p9" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
-                                    <div class="form-group">
+                                        @csrf
+                                      <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6">Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
                                             <select required="" name="payrolldate"
@@ -72,6 +73,7 @@
                       </span>
                                     </div>
 
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -106,7 +108,8 @@
                                       action="<?php echo  url(''); ?>/flex/reports/p10" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
-<!--                                    <div class="form-group">-->
+    @csrf
+                                      <!--                                    <div class="form-group">-->
 <!--                                        <label class="control-label col-md-3  col-xs-6">Payroll Month</label>-->
 <!--                                        <div class="col-md-3 col-sm-6 col-xs-12">-->
 <!--                                            <select required="" name="payrolldate"-->
@@ -122,7 +125,8 @@
 <!--                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>-->
 <!--                      </span>-->
 <!--                                    </div>-->
-                                    <div class="form-group">
+    @csrf                                    
+<div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
                                             <select required="" name="payrolldate" class="select_payroll_month form-control" tabindex="-1">
@@ -139,6 +143,7 @@
                                     </div>
                                     <br>
 
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">For
                                             Period</label>
@@ -156,6 +161,7 @@
                                         </div>
                                     </div>
 
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -190,7 +196,8 @@
                                       action="<?php echo  url(''); ?>/flex/reports/pension" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
-                                    <div class="form-group">
+                                        @csrf
+                                      <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6">Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
                                             <select required="" name="payrolldate"
@@ -207,6 +214,7 @@
                       </span>
                                     </div>
                                     <br>
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Select
                                             Fund</label>
@@ -226,6 +234,7 @@
                                         </div>
                                     </div>
 
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -260,7 +269,8 @@
                                       action="<?php echo  url(''); ?>/flex/reports/wcf" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
-                                    <div class="form-group">
+                                        @csrf
+                                      <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6">Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
                                             <select required="" name="payrolldate"
@@ -275,6 +285,7 @@
                       </span>
                                     </div>
 
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -310,7 +321,8 @@
                                       data-parsley-validate class="form-horizontal form-label-left">
 
 
-                                    <div class="form-group">
+                                        @csrf
+                                      <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6">Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
                                             <select required="" name="payrolldate"
@@ -325,6 +337,7 @@
                       </span>
                                     </div>
 
+                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
