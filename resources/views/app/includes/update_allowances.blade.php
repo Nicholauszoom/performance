@@ -40,7 +40,8 @@ function confirmBonus(id)
         $.ajax({
             url:"<?php echo url('flex/confirmBonus');?>/"+id,
             success:function(data)
-            {
+            {   var data = JSON.parse(data);
+                alert(data.status);
               if(data.status == 'OK'){
               alert("Bonus Confirmed Successifully");
                $('#feedBack').fadeOut('fast', function(){
@@ -73,6 +74,7 @@ function recommendBonus(id)
             url:"<?php echo url('flex/recommendBonus');?>/"+id,
             success:function(data)
             {
+              var data = JSON.parse(data);
               if(data.status == 'OK'){
               alert("Bonus Confirmed Successifully");
                $('#feedBack').fadeOut('fast', function(){
@@ -102,7 +104,8 @@ function deleteBonus(id)
         $.ajax({
             url:"<?php echo url('flex/deleteBonus');?>/"+id,
             success:function(data)
-            {
+            {  
+                var data = JSON.parse(data);
               if(data.status == 'OK'){
               alert("Bonus Deleted Successifully");
                $('#feedBack').fadeOut('fast', function(){
@@ -143,6 +146,7 @@ function deleteBonus(id)
                  async:false
              })
         .done(function(data){
+            var data = JSON.parse(data);
          $('#feedBackSubmission').fadeOut('fast', function(){
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
@@ -168,6 +172,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -191,6 +196,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -217,6 +223,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -241,6 +248,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -266,6 +274,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -293,6 +302,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackAssignment').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackAssignment').fadeIn('fast').html(data);
             });
 
@@ -321,6 +331,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackAssignment').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackAssignment').fadeIn('fast').html(data);
             });
      setTimeout(function(){// wait for 5 secs(2)
@@ -348,6 +359,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackRemove').fadeOut('fast', function(){
+            var data = JSON.parse(data);
               $('#feedBackRemove').fadeIn('fast').html(data);
             });
 
@@ -451,6 +463,7 @@ function deleteAllowance(id)
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addToBonus",
                  type:"post",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  data:new FormData(this),
                  processData:false,
                  contentType:false,

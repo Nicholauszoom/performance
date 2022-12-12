@@ -4832,7 +4832,10 @@ public function remove_group_from_allowance(Request $request)  {
 
 
    //###########BONUS################# updateAllowanceName
+   public function addToBonusByEmpGroup(Request $request) {
+     
 
+   }
 
     public function addToBonus(Request $request) {
           $empID = $request->input('employee');
@@ -4840,7 +4843,9 @@ public function remove_group_from_allowance(Request $request)  {
           $amount = $request->input('amount');
           $days = $request->input('days');
           $percent = $request->input('percent');
-            if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days =='' && $percent != '') {
+          $methode = $request->method();
+            if ($methode == "POST" && $empID!='' && $amount!='' && $days =='' && $percent != '') {
+
                 $data = array(
                             'empID' =>$request->input('employee'),
                             'amount' =>$amount*$percent/100,
@@ -4855,7 +4860,7 @@ public function remove_group_from_allowance(Request $request)  {
                     } else { echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>"; }
 
             }
-            if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days !='' && $percent == '') {
+            if ($methode == "POST" && $empID!='' && $amount!='' && $days !='' && $percent == '') {
               $data = array(
                           'empID' =>$request->input('employee'),
                           'amount' =>$amount*$days/30,
@@ -4871,7 +4876,7 @@ public function remove_group_from_allowance(Request $request)  {
                   } else { echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>"; }
 
           }
-          if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days =='' && $percent == '') {
+          if ($methode == "POST" && $empID!='' && $amount!='' && $days =='' && $percent == '') {
             $data = array(
                         'empID' =>$request->input('employee'),
                         'amount' =>$amount,
@@ -4889,7 +4894,8 @@ public function remove_group_from_allowance(Request $request)  {
    }
     public function addBonusTag(Request $request) {
           $name = $request->input('name');
-            if (Request::isMethod('post')&& $name!='') {
+          $methode = $request->method();
+            if ($methode = "POST" && $name!='') {
                 $data = array(
                             'name' =>$request->input('name')
                         );
@@ -4925,9 +4931,9 @@ public function cancelBonus(Request $request)
 
     }
 
-public function confirmBonus(Request $request)
-      {
-        $bonusID = $this->uri->segment(3);
+public function confirmBonus($id)
+       {
+        $bonusID = $id;
         $appr_author =session('emp_id');
         $data = array(
                             'state' =>1,
@@ -4947,12 +4953,11 @@ public function confirmBonus(Request $request)
         }
 
 
-
     }
 
-    public function recommendBonus(Request $request)
+    public function recommendBonus($id)
       {
-        $bonusID = $this->uri->segment(3);
+        $bonusID = $id;
         $appr_author =session('emp_id');
         $data = array(
                             'state' =>2,
@@ -4976,9 +4981,9 @@ public function confirmBonus(Request $request)
     }
 
 
-public function deleteBonus(Request $request)
+public function deleteBonus($id)
       {
-        $bonusID = $this->uri->segment(3);
+        $bonusID = $id;
         $result = $this->flexperformance_model->deleteBonus( $bonusID);
 
         if($result ==true){

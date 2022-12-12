@@ -193,7 +193,7 @@ Route::prefix('flex/attendance')->controller(AttendanceController::class)->group
 Route::prefix('')->controller(BaseController::class)->group(function (){
 
     Route::any('/index' ,'index')->name('index');
-    Route::any('/' ,'index')->name('index');
+    //Route::any('/' ,'index')->name('index');
     Route::any('/netTotalSummation' ,'netTotalSummation')->name('netTotalSummation');
     Route::any('/register' ,'register')->name('register');
     Route::any('/register_submit' ,'register_submit')->name('register_submit');
@@ -204,7 +204,7 @@ Route::prefix('')->controller(BaseController::class)->group(function (){
 Route::prefix('flex')->controller(GeneralController::class)->group(function (){
 
 Route::any('/index','index')->name('flex.index');
-Route::any('/','index')->name('flex.index');
+//Route::any('/','index')->name('flex.index');
 Route::any('/password_check/{$str}','password_check')->name('flex.password_check');
 Route::any('/login_info','login_info')->name('flex.login_info');
 Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
@@ -436,9 +436,9 @@ Route::any('/updateAllowancePolicy','updateAllowancePolicy')->name('flex.updateA
 Route::any('/addToBonus','addToBonus')->name('flex.addToBonus');
 Route::any('/addBonusTag','addBonusTag')->name('flex.addBonusTag');
 Route::any('/cancelBonus','cancelBonus')->name('flex.cancelBonus');
-Route::any('/confirmBonus','confirmBonus')->name('flex.confirmBonus');
-Route::any('/recommendBonus','recommendBonus')->name('flex.recommendBonus');
-Route::any('/deleteBonus','deleteBonus')->name('flex.deleteBonus');
+Route::any('/confirmBonus/{id}','confirmBonus')->name('flex.confirmBonus');
+Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
+Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
 Route::any('/role','role')->name('flex.role');
 Route::any('/groups','groups')->name('flex.groups');
 Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
