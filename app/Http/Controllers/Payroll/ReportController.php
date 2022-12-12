@@ -185,6 +185,7 @@ function p10(Request $request)  {
         $total=$data['total'];
         $info=$data['info'];
 
+        dd('here');
         include(app_path() . '/reports/p10.php');
         //  return view('app.reports/p10', $data);
     }

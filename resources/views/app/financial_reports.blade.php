@@ -77,7 +77,6 @@
                       </span>
                                     </div>
 
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -112,8 +111,24 @@
                                       action="<?php echo  url(''); ?>/flex/reports/p10" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
 
-    @csrf
-                              
+                                        @csrf
+                                      <!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3  col-xs-6">Payroll Month</label>-->
+<!--                                        <div class="col-md-3 col-sm-6 col-xs-12">-->
+<!--                                            <select required="" name="payrolldate"-->
+<!--                                                    class="select_payroll_year form-control" tabindex="-1">-->
+<!--                                                <option></option>-->
+<!--                                                --><?php
+//                                                foreach ($year_list as $row) {
+//                                                    # code... ?>
+<!--                                                    <option value="--><?php //echo $row->year; ?><!--">--><?php //echo $row->year; ?><!--</option> --><?php //} ?>
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                        <span class="input-group-btn">-->
+<!--                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>-->
+<!--                      </span>-->
+<!--                                    </div>-->
+                                      
 <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -131,7 +146,6 @@
                                     </div>
                                     <br>
 
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">For
                                             Period</label>
@@ -149,7 +163,6 @@
                                         </div>
                                     </div>
 
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -202,7 +215,6 @@
                       </span>
                                     </div>
                                     <br>
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Select
                                             Fund</label>
@@ -222,7 +234,6 @@
                                         </div>
                                     </div>
 
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -273,7 +284,6 @@
                       </span>
                                     </div>
 
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
@@ -325,7 +335,6 @@
                       </span>
                                     </div>
 
-                                        @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
