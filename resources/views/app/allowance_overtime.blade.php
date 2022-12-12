@@ -1,86 +1,87 @@
 @extends('layouts.vertical', ['title' => 'Overtime'])
 
 @push('head-script')
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
 @endpush
 
 @push('head-scriptTwo')
+    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
 @endpush
 
 @section('content')
+    <!-- Basic datatable -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5>Overtime</h5>
 
-
-
-
-  <!-- Basic datatable -->
-      <div class="card">
-        <div class="card-header">
-          <div class="d-flex justify-content-between">
-          <h5 class="mb-0">Overtime</h5>
-          <button   type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#save_department">
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add_overtime">
                     <i class="ph-plus me-2"></i> Overtime
-
-          </button>
-          </div>
-          
+                </button>
+            </div>
         </div>
-       <table class="table datatable-basic">
+        
+        <table class="table datatable-save-state">
             <thead>
                 <tr>
                     <th>S/N</th>
                     <th>Name</th>
                     <th>Percent Amount(Day)</th>
-                    <th>Percent Amount(Night)</th>                    
+                    <th>Percent Amount(Night)</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
-
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
+                @php
+                    $SN = 1;
+                @endphp
+                @if (isset($data['overtime']))
+                    @foreach ($data['overtime'] as $row)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
+                            <td>{{ $SN++ }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->day_percent }}</td>
+                            <td>{{ $row->night_percent }}</td>
+                            <td class="text-center">
+                                <div class="d-inline-flex">
+                                    <div class="dropdown">
+                                        <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                            <i class="ph-list"></i>
+                                        </a>
 
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
-
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a href="#" class="dropdown-item">
+                                                <i class="ph-file-pdf me-2"></i>
+                                                Export to .pdf
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class="ph-file-xls me-2"></i>
+                                                Export to .csv
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class="ph-file-doc me-2"></i>
+                                                Export to .doc
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
-
                     @endforeach
-                    @endif
+                @endif
+
             </tbody>
         </table>
-      </div>
-  <!-- /basic datatable -->
-
-
-
+    </div>
+    <!-- /basic datatable -->
 @endsection
 
 @section('modal')
-
-@include('setting.overtime.add')
-
+    @include('setting.overtime.add')
 @endsection
 
 
@@ -111,7 +112,7 @@
 
 
                         <div class="tab-content tab-bordered" id="myTab3Content">
-                            <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
+                            <div class="tab-pane fade @if (empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
 
@@ -128,8 +129,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(isset($departments))
-                    @foreach($departments as $departments)
+                    @if (isset($departments))
+                    @foreach ($departments as $departments)
 
                         <tr>
                             <th>{{ $loop->iteration }}</th>

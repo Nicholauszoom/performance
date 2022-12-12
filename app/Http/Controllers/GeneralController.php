@@ -1759,7 +1759,7 @@ public function activatePosition(Request $request)
 
 
   public function applyOvertime(Request $request){
-
+    return $request->all();
 
       $start = $request->input('time_start');
       $finish = $request->input('time_finish');
@@ -4490,8 +4490,8 @@ public function common_deductions_info(Request $request) {
 
 
     public function addOvertimeCategory(Request $request)   {
-
-      if (Request::isMethod('post')) {
+      
+      if ($request->method()=='POST') {
         $data = array(
             'name' =>$request->input('name'),
             'day_percent' =>($request->input('day_percent')/100),
@@ -4500,7 +4500,8 @@ public function common_deductions_info(Request $request) {
           $result = $this->flexperformance_model->addOvertimeCategory($data);
           if($result==true){
             $this->flexperformance_model->audit_log("Created New Overtime ");
-              echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
+            return back()->with('success', 'Overtime Added Successifully');
+              // echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
           } else {
               echo "<p class='alert alert-warning text-center'>Overtime Registration FAILED, Please Try Again</p>";
           }
