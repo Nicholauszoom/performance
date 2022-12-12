@@ -66,7 +66,7 @@
     <div class="card-header border-0">
         <div class="d-flex">
 
-            <h3 class="me-4">Payroll Info</h3>
+            <h3 class="me-4">Payroll Details For The Date:: {{ $payrollMonth }}</h3>
 
             @if($payrollState == 1)
             <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">

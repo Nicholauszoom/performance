@@ -6,20 +6,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form {{-- action="{{ route('departments.store') }}" --}} method="POST" class="form-horizontal">
+            <form action="{{ route('flex.addOrganizationLevel') }}" method="POST" class="form-horizontal">
                 @csrf
 
                 <div class="modal-body">
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Organisation Level Name:</label>
                         <div class="col-sm-9">
-
-                            <select class="form-control select" name="nationality">
+                            <input id="name" type="text"  name="name"
+                                class="form-control" name="minSalary">
+                            {{-- <select class="form-control select" name="nationality">
                                 <option selected disabled> Select </option>
                                 {{-- @foreach ($overtimeCategories as $overtimeCategorie)
                                 <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}</option>
-                                @endforeach --}}
-                            </select>
+                                @endforeach 
+                            </select> --}}
 
                             @error('name')
                                 <p class="text-danger mt-1"> Input field Error </p>
@@ -30,7 +31,7 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Mininum Annual Basic Salary Range:</label>
                         <div class="col-sm-9">
-                            <input id="minSalary" type="number" min="100" max="10000000000" name=""
+                            <input id="minSalary" type="number" min="100" max="10000000000" name="minSalary"
                                 class="form-control" id="minSalary" name="minSalary" placeholder="Minimum Salary">
 
                             @error('name')
