@@ -13,7 +13,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>Account Coding </h3>
+        <h5>Account Coding </h5>
     </div>
     <table class="table datatable-basic">
         <thead>
@@ -23,7 +23,7 @@
                 <th>Name</th>
                 <th>Status</th>
                 <th class="text-center">Actions</th>
-                <th>action</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +34,10 @@
                 <td>{{ $row->code }}</td>
                 <td>{{ $row->name }}</td>
                 <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td>
-                <td>Actino</td>
+                <td>
+                    {{-- <a href=""
+                    class="btn btn-perfrom">View</a> --}}
+            </td>
                 <td></td>
 
             </tr>
