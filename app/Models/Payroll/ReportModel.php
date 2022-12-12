@@ -199,15 +199,15 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
     function temp_sum_take_home($date){
 
         $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS name,
-	IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID), 0) AS allowances,
-	pl.less_takehome,
-	pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
-	IF((SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '".$date."' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '".$date."' GROUP BY l.empID),0) AS loans,
-
-	IF((SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
-	b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
-	FROM employee e, temp_payroll_logs pl,  bank_branch bb, bank b  WHERE pl.empID = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '".$date."') as parent_query";
-        return DB::select(DB::raw($query));
+        IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID), 0) AS allowances,
+        pl.less_takehome,
+        pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
+        IF((SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '".$date."' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '".$date."' GROUP BY l.empID),0) AS loans,
+    
+        IF((SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
+        b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
+        FROM employee e, temp_payroll_logs pl,  bank_branch bb, bank b  WHERE pl.empID = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '".$date."') as parent_query";
+            return DB::select(DB::raw($query));
     }
 
     function temp_sum_take_home1($date){
@@ -1282,6 +1282,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             WHERE e.emp_id = pl.empID and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
       
       $data = DB::select(DB::raw($query));
+
+    
        if ($data){
             return $data[0]->total_gross;
         }else{
@@ -1312,7 +1314,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         WHERE e.emp_id = pl.empID and e.contract_type = 2 and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
 
         $row = DB::select(DB::raw($query));
-        if ($row[0]){
+        //dd($row);
+        if ($row){
             return $row[0]->total_gross;
         }else{
             return null;

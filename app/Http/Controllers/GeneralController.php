@@ -2171,7 +2171,7 @@ public function activatePosition(Request $request)
 
    }
 
-    public function cancelOvertime(Request $request, $id) {
+    public function cancelOvertime($id) {
 
 
 
