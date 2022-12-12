@@ -2,10 +2,14 @@
 
 @push('head-script')
     {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
     {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -42,8 +46,8 @@ $employee = $data['employee'];
             </thead>
 
             <tbody>
-                @if(isset($departments))
-                    @foreach($departments as $department)
+                @if(isset($data['departments']))
+                    @foreach($data['departments'] as $department)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $department->name }}</td>

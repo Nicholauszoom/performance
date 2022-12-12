@@ -150,7 +150,7 @@ class BaseController extends Controller
       }
     } else {
       $data['title'] = "login";
-      return view('app.login', $data);
+      return view('auth.login', $data);
     }
   }
 

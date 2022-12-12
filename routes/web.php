@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
         'users' => UsersController::class,
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
+
         'skill' => SkillsController::class,
         'trainingApp'=>TrainingAppController::class,
     ]);
@@ -95,6 +96,8 @@ Route::middleware('auth')->group(function () {
 
     // Employee overtime
 
+//routes for setting
+Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
 
 

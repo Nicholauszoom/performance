@@ -32,12 +32,11 @@
                             @endforeach
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label class="">Reports To</label>
                         <select name="department_id" class="form-control m-b"  required>
                             <option value="">Select Department</option>
-                            @foreach($departments as $key => $row)
+                            @foreach($data['departments'] as $key => $row)
                                 <option value="{{$row->id}}"> {{$row->name}} </option>
                             @endforeach
                             
