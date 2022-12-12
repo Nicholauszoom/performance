@@ -1,12 +1,10 @@
 @extends('layouts.vertical', ['title' => 'Settings'])
 
 @push('head-script')
-  {{-- <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script> --}}
   <script src="{{ asset('assets/js/components/notifications/bootbox.min.js') }}></script>
 @endpush
 
 @push('head-scriptTwo')
-  {{-- <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script> --}}
   <script src="{{ asset('assets/js/pages/components_modals.js') }}"></script>
 @endpush
 
