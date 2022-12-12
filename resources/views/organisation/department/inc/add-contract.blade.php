@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Duration (Years)</label>
+                        <label class="col-form-label col-sm-3">Duratio (Years)</label>
                         <div class="col-sm-9">
                             <input id="minSalary" type="number" min="100" max="10000000000" name=""
                                 class="form-control" id="minSalary" name="minSalary" placeholder="Minimum Salary">

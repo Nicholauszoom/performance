@@ -412,6 +412,8 @@
                     url: "{{ route('positionFetcher') }}",
                     data: 'dept_id=' + stateID,
                     success: function(html) {
+                        console.log(html);
+                        
                         let jq_json_obj = $.parseJSON(html);
                         let jq_obj = eval(jq_json_obj);
 

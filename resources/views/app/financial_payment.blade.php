@@ -46,13 +46,14 @@
                                 Imprest
                             </a>
                         </li>
+                        <!--
                         <li class="nav-item" role="presentation">
                             <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
                                 tabindex="-1">
                                 <i class="ph-at me-2"></i>
                                 Salary Advance
                             </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item" role="presentation">
                             <a href="#incentivesTab" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
@@ -385,6 +386,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--
                         <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="x_panel">
@@ -510,7 +512,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div role="tabpanel" class="tab-pane fade" id="imprestTab"
                         aria-labelledby="profile-tab">
                         <div id="resultfeedImprest"></div>
@@ -658,7 +660,7 @@
                                                                 onclick="approveImprest(<?php echo $row->id; ?>)"
                                                                 title="Approve">
                                                                 <button class="btn btn-success btn-xs">
-                                                                    <i class="fa fa-check"></i></button>
+                                                                    <i class="fa fa-check"></i>aprove</button>
                                                             </a>
                                                             <?php }
                                                     }
@@ -1155,7 +1157,7 @@
 
  @include('app.includes.overtime_operations')
  @include("app.includes.update_allowances")
-    @include("app.includes.loan_operations")
+@include("app.includes.loan_operations")
 
 
 

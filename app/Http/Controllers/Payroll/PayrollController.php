@@ -626,12 +626,12 @@ class PayrollController extends Controller
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
             $data['employee'] = $this->payroll_model->customemployee();
-            $title = "Comission and Bonuses";
-            $parent = "Payroll";
-            $child = "Incentives";
+            $data["title"] = "Comission and Bonuses";
+            $data["parent"] = "Payroll";
+            $data["child"] = "Incentives";
 
 
-            return view('payroll.comission_bonus',compact('title','parent','child','data'));
+            return view('app.comission_bonus',$data);
         // } else {
         //     echo "Unauthorized Access";
         // }

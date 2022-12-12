@@ -1,107 +1,86 @@
 
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Employee'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
 
+  @if (session('mng_emp') || session('vw_emp') || session('appr_emp'))
+  <div class="card">
+    <div class="card-header mb-0">
+      <h5 class="text-muted">Employees</h5>
+    </div>
 
-        <?php if(session('mng_emp') || session('vw_emp') || session('appr_emp')){  ?> 
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <h4 class="lead">List of Employees</h4>
 
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Employees </h3>
-              </div>
-            </div>
-            <div class="clearfix"></div>
+        @if (session('mng_emp'))
+          <a href="{{ url('/flex/addEmployee') }}" class="btn btn-main">
+            <i class="ph-plus me-2"></i> Register Employee
+          </a>
+        @endif
+      </div>
+    </div>
 
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                      <div class="row">
-                          <div class="col-md-9">
-                              <h2>List of Employees </h2>
-                          </div>
-                          <div class="col-md-3">
-                              <?php  if( session('mng_emp')){ ?>
-
-                                  <a href="<?php echo  url(''); ?>/flex/addEmployee"><button type="button" class="btn btn-primary">Register New Employee</button></a>
-
-                                  <!-- <a href="<?php echo  url(''); ?>/flex/appreciation"><button type="button" class="btn btn-success"><i class="fa fa-user"></i>&nbsp; Employee Of The Month</button></a> <?php //} ?>
-                    -->
-                              <?php } ?>
-                          </div>
-                      </div>
-
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                  
-<!--                   --><?php //echo session("note");  ?>
-                   <div id="feedBack"></div>
-                    <table id="datatable" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>No.</th>
-                          <th>Name</th>
-                          <th>Gender</th>
-                          <th>Position</th>
-                          <th>Linemanager</th>
-                          <th>Contacts</th>
-                          <th>Options</th>
-                        </tr>
-                      </thead>
+    <table id="datatable" class="table table-striped table-bordered datatable-basic">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Position</th>
+          <th>Linemanager</th>
+          <th>Contacts</th>
+          <th>Options</th>
+        </tr>
+      </thead>
 
 
-                      <tbody>
-                        <?php
-                          foreach ($employee as $row) { 
-                            $empid= $row->emp_id; ?>
-                          <tr>
-                            <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>">
-                            <font color="blue"><?php echo $row->NAME; ?></font></a></td>
-                            <td ><?php echo $row->gender; ?></td>
-                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            <td><?php echo $row->LINEMANAGER; ?></td>
-                            <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
-                            
-
-                            <td class="options-width">
-                                <a  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                
-                                <?php if( session('mng_emp')){ ?>
-                                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></button> </a>
-
-                                <a href="<?php echo  url(''); ?>/flex/updateEmployee/?id=".$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button> </a>
-                                <a href="<?php echo  url('')."flex/project/evaluateEmployee/?id=".$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button> </a>
-                                <?php } ?>
-                            </tr>
-                          <?php } ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-        <!-- /page content -->
-        <?php } ?>
+      <tbody>
+        <?php
+          foreach ($employee as $row) {
+            $empid= $row->emp_id; ?>
+          <tr>
+            <td width="1px"><?php echo $row->SNo; ?></td>
+            <td><a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/?id='.$row->emp_id; ?>">
+            <font color="blue"><?php echo $row->NAME; ?></font></a></td>
+            <td ><?php echo $row->gender; ?></td>
+            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+            <td><?php echo $row->LINEMANAGER; ?></td>
+            <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
 
 
-    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <td class="options-width">
+                <a  href="<?php echo  url('') .'/flex/userprofile/?id=' .$row->emp_id; ?>"  title="Info and Details" class="icon-2 info-tooltip">
+                  <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button> </a>
+
+                <?php if( session('mng_emp')){ ?>
+                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate" class="icon-2 info-tooltip">
+                  <button type="button" class="btn btn-danger btn-xs"><i class="ph-prohibit"></i></button>
+                </a>
+
+                <a href="<?php echo  url('') .'/flex/updateEmployee/?id='.$row->emp_id."|".$row->department; ?>" title="Update" class="icon-2 info-tooltip">
+                  <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
+                </a>
+                {{-- <a href="<?php echo  url('').'flex/project/evaluateEmployee/?id='.$row->emp_id.'|'.$row->department; ?>" title="Update" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button> </a> --}}
+                <?php } ?>
+            </tr>
+          <?php } ?>
+      </tbody>
+    </table>
+  </div>
+  @endif
+
+
+
+  <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -120,14 +99,20 @@
 
                 </div>
             </div>
-
         </div>
     </div>
-</div>
+  </div>
 
 
 
-<script>
+
+
+ @endsection
+
+
+ @push('footer-scripts')
+
+ <script>
 
   function requestDeactivation(id) {
 
@@ -139,7 +124,7 @@
 
       $("#yes_delete").click(function () {
           $.ajax({
-              url:"<?php echo url('flex/employee_exit');?>/"+id,
+              url:"{{ url('flex/employee_exit') }}/"+id,
               success:function(data)
               {
                   // console.log(data);
@@ -179,7 +164,7 @@
     //
     // }
   }
-</script>    
+</script>
 
 
 
@@ -231,12 +216,5 @@
         alert("hello world");
     }
 
-    <?php if (session("note")){
-        echo "notify('Employee state changed successfuly!!', 'top', 'right', 'success');";
-
-    } ?>
-
-
 </script>
-
- @endsection
+@endpush

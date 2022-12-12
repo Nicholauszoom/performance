@@ -47,7 +47,7 @@ class PerformanceModel extends Model
 	function allTaskcompleted($id)
 	{
 		$query = "SELECT  t.id FROM task t WHERE t.status = 2 and t.assigned_to ='".$id."'";
-		return $query->num_rows();
+		return DB::select(DB::raw($query));
 	}
 
 	function all_task_monetary_value($id)
