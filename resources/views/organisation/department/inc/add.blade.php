@@ -27,18 +27,20 @@
                     <div class="form-group">
                         <label class="">Head os Department</label>
                         <select name="department_id" class="form-control m-b"  required>
-                            @if(!empty($employee))
-                            @foreach($employee as  $row)
-                               
-                               <option value="">{{$row}}</option>
+                            @foreach($employee as $key => $row)
+                                <option value="{{$row->empID}}">{{$row->NAME}}</option>
                             @endforeach
-                            @endif
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label class="">Reports To</label>
                         <select name="department_id" class="form-control m-b"  required>
                             <option value="">Select Department</option>
+                            @foreach($departments as $key => $row)
+                                <option value="{{$row->id}}"> {{$row->name}} </option>
+                            @endforeach
+                            
                         </select>
                     </div>
 
