@@ -1,4 +1,4 @@
-<div id="save_department" class="modal fade" tabindex="-1">
+<div id="save_allowance" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +7,7 @@
             </div>
 
             <form
-                action="{{ route('departments.store') }}"
+                action="{{ route('flex.addAllowance') }}"
                 method="POST"
                 class="form-horizontal"
             >
@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-group">
                         <label class="">Payment Policy</label>
-                        <select name="department_id" class="form-control m-b"  required>
+                        <select name="policy" class="form-control m-b"  required>
                             <option value="fixedAmount">Fixed Amount</option>
                             <option value="percBasicSalary"> Percent From Basic Salary</option>
                            
@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Percent</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+                            <input type="number" name="rate"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Amount</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+                            <input type="number" name="amount"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>
