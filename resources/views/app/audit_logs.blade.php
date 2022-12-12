@@ -1,43 +1,48 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
 
-<?php 
+<?php
   ////$CI_Model = get_instance();
-  //$CI_Model->load->model('flexperformance_model'); 
+  //$CI_Model->load->model('flexperformance_model');
 ?>
 
 
         <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Audit Trail </h3>
-              </div>
-            </div>
+         <div class="card">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+            <h5 class="mb-0">User Activity Logs</h5>
 
-            <div class="clearfix"></div>
 
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>User Activity Logs 
-                    <?php if(!empty($logs) && session('mng_audit')){ ?><a href="<?php echo url('flex/export_audit_logs/');?>" title="Export and Delete" class="icon-2 info-tooltip" target="_blank"><button id="purge_btn" type="button"  class="btn btn-primary">PURGE LOGS</button></a> <?php } ?></h2>
+                    <?php if(!empty($logs) && session('mng_audit')){ ?><a href="<?php echo url('flex/export_audit_logs/');?>"
+                      title="Export and Delete"
+                       class="icon-2 info-tooltip"
+                       target="_blank">
+                       <button   type="button"
+                    class="btn btn-perfrom"
+                    data-bs-toggle="modal"
+                    data-bs-target="#save_department">
+              PURELOGS
+
+          </button>
+           </div>
+                      </a> <?php } ?>
+                    </h5>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
                   <div id="feedBack"></div>
-                    <table id="datatable" class="table table-striped table-bordered">
+                    <table id="datatable" class="table datatable-basic">
                       <thead>
                         <tr>
                           <th>S/N</th>
@@ -61,7 +66,7 @@
                             <td><?php echo $row->description; ?></td>
                             <td><?php echo "<b>Platform: </b>".$row->platform."<br><b>Agent: </b>".$row->agent; ?></td>
                             <td><?php echo "<b>Date: </b>".$row->dated."<br><b>Time: </b>".$row->timed; ?></td>
-                            
+
                            </tr>
                           <?php $sno++; }  ?>
                         <?php
@@ -80,19 +85,20 @@
                       </tbody>
                     </table>
                   </div>
+                  </div>
                 </div>
               </div>
-              
+
 
             </div>
           </div>
         </div>
 
-        
+
 
 
         <!-- /page content -->
- 
+
 
 
 <script type="text/javascript">
@@ -108,7 +114,7 @@ function exportLogs()
     {
         if (confirm("Are You Sure You Want To Export and Delete This Audit Trails?") == true) {
         var id = id;
-        
+
         $.ajax({
             url:"<?php echo url('flex/export_audit_logs/');?>",
             success:function(data)
@@ -117,10 +123,10 @@ function exportLogs()
             // setTimeout(function() {
             //       location.reload();
             //     }, 2000);
-            
+
           }
-                    
-               
+
+
             });
         }
     }
