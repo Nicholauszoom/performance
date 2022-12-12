@@ -176,16 +176,9 @@
 </div>
 
 
+@endsection
 
-
-
-
-
-
-
- @endsection
-
- @push('footer-script')
+@push('footer-script')
 {{-- all page scripts --}}
 
  @include('app.includes.imprest_operations')
