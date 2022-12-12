@@ -1,11 +1,11 @@
 @extends('layouts.vertical', ['title' => 'Allowance'])
 
 @push('head-script')
-    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -26,7 +26,7 @@
 
           </button>
           </div>
-          
+
         </div>
        <table class="table datatable-basic">
             <thead>
@@ -34,7 +34,7 @@
                     <th>S/N</th>
                     <th>Name</th>
                     <th>Amount</th>
-                    
+
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -46,7 +46,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $department->name }}</td>
                             <td> HOD </td>
-                           
+
                             <td align="center">
                                 {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
 

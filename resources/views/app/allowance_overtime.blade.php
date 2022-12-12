@@ -1,11 +1,11 @@
 @extends('layouts.vertical', ['title' => 'Overtime'])
 
 @push('head-script')
-    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -26,7 +26,7 @@
 
           </button>
           </div>
-          
+
         </div>
        <table class="table datatable-basic">
             <thead>
@@ -34,7 +34,7 @@
                     <th>S/N</th>
                     <th>Name</th>
                     <th>Percent Amount(Day)</th>
-                    <th>Percent Amount(Night)</th>                    
+                    <th>Percent Amount(Night)</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
