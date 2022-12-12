@@ -4407,11 +4407,12 @@ public function common_deductions_info(Request $request) {
 
     if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
       $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
-      $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
+      // $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
-      return view('app.allowance_overtime', $data);
+      // dd($data);
+      return view('app.allowance_overtime', compact('data'));
 
     }else{
       echo "Unauthorized Access";
@@ -4491,7 +4492,15 @@ public function common_deductions_info(Request $request) {
       }
 
    }
-
+  //  public function getOvertimeAllowance(){
+  //   if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
+  //   $data['overtimeData'] = $this->flexperformance_model->overtime_allowances();
+  //   dd($data);
+  //   return view('app.allowance_overtime', $data);
+  //  }else{
+  //   echo 'Unauthorized Access';
+  //  }
+  // }
 
     public function addOvertimeCategory(Request $request)   {
       
@@ -4503,7 +4512,7 @@ public function common_deductions_info(Request $request) {
           );
           $result = $this->flexperformance_model->addOvertimeCategory($data);
           if($result==true){
-            $this->flexperformance_model->audit_log("Created New Overtime ");
+            // $this->flexperformance_model->audit_log("Created New Overtime ");
             return back()->with('success', 'Overtime Added Successifully');
               // echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
           } else {

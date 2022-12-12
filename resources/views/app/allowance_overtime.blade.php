@@ -24,7 +24,11 @@
                 </button>
             </div>
         </div>
-        
+        @if (Session::has('success'))
+            <div class="alert alert-success center" align='center' role="alert">
+                <p class="text-center" >{{ Session::get('success') }}</p>
+            </div>
+        @endif
         <table class="table datatable-save-state">
             <thead>
                 <tr>
@@ -39,13 +43,14 @@
                 @php
                     $SN = 1;
                 @endphp
-                @if (isset($data['overtime']))
-                    @foreach ($data['overtime'] as $row)
+                @if (isset($data['overtimes']))
+                    @foreach ($data['overtimes'] as $row)
                         <tr>
                             <td>{{ $SN++ }}</td>
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->day_percent }}</td>
                             <td>{{ $row->night_percent }}</td>
+                            <td></td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <div class="dropdown">
