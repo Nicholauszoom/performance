@@ -1458,6 +1458,7 @@
             $.ajax({
                 url: "<?php echo url('flex/payroll/cancelpayroll');?>",
                 success: function (data) {
+                    var data = JSON.parse(data);
                     if (data.status == 'OK') {
                         // alert("Payroll was Cancelled Successifully!");
                         //
@@ -1466,7 +1467,7 @@
                         // });
 
                         $('#delete').modal('hide');
-                        notify('Payroll cancelled successfully!', 'top', 'right', 'success');
+                         notify('Payroll cancelled successfully!', 'top', 'right', 'success');
 
                         setTimeout(function () {// wait for 2 secs(2)
                             location.reload(); // then reload the div to clear the success notification

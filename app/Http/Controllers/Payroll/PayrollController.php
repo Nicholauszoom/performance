@@ -1279,38 +1279,43 @@ class PayrollController extends Controller
     {
 
         /*get the payroll month*/
-        $result_month = $this->payroll_model->getPayrollMonth1();
-        $this_payroll = $this->payroll_model->payrollMonthListpending();
-        $payroll_id = $this_payroll[0]->id;
-        foreach ($result_month as $item) {
-            $cancel_date = $item->payroll_date;
-        }
-        foreach ($this_payroll as $item) {
-            $payroll_id = $item->id;
+        // $result_month = $this->payroll_model->getPayrollMonth1();
+        // $this_payroll = $this->payroll_model->payrollMonthListpending();
+        // $payroll_id = $this_payroll[0]->id;
+        // foreach ($result_month as $item) {
+        //     $cancel_date = $item->payroll_date;
+        // }
+        // foreach ($this_payroll as $item) {
+        //     $payroll_id = $item->id;
 
-        }
+        // }
 
-        $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
-        if ($initial_delete) {
-            $result = $this->payroll_model->cancel_payroll();
+        // $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
+        // if ($initial_delete) {
+        //     $result = $this->payroll_model->cancel_payroll();
 
-            if ($result == true) {
-                $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successifully</p>";
-                header('Content-type: application/json');
-                echo json_encode($response_array);
-            } else {
-                $response_array['status'] = "ERR";
-                $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! Payroll NOT Approved, Please Try again, If the Error persists Contact Your System Admin</p>";
-                header('Content-type: application/json');
-                echo json_encode($response_array);
-            }
-        } else {
-            $response_array['status'] = "ERR";
+        //     if ($result == true) {
+        //         $response_array['status'] = "OK";
+        //         $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successifully</p>";
+        //         header('Content-type: application/json');
+        //         echo json_encode($response_array);
+        //     } else {
+        //         $response_array['status'] = "ERR";
+        //         $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! Payroll NOT Approved, Please Try again, If the Error persists Contact Your System Admin</p>";
+        //         header('Content-type: application/json');
+        //         echo json_encode($response_array);
+        //     }
+        // } else {
+        //     $response_array['status'] = "ERR";
+        //     $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! Payroll NOT Approved, Please Try again, If the Error persists Contact Your System Admin</p>";
+        //     header('Content-type: application/json');
+        //     echo json_encode($response_array);
+        // }
+
+        $response_array['status'] = "ERR";
             $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! Payroll NOT Approved, Please Try again, If the Error persists Contact Your System Admin</p>";
             header('Content-type: application/json');
             echo json_encode($response_array);
-        }
 
     }
 
