@@ -4459,8 +4459,8 @@ public function common_deductions_info(Request $request) {
 
 
     public function addAllowance(Request $request)   {
-
-      if (Request::isMethod('post')) {
+      $method = $request->method();
+      if ($method=='POST') {
         $policy = $request->input('policy');
         if($policy==1){
           $amount = $request->input('amount');
@@ -4479,8 +4479,9 @@ public function common_deductions_info(Request $request) {
 
           $result = $this->flexperformance_model->addAllowance($data);
           if($result==true){
-            $this->flexperformance_model->audit_log("Created New Allowance ");
-              echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+              return back()->with('success', 'Allowance Registered Successifully');
+              // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
           } else {
                echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
           }
