@@ -28,13 +28,13 @@
                     </a>
                 </li>
 
-
+{{--               
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/flex/project/') }}">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
                     </a>
-                </li>
+                </li>  --}}
 
 
                 <li class="nav-item nav-item-submenu">
@@ -71,22 +71,9 @@
                 </li>
 
 
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-calendar-check"></i>
-                        <span> Leave and Attendance</span>
-                    </a>
+               
 
-                    <ul class="nav-group-sub collapse">
-                        @if (session('mng_attend'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li>
-                        @endif
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leave') }}">Leave Applications</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leavereport') }}">Leave Reports</a></li>
-                    </ul>
-                </li>
-
-
+              <!--
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-bank"></i>
@@ -96,7 +83,7 @@
                     <ul class="nav-group-sub collapse">
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Applications</a></li>
                     </ul>
-                </li>
+                </li> -->
 
 
                 <li class="nav-item nav-item-submenu">
@@ -122,7 +109,20 @@
                         @endif
                     </ul>
                 </li>
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-calendar-check"></i>
+                        <span> Leave and Attendance</span>
+                    </a>
 
+                    <ul class="nav-group-sub collapse">
+                        @if (session('mng_attend'))
+                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li>
+                        @endif
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leave') }}">Leave Applications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leavereport') }}">Leave Reports</a></li>
+                    </ul>
+                </li>
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">

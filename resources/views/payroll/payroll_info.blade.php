@@ -206,14 +206,14 @@
                     </a>
 
                     <?php if($payrollState == 0) {?>
-                    <a class="m-3" target="_self" href="{{route('grossReconciliation',['pdate',base64_encode($payrollMonth)])}}">
+                    <a class="m-3" target="_self" href="{{route('grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">GROSS RECON</button>
                     </a>
 
-                    <a class="m-3" target="_self" href="{{route('netReconciliation',['pdate',base64_encode($payrollMonth)])}}">
+                    <a class="m-3" target="_self" href="{{route('netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">NET RECON</button>
                     </a>
-                    <!-- <a class="m-3" target="_self" href="{{route('sendReviewEmail',['pdate',base64_encode($payrollMonth)])}}"><button
+                    <!-- <a class="m-3" target="_self" href="{{route('sendReviewEmail',['pdate'=>base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>
                 </div>
