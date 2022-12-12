@@ -26,13 +26,13 @@
 
         <div class="card-body">
           <form
-          id="applyOvertime"
-          enctype="multipart/form-data"
-          method="post"
-          data-parsley-validate
-          class="form-horizontal form-label-left"
-          autocomplete="off"
-        >
+            id="applyOvertime"
+            enctype="multipart/form-data"
+            method="post"
+            data-parsley-validate
+            class="form-horizontal form-label-left"
+            autocomplete="off"
+          >
           @csrf
 
           <div class="modal-body">
