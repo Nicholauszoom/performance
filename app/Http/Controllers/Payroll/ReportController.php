@@ -180,10 +180,10 @@ function p10(Request $request)  {
         $data['info']= $this->reports_model->company_info();
 
 
-$paye=$data['paye'];
-$sdl=$data['sdl'];
-$total=$data['total'];
-$info=$data['info'];
+        $paye=$data['paye'];
+        $sdl=$data['sdl'];
+        $total=$data['total'];
+        $info=$data['info'];
 
         include(app_path() . '/reports/p10.php');
         //  return view('app.reports/p10', $data);
