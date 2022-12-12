@@ -1,4 +1,4 @@
-<script type="text/javascript">        
+<script type="text/javascript">
 
   $(document).ready(function() {
     $('#imprest_startDate').daterangepicker({
@@ -7,7 +7,7 @@
         format: 'DD/MM/YYYY'
       },
       singleClasses: "picker_1",
-      startDate: "<?php echo date('d/m/Y', strtotime($startDate)); ?>"
+      startDate: "<?php if(isset($startDate)){echo date('d/m/Y', strtotime($startDate));} ?>"
     }, function(start, end, label) {
       console.log(start.toISOString(), end.toISOString(), label);
     });
@@ -24,15 +24,15 @@
         format: 'DD/MM/YYYY'
       },
       singleClasses: "picker_1",
-      startDate: "<?php echo date('d/m/Y', strtotime($endDate)); ?>"
+      startDate: <?php if(isset($endDate)){echo date('d/m/Y', strtotime($endDate));} ?>"
     }, function(start, end, label) {
       console.log(start.toISOString(), end.toISOString(), label);
     });
   });
 </script>
 
-<script type="text/javascript">        
-    
+<script type="text/javascript">
+
   function deleteImprest(id){
     if (confirm("Are You Sure You Want To CANCEL/DELETE This Imprest (All Requirement Associated With It Will Be Deleted Too) ?") == true) {
     var id = id;
@@ -45,7 +45,7 @@
           alert("Imprest Deleted Sussessifully!");
           setTimeout(function(){// wait for 5 secs(2)
           location.reload(); // then reload the page.(3)
-        }, 2000); 
+        }, 2000);
           $('#recordImprest'+id).hide();
           }else{
           alert("Imprest Not Deleted, Some Error Occured In Deleting");
@@ -53,27 +53,27 @@
        $('#resultFeedback').fadeOut('fast', function(){
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
-        
-           
+
+
         }
-           
+
         });
     }
-  }      
-    
+  }
+
   function deleteRequirement(id){
     if (confirm("Are You Sure You Want To Delete This Requirement") == true) {
     var id = id;
     // $('#recordRequirement'+id).show();
     $.ajax({
-        url:"<?php echo url('flex/imprest/deleteRequirement');?>/"+id,
+        url:'{{ url("flex/imprest/deleteRequirement") }}/'+id,
         success:function(data)
         {
           if(data.status == 'OK'){
           alert("Requirement Deleted Sussessifully!");
           setTimeout(function(){// wait for 5 secs(2)
           location.reload(); // then reload the page.(3)
-        }, 2000); 
+        }, 2000);
           }else if(data.status != 'SUCCESS'){
           alert("Requirement Not Deleted, Some Error Occured In Deleting");
           }
@@ -81,13 +81,13 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
         $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
-  }       
-    
+  }
+
   function approveRequirement(id){
     if (confirm("Are You Sure You Want To Approve This Requirement") == true) {
     var id = id;
@@ -100,7 +100,7 @@
           alert("Requirement Approved Sussessifully!");
           setTimeout(function(){// wait for 5 secs(2)
           location.reload(); // then reload the page.(3)
-        }, 2000); 
+        }, 2000);
           }else if(data.status != 'SUCCESS'){
           alert("Requirement Not Approved, Some Error Occured In Deleting");
           }
@@ -108,14 +108,14 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
         // $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
   }
 
-    
+
   function disapproveRequirement(id){
     if (confirm("Are You Sure You Want To Approve This Requirement") == true) {
     var id = id;
@@ -128,7 +128,7 @@
           alert("Requirement Disapproved Sussessifully!");
           setTimeout(function(){// wait for 5 secs(2)
           location.reload(); // then reload the page.(3)
-        }, 2000); 
+        }, 2000);
           }else if(data.status != 'SUCCESS'){
           alert("Failed, Some Error Occured In Deleting");
           }
@@ -136,15 +136,15 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
         // $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
   }
 
 
-    
+
   function confirmRequirement(id){
     if (confirm("Are You Sure You Want To Confirm This Requirement") == true) {
     var id = id;
@@ -157,7 +157,7 @@
           alert("Requirement Confirmed Sussessifully!");
           setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
           }else if(data.status != 'SUCCESS'){
           alert("Failed, Some Error Occured In Confirmation");
           }
@@ -165,14 +165,14 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
         });
          $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
   }
 
-    
+
   function unconfirmRequirement(id){
     if (confirm("Are You Sure You Want To Unconfirm This Requirement") == true) {
     var id = id;
@@ -185,7 +185,7 @@
           alert("Requirement Unconfirmed Sussessifully!");
           setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
           }else if(data.status != 'SUCCESS'){
           alert("Failed, Some Error Occured In Deleting");
           }
@@ -193,9 +193,9 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
         // $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
   }
@@ -211,7 +211,7 @@
           alert("Requirement Confirmed Sussessifully!");
           setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
           }else if(data.status != 'SUCCESS'){
           alert("Failed, Some Error Occured In Deleting");
           }
@@ -219,9 +219,9 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
         // $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
   }
@@ -237,7 +237,7 @@
           alert("Requirement Unconfirmed Sussessifully!");
           setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
           }else if(data.status != 'SUCCESS'){
           alert("Failed, Some Error Occured In Deleting");
           }
@@ -245,15 +245,15 @@
       $('#resultFeedback').fadeIn('fast').html(data.message);
     });
         // $('#recordRequirement'+id).hide();
-           
+
         }
-           
+
         });
     }
   }
 
 
-    
+
   function deleteEvidence(id){
     if (confirm("Are You Sure You Want To Delete Evidence for This Requirement") == true) {
     var id = id;
@@ -267,11 +267,11 @@
         });
        setTimeout(function(){// wait for 5 secs(2)
           location.reload(); // then reload the page.(3)
-        }, 2000); 
+        }, 2000);
 
-           
+
         }
-           
+
         });
     }
   }
@@ -279,7 +279,7 @@
 
 <script type="text/javascript">
     $('#addRequirement').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/add_imprest_requirement",
                  type:"post",
@@ -295,21 +295,21 @@
             });
     $('#addRequirement')[0].reset();
     setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
         })
         .fail(function(){
-     alert('Failed To Add!! ...'); 
+     alert('Failed To Add!! ...');
      setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
         });
-    }); 
+    });
 </script>
 
 <script type="text/javascript">
     $('#update_imprestTitle').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/updateImprestTitle",
                  type:"post",
@@ -324,23 +324,23 @@
               $('#resultFeed').fadeIn('fast').html(data);
             });
             setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
-    
+          location.reload();
+        }, 1500);
+
         })
         .fail(function(){
-     alert('Upload Failed!! ...'); 
+     alert('Upload Failed!! ...');
      setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
         });
-    }); 
+    });
 </script>
 
 
 <script type="text/javascript">
     $('#update_imprestDescription').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/updateImprestDescription",
                  type:"post",
@@ -355,23 +355,23 @@
               $('#resultFeed').fadeIn('fast').html(data);
             });
             setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
-    
+          location.reload();
+        }, 1500);
+
         })
         .fail(function(){
-     alert('Upload Failed!! ...'); 
+     alert('Upload Failed!! ...');
      setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
         });
-    }); 
+    });
 </script>
 
 
 <script type="text/javascript">
     $('#updateImprestDateRange').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/updateImprestDateRange",
                  type:"post",
@@ -386,17 +386,17 @@
               $('#resultFeed').fadeIn('fast').html(data);
             });
             setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
-    
+          location.reload();
+        }, 1500);
+
         })
         .fail(function(){
-     alert('Upload Failed!! ...'); 
+     alert('Upload Failed!! ...');
      setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
         });
-    }); 
+    });
 </script>
 
 
@@ -407,7 +407,7 @@
     {
         if (confirm("Are You Sure You Want to Hold This Imprest Request") == true) {
         var overtimeid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/holdImprest');?>/"+overtimeid
             })
@@ -418,22 +418,22 @@
              $('#status'+id).fadeOut('fast', function(){
                   $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">HELD</span></div>');
                 });
-             alert('Request Held!'); 
+             alert('Request Held!');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Hold Failed!! ...'); 
+             alert('Imprest Hold Failed!! ...');
                 });
         }
     }
-    
+
      function approveImprest(id)
     {
         if (confirm("Are You Sure You Want to Approve This Imprest Request") == true) {
         var overtimeid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/approveImprest');?>/"+overtimeid
             })
@@ -447,16 +447,16 @@
              $('#record'+id).fadeOut('fast', function(){
                   $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
                 });
-             alert('Request Approved Successifully!! ...'); 
+             alert('Request Approved Successifully!! ...');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Approval Failed!! ...'); 
+             alert('Imprest Approval Failed!! ...');
              setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
                 });
         }
     }
@@ -465,7 +465,7 @@
     {
         if (confirm("Are You Sure You Want to Dissaprove This Imprest Request") == true) {
         var overtimeid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/disapproveImprest');?>/"+overtimeid
             })
@@ -479,26 +479,26 @@
              $('#record'+id).fadeOut('fast', function(){
                   $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>');
                 });
-             alert('Request Dissaproved! ...'); 
+             alert('Request Dissaproved! ...');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Dissaproval Failed!! ...'); 
+             alert('Imprest Dissaproval Failed!! ...');
              setTimeout(function(){
-          location.reload(); 
-        }, 1500); 
+          location.reload();
+        }, 1500);
                 });
         }
     }
-    
-    
+
+
     function recommendImprest(id)
     {
         if (confirm("Are You Sure You Want to Recommend This Imprest Request") == true) {
         var overtimeid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/recommendImprest');?>/"+overtimeid
             })
@@ -509,23 +509,23 @@
              $('#status'+id).fadeOut('fast', function(){
                   $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>');
                 });
-             alert('Request Recommended Successifully!! ...'); 
+             alert('Request Recommended Successifully!! ...');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Recommendation Failed!! ...'); 
+             alert('Imprest Recommendation Failed!! ...');
                 });
         }
     }
 
-        
+
     function hr_recommendImprest(id)
     {
         if (confirm("Are You Sure You Want to Recommend This Imprest Request") == true) {
         var overtimeid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/hr_recommendImprest');?>/"+overtimeid
             })
@@ -536,24 +536,24 @@
              $('#status'+id).fadeOut('fast', function(){
                   $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>');
                 });
-             alert('Request Recommended Successifully!! ...'); 
+             alert('Request Recommended Successifully!! ...');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Recommendation Failed Unconfirmed Reuirements!! ...'); 
+             alert('Imprest Recommendation Failed Unconfirmed Reuirements!! ...');
                 });
         }
     }
-    
-    
-    
+
+
+
     function confirmImprest(id)
     {
         if (confirm("Are You Sure You Want to Confirm This Imprest Request, Action can not be Reversed") == true) {
         var imprestid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/confirmImprest');?>/"+imprestid
             })
@@ -564,22 +564,22 @@
              $('#status'+id).fadeOut('fast', function(){
                   $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>');
                 });
-             alert('Request Confirmed Successifully!! ...'); 
+             alert('Request Confirmed Successifully!! ...');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Confirmation Failed!! ...'); 
+             alert('Imprest Confirmation Failed!! ...');
                 });
         }
     }
-    
+
     function unconfirmImprest(id)
     {
         if (confirm("Are You Sure You Want to Unconfirm This Imprest Request") == true) {
         var imprestid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/unconfirmImprest');?>/"+imprestid
             })
@@ -590,22 +590,22 @@
              $('#status'+id).fadeOut('fast', function(){
                   $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>');
                 });
-             alert('Request Confirmed Successifully!! ...'); 
+             alert('Request Confirmed Successifully!! ...');
              setTimeout(function(){// wait for 2 secs(2)
                      location.reload(); // then reload the div to clear the success notification
-                }, 1500); 
+                }, 1500);
                 })
             .fail(function(){
-             alert('Imprest Confirmation Failed!! ...'); 
+             alert('Imprest Confirmation Failed!! ...');
                 });
         }
     }
-    
+
     function confirmImprestRetirement(id)
     {
         if (confirm("Are You Sure You Want to Confirm Retirement for This Imprest Request, Action can not be Reversed") == true) {
         var imprestid = id;
-  
+
             $.ajax({
                 url: "<?php echo url('flex/imprest/confirmImprestRetirement');?>/"+imprestid
             })
@@ -616,14 +616,14 @@
              $('#status'+id).fadeOut('fast', function(){
                   $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>');
                 });
-             alert('Request Confirmed Successifully!! ...'); 
+             alert('Request Confirmed Successifully!! ...');
              setTimeout(function(){
                      location.reload();
-                }, 1500); 
-             
+                }, 1500);
+
                 })
             .fail(function(){
-             alert('Imprest Confirmation Failed!! ...'); 
+             alert('Imprest Confirmation Failed!! ...');
                 });
         }
     }
@@ -646,7 +646,7 @@
 
 
 
-    
+
 
 
 </script>

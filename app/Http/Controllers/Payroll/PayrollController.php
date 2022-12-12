@@ -14,10 +14,10 @@ use App\Models\Payroll\ReportModel;
 use App\Helpers\SysHelpers;
 
 class PayrollController extends Controller
-{  
-    
+{
+
     public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null)
-    {   
+    {
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
@@ -64,7 +64,7 @@ class PayrollController extends Controller
                             'isActive' => $all_allocation->isActive,
                             'payroll_date' => $payroll_date
                         );
-                        
+
                         $this->payroll_model->insertAllocation($data_allocation_log);
 
                     }
@@ -116,10 +116,10 @@ class PayrollController extends Controller
 
                     if ($result == true) {
 
-  
+
                         $description  = "Run payroll of date " . $payroll_date;
 
-                        $result = SysHelpers::auditLog(1,$description,$request);
+                        //$result = SysHelpers::auditLog(1,$description,$request);
 
                         echo "<p class='alert alert-info text-center'>Payroll was Successifully Run,(Loans and Salaries Updated!)</p>";
                     } else {
@@ -146,7 +146,10 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        //if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        // dd(session()->all());
+
+        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+            
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
@@ -154,9 +157,9 @@ class PayrollController extends Controller
 
             return view('payroll.employee_payslip',compact('data','title','parent','child'));
 
-       // } else {
-         //   echo 'Unauthorised Access';
-       // }
+       } else {
+           echo 'Unauthorised Access';
+       }
 
     }
 
@@ -172,8 +175,10 @@ class PayrollController extends Controller
         $data['payrollList'] = $this->payroll_model->payrollMonthList();
         $data['title'] = "Payroll";
 
-        //dd($data);
+        // dd($data['pendingPayroll']);
         //echo $data['pendingPayroll_month'];
+
+
 
         return view('payroll.payroll', [
             'data' => $data,
@@ -292,9 +297,9 @@ class PayrollController extends Controller
         $title = "Payroll Info";
         $parent = "Payroll";
         $child = "Payroll Info";
-        
+
         return view('payroll.less_payments',compact('title','data','parent','child'));
-        
+
     }
 
     public function less_payments()
@@ -387,7 +392,7 @@ class PayrollController extends Controller
     public function grossReconciliation(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
-        if (isset($payrollMonth)) {
+         if (isset($payrollMonth)) {
             $current_payroll_month = $payrollMonth;
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -409,20 +414,21 @@ class PayrollController extends Controller
             $data['emp_ids'] = $payroll_employees;
             $data['total_previous_gross'] = $total_previous_gross;
             $data['total_current_gross'] = $total_current_gross;
-            $title = "Gross Reconciliation";
-            $parent = "Payroll";
-            $child = "Gross Reconciliation";
-            
-            return view('payroll.gross_recon',compact('title','parent','child','data'));
-            
+            $data['title'] = "Gross Reconciliation";
+            $data['parent'] = "Payroll";
+            $data['child'] = "Gross Reconciliation";
 
+            return view('app.gross_recon',$data);
+
+    
 
         }
+        
     }
 
-    public function netReconciliation()
+    public function netReconciliation(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->pdate);
         if (isset($payrollMonth)) {
             $current_payroll_month = $payrollMonth;
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
@@ -448,7 +454,7 @@ class PayrollController extends Controller
 
 //            echo json_encode($data);
 
-             return view('app.net_recon', $data);
+             return view('app.net_recon',$data);
 
 
         }
@@ -620,12 +626,12 @@ class PayrollController extends Controller
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
             $data['employee'] = $this->payroll_model->customemployee();
-            $title = "Comission and Bonuses";
-            $parent = "Payroll";
-            $child = "Incentives";
-           
+            $data["title"] = "Comission and Bonuses";
+            $data["parent"] = "Payroll";
+            $data["child"] = "Incentives";
 
-            return view('payroll.comission_bonus',compact('title','parent','child','data'));
+
+            return view('app.comission_bonus',$data);
         // } else {
         //     echo "Unauthorized Access";
         // }
@@ -642,7 +648,7 @@ class PayrollController extends Controller
             $title = "Comission and Bonuses";
             $parent = "Comission and Bonuses";
             $child = "Comission and Bonuses";
-            
+
 
             return view('payroll.partial_payment',compact('title','parent','child','data'));
         // } else {
@@ -725,9 +731,9 @@ class PayrollController extends Controller
         }
     }
 
-    function recommendpayroll()
+    function recommendpayroll(Request $request)
     {
-        $payrollMonth = $this->uri->segment(3);
+        $payrollMonth = $request->pdate;
         if ($payrollMonth != "") {
             $empID = session('emp_id');
             $todate = date('Y-m-d');
@@ -736,15 +742,10 @@ class PayrollController extends Controller
             if ($check > 0) {
                 $result = $this->payroll_model->recommendPayroll($empID, $todate);
                 if ($result == true) {
-                    $logData = array(
-                        'empID' => session('emp_id'),
-                        'description' => "Recommendation of payroll of date " . $todate,
-                        'agent' => session('agent'),
-                        'platform' => $this->agent->platform(),
-                        'ip_address' => $this->input->ip_address()
-                    );
+                    
+                    $description ="Recommendation of payroll of date " . $todate;
 
-                    $result = $this->flexperformance_model->insertAuditLog($logData);
+                  //  $result = SysHelpers::auditLog(1,$description,$request);
 
                     $response_array['status'] = "OK";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Recommended Successifully </p>";
@@ -762,9 +763,9 @@ class PayrollController extends Controller
 
     }
 
-    function runpayroll()
+    function runpayroll($pdate)
     {
-        $payrollMonth = $this->uri->segment(3);
+        $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
             // DATE MANIPULATION
@@ -786,15 +787,10 @@ class PayrollController extends Controller
                     $result = $this->partial_payment_manipulation($payroll_date);
                     if ($result) {
 
-                        $logData = array(
-                            'empID' => session('emp_id'),
-                            'description' => "Approved payment of payroll of date " . $payroll_date,
-                            'agent' => session('agent'),
-                            'platform' => $this->agent->platform(),
-                            'ip_address' => $this->input->ip_address()
-                        );
+                
+                        $description ="Approved payment of payroll of date " . $payroll_date;
 
-                        $result = $this->flexperformance_model->insertAuditLog($logData);
+                  //  $result = SysHelpers::auditLog(1,$description,$request);
 
                         $response_array['status'] = "OK";
                         $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Run and Approved Successifully (Loans, Deductions and Salaries Updated!)</p>";
@@ -909,7 +905,7 @@ class PayrollController extends Controller
             }
             if ($result == true) {
                 $description ="Generating checklist of full payment of payroll of date " . $payrollMonth;
-                $result = SysHelpers::auditLog(2,$description,$request);
+                //$result = SysHelpers::auditLog(2,$description,$request);
 
                 $response_array['status'] = 1;
                 $response_array['message'] = "<p class='alert alert-success text-center'>Pay Checklist Generated)</p>";
@@ -923,7 +919,7 @@ class PayrollController extends Controller
 
         }
         header('Content-type: application/json');
-        return  json_encode($response_array);
+        return  $response_array;
 
 
     }

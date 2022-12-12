@@ -9,11 +9,11 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php
   
-  //$CI_Model = get_instance();
+  ////$CI_Model = get_instance();
   //$CI_Model->load->model('flexperformance_model');
   
   if($mode == 1){

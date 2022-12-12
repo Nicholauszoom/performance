@@ -10,7 +10,7 @@
 
 @section('content')
 <!-- /top navigation -->
-      
+
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="clearfix"></div>
@@ -19,15 +19,15 @@
                       <!-- PANEL-->
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Employee Payslip</h2>
+                    <h2>Employee Payslip llll</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">                                  
+                  <div class="x_content">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/payslip" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
-                      
+
                     <div class="form-group">
-                        <label class="control-label col-md-3  col-xs-6" >Employee Type</label>
+                        <label class="control-label col-md-3  col-xs-6" >Employee Type jhjhj</label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
                         <select id="employee_exited_list" onchange="filterType()" class="form-control" tabindex="-1">
                           <option value="1">Active</option>
@@ -136,7 +136,7 @@
                                             }, 1000)
                                         </script>
                                     <?php  }?>
-                                    
+
                                     <?php } else { ?>
                                         <span class="label label-success">APPROVED</span><br>
                                     <?php  } ?>
@@ -188,7 +188,7 @@
        <?php
         ?>
 
-<script>    
+<script>
 function sendEmail(payrollDate) {
 
   if (confirm("Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??") == true) {
@@ -212,9 +212,9 @@ function sendEmail(payrollDate) {
           });
           setTimeout(function(){// wait for 2 secs(2)
               location.reload(); // then reload the div to clear the success notification
-          }, 1500);                    
+          }, 1500);
         }
-        
+
       }
 
     });
@@ -240,8 +240,8 @@ function filterType(){
       {
         let jq_json_obj = $.parseJSON(data);
         let jq_obj = eval (jq_json_obj);
-        
-                
+
+
         //populate employee
         $("#employee_list option").remove();
         $('#employee_list').append($("<option value='' selected disabled>Select Employee</option>"));
@@ -249,7 +249,7 @@ function filterType(){
             $('#employee_list').append($('<option>', {value: name.empID, text: name.NAME}));
         });
 
-        
+
       }
 
     });

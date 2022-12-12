@@ -10,8 +10,6 @@
 
 @section('content')
 
-
-
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
@@ -104,7 +102,8 @@
                                         <td align="right">
                                             <?php 
                                                 $diff = number_format($total_current_net_ - $total_previous_net_,2);
-                                                $num_check = intval(abs($diff));                                                
+                                                
+                                                $num_check = intval($diff);                                                
                                                 if($num_check == 0){
                                                     echo number_format(0,2); 
                                                 }else{
@@ -119,7 +118,7 @@
                                         <td align="right">
                                             <?php 
                                                 $diff = number_format($total_current_net_ - $total_previous_net_,2);
-                                                $num_check = intval(abs($diff));
+                                                $num_check = intval($diff);
 
                                                 if($num_check == 0){
                                                     $total_current_net_ = $total_previous_net_;
@@ -208,7 +207,7 @@
                                                 
                                                     $diff  = $current_net_salary - $previous_net_salary;
 
-                                                    $num_check = intval(abs($diff));
+                                                    $num_check = intval($diff);
                                                     if($num_check == 0){
                                                         echo number_format($previous_net_salary,2);
                                                     }else{
@@ -221,7 +220,7 @@
                                                 $diff  = $current_net_salary - $previous_net_salary;
                                                 $i_move += $diff;
 
-                                                $num_check = intval(abs($diff));
+                                                $num_check = intval($diff);
                                                 if($num_check == 0){
                                                     echo number_format(0,2);
                                                 }else{

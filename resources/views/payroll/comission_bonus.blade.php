@@ -17,12 +17,7 @@
 @endsection
 
 @section('content')
-@php
-$bonus = $data['bonus'];
-$pendingPayroll = $data['pendingPayroll'];
-$incentives = $data['incentives'];
-$employee = $data['employee'];
-@endphp
+
 
 <div class="card">
     <div class="card-header border-0">
@@ -71,7 +66,7 @@ $employee = $data['employee'];
                                 <div id="feedBackSubmission"></div>
                             </div>
                             <form id="addToBonus" class="form-horizontal form-label-left input_mask" method="POST">
-
+                             @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Incentive Name</label>
                                     <div class="col-md-6 col-sm-6 col-xs-12 form-group">
@@ -97,7 +92,7 @@ $employee = $data['employee'];
                                             </option> <?php } ?>
                                         </select>
                                     </div>
-                                    <span class="text-danger"><?php echo form_error("linemanager");?></span>
+                                    <span class="text-danger"><?php// echo form_error("linemanager");?></span>
                                 </div>
 
                                 <div class="form-group">

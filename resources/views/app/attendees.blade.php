@@ -8,7 +8,7 @@
 <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
-@section('content')('content')
+@section('content')
 
 <?php
 ?>
@@ -112,8 +112,7 @@
 
 
 
-<?php 
-      @include("app/includes/dropdown")
+       @include("app/includes/dropdown")
 
       <script>
 

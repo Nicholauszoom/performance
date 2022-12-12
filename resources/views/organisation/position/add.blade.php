@@ -5,24 +5,65 @@
             {{ Form::open(['route' => 'designations.store']) }}
             @method('POST')
             <div class="modal-header p-2 px-2">
-                <h4 class="modal-title">ADD DESIGNATIONS</h6>
+                <h4 class="modal-title">Add Position</h6>
             </div>
             <div class="modal-body p-3">
                 <div class="form-group">
-                    <label class="">Name </label>
+                    <label class="">Position Name</label>
                     <input type="text" class="form-control" name="name" required>
                 </div>
+
                <div class="form-group">
-                    <label class="">Department Name</label>
+                    <label class="">Organization Level</label>
+                    <select name="department_id" class="form-control m-b"  required>
+                   <option value="">Select Organizaion Level</option>
+                     @if(!empty($department))
+                     @foreach($department as $row)
+                        <option value="{{$row->id}}">{{$row->name}}</option>
+                     @endforeach
+                     @endif
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="">Position Code</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="">Minimum Qualification</label>
+                    <textarea rows="3" cols="3" class="form-control" placeholder="Default textarea"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="">Department</label>
                     <select name="department_id" class="form-control m-b"  required>
                    <option value="">Select Department</option>
-                 @if(!empty($department))
-                 @foreach($department as $row)
-               <option value="{{$row->id}}">{{$row->name}}</option>
-             @endforeach
-@endif
-</select>
+                     @if(!empty($department))
+                     @foreach($department as $row)
+                        <option value="{{$row->id}}">{{$row->name}}</option>
+                     @endforeach
+                     @endif
+                    </select>
                 </div>
+
+                <div class="form-group">
+                    <label class="">Reports To</label>
+                    <select name="department_id" class="form-control m-b"  required>
+                   <option value="">Select Position</option>
+                     @if(!empty($department))
+                     @foreach($department as $row)
+                        <option value="{{$row->id}}">{{$row->name}}</option>
+                     @endforeach
+                     @endif
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="">Purpose of This Position</label>
+                    <textarea rows="3" cols="3" class="form-control" ></textarea>
+                </div>
+
             </div>
             <div class="modal-footer p-0">
                 <div class="p-2">
