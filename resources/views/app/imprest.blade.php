@@ -186,7 +186,7 @@
  @endsection
 
  @push('footer-script')
-
+{{-- all page scripts --}}
 
  @include('app.includes.imprest_operations')
  <script>
