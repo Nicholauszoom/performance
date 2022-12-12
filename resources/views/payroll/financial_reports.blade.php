@@ -1,26 +1,36 @@
-@extends('layouts.vertical', ['title' => 'Payroll'])
+@extends('layouts.vertical', ['title' => 'Financial Reports'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/pages/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-
 <script src="{{ asset('assets/js/form_layouts.js') }}"></script>
-<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
-@section('page-header')
-@include('layouts.shared.page-header')
-@endsection
 
 @section('content')
-@php
-$month_list = $data['month_list'];
-$year_list = $data['year_list'];
-@endphp
+    @php
+        $month_list = $data['month_list'];
+        $year_list = $data['year_list'];
+    @endphp
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="text-muted">P9 (P.A.Y.E)</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="text-muted">P9 (P.A.Y.E)</h5>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div class="card">
     <div class="card-header border-0">
