@@ -1,11 +1,11 @@
 @extends('layouts.vertical', ['title' => 'Statutory Deductions'])
 
 @push('head-script')
-    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -18,9 +18,9 @@
         <div class="card-header">
           <div class="d-flex justify-content-between">
           <h5 class="mb-0">Pension Funds</h5>
-         
+
           </div>
-          
+
         </div>
        <table class="table datatable-basic">
             <thead>
@@ -28,8 +28,8 @@
                     <th>S/N</th>
                     <th>Name</th>
                     <th>Employee Amount</th>
-                    <th>Employer Amount</th> 
-                    <th>Deduction From</th>                   
+                    <th>Employer Amount</th>
+                    <th>Deduction From</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -74,9 +74,9 @@
         <div class="card-header">
           <div class="d-flex justify-content-between">
           <h5 class="mb-0">List of Deduction</h5>
-        
+
           </div>
-          
+
         </div>
        <table class="table datatable-basic">
             <thead>
@@ -84,8 +84,8 @@
                     <th>S/N</th>
                     <th>Minimum Amount</th>
                     <th>Maximum Amount</th>
-                    <th>Excess Added as</th>  
-                    <th>Rate to an Amount Excess of Minimum</th>                  
+                    <th>Excess Added as</th>
+                    <th>Rate to an Amount Excess of Minimum</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -138,7 +138,7 @@
 
           </button>
           </div>
-          
+
         </div>
        <table class="table datatable-basic">
             <thead>
@@ -146,7 +146,7 @@
                     <th>S/N</th>
                     <th>Name</th>
                     <th>Percent Amount(Day)</th>
-                    <th>Percent Amount(Night)</th>                    
+                    <th>Percent Amount(Night)</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
@@ -225,10 +225,6 @@
                             <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
-
-
-
-
 
                                     <table class="table datatable-basic table-striped" id="table-1">
                                     <thead>

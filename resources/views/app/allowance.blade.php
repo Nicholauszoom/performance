@@ -20,9 +20,6 @@
     <!-- Basic datatable -->
     {{-- <div class="card">
         <div class="card-header">
-            <div class="d-flex justify-content-between">
-                <h5 class="mb-0">Allowances</h5>
-                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#save_allowance">
                     <i class="ph-plus me-2"></i> Allowance
 
                 </button>
