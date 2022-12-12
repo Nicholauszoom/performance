@@ -5,6 +5,11 @@
 @endpush
 
 @push('head-scriptTwo')
+<!-- notification Js -->
+<script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
+
+
 <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
@@ -26,10 +31,10 @@
                 <div class="border rounded p-3 mb-3">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a href="#payrollReportTab" class="nav-link active show" data-bs-toggle="tab"
+                            <a href="#incentivesTab" class="nav-link active show" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
                                 <i class="ph-at me-2"></i>
-                                Payroll
+                                Incentives
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -54,11 +59,12 @@
                                 Salary Advance
                             </a>
                         </li> -->
+                      
                         <li class="nav-item" role="presentation">
-                            <a href="#incentivesTab" class="nav-link" data-bs-toggle="tab"
+                            <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
                                 <i class="ph-at me-2"></i>
-                                Incentives
+                                Payroll
                             </a>
                         </li>
                         {{-- <li class="nav-item" role="presentation">
@@ -86,7 +92,7 @@
 
                     <div class="tab-content" id="myTabContent">
 
-                        <div role="tabpanel" role="tabpanel" class="tab-pane fade active show" id="payrollReportTab" aria-labelledby="home-tab">
+                        <div role="tabpanel" role="tabpanel" class="tab-pane fade " id="payrollReportTab" aria-labelledby="home-tab">
                             <?php if ($pendingPayroll == 0 && session('mng_paym')) { ?>
 
                             <?php } ?>
@@ -625,7 +631,7 @@
                                                             onclick="hr_recommendImprest(<?php echo $row->id; ?>)"
                                                             title="Recommend">
                                                             <button class="btn btn-primary btn-xs"><i
-                                                                    class="fa fa-check"></i></button>
+                                                                    class="ph-check"></i></button>
                                                         </a>
 
                                                         <?php }else if (/*session('mng_emp') &&*/ $pendings > 0){ ?>
@@ -636,7 +642,7 @@
                                                             title="Recommend" <?php } else { ?>
                                                             title="Confirm retirement" <?php } ?>>
                                                             <button class="btn btn-success btn-xs"><i
-                                                                    class="fa fa-check"></i></button>
+                                                                    class="ph-check"></i></button>
                                                         </a>
                                                         <?php }else{ ?>
                                                         <?php if (/*session('mng_emp') &&*/ $row->status == 2){
@@ -648,7 +654,7 @@
                                                             title="Approve Retirement">
                                                             <button type="button"
                                                                 class="btn btn-success btn-xs"><i
-                                                                    class="fa fa-check"></i></button>
+                                                                    class="ph-check"></i></button>
                                                             <?php }
                                                     }
                                                     }
@@ -660,7 +666,7 @@
                                                                 onclick="approveImprest(<?php echo $row->id; ?>)"
                                                                 title="Approve">
                                                                 <button class="btn btn-success btn-xs">
-                                                                    <i class="fa fa-check"></i>aprove</button>
+                                                                    <i class="ph-check"></i>aprove</button>
                                                             </a>
                                                             <?php }
                                                     }
@@ -677,14 +683,14 @@
                                                             <a href="javascript:void(0)"
                                                                 onclick="pendingConfirmationAlert()">
                                                                 <button class="btn btn-primary btn-xs">
-                                                                    <i class="fa fa-check"></i></button>
+                                                                    <i class="ph-check"></i></button>
                                                             </a>
                                                             <?php } else { ?>
 
                                                             <a href="javascript:void(0)"
                                                                 onclick="recommendImprest(<?php echo $row->id; ?>)">
                                                                 <button class="btn btn-primary btn-xs">
-                                                                    <i class="fa fa-check"></i></button>
+                                                                    <i class="ph-check"></i></button>
                                                             </a>
 
                                                             <?php }
@@ -695,7 +701,7 @@
                                                                 onclick="unconfirmImprest(<?php echo $row->id; ?>)">
                                                                 <button
                                                                     class="btn btn-warning btn-xs"><i
-                                                                        class="fa fa-times"></i>
+                                                                        class="ph-x"></i>
                                                                 </button>
                                                             </a>
 
@@ -707,7 +713,7 @@
                                                                 onclick="pendingRetireAlert()">
                                                                 <button type="button"
                                                                     class="btn btn-danger btn-xs"><i
-                                                                        class="fa fa-times"></i></button>
+                                                                        class="ph-x"></i></button>
                                                                 <?php } else { ?>
 
 
@@ -726,14 +732,14 @@
                                                         class="icon-2 info-tooltip">
                                                         <button type="button"
                                                             class="btn btn-info btn-xs"><i
-                                                                class="fa fa-info-circle"></i></button>
+                                                                class="fa ph-circle"></i></button>
                                                     </a>
 
                                                     <a href="javascript:void(0)"
                                                         onclick="deleteImprest(<?php echo $row->id; ?>)">
                                                         <button type="button"
                                                             class="btn btn-danger btn-xs"><i
-                                                                class="fa fa-times"></i></button>
+                                                                class="ph-x"></i></button>
                                                     </a>
 
                                             </tr>
@@ -990,7 +996,7 @@
 
         </div>
 
-        <div role="tabpanel" class="tab-pane fade" id="incentivesTab" aria-labelledby="profile-tab">
+        <div role="tabpanel" class="tab-pane fade active show" id="incentivesTab" aria-labelledby="profile-tab">
             <div id="resultfeedImprest"></div>
 
             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -1047,7 +1053,7 @@
                                         class="icon-2 info-tooltip">
                                         <button type="button"
                                             class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash"></i></button>
+                                            <i class="ph-x"></i></button>
                                     </a>
                                     <?php } ?>
                                 </td>
@@ -1060,7 +1066,7 @@
                                         class="icon-2 info-tooltip">
                                         <button type="button"
                                             class="btn btn-success btn-xs"><i
-                                                class="fa fa-check"></i></button>
+                                                class="ph-check"></i></button>
                                     </a>
                                     <?php } else if (/*session('recom_paym') && */ $row->state == 0) { ?>
                                     <a href="javascript:void(0)"
@@ -1069,7 +1075,7 @@
                                         class="icon-2 info-tooltip">
                                         <button type="button"
                                             class="btn btn-primary btn-xs"><i
-                                                class="fa fa-check"></i></button>
+                                                class="ph-check"></i></button>
                                     </a>
                                     <?php } else { ?>
                                     <!-- <a href="javascript:void(0)" onclick="cancelBonus(<?php echo $row->id; ?>)" title="Cancel Confirmation" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button> </a> -->
@@ -1094,7 +1100,7 @@
         <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete"
             tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                <div class="modal-content">
+                <div class="modal-content py-3">
                     <div class="modal-body">
                         <div id="message"></div>
                     </div>
@@ -1104,7 +1110,7 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
                             <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">
@@ -1119,7 +1125,7 @@
         <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete1"
             tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                <div class="modal-content">
+                <div class="modal-content py-3">
                     <div class="modal-body">
                         <div id="message"></div>
                     </div>
@@ -1129,7 +1135,7 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
                             <button type="button" id="yes_delete1" class="btn btn-main btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">
@@ -1336,6 +1342,7 @@
             $.ajax({
                 url: "<?php echo url('flex/payroll/runpayroll');?>/<?php echo $pendingPayroll_month; ?>",
                 success: function (data) {
+                    var data = JSON.parse(data); 
                     if (data.status == 'OK') {
                         // alert("Payroll Approved Successifully");
 
@@ -1411,6 +1418,7 @@
             $.ajax({
                 url: "{{ route('pyaroll.recommendpayroll',['pdate'=>$pendingPayroll_month]) }}",
                 success: function (data) {
+                    var data = JSON.parse(data); 
                     if (data.status == 'OK') {
                         // alert("Payroll Recommend Successifully");
 

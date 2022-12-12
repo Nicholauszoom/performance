@@ -43,10 +43,10 @@
     <div class="card-body">
         <div class="clearfix"></div>
 
-        <div class="row offset-4">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+        <div class="row offset-2">
+            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-header">
                         <h2>Statutory Reports</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -56,19 +56,19 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
 
 
                         <!--PANEL-->
 
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>P9 (P.A.Y.E)</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body py-3">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                     action="{{ route('reports.p9')}}" target="_blank"
                                     data-parsley-validate class="form-horizontal form-label-left">
@@ -117,12 +117,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>Skills Development Levy SDL (P10)</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body py-3">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                     action="{{ route('reports.p10')}}" target="_blank"
                                     data-parsley-validate class="form-horizontal form-label-left">
@@ -206,12 +206,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>Pension Fund</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body py-3">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                     action="{{ route('reports.pension')}}" target="_blank"
                                     data-parsley-validate class="form-horizontal form-label-left">
@@ -278,12 +278,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>Workers Compasation Fund</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body py-3">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                     action="{{ route('reports.wcf')}}" target="_blank"
                                     data-parsley-validate class="form-horizontal form-label-left">
@@ -329,12 +329,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>HESLB</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body py-3">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                     action="{{ route('reports.heslb')}}" target="_blank"
                                     data-parsley-validate class="form-horizontal form-label-left">

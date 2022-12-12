@@ -10,8 +10,12 @@
 
 @section('content')
 
+<div class="card">
+    <div class="card-header border-0">
+        <h2 class="text-muted">Pending Payments <small>Need To Be Responded On</small></h2>
+    </div>
 
-
+    <div class="card-body">
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
@@ -45,12 +49,12 @@
 
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>P9 (P.A.Y.E)</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                       action="<?php echo  url(''); ?>/flex/reports/p9" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -109,23 +113,7 @@
                                       data-parsley-validate class="form-horizontal form-label-left">
 
     @csrf
-                                      <!--                                    <div class="form-group">-->
-<!--                                        <label class="control-label col-md-3  col-xs-6">Payroll Month</label>-->
-<!--                                        <div class="col-md-3 col-sm-6 col-xs-12">-->
-<!--                                            <select required="" name="payrolldate"-->
-<!--                                                    class="select_payroll_year form-control" tabindex="-1">-->
-<!--                                                <option></option>-->
-<!--                                                --><?php
-//                                                foreach ($year_list as $row) {
-//                                                    # code... ?>
-<!--                                                    <option value="--><?php //echo $row->year; ?><!--">--><?php //echo $row->year; ?><!--</option> --><?php //} ?>
-<!--                                            </select>-->
-<!--                                        </div>-->
-<!--                                        <span class="input-group-btn">-->
-<!--                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>-->
-<!--                      </span>-->
-<!--                                    </div>-->
-    @csrf                                    
+                              
 <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -369,6 +357,10 @@
 
 
 <!-- /page content -->
+
+
+    </div>
+</div>
 
 
 
