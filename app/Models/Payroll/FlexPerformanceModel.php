@@ -650,11 +650,23 @@ function retire_list()
 
 	function pendingSalaryTranferCheck($empID){
 
-		$query = "count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
-		$row = DB::table('result')
-		->select(DB::raw($query))
-		->first();
-    	return $row->result;
+		// $query = "count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
+
+		$query = "SELECT count(id) as result FROM result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
+
+        $row = DB::select(DB::raw($query));
+
+		$query = "count(id) as result";
+
+		// $row = DB::table('result')
+		// ->select(DB::raw($query))
+        // ->where('empID', '=', $empID)
+        // ->where('parameterID','=','1')
+        // ->where('status', '0')
+        // ->first();
+
+        dd($row);
+    	// return $row->result;
 	}
 	function pendingPositionTranferCheck($empID){
 
@@ -3429,54 +3441,54 @@ function my_grievances($empID)
 	}
 
 	public function transfers($id){
-		$query = "*  where id = '".$id."' ";
-		$row = DB::table('transfer')
-		->select(DB::raw($query));
-		if ($row->get()){
-			return $row->first();
+		$query = "SELECT * from transfer where id = '".$id."' ";
+        $row = DB::select(DB::raw($query));
+
+		if ($row){
+			return $row[0];
 		}else{
 			return null;
 		}
 	}
 
 	public function approveRegistration($empID, $transferID, $approver, $date){
-		 DB::transaction(function()
-       {
-		$query = "update employee set state = 1 where emp_id = '".$empID."' ";
-		DB::insert(DB::raw($query));
-		$query = "update transfer set status = 6, approved_by = '".$approver."', date_approved = '".$date."'
-		 where id = '".$transferID."' ";
-		 DB::insert(DB::raw($query));
+		 DB::transaction(function() use($empID, $approver, $date, $transferID){
+		    $query = "update employee set state = 1 where emp_id = '".$empID."' ";
+		    DB::insert(DB::raw($query));
+		    $query = "update transfer set status = 6, approved_by = '".$approver."', date_approved = '".$date."'
+		    where id = '".$transferID."' ";
+		    DB::insert(DB::raw($query));
 		});
+
 		return true;
 	}
 
 	public function disapproveRegistration($empID, $transferID){
-		 DB::transaction(function()
-       {
-		$query = "delete from employee where emp_id = '".$empID."' ";
-		DB::insert(DB::raw($query));
-		$query = "delete from employee_group where empID = '".$empID."' ";
-		DB::insert(DB::raw($query));
-		$query = "delete from employee_activity_grant where empID = '".$empID."' ";
-		DB::insert(DB::raw($query));
-		$query = "update transfer set status = 7 where id = '".$transferID."' ";
-		DB::insert(DB::raw($query));
+		 DB::transaction(function() use($empID, $transferID){
+		    $query = "delete from employee where emp_id = '".$empID."' ";
+		    DB::insert(DB::raw($query));
+		    $query = "delete from employee_group where empID = '".$empID."' ";
+		    DB::insert(DB::raw($query));
+		    $query = "delete from employee_activity_grant where empID = '".$empID."' ";
+		    DB::insert(DB::raw($query));
+		    $query = "update transfer set status = 7 where id = '".$transferID."' ";
+		    DB::insert(DB::raw($query));
 		});
+
 		return true;
 	}
 
 	public function assignment_task_log($payroll_date){
-		 DB::transaction(function() use($payroll_date)
-       {
-		$query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
-select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
-ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast
-where ae.id = ast.assignment_employee_id and ast.status = 1 and ast.date is null;";
-        DB::insert(DB::raw($query));
-		$query = "update assignment_task set date = '".$payroll_date."' where date is null ";
-		DB::insert(DB::raw($query));
+		 DB::transaction(function() use($payroll_date){
+		    $query = "insert into assignment_task_logs (assignment_employee_id,emp_id,task_name,description,start_date,end_date,remarks,status,payroll_date)
+                select ae.assignment_id, ae.emp_id, ast.task_name, ast.description, ast.start_date,
+                ast.end_date, ast.remarks, ast.status, '".$payroll_date."' from assignment_employee ae, assignment_task ast
+                where ae.id = ast.assignment_employee_id and ast.status = 1 and ast.date is null;";
+            DB::insert(DB::raw($query));
+		    $query = "update assignment_task set date = '".$payroll_date."' where date is null ";
+		    DB::insert(DB::raw($query));
 		});
+        
 		return true;
 	}
 

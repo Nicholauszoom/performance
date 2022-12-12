@@ -80,37 +80,36 @@
 
     <div class="card-body">
 
-        <div class="col-md-6 col-sm-6 col-xs-12 offset-3 bg-danger">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="card border-0 shadow-none">
-                <div class="card-header border-0 shadow-none text-center">
-                    <h2>Details</h2>
-                </div>
+                <div class="mb-2 ms-auto">
+                    <h4 class="text-muted">PayRoll Details:</h4>
+                    <div class="d-flex flex-wrap wmin-lg-400">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h5 class="my-2">Salaries:</h5></li>
+                            <li>Total Allowances:</li>
+                            <li>Pension(Employer):</li>
+                            <li>Pension (Employee):</li>
+                            @if ($meals)
+                            <li>Meals:</li>
+                            @endif
+                            <li>Taxdue (PAYE):</li>
+                            <li>WCF:</li>
+                            <li>SDL:</li>
+                        </ul>
 
-                <div class="card-body shadow-none border-0">
-                    <div class="x_content">
-                        <h5> Salaries:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($salary,2); ?></b></h5>
-                        <h5>Total Allowances:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($allowances,2); ?></b></h5>
-                        <h5> Pension(Employer):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($pension_employer,2); ?></b>
-                        </h5>
-                        <h5> Pension (Employee):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($pension_employee,2); ?></b>
-                        </h5>
-
-
-                        <?php if ($meals) { ?>
-                        <h5> Meals:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($meals,2); ?></b></h5>
-                        <?php } ?>
-                        <h5> Taxdue (PAYE):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($taxdue,2); ?></b></h5>
-                        <h5> WCF:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($wcf,2); ?></b></h5>
-                        <h5> SDL:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($sdl,2); ?></b></h5>
-
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h5 class="my-2">{{ number_format($salary,2) }}</h5></li>
+                            <li><span class="fw-semibold">{{ number_format($allowances,2) }}</span></li>
+                            <li>{{ number_format($pension_employer,2) }}</li>
+                            <li>{{ number_format($pension_employee,2) }}</li>
+                            @if ($meals)
+                            <li>{{ number_format($meals,2) }}</li>
+                            @endif
+                            <li>{{ number_format($taxdue,2) }}</li>
+                            <li><span class="fw-semibold">{{ number_format($wcf,2) }}</span></li>
+                            <li><span class="fw-semibold">{{ number_format($sdl,2) }}</span></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -120,93 +119,107 @@
         <hr>
 
         <?php if($payrollState == 0){ ?>
-        <div class="col-md-6 col-sm-6 col-xs-12 offset-3">
+        <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="card border-0 shadow-none">
-
                 <div id="resultConfirmation"></div>
 
-                <div class="card-header border-0">
-                    <h4 class="ms-2">More Details</h4>
+                <div class="mb-2 ms-auto">
+                    <h4 class="text-muted">More Details:</h4>
+
+                    @if ($payrollState == 1)
+                    <div class="d-flex flex-wrap wmin-lg-400 mb-2">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h6 class="my-2">Normal Allowances:</h6></li>
+                            <li><h6 class="my-2">Overtime:</h6></li>
+                            <li><h6 class="my-2">Incentives:</h6></li>
+                        </ul>
+
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h6 class="fw-semibold">{{ number_format(($total_allowances-$total_overtimes-$total_bonuses),2) }}</h6></li>
+                            <li><h6 class="fw-semibold">{{ number_format($total_overtimes,2) }}</h6></li>
+                            <li><h6 class="fw-semibold">{{ number_format($total_bonuses,2) }}</h6></li>
+                        </ul>
+                    </div>
+                    @endif
+
+                    @if ($paid_heslb)
+                    <div class="d-flex flex-wrap wmin-lg-400 mb-2">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h6 class="my-2">HESLB (Total Repayment):</h6></li>
+                        </ul>
+
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h6 class="fw-semibold">{{ number_format($paid_heslb,2) }}</h6></li>
+                        </ul>
+                    </div>
+                    @endif
+
+                    @if ($remained_heslb > 0)
+                    <div class="d-flex flex-wrap wmin-lg-400">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h6 class="my-2">HESLB (Total Outstanding):</h6></li>
+                        </ul>
+
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h6 class="fw-semibold">{{ number_format($remained_heslb,2) }}</h6></li>
+                        </ul>
+                    </div>
+                    @elseif($remained_heslb < 0)
+                    <div class="d-flex flex-wrap wmin-lg-400 mb-3">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h6 class="my-2">HESLB (Total Outstanding):</h6></li>
+                        </ul>
+
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h6 class="fw-semibold">{{ number_format(0,2) }}</h6></li>
+                        </ul>
+                    </div>
+                    @endif
+
+                    @if ($paid)
+                    <div class="d-flex flex-wrap wmin-lg-400">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h6 class="my-2">Loans (Total Returns):</h6></li>
+                            <li><h6 class="my-2">Loans (Total Outstanding):</h6></li>
+                        </ul>
+
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h6 class="fw-semibold">{{ number_format($paid,2) }}</h6></li>
+                            <li><h6 class="fw-semibold">{{ number_format($remained,2) }}</h6></li>
+                        </ul>
+                    </div>
+                    @endif
                 </div>
 
-            </div>
-
-            <div class="x_panel">
-
-
-                <div class="x_content">
-                    <?php if($payrollState == 1){ ?>
-                        <h5> Normal Allowances:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(($total_allowances-$total_overtimes-$total_bonuses),2); ?></b>
-                        </h5>
-                        <h5> Overtime:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($total_overtimes,2); ?></b></h5>
-                        <h5> Incentives:
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($total_bonuses,2); ?></b></h5>
-                        <?php } ?>
-
-                        <?php if ($paid_heslb) {?>
-                        <h5> HESLB (Total Repayment):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($paid_heslb,2); ?></b></h5>
-                        <?php if ($remained_heslb>0) {?>
-                        <h5> HESLB (Total Outstanding):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($remained_heslb,2); ?></b></h5>
-                        <?php }else {?>
-
-                        <h5> HESLB (Total Outstanding):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(0,2); ?></b></h5>
-                        <?php } ?>
-                    <?php }?>
-
-                        <?php if ($paid) {?>
-                        <h5> Loans (Total Returns):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($paid,2); ?></b></h5>
-                        <h5> Loans (Total Outstanding):
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($remained,2); ?></b></h5>
-                        <?php }?>
-                    <!--                      <h5> Other Deductions:-->
-                    <!--                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>--><?php //echo number_format($total_deductions,2); ?>
-                    <!--</b></h5> -->
-
-                </div>
-
-
-                <div class="x_content">
+                <div class="mb-2 ms-auto d-flex justify-content-around">
                     <?php if($payrollState == 0 /*&&  session('mng_emp')*/){ ?>
-                        <a href="javascript:void(0)" onclick="generate_checklist()">
-                            <button type="button" class="btn btn-default text-white"><b>Full Payment <br>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <?php if($state==2 || $state==1){ ?>
-                    <!-- <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print" value="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
-                                <small>Payment With Arrears</b></small></button></a> -->
-                    <?php } else { ?>
-                    <!-- <a href="{{route('less_payments',['pdate',base64_encode($payrollMonth)])}}"><button type="button"
-                            name="print" value="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
-                                <small>Payment With Arrears</b></small></button></a> -->
-                    <?php } ?>
+                        <a href="javascript:void(0)" onclick="generate_checklist()" class="m-3">
+                            <button type="button" class="btn btn-main">Full Payment </button></a>
                     <?php }  else { ?>
-                    <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print" value="print" class="btn btn-warning"><b>PAY CHECKLIST<br>
-                                <small>View</b></small></button></a>
+                    <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}">
+                        <button type="button" name="print" value="print" class="btn btn-warning">PAY CHECKLIST</button>
+                    </a>
                     <?php } ?>
-                    <br>
-                    <br>
-                    <a target="_blank"
-                        href="{{route('less_payments_print',['pdate',base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print_payroll" class="btn btn-primary"><b>PRINT<br></button></a>
+
+                    <a class="my-3" target="_blank" href="{{route('less_payments_print',['pdate',base64_encode($payrollMonth)])}}">
+                        <button type="button" name="print_payroll" class="btn btn-primary">PRINT</button>
+                    </a>
+
                     <?php if($payrollState == 0) {?>
-                   <!-- <a target="_self"
-                        href="{{route('grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print_payroll" class="btn btn-info"><b>GROSS RECON<br></button></a> -->
-                    <a target="_self"
-                        href="{{route('netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}"><button
-                            type="button" name="print_payroll" class="btn btn-info"><b>Net Reconsiliation<br></button></a>
-                    <!-- <a target="_self" href="{{route('sendReviewEmail',['pdate',base64_encode($payrollMonth)])}}"><button
+                    <a class="m-3" target="_self" href="{{route('grossReconciliation',['pdate',base64_encode($payrollMonth)])}}">
+                        <button type="button" name="print_payroll" class="btn btn-info">GROSS RECON</button>
+                    </a>
+
+                    <a class="m-3" target="_self" href="{{route('netReconciliation',['pdate',base64_encode($payrollMonth)])}}">
+                        <button type="button" name="print_payroll" class="btn btn-info">NET RECON</button>
+                    </a>
+                    <!-- <a class="m-3" target="_self" href="{{route('sendReviewEmail',['pdate',base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>
                 </div>
+
             </div>
+
         </div>
         <?php } ?>
 

@@ -26,7 +26,7 @@ class GeneralController extends Controller
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
-      $this->flexperformance_model = new FlexPerformanceModel();
+      $this->flexperformance_model = $flexperformance_model;
       $this->imprest_model = new ImprestModel();
       $this->reports_model = new ReportModel();
       $this->attendance_model = new AttendanceModel();
@@ -1758,9 +1758,8 @@ public function activatePosition(Request $request)
   }
 
 
-  function applyOvertime(Request $request){
+  public function applyOvertime(Request $request){
 
-    if(Request::isMethod('post')){
 
       $start = $request->input('time_start');
       $finish = $request->input('time_finish');
@@ -1885,13 +1884,13 @@ public function activatePosition(Request $request)
         }
       }
 
-    }
+
   }
 
 /*IMPREST FUNCTIONS MOVED TO IMPREST CONTROLLER*/
 
 
-  function overtime(Request $request)  {
+  function overtime()  {
 
     $data['title']="Overtime";
     $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
@@ -1905,6 +1904,8 @@ public function activatePosition(Request $request)
     //   $data['adv_overtime'] = $this->flexperformance_model->overtimesHR();
     // }
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'Overtime';
 
     return view('app.overtime', $data);
 
@@ -1964,11 +1965,9 @@ public function activatePosition(Request $request)
 
     }
 
-    public function confirmOvertime(Request $request)  {
+    public function confirmOvertime($id)  {
 
-          if($this->uri->segment(3)!=''){
-
-        $overtimeID = $this->uri->segment(3);
+        $overtimeID = $id;
         $data = array(
                  'status' =>5,
                  'time_confirmed_line' => date('Y-m-d h:i:s'),
@@ -1976,21 +1975,17 @@ public function activatePosition(Request $request)
             );
           $this->flexperformance_model->update_overtime($data, $overtimeID);
           echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
-          }
+
    }
 
-    public function recommendOvertime(Request $request)  {
-
-          if($this->uri->segment(3)!=''){
-
-        $overtimeID = $this->uri->segment(3);
+    public function recommendOvertime($id)  {
+        $overtimeID = $id;
         $data = array(
                  'status' =>1,
                  'time_recommended_line' => date('Y-m-d h:i:s')
             );
           $this->flexperformance_model->update_overtime($data, $overtimeID);
           echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
-          }
    }
 
     public function approved_financial_payments(Request $request)  {
@@ -2062,23 +2057,23 @@ public function activatePosition(Request $request)
  }
 
 
-  public function holdOvertime(Request $request) {
+  public function holdOvertime($id) {
 
-    if($this->uri->segment(3)!=''){
 
-      $overtimeID = $this->uri->segment(3);
+
+      $overtimeID = $id;
       $data = array(
                'status' =>3
           );
       $this->flexperformance_model->update_overtime($data, $overtimeID);
       echo "<p class='alert alert-warning text-center'>Overtime Held</p>";
-    }
+
   }
 
-    public function approveOvertime(Request $request) {
-      if($this->uri->segment(3)!=''){
+    public function approveOvertime($id) {
 
-        $overtimeID = $this->uri->segment(3);
+
+        $overtimeID = $id;
 
         // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
@@ -2095,13 +2090,13 @@ public function activatePosition(Request $request)
         // }else{
         //   echo "<p class='alert alert-danger text-center'>Overtime is not yet Approved</p>";
         // }
-      }
+
     }
 
-    public function lineapproveOvertime(Request $request) {
-      if($this->uri->segment(3)!=''){
+    public function lineapproveOvertime($id) {
 
-        $overtimeID = $this->uri->segment(3);
+
+        $overtimeID = $id;
 
         $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
@@ -2117,14 +2112,14 @@ public function activatePosition(Request $request)
         }else{
           echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         }
-      }
+
     }
 
 
-    public function hrapproveOvertime(Request $request) {
-      if($this->uri->segment(3)!=''){
+    public function hrapproveOvertime($id) {
 
-        $overtimeID = $this->uri->segment(3);
+
+        $overtimeID = $id;
 
         $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
@@ -2140,14 +2135,14 @@ public function activatePosition(Request $request)
         // }else{
         //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         // }
-      }
+
     }
 
 
-    public function fin_approveOvertime(Request $request) {
-      if($this->uri->segment(3)!=''){
+    public function fin_approveOvertime($id) {
 
-        $overtimeID = $this->uri->segment(3);
+
+        $overtimeID = $id;
 
         // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
@@ -2163,31 +2158,29 @@ public function activatePosition(Request $request)
         // }else{
         //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         // }
-      }
+
     }
 
-    public function denyOvertime(Request $request)  {  //or disapprove
+    public function denyOvertime($id)  {  //or disapprove
 
-          if($this->uri->segment(3)!=''){
-
-        $overtimeID = $this->uri->segment(3);
+        $overtimeID = $id;
           $result = $this->flexperformance_model->deny_overtime($overtimeID);
           if($result == true){
           echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
          } else { echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>"; }
-          }
+
    }
 
-    public function cancelOvertime(Request $request) {
+    public function cancelOvertime(Request $request, $id) {
 
-        if($this->uri->segment(3)!=''){
 
-          $overtimeID = $this->uri->segment(3);
-          $result = $this->flexperformance_model->deleteOvertime($overtimeID);
+
+        //   $overtimeID = $this->uri->segment(3);
+          $result = $this->flexperformance_model->deleteOvertime($id);
           if($result == true){
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
           } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
-        }
+
     }
 
 
@@ -2622,9 +2615,9 @@ public function updateLevel(Request $request) {
     }
   }
 
-  public function approveDeptPosTransfer(Request $request) {
-    if ($this->uri->segment(3)!='') {
-      $transferID = $this->uri->segment(3);
+  public function approveDeptPosTransfer($id) {
+    if ($id) {
+      $transferID = $id;
       $transfer =  $this->flexperformance_model->getTransferInfo($transferID);
       foreach ($transfer as $key ) {
         $empID = $key->empID;
@@ -3558,18 +3551,23 @@ function subdropFetcher(Request $request)  {
 
    function positionFetcher(Request $request)  {
 
-    if(!empty($request->input("dept_id"))){
-    $query = $this->flexperformance_model->positionfetcher($request->input("dept_id"));
-    $querypos = $query[0];
-    $querylinemanager = $query[1];
-    $querydirector = $query[2];
-    $data = [];
-    $data['position'] = $querypos;
-    $data['linemanager'] = $querylinemanager;
-    $data['director'] = $querydirector;
+    // dd($request->input("dept_id"));
 
-        echo json_encode($data);
-      }
+    $depID = $request->input("dept_id");
+
+    if(!empty($depID)){
+      $query = $this->flexperformance_model->positionfetcher($depID);
+
+      $querypos = $query[0];
+      $querylinemanager = $query[1];
+      $querydirector = $query[2];
+      $data = [];
+      $data['position'] = $querypos;
+      $data['linemanager'] = $querylinemanager;
+      $data['director'] = $querydirector;
+
+      echo json_encode($data);
+    }
 //    else{
 //        echo '<option value="">Position not available</option>';
 //    }
@@ -3668,10 +3666,10 @@ function subdropFetcher(Request $request)  {
       }
 
 
-   public function employee_exit(Request $request)
+   public function employee_exit($id)
       {
 
-          $empID = $this->uri->segment(3);
+          $empID = $id;
               $datalog = array(
                   'state' =>0,
                   'empID' =>$empID,
@@ -4837,7 +4835,10 @@ public function remove_group_from_allowance(Request $request)  {
 
 
    //###########BONUS################# updateAllowanceName
+   public function addToBonusByEmpGroup(Request $request) {
+     
 
+   }
 
     public function addToBonus(Request $request) {
           $empID = $request->input('employee');
@@ -4845,7 +4846,9 @@ public function remove_group_from_allowance(Request $request)  {
           $amount = $request->input('amount');
           $days = $request->input('days');
           $percent = $request->input('percent');
-            if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days =='' && $percent != '') {
+          $methode = $request->method();
+            if ($methode == "POST" && $empID!='' && $amount!='' && $days =='' && $percent != '') {
+
                 $data = array(
                             'empID' =>$request->input('employee'),
                             'amount' =>$amount*$percent/100,
@@ -4860,7 +4863,7 @@ public function remove_group_from_allowance(Request $request)  {
                     } else { echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>"; }
 
             }
-            if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days !='' && $percent == '') {
+            if ($methode == "POST" && $empID!='' && $amount!='' && $days !='' && $percent == '') {
               $data = array(
                           'empID' =>$request->input('employee'),
                           'amount' =>$amount*$days/30,
@@ -4876,7 +4879,7 @@ public function remove_group_from_allowance(Request $request)  {
                   } else { echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>"; }
 
           }
-          if (Request::isMethod('post')&& $empID!='' && $amount!='' && $days =='' && $percent == '') {
+          if ($methode == "POST" && $empID!='' && $amount!='' && $days =='' && $percent == '') {
             $data = array(
                         'empID' =>$request->input('employee'),
                         'amount' =>$amount,
@@ -4894,7 +4897,8 @@ public function remove_group_from_allowance(Request $request)  {
    }
     public function addBonusTag(Request $request) {
           $name = $request->input('name');
-            if (Request::isMethod('post')&& $name!='') {
+          $methode = $request->method();
+            if ($methode = "POST" && $name!='') {
                 $data = array(
                             'name' =>$request->input('name')
                         );
@@ -4930,9 +4934,9 @@ public function cancelBonus(Request $request)
 
     }
 
-public function confirmBonus(Request $request)
-      {
-        $bonusID = $this->uri->segment(3);
+public function confirmBonus($id)
+       {
+        $bonusID = $id;
         $appr_author =session('emp_id');
         $data = array(
                             'state' =>1,
@@ -4952,12 +4956,11 @@ public function confirmBonus(Request $request)
         }
 
 
-
     }
 
-    public function recommendBonus(Request $request)
+    public function recommendBonus($id)
       {
-        $bonusID = $this->uri->segment(3);
+        $bonusID = $id;
         $appr_author =session('emp_id');
         $data = array(
                             'state' =>2,
@@ -4981,9 +4984,9 @@ public function confirmBonus(Request $request)
     }
 
 
-public function deleteBonus(Request $request)
+public function deleteBonus($id)
       {
-        $bonusID = $this->uri->segment(3);
+        $bonusID = $id;
         $result = $this->flexperformance_model->deleteBonus( $bonusID);
 
         if($result ==true){
@@ -5606,6 +5609,8 @@ public function updateCompanyName(Request $request) {
          $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
 
          $data['title'] = "Add Employee";
+         $data['parent'] = "Employee";
+         $data["child"] = "Register Employee";
          return view('app.employeeAdd', $data);
      }else{
          echo 'Unauthorized Access';
@@ -5616,22 +5621,25 @@ public function updateCompanyName(Request $request) {
 public function getPositionSalaryRange(Request $request)
   {
 
-    $positionID = $request->input("positionID");
+    $positionID = $request->positionID;
+
     $data = array(
     'state' => 0
     );
 
     $minSalary = $maxSalary = 0;;
     $result = $this->flexperformance_model->getPositionSalaryRange($positionID);
+
+
     foreach ($result as $value) {
       $minSalary = $value->minSalary;
       $maxSalary = $value->maxSalary;
     }
     if($result){
-    //$response_array['status'] = "OK";
-    $response_array['salary'] = "<input required='required'  class='form-control col-md-7 col-xs-12' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'>";
+      $response_array['salary'] = "<div><input required='required'  class='form-control @error('salary') is-invalid @enderror' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'><div class='form-text text-muted'>Minimum salary is ".$minSalary." and Maximam salary is ".$maxSalary."</div></div>";
+
     }else{
-    $response_array['salary'] = "<input required='required'  class='form-control col-md-7 col-xs-12' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
+      $response_array['salary'] = "<input required='required'  class='form-control col-md-7 col-xs-12' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
     }
     header('Content-type: application/json');
     echo json_encode($response_array);
@@ -6768,14 +6776,17 @@ function send(Request $request)  {
         }
     }
 
-    public function approveRegistration(Request $request) {
+    public function approveRegistration($id) {
         /*
          * status 7 = cancelled
          * status 6 = accepted
         */
-        if ($this->uri->segment(3)!='') {
-            $transferID = $this->uri->segment(3);
+        if ($id) {
+            $transferID = $id;
             $transfers = $this->flexperformance_model->transfers($transferID);
+
+            // dd($transfers);
+
             if ($transfers){
                 $emp_id = $transfers->empID;
                 $approver =session('emp_id');
@@ -6790,14 +6801,17 @@ function send(Request $request)  {
         }
     }
 
-    public function disapproveRegistration(Request $request) {
+    public function disapproveRegistration($id) {
        /*
         * status 7 = cancelled
         * status 6 = accepted
        */
-        if ($this->uri->segment(3)!='') {
-            $transferID = $this->uri->segment(3);
+        if ($id) {
+            $transferID = $id;
             $transfers = $this->flexperformance_model->transfers($transferID);
+
+            // dd($transfers);
+
             if ($transfers){
                 $emp_id = $transfers->empID;
                 $result = $this->flexperformance_model->disapproveRegistration($emp_id,$transferID);

@@ -110,7 +110,7 @@
                         @if (session('mng_paym'))
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/employee_payslip') }}"> Payslip </a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/comission_bonus') }}">Incentives</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/partial_payment') }}">Partial Payment</a></li>
+                          <!--  <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/partial_payment') }}">Partial Payment</a></li> -->
                         @endif
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/approved_financial_payments') }}">Pending Payments </a></li>
                         @if (session('mng_stat_rpt'))
