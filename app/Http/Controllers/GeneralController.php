@@ -4390,7 +4390,7 @@ public function common_deductions_info(Request $request) {
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['title']="Allowances";
-            return view('app.allowance', $data);
+            return view('app.allowance', compact('data'));
         }else{
             echo "Unauthorized Access";
         }
@@ -4428,7 +4428,7 @@ public function common_deductions_info(Request $request) {
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
       $data['title']="Statutory Deductions";
-      return view('app.statutory_deduction', $data);
+      return view('app.statutory_deduction', compact('data'));
 
     }else{
       echo "Unauthorized Access";
