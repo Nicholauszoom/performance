@@ -129,7 +129,7 @@ class ReportController extends Controller
 
         // dd(app_path());
 
-        include(app_path() . '\reports\p9.php');
+        include(app_path() . '/reports/p9.php');
         
         //  return view('app.reports/p9', $data); 
     }    
@@ -185,7 +185,7 @@ $sdl=$data['sdl'];
 $total=$data['total'];
 $info=$data['info'];
 
-        include(app_path() . '\reports\p10.php');
+        include(app_path() . '/reports/p10.php');
         //  return view('app.reports/p10', $data);
     }
     else{
@@ -214,7 +214,7 @@ function heslb(Request $request)  {
     $info=$data['info'];
 
 
-    include(app_path() . '\reports\heslb.php');
+    include(app_path() . '/reports/heslb.php');
     
     //  return view('app.reports/heslb', $data);
 
@@ -249,7 +249,7 @@ $info=$data['info'];
 $payroll_month=$data['payroll_month'];
 $pension_fund=$data['pension_fund'];
 
-include(app_path() . '\reports\pension.php');
+include(app_path() . '/reports/pension.php');
     //  return view('app.reports/pension', $data);
 
 }
@@ -283,7 +283,7 @@ function wcf(Request $request)  {
         $info=$data['info'];
         $payroll_month=$data['payroll_month'];
 
-        include(app_path() . '\reports\wcf.php');
+        include(app_path() . '/reports/wcf.php');
         //  return view('app.reports/wcf', $data);
     }
 
@@ -346,7 +346,7 @@ $total_overtimes=$data['total_overtimes'];
 $payroll_date=$data['payroll_date'];
 $payroll_month=$data['payroll_month'];
 
-include(app_path() . '\reports\employment_cost.php');
+include(app_path() . '/reports/employment_cost.php');
         //  return view('app.reports/employment_cost', $data);
     //}
 
@@ -392,7 +392,7 @@ public function loanreport(Request $request)
 
   $loan=$data['loan'];
 $title=$data['title'];
-include(app_path() . '\reports\loan_report.php');
+include(app_path() . '/reports/loan_report.php');
 
     //  return view('app.reports/loan_report', $data);
   }
@@ -427,7 +427,7 @@ include(app_path() . '\reports\loan_report.php');
       $leave=$data['leave'];
       $title=$data['title'];
 
-      include(app_path() . '\reports\customleave_report.php');
+      include(app_path() . '/reports/customleave_report.php');
     //  return view('app.customleave_report', $data);
   }
 
@@ -447,7 +447,7 @@ include(app_path() . '\reports\loan_report.php');
       $leave=$data['leave'];
       $title=$data['title'];
 
-      include(app_path() . '\reports\customleave_report.php');
+      include(app_path() . '/reports/customleave_report.php');
 
     }
 
@@ -460,7 +460,7 @@ include(app_path() . '\reports\loan_report.php');
       $leave=$data['leave'];
       $title=$data['title'];
 
-      include(app_path() . '\reports\customleave_report.php');
+      include(app_path() . '/reports/customleave_report.php');
 
       }
 
@@ -533,7 +533,7 @@ include(app_path() . '\reports\loan_report.php');
                 $paid_with_arrears_d=$data['paid_with_arrears_d'];
                 $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                 include(app_path() . '\reports\customleave_report.php');
+                 include(app_path() . '/reports/customleave_report.php');
 
             }
         }else{
@@ -606,7 +606,7 @@ include(app_path() . '\reports\loan_report.php');
                         $paid_with_arrears_d=$data['paid_with_arrears_d'];
                         $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                        include(app_path() . '\reports\payslip.php');
+                        include(app_path() . '/reports/payslip.php');
                 }
 
                 $data_all['emp_id'] = $payroll_emp_ids;
@@ -684,7 +684,7 @@ include(app_path() . '\reports\loan_report.php');
                 $paid_with_arrears_d=$data['paid_with_arrears_d'];
                 $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                include(app_path() . '\reports\payslip.php');
+                include(app_path() . '/reports/payslip.php');
                 //  return view('app.reports/payslip', $data);
 
             }
@@ -727,7 +727,7 @@ function backup_payslip(Request $request)  {
                 $slipinfo=$data['slipinfo'];
                 $companyinfo=$data['companyinfo'];
 
-                include(app_path() . '\reports\payslip_test.php');
+                include(app_path() . '/reports/payslip_test.php');
 
             }
 
@@ -748,7 +748,7 @@ function backup_payslip(Request $request)  {
         $empInfo=$data['empInfo'];
         $empID=$data['empID'];
 
-        include(app_path() . '\reports\payslip_test.php');
+        include(app_path() . '/reports/payslip_test.php');
         //  return view('app.reports/kpi', $data);
 
     }
@@ -774,7 +774,7 @@ function backup_payslip(Request $request)  {
             $employee_list=$data['employee_list'];
             $payroll_month=$data['payroll_month'];
 
-            include(app_path() . '\reports\attendance_report.php');
+            include(app_path() . '/reports/attendance_report.php');
             //  return view('app.reports/attendance_report', $data);
         }
 
