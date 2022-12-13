@@ -57,16 +57,16 @@
                             <td>{{ $row->night_percent }}</td>
                             <td align="center">
 
-                                <a href="{{ route('flex.overtime_category_info', [$row->id]) }}"
-                                    class="btn btn-outline-info btn-xs">
-                                    <i class="ph-note-pencil"></i>Edit</a>
+                                    <a href="{{ route('flex.overtime_category_info', [$row->id]) }}"
+                                        class="btn btn-outline-info btn-xs">
+                                        <i class="ph-note-pencil"></i>Edit</a>
 
-                                <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
-                                    class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal"
-                                    {{-- data-id="{{ $row->id }}"
-                                    data-name="{{ $row->name }}" --}}>
-                                    <i class="ph-trash"></i> Delete
-                                </button>
+                                    <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
+                                        class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal"
+                                        {{-- data-id="{{ $row->id }}"
+                                        data-name="{{ $row->name }}" --}}>
+                                        <i class="ph-trash"></i> Delete
+                                    </button>
                             </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">

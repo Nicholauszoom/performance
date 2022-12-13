@@ -4651,8 +4651,8 @@ public function remove_group_from_allowance(Request $request)  {
     }
 }
 
-  public function allowance_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function allowance_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Package';
       $data['allowance'] =  $this->flexperformance_model->getallowancebyid($id);
       $data['group'] =  $this->flexperformance_model->customgroup($id);
@@ -4662,6 +4662,7 @@ public function remove_group_from_allowance(Request $request)  {
       $data['employee'] =  $this->flexperformance_model->employee_allowance($id);
       $data['allowanceID'] =  $id;
       $data['title'] =  "Allowances";
+      // dd($data);
       return view('app.allowance_info', $data);
     }
 

@@ -1466,11 +1466,9 @@ function meals_deduction()
 
 	function allowance_membersCount($allowance)
 	{
-		$query = "COUNT(DISTINCT ea.empID) members  WHERE ea.allowance = ".$allowance."  ";
-		$row = BD::table('emp_allowances as ea')
-		->select(DB::raw($query))
-		->first();
-    	return $row->members;
+		$query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea  WHERE ea.allowance = ".$allowance."  ";
+		$row = DB::select(DB::raw($query));
+    	return $row[0]->members;
 	}
 
 	function allowance_groupsCount($allowance)

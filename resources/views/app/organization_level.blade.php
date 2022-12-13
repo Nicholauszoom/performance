@@ -116,8 +116,18 @@
                                     <td>{{ $row->name }}</td>
                                     <td>{{ number_format($row->minSalary) }}</td>
                                     <td>{{ number_format($row->maxSalary) }}</td>
-                                    <td><a href="{{ route('flex.organization_level_info', [$row->id]) }}"
-                                            class="btn btn-perfrom">View</a>
+                                    <td align="center">
+
+                                        <a href="{{ route('flex.organization_level_info', [$row->id]) }}"
+                                            class="btn btn-outline-info btn-xs">
+                                            <i class="ph-note-pencil"></i>Edit</a>
+        
+                                        <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
+                                            class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal"
+                                            {{-- data-id="{{ $row->id }}"
+                                            data-name="{{ $row->name }}" --}}>
+                                            <i class="ph-trash"></i> Delete
+                                        </button>
                                     </td>
                                     {{-- <td><a href="{{ route('flex.organization_level_info',base64_encode($row->id))}}" class="btn btn-perfrom">View</a>
                                     </td>  --}}

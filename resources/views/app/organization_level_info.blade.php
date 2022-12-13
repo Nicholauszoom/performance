@@ -77,8 +77,8 @@
                                     <td>{{ number_format($maxSalary) }}</td>
                                 </tr>
 
+                            </table>
                         </tbody>
-                        </table>
                     </div>
                 </div>
                 <!-- Groups -->
