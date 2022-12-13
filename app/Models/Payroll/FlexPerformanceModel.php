@@ -1543,6 +1543,13 @@ function meals_deduction()
 
 	}
 
+	public function deleteOvertimeCategory($id)
+	{
+		DB::table('overtime_category')->delete($id);
+		return true;
+
+	}
+
 
     function overtimeCategory()
 	{

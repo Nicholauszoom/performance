@@ -257,6 +257,7 @@
 
       $("#yes_delete").click(function () {
           $.ajax({
+              
               url:"<?php echo url('flex/cancelRequest');?>/"+id+"/"+empID,
               success:function(data)
               {

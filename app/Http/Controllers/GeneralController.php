@@ -18,7 +18,7 @@ use App\Models\AttendanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\AccessControll\Departments;
-
+use GrahamCampbell\ResultType\Success;
 
 class GeneralController extends Controller
 {
@@ -2182,6 +2182,18 @@ public function activatePosition(Request $request)
           $result = $this->flexperformance_model->deleteOvertime($id);
           if($result == true){
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
+          } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
+
+    }
+
+    public function overtimeCategoryDelete($id) {
+        //   $overtimeID = $this->uri->segment(3);
+          $result = $this->flexperformance_model->deleteOvertimeCategory($id);
+          
+          if($result == true){
+            $response_array['status'] = "OK";
+            return back()->with('overtimeAdded', 'Overtime Category Deleted Successfully');
+            // echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
           } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
 
     }
@@ -4654,8 +4666,8 @@ public function remove_group_from_allowance(Request $request)  {
     }
 
 
-  public function overtime_category_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function overtime_category_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Overtime Category';
       $data['category'] =  $this->flexperformance_model->OvertimeCategoryInfo($id);
       return view('app.overtime_category_info', $data);
@@ -4750,40 +4762,43 @@ public function remove_group_from_allowance(Request $request)  {
    }
 
   public function updateOvertimeName(Request $request) {
-    $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+      $ID = $request->input('categoryID');
+      if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'name' =>$request->input('name')
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                  return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
    }
   public function updateOvertimeRateDay(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+    if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'day_percent' =>($request->input('day_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
    }
   public function updateOvertimeRateNight(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+    if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'night_percent' =>($request->input('night_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
