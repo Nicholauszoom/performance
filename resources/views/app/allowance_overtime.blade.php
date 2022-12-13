@@ -41,7 +41,7 @@
             </thead>
             <tbody>
                 @php
-                    $SN = 1;
+                   $SN=1
                 @endphp
                 @if (isset($data['overtimes']))
                     @foreach ($data['overtimes'] as $row)
@@ -50,7 +50,34 @@
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->day_percent }}</td>
                             <td>{{ $row->night_percent }}</td>
-                            <td></td>
+                            <td align="center">
+                                
+
+                                <button
+                                    type="button"
+                                    id="edit"
+                                    class="btn btn-outline-info btn-xs edit_permission_btn"
+                                     data-toggle="modal" 
+                                    {{-- data-id="{{ $row->id }}"
+                                    data-name="{{ $row->name }}" --}}
+                                >
+                                    <i class="ph-note-pencil"></i> Edit
+                                </button>
+                                <button
+                                    type="button"
+                                    id="edit"
+                                    onclick="editOvertime({{$row->id}})"
+                                    class="btn btn-outline-danger btn-xs edit_permission_btn"
+                                     data-toggle="modal" 
+                                    {{-- data-id="{{ $row->id }}"
+                                    data-name="{{ $row->name }}" --}}
+                                >
+                                    <i class="ph-trash"></i> Delete
+                                </button>
+
+                                {{-- {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                                {{ Form::close() }} --}}
+                            </td>
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <div class="dropdown">
@@ -81,6 +108,32 @@
 
             </tbody>
         </table>
+    </div>
+
+
+    {{--Modal section--}}
+    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="editt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content py-4 px-2">
+                <div class="modal-body">
+                    <div id="message"></div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-sm-4">
+    
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                        <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
+                    </div>
+                    <div class="col-sm-2">
+    
+                    </div>
+                </div>
+    
+            </div>
+        </div>
     </div>
     <!-- /basic datatable -->
 @endsection
@@ -175,8 +228,15 @@
 
 
 @endsection --}}
-
-{{-- @section('scripts')
+<script>
+    function editOvertime(id) {
+        const message = "Are you sure you want to delete?";
+      $('#editt').modal('show');
+      $('#editt').find('.modal-body #message').text(message);
+    }
+ </script>
+ @section('scripts')
+ 
 <script>
         $(document).on('click', '.edit_permission_btn', function () {
             var id = $(this).data('id');
@@ -202,4 +262,4 @@
 
         });
     </script>
-@endsection --}}
+@endsection 
