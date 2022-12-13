@@ -335,7 +335,8 @@ class GeneralController extends Controller
                   );
               $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                  return back()->with('success', 'Organization Level Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
@@ -349,7 +350,8 @@ class GeneralController extends Controller
                   );
               $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Organization Level Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
@@ -363,7 +365,8 @@ class GeneralController extends Controller
                   );
               $result = $this->flexperformance_model->updateOrganizationLevel($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Organization Level Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
