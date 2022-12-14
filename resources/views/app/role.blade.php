@@ -133,11 +133,11 @@
             Financial Groups <br> <small>Allowances, Bonuses and Deductions</small>
           </h3>
 
-          <a>
-            <button type="button" id="modal" data-toggle="modal" data-bs-target="#save_department" class="btn btn-main">
-              <i class="ph-plus me-2"></i> New Group
-            </button>
-          </a>
+          <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-finance-group">
+            <i class="ph-plus me-2"></i>New Group
+          </button>
+
+
         </div>
       </div>
 
@@ -181,11 +181,11 @@
 
 
 
- 
-            
-         
 
-      
+
+
+
+
         <!-- Modal -->
         <?php if( session('mng_roles_grp')){ ?>
         <div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -299,7 +299,7 @@
         <?php } ?>
         <!--Roles Group Modal-->
 
-         
+
 
 
         <!-- /page content -->
@@ -309,10 +309,17 @@
 
 
 @section('modal')
-<div>
-  @include('app.modal.add-role-group')
-</div>
-@include('app.modal.add-role')
+  <div>
+    @include('app.modal.add-role-group')
+  </div>
+
+  <div>
+    @include('app.modal.add-role')
+  </div>
+
+  <div>
+    @include('app.modal.finance-group')
+  </div>
 @endsection
 
 
