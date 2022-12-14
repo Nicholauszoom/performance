@@ -5183,7 +5183,7 @@ public function financial_group(Request $request) {
    public function groups(Request $request)  {
       if(session('mng_roles_grp')){
         $id = base64_decode($request->id);
-        
+
         $data['members'] = $this->flexperformance_model->members_byid($id);
         $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
         $data['headcounts'] = $this->flexperformance_model->memberscount($id);
@@ -5198,7 +5198,7 @@ public function financial_group(Request $request) {
 
 public function removeEmployeeFromGroup(Request $request)  {
    $method = $request->method();
-  
+
   if ($method == "POST") {
 
       $arr = $request->input('option');
@@ -5225,7 +5225,7 @@ public function removeEmployeeFromGroup(Request $request)  {
 public function removeEmployeeFromRole(Request $request)  {
 
   $method = $request->method();
-  
+
   if ($method == "POST") {
 
       $arr = $request->input('option');
@@ -5257,7 +5257,7 @@ public function removeEmployeeFromRole(Request $request)  {
 public function addEmployeeToGroup(Request $request)  {
 
   $method = $request->method();
-  
+
   if ($method == "POST") {
 
       $arr = $request->input('option');
@@ -5839,9 +5839,9 @@ function password_generator($size){
     if(Request::isMethod('post')) {
 
       // DATE MANIPULATION
-        $calendar = str_replace('/', '-', $request->input('birthdate'));
-        $contract_end = str_replace('/', '-', $request->input('contract_end'));
-        $contract_start = str_replace('/', '-', $request->input('contract_start'));
+      $calendar = str_replace('/', '-', $request->input('birthdate'));
+      $contract_end = str_replace('/', '-', $request->input('contract_end'));
+      $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
       $birthdate = date('Y-m-d', strtotime($calendar));
 
@@ -5888,8 +5888,8 @@ function password_generator($size){
           'branch' => $request->input("branch"),
           'hire_date' => date('Y-m-d',strtotime($contract_start)),
           'contract_renewal_date' => date('Y-m-d'),
-            'emp_id' => $request->input("emp_id"),
-            'username' => $request->input("emp_id"),
+          'emp_id' => $request->input("emp_id"),
+          'username' => $request->input("emp_id"),
             'password' => password_hash( $randomPassword, PASSWORD_BCRYPT),
             'contract_end' => date('Y-m-d',strtotime($contract_end)),
             'state' => 5,
