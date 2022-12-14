@@ -37,36 +37,22 @@
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
-
             <tbody>
-                @if(isset($data['deductions']))
-                    @foreach($data['deductions'] as $deductions)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $deductions->name }}</td>
-                            <td>{{ $deductions->amount }}</td>
-                            <td> HOD </td>
-                            <td align="center">
-                                {!! Form::open(['route' => ['deductions.destroy', $deductions->id], 'method' => 'delete']) !!}
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $deductions->id }}"
-                                    data-name="{{ $deductions->name }}"
-                                    data-name="{{ $deductions->amount}}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
-
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
-                            </td>
-                        </tr>
-
-                    @endforeach
-                    @endif
+                @foreach ($deduction as $row)
+                <tr id="domain {{ $row->id }}">
+                    <td width="1px">{{ $row->SNo }}</td>
+                    <td>{{ $row->name }}</td>
+                    <td>{{ $row->amount }}</td>
+                    <td class="options-width">
+                        <a href="{{ url('') }}/flex/updateBank/?category=2&id=".base64_encode{{ $row->id }}
+                            <button type="button" class="btn btn-info btn-xs"><i
+                                class="fa fa-info-circle"></i></button> </a>
+                        <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
+                            class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
+                                    class="fa fa-trash-o"></i></button> </a>
+                    </td>
+                </tr>
+            @endforeach
             </tbody>
         </table>
       </div>
