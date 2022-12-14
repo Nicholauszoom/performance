@@ -469,7 +469,9 @@ include(app_path() . '/reports/loan_report.php');
 
       }
 
-    function payslip(Request $request)  {
+    public function payslip(Request $request)  {
+        dd($request->all());
+
         if ($request->input('print')) {
 
       // DATE MANIPULATION
