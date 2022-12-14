@@ -75,17 +75,6 @@
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Birthdate:</label>
-                        <div class="input-group">
-							<span class="input-group-text"><i class="ph-calendar"></i></span>
-							<input type="text" placeholder="Date of Birth" class="form-control daterange-single @error('birthdate') is-invalid @enderror" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
-						</div>
-                        <span id="age" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="col-md-4 col-lg-4">
-                    <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" maxlength="30" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com">
                     </div>
@@ -111,6 +100,17 @@
                             <option value="Married">Married</option>
                             <option value="Widowed">Widowed</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="mb-3">
+                        <label class="form-label">Birthdate:</label>
+                        <div class="input-group">
+							<span class="input-group-text"><i class="ph-calendar"></i></span>
+							<input type="text" placeholder="Date of Birth" class="form-control daterange-single @error('birthdate') is-invalid @enderror" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
+						</div>
+                        <span id="age" class="text-danger"></span>
                     </div>
                 </div>
             </div>
