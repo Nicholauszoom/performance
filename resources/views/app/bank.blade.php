@@ -109,8 +109,9 @@
 
 @push('footer-script')
     <script type="text/javascript">
-        $('#add-branch').submit(function(e) {
-
+        $('#add-branch1').submit(function(e) {
+              var a = document.getElementById("name1");
+              alert(a);
             e.preventDefault(); // Prevent Default Submission
 
             $.ajax({

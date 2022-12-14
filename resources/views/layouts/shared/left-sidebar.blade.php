@@ -168,6 +168,8 @@
                         @if (session('mng_roles_grp'))
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/role') }}">Roles and Groups</a></li>
                         @endif
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_group')}}">Financial Groups</a></li>
+
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance')}}">Allowances</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance_overtime')}}">Overtime</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/statutory_deductions')}}">Statutory Deductions</a></li>

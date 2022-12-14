@@ -5089,7 +5089,50 @@ public function deleteBonus($id)
 #####################PRIVELEGES######################################
 
 
+public function financial_group(Request $request) {
+  if(session('mng_roles_grp')){
+    if(isset($_POST['addrole'])){
+      $data = array(
+           'name' => $request->input('name'),
+           'created_by' =>session('emp_id')
+      );
 
+      $result = $this->flexperformance_model->addrole($data);
+      if($result==true) {
+        $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+        session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
+      return  redirect('/flex/role');
+      } else {
+        echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
+      }
+
+
+    } elseif(isset($_POST['addgroup'])) {
+
+      $data = array(
+           'name' => $request->input('name'),
+           'type' => $request->input('type'),
+           'created_by' =>session('emp_id')
+      );
+
+      $this->flexperformance_model->addgroup($data);
+
+      session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
+      //$this->department();
+      return  redirect('/flex/role');
+    } else {
+      // $id =session('emp_id');
+      $data['role'] = $this->flexperformance_model->allrole();
+      $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
+      $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
+      $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+      $data['title']="Financial Groups";
+      return view('app.financial_group', $data);
+    }
+  }else{
+      echo "Unauthorized Access";
+  }
+}
   public function role(Request $request) {
     if(session('mng_roles_grp')){
       if(isset($_POST['addrole'])){

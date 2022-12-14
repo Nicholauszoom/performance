@@ -381,6 +381,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
+        Route::any('/financial_group','financial_group')->name('flex.financial_group');
+
         Route::any('/groups','groups')->name('flex.groups');
         Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
         Route::any('/removeEmployeeFromRole','removeEmployeeFromRole')->name('flex.removeEmployeeFromRole');
