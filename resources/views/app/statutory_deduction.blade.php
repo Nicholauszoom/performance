@@ -36,15 +36,16 @@
 
             <tbody>
 
-                    {{-- @foreach($pension as $row)
+                    @foreach($pension as $row)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td> </td>
-                            <td align="center">
+                            <td>{{ $row->SNo }}</td>
+                            <td>{{  $row->name}}</td>
+                            <td>{{ $row->amount_employee }}</td>
+                            <td> {{$row->amount_employer}}</td>
+                            <td> {{ $row->deduction_from }}</td>
+
+
+                            {{-- <td align="center">
                                 {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
 
                                 <button
@@ -59,11 +60,11 @@
 
                                 {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
-                            </td>
+                            </td> --}}
                         </tr>
 
                     @endforeach
-           --}}
+
             </tbody>
         </table>
       </div>
@@ -82,24 +83,23 @@
             <thead>
                 <tr>
                     <th>S/N</th>
-                    <th>Minimum Amount</th>
-                    <th>Maximum Amount</th>
-                    <th>Excess Added as</th>
-                    <th>Rate to an Amount Excess of Minimum</th>
+                    <th>Name</th>
+                    <th>Employee Amount(in %)</th>
+                    <th>Employer Amonut(in %)</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
 
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
+
+                    @foreach($deduction as $row)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td align="center">
+                            <td>{{ $row->SNo }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->rate_employee}}</td>
+                            <td>{{ $row->rate_employer }}</td>
+
+                            {{-- <td align="center">
                                 {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
 
                                 <button
@@ -114,11 +114,11 @@
 
                                 {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
-                            </td>
+                            </td> --}}
                         </tr>
 
                     @endforeach
-                    @endif
+
             </tbody>
         </table>
       </div>
@@ -162,13 +162,13 @@
                             <td>{{ $row->excess_added }} </td>
                             <td> {{ $row->rate }} </td>
 
-                            <td align="center">
+                            {{-- <td align="center">
                                 {!! Form::open(['route' => ['flex.deletepaye', $row->id], 'method' => 'delete']) !!}
                                 <button
                                     type="button"
                                     class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $row->id}}"
+                                     data-toggle="modal"
+                                      data-id="{{ $row->id}}"
                                     data-minimum="{{ $row->minimum}}"
                                     data-excess_added="{{ $row->excess_added}}"
                                     data-maximum="{{ $row->maximum}}"
@@ -178,7 +178,7 @@
                                 </button>
                                 {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
             </tbody>
