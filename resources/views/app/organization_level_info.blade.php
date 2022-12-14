@@ -91,6 +91,11 @@
                         </div>
 
                         <div class="card-body">
+                            @if (Session::has('success'))
+                            <div class="alert alert-success" role="alert">
+                                <p>{{ Session::get('success') }}</p>
+                            </div>
+                        @endif
                             <form action="{{ route('flex.updateOrganizationLevelName') }}"  method="POST" class="form-horizontal">
                               @csrf
                                 <div class="mb-3">

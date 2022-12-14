@@ -14,14 +14,10 @@
         <div class="card-header">
             <div class="d-flex justify-content-between">
                 <h5 class="mb-0">Banks</h5>
-                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#addCountry">
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add-bank">
                     <i class="ph-plus me-2"></i>Add Banks
                 </button>
-                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#addCountry">
-                    <i class="ph-plus me-2"></i>Add Branch
-                </button>
             </div>
-
         </div>
         <table class="table datatable-basic">
             <thead>
@@ -37,79 +33,89 @@
 
 
             <tbody>
-                <?php
-                          foreach ($banks as $row) { ?>
-                <tr id="domain<?php echo $row->id; ?>">
-                    <td width="1px"><?php echo $row->SNo; ?></td>
-                    <td><?php echo $row->name; ?></td>
-                    <td><?php echo $row->bank_code; ?></td>
-                    <td class="options-width">
-                        <a href="<?php echo url(''); ?>/flex/updateBank/?category=1&id=".base64_encode($row->id); ?>"
-                            title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                        <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
-                            class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
-                                    class="fa fa-trash-o"></i></button> </a>
-                    </td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <?php } //} ?>
+                @foreach ($banks as $row)
+                    <tr id="domain">
+                        <td width="1px">{{ $row->SNo }}</td>
+                        <td>{{ $row->name }}</td>
+                        <td>{{ $row->bank_code }}</td>
+                        <td class="options-width">
+                            <a href="<?php echo url(''); ?>/flex/updateBank/?category=1&id=".base64_encode{{ $row->id }};
+                                <button type="button" class="btn btn-info btn-xs">
+                                  <i class="fa fa-info-circle"></i></button> </a>
+                            <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
+                                class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
+                                        class="fa fa-trash-o"></i></button> </a>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
 
 
     <div class="card">
-      <div class="card-header">
-          <div class="d-flex justify-content-between">
-              <h5 class="mb-0">Branches</h5>
-          </div>
-      </div>
-                <table id="dataTables" class="table datatable-basic">
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Bank Name</th>
-                            <th>Branch Name</th>
-                            <th>Location</th>
-                            <th>Branch Code</th>
-                            <th>Option</th>
-                        </tr>
-                    </thead>
-
-
-                    <tbody>
-                        <?php
-                          foreach ($branch as $row) { ?>
-                        <tr id="domain<?php echo $row->id; ?>">
-                            <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->bankname; ?></td>
-                            <td><?php echo $row->name; ?></td>
-                            <td><?php echo $row->country; ?><br><?php echo $row->region; ?></td>
-                            <td><?php echo $row->branch_code; ?></td>
-                            <td class="options-width">
-                                <a href="<?php echo url(''); ?>/flex/updateBank/?category=2&id=".base64_encode($row->id); ?>"
-                                    title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                        class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
-                                    class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
-                                            class="fa fa-trash-o"></i></button> </a>
-                            </td>
-                        </tr>
-                        <?php } //} ?>
-                    </tbody>
-                </table>
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-0">Branches</h5>
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add-branch">
+                    <i class="ph-plus me-2"></i>Add Branch
+                </button>
             </div>
+        </div>
+        <table id="dataTables" class="table datatable-basic">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Bank Name</th>
+                    <th>Branch Name</th>
+                    <th>Location</th>
+                    <th>Branch Code</th>
+                    <th>Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($branch as $row)
+                    <tr id="domain {{ $row->id }}">
+                        <td width="1px">{{ $row->SNo }}</td>
+                        <td>{{ $row->bankname }}</td>
+                        <td>{{ $row->name }}</td>
+                        <td>{{ $row->country }}<br>{{ $row->region }}</td>
+                        <td>{{ $row->branch_code }}</td>
+                        <td class="options-width">
+                            <a href="{{ url('') }}/flex/updateBank/?category=2&id=".base64_encode{{ $row->id }}
+                                <button type="button" class="btn btn-info btn-xs"><i
+                                    class="fa fa-info-circle"></i></button> </a>
+                            <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
+                                class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
+                                        class="fa fa-trash-o"></i></button> </a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@endsection
 
+@section('modal')
+    <div>
+        @include('app.modal.add-bank')
 
+    </div>
+
+    @include('app.modal.add-branch')
+@endsection
+
+@push('footer-script')
     <script type="text/javascript">
-        $('#addBankBranch').submit(function(e) {
+        $('#add-branch').submit(function(e) {
 
             e.preventDefault(); // Prevent Default Submission
 
             $.ajax({
                     url: "<?php echo url(''); ?>/flex/addBankBranch",
+                    headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
                     type: 'POST',
                     data: $(this).serialize(), // it will serialize the form data
                     dataType: 'json'
@@ -124,11 +130,11 @@
                         $('#feedbackBankBranch').fadeOut('fast', function() {
                             $('#feedbackBankBranch').fadeIn('fast').html(data.message);
                         });
-                        $('#addBankBranch')[0].reset();
+                        $('#add-branch')[0].reset();
                         $("#branchList").load(" #branchList"); // then reload the div to clear the
                         /*setTimeout(function(){// wait for 5 secs(2)
-                 location.reload();
-              }, 2000);*/
+                   location.reload();
+                }, 2000);*/
 
                     } else {
                         alert(data.message);
@@ -143,4 +149,4 @@
 
         });
     </script>
-@endsection
+@endpush

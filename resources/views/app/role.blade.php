@@ -2,10 +2,12 @@
 
 @push('head-script')
   <script src="{{ asset('assets/js/components/notifications/bootbox.min.js') }}></script>
+  <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
   <script src="{{ asset('assets/js/pages/components_modals.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -19,7 +21,9 @@
             <h3 class="text-muted">Roles and Permission Groups</h3>
 
             @if (session('mng_roles_grp'))
-            <button class="btn btn-main"> <i class="ph-plus me-2"></i> New Group</button>
+            <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add-role-group">
+              <i class="ph-plus me-2"></i>New Group
+          </button>
             @endif
         </div>
       </div>
@@ -69,7 +73,9 @@
           <h3 class="text-muted">Roles </h3>
 
           @if (session('mng_roles_grp'))
-          <button class="btn btn-main"> <i class="ph-plus me-2"></i> New Role</button>
+          <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add-role">
+            <i class="ph-plus me-2"></i>New Role
+        </button>
           @endif
         </div>
       </div>
@@ -416,8 +422,11 @@
 @endsection
 
 
-@section('modals')
-  @include('app.modal.add-role')
+@section('modal')
+<div>
+  @include('app.modal.add-role-group')
+</div>
+@include('app.modal.add-role')
 @endsection
 
 
