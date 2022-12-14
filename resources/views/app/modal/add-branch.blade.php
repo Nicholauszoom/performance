@@ -16,7 +16,7 @@
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Branch name</label>
                         <div class="col-sm-9">
-                            <input type="text" name="name" class="form-control">
+                            <input type="text" name="name" id="name1" class="form-control">
                         </div>
                     </div>
                     <div class="row mb-3">

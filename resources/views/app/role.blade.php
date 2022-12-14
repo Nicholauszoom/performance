@@ -133,11 +133,11 @@
             Financial Groups <br> <small>Allowances, Bonuses and Deductions</small>
           </h3>
 
-          <a>
-            <button type="button" id="modal" data-toggle="modal" data-bs-target="#save_department" class="btn btn-main">
-              <i class="ph-plus me-2"></i> New Group
-            </button>
-          </a>
+          <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-finance-group">
+            <i class="ph-plus me-2"></i>New Group
+          </button>
+
+
         </div>
       </div>
 
@@ -163,9 +163,9 @@
               <td class="options-width">
               <?php if($row->type>0){ ?>
 
-              <a  href="<?php echo  url(''); ?>/flex/groups/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+              <a  href="<?php echo  url(''); ?>/flex/groups/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button> </a>
 
-             <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+             <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
              <?php } ?>
               </td>
                <?php } ?>
@@ -181,124 +181,11 @@
 
 
 
-  <div class="card" role="main">
-
-
-    <
-          <div class="">
-            <div class="page-title">
-              <div class="title_left">
-
-              </div>
-            </div>
-            <div class="clearfix"></div>
-
-               <?php echo session("notegroup");
-
-               echo session("note");  ?>
-
-            <div class="row">
 
 
 
-              <!-- Groups -->
-              <div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Financial Groups<small>Allowances, Bonuses and Deductions</small> &nbsp;&nbsp;<a><button type="button" id="modal" data-toggle="modal" data-target="#groupModal" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;New Group</button></a></h2>
-
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                  <div id="feedBackFinanceGroup"></div>
-                    <table  class="table table-bordered table-striped">
-                      <thead>
-                        <tr>
-                          <th>S/N</th>
-                          <th>Name</th>
-                          <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
-                          <th>Option</th>
-                          <?php } ?>
-                        </tr>
-                      </thead>
 
 
-                      <tbody>
-                        <?php
-                          foreach ($financialgroups as $row) { ?>
-                          <tr id = "recordFinanceGroup<?php echo $row->id; ?>">
-                            <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->name; ?></td>
-                            <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
-                            <td class="options-width">
-                            <?php if($row->type>0){ ?>
-
-                            <a  href="<?php echo  url(''); ?>/flex/groups/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-
-                           <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                           <?php } ?>
-                            </td>
-                             <?php } ?>
-                            </tr>
-                          <?php } ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <!-- Groups -->
-
-              <!--Roles-->
-
-
-              <div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Roles<a>&nbsp;&nbsp;<button type="button" id="modal" data-toggle="modal" data-target="#roleModal" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;&nbsp;Create New Role</button></a></h2>
-
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                  <div id="feedBackRole"></div>
-                    <table  class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>S/N</th>
-                          <th>Name</th>
-                          <?php if( session('mng_roles_grp')){ ?>
-                          <th>Option</th>
-                        <?php } ?>
-                        </tr>
-                      </thead>
-
-
-                      <tbody>
-                        <?php
-                        // if ($department->num_rows() > 0){
-                          foreach ($role as $row) { ?>
-                          <tr id = "recordRole<?php echo $row->id; ?>">
-                            <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->name; ?></td>
-                          <?php if( session('mng_roles_grp')){ ?>
-                            <td class="options-width">
-                            <a  href="<?php echo  url(''); ?>/flex/role_info/?id=".base64_encode($row->id); ?>"  title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-
-                           <a href="javascript:void(0)" onclick="deleteRole(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-
-                           <!-- <a href="<?php echo  url(''); ?>/flex/deleterole/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a> -->
-                           </td>
-                         <?php } ?>
-                            </tr>
-                          <?php } //} ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-              <!--Roles-->
-            </div>
-            <br><br><br><br><br>
         <!-- Modal -->
         <?php if( session('mng_roles_grp')){ ?>
         <div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -412,8 +299,7 @@
         <?php } ?>
         <!--Roles Group Modal-->
 
-          </div>
-        </div>
+
 
 
         <!-- /page content -->
@@ -423,10 +309,17 @@
 
 
 @section('modal')
-<div>
-  @include('app.modal.add-role-group')
-</div>
-@include('app.modal.add-role')
+  <div>
+    @include('app.modal.add-role-group')
+  </div>
+
+  <div>
+    @include('app.modal.add-role')
+  </div>
+
+  <div>
+    @include('app.modal.finance-group')
+  </div>
 @endsection
 
 

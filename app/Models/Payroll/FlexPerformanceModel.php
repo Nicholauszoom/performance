@@ -1466,11 +1466,9 @@ function meals_deduction()
 
 	function allowance_membersCount($allowance)
 	{
-		$query = "COUNT(DISTINCT ea.empID) members  WHERE ea.allowance = ".$allowance."  ";
-		$row = BD::table('emp_allowances as ea')
-		->select(DB::raw($query))
-		->first();
-    	return $row->members;
+		$query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea  WHERE ea.allowance = ".$allowance."  ";
+		$row = DB::select(DB::raw($query));
+    	return $row[0]->members;
 	}
 
 	function allowance_groupsCount($allowance)
@@ -1539,6 +1537,13 @@ function meals_deduction()
 	public function addOvertimeCategory($data)
 	{
 		DB::table('overtime_category')->insert($data);
+		return true;
+
+	}
+
+	public function deleteOvertimeCategory($id)
+	{
+		DB::table('overtime_category')->delete($id);
 		return true;
 
 	}
@@ -2425,15 +2430,17 @@ function allLevels()
 
 
 	// FORM
-	function positionFetcher($id)
+	public function positionFetcher($id)
 	{
 		$query = "SELECT * FROM position where dept_id = '".$id."' and state = 1";
         $query = DB::select(DB::raw($query));
         $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '".$id."'";
         $query_linemanager = DB::select(DB::raw($query_linemanager));
-		$query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
-		$$query_country_director = DB::select(DB::raw($query_country_director));
-		return [$query,$query_linemanager,$query_country_director];
+		// $query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
+		// $query_country_director = DB::select(DB::raw($query_country_director));
+		// return [$query,$query_linemanager,$query_country_director];
+
+		return [$query,$query_linemanager];
 	}
 
 	// FORM
@@ -2452,6 +2459,7 @@ function allLevels()
 		->select(DB::raw($query))
 		->first();
         });
+
 		return $row->id;
 	}
 
@@ -2799,12 +2807,12 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 
 	function memberscount($id)
-	{
-		$query = "count(id) as headcounts  WHERE group_name =".$id."";
-		$row = DB::table('employee_group')
-		->select(DB::raw($query))
-		->first();
-    	return $row->headcounts;
+	{   
+		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
+		$row = DB::select(DB::raw($query));
+		
+    	return $row[0]->headcounts;
+
 	}
 
 
@@ -2834,6 +2842,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     function members_byid($id)
 	{
+		
 		$query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = ".$id."  and e.emp_id IN (SELECT empID from employee_group where group_name=".$id.")";
 
 		return DB::select(DB::raw($query));
@@ -2877,7 +2886,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeFromGroup($refID, $empID, $groupID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($refID, $empID, $groupID)
        {
 	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
         DB::insert(DB::raw($query));
@@ -2896,7 +2905,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeFromRole($refID, $empID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($refID, $empID)
        {
 	    $query = "DELETE FROM emp_role WHERE id ='".$refID."'";
 		DB::insert(DB::raw($query));
@@ -2920,7 +2929,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function deleteEmployeeFromGroup($group_id, $empID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use ($group_id, $empID)
        {
 		$query = "DELETE FROM employee_group WHERE empID ='".$empID."' and group_name = '".$group_id."'";
         DB::insert(DB::raw($query));
@@ -3488,7 +3497,7 @@ function my_grievances($empID)
 		    $query = "update assignment_task set date = '".$payroll_date."' where date is null ";
 		    DB::insert(DB::raw($query));
 		});
-        
+
 		return true;
 	}
 

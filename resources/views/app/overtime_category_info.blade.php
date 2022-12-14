@@ -37,7 +37,7 @@
             
             ?>            
             <!--START Overtimes-->
-            <div class="row">
+            {{-- <div class="row">
               <!-- Groups -->
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
@@ -110,7 +110,181 @@
                 </div>
               </div>
               <!--UPDATE-->
-            </div> <!--end row Overtimes -->
+            </div> <!--end row Overtimes --> --}}
+
+            <div class="row">
+              <div class="card col-md-6">
+                  <div class="card-header">
+                      <h5 class="mb-0">Details</h5>
+                  </div>
+
+                  <div class="table-responsive">
+                      <tbody>
+                          <table class="table table-bordered">
+                              <tr>
+                                  <th>Name</th>
+                                  <td>{{ $name }}</td>
+                              </tr>
+                              <tr>
+                                  <th>Day Hours Rate:</th>
+                                  <td>{{ $day_percent }}</td>
+                              </tr>
+                              <tr>
+                                  <th>Night Hours Rate</th>
+                                  <td>{{$night_percent }}</td>
+                              </tr>
+
+                      </tbody>
+                      </table>
+                  </div>
+              </div>
+              <!-- Groups -->
+
+              <!--UPDATE-->
+              <div class="col-lg-6">
+                  <div class="card">
+                      <div class="card-header">
+                          <h6 class="mb-0">Update</h6>
+                      </div>
+
+                      <div class="card-body">
+                          @if (Session::has('success'))
+                              <div class="alert alert-success" role="alert">
+                                  <p>{{ Session::get('success') }}</p>
+                              </div>
+                          @endif
+                          <form action="{{ route('flex.updateOvertimeName') }}" method="POST"
+                              class="form-horizontal">
+                              @csrf
+                              <div class="mb-3">
+                                  <div class="d-md-flex">
+                                      <div class="col-sm-8">
+                                          <input type="hidden" name='categoryID' value="{{ $categoryID }}"
+                                              class="form-control">
+                                          <input type="text" value="{{ $name }}" name="name"
+                                              class="form-control">
+                                      </div>
+                                      <div class="btn-group flex-shrink-0 ms-md-3">
+                                          <button type="submit" class="btn btn-perfrom multiselect-order-options-button"
+                                              id="updateLevelName">Update Name</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                          <form action="{{ route('flex.updateOvertimeRateDay') }}" method="POST" class="form-horizontal">
+                              @csrf
+                              <div class="mb-3">
+                                  <div class="d-md-flex">
+                                      <div class="col-sm-7">
+                                          <input type="hidden" name='categoryID' value="{{ $categoryID }}"
+                                              class="form-control">
+                                          <input type="number" min="0" name="day_percent" value="{{ $day_percent }}"
+                                              class="form-control">
+                                      </div>
+                                      <div class="btn-group flex-shrink-0 ms-md-3">
+                                          <button type="submit"
+                                              class="btn btn-perfrom multiselect-order-options-button">Update Day Rate</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                          <form action="{{ route('flex.updateOvertimeRateNight') }}" method="POST" class="form-horizontal">
+                              @csrf
+                              <div class="mb-3">
+                                  <div class="d-md-flex">
+                                      <div class="col-sm-7">
+                                          <input type="hidden" name='categoryID' value="{{ $categoryID }}"
+                                              class="form-control">
+                                          <input type="number" min="0" name="night_percent" value="{{ $night_percent }}"
+                                              class="form-control">
+                                      </div>
+                                      <div class="btn-group flex-shrink-0 ms-md-3">
+                                          <button type="submit"
+                                              class="btn btn-perfrom multiselect-order-options-button">Update Night Rate</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+
+
+              {{-- <div class="col-md-6 col-sm-6 col-xs-12">
+                  <div class="x_panel">
+                      <div class="x_title">
+                          <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Update</b></h2>
+                          <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                          <div id="feedBackSubmission"></div>
+                          <form autocomplete="off" id="updateLevelName" class="form-horizontal form-label-left">
+                              <div class="form-group">
+                                  <div class="col-sm-9">
+                                      <div class="input-group">
+                                          <input hidden name="levelID" value="<?php echo $levelID; ?>">
+                                          <input required="" type="text" name="name" value="<?php echo $name; ?>"
+                                              class="form-control">
+                                          <span class="input-group-btn">
+                                              <button class="btn btn-primary">Update Name</button>
+                                          </span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+
+
+                          <form autocomplete="off" id="updateMinSalary" class="form-horizontal form-label-left">
+                              {{-- <div class="row mb-3">
+                              <div class="col-lg-9">
+                                  <div class="d-md-flex">
+                                      <div class="flex-grow-1">
+                                          <div class="form-group">
+                                              <label class="">Contract Name</label>
+                                              <input type="text" class="form-control" name="name" required>
+                                          </div>
+                                      </div>
+
+                                      <div class="btn-group flex-shrink-0 ms-md-3">
+                                          <button type="button"
+                                              class="btn btn-primary multiselect-order-options-button">Order</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div}}> 
+                              <div class="form-group">
+                                  <div class="col-sm-9">
+                                      <div class="input-group">
+                                          <input hidden name="levelID" value="<?php echo $levelID; ?>">
+                                          <input required="" type="number" step="0.01" name="minSalary"
+                                              step="1" min="1" max="1000000000" value="<?php echo $minSalary; ?>"
+                                              class="form-control">
+                                          <span class="input-group-btn">
+                                              <button class="btn btn-primary">UPDATE MIN SALARY</button>
+                                          </span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                          <form autocomplete="off" id="updateMaxSalary" class="form-horizontal form-label-left">
+                              <div class="form-group">
+                                  <div class="col-sm-9">
+                                      <div class="input-group">
+                                          <input hidden name="levelID" value="<?php echo $levelID; ?>">
+                                          <input required="" type="number" step="1" name="maxSalary"
+                                              step="1" min="1" max="1000000000" value="<?php echo $maxSalary; ?>"
+                                              class="form-control">
+                                          <span class="input-group-btn">
+                                              <button class="btn btn-primary">UPDATE MAX SALARY</button>
+                                          </span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div> --}}
+          </div>
 
             <!--END DEDUCTION-->            
             <?php  //} ?>
@@ -122,7 +296,8 @@
 
         <!-- /page content -->   
 
-<?php 
+{{-- 
+  <?php 
 //@include("app/includes/update_deductions")
 
 <script type="text/javascript">
@@ -205,5 +380,5 @@
      alert('Update Failed!! ...'); 
         });
     }); 
-</script>
+</script> --}}
  @endsection

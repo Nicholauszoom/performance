@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
 
     //routes for setting
-    Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
+    //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
     //route for payroll
     Route::group(['prefix' => 'payroll'], function () {
@@ -312,7 +312,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/not_logged_in','not_logged_in')->name('flex.not_logged_in');
         Route::any('/viewrecords','viewrecords')->name('flex.viewrecords');
         Route::any('/home','home')->name('flex.home');
-        Route::any('/positionFetcher/{id}','positionFetcher')->name('flex.positionFetcher');
+        Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
         Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
         Route::any('/addkin','addkin')->name('flex.addkin');
         Route::any('/deletekin','deletekin')->name('flex.deletekin');
@@ -356,14 +356,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/non_statutory_deductions','non_statutory_deductions')->name('flex.non_statutory_deductions');
         Route::any('/addAllowance','addAllowance')->name('flex.addAllowance');
         Route::any('/addOvertimeCategory','addOvertimeCategory')->name('flex.addOvertimeCategory');
+        Route::any('/overtimeCategoryDelete/{id}','overtimeCategoryDelete')->name('flex.overtimeCategoryDelete');
         Route::any('/addDeduction','addDeduction')->name('flex.addDeduction');
         Route::any('/assign_allowance_individual','assign_allowance_individual')->name('flex.assign_allowance_individual');
         Route::any('/assign_allowance_group','assign_allowance_group')->name('flex.assign_allowance_group');
         Route::any('/remove_individual_from_allowance','remove_individual_from_allowance')->name('flex.remove_individual_from_allowance');
         Route::any('/remove_group_from_allowance','remove_group_from_allowance')->name('flex.remove_group_from_allowance');
-        Route::any('/allowance_info','allowance_info')->name('flex.allowance_info');
-        Route::any('/overtime_category_info','overtime_category_info')->name('flex.overtime_category_info');
-        Route::any('/overtime_category_info','overtime_category_info')->name('flex.overtime_category_info');
+
         Route::any('/deleteAllowance','deleteAllowance')->name('flex.deleteAllowance');
         Route::any('/activateAllowance','activateAllowance')->name('flex.activateAllowance');
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
@@ -383,6 +382,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
+        Route::any('/financial_group','financial_group')->name('flex.financial_group');
+
         Route::any('/groups','groups')->name('flex.groups');
         Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
         Route::any('/removeEmployeeFromRole','removeEmployeeFromRole')->name('flex.removeEmployeeFromRole');

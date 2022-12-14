@@ -22,19 +22,12 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Groups</h3>
-              </div>
-
-            </div>
-
             <div class="clearfix"></div>
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head py-3">
                     <h2><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h2>
                           
                     <div class="col-md-6 col-sm-12 col-xs-12">
@@ -56,10 +49,11 @@
                     <div class="clearfix"></div>
                   </div>
 
-                  <div class="x_content">
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                  <div class="card-body">
+                   @if(Session::has('note'))      {{ session('note') }}  @endif  
                    <div id="feedBackRemove"></div>
                     <form id="removeFromGroup"  method="post">
+                      @csrf
                     <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
                     
                         <!-- </div> -->
@@ -105,18 +99,18 @@
 
               <!-- Groups -->
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>All Employees </h2><br>
                     <small><b>Mark Employees to add them in this Group</b></small>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    <?php echo session("notegroup");  ?>
                    <div id="feedBackAdd"></div>
                     <form id="addToGroup" method="post">
-
+                    @csrf
                     <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
                     <table  id="datatable-keytable" class="table table-striped table-bordered">
                       <thead>

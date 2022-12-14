@@ -24,7 +24,7 @@
 
     <div class="card-body">
         <div class="mb-3">
-            <label class="form-label">Employee Type hjjj:</label>
+            <label class="form-label">Employee Type:</label>
             <select class="form-control select">
                 <option value="AZ">Active</option>
                 <option value="CO">Exited</option>

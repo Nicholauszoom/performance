@@ -107,6 +107,8 @@ class ReportController extends Controller
 
    function p9(Request $request)  {
 
+        dd($request->all());
+
 
       if ($request->input('run')) {
         $payrolldate =$request->input('payrolldate');
@@ -130,9 +132,9 @@ class ReportController extends Controller
         // dd(app_path());
 
         include(app_path() . '/reports/p9.php');
-        
-        //  return view('app.reports/p9', $data); 
-    }    
+
+        //  return view('app.reports/p9', $data);
+    }
 }
 
 function p10(Request $request)  {
@@ -216,7 +218,7 @@ function heslb(Request $request)  {
 
 
     include(app_path() . '/reports/heslb.php');
-    
+
     //  return view('app.reports/heslb', $data);
 
 }
@@ -258,6 +260,8 @@ include(app_path() . '/reports/pension.php');
 
 
 function wcf(Request $request)  {
+    dd($request->all());
+
     if ($request->input('run')) {
         $calendar =$request->input('payrolldate');
         $datewell = explode("-",$calendar);
@@ -423,7 +427,7 @@ include(app_path() . '/reports/loan_report.php');
     $data['leave'] =  $this->attendance_model->leavereport1($dates, $datee);
     $data['title']="List of Employees Who went to Leave From ".$dates. " to ".$datee;
       $data['showbox'] = 1;
-        
+
       $showbox=$data['showbox'];
       $leave=$data['leave'];
       $title=$data['title'];
@@ -465,7 +469,9 @@ include(app_path() . '/reports/loan_report.php');
 
       }
 
-    function payslip(Request $request)  {
+    public function payslip(Request $request)  {
+        dd($request->all());
+
         if ($request->input('print')) {
 
       // DATE MANIPULATION

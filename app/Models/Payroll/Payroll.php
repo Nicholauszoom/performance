@@ -1038,7 +1038,7 @@ DB::insert(DB::raw($query));
 
 	     '".$payroll_date."' as payroll_date
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
-         //=========DB::insert(DB::raw($query));
+         DB::insert(DB::raw($query));
         //Confirm The Pending Payoll
         $query = " UPDATE payroll_months SET state = 0, appr_author = '".$empID."', appr_date = '".$todate."'  WHERE state = 1 ";
         DB::insert(DB::raw($query));

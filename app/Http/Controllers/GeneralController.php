@@ -18,7 +18,7 @@ use App\Models\AttendanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\AccessControll\Departments;
-
+use GrahamCampbell\ResultType\Success;
 
 class GeneralController extends Controller
 {
@@ -1811,7 +1811,7 @@ public function activatePosition(Request $request)
 
 
   public function applyOvertime(Request $request){
-
+    return $request->all();
 
       $start = $request->input('time_start');
       $finish = $request->input('time_finish');
@@ -2231,6 +2231,18 @@ public function activatePosition(Request $request)
           $result = $this->flexperformance_model->deleteOvertime($id);
           if($result == true){
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
+          } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
+
+    }
+
+    public function overtimeCategoryDelete($id) {
+        //   $overtimeID = $this->uri->segment(3);
+          $result = $this->flexperformance_model->deleteOvertimeCategory($id);
+          
+          if($result == true){
+            $response_array['status'] = "OK";
+            return back()->with('overtimeAdded', 'Overtime Category Deleted Successfully');
+            // echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
           } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
 
     }
@@ -3586,25 +3598,26 @@ public function updateLevel(Request $request) {
 
 
 
-function subdropFetcher(Request $request)  {
+  public function subdropFetcher()  {
 
     if(!empty($this->uri_segment(3))){
-    $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-     foreach ($querypos as $row){
-      echo "<option value='".$row->id."'>".$row->name."</option>";
+      $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-        }
-      }else{
-        echo '<option value="">Position not available</option>';
+      foreach ($querypos as $row){
+        echo "<option value='".$row->id."'>".$row->name."</option>";
+      }
+
+    } else {
+
+      echo '<option value="">Position not available</option>';
+
     }
 
-   }
+  }
 
-   function positionFetcher(Request $request)  {
-
-    // dd($request->input("dept_id"));
-
+  public function positionFetcher(Request $request)
+  {
     $depID = $request->input("dept_id");
 
     if(!empty($depID)){
@@ -3612,21 +3625,23 @@ function subdropFetcher(Request $request)  {
 
       $querypos = $query[0];
       $querylinemanager = $query[1];
-      $querydirector = $query[2];
+       //   $querydirector = $query[2];
       $data = [];
       $data['position'] = $querypos;
       $data['linemanager'] = $querylinemanager;
-      $data['director'] = $querydirector;
+      //   $data['director'] = $querydirector;
 
       echo json_encode($data);
+
+    } else{
+
+      echo '<option value="">Position not available</option>';
+
     }
-//    else{
-//        echo '<option value="">Position not available</option>';
-//    }
 
-   }
+  }
 
-   function bankBranchFetcher(Request $request)  {
+  public function bankBranchFetcher(Request $request)  {
 
     if(!empty($request->input("bank"))){
     $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
@@ -4456,11 +4471,12 @@ public function common_deductions_info(Request $request) {
 
     if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
       $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
-      $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
+      // $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
-      return view('app.allowance_overtime', $data);
+      // dd($data);
+      return view('app.allowance_overtime', compact('data'));
 
     }else{
       echo "Unauthorized Access";
@@ -4547,25 +4563,17 @@ public function common_deductions_info(Request $request) {
       }
 
    }
+  //  public function getOvertimeAllowance(){
+  //   if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
+  //   $data['overtimeData'] = $this->flexperformance_model->overtime_allowances();
+  //   dd($data);
+  //   return view('app.allowance_overtime', $data);
+  //  }else{
+  //   echo 'Unauthorized Access';
+  //  }
+  // }
 
 
-   //
-   public function addOvertimeCategory(Request $request){
-
-    $name = $request->input('name');
-    $day_percent = $request->input('day_percent');
-    $night_percent = $request->input('night_percent');
-
-    $data=array(
-
-    "name"=>$name,
-    "day_percent"=>$day_percent,
-    "night_percent"=>$night_percent,
-);
-// $result = $this->flexperformance_model->addOvertimeCategory($data);
-    DB::table('overtime_category')->insert($data);
-    echo "Record inserted successfully.<br/>";
-    return view('flex/statutory_deductions');
     }
 
     
@@ -4713,8 +4721,8 @@ public function remove_group_from_allowance(Request $request)  {
     }
 }
 
-  public function allowance_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function allowance_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Package';
       $data['allowance'] =  $this->flexperformance_model->getallowancebyid($id);
       $data['group'] =  $this->flexperformance_model->customgroup($id);
@@ -4724,12 +4732,13 @@ public function remove_group_from_allowance(Request $request)  {
       $data['employee'] =  $this->flexperformance_model->employee_allowance($id);
       $data['allowanceID'] =  $id;
       $data['title'] =  "Allowances";
+      // dd($data);
       return view('app.allowance_info', $data);
     }
 
 
-  public function overtime_category_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function overtime_category_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Overtime Category';
       $data['category'] =  $this->flexperformance_model->OvertimeCategoryInfo($id);
       return view('app.overtime_category_info', $data);
@@ -4824,40 +4833,43 @@ public function remove_group_from_allowance(Request $request)  {
    }
 
   public function updateOvertimeName(Request $request) {
-    $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+      $ID = $request->input('categoryID');
+      if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'name' =>$request->input('name')
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                  return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
    }
   public function updateOvertimeRateDay(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+    if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'day_percent' =>($request->input('day_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
    }
   public function updateOvertimeRateNight(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+    if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'night_percent' =>($request->input('night_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
@@ -5098,7 +5110,50 @@ public function deleteBonus($id)
 #####################PRIVELEGES######################################
 
 
+public function financial_group(Request $request) {
+  if(session('mng_roles_grp')){
+    if(isset($_POST['addrole'])){
+      $data = array(
+           'name' => $request->input('name'),
+           'created_by' =>session('emp_id')
+      );
 
+      $result = $this->flexperformance_model->addrole($data);
+      if($result==true) {
+        $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+        session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
+      return  redirect('/flex/role');
+      } else {
+        echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
+      }
+
+
+    } elseif(isset($_POST['addgroup'])) {
+
+      $data = array(
+           'name' => $request->input('name'),
+           'type' => $request->input('type'),
+           'created_by' =>session('emp_id')
+      );
+
+      $this->flexperformance_model->addgroup($data);
+
+      session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
+      //$this->department();
+      return  redirect('/flex/role');
+    } else {
+      // $id =session('emp_id');
+      $data['role'] = $this->flexperformance_model->allrole();
+      $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
+      $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
+      $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+      $data['title']="Financial Groups";
+      return view('app.financial_group', $data);
+    }
+  }else{
+      echo "Unauthorized Access";
+  }
+}
   public function role(Request $request) {
     if(session('mng_roles_grp')){
       if(isset($_POST['addrole'])){
@@ -5145,7 +5200,8 @@ public function deleteBonus($id)
   }
    public function groups(Request $request)  {
       if(session('mng_roles_grp')){
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($request->id);
+
         $data['members'] = $this->flexperformance_model->members_byid($id);
         $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
         $data['headcounts'] = $this->flexperformance_model->memberscount($id);
@@ -5159,8 +5215,9 @@ public function deleteBonus($id)
 
 
 public function removeEmployeeFromGroup(Request $request)  {
+   $method = $request->method();
 
-  if (Request::isMethod('post')) {
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       $groupID = $request->input('groupID');
@@ -5185,7 +5242,9 @@ public function removeEmployeeFromGroup(Request $request)  {
 
 public function removeEmployeeFromRole(Request $request)  {
 
-  if (Request::isMethod('post')) {
+  $method = $request->method();
+
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       if($arr == "" || $arr == "[]"){
@@ -5215,7 +5274,9 @@ public function removeEmployeeFromRole(Request $request)  {
 
 public function addEmployeeToGroup(Request $request)  {
 
-  if (Request::isMethod('post')) {
+  $method = $request->method();
+
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       $groupID = $request->input('groupID');
@@ -5447,7 +5508,7 @@ public function deleteGroup(Request $request)
 
     public function role_info(Request $request)  {
       if(session('mng_roles_grp')){
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($request->id);
 
           $data['employeesnot'] =  $this->flexperformance_model->employeesrole($id);
           $data['role'] = $this->flexperformance_model->getrolebyid($id);
@@ -5684,7 +5745,7 @@ public function updateCompanyName(Request $request) {
         }
    }
 
- function addEmployee(Request $request)  {
+  public function addEmployee(Request $request)  {
      if(session('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
          $data['pdrop'] = $this->flexperformance_model->positiondropdown();
          $data['contract'] = $this->flexperformance_model->contractdrop();
@@ -5704,11 +5765,10 @@ public function updateCompanyName(Request $request) {
          echo 'Unauthorized Access';
      }
 
-   }
+  }
 
-public function getPositionSalaryRange(Request $request)
+  public function getPositionSalaryRange(Request $request)
   {
-
     $positionID = $request->positionID;
 
     $data = array(
@@ -5717,7 +5777,6 @@ public function getPositionSalaryRange(Request $request)
 
     $minSalary = $maxSalary = 0;;
     $result = $this->flexperformance_model->getPositionSalaryRange($positionID);
-
 
     foreach ($result as $value) {
       $minSalary = $value->minSalary;
@@ -5787,14 +5846,20 @@ function password_generator($size){
 }
 
 
+  /**
+   * Register emmployee
+   *
+   */
   public function registerEmployee(Request $request) {
+
+    dd($request->all());
 
     if(Request::isMethod('post')) {
 
       // DATE MANIPULATION
-        $calendar = str_replace('/', '-', $request->input('birthdate'));
-        $contract_end = str_replace('/', '-', $request->input('contract_end'));
-        $contract_start = str_replace('/', '-', $request->input('contract_start'));
+      $calendar = str_replace('/', '-', $request->input('birthdate'));
+      $contract_end = str_replace('/', '-', $request->input('contract_end'));
+      $contract_start = str_replace('/', '-', $request->input('contract_start'));
 
       $birthdate = date('Y-m-d', strtotime($calendar));
 
@@ -5841,8 +5906,8 @@ function password_generator($size){
           'branch' => $request->input("branch"),
           'hire_date' => date('Y-m-d',strtotime($contract_start)),
           'contract_renewal_date' => date('Y-m-d'),
-            'emp_id' => $request->input("emp_id"),
-            'username' => $request->input("emp_id"),
+          'emp_id' => $request->input("emp_id"),
+          'username' => $request->input("emp_id"),
             'password' => password_hash( $randomPassword, PASSWORD_BCRYPT),
             'contract_end' => date('Y-m-d',strtotime($contract_end)),
             'state' => 5,

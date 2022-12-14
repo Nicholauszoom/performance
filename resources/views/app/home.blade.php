@@ -275,7 +275,7 @@
                         <td align="right">{{ number_format($s_gross_c - $s_gross_p, 2) }} </td>
                     </tr>
                     <tr>
-                        <td><b>Volunteer</b></td>
+                        <td><b>Temporary</b></td>
                         <td align="right">{{ number_format($v_gross_c, 2) }}</td>
                         <td align="right">{{ number_format($v_gross_p, 2) }}</td>
                         <td align="right">{{ number_format($v_gross_c - $v_gross_p, 2) }}</td>
@@ -288,7 +288,7 @@
                         <td align="right">{{ number_format($s_net_c_ - $s_net_p_, 2) }}</td>
                     </tr>
                     <tr>
-                        <td><b>Volunteer</b></td>
+                        <td><b>Temporary</b></td>
                         <td align="right">{{ number_format($v_net_c_, 2) }}</td>
                         <td align="right">{{ number_format($v_net_p_, 2) }}</td>
                         <td align="right">{{ number_format($v_net_c_ - $v_net_p_, 2) }}</td>
@@ -301,7 +301,7 @@
                         <td align="right">{{ $staff - $staff_p }}</td>
                     </tr>
                     <tr>
-                        <td><b>Volunteer</b></td>
+                        <td><b>Temporary</b></td>
                         <td align="right">{{ $volunteer }}</td>
                         <td align="right">{{ $volunteer_p }} </td>
                         <td align="right">{{ $volunteer - $volunteer_p }}</td>
