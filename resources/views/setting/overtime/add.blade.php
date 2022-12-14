@@ -1,4 +1,4 @@
-<div id="save_department" class="modal fade" tabindex="-1">
+<div id="add_overtime" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +7,7 @@
             </div>
 
             <form
-                action="{{ route('departments.store') }}"
+                action="{{ route('flex.addOvertimeCategory') }}"
                 method="POST"
                 class="form-horizontal"
             >
@@ -17,7 +17,7 @@
                     <div class="row mb-3">
                         
                     <div class="form-group">
-                        <label class="col-form-label col-sm-3">Contract Name</label>
+                        <label class="col-form-label col-sm-3">Overtime Name: </label>
                             <input type="text" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
@@ -26,16 +26,16 @@
                     </div>
                    
                     <div class="form-group">
-                        <label class="col-form-label col-sm-3">Duration (Years)</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+                        <label class="col-form-label col-sm-3">Day Payment Per Hour(In Percent)</label>
+                            <input type="number" placeholder="Payment Per Hour(Day)" name="day_percent"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>
                             @enderror
                     </div>
                     <div class="form-group">
-                        <label class="col-form-label col-sm-3">Notify Me (Months Before Contract Expiration)</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+                        <label class="col-form-label col-sm-3">Night Payment Per Hour(In Percent)</label>
+                            <input type="number" name="night_percent" placeholder="Payment Per Hour(Night)"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>

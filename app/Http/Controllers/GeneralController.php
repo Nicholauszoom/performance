@@ -18,7 +18,7 @@ use App\Models\AttendanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\AccessControll\Departments;
-
+use GrahamCampbell\ResultType\Success;
 
 class GeneralController extends Controller
 {
@@ -1811,7 +1811,7 @@ public function activatePosition(Request $request)
 
 
   public function applyOvertime(Request $request){
-
+    return $request->all();
 
       $start = $request->input('time_start');
       $finish = $request->input('time_finish');
@@ -2231,6 +2231,18 @@ public function activatePosition(Request $request)
           $result = $this->flexperformance_model->deleteOvertime($id);
           if($result == true){
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
+          } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
+
+    }
+
+    public function overtimeCategoryDelete($id) {
+        //   $overtimeID = $this->uri->segment(3);
+          $result = $this->flexperformance_model->deleteOvertimeCategory($id);
+          
+          if($result == true){
+            $response_array['status'] = "OK";
+            return back()->with('overtimeAdded', 'Overtime Category Deleted Successfully');
+            // echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
           } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
 
     }
@@ -4459,11 +4471,12 @@ public function common_deductions_info(Request $request) {
 
     if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
       $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
-      $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
+      // $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
-      return view('app.allowance_overtime', $data);
+      // dd($data);
+      return view('app.allowance_overtime', compact('data'));
 
     }else{
       echo "Unauthorized Access";
@@ -4543,11 +4556,19 @@ public function common_deductions_info(Request $request) {
       }
 
    }
-
+  //  public function getOvertimeAllowance(){
+  //   if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
+  //   $data['overtimeData'] = $this->flexperformance_model->overtime_allowances();
+  //   dd($data);
+  //   return view('app.allowance_overtime', $data);
+  //  }else{
+  //   echo 'Unauthorized Access';
+  //  }
+  // }
 
     public function addOvertimeCategory(Request $request)   {
-
-      if (Request::isMethod('post')) {
+      
+      if ($request->method()=='POST') {
         $data = array(
             'name' =>$request->input('name'),
             'day_percent' =>($request->input('day_percent')/100),
@@ -4555,8 +4576,9 @@ public function common_deductions_info(Request $request) {
           );
           $result = $this->flexperformance_model->addOvertimeCategory($data);
           if($result==true){
-            $this->flexperformance_model->audit_log("Created New Overtime ");
-              echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
+            // $this->flexperformance_model->audit_log("Created New Overtime ");
+            return back()->with('success', 'Overtime Added Successifully');
+              // echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
           } else {
               echo "<p class='alert alert-warning text-center'>Overtime Registration FAILED, Please Try Again</p>";
           }
@@ -4707,8 +4729,8 @@ public function remove_group_from_allowance(Request $request)  {
     }
 }
 
-  public function allowance_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function allowance_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Package';
       $data['allowance'] =  $this->flexperformance_model->getallowancebyid($id);
       $data['group'] =  $this->flexperformance_model->customgroup($id);
@@ -4718,12 +4740,13 @@ public function remove_group_from_allowance(Request $request)  {
       $data['employee'] =  $this->flexperformance_model->employee_allowance($id);
       $data['allowanceID'] =  $id;
       $data['title'] =  "Allowances";
+      // dd($data);
       return view('app.allowance_info', $data);
     }
 
 
-  public function overtime_category_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function overtime_category_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Overtime Category';
       $data['category'] =  $this->flexperformance_model->OvertimeCategoryInfo($id);
       return view('app.overtime_category_info', $data);
@@ -4818,40 +4841,43 @@ public function remove_group_from_allowance(Request $request)  {
    }
 
   public function updateOvertimeName(Request $request) {
-    $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+      $ID = $request->input('categoryID');
+      if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'name' =>$request->input('name')
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                  return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
    }
   public function updateOvertimeRateDay(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+    if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'day_percent' =>($request->input('day_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
    }
   public function updateOvertimeRateNight(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
+    if ($request->method()=='POST' && $ID!='') {
           $updates = array(
                       'night_percent' =>($request->input('night_percent')/100)
                   );
               $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
               if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+                return back()->with('success', 'Updated Successifully!');
+                  // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
               } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
       }
