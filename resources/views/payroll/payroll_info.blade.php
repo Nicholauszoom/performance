@@ -66,7 +66,7 @@
     <div class="card-header border-0">
         <div class="d-flex">
 
-            <h3 class="me-4">Payroll Details For The Date:: {{ $payrollMonth }}</h3>
+            <h3 class="me-4">Payroll Details For : {{ $payrollMonth }}</h3>
 
             @if($payrollState == 1)
             <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
@@ -83,7 +83,7 @@
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="card border-0 shadow-none">
                 <div class="mb-2 ms-auto">
-                    <h4 class="text-muted">PayRoll Details:</h4>
+                    <h4 class="text-muted">Payloll Details:</h4>
                     <div class="d-flex flex-wrap wmin-lg-400">
                         <ul class="list list-unstyled mb-0">
                             <li><h5 class="my-2">Salaries:</h5></li>
@@ -124,7 +124,7 @@
                 <div id="resultConfirmation"></div>
 
                 <div class="mb-2 ms-auto">
-                    <h4 class="text-muted">More Details:</h4>
+                  <!--  <h4 class="text-muted">More Details:</h4> -->
 
                     @if ($payrollState == 1)
                     <div class="d-flex flex-wrap wmin-lg-400 mb-2">
@@ -194,7 +194,7 @@
                 <div class="mb-2 ms-auto d-flex justify-content-around">
                     <?php if($payrollState == 0 /*&&  session('mng_emp')*/){ ?>
                         <a href="javascript:void(0)" onclick="generate_checklist()" class="m-3">
-                            <button type="button" class="btn btn-main">Full Payment </button></a>
+                            <button type="button" class="btn btn-main">Confirm Payroll </button></a>
                     <?php }  else { ?>
                     <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}">
                         <button type="button" name="print" value="print" class="btn btn-warning">PAY CHECKLIST</button>
@@ -202,16 +202,16 @@
                     <?php } ?>
 
                     <a class="my-3" target="_blank" href="{{route('less_payments_print',['pdate',base64_encode($payrollMonth)])}}">
-                        <button type="button" name="print_payroll" class="btn btn-primary">PRINT</button>
+                        <button type="button" name="print_payroll" class="btn btn-main">Print Checklist</button>
                     </a>
 
                     <?php if($payrollState == 0) {?>
                     <a class="m-3" target="_self" href="{{route('grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
-                        <button type="button" name="print_payroll" class="btn btn-info">GROSS RECON</button>
+                        <button type="button" name="print_payroll" class="btn btn-info">Gross Recon</button>
                     </a>
 
                     <a class="m-3" target="_self" href="{{route('netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
-                        <button type="button" name="print_payroll" class="btn btn-info">NET RECON</button>
+                        <button type="button" name="print_payroll" class="btn btn-info">Net Recon</button>
                     </a>
                     <!-- <a class="m-3" target="_self" href="{{route('sendReviewEmail',['pdate'=>base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
@@ -285,7 +285,7 @@ if (check) {
 
 <script>
 function generate_checklist() {
-    if (confirm("Are You Sure You Want To a Full Payment Cheklist for This Payroll") == true) {
+    if (confirm("Are you sure? you whant to confirm payroll") == true) {
         // var id = id;
         $('#hideList').hide();
         $.ajax({

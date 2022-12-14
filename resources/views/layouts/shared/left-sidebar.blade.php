@@ -100,12 +100,9 @@
                           <!--  <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/partial_payment') }}">Partial Payment</a></li> -->
                         @endif
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/approved_financial_payments') }}">Pending Payments </a></li>
-                        @if (session('mng_stat_rpt'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_reports') }}">Statutory Reports </a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/organisation_reports') }}">Organisation Reports </a></li>
-                        @endif
+
                         @if (session('mng_paym'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/salary_calculator') }}"> Salary Calculator </a></li>
+                         <!--   <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/salary_calculator') }}"> Salary Calculator </a></li> -->
                         @endif
                     </ul>
                 </li>
@@ -153,17 +150,10 @@
                         <span>Reports</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('cipay.financial_reports') }}" class="nav-link {{ request()->routeIs('cipay.financial_reports') ? 'active' : null  }}">
-                                Statutory Reports
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('cipay.organisation_reports') }}" class="nav-link {{ request()->routeIs('cipay.organisation_reports') ? 'active' : null  }}">
-                                Organisation Reports
-                            </a>
-                        </li> --}}
+                        @if (session('mng_stat_rpt'))
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_reports') }}">Statutory Reports </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/organisation_reports') }}">Organisation Reports </a></li>
+                    @endif
                     </ul>
                 </li>
 
@@ -178,6 +168,8 @@
                         @if (session('mng_roles_grp'))
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/role') }}">Roles and Groups</a></li>
                         @endif
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_group')}}">Financial Groups</a></li>
+
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance')}}">Allowances</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance_overtime')}}">Overtime</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/statutory_deductions')}}">Statutory Deductions</a></li>

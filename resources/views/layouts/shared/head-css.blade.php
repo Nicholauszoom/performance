@@ -7,6 +7,9 @@
 
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
+
+
+
 <script src="{{ asset('assets/js/configurator.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 

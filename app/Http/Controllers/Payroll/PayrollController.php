@@ -761,7 +761,7 @@ class PayrollController extends Controller
     }
 
     function runpayroll($pdate)
-    {
+    {  
         $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
@@ -1308,6 +1308,8 @@ class PayrollController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
+
+        
 
     }
 
