@@ -107,7 +107,7 @@
     @include('app.modal.add-branch')
 @endsection
 
-@push('footer-script')
+{{-- @push('footer-script')
     <script type="text/javascript">
         $('#add-branch').submit(function(e) {
 
@@ -149,4 +149,4 @@
 
         });
     </script>
-@endpush
+@endpush --}}

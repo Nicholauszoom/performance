@@ -608,62 +608,62 @@ public function addBank(Request $request){
 // end add bank
 
 // add branch
-// public function addBankBranch(Request $request){
+public function addBankBranch(Request $request){
 
 //   dd($request->name);
 
-//     $name = $request->input('name');
-//     $bank = $request->input('bank');
-//     $street = $request->input('street');
-//     $region = $request->input('region');
-//     $country = $request->input('country');
-//     $branch_code = $request->input('branch_code');
-//     $swiftcode = $request->input('swiftcode');
+    $name = $request->input('name');
+    $bank = $request->input('bank');
+    $street = $request->input('street');
+    $region = $request->input('region');
+    $country = $request->input('country');
+    $branch_code= $request->input('branch_code');
+    $swiftcode = $request->input('swiftcode');
 
-//   $data=array(
-//    'name'=>$name,
-//    'bank'=>$bank,
-//    'street'=>$street,
-//    'region'=>$region,
-//    'country'=>$country,
-//    'branch_code'=>$branch_code,
-//    'swiftcode'=>$swiftcode
+  $data=array(
+   'name'=>$name,
+   'bank'=>$bank,
+   'street'=>$street,
+   'region'=>$region,
+   'country'=>$country,
+   'branch_code'=>$branch_code,
+   'swiftcode'=>$swiftcode
 
-// );
-//   DB::table('bank_branch')->insert($data);
-//   echo "Record inserted successfully.<br/>";
-//   return redirect('flex/bank');
+);
+  DB::table('bank_branch')->insert($data);
+  echo "Record inserted successfully.<br/>";
+  return redirect('flex/bank');
 
-//   }
+  }
 //   end add branch
 
-      public function addBankBranch(Request $request) {
-    $method = $request->method();
-        if($method == "POST") {
-          $data = array(
-                  'name' => $request->name,
-                  'bank' => $request->bank,
-                  'street' => $request->street,
-                  'region' => $request->region,
-                  'branch_code' => $request->code,
-                  'country' => $request->country,
-                  'swiftcode' => $request->swiftcode
-              );
-          $result = $this->flexperformance_model->addBankBranch($data);
-          if($result){
-              $response_array['status'] = "OK";
-              $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
-              header('Content-type: application/json');
-              echo json_encode($response_array);
-          } else{
-              $response_array['status'] = "ERR";
-              $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Branch not Added, Please try again</p>";
-              header('Content-type: application/json');
-              echo json_encode($response_array);
-          }
-        }
+    //   public function addBankBranch(Request $request) {
+    // $method = $request->method();
+    //     if($method == "POST") {
+    //       $data = array(
+    //               'name' => $request->name,
+    //               'bank' => $request->bank,
+    //               'street' => $request->street,
+    //               'region' => $request->region,
+    //               'branch_code' => $request->code,
+    //               'country' => $request->country,
+    //               'swiftcode' => $request->swiftcode
+    //           );
+    //       $result = $this->flexperformance_model->addBankBranch($data);
+    //       if($result){
+    //           $response_array['status'] = "OK";
+    //           $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
+    //           header('Content-type: application/json');
+    //           echo json_encode($response_array);
+    //       } else{
+    //           $response_array['status'] = "ERR";
+    //           $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Branch not Added, Please try again</p>";
+    //           header('Content-type: application/json');
+    //           echo json_encode($response_array);
+    //       }
+    //     }
 
-      }
+    //   }
 
 
     public function updateBank(Request $request) {

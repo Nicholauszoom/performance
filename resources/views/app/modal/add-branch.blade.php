@@ -7,55 +7,52 @@
             </div>
 
             <form
-            action="{{ route('flex.addBank') }}"
+            action="{{ route('flex.addBankBranch') }}"
             method="POST"
             class="form-horizontal"
         >
                 @csrf
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Bank name</label>
+                        <label class="col-form-label col-sm-3">Branch name</label>
                         <div class="col-sm-9">
                             <input type="text" name="name" class="form-control">
                         </div>
                     </div>
-
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3"> Abbr</label>
+                        <label class="col-form-label col-sm-3">Bank</label>
                         <div class="col-sm-9">
-                            <input type="text" name="brach_code" class="form-control">
+                            <input type="number" name="bank" class="form-control">
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3"> Code</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="swiftcode" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label class="col-form-label col-sm-3">Bank name</label>
-                        <div class="col-sm-9">
-                            <input type="text" name="bank" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <label class="col-form-label col-sm-3"> Abbr</label>
+                        <label class="col-form-label col-sm-3"> Street</label>
                         <div class="col-sm-9">
                             <input type="text" name="street" class="form-control">
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3"> Code</label>
+                        <label class="col-form-label col-sm-3"> Region</label>
                         <div class="col-sm-9">
                             <input type="text" name="region" class="form-control">
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-form-label col-sm-3"> Code</label>
+                        <label class="col-form-label col-sm-3"> Country</label>
                         <div class="col-sm-9">
                             <input type="text" name="country" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-form-label col-sm-3"> Branch code</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="branch_code" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-form-label col-sm-3"> SwiftCode</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="swiftcode" class="form-control">
                         </div>
                     </div>
 
