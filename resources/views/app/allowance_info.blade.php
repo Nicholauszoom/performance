@@ -35,63 +35,87 @@
             <div class="clearfix"></div>
 
             <div class="row">
-                <!-- Groups -->
-                {{-- <div class="card col-md-6">
-                  <div class="card-header">
-                      <h5 class="mb-0">Details</h5>
-                  </div>
+                <div class="card col-md-6">
+                    <div class="card-header">
+                        <h5 class="mb-0">Details</h5>
+                    </div>
 
-                  <div class="table-responsive">
-                      <tbody>
-                          <table class="table table-bordered">
-                              <tr>
-                                  <th>Name</th>
-                                  <td>{{ $name }}</td>
-                              </tr>
-                              <tr>
-                                  <th>Amount</th>
-                                  <td>{{ number_format($amount, 2) }}</td>
-                              </tr>
-                              <tr>
-                                  <th>Total Beneficiaries</th>
-                                  <td>{{ number_format(100 * $percent) }}</td>
-                              </tr>
+                    <div class="table-responsive">
+                        <table class="table ">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ $name }}</td>
+                            </tr>
+                            @if ($mode == 1)
+                                <tr>
+                                    <th>Amount</th>
+                                    <td>{{ number_format($amount, 2) }}</td>
+                                </tr>
+                            @else
+                                <tr>
+                                    <th>Amount</th>
+                                    <td>{{ 100 * $percent }}% of Salary</td>
+                                </tr>
+                            @endif
+                            <tr>
+                                <th>Total Beneficiaries</th>
+                                <td>{{ $membersCount }}</td>
+                            </tr>
 
-                          </table>
-                      </tbody>
-                  </div>
-              </div> --}}
+                        </table>
+                        <div class="card-body">
+                            <h4><i class="ph-plus me-2"></i>Add Members</h4>
+                            <form id="applyOvertime" enctype="multipart/form-data" method="post" data-parsley-validate
+                                class="form-horizontal form-label-left" autocomplete="off">
+                                @csrf
 
-              <div class="card col-md-6">
-                <div class="card-header">
-                  <h5 class="mb-0">Both borders</h5>
+                                <div class="modal-body">
+                                    <div class="row mb-3">
+                                        <label class="col-form-label col-sm-3">Employee:</label>
+                                        <div class="col-sm-9">
+
+                                            <select class="form-control select_category select" name="category">
+                                                <option selected disabled> Select </option>
+                                                {{-- @foreach ($overtimeCategory as $overtimeCategorie)
+                                          <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}</option>
+                                          @endforeach --}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="middle" align="center">
+                                    <button type="submit" class="btn btn-perfrom">Add</button>
+                                </div>
+                                <br>
+                            </form>
+
+                            <form id="applyOvertime" enctype="multipart/form-data" method="post" data-parsley-validate
+                                class="form-horizontal form-label-left" autocomplete="off">
+                                @csrf
+
+                                <div class="modal-body">
+                                    <div class="row mb-3">
+                                        <label class="col-form-label col-sm-3">Group</label>
+                                        <div class="col-sm-9">
+
+                                            <select class="form-control select_category select" name="category">
+                                                <option selected disabled> Select </option>
+                                                {{-- @foreach ($overtimeCategory as $overtimeCategorie)
+                                          <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}</option>
+                                          @endforeach --}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="" align="center">
+                                    <button type="submit" class="btn btn-perfrom">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-    
-                <div class="table-responsive">
-                  <table class="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>First Nam</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
-                      </tr>
-                    </thead>
-                      <tr>
-                        <td>1</td>
-                        <td>Eugene</td>
-                        <td>Kopyov</td>
-                        <td>@Kopyov</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Victoria</td>
-                        <td>Baker</td>
-                        <td>@Vicky</td>
-                      </tr>
-                  </table>
-                </div>
-              </div>
                 {{-- <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
@@ -172,182 +196,137 @@
                 <!-- Groups -->
 
                 <!--UPDATE-->
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Update</b></h2>
-                            <div class="clearfix"></div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Update</h6>
                         </div>
-                        <div class="x_content">
-                            <div id="feedBackSubmission"></div>
-                            <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <div class="input-group">
-                                            <input hidden name="allowanceID" value="<?php echo $allowanceID; ?>">
-                                            <input required="" type="text" name="name" value="<?php echo $name; ?>"
-                                                class="form-control">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary">Update Name</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <form autocomplete="off" id="updateTaxable" class="form-horizontal form-label-left">
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <div class="input-group">
-                                            <input hidden name="allowanceID" value="<?php echo $allowanceID; ?>">
-                                            <label for="first-name" for="stream">Is Taxable?</label>
-                                            <select name="taxable" class="select_type form-control" required tabindex="-1"
-                                                id="policy">
-                                                <option></option>
-                                                {{-- <option value="YES" <?php if ($taxable == 'YES') {
-                                                    echo 'selected';
-                                                } ?>>YES</option>
-                           <option value="NO" <?php if ($taxable == 'NO') {
-                               echo 'selected';
-                           } ?>>NO</option> --}}
-                                            </select>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary">Update Name</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                            <form autocomplete="off" id="updatePentionable" class="form-horizontal form-label-left">
-                                <div class="form-group">
-                                    <div class="col-sm-9">
-                                        <div class="input-group">
-                                            <input hidden name="allowanceID" value="<?php echo $allowanceID; ?>">
-                                            <label for="first-name" for="stream">Is Pentionable?</label>
-                                            <select name="pentionable" class="select_type form-control" required
-                                                tabindex="-1" id="policy">
-                                                <option></option>
-                                                {{-- <option value="YES" <?php if ($pentionable == 'YES') {
-                                                    echo 'selected';
-                                                } ?>>YES</option>
-                           <option value="NO" <?php if ($pentionable == 'NO') {
-                               echo 'selected';
-                           } ?>>NO</option> --}}
-                                            </select>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary">Update Name</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
 
-                            <div id="policy">
-                                <?php if($mode ==1){ ?>
-                                <form autocomplete="off" id="updateAmount" class="form-horizontal form-label-left">
-                                    <div class="form-group">
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <input hidden name="allowanceID" value="<?php echo $allowanceID; ?>">
-                                                <input required="" type="number" name="amount" step="1"
-                                                    min="1" max="10000000" value="<?php echo $amount; ?>"
-                                                    class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-primary">Update Amount</button>
-                                                </span>
-                                            </div>
+                        <div class="card-body">
+                            @if (Session::has('success'))
+                                <div class="alert alert-success" role="alert">
+                                    <p>{{ Session::get('success') }}</p>
+                                </div>
+                            @endif
+                            <form action="{{ route('flex.updateOrganizationLevelName') }}" method="POST"
+                                class="form-horizontal">
+                                @csrf
+                                <div class="mb-3">
+                                    <div class="d-md-flex">
+                                        <div class="col-sm-8">
+                                            <input type="hidden" name='levelID' class="form-control">
+                                            <input type="text" value="{{ $name }}" name="name"
+                                                class="form-control">
+                                        </div>
+                                        <div class="btn-group flex-shrink-0 ms-md-3">
+                                            <button type="submit" class="btn btn-perfrom multiselect-order-options-button"
+                                                id="updateLevelName">Update Name</button>
                                         </div>
                                     </div>
-                                </form>
-                                <?php }  if($mode ==2){ ?>
-                                <form autocomplete="off" id="updatePercent" class="form-horizontal form-label-left">
-                                    <div class="form-group">
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <input hidden name="allowanceID" value="<?php echo $allowanceID; ?>">
-                                                <input type="number" name="percent" min="0" max="99"
-                                                    step="0.1" value="<?php echo 100 * $percent; ?>" class="form-control">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-primary">% Update Percent</button>
-                                                </span>
-                                            </div>
+                                </div>
+                            </form>
+                            <form action="{{ route('flex.updateMinSalary') }}" method="POST" class="form-horizontal">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="first-name" for="stream">Is Taxable?</label>
+                                    <div class="d-md-flex">
+                                        <div class="col-sm-8">
+
+                                            <select class="form-control select_category select" name="category">
+                                                <option selected disabled> Select </option>
+                                                {{-- @foreach ($overtimeCategory as $overtimeCategorie) --}}
+                                                <option value="">YES</option>
+                                                <option value="">NO</option>
+                                            </select>
+                                        </div>
+                                        <div class="btn-group flex-shrink-0 ms-md-3">
+                                            <button type="submit"
+                                                class="btn btn-perfrom multiselect-order-options-button">Update
+                                                Name</button>
                                         </div>
                                     </div>
-                                </form>
-                                <?php } ?>
-                            </div>
-                            <form autocomplete="off" id="updatePolicy" method="post"
-                                class="form-horizontal form-label-left">
-                                <div class="form-group">
+                                </div>
+                            </form>
+                            <form action="{{ route('flex.updateMinSalary') }}" method="POST" class="form-horizontal">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="first-name" for="stream">Is Pentionable?</label>
+                                    <div class="d-md-flex">
+                                        <div class="col-sm-8">
+
+                                            <select class="form-control select_category select" name="category">
+                                                <option selected disabled> Select </option>
+                                                {{-- @foreach ($overtimeCategory as $overtimeCategorie) --}}
+                                                <option value="">YES</option>
+                                                <option value="">NO</option>
+                                            </select>
+                                        </div>
+                                        <div class="btn-group flex-shrink-0 ms-md-3">
+                                            <button type="submit"
+                                                class="btn btn-perfrom multiselect-order-options-button">Update
+                                                Name</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="{{ route('flex.updateAllowanceAmount') }}" method="POST"
+                                class="form-horizontal">
+                                @csrf
+                                <div class="mb-3">
+                                    <div class="d-md-flex">
+                                        <div class="col-sm-8">
+                                            <input type="hidden" name='levelID' value="{{ $allowanceID }}"
+                                                class="form-control">
+                                            <input type="number" name="maxSalary" value="{{ $amount }}"
+                                                class="form-control">
+                                        </div>
+                                        <div class="btn-group flex-shrink-0 ms-md-3">
+                                            <button type="submit"
+                                                class="btn btn-perfrom multiselect-order-options-button">Update
+                                                Amount</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="{{ route('flex.updateAllowanceAmount') }}" method="POST"
+                                class="form-horizontal">
+                                @csrf
+                                <div class="mb-3">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Change
                                         Policy
                                     </label>
-                                    <input hidden name="allowanceID" value="<?php echo $allowanceID; ?>">
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <label class="containercheckbox">Fixed Amout
-                                            <input <?php if($mode ==1){ ?> checked="" <?php } ?> type="radio"
-                                                value="1" name="policy">
-                                            <span class="checkmarkradio"></span>
-                                        </label>
-                                        <label class="containercheckbox">Percent(From Basic Salary)
-                                            <input <?php if($mode ==2){ ?> checked="" <?php } ?> type="radio"
-                                                value="2" name="policy">
-                                            <span class="checkmarkradio"></span>
-                                        </label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="radio" id="dc_ls_c" name="policy" checked>
+                                        <label class="ms-2" for="dc_ls_c">Fixed Amount</label>
+                                    </div>
+
+                                    <div class="d-flex align-items-center mb-2">
+                                        <input type="radio" id="dc_ls_u" name="policy">
+                                        <label class="ms-2" for="dc_ls_u">Percent(From Basic Salary)</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <button name="updatename" class="btn btn-success">Update</button>
+                                    <div class="col-md-6">
+                                        <center><button name="updatename" class="btn btn-perfrom">Update</button></center>
                                     </div>
                                 </div>
                             </form>
 
-
-
-
-                            <!--<form autocomplete="off" id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo url(''); ?>/flex/updaterole/?id=<?php //echo $id;
-                            ?>"  data-parsley-validate class="form-horizontal form-label-left">
-                              
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Role Name
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input  value="<?php //echo $row->name;
-                              ?>" name="name" class="form-control col-md-7 col-xs-12">
-                              <span class="text-danger"><?php // echo form_error("lname");
-                              ?></span>
-                            </div>
-                          </div>
-
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Permission Tag
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12">
-                              <input disabled="disabled"  value="<?php //echo $row->activity;
-                              ?>" class="form-control col-md-7 col-xs-12">
-                              <span class="text-danger"><?php // echo form_error("lname");
-                              ?></span>
-                            </div>
-                          </div>
-                          <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                              <button  type="submit"  name="updatename" class="btn btn-success">Update</button>
-                            </div>
-                          </div>
-
-                        </form>-->
                         </div>
                     </div>
                 </div>
-                <!--UPDATE-->
-            </div>
-            <!--end row-->
 
-            <div class="row">
+                {{-- Updates column old here --}}
+
+
+                <!--end row-->
+
+                {{--<div class="row">
                 <div class="col-md-12 col-sm-6 col-xs-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2><i class="fa fa-list"></i>&nbsp;&nbsp;<b>Allowance Beneficiaries in Details</b></h2>
+                            <h2><i class="fa fa-list"></i>&nbsp;&nbsp;<b>Allowance Beneficiaries in Details</b>
+                            </h2>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
@@ -450,6 +429,65 @@
                     </div>
                 </div>
 
+            </div> --}}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Allowance Beneficiaries in Details</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Groups</h5>
+                            </div>
+    
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th width="50%">Name</th>
+                                            <th>Mark</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            {{-- <td>1</td>
+                                            <td>@Kopyov</td> --}}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Individual Employee</h5>
+                            </div>
+                            
+                                
+                           
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>SN</th>
+                                            <th>Name</th>
+                                            <th>Mark</th>
+                                        </tr>
+                                    </thead>
+                                    @foreach ($employeein as $row)
+                                    <tbody>
+                                        <tr>
+                                            <td>{{$row->SNo}}</td>
+                                            <td>{{$row->name}}</td>
+                                            <td>{{$row->empID}}</td>
+                                        </tr>
+                                    </tbody>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
