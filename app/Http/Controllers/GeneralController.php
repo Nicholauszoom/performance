@@ -3586,25 +3586,26 @@ public function updateLevel(Request $request) {
 
 
 
-function subdropFetcher(Request $request)  {
+  public function subdropFetcher()  {
 
     if(!empty($this->uri_segment(3))){
-    $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-     foreach ($querypos as $row){
-      echo "<option value='".$row->id."'>".$row->name."</option>";
+      $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-        }
-      }else{
-        echo '<option value="">Position not available</option>';
+      foreach ($querypos as $row){
+        echo "<option value='".$row->id."'>".$row->name."</option>";
+      }
+
+    } else {
+
+      echo '<option value="">Position not available</option>';
+
     }
 
-   }
+  }
 
-   function positionFetcher(Request $request)  {
-
-    // dd($request->input("dept_id"));
-
+  public function positionFetcher(Request $request)
+  {
     $depID = $request->input("dept_id");
 
     if(!empty($depID)){
@@ -3612,21 +3613,23 @@ function subdropFetcher(Request $request)  {
 
       $querypos = $query[0];
       $querylinemanager = $query[1];
-      $querydirector = $query[2];
+       //   $querydirector = $query[2];
       $data = [];
       $data['position'] = $querypos;
       $data['linemanager'] = $querylinemanager;
-      $data['director'] = $querydirector;
+      //   $data['director'] = $querydirector;
 
       echo json_encode($data);
+
+    } else{
+
+      echo '<option value="">Position not available</option>';
+
     }
-//    else{
-//        echo '<option value="">Position not available</option>';
-//    }
 
-   }
+  }
 
-   function bankBranchFetcher(Request $request)  {
+  public function bankBranchFetcher(Request $request)  {
 
     if(!empty($request->input("bank"))){
     $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
@@ -5675,7 +5678,7 @@ public function updateCompanyName(Request $request) {
         }
    }
 
- function addEmployee(Request $request)  {
+  public function addEmployee(Request $request)  {
      if(session('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
          $data['pdrop'] = $this->flexperformance_model->positiondropdown();
          $data['contract'] = $this->flexperformance_model->contractdrop();
@@ -5695,11 +5698,10 @@ public function updateCompanyName(Request $request) {
          echo 'Unauthorized Access';
      }
 
-   }
+  }
 
-public function getPositionSalaryRange(Request $request)
+  public function getPositionSalaryRange(Request $request)
   {
-
     $positionID = $request->positionID;
 
     $data = array(
@@ -5708,7 +5710,6 @@ public function getPositionSalaryRange(Request $request)
 
     $minSalary = $maxSalary = 0;;
     $result = $this->flexperformance_model->getPositionSalaryRange($positionID);
-
 
     foreach ($result as $value) {
       $minSalary = $value->minSalary;
@@ -5778,7 +5779,13 @@ function password_generator($size){
 }
 
 
+  /**
+   * Register emmployee
+   *
+   */
   public function registerEmployee(Request $request) {
+
+    dd($request->all());
 
     if(Request::isMethod('post')) {
 

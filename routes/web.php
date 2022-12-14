@@ -311,7 +311,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/not_logged_in','not_logged_in')->name('flex.not_logged_in');
         Route::any('/viewrecords','viewrecords')->name('flex.viewrecords');
         Route::any('/home','home')->name('flex.home');
-        Route::any('/positionFetcher/{id}','positionFetcher')->name('flex.positionFetcher');
+        Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
         Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
         Route::any('/addkin','addkin')->name('flex.addkin');
         Route::any('/deletekin','deletekin')->name('flex.deletekin');

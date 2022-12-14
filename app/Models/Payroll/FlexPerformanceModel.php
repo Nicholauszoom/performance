@@ -2425,15 +2425,17 @@ function allLevels()
 
 
 	// FORM
-	function positionFetcher($id)
+	public function positionFetcher($id)
 	{
 		$query = "SELECT * FROM position where dept_id = '".$id."' and state = 1";
         $query = DB::select(DB::raw($query));
         $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '".$id."'";
         $query_linemanager = DB::select(DB::raw($query_linemanager));
-		$query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
-		$$query_country_director = DB::select(DB::raw($query_country_director));
-		return [$query,$query_linemanager,$query_country_director];
+		// $query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
+		// $query_country_director = DB::select(DB::raw($query_country_director));
+		// return [$query,$query_linemanager,$query_country_director];
+
+		return [$query,$query_linemanager];
 	}
 
 	// FORM
@@ -2452,6 +2454,7 @@ function allLevels()
 		->select(DB::raw($query))
 		->first();
         });
+
 		return $row->id;
 	}
 
@@ -3488,7 +3491,7 @@ function my_grievances($empID)
 		    $query = "update assignment_task set date = '".$payroll_date."' where date is null ";
 		    DB::insert(DB::raw($query));
 		});
-        
+
 		return true;
 	}
 
