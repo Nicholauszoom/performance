@@ -328,6 +328,7 @@
                 $.ajax({
                     url: "{{route('cancelpayroll')}}",
                     success: function(data) {
+                        var data = JSON.parse(data);
                         if (data.status == 'OK') {
                             alert("Payroll was Cancelled Successifully!");
 

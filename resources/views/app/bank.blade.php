@@ -109,12 +109,14 @@
 
 @push('footer-script')
     <script type="text/javascript">
-        $('#add-branch').submit(function(e) {
-
+        $('#add-branch1').submit(function(e) {
+              var a = document.getElementById("name1");
+              alert(a);
             e.preventDefault(); // Prevent Default Submission
 
             $.ajax({
                     url: "<?php echo url(''); ?>/flex/addBankBranch",
+                    headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
                     type: 'POST',
                     data: $(this).serialize(), // it will serialize the form data
                     dataType: 'json'

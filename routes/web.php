@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
 
     //routes for setting
-    Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
+    //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
     //route for payroll
     Route::group(['prefix' => 'payroll'], function () {
@@ -311,7 +311,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/not_logged_in','not_logged_in')->name('flex.not_logged_in');
         Route::any('/viewrecords','viewrecords')->name('flex.viewrecords');
         Route::any('/home','home')->name('flex.home');
-        Route::any('/positionFetcher/{id}','positionFetcher')->name('flex.positionFetcher');
+        Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
         Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
         Route::any('/addkin','addkin')->name('flex.addkin');
         Route::any('/deletekin','deletekin')->name('flex.deletekin');
@@ -382,6 +382,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
+        Route::any('/financial_group','financial_group')->name('flex.financial_group');
+
         Route::any('/groups','groups')->name('flex.groups');
         Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
         Route::any('/removeEmployeeFromRole','removeEmployeeFromRole')->name('flex.removeEmployeeFromRole');

@@ -313,7 +313,7 @@ class GeneralController extends Controller
       // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Organization Level';
       $data['category'] =  $this->flexperformance_model->organization_level_info($id);
-      
+
       return view('app.organization_level_info', $data);
     }
 
@@ -568,37 +568,86 @@ class GeneralController extends Controller
      }
    }
 
-  public function addBank(Request $request) {
-     if(isset($_POST['add'])) {
-        $data = array(
-             'name' => $request->input('name'),
-             'abbr' => $request->input('abbrv'),
-             'bank_code' => $request->input('bank_code')
-        );
-        if(session('mng_bank_info')){
-          $result = $this->flexperformance_model->addBank($data);
-          if($result){
-              session('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
-              return  redirect('/flex/bank');
-          } else {  return  redirect('/flex/bank'); }
-        }else{
-          echo "Unauthorized Access";
-        }
+//   public function addBank(Request $request) {
+//      if(isset($_POST['add'])) {
+//         $data = array(
+//              'name' => $request->input('name'),
+//              'abbr' => $request->input('abbrv'),
+//              'bank_code' => $request->input('bank_code')
+//         );
+//         if(session('mng_bank_info')){
+//           $result = $this->flexperformance_model->addBank($data);
+//           if($result){
+//               session('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
+//               return  redirect('/flex/bank');
+//           } else {  return  redirect('/flex/bank'); }
+//         }else{
+//           echo "Unauthorized Access";
+//         }
+//     }
+//   }
+
+//addBank
+
+public function addBank(Request $request){
+
+    $name = $request->input('name');
+    $abbr = $request->input('abbr');
+    $bank_code = $request->input('bank_code');
+
+    $data=array(
+
+    "name"=>$name,
+    "abbr"=>$abbr,
+    "bank_code"=>$bank_code
+);
+    DB::table('bank')->insert($data);
+    echo "Record inserted successfully.<br/>";
+    return redirect('flex/bank');
     }
-  }
+// end add bank
 
+// add branch
+// public function addBankBranch(Request $request){
 
+//   dd($request->name);
+
+//     $name = $request->input('name');
+//     $bank = $request->input('bank');
+//     $street = $request->input('street');
+//     $region = $request->input('region');
+//     $country = $request->input('country');
+//     $branch_code = $request->input('branch_code');
+//     $swiftcode = $request->input('swiftcode');
+
+//   $data=array(
+//    'name'=>$name,
+//    'bank'=>$bank,
+//    'street'=>$street,
+//    'region'=>$region,
+//    'country'=>$country,
+//    'branch_code'=>$branch_code,
+//    'swiftcode'=>$swiftcode
+
+// );
+//   DB::table('bank_branch')->insert($data);
+//   echo "Record inserted successfully.<br/>";
+//   return redirect('flex/bank');
+
+//   }
+//   end add branch
 
       public function addBankBranch(Request $request) {
-        if(Request::isMethod('post')) {
+    $method = $request->method();
+        if($method == "POST") {
           $data = array(
-                  'name' => $request->input('name'),
-                  'bank' => $request->input('bank'),
-                  'street' => $request->input('street'),
-                  'region' => $request->input('region'),
-                  'branch_code' => $request->input('code'),
-                  'country' => $request->input('country'),
-                  'swiftcode' => $request->input('swiftcode')
+                  'name' => $request->name,
+                  'bank' => $request->bank,
+                  'street' => $request->street,
+                  'region' => $request->region,
+                  'branch_code' => $request->code,
+                  'country' => $request->country,
+                  'swiftcode' => $request->swiftcode
               );
           $result = $this->flexperformance_model->addBankBranch($data);
           if($result){
@@ -3549,25 +3598,26 @@ public function updateLevel(Request $request) {
 
 
 
-function subdropFetcher(Request $request)  {
+  public function subdropFetcher()  {
 
     if(!empty($this->uri_segment(3))){
-    $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-     foreach ($querypos as $row){
-      echo "<option value='".$row->id."'>".$row->name."</option>";
+      $querypos = $this->flexperformance_model->positionfetcher($this->uri_segment(3));
 
-        }
-      }else{
-        echo '<option value="">Position not available</option>';
+      foreach ($querypos as $row){
+        echo "<option value='".$row->id."'>".$row->name."</option>";
+      }
+
+    } else {
+
+      echo '<option value="">Position not available</option>';
+
     }
 
-   }
+  }
 
-   function positionFetcher(Request $request)  {
-
-    // dd($request->input("dept_id"));
-
+  public function positionFetcher(Request $request)
+  {
     $depID = $request->input("dept_id");
 
     if(!empty($depID)){
@@ -3575,21 +3625,23 @@ function subdropFetcher(Request $request)  {
 
       $querypos = $query[0];
       $querylinemanager = $query[1];
-      $querydirector = $query[2];
+       //   $querydirector = $query[2];
       $data = [];
       $data['position'] = $querypos;
       $data['linemanager'] = $querylinemanager;
-      $data['director'] = $querydirector;
+      //   $data['director'] = $querydirector;
 
       echo json_encode($data);
+
+    } else{
+
+      echo '<option value="">Position not available</option>';
+
     }
-//    else{
-//        echo '<option value="">Position not available</option>';
-//    }
 
-   }
+  }
 
-   function bankBranchFetcher(Request $request)  {
+  public function bankBranchFetcher(Request $request)  {
 
     if(!empty($request->input("bank"))){
     $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
@@ -4533,36 +4585,62 @@ public function common_deductions_info(Request $request) {
       }
     }
 
-    public function addDeduction(Request $request)   {
 
-      if (Request::isMethod('post')) {
-        $policy = $request->input('policy');
-        if($policy==1){
-          $amount = $request->input('amount');
-          $percent = 0;
-        } else{
-          $amount = 0;
-          $percent = 0.01*($request->input('rate'));
-        }
-        $data = array(
-            'name' =>trim($request->input('name')),
-            'amount' =>$amount,
-            'mode' =>$request->input('policy'),
-            'state' =>1,
-            'apply_to' =>2,
-            'percent' =>$percent
-            );
+    public function addDeduction(Request $request){
 
-          $result = $this->flexperformance_model->addDeduction($data);
-          if($result==true){
-             $this->flexperformance_model->audit_log("Created New Deduction ");
-              echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
-          } else {
-               echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
-          }
+      $name = $request->input('name');
+      $code = $request->input('code');
+      $amount = $request->input('amount');
+      $percent = $request->input('percent');
+      $apply_to = $request->input('apply_to');
+      $mode = $request->input('mode');
+      $state = $request->input('state');
+
+      $data=array(
+
+      'name'=>$name,
+      'code'=>$code,
+      'amount'=>$amount,
+      'percent'=>$percent,
+      'apply_to'=>$apply_to,
+      'mode'=>$mode,
+      'state'=>$state,
+
+  );
+      DB::table('deductions')->insert($data);
+      echo "Record inserted successfully.<br/>";
+      return redirect('flex/non_statutory_deductions');
       }
+//     public function addDeduction(Request $request)   {
 
-   }
+//       if (Request::isMethod('post')) {
+//         $policy = $request->input('policy');
+//         if($policy==1){
+//           $amount = $request->input('amount');
+//           $percent = 0;
+//         } else{
+//           $amount = 0;
+//           $percent = 0.01*($request->input('rate'));
+//         }
+//         $data = array(
+//             'name' =>trim($request->input('name')),
+//             'amount' =>$amount,
+//             'mode' =>$request->input('policy'),
+//             'state' =>1,
+//             'apply_to' =>2,
+//             'percent' =>$percent
+//             );
+
+//           $result = $this->flexperformance_model->addDeduction($data);
+//           if($result==true){
+//              $this->flexperformance_model->audit_log("Created New Deduction ");
+//               echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
+//           } else {
+//                echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
+//           }
+//       }
+
+//    }
 
 public function assign_allowance_individual(Request $request)  {
 
@@ -4866,7 +4944,7 @@ public function remove_group_from_allowance(Request $request)  {
 
    //###########BONUS################# updateAllowanceName
    public function addToBonusByEmpGroup(Request $request) {
-     
+
 
    }
 
@@ -5040,7 +5118,50 @@ public function deleteBonus($id)
 #####################PRIVELEGES######################################
 
 
+public function financial_group(Request $request) {
+  if(session('mng_roles_grp')){
+    if(isset($_POST['addrole'])){
+      $data = array(
+           'name' => $request->input('name'),
+           'created_by' =>session('emp_id')
+      );
 
+      $result = $this->flexperformance_model->addrole($data);
+      if($result==true) {
+        $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+        session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
+      return  redirect('/flex/role');
+      } else {
+        echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
+      }
+
+
+    } elseif(isset($_POST['addgroup'])) {
+
+      $data = array(
+           'name' => $request->input('name'),
+           'type' => $request->input('type'),
+           'created_by' =>session('emp_id')
+      );
+
+      $this->flexperformance_model->addgroup($data);
+
+      session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
+      //$this->department();
+      return  redirect('/flex/role');
+    } else {
+      // $id =session('emp_id');
+      $data['role'] = $this->flexperformance_model->allrole();
+      $data['financialgroups'] = $this->flexperformance_model->finencialgroups();
+      $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
+      $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+      $data['title']="Financial Groups";
+      return view('app.financial_group', $data);
+    }
+  }else{
+      echo "Unauthorized Access";
+  }
+}
   public function role(Request $request) {
     if(session('mng_roles_grp')){
       if(isset($_POST['addrole'])){
@@ -5087,7 +5208,8 @@ public function deleteBonus($id)
   }
    public function groups(Request $request)  {
       if(session('mng_roles_grp')){
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($request->id);
+        
         $data['members'] = $this->flexperformance_model->members_byid($id);
         $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
         $data['headcounts'] = $this->flexperformance_model->memberscount($id);
@@ -5101,8 +5223,9 @@ public function deleteBonus($id)
 
 
 public function removeEmployeeFromGroup(Request $request)  {
-
-  if (Request::isMethod('post')) {
+   $method = $request->method();
+  
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       $groupID = $request->input('groupID');
@@ -5127,7 +5250,9 @@ public function removeEmployeeFromGroup(Request $request)  {
 
 public function removeEmployeeFromRole(Request $request)  {
 
-  if (Request::isMethod('post')) {
+  $method = $request->method();
+  
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       if($arr == "" || $arr == "[]"){
@@ -5157,7 +5282,9 @@ public function removeEmployeeFromRole(Request $request)  {
 
 public function addEmployeeToGroup(Request $request)  {
 
-  if (Request::isMethod('post')) {
+  $method = $request->method();
+  
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       $groupID = $request->input('groupID');
@@ -5389,7 +5516,7 @@ public function deleteGroup(Request $request)
 
     public function role_info(Request $request)  {
       if(session('mng_roles_grp')){
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($request->id);
 
           $data['employeesnot'] =  $this->flexperformance_model->employeesrole($id);
           $data['role'] = $this->flexperformance_model->getrolebyid($id);
@@ -5626,7 +5753,7 @@ public function updateCompanyName(Request $request) {
         }
    }
 
- function addEmployee(Request $request)  {
+  public function addEmployee(Request $request)  {
      if(session('mng_emp') ||session('vw_emp') ||session('appr_emp') ||session('mng_roles_grp')){
          $data['pdrop'] = $this->flexperformance_model->positiondropdown();
          $data['contract'] = $this->flexperformance_model->contractdrop();
@@ -5646,11 +5773,10 @@ public function updateCompanyName(Request $request) {
          echo 'Unauthorized Access';
      }
 
-   }
+  }
 
-public function getPositionSalaryRange(Request $request)
+  public function getPositionSalaryRange(Request $request)
   {
-
     $positionID = $request->positionID;
 
     $data = array(
@@ -5659,7 +5785,6 @@ public function getPositionSalaryRange(Request $request)
 
     $minSalary = $maxSalary = 0;;
     $result = $this->flexperformance_model->getPositionSalaryRange($positionID);
-
 
     foreach ($result as $value) {
       $minSalary = $value->minSalary;
@@ -5729,7 +5854,13 @@ function password_generator($size){
 }
 
 
+  /**
+   * Register emmployee
+   *
+   */
   public function registerEmployee(Request $request) {
+
+    dd($request->all());
 
     if(Request::isMethod('post')) {
 
