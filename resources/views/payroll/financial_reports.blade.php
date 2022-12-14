@@ -45,7 +45,7 @@
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
                             </select>
-                            <button type="submit" class="btn btn-main"> Print</button>
+                            <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                         </div>
 
                         <div class="mt-2">
