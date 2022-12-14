@@ -69,7 +69,7 @@ Route::middleware('auth')->group(function () {
 
 
     //routes for setting
-    Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
+    //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
     //route for payroll
     Route::group(['prefix' => 'payroll'], function () {

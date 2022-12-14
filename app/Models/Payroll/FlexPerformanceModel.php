@@ -2799,12 +2799,12 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 
 	function memberscount($id)
-	{
-		$query = "count(id) as headcounts  WHERE group_name =".$id."";
-		$row = DB::table('employee_group')
-		->select(DB::raw($query))
-		->first();
-    	return $row->headcounts;
+	{   
+		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
+		$row = DB::select(DB::raw($query));
+		
+    	return $row[0]->headcounts;
+
 	}
 
 
@@ -2834,6 +2834,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     function members_byid($id)
 	{
+		
 		$query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = ".$id."  and e.emp_id IN (SELECT empID from employee_group where group_name=".$id.")";
 
 		return DB::select(DB::raw($query));
@@ -2877,7 +2878,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeFromGroup($refID, $empID, $groupID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($refID, $empID, $groupID)
        {
 	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
         DB::insert(DB::raw($query));
@@ -2896,7 +2897,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeFromRole($refID, $empID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($refID, $empID)
        {
 	    $query = "DELETE FROM emp_role WHERE id ='".$refID."'";
 		DB::insert(DB::raw($query));
@@ -2920,7 +2921,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function deleteEmployeeFromGroup($group_id, $empID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use ($group_id, $empID)
        {
 		$query = "DELETE FROM employee_group WHERE empID ='".$empID."' and group_name = '".$group_id."'";
         DB::insert(DB::raw($query));

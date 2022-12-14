@@ -5061,7 +5061,8 @@ public function deleteBonus($id)
   }
    public function groups(Request $request)  {
       if(session('mng_roles_grp')){
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($request->id);
+        
         $data['members'] = $this->flexperformance_model->members_byid($id);
         $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);
         $data['headcounts'] = $this->flexperformance_model->memberscount($id);
@@ -5075,8 +5076,9 @@ public function deleteBonus($id)
 
 
 public function removeEmployeeFromGroup(Request $request)  {
-
-  if (Request::isMethod('post')) {
+   $method = $request->method();
+  
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       $groupID = $request->input('groupID');
@@ -5101,7 +5103,9 @@ public function removeEmployeeFromGroup(Request $request)  {
 
 public function removeEmployeeFromRole(Request $request)  {
 
-  if (Request::isMethod('post')) {
+  $method = $request->method();
+  
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       if($arr == "" || $arr == "[]"){
@@ -5131,7 +5135,9 @@ public function removeEmployeeFromRole(Request $request)  {
 
 public function addEmployeeToGroup(Request $request)  {
 
-  if (Request::isMethod('post')) {
+  $method = $request->method();
+  
+  if ($method == "POST") {
 
       $arr = $request->input('option');
       $groupID = $request->input('groupID');
@@ -5363,7 +5369,7 @@ public function deleteGroup(Request $request)
 
     public function role_info(Request $request)  {
       if(session('mng_roles_grp')){
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($request->id);
 
           $data['employeesnot'] =  $this->flexperformance_model->employeesrole($id);
           $data['role'] = $this->flexperformance_model->getrolebyid($id);
