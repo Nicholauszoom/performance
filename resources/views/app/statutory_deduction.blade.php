@@ -35,8 +35,8 @@
             </thead>
 
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
+
+                    @foreach($pension as $row)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $department->name }}</td>
@@ -63,7 +63,7 @@
                         </tr>
 
                     @endforeach
-                    @endif
+          
             </tbody>
         </table>
       </div>
@@ -143,43 +143,44 @@
        <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <th>S/N</th>
-                    <th>Name</th>
-                    <th>Percent Amount(Day)</th>
-                    <th>Percent Amount(Night)</th>
+                   <th>S/N</th>
+                    <th>Minimum Amount</th>
+                    <th>Maximum Amount</th>
+                    <th>Excess Added as</th>
+                    <th>Rate to an Amount Excess of Minimum</th>
                     <th class="text-center">Action</th>
                 </tr>
             </thead>
 
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
 
+                    @foreach($paye as $row)
+                        <tr>
+                            <td>{{ $row->SNo }}</td>
+                            <td>{{ $row->minimum }}</td>
+                            <td>{{ $row->maximum }}</td>
+                            <td>{{ $row->excess_added }} </td>
+                            <td> {{ $row->rate }} </td>
+
+                            <td align="center">
+                                {!! Form::open(['route' => ['flex.deletepaye', $row->id], 'method' => 'delete']) !!}
                                 <button
                                     type="button"
                                     class="btn btn-outline-info btn-xs edit_permission_btn"
                                     data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
+                                    data-id="{{ $row->id}}"
+                                    data-minimum="{{ $row->minimum}}"
+                                    data-excess_added="{{ $row->excess_added}}"
+                                    data-maximum="{{ $row->maximum}}"
+                                    data-rate="{{$row->rate}}"
                                 >
                                     <i class="ph-note-pencil"></i> Edit
                                 </button>
-
                                 {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
                             </td>
                         </tr>
-
                     @endforeach
-                    @endif
             </tbody>
         </table>
       </div>
@@ -235,7 +236,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(isset($departments))
+                    @if(isset($row))
                     @foreach($departments as $departments)
 
                         <tr>

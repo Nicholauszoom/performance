@@ -4483,12 +4483,19 @@ public function common_deductions_info(Request $request) {
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
       $data['title']="Statutory Deductions";
-      return view('app.statutory_deduction', compact('data'));
+      return view('app.statutory_deduction',$data);
 
     }else{
       echo "Unauthorized Access";
     }
 
+  }
+
+  public function overtime_info_perce()
+  {
+      $stat = DB::table('overtime_category')->select('id','name','day_percent','night_percent')->get();
+
+      return view('flex.statutory_deductions')->with('statutory_deductions', $stat);
   }
 
 
@@ -4542,24 +4549,26 @@ public function common_deductions_info(Request $request) {
    }
 
 
-    public function addOvertimeCategory(Request $request)   {
+   //
+   public function addOvertimeCategory(Request $request){
 
-      if (Request::isMethod('post')) {
-        $data = array(
-            'name' =>$request->input('name'),
-            'day_percent' =>($request->input('day_percent')/100),
-            'night_percent' =>($request->input('night_percent')/100)
-          );
-          $result = $this->flexperformance_model->addOvertimeCategory($data);
-          if($result==true){
-            $this->flexperformance_model->audit_log("Created New Overtime ");
-              echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
-          } else {
-              echo "<p class='alert alert-warning text-center'>Overtime Registration FAILED, Please Try Again</p>";
-          }
-      }
+    $name = $request->input('name');
+    $day_percent = $request->input('day_percent');
+    $night_percent = $request->input('night_percent');
+
+    $data=array(
+
+    "name"=>$name,
+    "day_percent"=>$day_percent,
+    "night_percent"=>$night_percent,
+);
+// $result = $this->flexperformance_model->addOvertimeCategory($data);
+    DB::table('overtime_category')->insert($data);
+    echo "Record inserted successfully.<br/>";
+    return view('flex/statutory_deductions');
     }
 
+    
 
     public function addDeduction(Request $request){
 

@@ -230,6 +230,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
         Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
         Route::any('/overtime','overtime')->name('flex.overtime');
+        Route::any('/statutory_deductions','overtimeCat')->name('flex.overtimeCat');
         Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
         Route::any('/confirmOvertime/{id}','confirmOvertime')->name('flex.confirmOvertime');
         Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
@@ -361,6 +362,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/remove_individual_from_allowance','remove_individual_from_allowance')->name('flex.remove_individual_from_allowance');
         Route::any('/remove_group_from_allowance','remove_group_from_allowance')->name('flex.remove_group_from_allowance');
         Route::any('/allowance_info','allowance_info')->name('flex.allowance_info');
+        Route::any('/overtime_category_info','overtime_category_info')->name('flex.overtime_category_info');
         Route::any('/overtime_category_info','overtime_category_info')->name('flex.overtime_category_info');
         Route::any('/deleteAllowance','deleteAllowance')->name('flex.deleteAllowance');
         Route::any('/activateAllowance','activateAllowance')->name('flex.activateAllowance');
