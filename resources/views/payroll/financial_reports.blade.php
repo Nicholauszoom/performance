@@ -21,7 +21,6 @@
 
     <div class="row">
         <div class="col-md-6">
-
             <div class="card">
                 <div class="card-header">
                     <h5 class="text-muted">P9 (P.A.Y.E)</h5>
@@ -67,13 +66,10 @@
 
                 </form>
 
-
-
             </div>
         </div>
 
         <div class="col-md-6">
-
             <div class="card">
                 <div class="card-header">
                     <h5 class="text-muted">Workers Compasation Fund:</h5>

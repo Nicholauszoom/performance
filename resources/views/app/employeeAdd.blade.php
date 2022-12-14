@@ -512,63 +512,64 @@
 
 
     <script type="text/javascript">
-    $('#addEmployee').submit(function(e) {
 
-        e.preventDefault(); // Prevent Default Submission
+        $('#addEmployee').submit(function(e) {
 
-        alert(document.getElementById("name"));
+            e.preventDefault(); // Prevent Default Submission
 
-        $.ajax({
-                url: '{{ url("/flex/registerEmployee") }}',
+            alert(document.getElementById("name"));
+
+            $.ajax({
+                    url: '{{ url("/flex/registerEmployee") }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type: 'POST',
+                    data: $(this).serialize(), // it will serialize the form data
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    alert(data.title);
+
+                    if (data.status == 'OK') {
+                        $('#feedBackSubmission').fadeOut('fast', function() {
+                            $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                        });
+                        setTimeout(function() { // wait for 5 secs(2)
+                            window.location.href =
+                                "<?php echo url('flex/userprofile/?id=');?>" + data
+                                .empID; // then reload the page.(3)
+                        }, 2000);
+                        $('#addEmployee').trigger("reset");
+                    } else {
+                        $('#feedBackSubmission').fadeOut('fast', function() {
+                            $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                        });
+                        $('#addEmployee').trigger("reset");
+
+                    }
+                })
+                .fail(function() {
+                    alert('Registration Failed, Review Your Network Connection...');
+                });
+        });
+
+
+        $('#import_form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '{{ url("/flex/import") }}',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                type: 'POST',
-                data: $(this).serialize(), // it will serialize the form data
-                dataType: 'json'
-            })
-            .done(function(data) {
-                alert(data.title);
-
-                if (data.status == 'OK') {
-                    $('#feedBackSubmission').fadeOut('fast', function() {
-                        $('#feedBackSubmission').fadeIn('fast').html(data.message);
-                    });
-                    setTimeout(function() { // wait for 5 secs(2)
-                        window.location.href =
-                            "<?php echo url('flex/userprofile/?id=');?>" + data
-                            .empID; // then reload the page.(3)
-                    }, 2000);
-                    $('#addEmployee').trigger("reset");
-                } else {
-                    $('#feedBackSubmission').fadeOut('fast', function() {
-                        $('#feedBackSubmission').fadeIn('fast').html(data.message);
-                    });
-                    $('#addEmployee').trigger("reset");
-
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    $('#file').val('');
+                    load_data();
+                    alert(' Employees Succefully Imported');
                 }
             })
-            .fail(function() {
-                alert('Registration Failed, Review Your Network Connection...');
-            });
-    });
-
-
-    $('#import_form').on('submit', function(event) {
-        event.preventDefault();
-        $.ajax({
-            url: '{{ url("/flex/import") }}',
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(data) {
-                $('#file').val('');
-                load_data();
-                alert(' Employees Succefully Imported');
-            }
-        })
-    });
+        });
     </script>
 
     <script>
