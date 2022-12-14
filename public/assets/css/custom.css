@@ -1,30 +1,38 @@
 .bg-main {
-    background: #001949;
+    background: #00204e;
     color: #fff;
 }
 
+.bg-danger {
+    background: #c20430;
+}
+
+.bg-warning {
+    background: #f0ab00;
+}
+
 .btn-default {
-    border: 2px solid #001949;
-    color: #001949;
+    border: 2px solid #00204e;
+    color: #00204e;
     background-color: #fff;
     font-weight: 600;
 }
 
 .btn-default:hover {
-    border: 2px solid #206af4;
-    color: #266df3;
+    border: 2px solid #00204e;
+    color: #00204e;
     background-color: #fff;
     font-weight: 500;
 }
 
 .btn-main {
-    background: #001949;
+    background: #00204e;
     color: #fff;
     font-weight: 600;
 }
 
 .btn-main:hover {
-    background: #001a49e0;
+    background: #00204e;
     color: #fff;
     font-weight: 600;
 }
@@ -36,13 +44,13 @@
 }
 
 .btn-perfrom {
-    background-color: #001a49ef;
+    background-color: #00204e;
     color: #fff;
     font-weight: 500;
 }
 
 .btn-perfrom:hover {
-    background-color: #001a49cf;
+    background-color: #00204e;
     color: #fff;
     font-weight: 500;
 }
