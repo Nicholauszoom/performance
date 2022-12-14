@@ -21,7 +21,7 @@
           <button   type="button"
                     class="btn btn-perfrom"
                     data-bs-toggle="modal"
-                    data-bs-target="#save_department">
+                    data-bs-target="#save_deduction">
                     <i class="ph-plus me-2"></i> Deduction
 
           </button>
@@ -39,22 +39,23 @@
             </thead>
 
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
+                @if(isset($data['deductions']))
+                    @foreach($data['deductions'] as $deductions)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
+                            <td>{{ $deductions->name }}</td>
+                            <td>{{ $deductions->amount }}</td>
                             <td> HOD </td>
                             <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
+                                {!! Form::open(['route' => ['deductions.destroy', $deductions->id], 'method' => 'delete']) !!}
 
                                 <button
                                     type="button"
                                     class="btn btn-outline-info btn-xs edit_permission_btn"
                                     data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
+                                    data-id="{{ $deductions->id }}"
+                                    data-name="{{ $deductions->name }}"
+                                    data-name="{{ $deductions->amount}}"
                                 >
                                     <i class="ph-note-pencil"></i> Edit
                                 </button>
