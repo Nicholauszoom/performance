@@ -36,7 +36,7 @@
 
             <tbody>
 
-                    @foreach($pension as $row)
+                    {{-- @foreach($pension as $row)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $department->name }}</td>
@@ -63,7 +63,7 @@
                         </tr>
 
                     @endforeach
-          
+           --}}
             </tbody>
         </table>
       </div>
