@@ -115,6 +115,7 @@
 
             $.ajax({
                     url: "<?php echo url(''); ?>/flex/addBankBranch",
+                    headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
                     type: 'POST',
                     data: $(this).serialize(), // it will serialize the form data
                     dataType: 'json'

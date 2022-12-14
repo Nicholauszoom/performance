@@ -313,7 +313,7 @@ class GeneralController extends Controller
       // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Organization Level';
       $data['category'] =  $this->flexperformance_model->organization_level_info($id);
-      
+
       return view('app.organization_level_info', $data);
     }
 
@@ -568,37 +568,86 @@ class GeneralController extends Controller
      }
    }
 
-  public function addBank(Request $request) {
-     if(isset($_POST['add'])) {
-        $data = array(
-             'name' => $request->input('name'),
-             'abbr' => $request->input('abbrv'),
-             'bank_code' => $request->input('bank_code')
-        );
-        if(session('mng_bank_info')){
-          $result = $this->flexperformance_model->addBank($data);
-          if($result){
-              session('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
-              return  redirect('/flex/bank');
-          } else {  return  redirect('/flex/bank'); }
-        }else{
-          echo "Unauthorized Access";
-        }
+//   public function addBank(Request $request) {
+//      if(isset($_POST['add'])) {
+//         $data = array(
+//              'name' => $request->input('name'),
+//              'abbr' => $request->input('abbrv'),
+//              'bank_code' => $request->input('bank_code')
+//         );
+//         if(session('mng_bank_info')){
+//           $result = $this->flexperformance_model->addBank($data);
+//           if($result){
+//               session('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
+//               return  redirect('/flex/bank');
+//           } else {  return  redirect('/flex/bank'); }
+//         }else{
+//           echo "Unauthorized Access";
+//         }
+//     }
+//   }
+
+//addBank
+
+public function addBank(Request $request){
+
+    $name = $request->input('name');
+    $abbr = $request->input('abbr');
+    $bank_code = $request->input('bank_code');
+
+    $data=array(
+
+    "name"=>$name,
+    "abbr"=>$abbr,
+    "bank_code"=>$bank_code
+);
+    DB::table('bank')->insert($data);
+    echo "Record inserted successfully.<br/>";
+    return redirect('flex/bank');
     }
-  }
+// end add bank
 
+// add branch
+// public function addBankBranch(Request $request){
 
+//   dd($request->name);
+
+//     $name = $request->input('name');
+//     $bank = $request->input('bank');
+//     $street = $request->input('street');
+//     $region = $request->input('region');
+//     $country = $request->input('country');
+//     $branch_code = $request->input('branch_code');
+//     $swiftcode = $request->input('swiftcode');
+
+//   $data=array(
+//    'name'=>$name,
+//    'bank'=>$bank,
+//    'street'=>$street,
+//    'region'=>$region,
+//    'country'=>$country,
+//    'branch_code'=>$branch_code,
+//    'swiftcode'=>$swiftcode
+
+// );
+//   DB::table('bank_branch')->insert($data);
+//   echo "Record inserted successfully.<br/>";
+//   return redirect('flex/bank');
+
+//   }
+//   end add branch
 
       public function addBankBranch(Request $request) {
-        if(Request::isMethod('post')) {
+    $method = $request->method();
+        if($method == "POST") {
           $data = array(
-                  'name' => $request->input('name'),
-                  'bank' => $request->input('bank'),
-                  'street' => $request->input('street'),
-                  'region' => $request->input('region'),
-                  'branch_code' => $request->input('code'),
-                  'country' => $request->input('country'),
-                  'swiftcode' => $request->input('swiftcode')
+                  'name' => $request->name,
+                  'bank' => $request->bank,
+                  'street' => $request->street,
+                  'region' => $request->region,
+                  'branch_code' => $request->code,
+                  'country' => $request->country,
+                  'swiftcode' => $request->swiftcode
               );
           $result = $this->flexperformance_model->addBankBranch($data);
           if($result){
@@ -4511,36 +4560,62 @@ public function common_deductions_info(Request $request) {
       }
     }
 
-    public function addDeduction(Request $request)   {
 
-      if (Request::isMethod('post')) {
-        $policy = $request->input('policy');
-        if($policy==1){
-          $amount = $request->input('amount');
-          $percent = 0;
-        } else{
-          $amount = 0;
-          $percent = 0.01*($request->input('rate'));
-        }
-        $data = array(
-            'name' =>trim($request->input('name')),
-            'amount' =>$amount,
-            'mode' =>$request->input('policy'),
-            'state' =>1,
-            'apply_to' =>2,
-            'percent' =>$percent
-            );
+    public function addDeduction(Request $request){
 
-          $result = $this->flexperformance_model->addDeduction($data);
-          if($result==true){
-             $this->flexperformance_model->audit_log("Created New Deduction ");
-              echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
-          } else {
-               echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
-          }
+      $name = $request->input('name');
+      $code = $request->input('code');
+      $amount = $request->input('amount');
+      $percent = $request->input('percent');
+      $apply_to = $request->input('apply_to');
+      $mode = $request->input('mode');
+      $state = $request->input('state');
+
+      $data=array(
+
+      'name'=>$name,
+      'code'=>$code,
+      'amount'=>$amount,
+      'percent'=>$percent,
+      'apply_to'=>$apply_to,
+      'mode'=>$mode,
+      'state'=>$state,
+
+  );
+      DB::table('deductions')->insert($data);
+      echo "Record inserted successfully.<br/>";
+      return redirect('flex/non_statutory_deductions');
       }
+//     public function addDeduction(Request $request)   {
 
-   }
+//       if (Request::isMethod('post')) {
+//         $policy = $request->input('policy');
+//         if($policy==1){
+//           $amount = $request->input('amount');
+//           $percent = 0;
+//         } else{
+//           $amount = 0;
+//           $percent = 0.01*($request->input('rate'));
+//         }
+//         $data = array(
+//             'name' =>trim($request->input('name')),
+//             'amount' =>$amount,
+//             'mode' =>$request->input('policy'),
+//             'state' =>1,
+//             'apply_to' =>2,
+//             'percent' =>$percent
+//             );
+
+//           $result = $this->flexperformance_model->addDeduction($data);
+//           if($result==true){
+//              $this->flexperformance_model->audit_log("Created New Deduction ");
+//               echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
+//           } else {
+//                echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
+//           }
+//       }
+
+//    }
 
 public function assign_allowance_individual(Request $request)  {
 
@@ -4840,7 +4915,7 @@ public function remove_group_from_allowance(Request $request)  {
 
    //###########BONUS################# updateAllowanceName
    public function addToBonusByEmpGroup(Request $request) {
-     
+
 
    }
 
