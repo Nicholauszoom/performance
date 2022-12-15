@@ -4460,7 +4460,7 @@ public function common_deductions_info(Request $request) {
       $data['meals'] = $this->flexperformance_model->meals_deduction();
       $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
       $data['title']="Overtime";
-      return view('app.allowance_overtime', $data);
+      return view('app.allowance_overtime', compact('data'));
 
     }else{
       echo "Unauthorized Access";
@@ -4732,8 +4732,8 @@ public function allowance_info(Request $request,$id)  {
 }
 
 
-  public function overtime_category_info(Request $request)  {
-      $id = base64_decode($this->input->get('id'));
+  public function overtime_category_info(Request $request,$id)  {
+      // $id = base64_decode($this->input->get('id'));
       $data['title'] =  'Overtime Category';
       $data['category'] =  $this->flexperformance_model->OvertimeCategoryInfo($id);
       return view('app.overtime_category_info', $data);
@@ -4827,45 +4827,48 @@ public function allowance_info(Request $request,$id)  {
       }
    }
 
-  public function updateOvertimeName(Request $request) {
+   public function updateOvertimeName(Request $request) {
     $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
-          $updates = array(
-                      'name' =>$request->input('name')
-                  );
-              $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
-              if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-              } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
+    if ($request->method()=='POST' && $ID!='') {
+        $updates = array(
+                    'name' =>$request->input('name')
+                );
+            $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
+            if($result==true) {
+                return back()->with('success', 'Updated Successifully!');
+                // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
-      }
-   }
-  public function updateOvertimeRateDay(Request $request) {
-    $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
-          $updates = array(
-                      'day_percent' =>($request->input('day_percent')/100)
-                  );
-              $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
-              if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-              } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
+    }
+ }
+public function updateOvertimeRateDay(Request $request) {
+  $ID = $request->input('categoryID');
+  if ($request->method()=='POST' && $ID!='') {
+        $updates = array(
+                    'day_percent' =>($request->input('day_percent')/100)
+                );
+            $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
+            if($result==true) {
+              return back()->with('success', 'Updated Successifully!');
+                // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
-      }
-   }
-  public function updateOvertimeRateNight(Request $request) {
-    $ID = $request->input('categoryID');
-      if (Request::isMethod('post')&& $ID!='') {
-          $updates = array(
-                      'night_percent' =>($request->input('night_percent')/100)
-                  );
-              $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
-              if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-              } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
+    }
+ }
+public function updateOvertimeRateNight(Request $request) {
+  $ID = $request->input('categoryID');
+  if ($request->method()=='POST' && $ID!='') {
+        $updates = array(
+                    'night_percent' =>($request->input('night_percent')/100)
+                );
+            $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
+            if($result==true) {
+              return back()->with('success', 'Updated Successifully!');
+                // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
 
-      }
-   }
+    }
+ }
 
 
     public function updateAllowanceAmount(Request $request) {
