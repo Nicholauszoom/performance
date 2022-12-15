@@ -609,8 +609,8 @@ function retire_list()
 	function employeeTransfer($data)
 	{
 		DB::table('transfer')->insert($data);
-		return true;
 
+		return true;
 	}
 
 	function employeeTransfers()
@@ -1466,11 +1466,9 @@ function meals_deduction()
 
 	function allowance_membersCount($allowance)
 	{
-		$query = "COUNT(DISTINCT ea.empID) members  WHERE ea.allowance = ".$allowance."  ";
-		$row = BD::table('emp_allowances as ea')
-		->select(DB::raw($query))
-		->first();
-    	return $row->members;
+		$query = "select COUNT(DISTINCT ea.empID) members from emp_allowances as ea  WHERE ea.allowance = ".$allowance."  ";
+		$row = DB::select(DB::raw($query));
+    	return $row[0]->members;
 	}
 
 	function allowance_groupsCount($allowance)
@@ -1539,6 +1537,13 @@ function meals_deduction()
 	public function addOvertimeCategory($data)
 	{
 		DB::table('overtime_category')->insert($data);
+		return true;
+
+	}
+
+	public function deleteOvertimeCategory($id)
+	{
+		DB::table('overtime_category')->delete($id);
 		return true;
 
 	}
@@ -2425,62 +2430,71 @@ function allLevels()
 
 
 	// FORM
-	function positionFetcher($id)
+	public function positionFetcher($id)
 	{
 		$query = "SELECT * FROM position where dept_id = '".$id."' and state = 1";
         $query = DB::select(DB::raw($query));
         $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '".$id."'";
         $query_linemanager = DB::select(DB::raw($query_linemanager));
-		$query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
-		$$query_country_director = DB::select(DB::raw($query_country_director));
-		return [$query,$query_linemanager,$query_country_director];
+		// $query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
+		// $query_country_director = DB::select(DB::raw($query_country_director));
+		// return [$query,$query_linemanager,$query_country_director];
+
+		return [$query,$query_linemanager];
 	}
 
 	// FORM
-
-
-
-	function employeeAdd($employee)
+	public function employeeAdd($employee)
 	{
-	     DB::transaction(function() use($employee)
-       {
-		DB::table('employee')->insert($employee);
-        // ->insert("company_property", $property);
-        // ->insert("employee_group", $datagroup);
-        $query = "id ORDER BY id DESC LIMIT 1";
-        $row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
-        });
-		return $row->id;
+	    $result  =   DB::transaction(function() use($employee){
+                        DB::table('employee')->insert($employee);
+
+                        // ->insert("company_property", $property);
+                        // ->insert("employee_group", $datagroup);
+
+                        $row = DB::table('employee')
+                            ->select('id')
+                            ->orderBy('id', 'DESC')
+                            ->limit(1)
+                            ->first();
+
+                        return $row;
+                    });
+
+        return $result->id;
 	}
 
 	function updateEmployeeID($recordID, $empID, $property, $datagroup)
 	{
-		 DB::transaction(function()  use ($recordID, $empID, $property, $datagroup)
-       {
-		$query = "UPDATE employee SET emp_id = '".$empID."' WHERE id ='".$recordID."'";
-        DB::insert(DB::raw($query));
-		DB::table('company_property')->insert($property);
-        DB::table('company_property')->insert($datagroup);
+		DB::transaction(function()  use ($recordID, $empID, $property, $datagroup)
+        {
+		    $query = "UPDATE employee SET emp_id = '".$empID."' WHERE id ='".$recordID."'";
+
+            DB::insert(DB::raw($query));
+		    DB::table('company_property')->insert($property);
+            DB::table('company_property')->insert($datagroup);
         });
+
 		return true;
 	}
 
 	function get_latestEmployee()
 	{
 		$query = "emp_id  order by id DESC LIMIT 1";
+
 		$row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
-		return $row->emp_id;
+		    ->select(DB::raw($query))
+		    ->first();
+
+        return $row->emp_id;
 	}
+
 	function getldPhoto($empID)
 	{
 		$query = "photo WHERE emp_id = '".$empID."' ";
 		$row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
+            ->select(DB::raw($query))
+            ->first();
 		return $row->ephoto;
 	}
 
@@ -2762,7 +2776,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		$query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s  WHERE type IN (0,1) ";
 
-
+		
 		return DB::select(DB::raw($query));
 	}
 
@@ -2800,14 +2814,22 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function memberscount($id)
 	{
-		$query = "count(id) as headcounts  WHERE group_name =".$id."";
-		$row = DB::table('employee_group')
-		->select(DB::raw($query))
-		->first();
-    	return $row->headcounts;
+		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
+		$row = DB::select(DB::raw($query));
+
+    	return $row[0]->headcounts;
+
 	}
 
 
+	function nonmembers_roles_byid($id)
+	{
+		 
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id,  (SELECT @s:=0) as s  where  p.id NOT IN (SELECT roleID from role_groups  where group_name=".$id.")";
+
+		//dd(DB::select(DB::raw($query)));
+		return DB::select(DB::raw($query));
+	}
 
     function nonmembers_byid($id)
 	{
@@ -2834,8 +2856,21 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     function members_byid($id)
 	{
+
 		$query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = ".$id."  and e.emp_id IN (SELECT empID from employee_group where group_name=".$id.")";
 
+		return DB::select(DB::raw($query));
+	}
+	function roles_byid($id)
+	{
+		
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p, department d, role_groups rg,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = ".$id."  and p.id IN (SELECT roleID from role_groups where group_name=".$id.")";
+        
+		
+		return DB::select(DB::raw($query));
+	}
+	function get_employee_by_position($position){
+		$query = "SELECT emp_id from employee where position=".$position;
 		return DB::select(DB::raw($query));
 	}
 
@@ -2877,7 +2912,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeFromGroup($refID, $empID, $groupID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($refID, $empID, $groupID)
        {
 	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
         DB::insert(DB::raw($query));
@@ -2896,7 +2931,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeFromRole($refID, $empID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($refID, $empID)
        {
 	    $query = "DELETE FROM emp_role WHERE id ='".$refID."'";
 		DB::insert(DB::raw($query));
@@ -2920,7 +2955,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function deleteEmployeeFromGroup($group_id, $empID)
 	{
-		 DB::transaction(function()
+		 DB::transaction(function() use ($group_id, $empID)
        {
 		$query = "DELETE FROM employee_group WHERE empID ='".$empID."' and group_name = '".$group_id."'";
         DB::insert(DB::raw($query));
@@ -2932,7 +2967,16 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function addEmployeeToGroup($empID, $groupID)
 	{
+		//dd($groupID);
 	    $query = "INSERT INTO  employee_group(empID, group_name) VALUES ('".$empID."', ".$groupID.") ";
+		
+		DB::insert(DB::raw($query));
+		return true;
+	}
+
+	function addRoleToGroup($roleID, $groupID)
+	{
+	    $query = "INSERT INTO  role_groups(roleID, group_name) VALUES ('".$roleID."', ".$groupID.") ";
 		DB::insert(DB::raw($query));
 		return true;
 	}
@@ -3488,7 +3532,7 @@ function my_grievances($empID)
 		    $query = "update assignment_task set date = '".$payroll_date."' where date is null ";
 		    DB::insert(DB::raw($query));
 		});
-        
+
 		return true;
 	}
 

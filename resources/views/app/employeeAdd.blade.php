@@ -37,7 +37,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="firstName">First name:</label>
-                        <input type="text" id="firstName" pattern="[a-zA-Z]+" maxlength="15" title="Only enter letters" name="fname" value="{{ old('fname') }}" class="form-control @error('fname') is-invalid @enderror" placeholder="First Name">
+                        <input type="text" id="firstName" pattern="[a-zA-Z]+" maxlength="15" title="Only enter letters" name="fname" id="name" value="{{ old('fname') }}" class="form-control @error('fname') is-invalid @enderror" placeholder="First Name">
                     </div>
                 </div>
 
@@ -75,17 +75,6 @@
 
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
-                        <label class="form-label">Birthdate:</label>
-                        <div class="input-group">
-							<span class="input-group-text"><i class="ph-calendar"></i></span>
-							<input type="text" placeholder="Date of Birth" class="form-control daterange-single @error('birthdate') is-invalid @enderror" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
-						</div>
-                        <span id="age" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="col-md-4 col-lg-4">
-                    <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" maxlength="30" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com">
                     </div>
@@ -111,6 +100,17 @@
                             <option value="Married">Married</option>
                             <option value="Widowed">Widowed</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="mb-3">
+                        <label class="form-label">Birthdate:</label>
+                        <div class="input-group">
+							<span class="input-group-text"><i class="ph-calendar"></i></span>
+							<input type="text" placeholder="Date of Birth" class="form-control daterange-single @error('birthdate') is-invalid @enderror" name="bithdate" value="{{ old('birthdate') }}" id="birthdate">
+						</div>
+                        <span id="age" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -156,7 +156,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Line Manager:</label>
-                        <select class="form-control select2_single select @error('linemanager') is-invalid @enderror" id="linemanager" name="linemanager">
+                        <select class="form-control select2_single select" id="linemanager" name="linemanager">
                             <option selected disabled> Select Line manager </option>
                         </select>
                     </div>
@@ -361,102 +361,118 @@
 
 @endsection
 
- @push('footer-script')
- <script>
-    $(document).ready(function() {
-        $('#accountNo').show();
-        $('#bank').on('change', function() {
-            var bankID = $(this).val();
-            if (bankID) {
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ url("/flex/bankBranchFetcher/") }}',
-                    data: 'bank=' + bankID,
-                    success: function(html) {
-                        $('#bank_branch').html(html);
+@push('footer-script')
+    {{-- Populating banches according to the bank selected --}}
+    <script>
+        $(document).ready(function() {
+            $('#accountNo').show();
+            $('#bank').on('change', function() {
+                var bankID = $(this).val();
+                if (bankID) {
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '{{ url("/flex/bankBranchFetcher/") }}',
+                        data: 'bank=' + bankID,
+                        success: function(html) {
+                            $('#bank_branch').html(html);
+                        }
+                    });
+
+                    if (bankID == "5") {
+                        $('#accountNo').hide();
+                    } else {
+                        $('#accountNo').show();
                     }
-                });
-                if (bankID == "5") {
-                    $('#accountNo').hide();
+
                 } else {
-                    $('#accountNo').show();
+                    $('#bank_branch').html('<option >Select Bank First</option>');
                 }
-            } else {
-                $('#bank_branch').html('<option >Select Bank First</option>');
-            }
+            });
         });
-    });
     </script>
+    {{-- / --}}
+
+    {{-- getting salaries according to the position selected --}}
     <script>
-    $(document).ready(function() {
+        $(document).ready(function() {
+            $('#pos').on('change', function() {
+                var positionID = $(this).val();
+                if (positionID) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '{{ url("/flex/getPositionSalaryRange/") }}',
+                        data: 'positionID=' + positionID,
+                        success: function(response) {
+                            var response = JSON.parse(response);
 
-        $('#pos').on('change', function() {
-            var positionID = $(this).val();
-            if (positionID) {
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ url("/flex/getPositionSalaryRange/") }}',
-                    data: 'positionID=' + positionID,
-                    success: function(response) {
-                        var response = JSON.parse(response);
+                            $('#salaryField').fadeOut('fast', function() {
+                                $('#salaryField').fadeIn('fast').html(response.salary);
+                            });
+                        }
+                    });
+                } else {
 
-                        $('#salaryField').fadeOut('fast', function() {
-                            $('#salaryField').fadeIn('fast').html(response.salary);
-                        });
-                    }
-                });
-            } else {
-
-            }
+                }
+            });
         });
-    });
     </script>
+    {{-- / --}}
 
     <script>
-    $(document).ready(function() {
+        $(document).ready(function() {
 
-        $('#department').on('change', function() {
-            var stateID = $(this).val();
-            if (stateID) {
-                $.ajax({
-                    type: 'GET',
-                    url: '{{ url("/flex/positionFetcher") }}',
-                    data: 'dept_id=' + stateID,
-                    success: function(html) {
-                        let jq_json_obj = $.parseJSON(html);
-                        let jq_obj = eval(jq_json_obj);
+            $('#department').on('change', function() {
+                var stateID = $(this).val();
 
-                        //populate position
-                        $("#pos option").remove();
-                        $('#pos').append($('<option>', {
-                            value: '',
-                            text: 'Select Position',
-                            selected: true,
-                            disabled: true
-                        }));
-                        $.each(jq_obj.position, function(detail, name) {
+                console.log(stateID);
+
+                if (stateID) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '{{ url("/flex/positionFetcher") }}',
+                        data: 'dept_id=' + stateID,
+                        success: function(html) {
+                            let jq_json_obj = $.parseJSON(html);
+                            let jq_obj = eval(jq_json_obj);
+
+                            console.log(jq_obj);
+
+                            //populate position
+                            $("#pos option").remove();
+
                             $('#pos').append($('<option>', {
-                                value: name.id,
-                                text: name.name
+                                value: '',
+                                text: 'Select Position',
+                                selected: true,
+                                disabled: true
                             }));
-                        });
 
-                        var x = [];
-                        $.each(jq_obj.linemanager, function(detail, name) {
-                            var y = {};
-                            y.name = name.NAME;
-                            y.id = name.empID;
-                            x.push(y);
-                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
-                        });
-                        $.each(jq_obj.director, function(detail, name) {
-                            var y = {};
-                            y.name = name.NAME;
-                            y.id = name.empID;
-                            x.push(y);
+                            $.each(jq_obj.position, function(detail, name) {
+                                $('#pos').append($('<option>', {
+                                    value: name.id,
+                                    text: name.name
+                                }));
+                            });
 
-                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
-                        });
+                            var x = [];
+
+                            $.each(jq_obj.linemanager, function(detail, name) {
+                                var y = {};
+                                y.name = name.NAME;
+                                y.id = name.empID;
+                                x.push(y);
+                                // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                            });
+
+                            $.each(jq_obj.director, function(detail, name) {
+                                var y = {};
+                                y.name = name.NAME;
+                                y.id = name.empID;
+                                x.push(y);
+
+                                // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                            });
 
                         var flags = [];
                         var output = [];
@@ -477,6 +493,7 @@
                             selected: true,
                             disabled: true
                         }));
+
                         $.each(output, function(detail, name) {
                             $('#linemanager').append($('<option>', {
                                 value: name.id,
@@ -495,61 +512,64 @@
 
 
     <script type="text/javascript">
-    $('#addEmployee').submit(function(e) {
 
-        e.preventDefault(); // Prevent Default Submission
+        $('#addEmployee').submit(function(e) {
 
-        $.ajax({
-                url: '{{ url("/flex/registerEmployee") }}',
+            e.preventDefault(); // Prevent Default Submission
+
+            // alert(document.getElementById("name"));
+
+            $.ajax({
+                    url: '{{ url("/flex/registerEmployee") }}',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type: 'POST',
+                    data: $(this).serialize(), // it will serialize the form data
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    alert(data.title);
+
+                    if (data.status == 'OK') {
+                        $('#feedBackSubmission').fadeOut('fast', function() {
+                            $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                        });
+                        setTimeout(function() { // wait for 5 secs(2)
+                            window.location.href =
+                                "<?php echo url('flex/userprofile/?id=');?>" + data
+                                .empID; // then reload the page.(3)
+                        }, 2000);
+                        $('#addEmployee').trigger("reset");
+                    } else {
+                        $('#feedBackSubmission').fadeOut('fast', function() {
+                            $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                        });
+                        $('#addEmployee').trigger("reset");
+
+                    }
+                })
+                .fail(function() {
+                    alert('Registration Failed, Review Your Network Connection...');
+                });
+        });
+
+
+        $('#import_form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '{{ url("/flex/import") }}',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                type: 'POST',
-                data: $(this).serialize(), // it will serialize the form data
-                dataType: 'json'
-            })
-            .done(function(data) {
-                alert(data.title);
-
-                if (data.status == 'OK') {
-                    $('#feedBackSubmission').fadeOut('fast', function() {
-                        $('#feedBackSubmission').fadeIn('fast').html(data.message);
-                    });
-                    setTimeout(function() { // wait for 5 secs(2)
-                        window.location.href =
-                            "<?php echo url('flex/userprofile/?id=');?>" + data
-                            .empID; // then reload the page.(3)
-                    }, 2000);
-                    $('#addEmployee').trigger("reset");
-                } else {
-                    $('#feedBackSubmission').fadeOut('fast', function() {
-                        $('#feedBackSubmission').fadeIn('fast').html(data.message);
-                    });
-                    $('#addEmployee').trigger("reset");
-
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    $('#file').val('');
+                    load_data();
+                    alert(' Employees Succefully Imported');
                 }
             })
-            .fail(function() {
-                alert('Registration Failed, Review Your Network Connection...');
-            });
-    });
-
-
-    $('#import_form').on('submit', function(event) {
-        event.preventDefault();
-        $.ajax({
-            url: '{{ url("/flex/import") }}',
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            method: "POST",
-            data: new FormData(this),
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(data) {
-                $('#file').val('');
-                load_data();
-                alert(' Employees Succefully Imported');
-            }
-        })
-    });
+        });
     </script>
 
     <script>

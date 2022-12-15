@@ -68,31 +68,27 @@
 
     <div class="card">
         <div class="card-header">
-          <div class="d-flex justify-content-between">
-          <h5 class="mb-0">Allowances</h5>
-          <button   type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#save_allowance">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-0">Allowances</h5>
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#save_allowance">
                     <i class="ph-plus me-2"></i> Allowance
-          </button>
-          </div>
-          @if (Session::has('success'))
-                                <div class="alert alert-success" role="alert">
-                                    <p>{{ Session::get('success') }}</p>
-                                </div>
-                            @endif
+                </button>
+            </div>
+            @if (Session::has('success'))
+                <div class="alert alert-success" role="alert">
+                    <p>{{ Session::get('success') }}</p>
+                </div>
+            @endif
         </div>
-       <table class="table datatable-basic">
+        <table class="table datatable-basic">
             <thead>
                 <tr>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        
-                        <th>Action</th>
-                    </tr>
+                <tr>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
                 </tr>
             </thead>
 
@@ -100,23 +96,35 @@
                 @php
                     $SN = 1;
                 @endphp
-                @if(isset($data['allowance']))
-                    @foreach($data['allowance'] as $row)
+                @if (isset($data['allowance']))
+                    @foreach ($data['allowance'] as $row)
                         <tr>
                             <td>{{ $SN++ }}</td>
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->amount }}</td>
-                            <td>
+                            {{-- <td>
                                 <a href="{{ route('flex.organization_level_info', [$row->id]) }}"
                                     class="btn btn-perfrom">View</a>
-                            </td>
-                        </tr>
+                            </td> --}}
+                            <td>
 
+                                <a href="{{ route('flex.allowance_info', [$row->id]) }}"
+                                    class="btn btn-outline-info btn-xs">
+                                    <i class="ph-note-pencil"></i>Edit</a>
+
+                                <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
+                                    class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal"
+                                    {{-- data-id="{{ $row->id }}"
+                                    data-name="{{ $row->name }}" --}}>
+                                    <i class="ph-trash"></i> Delete
+                                </button>
+                        </td>
+                        </tr>
                     @endforeach
-                    @endif
+                @endif
             </tbody>
         </table>
-      </div>
+    </div>
     <!-- /basic datatable -->
 
 

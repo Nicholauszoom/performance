@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Payroll;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use App\CustomModels\PayrollModel;
-use App\CustomModels\flexFerformanceModel;
-use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
@@ -146,10 +143,8 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        // dd(session()->all());
-
         if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
-            
+
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
@@ -160,7 +155,6 @@ class PayrollController extends Controller
        } else {
            echo 'Unauthorised Access';
        }
-
     }
 
     public function payroll()
@@ -420,10 +414,10 @@ class PayrollController extends Controller
 
             return view('app.gross_recon',$data);
 
-    
+
 
         }
-        
+
     }
 
     public function netReconciliation(Request $request)
@@ -742,7 +736,7 @@ class PayrollController extends Controller
             if ($check > 0) {
                 $result = $this->payroll_model->recommendPayroll($empID, $todate);
                 if ($result == true) {
-                    
+
                     $description ="Recommendation of payroll of date " . $todate;
 
                   //  $result = SysHelpers::auditLog(1,$description,$request);
@@ -787,7 +781,7 @@ class PayrollController extends Controller
                     $result = $this->partial_payment_manipulation($payroll_date);
                     if ($result) {
 
-                
+
                         $description ="Approved payment of payroll of date " . $payroll_date;
 
                   //  $result = SysHelpers::auditLog(1,$description,$request);
@@ -1311,6 +1305,8 @@ class PayrollController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
+
+
 
     }
 

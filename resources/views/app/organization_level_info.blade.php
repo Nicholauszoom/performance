@@ -77,8 +77,8 @@
                                     <td>{{ number_format($maxSalary) }}</td>
                                 </tr>
 
+                            </table>
                         </tbody>
-                        </table>
                     </div>
                 </div>
                 <!-- Groups -->
@@ -91,47 +91,61 @@
                         </div>
 
                         <div class="card-body">
-                            <form action="{{ route('flex.updateOrganizationLevelName') }}"  method="POST" class="form-horizontal">
-                              @csrf
+                            @if (Session::has('success'))
+                                <div class="alert alert-success" role="alert">
+                                    <p>{{ Session::get('success') }}</p>
+                                </div>
+                            @endif
+                            <form action="{{ route('flex.updateOrganizationLevelName') }}" method="POST"
+                                class="form-horizontal">
+                                @csrf
                                 <div class="mb-3">
                                     <div class="d-md-flex">
                                         <div class="col-sm-8">
-                                            <input type="hidden" name ='levelID' value="{{$levelID}}" class="form-control">
-                                            <input type="text" value="{{$name}}"  name="name" class="form-control">
+                                            <input type="hidden" name='levelID' value="{{ $levelID }}"
+                                                class="form-control">
+                                            <input type="text" value="{{ $name }}" name="name"
+                                                class="form-control">
                                         </div>
                                         <div class="btn-group flex-shrink-0 ms-md-3">
-                                            <button type="submit"
-                                                class="btn btn-perfrom multiselect-order-options-button" id="updateLevelName">Update Name</button>
+                                            <button type="submit" class="btn btn-perfrom multiselect-order-options-button"
+                                                id="updateLevelName">Update Name</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
-                            <form action="{{ route('flex.updateMinSalary') }}"  method="POST" class="form-horizontal">
-                              @csrf
+                            <form action="{{ route('flex.updateMinSalary') }}" method="POST" class="form-horizontal">
+                                @csrf
                                 <div class="mb-3">
                                     <div class="d-md-flex">
                                         <div class="col-sm-7">
-                                          <input type="hidden" name ='levelID' value="{{$levelID}}" class="form-control">
-                                            <input type="number" name="minSalary" value="{{$minSalary}}" class="form-control">
+                                            <input type="hidden" name='levelID' value="{{ $levelID }}"
+                                                class="form-control">
+                                            <input type="number" name="minSalary" value="{{ $minSalary }}"
+                                                class="form-control">
                                         </div>
                                         <div class="btn-group flex-shrink-0 ms-md-3">
                                             <button type="submit"
-                                                class="btn btn-perfrom multiselect-order-options-button">Update Min Salary</button>
+                                                class="btn btn-perfrom multiselect-order-options-button">Update Min
+                                                Salary</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                             <form action="{{ route('flex.updateMaxSalary') }}" method="POST" class="form-horizontal">
-                              @csrf
+                                @csrf
                                 <div class="mb-3">
                                     <div class="d-md-flex">
                                         <div class="col-sm-7">
-                                          <input type="hidden" name ='levelID' value="{{$levelID}}" class="form-control">
-                                            <input type="number" name="maxSalary" value="{{$maxSalary}}" class="form-control">
+                                            <input type="hidden" name='levelID' value="{{ $levelID }}"
+                                                class="form-control">
+                                            <input type="number" name="maxSalary" value="{{ $maxSalary }}"
+                                                class="form-control">
                                         </div>
                                         <div class="btn-group flex-shrink-0 ms-md-3">
                                             <button type="submit"
-                                                class="btn btn-perfrom multiselect-order-options-button">Update Max Salary</button>
+                                                class="btn btn-perfrom multiselect-order-options-button">Update Max
+                                                Salary</button>
                                         </div>
                                     </div>
                                 </div>

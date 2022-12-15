@@ -1,4 +1,4 @@
-<!-- Main navbar -->
+{{-- Main navbar --}}
 <div class="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10 bg-main">
     <div class="container-fluid">
         <div class="d-flex d-lg-none me-2">
@@ -108,7 +108,7 @@
             </li> --}}
         </ul>
 
-        <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
+        {{-- <div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
             <div class="navbar-search flex-fill position-relative mt-2 mt-lg-0 mx-lg-3">
                 <div class="form-control-feedback form-control-feedback-start flex-grow-1" data-color-theme="dark">
                     <input type="text" class="form-control bg-transparent rounded-pill" placeholder="Search" data-bs-toggle="dropdown">
@@ -198,9 +198,9 @@
                     </div>
                 </div>
 
-                {{-- <a href="#" class="navbar-nav-link align-items-center justify-content-center w-40px h-32px rounded-pill position-absolute end-0 top-50 translate-middle-y p-0 me-1" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                <a href="#" class="navbar-nav-link align-items-center justify-content-center w-40px h-32px rounded-pill position-absolute end-0 top-50 translate-middle-y p-0 me-1" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                     <i class="ph-faders-horizontal"></i>
-                </a> --}}
+                </a>
 
                 <div class="dropdown-menu w-100 p-3">
                     <div class="d-flex align-items-center mb-3">
@@ -264,7 +264,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <ul class="nav flex-row justify-content-end order-1 order-lg-2">
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
@@ -277,10 +277,10 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="{{ route('employee.profile') }}" class="dropdown-item">
+                    {{-- <a href="{{ route('employee.profile') }}" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
-                    </a>
+                    </a> --}}
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-currency-circle-dollar me-2"></i>
                         My subscription
@@ -316,5 +316,5 @@
         </ul>
     </div>
 </div>
-<!-- /main navbar -->
+{{-- /main navbar --}}
 

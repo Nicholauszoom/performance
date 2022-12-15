@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Payslip'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
@@ -29,10 +29,11 @@
             id="demo-form2"
             enctype="multipart/form-data"
             method="post"
-            action="<?php echo  url(''); ?>/flex/reports/payslip"
+            action="{{ url('/flex/reports/payslip') }}"
             target="_blank"
             data-parsley-validate class="form-horizontal form-label-left"
         >
+        @csrf
 
             <div class="row">
                 <div class="col-md-3">
@@ -71,7 +72,7 @@
 
                 <div class="col-md-2">
                     <div class="mb-3">
-                        <button class="btn btn-main px-3 mt-4">
+                        <button class="btn btn-main px-3 mt-4" type="submit">
                             <i class="ph-printer me-2"></i> Print
                         </button>
                     </div>
@@ -101,7 +102,7 @@
 
                 <div class="col-6">
                     <div class="mb-3">
-                        <button class="btn btn-main px-3 mt-4" id="print_all">
+                        <button class="btn btn-main px-3 mt-4" id="print_all" type="submit">
                             <i class="ph-printer me-2"></i> PRINT ALL
                         </button>
                     </div>

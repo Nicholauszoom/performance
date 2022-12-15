@@ -1,11 +1,10 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
-@endpush
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>@endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -57,7 +56,7 @@
                     <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
                     
                         <!-- </div> -->
-                    <table  id="datatable" class="table table-striped table-bordered">
+                    <table  id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
                           <th>S/N</th>
@@ -74,12 +73,12 @@
                           foreach ($members as $row) { ?>
                           <tr>
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->NAME; ?></td>
-                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+                            <td><?php echo $row->POSITION; ?></td>
+                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT; ?></td>
                             
                             <td class="options-width">
                            <label class="containercheckbox">
-                           <input type="checkbox" name="option[]" value="<?php echo $row->EGID."|".$row->ID; ?>">
+                           <input type="checkbox" name="option[]" value="<?php echo $row->RGID."|".$row->ID; ?>">
                             <span class="checkmark"></span>
                           </label></td>
                             </tr>
@@ -100,19 +99,23 @@
               <!-- Groups -->
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                  <div class="card-head">
-                    <h2>All Employees </h2><br>
-                    <small><b>Mark Employees to add them in this Group</b></small>
+
+                  <div class="card-header">
+                    <h4 class=" text-muted">All Roles </h4>
+                  </div>
+                  <div class="card-body">
+                    
+                    <small><b>Mark Role to add them in this Group</b></small>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="card-body">
+                  <div class="card-bod">
                    <?php echo session("notegroup");  ?>
                    <div id="feedBackAdd"></div>
                     <form id="addToGroup" method="post">
                     @csrf
                     <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
-                    <table  id="datatable-keytable" class="table table-striped table-bordered">
+                    <table  id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
                           <th>S/N</th>
@@ -129,8 +132,8 @@
                           foreach ($nonmembers as $row) { ?>
                           <tr>
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->NAME; ?></td>
-                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+                            <td><?php echo $row->POSITION; ?></td>
+                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT; ?></td>
                             
                             <td class="options-width">
                            <label class="containercheckbox">
@@ -139,7 +142,7 @@
                           </label>
 
                            </td>
-                           </td>
+                           
                             </tr>
                           <?php } //} ?>
                       </tbody>
@@ -243,7 +246,7 @@
         if (confirm("Are You Sure You Want To Add The selected Employee(s) Into  This Group?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/addEmployeeToGroup",
+                 url:"<?php echo  url(''); ?>/flex/addEmployeeToGroupByRoles",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

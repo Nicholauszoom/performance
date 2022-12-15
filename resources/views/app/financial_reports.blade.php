@@ -10,8 +10,12 @@
 
 @section('content')
 
+<div class="card">
+    <div class="card-header border-0">
+        <h2 class="text-muted">Pending Payments <small>Need To Be Responded On</small></h2>
+    </div>
 
-
+    <div class="card-body">
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
@@ -45,12 +49,12 @@
 
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-header">
                                 <h2>P9 (P.A.Y.E)</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                       action="<?php echo  url(''); ?>/flex/reports/p9" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -362,6 +366,10 @@
 
 
 <!-- /page content -->
+
+
+    </div>
+</div>
 
 
 

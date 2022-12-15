@@ -108,7 +108,7 @@ class ProjectModel extends Model
 		$query ="SELECT *  FROM deliverables  WHERE id = '".$Id."' ";
     	return DB::select(DB::raw($query));
 	}
-    
+
     public function getDepInfoById($Id){
         $query ="SELECT *  FROM department  WHERE id = '".$Id."' ";
     	return DB::select(DB::raw($query));
@@ -126,14 +126,14 @@ class ProjectModel extends Model
 		$query ="SELECT *  FROM project  WHERE id = '".$Id."' ";
     	return DB::select(DB::raw($query));
 	}
-    
-    
-    
+
+
+
     public function getAllActivity($projectId) {
 		$query ="SELECT *  FROM activities  WHERE deliverable_id = '".$projectId."' ";
     	return DB::select(DB::raw($query));
 	}
-    
+
     public function getAllActivityResultByEmployeeID($emp_id) {
 		$query ="SELECT *  FROM activity_results  WHERE managed_by = '".$emp_id."' ";
     	return DB::select(DB::raw($query));
@@ -143,7 +143,7 @@ class ProjectModel extends Model
 		$query ="SELECT *  FROM activities  WHERE managed_by = '".$emp_id."' ";
     	return DB::select(DB::raw($query));
 	}
-    
+
 
     public function getAllDeliverable($projectId) {
 		$query ="SELECT *  FROM deliverables  WHERE project_id = '".$projectId."' ";
@@ -193,7 +193,7 @@ class ProjectModel extends Model
         $query ="SELECT  eg.*, concat(e.fname,' ',e.mname,' ',e.lname) as name FROM employee_activity_grant eg, employee e WHERE eg.empID = e.emp_id AND eg.activity_code = '".$activityCode."' and e.state != 4 ";
         return DB::select(DB::raw($query));
     }
-    
+
 
     public function addActivityResult($activityData)
     {
@@ -295,7 +295,7 @@ class ProjectModel extends Model
 
   	public function allocateActivity($data)
     {
-      $this->db->insert("employee_activity_grant", $data);
+        DB::table('employee_activity_grant')->insert($data);
         return true;
     }
 

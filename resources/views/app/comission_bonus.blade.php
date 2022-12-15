@@ -113,7 +113,7 @@
                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                        <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
                        <button type="reset" class="btn btn-default">Cancel</button>
-                       <button  class="btn btn-main">Add To Incentive</button>
+                       <button  class="btn btn-main">Add</button>
                        <?php }else { ?>                            
                        <button type="button"  class="btn btn-warning">Incentivees Not Allowed Until the Current Pending Payroll is Confirmed</button>
                        <?php } ?>
@@ -123,7 +123,7 @@
                 </form>
                 <?php } ?>
           <div class="x_title">
-            <h2>List Of Employees Entitled For Incentive This Month</h2>
+            <h2>Incentives Entittlement List</h2>
             <div class="clearfix"></div>
             <div id ="feedBack"></div>
           </div>
