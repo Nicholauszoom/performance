@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Payslip'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
@@ -24,7 +24,7 @@
                   </div>
                   <div class="x_content">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
-                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/payslip" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data"  method="post" action="{{ url("/flex/reports/payslip") }}" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
 
                     <div class="form-group">
                         <label class="control-label col-md-3  col-xs-6" >Employee Type jhjhj</label>

@@ -517,7 +517,7 @@
 
             e.preventDefault(); // Prevent Default Submission
 
-            alert(document.getElementById("name"));
+            // alert(document.getElementById("name"));
 
             $.ajax({
                     url: '{{ url("/flex/registerEmployee") }}',

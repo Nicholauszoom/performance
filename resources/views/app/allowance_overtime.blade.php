@@ -1,34 +1,39 @@
 @extends('layouts.vertical', ['title' => 'Overtime'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+
 @endpush
 
 @section('content')
+    <!-- Basic datatable -->
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5>Overtime</h5>
 
-
-
-
-  <!-- Basic datatable -->
-      <div class="card">
-        <div class="card-header">
-          <div class="d-flex justify-content-between">
-          <h5 class="mb-0">Overtime</h5>
-          <button   type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#save_department">
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add_overtime">
                     <i class="ph-plus me-2"></i> Overtime
-
-          </button>
-          </div>
-
+                </button>
+            </div>
         </div>
-       <table class="table datatable-basic">
+        {{-- @if (Session::has('success'))
+            <div class="alert alert-success center" align='center' role="alert">
+                <p class="text-center">{{ Session::get('success') }}</p>
+            </div>
+        @endif
+        @if (Session::has('overtimeAdded'))
+            <div class="alert alert-success center" align='center' role="alert">
+                <p class="text-center">{{ Session::get('overtimeAdded') }}</p>
+            </div>
+        @endif --}}
+        <table class="table datatable-basic">
             <thead>
                 <tr>
                     <th>S/N</th>
@@ -36,51 +41,98 @@
                     <th>Percent Amount(Day)</th>
                     <th>Percent Amount(Night)</th>
                     <th class="text-center">Action</th>
+                    <th></th>
                 </tr>
             </thead>
-
             <tbody>
-                @if(isset($data['departments']))
-                    @foreach($data['departments'] as $department)
+                @php
+                    $SN = 1;
+                @endphp
+                {{-- @if (isset($data['overtimes'])) --}}
+                    @foreach ($overtimes as $row)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $department->name }}</td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td> HOD </td>
-                            <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
+                            <td>{{ $SN++ }}</td>
+                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->day_percent }}</td>
+                            <td>{{ $row->night_percent }}</td>
 
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
+                            {{-- <td align="center">
 
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
+                                    <a href="{{ route('flex.overtime_category_info', [$row->id]) }}"
+                                        class="btn btn-outline-info btn-xs">
+                                        <i class="ph-note-pencil"></i>Edit</a> --}}
+
+                                    {{-- <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
+                                        class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal" --}}
+                                        {{-- data-id="{{ $row->id }}"
+                                        data-name="{{ $row->name }}" --}}
+                                        {{-- <i class="ph-trash"></i> Delete
+                                    </button>
+                            </td> --}}
+                            <td class="text-center">
+                                <div class="d-inline-flex">
+                                    <div class="dropdown">
+                                        <a href="#" class="text-body" data-bs-toggle="dropdown">
+                                            <i class="ph-list"></i>
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a href="#" class="dropdown-item">
+                                                <i class="ph-file-pdf me-2"></i>
+                                                Export to .pdf
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class="ph-file-xls me-2"></i>
+                                                Export to .csv
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class="ph-file-doc me-2"></i>
+                                                Export to .doc
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
+                            <td></td>
                         </tr>
-
                     @endforeach
-                    @endif
+                {{-- @endif --}}
+
             </tbody>
         </table>
-      </div>
-  <!-- /basic datatable -->
+    </div>
 
 
+    {{-- Modal section --}}
+    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="editt" tabindex="-1"
+        role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content py-4 px-2">
+                <div class="modal-body">
+                    <div id="message"></div>
+                </div>
 
+                <div class="row">
+                    <div class="col-sm-4">
+
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                        <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
+                    </div>
+                    <div class="col-sm-2">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /basic datatable -->
 @endsection
 
 @section('modal')
-
-@include('setting.overtime.add')
-
+    @include('setting.overtime.add')
 @endsection
 
 
@@ -111,7 +163,7 @@
 
 
                         <div class="tab-content tab-bordered" id="myTab3Content">
-                            <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
+                            <div class="tab-pane fade @if (empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
                                 <div class="table-responsive">
 
@@ -128,8 +180,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if(isset($departments))
-                    @foreach($departments as $departments)
+                    @if (isset($departments))
+                    @foreach ($departments as $departments)
 
                         <tr>
                             <th>{{ $loop->iteration }}</th>
@@ -169,10 +221,24 @@
 
 
 @endsection --}}
-
-{{-- @section('scripts')
 <script>
-        $(document).on('click', '.edit_permission_btn', function () {
+    function editOvertime(id) {
+        const message = "Are you sure you want to delete?";
+        $('#editt').modal('show');
+        $('#editt').find('.modal-body #message').text(message);
+        var newId = id;
+        $('#yes_delete').click(function() {
+            var url = "{{ route('flex.overtimeCategoryDelete', ':id') }}";
+             url = url.replace(':id', id);
+            location.href=url;
+
+        });
+
+    }
+</script>
+@section('scripts')
+    <script>
+        $(document).on('click', '.edit_permission_btn', function() {
             var id = $(this).data('id');
             var name = $(this).data('name');
             $('#id').val(id);
@@ -180,20 +246,25 @@
             $('#editPermissionModal').modal('show');
         });
     </script>
-<script>
-       $('.datatable-basic').DataTable({
+    <script>
+        $('.datatable-basic').DataTable({
             autoWidth: false,
-            "columnDefs": [
-                {"targets": [1]}
-            ],
-           dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+            "columnDefs": [{
+                "targets": [1]
+            }],
+            dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
             "language": {
-               search: '<span>Filter:</span> _INPUT_',
+                search: '<span>Filter:</span> _INPUT_',
                 searchPlaceholder: 'Type to filter...',
                 lengthMenu: '<span>Show:</span> _MENU_',
-             paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
+                paginate: {
+                    'first': 'First',
+                    'last': 'Last',
+                    'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;',
+                    'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;'
+                }
             },
 
         });
     </script>
-@endsection --}}
+@endsection

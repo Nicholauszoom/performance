@@ -230,6 +230,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
         Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
         Route::any('/overtime','overtime')->name('flex.overtime');
+        Route::any('/statutory_deductions','overtimeCat')->name('flex.overtimeCat');
         Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
         Route::any('/confirmOvertime/{id}','confirmOvertime')->name('flex.confirmOvertime');
         Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
@@ -320,7 +321,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/deleteproperty/$id','deleteproperty')->name('flex.deleteproperty');
         Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->name('flex.employeeDeactivationRequest');
         Route::any('/employeeActivationRequest','employeeActivationRequest')->name('flex.employeeActivationRequest');
-        Route::any('/cancelRequest','cancelRequest')->name('flex.cancelRequest');
+        Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->name('flex.cancelRequest');
         Route::any('/activateEmployee','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
@@ -355,13 +356,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/non_statutory_deductions','non_statutory_deductions')->name('flex.non_statutory_deductions');
         Route::any('/addAllowance','addAllowance')->name('flex.addAllowance');
         Route::any('/addOvertimeCategory','addOvertimeCategory')->name('flex.addOvertimeCategory');
+        Route::any('/overtimeCategoryDelete/{id}','overtimeCategoryDelete')->name('flex.overtimeCategoryDelete');
         Route::any('/addDeduction','addDeduction')->name('flex.addDeduction');
         Route::any('/assign_allowance_individual','assign_allowance_individual')->name('flex.assign_allowance_individual');
         Route::any('/assign_allowance_group','assign_allowance_group')->name('flex.assign_allowance_group');
         Route::any('/remove_individual_from_allowance','remove_individual_from_allowance')->name('flex.remove_individual_from_allowance');
         Route::any('/remove_group_from_allowance','remove_group_from_allowance')->name('flex.remove_group_from_allowance');
-        Route::any('/allowance_info','allowance_info')->name('flex.allowance_info');
-        Route::any('/overtime_category_info','overtime_category_info')->name('flex.overtime_category_info');
+
         Route::any('/deleteAllowance','deleteAllowance')->name('flex.deleteAllowance');
         Route::any('/activateAllowance','activateAllowance')->name('flex.activateAllowance');
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');

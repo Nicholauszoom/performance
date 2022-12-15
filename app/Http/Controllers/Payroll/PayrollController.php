@@ -143,8 +143,6 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        // dd(session()->all());
-
         if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
@@ -157,7 +155,6 @@ class PayrollController extends Controller
        } else {
            echo 'Unauthorised Access';
        }
-
     }
 
     public function payroll()
@@ -761,7 +758,7 @@ class PayrollController extends Controller
     }
 
     function runpayroll($pdate)
-    {  
+    {
         $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
@@ -1309,7 +1306,7 @@ class PayrollController extends Controller
             echo json_encode($response_array);
         }
 
-        
+
 
     }
 
