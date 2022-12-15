@@ -3731,27 +3731,32 @@ class GeneralController extends Controller
     {
 
         $empID = $id;
+
         $datalog = array(
-            'state' => 0,
-            'empID' => $empID,
-            'author' => session('emp_id'),
-        );
+                        'state' =>0,
+                        'empID' =>$empID,
+                        'author' =>session('emp_id')
+                    );
 
         $this->flexperformance_model->employeestatelog($datalog);
-//                if($result ==true){
-//                    $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+
+        //  if($result ==true){
+        //      $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+
         $response_array['status'] = "OK";
         $response_array['title'] = "SUCCESS";
         $response_array['message'] = "<p class='alert alert-success text-center'>Deactivation Request For This Employee Has Been Sent Successifully</p>";
+
         header('Content-type: application/json');
         echo json_encode($response_array);
-//                } else {
-//                    $response_array['status'] = "ERR";
-//                    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
-//                    header('Content-type: application/json');
-//                    echo json_encode($response_array);
-//                }
-    }
+
+        //  } else {
+        //    $response_array['status'] = "ERR";
+        //    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
+        //    header('Content-type: application/json');
+        //    echo json_encode($response_array);
+        //  }
+      }
 
     public function deleteproperty($id, Request $request)
     {
@@ -3801,17 +3806,20 @@ class GeneralController extends Controller
 
     }
 
-    public function employeeActivationRequest(Request $request)
-    {
-        $empID = $this->uri->segment(3);
+    public function employeeActivationRequest($id, Request $request) {
+        $empID = $id;
+
         $datalog = array(
             'state' => 1,
             'empID' => $empID,
             'author' => session('emp_id'),
         );
-        $result = $this->flexperformance_model->updateemployeestatelog($datalog, $empID);
-        if ($result == true) {
-            $this->flexperformance_model->audit_log("Activation of Employee with ID =" . $empID . "");
+
+        $result = $this->flexperformance_model->updateemployeestatelog($datalog,$empID);
+
+        if($result ==true){
+            // $this->flexperformance_model->audit_log("Activation of Employee with ID =".$empID."");
+
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been Sent Successifully</p>";
@@ -3825,15 +3833,25 @@ class GeneralController extends Controller
         }
     }
 
-    public function cancelRequest(Request $request)
-    {
-        $logID = $this->uri->segment(3);
-        $empID = $this->uri->segment(4);
-        $updates = array(
-            'state' => 0,
-            'current_state' => 0,
-            'empID' => $empID,
-        );
+  public function cancelRequest($id, $empID, Request $request)
+  {
+    $updates = array(
+        'state' => 0,
+        'current_state' =>0,
+        'empID' => $empID
+    );
+
+    $result = $this->flexperformance_model->updateemployeestatelog($updates, $id);
+
+    $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =".$empID."");
+
+    SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =".$empID , $request);
+
+    $response_array['status'] = "OK";
+    $response_array['title'] = "SUCCESS";
+    $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+
+    header('Content-type: application/json');
 
         $result = $this->flexperformance_model->updateemployeestatelog($updates, $logID);
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
@@ -3843,24 +3861,22 @@ class GeneralController extends Controller
         header('Content-type: application/json');
         echo json_encode($response_array);
 
-//      if($result ==true){
-//            $response_array['status'] = "OK";
-//            $response_array['title'] = "SUCCESS";
-//            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        } else {
-//            $response_array['status'] = "ERR";
-//            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        }
+    //      if($result ==true){
+    //            $response_array['status'] = "OK";
+    //            $response_array['title'] = "SUCCESS";
+    //            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+    //            header('Content-type: application/json');
+    //            echo json_encode($response_array);
+    //        } else {
+    //            $response_array['status'] = "ERR";
+    //            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
+    //            header('Content-type: application/json');
+    //            echo json_encode($response_array);
+    //        }
     }
 
-    public function activateEmployee(Request $request)
-    {
-        $logID = $this->uri->segment(3);
-        $empID = $this->uri->segment(4);
+    public function activateEmployee($logID, $empID, Request $request) {
+
         $todate = date('Y-m-d');
 
         $property = array(
@@ -3876,15 +3892,16 @@ class GeneralController extends Controller
         );
 
         $datalog = array(
-            'state' => 1,
-            'current_state' => 1,
-            'empID' => $empID,
-            'author' => session('emp_id'),
+          'state' =>1,
+          'current_state' =>1,
+          'empID' =>$empID,
+          'author' =>session('emp_id')
         );
 
         $result = $this->flexperformance_model->activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate);
-        if ($result == true) {
-            $this->flexperformance_model->audit_log("Activated an Employee of ID =" . $empID . "");
+
+        if($result ==true){
+            //   $this->flexperformance_model->audit_log("Activated an Employee of ID =".$empID."");
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<p class='alert alert-success text-center'>Employee Has Activated Successifully</p>";

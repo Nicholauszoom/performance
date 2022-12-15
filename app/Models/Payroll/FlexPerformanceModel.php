@@ -2519,21 +2519,26 @@ function allLevels()
 		return true;
 	}
 
-	function activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate)
+	public function activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate)
 	{
-	     DB::transaction(function()  use($property, $datagroup, $datalog, $empID, $logID, $todate)
-       {
-        DB::table('company_property')->insert($property);
-        DB::table('company_property')->insert($datagroup);
-		DB::table('activation_deactivation')->insert($datalog);
-        $query = "UPDATE employee SET state = 1, last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
-		DB::insert(DB::raw($query));
-        $query = "UPDATE activation_deactivation SET current_state = 1 WHERE id ='".$logID."'";
-        DB::insert(DB::raw($query));
-        });
+	    $result = DB::transaction(function()  use($property, $datagroup, $datalog, $empID, $logID, $todate)
+                    {
+                        DB::table('company_property')->insert($property);
+                        DB::table('company_property')->insert($datagroup);
+		                DB::table('activation_deactivation')->insert($datalog);
 
-		return true;
+                        $query = "UPDATE employee SET state = 1, last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
 
+                        DB::insert(DB::raw($query));
+
+                        $query = "UPDATE activation_deactivation SET current_state = 1 WHERE id ='".$logID."'";
+
+                        DB::insert(DB::raw($query));
+
+                        return true;
+                    });
+
+		return $result;
 	}
 
 	function deactivateEmployee($empID, $datalog, $logID, $todate)
@@ -2590,9 +2595,12 @@ function allLevels()
 		$empID = $data['empID'];
 		$state = $data['state'];
 		$query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+
         DB::insert(DB::raw($query));
-		DB::table('activation_deactivation')->insert($data);
-//		return true;
+
+        DB::table('activation_deactivation')->insert($data);
+
+        // return true;
 	}
 
 
