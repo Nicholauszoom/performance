@@ -65,12 +65,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
  
-// set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-               require_once(dirname(__FILE__).'/lang/eng.php');
-               $pdf->setLanguageArray($l);
-}
- 
+
 // ---------------------------------------------------------
  
 // set default font subsetting mode
@@ -147,7 +142,7 @@ $header2 = "
 $pdf->writeHTMLCell(0, 0, '', '', $header2, 0, 1, 0, true, '', true);
 
 $pdf->SetXY(76, 17);
-$path=FCPATH.'uploads/logo/wcf.png';
+$path=public_path().'/img/logo/wcf.png';
 // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
 $pdf->Image($path, '', '', 75, 30, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 

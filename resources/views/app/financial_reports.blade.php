@@ -73,8 +73,8 @@
                                             </select>
                                         </div>
                                         <span class="input-group-btn">
-                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>
-                      </span>
+                                        <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>
+                                    </span>
                                     </div>
 
                                     <div class="form-group">

@@ -51,7 +51,7 @@ class ReportController extends Controller
  }
 
  function pay_checklist(Request $request)  {
-      if ($request->input('run')) {
+      if (1) {
         $payroll_date =$request->input('payrolldate');
         $isReady = $this->reports_model->payCheklistStatus($payroll_date);
         $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -107,10 +107,10 @@ class ReportController extends Controller
 
    function p9(Request $request)  {
 
-        dd($request->all());
+        // dd($request->all());
 
 
-      if ($request->input('run')) {
+      if (1) {
         $payrolldate =$request->input('payrolldate');
           $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
           if ($reportType == 1) {
@@ -139,7 +139,7 @@ class ReportController extends Controller
 
 function p10(Request $request)  {
 
-    dd("here");
+    // dd("here");
 
     $period =$request->input('period');
     $year =$request->input('payrolldate');
@@ -166,7 +166,13 @@ function p10(Request $request)  {
             $data['sdl']= $this->reports_model->v_p10($year,$year);
             $data['total']= $this->reports_model->v_totalp10($year,$year);
         }
-         return view('app.reports/p10', $data);
+
+        $paye=$data['paye'];
+        $sdl=$data['sdl'];
+        $total=$data['total'];
+        $info=$data['info'];
+
+        include(app_path() . '/reports/p10.php');
     }
     elseif($period==2 && $checkup2>=1){
         // exit($date2start."<br>".$date2end);
@@ -224,6 +230,8 @@ function heslb(Request $request)  {
 }
 
 function pension(Request $request)  {
+
+    
     $payrollMonth =$request->input('payrolldate');
     $pensionFund =$request->input('fund');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -260,9 +268,9 @@ include(app_path() . '/reports/pension.php');
 
 
 function wcf(Request $request)  {
-    dd($request->all());
+    // dd($request->all());
 
-    if ($request->input('run')) {
+    if (1) {
         $calendar =$request->input('payrolldate');
         $datewell = explode("-",$calendar);
         $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -296,7 +304,7 @@ function wcf(Request $request)  {
 
 
 // function employment_cost_old(Request $request)  {
-//     //if ($request->input('run')) {
+//     //if (1) {
 
 //         //DATE MANIPULATION
 //         $calendar =$request->input('payrolldate');
@@ -791,7 +799,7 @@ function backup_payslip(Request $request)  {
     #################################END PROJECT REPORTS##############################
 
     public function payrollInputJournalExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -1163,7 +1171,7 @@ function backup_payslip(Request $request)  {
     }
 
     public function payrollInputJournalExportTime(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -1597,7 +1605,7 @@ function backup_payslip(Request $request)  {
     }
 
     public function staffPayrollBankExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -1715,7 +1723,7 @@ function backup_payslip(Request $request)  {
 
 
     public function volunteerAllowanceMWPExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             //start
             $todayDate = date('d/m/Y');
@@ -2092,7 +2100,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function employeeCostExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -2360,7 +2368,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function employeeBioDataExport(Request $request) {
-        if ($request->input('run') && $request->input('status')!='' ) {
+        if (1 && $request->input('status')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $status = $request->input('status'); //active = 1, exited = 4
@@ -2486,7 +2494,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     public function grossReconciliation()
     {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $current_payroll_month = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
@@ -2525,7 +2533,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     public function netReconciliation()
     {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $current_payroll_month = $request->input('payrolldate');
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
@@ -2562,7 +2570,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function loanReports(Request $request)  {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        if (1 && $request->input('payrolldate')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -2583,7 +2591,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function projectTime(Request $request)  {
-        if ($request->input('run') && $request->input('project')!='' ) {
+        if (1 && $request->input('project')!='' ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];
             $duration = explode('-',$request->input('duration'));
@@ -2611,7 +2619,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function funder(Request $request)  {
-        if ($request->input('run') && $request->input('project')!='' ) {
+        if (1 && $request->input('project')!='' ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];
             $duration = explode('-',$request->input('duration'));
