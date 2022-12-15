@@ -1380,10 +1380,10 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
         $query = " payroll_date  ORDER BY id DESC LIMIT 1";
 
-
         $row =  DB::table('payroll_logs')
-        ->select(DB::raw($query))
-        ->first();
+            ->select(DB::raw($query))
+            ->first();
+
         return $row->payroll_date;
     }
 
@@ -1396,8 +1396,15 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '".$p
 
 
     public function senderInfo() {
-        $query = "SELECT host, username, password, email, name, secure, port FROM company_emails WHERE use_as = 1 AND state = 1 LIMIT 1";
-        return DB::select(DB::raw($query));
+
+        $query = DB::table('company_emails')
+                    ->select('host', 'username', 'password', 'email', 'name', 'secure', 'port')
+                    ->where('use_as', 1)
+                    ->where('state', 1)
+                    ->limit(1)
+                    ->first();
+
+        return $query;
     }
 
 

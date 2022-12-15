@@ -2238,7 +2238,7 @@ public function activatePosition(Request $request)
     public function overtimeCategoryDelete($id) {
         //   $overtimeID = $this->uri->segment(3);
           $result = $this->flexperformance_model->deleteOvertimeCategory($id);
-          
+
           if($result == true){
             $response_array['status'] = "OK";
             return back()->with('overtimeAdded', 'Overtime Category Deleted Successfully');
@@ -3831,22 +3831,29 @@ public function updateLevel(Request $request) {
         }
     }
 
-  public function cancelRequest(Request $request) {
-      $logID = $this->uri->segment(3);
-      $empID = $this->uri->segment(4);
-        $updates = array(
-            'state' => 0,
-          'current_state' =>0,
-            'empID' => $empID
-        );
+  public function cancelRequest($id, $empID, Request $request) {
+    //   $logID = $this->uri->segment(3);
+    //   $empID = $this->uri->segment(4);
 
-        $result = $this->flexperformance_model->updateemployeestatelog($updates, $logID);
-      $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =".$empID."");
-      $response_array['status'] = "OK";
-            $response_array['title'] = "SUCCESS";
-            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
-            header('Content-type: application/json');
-            echo json_encode($response_array);
+    $updates = array(
+        'state' => 0,
+        'current_state' =>0,
+        'empID' => $empID
+    );
+
+    $result = $this->flexperformance_model->updateemployeestatelog($updates, $id);
+
+    $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =".$empID."");
+
+    SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =".$empID , $request);
+
+    $response_array['status'] = "OK";
+    $response_array['title'] = "SUCCESS";
+    $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+
+    header('Content-type: application/json');
+
+    echo json_encode($response_array);
 
 //      if($result ==true){
 //            $response_array['status'] = "OK";
@@ -4567,7 +4574,7 @@ public function common_deductions_info(Request $request) {
   // }
 
     public function addOvertimeCategory(Request $request)   {
-      
+
       if ($request->method()=='POST') {
         $data = array(
             'name' =>$request->input('name'),
@@ -5780,7 +5787,7 @@ public function updateCompanyName(Request $request) {
     $positionID = $request->positionID;
 
     $data = array(
-    'state' => 0
+      'state' => 0
     );
 
     $minSalary = $maxSalary = 0;;
@@ -5791,7 +5798,7 @@ public function updateCompanyName(Request $request) {
       $maxSalary = $value->maxSalary;
     }
     if($result){
-      $response_array['salary'] = "<div><input required='required'  class='form-control @error('salary') is-invalid @enderror' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'><div class='form-text text-muted'>Minimum salary is ".$minSalary." and Maximam salary is ".$maxSalary."</div></div>";
+      $response_array['salary'] = "<div><input required='required'  class='form-control @error('salary') is-invalid @enderror' type='number' min='".$minSalary."' step='0.01' max='".$maxSalary."'  name='salary'><div class='form-text text-muted'>Minimum salary is ".number_format($minSalary)." and Maximam salary is ".number_format($maxSalary)."</div></div>";
 
     }else{
       $response_array['salary'] = "<input required='required'  class='form-control col-md-7 col-xs-12' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
@@ -5858,211 +5865,220 @@ function password_generator($size){
    * Register emmployee
    *
    */
-  public function registerEmployee(Request $request) {
+  public function registerEmployee(Request $request)
+  {
+    // DATE MANIPULATION
+    $calendar = str_replace('/', '-', $request->birthdate);
+    $contract_end = str_replace('/', '-', $request->contract_end);
+    $contract_start = str_replace('/', '-', $request->contract_start);
 
-    dd($request->all());
+    $birthdate = date('Y-m-d', strtotime($calendar));
 
-    if(Request::isMethod('post')) {
+    $date1=date_create($birthdate);
+    $date2=date_create(date('Y-m-d'));
 
-      // DATE MANIPULATION
-      $calendar = str_replace('/', '-', $request->input('birthdate'));
-      $contract_end = str_replace('/', '-', $request->input('contract_end'));
-      $contract_start = str_replace('/', '-', $request->input('contract_start'));
+    $diff=date_diff($date1, $date2);
+    $required = $diff->format("%R%a");
 
-      $birthdate = date('Y-m-d', strtotime($calendar));
+    if (($required/365) > 16) {
 
-      $date1=date_create($birthdate);
-      $date2=date_create(date('Y-m-d'));
 
-      $diff=date_diff($date1, $date2);
-      $required = $diff->format("%R%a");
 
-      if (($required/365) > 16) {
+    //   "bithdate" => "22/07/1997"
+    //   "emp_id" => "46578378"
+    //   "department" => "2"
+    //   "position" => "84"
+    //   "linemanager" => "255010"
+    //   "branch" => "001"
+    //   "ctype" => "3"
+    //   "salary" => "4411389.96"
+    //   "contract_start" => "27/11/2022"
+    //   "contract_end" => "07/01/2023"
+    //   "pension_fund" => "2"
+    //   "pf_membership_no" => "8743748"
+    //   "emp_code" => "101"
+    //   "bank" => "4"
+    //   "banck_branch" => "19"
+    //   "accno" => "70210029252"
+    //   "mobile" => "754317005"
+    //   "postaddress" => "fdfd"
+    //   "postalcity" => "dfd"
+    //   "phyaddress" => "ccxcx"
+    //   "haddress" => "cxcxc"
+    //   "nationalid" => "2248274287482482"
+    //   "tin" => "42287482748"
+    //   "emp_level" => "3"
 
-        $countryCode = $request->input("nationality");
-        $randomPassword = $this->password_generator(8);
-        $employee = array(
-          'fname' =>$request->input("fname"),
-          'mname' =>$request->input("mname"),
+      $countryCode = $request->nationality;
 
-          'emp_code' =>$request->input("emp_code"),
-          'emp_level' =>$request->input("emp_level"),
-          //'lname' =>$request->input("lname"),
-          'lname' =>$randomPassword,
-          'salary' =>$request->input("salary"),
-          'gender' =>$request->input("gender"),
-          'email' =>$request->input("email"),
-          'nationality' =>$request->input("nationality"),
-          'merital_status' =>$request->input("status"),
-          'birthdate' =>$birthdate,
-          'position' =>$request->input("position"),
-          'contract_type' =>$request->input("ctype"),
-          'postal_address' =>$request->input("postaddress"),
-          'physical_address' =>$request->input('haddress'),
-          'mobile' =>$request->input('mobile'),
-          'account_no' =>$request->input("accno"),
-          'bank' =>$request->input("bank"),
-          'bank_branch' =>$request->input("bank_branch"),
-          'pension_fund' =>$request->input("pension_fund"),
-          'pf_membership_no' =>$request->input("pf_membership_no"),
-          'home' =>$request->input("haddress"),
-          'postal_city' =>$request->input("postalcity"),
-          'photo' =>"user.png",
-          'password_set' =>"1",
-          'line_manager' =>$request->input("linemanager"),
-          'department' =>$request->input("department"),
-          'branch' => $request->input("branch"),
-          'hire_date' => date('Y-m-d',strtotime($contract_start)),
-          'contract_renewal_date' => date('Y-m-d'),
-          'emp_id' => $request->input("emp_id"),
-          'username' => $request->input("emp_id"),
-            'password' => password_hash( $randomPassword, PASSWORD_BCRYPT),
-            'contract_end' => date('Y-m-d',strtotime($contract_end)),
-            'state' => 5,
-            'national_id' =>$request->input("nationalid"),
-            'tin' =>$request->input("tin"),
+      $randomPassword = $this->password_generator(8);
 
+      $employee = array(
+        'fname' =>$request->fname,
+        'mname' =>$request->mname,
+
+        // 'emp_code' =>$request->input("emp_code"),
+        // 'emp_level' =>$request->input("emp_level"),
+
+        'lname' =>$request->lname,
+
+        // 'lname' =>$randomPassword,
+
+        'salary' => $request->salary,
+        'gender' => $request->gender,
+        'email' => $request->email,
+        'nationality' => $countryCode, //$request->nationality,
+        'merital_status' => $request->status,
+        'birthdate' => $birthdate,
+        'position' => $request->position,
+        'contract_type' => $request->ctype,
+        'postal_address' => $request->postaddress,
+        'physical_address' => $request->haddress,
+        'mobile' => $request->mobile,
+        'account_no' => $request->accno,
+        'bank' => 6, //$request->bank,
+        'bank_branch' => 8, //$request->bank_branch,
+        'pension_fund' => 2, //$request->pension_fund,
+        'pf_membership_no' => $request->pf_membership_no,
+        'home' => $request->haddress,
+        'postal_city' => $request->postalcity,
+        'photo' => "user.png",
+        'password_set' => "1",
+        'line_manager' =>$request->linemanager,
+        'department' =>$request->department,
+        'branch' => 100, //$request->branch,
+        'hire_date' => date('Y-m-d',strtotime($contract_start)),
+        'contract_renewal_date' => date('Y-m-d'),
+        'emp_id' => 255012, //$request->emp_id,
+        'username' =>  $request->emp_id,
+        'password' => password_hash( $randomPassword, PASSWORD_BCRYPT),
+        'contract_end' => date('Y-m-d', strtotime($contract_end)),
+        'state' => 5,
+        'national_id' =>$request->nationalid,
+        'tin' =>$request->tin,
       );
-      $empName = $request->input("fname") .' '.$request->input("mname").' '.$request->input("lname");
 
+      $empName = $request->fname .' '.$request->mname.' '.$request->lname;
+
+      $result  =   DB::transaction(function() use($employee){
+                    DB::table('employee')->insert($employee);
+
+                    // ->insert("company_property", $property);
+                    // ->insert("employee_group", $datagroup);
+
+                    $row = DB::table('employee')
+                        ->select('id')
+                        ->orderBy('id', 'DESC')
+                        ->limit(1)
+                        ->first();
+
+                    return $row;
+                  });
 
       $recordID = $this->flexperformance_model->employeeAdd($employee);
 
-        if($recordID > 0){
+      // dd($recordID);
 
-        /*give 100 allocation*/
-            $data = array(
-                'empID' =>$request->input("emp_id"),
-                'activity_code' =>'AC0018',
-                'grant_code' =>'VSO',
-                'percent' => 100.00
-            );
+      if($recordID > 0){
+
+          /*give 100 allocation*/
+
+          $data = array(
+              'empID' => 255012, //$request->emp_id,
+              'activity_code' =>'AC0018',
+              'grant_code' =>'VSO',
+              'percent' => 100.00
+          );
+
           $this->project_model->allocateActivity($data);
 
           // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
-          $empID = $request->input("emp_id");
+
+          $empID = 255012; //$request->input("emp_id");
 
           $property = array(
-                'prop_type' =>"Employee Package",
-                'prop_name' =>"Employee ID, Health Insuarance Card, Email Address and System Access",
-                'serial_no' =>$empID,
-                'given_by' =>session('emp_id'),
-                'given_to' =>$empID
+            'prop_type' => "Employee Package",
+            'prop_name' => "Employee ID, Health Insuarance Card, Email Address and System Access",
+            'serial_no' => $empID,
+            'given_by' => session('emp_id'),
+            'given_to' => $empID
           );
+
           $datagroup = array(
-                 'empID' =>$empID,
-                 'group_name'=>1
+            'empID' => $empID,
+            'group_name'=> 1
           );
 
           $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+
           if($result == true){
 
-        $senderInfo = $this->payroll_model->senderInfo();
-    //         /* EMAIL*/
-    //     foreach ($senderInfo as $keyInfo) {
-    //       $host = $keyInfo->host;
-    //       $username = $keyInfo->username;
-    //       $password = $keyInfo->password;
-    //       $smtpsecure = $keyInfo->secure;
-    //       $port = $keyInfo->port;
-    //       $senderEmail = $keyInfo->email;
-    //       $senderName = $keyInfo->name;
-    //     }
-    //   // PHPMailer object
-    //     $mail = $this->phpmailer_lib->load();// PHPMailer object
-    //     // SMTP configuration
-    //     $mail->isSMTP();
-    //     $mail->Host     = $host;
-    //     $mail->SMTPAuth = true;
-    //     $mail->Username = $username;
-    //     $mail->Password = $password;
+            $senderInfo = $this->payroll_model->senderInfo();
 
+            /**
+            *  Bunch of commited lines
+            *
+            */
 
-    //     $mail->SMTPSecure = $smtpsecure;
-    //     $mail->Port     = $port;
+            $data_transfer = array(
+              'empID' => 255012, //$request->input("emp_id"),
+              'parameter' => 'New Employee',
+              'parameterID' => 5,
+              'old' => 0,
+              'new' => $request->input("salary"),
+              'old_department' => 0,
+              'new_department' => $request->input("department"),
+              'old_position' => 0,
+              'new_position' => $request->input("position"),
+              'status' => 5,//new employee
+              'recommended_by' =>session('emp_id'),
+              'approved_by' => '',
+              'date_recommended' => date('Y-m-d'),
+              'date_approved' => ''
+            );
 
+            $this->flexperformance_model->employeeTransfer($data_transfer);
 
-    //     $mail->setFrom($senderEmail, $senderName);
+            /*end add employee in transfer*/
 
-    //     // Add a recipient
-    //     $mail->addAddress($request->input("email"));
+            // $this->flexperformance_model->audit_log("Registered New Employee ");
 
+            SysHelpers::AuditLog('Register Employee', $request);
 
-    //     // Email subject
-    //     $mail->Subject = "VSO User Credentials";
-
-    //     // Set email format to HTML
-    //     $mail->isHTML(true);
-
-    //     // Email body content
-    //     $mailContent = "<p>Dear <b>".$empName."</b>,</p>
-    //                 <p>Your Flex Performance Account login credential are  password: <b>".$randomPassword."</b>.
-    //                 Please use your employee ID as your username.</p>
-    //                 <p>You are advised not to share your password with anyone. If you dont know this activity or you received this email by accident, please report
-    //                     this incident to the system administrator.<br><br>
-    //                     Thank you,<br>
-    //                     Flex Performance Software Self Service.</p>";
-    //     $mail->Body = $mailContent;
-
-    //     if(!$mail->send()){
-
-    //         session("note", "<p><font color='green'>Email was not sent</font></p>");
-    //         }else{
-    //         session("note","<p><font color='green'>Email sent!</font></p>");
-    //       }
-
-              /*add in transfer with status = 5 (registered, waiting for approval)*/
-              $data_transfer = array(
-                  'empID' => $request->input("emp_id"),
-                  'parameter' => 'New Employee',
-                  'parameterID' => 5,
-                  'old' => 0,
-                  'new' => $request->input("salary"),
-                  'old_department' => 0,
-                  'new_department' => $request->input("department"),
-                  'old_position' => 0,
-                  'new_position' => $request->input("position"),
-                  'status' => 5,//new employee
-                  'recommended_by' =>session('emp_id'),
-                  'approved_by' => '',
-                  'date_recommended' => date('Y-m-d'),
-                  'date_approved' => ''
-              );
-              $this->flexperformance_model->employeeTransfer($data_transfer);
-              /*end add employee in transfer*/
-
-              $this->flexperformance_model->audit_log("Registered New Employee ");
             $response_array['empID'] = $empID;
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
-                    </div>";
-            header('Content-type: application/json');
+                    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
+                  </div>";
+
+                  header('Content-type: application/json');
             $response_array['credentials'] = "username ni ".$request->input("emp_id")."password:".$randomPassword;
+
             echo json_encode($response_array);
-          }else{
+          } else {
             $response_array['status'] = "ERR";
             $response_array['title'] = "FAILED";
             $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
-                    </div>';
-            header('Content-type: application/json');
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
+                  </div>';
+
+                  header('Content-type: application/json');
             echo json_encode($response_array);
           }
-        } else {
-          $response_array['status'] = "ERR";
-          $response_array['title'] = "FAILED";
-          $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
-                  </div>';
-          header('Content-type: application/json');
-          echo json_encode($response_array);
+      } else {
 
+        $response_array['status'] = "ERR";
+        $response_array['title'] = "FAILED";
+        $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
+                </div>';
 
-        }
+                header('Content-type: application/json');
 
+                echo json_encode($response_array);
       }
+
     }
   }
 
