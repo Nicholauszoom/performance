@@ -10,19 +10,13 @@
 
 @section('content')
 
-
-
-
-  <!-- Basic datatable -->
-      <div class="card">
+<div class="card">
         <div class="card-header">
-          <div class="d-flex justify-content-between">
-          <h5 class="mb-0">Pension Funds</h5>
-
-          </div>
-
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-0">Pension Funds</h5>
+            </div>
         </div>
-       <table class="table datatable-basic">
+        <table class="table datatable-basic">
             <thead>
                 <tr>
                     <th>S/N</th>
@@ -31,55 +25,33 @@
                     <th>Employer Amount</th>
                     <th>Deduction From</th>
                     <th class="text-center">Action</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
-
             <tbody>
-
-                    @foreach($pension as $row)
-                        <tr>
-                            <td>{{ $row->SNo }}</td>
-                            <td>{{  $row->name}}</td>
-                            <td>{{ $row->amount_employee }}</td>
-                            <td> {{$row->amount_employer}}</td>
-                            <td> {{ $row->deduction_from }}</td>
-
-
-                            {{-- <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
-
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
-                            </td> --}}
-                        </tr>
-
-                    @endforeach
-
+                @foreach ($pension as $row)
+                    <tr>
+                        <td>{{ $row->SNo }}</td>
+                        <td>{{ $row->name }}</td>
+                        <td>{{ $row->amount_employee }}</td>
+                        <td> {{ $row->amount_employer }}</td>
+                        <td> {{ $row->deduction_from }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
-      </div>
-  <!-- /basic datatable -->
-
-   <!-- Basic datatable -->
-      <div class="card">
+    </div>
+    <div class="card">
         <div class="card-header">
-          <div class="d-flex justify-content-between">
-          <h5 class="mb-0">List of Deduction</h5>
-
-          </div>
-
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-0">List of Deduction</h5>
+            </div>
         </div>
-       <table class="table datatable-basic">
+        <table class="table datatable-basic">
             <thead>
                 <tr>
                     <th>S/N</th>
@@ -87,221 +59,65 @@
                     <th>Employee Amount(in %)</th>
                     <th>Employer Amonut(in %)</th>
                     <th class="text-center">Action</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
-
             <tbody>
-
-                    @foreach($deduction as $row)
-                        <tr>
-                            <td>{{ $row->SNo }}</td>
-                            <td>{{ $row->name }}</td>
-                            <td>{{ $row->rate_employee}}</td>
-                            <td>{{ $row->rate_employer }}</td>
-
-                            {{-- <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $department->id], 'method' => 'delete']) !!}
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                    data-toggle="modal"
-                                    data-id="{{ $department->id }}"
-                                    data-name="{{ $department->name }}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
-
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
-                            </td> --}}
-                        </tr>
-
-                    @endforeach
-
+                @foreach ($deduction as $row)
+                    <tr>
+                        <td>{{ $row->SNo }}</td>
+                        <td>{{ $row->name }}</td>
+                        <td>{{ $row->rate_employee }}</td>
+                        <td>{{ $row->rate_employer }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
-      </div>
-  <!-- /basic datatable -->
-
-
- <!-- Basic datatable -->
-      <div class="card">
+    </div>
+    <div class="card">
         <div class="card-header">
-          <div class="d-flex justify-content-between">
-          <h5 class="mb-0">P .A .Y .E Ranges</h5>
-          <button   type="button"
-                    class="btn btn-perfrom"
-                    data-bs-toggle="modal"
-                    data-bs-target="#save_department">
+            <div class="d-flex justify-content-between">
+                <h5 class="mb-0">P .A .Y .E Ranges</h5>
+                <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#save_department">
                     <i class="ph-plus me-2"></i> Overtime
-
-          </button>
-          </div>
-
+                </button>
+            </div>
         </div>
-       <table class="table datatable-basic">
+        <table class="table datatable-basic">
             <thead>
                 <tr>
-                   <th>S/N</th>
+                    <th>S/N</th>
                     <th>Minimum Amount</th>
                     <th>Maximum Amount</th>
                     <th>Excess Added as</th>
                     <th>Rate to an Amount Excess of Minimum</th>
                     <th class="text-center">Action</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
-
             <tbody>
-
-                    @foreach($paye as $row)
-                        <tr>
-                            <td>{{ $row->SNo }}</td>
-                            <td>{{ $row->minimum }}</td>
-                            <td>{{ $row->maximum }}</td>
-                            <td>{{ $row->excess_added }} </td>
-                            <td> {{ $row->rate }} </td>
-
-                            {{-- <td align="center">
-                                {!! Form::open(['route' => ['flex.deletepaye', $row->id], 'method' => 'delete']) !!}
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-info btn-xs edit_permission_btn"
-                                     data-toggle="modal"
-                                      data-id="{{ $row->id}}"
-                                    data-minimum="{{ $row->minimum}}"
-                                    data-excess_added="{{ $row->excess_added}}"
-                                    data-maximum="{{ $row->maximum}}"
-                                    data-rate="{{$row->rate}}"
-                                >
-                                    <i class="ph-note-pencil"></i> Edit
-                                </button>
-                                {{ Form::button('<i class="ph-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
-                            </td> --}}
-                        </tr>
-                    @endforeach
+                @foreach ($paye as $row)
+                    <tr>
+                        <td>{{ $row->SNo }}</td>
+                        <td>{{ $row->minimum }}</td>
+                        <td>{{ $row->maximum }}</td>
+                        <td>{{ $row->excess_added }} </td>
+                        <td> {{ $row->rate }} </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
-      </div>
-  <!-- /basic datatable -->
-
-
+    </div>
 @endsection
 
 @section('modal')
-
-@include('setting.deduction.add_paye')
-
+    @include('setting.deduction.add_paye')
 @endsection
-
-
-{{-- @section('content')
-<section class="section">
-    <div class="section-body">
-        @include('layouts.alerts.message')
-        <div class="row">
-            <div class="col-12 col-sm-6 col-lg-12">
-                <div class="card">
-                     <div class="card-header header-elements-sm-inline">
-                <h4 class="card-title"> Departments</h4>
-                <div class="header-elements">
-
-
-                       <button type="button" class="btn btn-outline-info btn-xs px-4 pull-right"
-                            data-toggle="modal" data-target="#addPermissionModal">
-                        <i class="fa fa-plus-circle"></i>
-                        Add
-                    </button>
-
-                          </div>
-
-              </div>
-
-
-                    <div class="card-body">
-
-
-                        <div class="tab-content tab-bordered" id="myTab3Content">
-                            <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
-                                aria-labelledby="home-tab2">
-                                <div class="table-responsive">
-
-                                    <table class="table datatable-basic table-striped" id="table-1">
-                                    <thead>
-                    <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if(isset($row))
-                    @foreach($departments as $departments)
-
-                        <tr>
-                            <th>{{ $loop->iteration }}</th>
-                            <td>{{ $permission->name }}</td>
-
-                            <td align="center">
-                                {!! Form::open(['route' => ['departments.destroy', $permission->id], 'method' => 'delete']) !!}
-                                <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
-                                        data-toggle="modal"
-                                        data-id="{{$permission->id}}"
-                                 data-name="{{$permission->name}}"
-                                    <i class="fa fa-edit"></i> Edit
-                                </button>
-                                {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
-                                {{ Form::close() }}
-                            </td>
-                        </tr>
-
-                    @endforeach
-                    @endif
-                    </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-
-
-
-@endsection --}}
-
-{{-- @section('scripts')
-<script>
-        $(document).on('click', '.edit_permission_btn', function () {
-            var id = $(this).data('id');
-            var name = $(this).data('name');
-            $('#id').val(id);
-            $('#p-name_').val(name);
-            $('#editPermissionModal').modal('show');
-        });
-    </script>
-<script>
-       $('.datatable-basic').DataTable({
-            autoWidth: false,
-            "columnDefs": [
-                {"targets": [1]}
-            ],
-           dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
-            "language": {
-               search: '<span>Filter:</span> _INPUT_',
-                searchPlaceholder: 'Type to filter...',
-                lengthMenu: '<span>Show:</span> _MENU_',
-             paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
-            },
-
-        });
-    </script>
-@endsection --}}

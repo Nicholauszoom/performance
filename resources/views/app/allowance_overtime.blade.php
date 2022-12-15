@@ -1,15 +1,14 @@
 @extends('layouts.vertical', ['title' => 'Overtime'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script> --}}
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
+
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+
 @endpush
 
 @section('content')
@@ -24,7 +23,7 @@
                 </button>
             </div>
         </div>
-        @if (Session::has('success'))
+        {{-- @if (Session::has('success'))
             <div class="alert alert-success center" align='center' role="alert">
                 <p class="text-center">{{ Session::get('success') }}</p>
             </div>
@@ -33,8 +32,8 @@
             <div class="alert alert-success center" align='center' role="alert">
                 <p class="text-center">{{ Session::get('overtimeAdded') }}</p>
             </div>
-        @endif
-        <table class="table datatable-save-state">
+        @endif --}}
+        <table class="table datatable-basic">
             <thead>
                 <tr>
                     <th>S/N</th>
@@ -42,32 +41,34 @@
                     <th>Percent Amount(Day)</th>
                     <th>Percent Amount(Night)</th>
                     <th class="text-center">Action</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @php
                     $SN = 1;
                 @endphp
-                @if (isset($data['overtimes']))
-                    @foreach ($data['overtimes'] as $row)
+                {{-- @if (isset($data['overtimes'])) --}}
+                    @foreach ($overtimes as $row)
                         <tr>
                             <td>{{ $SN++ }}</td>
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->day_percent }}</td>
                             <td>{{ $row->night_percent }}</td>
-                            <td align="center">
+
+                            {{-- <td align="center">
 
                                     <a href="{{ route('flex.overtime_category_info', [$row->id]) }}"
                                         class="btn btn-outline-info btn-xs">
-                                        <i class="ph-note-pencil"></i>Edit</a>
+                                        <i class="ph-note-pencil"></i>Edit</a> --}}
 
-                                    <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
-                                        class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal"
+                                    {{-- <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
+                                        class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal" --}}
                                         {{-- data-id="{{ $row->id }}"
-                                        data-name="{{ $row->name }}" --}}>
-                                        <i class="ph-trash"></i> Delete
+                                        data-name="{{ $row->name }}" --}}
+                                        {{-- <i class="ph-trash"></i> Delete
                                     </button>
-                            </td>
+                            </td> --}}
                             <td class="text-center">
                                 <div class="d-inline-flex">
                                     <div class="dropdown">
@@ -92,9 +93,10 @@
                                     </div>
                                 </div>
                             </td>
+                            <td></td>
                         </tr>
                     @endforeach
-                @endif
+                {{-- @endif --}}
 
             </tbody>
         </table>
@@ -229,7 +231,7 @@
             var url = "{{ route('flex.overtimeCategoryDelete', ':id') }}";
              url = url.replace(':id', id);
             location.href=url;
-            
+
         });
 
     }
