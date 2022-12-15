@@ -357,6 +357,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/non_statutory_deductions','non_statutory_deductions')->name('flex.non_statutory_deductions');
         Route::any('/addAllowance','addAllowance')->name('flex.addAllowance');
         Route::any('/addOvertimeCategory','addOvertimeCategory')->name('flex.addOvertimeCategory');
+        Route::any('/overtime_category_info/{id}','overtime_category_info')->name('flex.overtime_category_info');
         Route::any('/overtimeCategoryDelete/{id}','overtimeCategoryDelete')->name('flex.overtimeCategoryDelete');
         Route::any('/addDeduction','addDeduction')->name('flex.addDeduction');
         Route::any('/assign_allowance_individual','assign_allowance_individual')->name('flex.assign_allowance_individual');
