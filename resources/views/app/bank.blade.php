@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Bank'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -107,7 +107,7 @@
     @include('app.modal.add-branch')
 @endsection
 
-@push('footer-script')
+{{-- @push('footer-script')
     <script type="text/javascript">
         $('#add-branch1').submit(function(e) {
               var a = document.getElementById("name1");
@@ -150,4 +150,4 @@
 
         });
     </script>
-@endpush
+@endpush --}}

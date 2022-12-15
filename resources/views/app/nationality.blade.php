@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Nationality'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>

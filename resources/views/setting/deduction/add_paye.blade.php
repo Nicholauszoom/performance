@@ -7,7 +7,7 @@
             </div>
 
             <form
-                action="{{ route('departments.store') }}"
+                action="{{ route('flex.addOvertimeCategory') }}"
                 method="POST"
                 class="form-horizontal"
             >
@@ -15,27 +15,10 @@
 
                 <div class="modal-body">
                     <div class="row mb-3">
-                        
-                    <div class="form-group">
-                        <label class="col-form-label col-sm-3">Minimum Amount</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
-                            @error('name')
-                                <p class="text-danger mt-1"> Field Name has an error </p>
-                            @enderror
-                    </div>
-                   
                     <div class="form-group">
-                        <label class="col-form-label col-sm-3">Maximum Amount</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
-
-                            @error('name')
-                                <p class="text-danger mt-1"> Field Name has an error </p>
-                            @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label col-sm-3">Excess Added To an Amount Exceeding the Minimum Amount</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+                        <label class="col-form-label col-sm-3">Minimum</label>
+                            <input type="text" name="minimum"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>
@@ -43,16 +26,31 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-form-label col-sm-3">Percentage Contribution to Amount that Exceed the Minimum Amount</label>
-                            <input type="number" name="name"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+                        <label class="col-form-label col-sm-3">Maxmum</label>
+                            <input type="number" name="maximum"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+
+                            @error('name')
+                                <p class="text-danger mt-1"> Excess added </p>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-sm-3">Excess added</label>
+                            <input type="number" name="excess_added"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
+
+                            @error('name')
+                                <p class="text-danger mt-1"> Excess added </p>
+                            @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-form-label col-sm-3">Rate to an Amount Excess of Minimum</label>
+                            <input type="number" name="rate"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
                             @error('name')
                                 <p class="text-danger mt-1"> Field Name has an error </p>
                             @enderror
                     </div>
-                   
-                    </div>
-                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
