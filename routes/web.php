@@ -351,6 +351,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateMealsLowerAmount','updateMealsLowerAmount')->name('flex.updateMealsLowerAmount');
         Route::any('/updateMealsUpperAmount','updateMealsUpperAmount')->name('flex.updateMealsUpperAmount');
         Route::any('/allowance','allowance')->name('flex.allowance');
+        Route::any('/allowance_info/{id}','allowance_info')->name('flex.allowance_info');
         Route::any('/allowance_overtime','allowance_overtime')->name('flex.allowance_overtime');
         Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
         Route::any('/non_statutory_deductions','non_statutory_deductions')->name('flex.non_statutory_deductions');
