@@ -270,7 +270,7 @@ class PayrollController extends Controller
     }
 
     // public function temp_less_payments(Request $request)  {
-    //   $payrollMonth = base64_decode($this->input->get('pdate'));
+    //   $payrollMonth = base64_decode($request->input('pdate'));
     //   $data['payroll_list'] =  $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");
     //   $data['confirmed'] =1;
     //   $data['payroll_date']= $payrollMonth;
@@ -302,9 +302,9 @@ class PayrollController extends Controller
 
     }
 
-    public function less_payments()
+    public function less_payments(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         $data['payroll_list'] = $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
         // /*check if temp payroll*/
         //     $temp_check = $this->payroll_model->temp_payroll_check($payrollMonth);
@@ -330,9 +330,9 @@ class PayrollController extends Controller
     }
 
 
-    public function less_payments_print()
+    public function less_payments_print(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         $data['employee_list'] = $this->reports_model->temp_pay_checklist($payrollMonth);
         $data['authorization'] = $this->reports_model->payrollAuthorization($payrollMonth);
         //$data['employee_list'] =  $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
@@ -1319,8 +1319,8 @@ class PayrollController extends Controller
 
     public function temp_payroll_review()
     {
-        $empID = base64_decode($this->input->get('id'));
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $empID = base64_decode($request->input('id'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         if ($empID == '') {
 
         } else {
@@ -1341,8 +1341,8 @@ class PayrollController extends Controller
 
     public function payroll_review()
     {
-        $empID = base64_decode($this->input->get('id'));
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $empID = base64_decode($request->input('id'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         if ($empID == '') {
 
         } else {

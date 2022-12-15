@@ -94,7 +94,7 @@ class ReportController extends Controller
  }
 
  function employee_arrears(Request $request)  {
-    $empID = base64_decode($this->input->get('empid'));
+    $empID = base64_decode($request->input('empid'));
     if($empID=='' || ($this->reports_model->employeeInfo($empID))==false){
         exit("Employee ID Not Found");
     } else {
@@ -318,7 +318,7 @@ function wcf(Request $request)  {
 // }
 
 function employment_cost(Request $request)  {
-        $payrollMonth = '2009-01-22'; //base64_decode($this->input->get("pdate"));
+        $payrollMonth = '2009-01-22'; //base64_decode($request->input("pdate"));
         $data['info']= $this->reports_model->company_info();
         $data['authorization']= $this->reports_model->payrollAuthorization($payrollMonth);
         $toDate = date('Y-m-d');
@@ -466,6 +466,8 @@ include(app_path() . '/reports/loan_report.php');
       }
 
     function payslip(Request $request)  {
+
+        dd("I am here");
         if ($request->input('print')) {
 
       // DATE MANIPULATION
