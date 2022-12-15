@@ -11,6 +11,16 @@
     background: #f0ab00;
 }
 
+.nav-tabs-highlight,
+.nav-tabs-overline,
+.nav-tabs-underline {
+    --nav-tabs-underline-color: #00204e;
+}
+
+bg-extra {
+    background: #707271;
+}
+
 .btn-default {
     border: 2px solid #00204e;
     color: #00204e;

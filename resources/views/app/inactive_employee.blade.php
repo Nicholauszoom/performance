@@ -38,34 +38,41 @@
 
 
     <tbody>
-      <?php
-        foreach ($employee1 as $row) {
-          $empid= $row->emp_id; ?>
-        <tr id="emp<?php echo $empid; ?>">
-          <td width="1px"><?php echo $row->SNo; ?></td>
-          <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>">
-          <font color="blue"><?php echo $row->NAME; ?></font></a></td>
-          <td ><?php echo $row->gender; ?></td>
-            <td hidden><?php echo $row->emp_id; ?></td>
-            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-          <td><?php echo $row->LINEMANAGER; ?></td>
-          <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
-          <td ><?php echo $row->dated;  ?></td>
+      @foreach ( $employee1 as $row )
+          <tr id="{{ 'emp'.$row->emp_id }}">
+            <td width="1px"> {{ $row->SNo }}</td>
+            <td>
+              <a
+                title="More Details"
+                href="<?php echo  url('') .'/flex/userprofile/?id='.$row->emp_id; ?>"
+              >{{ $row->NAME }}</a>
+            </td>
+            <td > {{ $row->gender }}</td>
+            <td hidden> {{ $row->emp_id }}</td>
+            <td>
+              <?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?>
+            </td>
+            <td><?php echo $row->LINEMANAGER; ?></td>
+            <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
+            <td ><?php echo $row->dated;  ?></td>
+
+            <td class="options-width">
+              <?php if($row->isRequested==0){
+                if( session('mng_emp')){ ?>
+                  <a href="javascript:void(0)" title="Request Activation" class="icon-2 info-tooltip" id="reactivate">
+                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                  </a>
+                <?php } } else { ?>
+                  <div class="col-md-12">
+                    <span class="badge bg-main"> ACTIVATION &nbsp; <br> &nbsp;REQUESTED</span>
+                  </div>
+            <?php } ?>
+
+            </td>
 
 
-          <td class="options-width">
-          <?php if($row->isRequested==0){
-            if( session('mng_emp')){ ?>
-                <a href="javascript:void(0)" title="Request Activation" class="icon-2 info-tooltip" id="reactivate"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
-          <?php } } else { ?>
-          <div class="col-md-12">
-              <span class="label label-primary"> ACTIVATION&nbsp;<br>&nbsp;REQUESTED
-              </span></div>
-          <?php } ?>
-
-          </td>
           </tr>
-        <?php } //} ?>
+      @endforeach
     </tbody>
   </table>
 
@@ -97,61 +104,51 @@
           $empid= $row->emp_id; ?>
         <tr id="activeRecord<?php echo $row->logID; ?>">
           <td width="1px"><?php echo $row->SNo; ?></td>
-          <td><a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/?id='.$row->emp_id; ?>">
-          <font color="blue"><?php echo $row->NAME; ?></font></a></td>
+          <td>
+            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/?id='.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
+          </td>
           <td ><?php echo $row->gender; ?></td>
           <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
           <td><?php echo $row->LINEMANAGER; ?></td>
           <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
           <td >
-          <?php if ($row->current_state==1 && $row->log_state==1){  ?>
-          <div class="col-md-12">
-              <span class="badge bg-success">ACTIVE
-              </span></div>
+            <?php if ($row->current_state==1 && $row->log_state==1){  ?>
+              <span class="badge bg-success">ACTIVE</span>
             <?php } elseif($row->current_state==1 && $row->log_state==0){ ?>
-          <div class="col-md-12">
-              <span class="badge bg-danger">INACTIVE
-              </span></div>
-
+              <span class="badge bg-danger">INACTIVE</span>
             <?php }  if ($row->log_state==2){ ?>
-              <div class="col-md-12">
-              <span class="badge bg-danger">INACTIVE
-              </span></div>
-              <?php  } if ($row->log_state=="3"){ ?>
-              <div class="col-md-12">
-              <span class="badge bg-danger">Exit
-              </span></div><?php  } if ($row->log_state=="4"){   } ?>
+              <span class="badge bg-danger">INACTIVE</span>
+            <?php  } if ($row->log_state=="3"){ ?>
+              <span class="badge bg-danger">Exit</span>
+            <?php  } if ($row->log_state=="4"){   } ?>
           </td>
 
 
           <td class="options-width">
+            <?php if ($row->current_state==0){
+              if( session('appr_emp')){
+                if ($row->log_state==2){  ?>
+                  <a href="javascript:void(0)" onclick="activateEmployee(<?php echo $row->logID.','.$row->emp_id; ?>)"  title="Confirm and Activate Employee" class="me-2 text-body">
+                    <span class="badge bg-success">ACTIVATE</span>
+                  </a>
+                <?php }
 
-
-          <?php if ($row->current_state==0){
-
-          if( session('appr_emp')){
-
-          if ($row->log_state==2){  ?>
-          <a href="javascript:void(0)" onclick="activateEmployee(<?php echo $row->logID.','.$row->emp_id; ?>)"  title="Confirm and Activate Employee" class="me-2 text-body">
-              <div class="col-md-12">
-              <span class="badge bg-success">ACTIVATE
-              </span></div></a> <?php }
-
-              if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
-          <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
-              <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
-          </a> <?php } }
+                if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
+                  <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
+                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                  </a>
+                <?php }
+              }
 
               if( session('mng_emp')){ ?>
-          <a href="javascript:void(0)" onclick="cancelRequest(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Cancel exit" class="me-2 text-body">
-              <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
-          </a>
-          <?php } }  else { ?>
-          <div class="col-md-12">
-          <span class="label label-primary">comitted
-          </span></div><?php  } ?>
+                <a href="javascript:void(0)" onclick="cancelRequest(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Cancel exit" class="me-2 text-body">
+                  <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
+                </a>
+              <?php } }  else { ?>
+                <span class="label label-primary">comitted</span>
+              <?php  } ?>
 
-              </td>
+            </td>
           </tr>
         <?php } //} ?>
     </tbody>
@@ -159,40 +156,33 @@
 </div>
 {{-- /exit employee --}}
 
+ {{-- pop up modal --}}
+ <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+      <div class="modal-content py-4 px-2">
+          <div class="modal-body">
+              <div id="message"></div>
+          </div>
 
-{{-- pop up modal --}}
-<div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-        <div class="modal-content py-4 px-2">
-            <div class="modal-body">
-                <div id="message"></div>
-            </div>
+          <div class="row">
+              <div class="col-sm-4">
 
-            <div class="row">
-                <div class="col-sm-4">
+              </div>
+              <div class="col-sm-6">
+                  <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                  <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
+              </div>
+              <div class="col-sm-2">
 
-                </div>
-                <div class="col-sm-6">
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
-                    <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
-                </div>
-                <div class="col-sm-2">
+              </div>
+          </div>
 
-                </div>
-            </div>
-
-        </div>
-    </div>
+      </div>
+  </div>
 </div>
 {{-- pop up modal --}}
 
-
-
-
-
-
-
- @endsection
+@endsection
 
 @push('footer-script')
 
@@ -256,42 +246,43 @@
       var empID = empID;
 
       $("#yes_delete").click(function () {
-          $.ajax({
-              
-              url:"<?php echo url('flex/cancelRequest');?>/"+id+"/"+empID,
-              success:function(data)
-              {
-                  if(data.status == 'OK'){
-                      // alert("SUCCESS");
-                      // $('#feedBackActiveList').fadeOut('fast', function(){
-                      //     $('#feedBackActiveList').fadeIn('fast').html(data.message);
-                      // });
-                      $('#activeRecord'+id).hide();
 
-                      $('#delete').modal('hide');
-                      notify('Employee exit cancelled successfully!', 'top', 'right', 'success');
+        $.ajax({
 
-                      setTimeout(function() {
-                          location.reload();
-                      }, 1000);
+          url: '{{ url("flex/cancelRequest") }}/'+ id + '/' + empID,
+          success:function(data)
+          {
+              if(data.status == 'OK'){
+                  // alert("SUCCESS");
+                  // $('#feedBackActiveList').fadeOut('fast', function(){
+                  //     $('#feedBackActiveList').fadeIn('fast').html(data.message);
+                  // });
+                  $('#activeRecord'+id).hide();
 
-                  }else{
-                      // alert("FAILED");
-                      // $('#feedBackActiveList').fadeOut('fast', function(){
-                      //     $('#feedBackActiveList').fadeIn('fast').html(data.message);
-                      // });
-                      $('#delete').modal('hide');
-                      notify('Employee exit cancelled failed!', 'top', 'right', 'danger');
-                      setTimeout(function() {
-                          location.reload();
-                      }, 1000);
-                  }
+                  $('#delete').modal('hide');
+                  notify('Employee exit cancelled successfully!', 'top', 'right', 'success');
 
-              },
-              error: function(XMLHttpRequest, textStatus, errorThrown) {
-                  alert("FAILED: Request failed Please Try again");
-                  // alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                  setTimeout(function() {
+                      location.reload();
+                  }, 1000);
+
+              }else{
+                  // alert("FAILED");
+                  // $('#feedBackActiveList').fadeOut('fast', function(){
+                  //     $('#feedBackActiveList').fadeIn('fast').html(data.message);
+                  // });
+                  $('#delete').modal('hide');
+                  notify('Employee exit cancelled failed!', 'top', 'right', 'danger');
+                  setTimeout(function() {
+                      location.reload();
+                  }, 1000);
               }
+
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert("FAILED: Request failed Please Try again");
+                // alert("Status: " + textStatus); alert("Error: " + errorThrown);
+            }
 
           });
       });
