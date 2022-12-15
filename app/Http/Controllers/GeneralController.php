@@ -5181,8 +5181,8 @@ class GeneralController extends Controller
         if (session('mng_roles_grp')) {
             $id = base64_decode($request->id);
 
-            $data['members'] = $this->flexperformance_model->roles_byid(1);
-            $data['nonmembers'] = $this->flexperformance_model->nonmembers_roles_byid(1);
+            $data['members'] = $this->flexperformance_model->roles_byid($id);
+            $data['nonmembers'] = $this->flexperformance_model->nonmembers_roles_byid($id);
             $data['headcounts'] = $this->flexperformance_model->memberscount($id);
             $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
             $data['title'] = "Groups";
@@ -5298,10 +5298,11 @@ class GeneralController extends Controller
             } else {
 
                 foreach ($arr as $value) {
-                    $emp_ids = $this->flexperformance_model->get_employee_by_position($value);
+                    $roleID = $value;
+                    $emp_ids = $this->flexperformance_model->get_employee_by_position($roleID);
                     
                     foreach ($emp_ids as $value) {
-                        $empID = $value;
+                        $empID = $value->emp_id;
                         if (!empty($group_allowances)) {
                             foreach ($group_allowances as $key) {
                                 $allowance = $key->allowance;
@@ -5338,9 +5339,13 @@ class GeneralController extends Controller
                                 $this->flexperformance_model->assign_deduction($data);
                             }
                         }
+                        $result = $this->flexperformance_model->addEmployeeToGroup($empID, $groupID);
                     }
 
-                    $result = $this->flexperformance_model->addEmployeeToGroup($empID, $groupID);
+                    $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
+
+
+                    
                 }
 
                 if ($result == true) {
