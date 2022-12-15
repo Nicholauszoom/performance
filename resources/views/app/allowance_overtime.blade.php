@@ -115,7 +115,7 @@
 
                     </div>
                     <div class="col-sm-6">
-                        <button type="button" class="btn btn-primary btn-sm" id="Not_delete" data-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
                         <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
                     </div>
                     <div class="col-sm-2">
@@ -225,10 +225,6 @@
         $('#editt').modal('show');
         $('#editt').find('.modal-body #message').text(message);
         var newId = id;
-        $('#Not_delete').click(function(){
-             $('.modal').modal('hide');
-            
-        });
         $('#yes_delete').click(function() {
             var url = "{{ route('flex.overtimeCategoryDelete', ':id') }}";
              url = url.replace(':id', id);
