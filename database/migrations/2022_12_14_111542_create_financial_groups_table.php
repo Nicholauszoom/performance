@@ -13,10 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('skill', function (Blueprint $table) {
-            $table->integer('skills_id')->primary();
-            $table->string('skill',20);
-            $table->string('budget',20); 
+        Schema::create('financial_groups', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('skill');
+        Schema::dropIfExists('financial_groups');
     }
 };
