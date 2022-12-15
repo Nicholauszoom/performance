@@ -201,38 +201,37 @@
 
       var id = id;
 
-      $("#yes_delete").click(function () {
-          $.ajax({
-              url:"<?php echo url('flex/employeeActivationRequest');?>/"+id,
-              success:function(data)
-              {
-                  // if(data.status == 'OK'){
-                  // alert("SUCCESS");
-                  // $('#feedBack').fadeOut('fast', function(){
-                  //     $('#feedBack').fadeIn('fast').html(data.message);
-                  // });
-                  $('#emp'+id).hide();
-                  $('#delete').modal('hide');
-                  // }else{ }
-                  notify('Employee activated successfully!', 'top', 'right', 'success');
+        $("#yes_delete").click(function () {
+            $.ajax({
+                url: '{{ url("flex/employeeActivationRequest") }}/' + id,
+                success:function(data)
+                {
+                    // if(data.status == 'OK'){
+                    // alert("SUCCESS");
+                    // $('#feedBack').fadeOut('fast', function(){
+                    //     $('#feedBack').fadeIn('fast').html(data.message);
+                    // });
+                    $('#emp'+id).hide();
+                    $('#delete').modal('hide');
+                    // }else{ }
+                    notify('Employee activated successfully!', 'top', 'right', 'success');
 
-                  setTimeout(function() {
-                      location.reload();
-                  }, 1000);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
 
-              },
-              error: function(XMLHttpRequest, textStatus, errorThrown) {
-                  $('#delete').modal('hide');
-                  notify('FAILED: Request failed please try again!', 'top', 'right', 'danger');
-                  // alert("FAILED: Request failed Please Try again");
-                  // alert("Status: " + textStatus); alert("Error: " + errorThrown);
-                  setTimeout(function() {
-                      location.reload();
-                  }, 1000);
-              }
-
-          });
-      });
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#delete').modal('hide');
+                    notify('FAILED: Request failed please try again!', 'top', 'right', 'danger');
+                    // alert("FAILED: Request failed Please Try again");
+                    // alert("Status: " + textStatus); alert("Error: " + errorThrown);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
 
   }
 
@@ -294,7 +293,7 @@
       // var id = id;
 
       $.ajax({
-          url:"<?php echo url('flex/activateEmployee');?>/"+logID+"/"+empID,
+          url:'{{ url("flex/activateEmployee") }}/'+ logID + '/' + empID,
           success:function(data)
           {
             if(data.status == 'OK'){

@@ -320,9 +320,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/employee_exit/{id}','employee_exit')->name('flex.employee_exit');
         Route::any('/deleteproperty/$id','deleteproperty')->name('flex.deleteproperty');
         Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->name('flex.employeeDeactivationRequest');
-        Route::any('/employeeActivationRequest','employeeActivationRequest')->name('flex.employeeActivationRequest');
+        Route::any('/employeeActivationRequest/{id}','employeeActivationRequest')->name('flex.employeeActivationRequest');
         Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->name('flex.cancelRequest');
-        Route::any('/activateEmployee','activateEmployee')->name('flex.activateEmployee');
+        Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
