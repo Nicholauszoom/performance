@@ -627,34 +627,38 @@ public function addBankBranch(Request $request){
   }
 //   end add branch
 
-    public function addBankBranch(Request $request)
-    {
-        $method = $request->method();
-        if ($method == "POST") {
-            $data = array(
-                'name' => $request->name,
-                'bank' => $request->bank,
-                'street' => $request->street,
-                'region' => $request->region,
-                'branch_code' => $request->code,
-                'country' => $request->country,
-                'swiftcode' => $request->swiftcode,
-            );
-            $result = $this->flexperformance_model->addBankBranch($data);
-            if ($result) {
-                $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
-                header('Content-type: application/json');
-                echo json_encode($response_array);
-            } else {
-                $response_array['status'] = "ERR";
-                $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Branch not Added, Please try again</p>";
-                header('Content-type: application/json');
-                echo json_encode($response_array);
-            }
-        }
+    //   public function addBankBranch(Request $request) {
+    // $method = $request->method();
+    //     if($method == "POST") {
+    //       $data = array(
+    //               'name' => $request->name,
+    //               'bank' => $request->bank,
+    //               'street' => $request->street,
+    //               'region' => $request->region,
+    //               'branch_code' => $request->code,
+    //               'country' => $request->country,
+    //               'swiftcode' => $request->swiftcode
+    //           );
+    //       $result = $this->flexperformance_model->addBankBranch($data);
+    //       if($result){
+    //           $response_array['status'] = "OK";
+    //           $response_array['message'] = "<p class='alert alert-success text-center'>Branch Added Successifully</p>";
+    //           header('Content-type: application/json');
+    //           echo json_encode($response_array);
+    //       } else{
+    //           $response_array['status'] = "ERR";
+    //           $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Branch not Added, Please try again</p>";
+    //           header('Content-type: application/json');
+    //           echo json_encode($response_array);
+    //       }
+    //     }
 
-    }
+    //   }
+
+
+    public function updateBank(Request $request) {
+      $id =base64_decode($this->input->get("id"));
+      $category =$this->input->get("category");
 
     public function updateBank(Request $request)
     {
@@ -2256,8 +2260,11 @@ public function addBankBranch(Request $request){
             // echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
           } else { echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>"; }
 
-    
+    }
 
+
+
+    public function confirmOvertimePayment(Request $request) {
 
         if ($this->uri->segment(3) != '') {
 
@@ -5834,12 +5841,6 @@ function subdropFetcher(Request $request)  {
             echo 'Unauthorized Access';
         }
 
-    }
-
-    public function getPositionSalaryRange(Request $request)
-    {
-        $positionID = $request->positionID;
-
    }
 
 public function getPositionSalaryRange(Request $request)
@@ -5856,6 +5857,7 @@ public function getPositionSalaryRange(Request $request)
         }
         header('Content-type: application/json');
         echo json_encode($response_array);
+
 
 
     foreach ($result as $value) {
@@ -6217,9 +6219,9 @@ public function getPositionSalaryRange(Request $request)
 
                 echo json_encode($response_array);
       }
+}
 
-    }
-
+}
     ##################  END ADD EMPLOYEE  ############################
 
     public function organization_structure(Request $request)
