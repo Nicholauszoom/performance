@@ -383,11 +383,18 @@ Route::middleware('auth')->group(function () {
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
         Route::any('/financial_group','financial_group')->name('flex.financial_group');
+        Route::any('/financial_groups_details','financial_groups_details')->name('flex.financial_groups_details');
+        Route::any('/financial_groups_byRole_details','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
 
+        
         Route::any('/groups','groups')->name('flex.groups');
         Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
         Route::any('/removeEmployeeFromRole','removeEmployeeFromRole')->name('flex.removeEmployeeFromRole');
         Route::any('/addEmployeeToGroup','addEmployeeToGroup')->name('flex.addEmployeeToGroup');
+        Route::any('/addEmployeeToGroupByRoles','addEmployeeToGroupByRoles')->name('flex.addEmployeeToGroupByRoles');
+
+
+        
         Route::any('/updategroup','updategroup')->name('flex.updategroup');
         Route::any('/deleteRole','deleteRole')->name('flex.deleteRole');
         Route::any('/deleteGroup','deleteGroup')->name('flex.deleteGroup');

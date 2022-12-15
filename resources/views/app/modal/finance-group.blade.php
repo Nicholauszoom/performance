@@ -6,17 +6,28 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form action="#" class="form-horizontal">
+            <form action="{{ route("flex.financial_group") }}" method="POST" class="form-horizontal">
+               @csrf
                 <div class="modal-body">
                     <div class="row mb-3">
                         <label class="col-form-label col-sm-3">Group name</label>
                         <div class="col-sm-9">
-                            <input type="text" name="" class="form-control">
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-form-label col-sm-3">Group By</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="grouped_by">
+                                <option value="1">Employee</option>
+                                <option value="2">Role</option>
+                            </select>
+                           
                         </div>
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-perfrom"  >
+                    <button type="submit" class="btn btn-perfrom">
                      Save group
                     </button>
                 </div>

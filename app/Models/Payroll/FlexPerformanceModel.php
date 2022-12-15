@@ -2784,7 +2784,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		$query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s  WHERE type IN (0,1) ";
 
-
+		
 		return DB::select(DB::raw($query));
 	}
 
@@ -2830,6 +2830,14 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 
 
+	function nonmembers_roles_byid($id)
+	{
+		 
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id,  (SELECT @s:=0) as s  where  p.id NOT IN (SELECT roleID from role_groups  where group_name=".$id.")";
+
+		//dd(DB::select(DB::raw($query)));
+		return DB::select(DB::raw($query));
+	}
 
     function nonmembers_byid($id)
 	{
@@ -2859,6 +2867,18 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 		$query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = ".$id."  and e.emp_id IN (SELECT empID from employee_group where group_name=".$id.")";
 
+		return DB::select(DB::raw($query));
+	}
+	function roles_byid($id)
+	{
+		
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p, department d, role_groups rg,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = ".$id."  and p.id IN (SELECT roleID from role_groups where group_name=".$id.")";
+        
+		
+		return DB::select(DB::raw($query));
+	}
+	function get_employee_by_position($position){
+		$query = "SELECT emp_id from employee where position=".$position;
 		return DB::select(DB::raw($query));
 	}
 
@@ -2955,7 +2975,16 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function addEmployeeToGroup($empID, $groupID)
 	{
+		//dd($groupID);
 	    $query = "INSERT INTO  employee_group(empID, group_name) VALUES ('".$empID."', ".$groupID.") ";
+		
+		DB::insert(DB::raw($query));
+		return true;
+	}
+
+	function addRoleToGroup($roleID, $groupID)
+	{
+	    $query = "INSERT INTO  role_groups(roleID, group_name) VALUES ('".$roleID."', ".$groupID.") ";
 		DB::insert(DB::raw($query));
 		return true;
 	}
