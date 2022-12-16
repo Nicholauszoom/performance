@@ -1165,7 +1165,7 @@ function backup_payslip(Request $request)  {
                 $count++;
             }
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1395,8 +1395,8 @@ function backup_payslip(Request $request)  {
 
                             foreach ($project_activity_time as $p_a_t) {
                                 try {
-                                        $d1 = new DateTime($p_a_t->start_date);
-                                        $d2 = new DateTime($p_a_t->end_date);
+                                        $d1 = DateTime($p_a_t->start_date);
+                                        $d2 = DateTime($p_a_t->end_date);
                                         $diff = $d2->diff($d1);
 
                                         if (($p_a_t->project == $p_a->project) && ($p_a_t->activity == $p_a->activity) && ($row->empID == $p_a->emp_id)) {
@@ -1602,7 +1602,7 @@ function backup_payslip(Request $request)  {
                  $count++;
              }
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1723,7 +1723,7 @@ function backup_payslip(Request $request)  {
              $data_row++;
             }
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1823,7 +1823,7 @@ function backup_payslip(Request $request)  {
             }
 
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1854,56 +1854,56 @@ function dynamic_pdf(Request $request)  {
 
 
 // set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Cits');
-$pdf->SetTitle('P9-'.date('d/m/Y'));
-$pdf->SetSubject('PAYE');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf::SetCreator(PDF_CREATOR);
+$pdf::SetAuthor('Cits');
+$pdf::SetTitle('P9-'.date('d/m/Y'));
+$pdf::SetSubject('PAYE');
+$pdf::SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
 
-// $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
+// $pdf::SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
 //  PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-$pdf->setFooterData(array(0,64,0), array(0,64,128));
+$pdf::setFooterData(array(0,64,0), array(0,64,128));
 
 // remove default header/footer
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(true);
+$pdf::setPrintHeader(false);
+$pdf::setPrintFooter(true);
 
 // set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$pdf::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+$pdf::SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+$pdf::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf::SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf::SetFooterMargin(PDF_MARGIN_FOOTER);
 
 // set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+$pdf::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 // set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+$pdf::setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set some language-dependent strings (optional)
 if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
                require_once(dirname(__FILE__).'/lang/eng.php');
-               $pdf->setLanguageArray($l);
+               $pdf::setLanguageArray($l);
 }
 
 // ---------------------------------------------------------
 
 // set default font subsetting mode
-$pdf->setFontSubsetting(true);
+$pdf::setFontSubsetting(true);
 
 // Set font
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf->SetFont('times', '', 12, '', true);
+$pdf::SetFont('times', '', 12, '', true);
 
 // TIN NUMBER
 
@@ -1926,16 +1926,16 @@ foreach($info as $key){
 
 
 // This method has several options, check the source code documentation for more information.
-// $pdf->AddPage();
-$pdf->AddPage('L', 'A4');
-// $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
+// $pdf::AddPage();
+$pdf::AddPage('L', 'A4');
+// $pdf::Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
 
-$pdf->SetXY(0, 18);
+$pdf::SetXY(0, 18);
 $header1 = <<<"EOD"
 <p align="center">HESLB LOAN REPAYMENT SCHEDULE<br>(To be submitted duly completed with every payment to HESLB)</p>
 EOD;
-$pdf->writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
+$pdf::writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
 
 
 // EMPLOYER
@@ -1961,31 +1961,31 @@ $payrollmonth = date('F, Y', strtotime($payrolldate));
 
 
 
-$pdf->SetFont('times', '', 10, '', true);
-$pdf->SetXY(40, 34);
+$pdf::SetFont('times', '', 10, '', true);
+$pdf::SetXY(40, 34);
 $header = "<p><b>NAME OF EMPLOYER:&nbsp;&nbsp;</b>  ".strtoupper($name)."<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>POSTAL ADDRESS:&nbsp;&nbsp;&nbsp;</b>".$postal_address."<br><br><br>";
 
-$pdf->writeHTMLCell(0, 12, '', '', $header, 0, 1, 0, true, '', true);
+$pdf::writeHTMLCell(0, 12, '', '', $header, 0, 1, 0, true, '', true);
 
 
 
-$pdf->SetXY(55, 54);
+$pdf::SetXY(55, 54);
 $htm = "<p><b>TELEPHONE:&nbsp;&nbsp;&nbsp;</b>".$phone_no1."<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>EMAIL:&nbsp;&nbsp;&nbsp;</b>".$email."</p>";
-$pdf->writeHTMLCell(0, 12, '', '', $htm, 0, 1, 0, true, '', true);
+$pdf::writeHTMLCell(0, 12, '', '', $htm, 0, 1, 0, true, '', true);
 
 
-$pdf->SetXY(190, 34);
+$pdf::SetXY(190, 34);
 $header2 = "<p><b>EMPLOYER HESLB CODE NO:&nbsp;&nbsp;</b>&nbsp;&nbsp;&nbsp;".$heslbcode."<br><br><br><br>
       <b>PAYROLL MONTH:&nbsp;&nbsp;</b>".$payrollmonth;
-$pdf->writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
+$pdf::writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
 
 
 
-$pdf->SetFont('times', '', 12, '', true);
+$pdf::SetFont('times', '', 12, '', true);
 // Set some content to print
-$pdf->SetXY(38, 30);
+$pdf::SetXY(38, 30);
 
 $html = '<table align="center" border="1px">';
 
@@ -2054,14 +2054,14 @@ $html .= '</table>
 // MYSQL DATA
 
 // Print text using writeHTMLCell()
-$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+$pdf::writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-// $pdf->Output('heslb-'.date('d/m/Y').'.pdf', 'I');
-$pdfString = $pdf->Output('quotation.pdf', 'S');
+// $pdf::Output('heslb-'.date('d/m/Y').'.pdf', 'I');
+$pdfString = $pdf::Output('quotation.pdf', 'S');
 
 // SEND EMAIL
 // SMTP configuration
@@ -2244,7 +2244,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                 $data_row++;
             }
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -2373,7 +2373,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                 $data_row++;
             }
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -2500,7 +2500,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                 $data_row++;
             }
 
-            $writer = new Xls($object); // instantiate Xlsx
+            $writer = new Xlsx($object); // instantiate Xlsxx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
