@@ -16,6 +16,11 @@ use Elibyy\TCPDF\Facades\TCPDF;
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use Excel;
+
 
 use function GuzzleHttp\Promise\all;
 
@@ -850,7 +855,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => \PhpOffice\PhpSpreadsheet\PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -868,7 +873,7 @@ function backup_payslip(Request $request)  {
                 $object->getActiveSheet()->getStyle("$value")->applyFromArray(
                         array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -906,7 +911,7 @@ function backup_payslip(Request $request)  {
                 array(
                     'borders' => array(
                         'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'style' => Border::BORDER_THIN,
                             'color' => array('rgb' => '000000')
                         )
                     )
@@ -918,7 +923,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -926,7 +931,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("I9:N9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'FFFF00')
                         )
                     )
@@ -936,7 +941,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1038,7 +1043,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1083,7 +1088,7 @@ function backup_payslip(Request $request)  {
                     // $object->getActiveSheet()->getStyle("D$i:H$i")->applyFromArray(
                     //     // array(
                     //     //     'fill' => array(
-                    //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    //     //         'type' => Fill::FILL_SOLID,
                     //     //         'color' => array('rgb' => 'AAD08E')
                     //     //     )
                     //     // )
@@ -1101,7 +1106,7 @@ function backup_payslip(Request $request)  {
                     // $object->getActiveSheet()->getStyle("F$i:H$i")->applyFromArray(
                     //     // array(
                     //     //     'fill' => array(
-                    //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    //     //         'type' => Fill::FILL_SOLID,
                     //     //         'color' => array('rgb' => 'ED7C31')
                     //     //     )
                     //     // )
@@ -1138,7 +1143,7 @@ function backup_payslip(Request $request)  {
                     // $object->getActiveSheet()->getStyle("D$nextRepeated:H$nextRepeated")->applyFromArray(
                     //     // array(
                     //     //     'fill' => array(
-                    //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    //     //         'type' => Fill::FILL_SOLID,
                     //     //         'color' => array('rgb' => 'FFFF00')
                     //     //     )
                     //     // )
@@ -1150,7 +1155,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -1223,7 +1228,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -1241,7 +1246,7 @@ function backup_payslip(Request $request)  {
                 $object->getActiveSheet()->getStyle("$value")->applyFromArray(
                         array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1279,7 +1284,7 @@ function backup_payslip(Request $request)  {
                 array(
                     'borders' => array(
                         'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'style' => Border::BORDER_THIN,
                             'color' => array('rgb' => '000000')
                         )
                     )
@@ -1291,7 +1296,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1299,7 +1304,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("I9:N9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'FFFF00')
                         )
                     )
@@ -1309,7 +1314,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1466,7 +1471,7 @@ function backup_payslip(Request $request)  {
                                 array(
                                     'borders' => array(
                                         'allborders' => array(
-                                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                            'style' => Border::BORDER_THIN,
                                             'color' => array('rgb' => '000000')
                                         )
                                     )
@@ -1520,7 +1525,7 @@ function backup_payslip(Request $request)  {
                      // $object->getActiveSheet()->getStyle("D$i:H$i")->applyFromArray(
                      //     // array(
                      //     //     'fill' => array(
-                     //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                     //     //         'type' => Fill::FILL_SOLID,
                      //     //         'color' => array('rgb' => 'AAD08E')
                      //     //     )
                      //     // )
@@ -1538,7 +1543,7 @@ function backup_payslip(Request $request)  {
                      // $object->getActiveSheet()->getStyle("F$i:H$i")->applyFromArray(
                      //     // array(
                      //     //     'fill' => array(
-                     //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                     //     //         'type' => Fill::FILL_SOLID,
                      //     //         'color' => array('rgb' => 'ED7C31')
                      //     //     )
                      //     // )
@@ -1575,7 +1580,7 @@ function backup_payslip(Request $request)  {
                      // $object->getActiveSheet()->getStyle("D$nextRepeated:H$nextRepeated")->applyFromArray(
                      //     // array(
                      //     //     'fill' => array(
-                     //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                     //     //         'type' => Fill::FILL_SOLID,
                      //     //         'color' => array('rgb' => 'FFFF00')
                      //     //     )
                      //     // )
@@ -1587,7 +1592,7 @@ function backup_payslip(Request $request)  {
                          array(
                              'borders' => array(
                                  'allborders' => array(
-                                     'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                     'style' => Border::BORDER_THIN,
                                      'color' => array('rgb' => '000000')
                                  )
                              )
@@ -1657,7 +1662,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1708,7 +1713,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1768,7 +1773,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1807,7 +1812,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2157,7 +2162,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2229,7 +2234,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -2289,7 +2294,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2358,7 +2363,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -2426,7 +2431,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2485,7 +2490,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
