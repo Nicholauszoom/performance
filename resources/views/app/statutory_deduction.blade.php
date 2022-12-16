@@ -48,12 +48,20 @@
                     </td>
 
                     <td>
-                        <a
-                            href="<?php echo url(); ?>{{ url('flex/deduction_info/?pattern=').$row->id }}<?php echo $row->id; ?>|1"
+
+                        {{-- <a href="<?php echo url(""); ?>flex/deduction_info/?pattern=<?php echo $row->id; ?>|1" title="Info and Details" class="icon-2 info-tooltip">
+                            <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                        </a> --}}
+
+                        <a href="{{ route('flex.deduction_info', ['pattern' => $row->id , 'id' => 1 ]) }}" title="Info and Details" class="icon-2 info-tooltip">
+                            <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                        </a>
+                        {{-- <a
+                            href="{{ url('flex/deduction_info', $row->id) }}"
                             title="Info and Details"
                         >
                             <button type="button" class="btn btn-main btn-xs"><i class="ph-note-pencil"></i></button>
-                        </a>
+                        </a> --}}
                     </td>
 
                 </tr>

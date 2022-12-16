@@ -807,11 +807,9 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
         return DB::select(DB::raw($query));
     }
     function annualLeaveSpent($empID, $payroll_month_end){
-        $query = "IF( (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."'  GROUP BY l.empID, l.nature)>0, (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."' GROUP BY l.empID, l.nature), 0 ) AS days ";
-        $row = DB::table('employee e')
-        ->select(DB::raw($query))
-        ->first();
-        return $row->days;
+        $query = "SELECT IF( (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."'  GROUP BY l.empID, l.nature)>0, (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."' GROUP BY l.empID, l.nature), 0 ) AS days FROM employee e";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->days;
     }
 
     function allowances($empID, $payroll_month){
@@ -844,11 +842,9 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     }*/
     function total_allowances($empID, $payroll_month){
-        $query = " IF( (SUM(amount)  WHERE empID = '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID)>0, (SUM(amount)   WHERE empID =  '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
-        $row = DB::table('allowance_logs')
-        ->select(DB::raw($query))
-        ->first();
-        return $row->total;
+        $query = "SELECT IF( (SELECT SUM(amount)  FROM allowance_logs WHERE empID = '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID)>0, (SELECT SUM(amount)  FROM allowance_logs WHERE empID =  '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->total;
 
     }
 
@@ -883,11 +879,10 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     }*/
     function total_deductions($empID, $payroll_month){
-        $query = " IF( (SUM(paid) WHERE  empID = '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID)>0, ( SUM(paid)  WHERE  empID =  '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
-        $row = DB::table('deduction_logs')
-        ->select(DB::raw($query))
-        ->first();
-        return $row->total;
+        $query = "SELECT IF( (SELECT SUM(paid) FROM deduction_logs WHERE  empID = '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID)>0, (SELECT SUM(paid) FROM deduction_logs WHERE  empID =  '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->total;
 
     }
 
@@ -928,16 +923,19 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function loansAmountRemained($empID, $payroll_month){
         $query = "SELECT remained
-    FROM (
-      SELECT remained
-      FROM loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
-      ORDER BY remained ASC LIMIT 2
-    ) z
-    where remained != 0 ORDER BY remained asc LIMIT 1";
+        FROM (
+          SELECT remained
+          FROM loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
+          ORDER BY remained ASC LIMIT 2
+        ) z
+        where remained != 0 ORDER BY remained asc LIMIT 1";
 
-        if($query->row()){
-            $row = $query->row();
-            return $row->remained;
+
+    $row = DB::select(DB::raw($query));
+    
+
+        if($row){
+            return $row[0]->remained;
         }else{
             return null;
         }
@@ -945,21 +943,24 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     }
 
     function temp_loansAmountRemained($empID, $payroll_month){
-        $query = "SELECT remained
-    FROM (
-      SELECT remained
-      FROM temp_loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
-      ORDER BY remained ASC LIMIT 2
-    ) z
-    where remained != 0 ORDER BY remained asc LIMIT 1";
 
-        if($query->row()){
-            $row = $query->row();
-            return $row->remained;
+        $query = "SELECT remained
+        FROM (
+          SELECT remained
+          FROM temp_loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
+          ORDER BY remained ASC LIMIT 2
+        ) z
+        where remained != 0 ORDER BY remained asc LIMIT 1";
+
+
+    $row = DB::select(DB::raw($query));
+    
+
+        if($row){
+            return $row[0]->remained;
         }else{
             return null;
         }
-
     }
 
 

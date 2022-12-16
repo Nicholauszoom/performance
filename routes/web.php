@@ -326,7 +326,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
-        Route::any('/deduction_info','deduction_info')->name('flex.deduction_info');
+        Route::any('/deduction_info/{pattern}/{id}','deduction_info')->name('flex.deduction_info');
         Route::any('/assign_deduction_individual','assign_deduction_individual')->name('flex.assign_deduction_individual');
         Route::any('/assign_deduction_group','assign_deduction_group')->name('flex.assign_deduction_group');
         Route::any('/remove_individual_deduction','remove_individual_deduction')->name('flex.remove_individual_deduction');
