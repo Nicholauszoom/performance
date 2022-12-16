@@ -4544,33 +4544,36 @@ class GeneralController extends Controller
 
     public function addAllowance(Request $request)
     {
-        $policy = $request->policy;
+        // $policy = $request->policy;
 
-        if ($policy == 1) {
-            $amount = $request->amount;
-            $percent = 0;
-        } else {
-            $amount = 0;
-            $percent = 0.01 * ($request->rate);
-        }
+        // if ($policy == 1) {
+        //     $amount = $request->amount;
+        //     $percent = 0;
+        // } else {
+        //     $amount = 0;
+        //     $percent = 0.01 * ($request->rate);
+        // }
 
-        $data = array(
-            'name' => $request->name,
-            'amount' => $amount,
-            'mode' => $request->policy,
-            'state' => 1,
-            'percent' => $percent,
-        );
+        // $data = array(
+        //     'name' => $request->name,
+        //     'amount' => $amount,
+        //     'mode' => $request->policy,
+        //     'taxable' => $request->taxable,
+        //     'pentionable' => $request->pentionable ,
+        //     'state' => 1,
+        //     'percent' => $percent,
+        // );
 
-        $result = $this->flexperformance_model->addAllowance($data);
+        // $result = $this->flexperformance_model->addAllowance($data);
 
-        if ($result == true) {
-            // $this->flexperformance_model->audit_log("Created New Allowance ");
-            return Redirect::back();
-            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
-        } else {
-            echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
-        }
+        // if ($result == true) {
+        //     // $this->flexperformance_model->audit_log("Created New Allowance ");
+        //     return back()->with('success', 'Saved');
+        //     // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        // } else {
+        //     echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
+        // }
+        return back()->with('success', 'Saved');
 
     }
 
@@ -4653,7 +4656,8 @@ class GeneralController extends Controller
     public function assign_allowance_individual(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+        if ($method == "POST") {
 
             $data = array(
                 'empID' => $request->input('empID'),
@@ -4662,7 +4666,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_allowance($data);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
+               // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4671,8 +4675,9 @@ class GeneralController extends Controller
 
     public function assign_allowance_group(Request $request)
     {
-
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+         
+        if ($method =="POST") {
 
             $members = $this->flexperformance_model->get_allowance_members($request->input('allowance'), $request->input('group'));
             foreach ($members as $row) {
@@ -4685,7 +4690,7 @@ class GeneralController extends Controller
 
             }
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
+               // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4695,7 +4700,9 @@ class GeneralController extends Controller
     public function remove_individual_from_allowance(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+         
+        if ($method =="POST") {
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
@@ -4708,7 +4715,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
+                  //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
             }
@@ -4718,7 +4725,9 @@ class GeneralController extends Controller
     public function remove_group_from_allowance(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+         
+        if ($method =="POST") {
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
@@ -4731,7 +4740,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
+                   // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
             }

@@ -19,10 +19,10 @@
     <div class="card">
       <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
         <li class="nav-item" role="presentation">
-            <a href="#incentivesTab" class="nav-link active show" data-bs-toggle="tab"
+            <a href="{{ url('/flex/financial_group')}}" class="nav-link active show"
                 aria-selected="false" role="tab" tabindex="-1">
                 <i class="ph-at me-2"></i>
-                Financial Froups
+                Financial Groups
             </a>
         </li>
         <li class="nav-item" role="presentation">
@@ -33,21 +33,28 @@
             </a>
         </li>
         <li class="nav-item" role="presentation">
-            <a href="#imprestTab" class="nav-link" data-bs-toggle="tab"
+            <a href="{{ url('/flex/allowance')}}" class="nav-link" 
                 aria-selected="false" role="tab" tabindex="-1">
                 <i class="ph-at me-2"></i>
-                Imprest
+                Allowance
             </a>
         </li>
     
       
         <li class="nav-item" role="presentation">
-            <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab"
+            <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
                 aria-selected="false" role="tab" tabindex="-1">
                 <i class="ph-at me-2"></i>
-                Payroll
+                Statutory Deductions
             </a>
         </li>
+        <li class="nav-item" role="presentation">
+          <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link "
+              aria-selected="false" role="tab" tabindex="-1">
+              <i class="ph-at me-2"></i>
+              Non Statutory Deductions
+          </a>
+      </li>
      
     </ul>
       <div class="card-header">

@@ -239,6 +239,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowancePercent",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -265,6 +266,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowancePolicy",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -293,6 +295,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_allowance_individual",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -322,6 +325,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_allowance_group",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -350,6 +354,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_individual_from_allowance",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -380,6 +385,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
