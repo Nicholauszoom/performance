@@ -65,19 +65,20 @@
                             <td><?php echo $row->pentionable; ?></td>
 
 
-                            <?php if($pendingPayroll==0){ ?>
+                            <?php if($pendingPayroll == 0){ ?>
                             <td class="options-width">
-                                <a href="<?php echo base_url()."index.php/cipay/allowance_info/?id=".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip">
-                                    <button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button>
-                                </a>
+                                <a href="{{ route('flex.allowance_info', base64_encode($row->id) ) }}"  title="Info and Details" class="icon-2 info-tooltip">
+                                    <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                                 </a>
+
                                 <?php if($row->state ==1){ ?>
                                 <a href="javascript:void(0)" onclick="deleteAllowance(<?php echo $row->id; ?>)" title="Delete Allowance" class="icon-2 info-tooltip">
-                                    <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
+                                    <button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button>
                                 </a>
                                 <?php } else{ ?>
 
                                 <a href="javascript:void(0)" onclick="activateAllowance(<?php echo $row->id; ?>)" title="Activate Allowance" class="icon-2 info-tooltip">
-                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button>
+                                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
                                 </a><?php } ?>
                             </td><?php } ?>
                       </tr>
@@ -149,8 +150,6 @@
             </div>
         </div>
     </div>
-
-
 
 </div>
 

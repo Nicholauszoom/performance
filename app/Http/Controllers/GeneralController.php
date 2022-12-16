@@ -4488,8 +4488,9 @@ class GeneralController extends Controller
             $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['title'] = "Overtime";
-            return view('app.allowance_overtime', $data);
+            $data['parent'] = "Settings";
+            $data['child'] = "Overtime";
+            return view('allowance.allowance_overtime', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -4737,9 +4738,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function allowance_info(Request $request)
+    public function allowance_info($id)
     {
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($id);
+
         $data['title'] = 'Package';
         $data['allowance'] = $this->flexperformance_model->getallowancebyid($id);
         $data['group'] = $this->flexperformance_model->customgroup($id);
@@ -4750,7 +4752,9 @@ class GeneralController extends Controller
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
 
-        return view('app.allowance_info', $data);
+        // dd($data['allowance']);
+
+        return view('allowance.allowance_info', $data);
     }
 
     public function overtime_category_info(Request $request)
