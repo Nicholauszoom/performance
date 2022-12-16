@@ -13,6 +13,9 @@ use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
 use App\Models\ProjectModel;
 use Elibyy\TCPDF\Facades\TCPDF;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use function GuzzleHttp\Promise\all;
 
@@ -483,7 +486,7 @@ include(app_path() . '/reports/loan_report.php');
       }
 
     public function payslip(Request $request)  {
-        dd($request->all());
+        // dd($request->all());
 
         if ($request->input('print')) {
 
@@ -806,7 +809,7 @@ function backup_payslip(Request $request)  {
     public function payrollInputJournalExport(Request $request) {
         dd($request->all());
 
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -847,7 +850,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => \PhpOffice\PhpSpreadsheet\PHPExcel_Style_Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -1179,7 +1182,7 @@ function backup_payslip(Request $request)  {
 
     public function payrollInputJournalExportTime(Request $request) {
         dd($request->all());
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -1614,7 +1617,7 @@ function backup_payslip(Request $request)  {
 
     public function staffPayrollBankExport(Request $request) {
         dd($request->all());
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -1732,9 +1735,9 @@ function backup_payslip(Request $request)  {
 
 
     public function volunteerAllowanceMWPExport(Request $request) {
-        dd($request->all());
+        // dd($request->all());
 
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             //start
             $todayDate = date('d/m/Y');
@@ -2112,7 +2115,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     public function employeeCostExport(Request $request) {
         dd($request->all());
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -2510,7 +2513,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     {
         dd($request->all());
 
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $current_payroll_month = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
@@ -2551,7 +2554,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     {
         dd($request->all());
 
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $current_payroll_month = $request->input('payrolldate');
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
@@ -2590,7 +2593,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     public function loanReports(Request $request)  {
         dd($request->all());
 
-        if (1 && $request->input('payrolldate')!='' ) {
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
