@@ -1,18 +1,102 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Deducton Info'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
 
-<?php   
+<?php  if($parameter == 1 ){
+
+    foreach($pension as $row){
+        $fundID = $row->id;
+        $name = $row->name;
+        $abbrv = $row->abbrv;
+        $employee_percent = $row->amount_employee;
+        $employer_percent = $row->amount_employer;
+        $mode = $row->deduction_from;
+        if($mode ==1){
+            $from = "Basic Salary";
+        } else {  $from = "Gross Salary"; }
+    }
+
 ?>
 
+
+<div class="mb-3">
+    <h5 class="text-muted">Deductions</h5>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-muted">Details</h4>
+            </div>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Name :</td>
+                        <td>{{ $name }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Abbrev :</td>
+                        <td>{{ $abbrv }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Employee Amount :</td>
+                        <td>{{ 100 * $employee_percent . "% Of " .$from }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Employer Amount :</td>
+                        <td>{{ 100 * $employer_percent . "% Of " .$from }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Deduction From :</td>
+                        <td>{{ $from }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header border-0 shadow-none">
+                <h5>Update</h5>
+            </div>
+
+            <div class="card-body">
+                <div id ="feedBackSubmission"></div>
+
+                <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
+                    <div class="form-group">
+                      <div class="col-sm-9">
+                        <div class="input-group">
+                          <input hidden name ="fundID" value="<?php echo $fundID; ?>">
+                          <textarea required="" name ="name" class="form-control"><?php echo $name; ?></textarea>
+                          <span class="input-group-btn">
+                            <button  class="btn btn-primary">Update Name</button>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    </form>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
 
         <!-- page content -->
         <div class="right_col" role="main">
@@ -23,58 +107,19 @@
               </div>
             </div>
             <div class="clearfix"></div>
-            
+
             <!-- PARAMETERS:
                 1 For Pension,
                 2 For Deductions,
-                3 For Meals deductions 
+                3 For Meals deductions
             -->
-            
+
             <!--START PENSION-->
-            <?php  if($parameter == 1 ){ 
-            
-            foreach($pension as $row){
-                $fundID = $row->id;
-                $name = $row->name;
-                $abbrv = $row->abbrv;
-                $employee_percent = $row->amount_employee;
-                $employer_percent = $row->amount_employer;
-                $mode = $row->deduction_from;
-                if($mode ==1){
-                    $from = "Basic Salary";
-                } else {  $from = "Gross Salary"; }
-            }
-            
-            ?>
-            
+
+
             <div class="row">
-              <!-- Groups -->
-              <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                      <div id ="feedBackAssignment"></div>
-                      <h5> Name:
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h5>
-                      <h5> Abbrev:
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $abbrv; ?></b></h5>
-                    <h5> Employee Amount:
-                    &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo 100*$employee_percent."% Of ".$from; ?></b>
-                    </h5>
-                    <h5> Employer Amount:
-                    &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo 100*$employer_percent."% Of ".$from; ?></b>
-                    </h5>
-                    <h5> Deduction From:  &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $from; ?></b> 
-                    </h5>
-                    
-                  </div>
-                </div>
-              </div>
-              <!-- Groups -->
-              
+
+
               <!--UPDATE-->
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
@@ -97,7 +142,7 @@
                         </div>
                       </div>
                       </form>
-                      
+
                       <form autocomplete="off"  id="percentAbbrv" class="form-horizontal form-label-left">
                       <div class="form-group">
                         <div class="col-sm-9">
@@ -168,9 +213,9 @@
               <!--UPDATE-->
             </div> <!--end row-->
             <!--END PENSION-->
-            
-            <?php } if($parameter == 2 ){ 
-            
+
+            <?php } if($parameter == 2 ){
+
             foreach($deduction as $row){
                 $deductionID = $row->id;
                 $id = $row->id;
@@ -182,10 +227,10 @@
                     $deductionAmount = number_format($amount,2)." (Fixed Amount)";
                 } else {  $deductionAmount = 100*$percent."% (From Basic Salary)"; }
             }
-            
+
             ?>
-            
-            
+
+
             <!--START DEDUCTION-->
             <div class="row">
               <!-- Groups -->
@@ -203,7 +248,7 @@
                     </h5>
                     <?php if($deduction_type== 2){ ?>
                     <h5> Total Beneficiaries:&nbsp;&nbsp;<b> <?php echo $membersCount; ?>  Employees </b></h5>
-                    
+
                     <br><br>
                     <h2><i class="fa fa-plus"></i>&nbsp;&nbsp;<b>Add Members</b></h2>
                     <!--<div id="details">-->
@@ -226,7 +271,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button  class="btn btn-primary">ADD</button>
                         </div>
-                      </div> 
+                      </div>
                     </form>
 
 
@@ -250,7 +295,7 @@
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button  class="btn btn-primary">ADD</button>
                         </div>
-                      </div> 
+                      </div>
                     </form>
                     <br>
                   </div>
@@ -258,7 +303,7 @@
               </div>
               <!-- Groups -->
               <?php } ?>
-              
+
               <!--UPDATE-->
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
@@ -296,7 +341,7 @@
                         </div>
                       </div>
                       </form>
-                        <?php }  if($mode ==2 || $mode ==3){ ?> 
+                        <?php }  if($mode ==2 || $mode ==3){ ?>
                       <form autocomplete="off" id="updateDeductionPercent" class="form-horizontal form-label-left">
                       <div class="form-group">
                         <div class="col-sm-9">
@@ -344,7 +389,7 @@
               <!--UPDATE-->
             </div> <!--end row-->
 
-             <div class="row">              
+             <div class="row">
               <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
@@ -352,12 +397,12 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                      
+
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
                       <div class="x_title">
                         <h2>Groups(s)</h2>
-    
+
                         <div class="clearfix"></div>
                       </div>
                       <div class="x_content">
@@ -371,10 +416,10 @@
                               <th>Mark &nbsp;&nbsp;&nbsp;<a  title="Remove Selected"><button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">REMOVE SELECTED</button></a></th>
                             </tr>
                           </thead>
-    
-    
+
+
                           <tbody>
-    
+
                             <?php
                               foreach ($groupin as $row) { ?>
                               <tr>
@@ -386,7 +431,7 @@
                               </label></td>
                                 </tr>
                               <?php } //} ?>
-                          
+
                           </tbody>
                         </table>
                         </form>
@@ -396,15 +441,15 @@
 
                   <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="x_panel">
-                      <div class="x_title">                          
-                        <h2>Individual Employees </h2>    
+                      <div class="x_title">
+                        <h2>Individual Employees </h2>
                         <div class="clearfix"></div>
                       </div>
                       <div class="x_content">
                       <div id ="feedBackRemove"></div>
                         <form autocomplete="off" id = "removeIndividual" method="post"  >
                             <input type="text" hidden="hidden" name="deductionID" value="<?php echo $deductionID; ?>">
-    
+
                         <table  id="datatable" class="table table-striped table-bordered">
                           <thead>
                             <tr>
@@ -414,7 +459,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                              
+
                             <?php
                               foreach ($employeein as $row) { ?>
                               <tr>
@@ -428,20 +473,20 @@
                                 </tr>
                               <?php }  ?>
                           </tbody>
-                        </table>  
+                        </table>
                       </div>
                         </form>
                     </div>
                   </div>
-                    
+
 
                   </div>
                 </div>
               </div>
             <!--END DEDUCTION-->
-            
+
             <?php } if($parameter == 3 ){
-                
+
              foreach($meals as $row){
                 $deductionID = $row->id;
                 $name = $row->name;
@@ -449,10 +494,10 @@
                 $max = $row->maximum_payment;
                 $min = $row->minimum_payment;
             }
-            
+
             ?>
-            
-            
+
+
             <!--START Meals-->
             <div class="row">
               <!-- Groups -->
@@ -475,7 +520,7 @@
                 </div>
               </div>
               <!-- Groups -->
-              
+
               <!--UPDATE-->
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="x_panel">
@@ -542,22 +587,22 @@
               </div>
               <!--UPDATE-->
             </div> <!--end row-->
-            <!--END DEDUCTION-->            
+            <!--END DEDUCTION-->
             <?php  } ?>
-            
-            
+
+
           </div>
         </div>
 
 
-        <!-- /page content -->   
+        <!-- /page content -->
 
 @include  ("app/includes/update_deductions")
 
 <script type="text/javascript">
     $('#removeIndividual').submit(function(e){
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) From  This Deduction?") == true ) {
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_individual_deduction",
                  type:"post",
@@ -571,22 +616,22 @@
          $('#feedBackRemove').fadeOut('fast', function(){
               $('#feedBackRemove').fadeIn('fast').html(data);
             });
-    
+
      setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    } 
-    }); 
+    }
+    });
 </script>
 
 <script type="text/javascript">
     $('#removeGroup').submit(function(e){
         if (confirm("Are You Sure You Want To Delete The selected Group(s) From This Deduction?") == true) {
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_group_deduction",
                  type:"post",
@@ -600,21 +645,21 @@
          $('#feedBackRemoveGroup').fadeOut('fast', function(){
               $('#feedBackRemoveGroup').fadeIn('fast').html(data);
             });
-    
+
      setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    } 
-    }); 
+    }
+    });
 </script>
 
 <script type="text/javascript">
     $('#assignIndividual').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_deduction_individual",
                  type:"post",
@@ -628,21 +673,21 @@
          $('#feedBackAssignment').fadeOut('fast', function(){
               $('#feedBackAssignment').fadeIn('fast').html(data);
             });
-    
-    
+
+
         setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    }); 
+    });
 </script>
 
 <script type="text/javascript">
     $('#assignGroup').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_deduction_group",
                  type:"post",
@@ -658,11 +703,11 @@
             });
      setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    }); 
+    });
 </script>
  @endsection

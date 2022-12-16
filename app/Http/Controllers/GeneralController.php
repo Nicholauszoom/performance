@@ -3992,13 +3992,12 @@ class GeneralController extends Controller
 
     }
 
-    public function deduction_info(Request $request)
+    public function deduction_info($id, $pattern)
     {
 
-        $pattern = $request->input('pattern');
-        $values = explode('|', $pattern);
-        $deductionID = $values[0];
-        $deductionType = $values[1];
+
+        $deductionID = $id;
+        $deductionType = $pattern;
 
         /*
         PARAMETERS:
