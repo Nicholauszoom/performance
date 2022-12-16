@@ -1,11 +1,9 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
@@ -440,7 +438,7 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Groups</h5>
                             </div>
-    
+
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -462,9 +460,9 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Individual Employee</h5>
                             </div>
-                            
-                                
-                           
+
+
+
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>

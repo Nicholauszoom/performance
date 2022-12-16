@@ -20,8 +20,8 @@
                         <label class="col-form-label col-sm-3">Minimum</label>
                             <input type="text" name="minimum"  value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror">
 
-                            @error('name')
-                                <p class="text-danger mt-1"> Field Name has an error </p>
+                            @error('minimum')
+                                <p class="text-danger mt-1"> Field minimum has an error </p>
                             @enderror
                     </div>
 

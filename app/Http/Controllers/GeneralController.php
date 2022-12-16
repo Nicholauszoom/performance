@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use App\Models\AccessControll\Departments;
-use App\Models\AttendanceModel;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ImprestModel;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\ReportModel;
-use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\AccessControll\Departments;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class GeneralController extends Controller
 {
@@ -71,6 +72,7 @@ class GeneralController extends Controller
 //     }
 //     return $res;
 // }
+
 
     public function update_login_info(Request $request)
     {
@@ -4468,8 +4470,10 @@ class GeneralController extends Controller
             $data['allowance'] = $this->flexperformance_model->allowance();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['title'] = "Allowances";
-            return view('app.allowance', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Allowances";
+
+            return view('allowance.allowance', $data);
         } else {
             echo "Unauthorized Access";
         }
@@ -4508,8 +4512,10 @@ class GeneralController extends Controller
             $data['paye'] = $this->flexperformance_model->paye();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-            $data['title'] = "Statutory Deductions";
-            return view('app.statutory_deduction', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Statutory Deductions";
+
+            return view('app.statutory_deduction', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -4537,32 +4543,32 @@ class GeneralController extends Controller
 
     public function addAllowance(Request $request)
     {
-        $method = $request->method();
-        if ($method == 'POST') {
-            $policy = $request->input('policy');
-            if ($policy == 1) {
-                $amount = $request->input('amount');
-                $percent = 0;
-            } else {
-                $amount = 0;
-                $percent = 0.01 * ($request->input('rate'));
-            }
-            $data = array(
-                'name' => $request->input('name'),
-                'amount' => $amount,
-                'mode' => $request->input('policy'),
-                'state' => 1,
-                'percent' => $percent,
-            );
+        $policy = $request->policy;
 
-            $result = $this->flexperformance_model->addAllowance($data);
-            if ($result == true) {
-                // $this->flexperformance_model->audit_log("Created New Allowance ");
-                return back()->with('success', 'Allowance Registered Successifully');
-                // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
-            } else {
-                echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
-            }
+        if ($policy == 1) {
+            $amount = $request->amount;
+            $percent = 0;
+        } else {
+            $amount = 0;
+            $percent = 0.01 * ($request->rate);
+        }
+
+        $data = array(
+            'name' => $request->name,
+            'amount' => $amount,
+            'mode' => $request->policy,
+            'state' => 1,
+            'percent' => $percent,
+        );
+
+        $result = $this->flexperformance_model->addAllowance($data);
+
+        if ($result == true) {
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+            return Redirect::back();
+            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
         }
 
     }
@@ -4743,6 +4749,7 @@ class GeneralController extends Controller
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
+
         return view('app.allowance_info', $data);
     }
 
@@ -5317,7 +5324,7 @@ class GeneralController extends Controller
                 foreach ($arr as $value) {
                     $roleID = $value;
                     $emp_ids = $this->flexperformance_model->get_employee_by_position($roleID);
-                    
+
                     foreach ($emp_ids as $value) {
                         $empID = $value->emp_id;
                         if (!empty($group_allowances)) {
@@ -5362,7 +5369,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
 
 
-                    
+
                 }
 
                 if ($result == true) {

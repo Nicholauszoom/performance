@@ -21,7 +21,7 @@
             <h3 class="text-muted">Roles and Permission Groups</h3>
 
             @if (session('mng_roles_grp'))
-            <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add-role-group">
+            <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-role-group">
               <i class="ph-plus me-2"></i>New Group
           </button>
             @endif
