@@ -67,13 +67,7 @@ $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
  
 // set some language-dependent strings (optional)
-// set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__). url('').'/application/libraries/tcpdf/examples/lang/eng.php')) {
-               require_once(dirname(__FILE__). url('').'/application/libraries/tcpdf/examples/lang/eng.php');
-               $pdf->setLanguageArray($l);
-}
- 
-// ---------------------------------------------------------
+
  
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
@@ -88,7 +82,7 @@ $pdf->SetFont('times', '', 14, '', true);
 $pdf->AddPage();
 
 $pdf->SetXY(70, 5);
-$path=FCPATH.'uploads/logo/TRAheader.png';
+$path=public_path().'/img/logo/TRAheader.png';
 // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
 $pdf->Image($path, '', '', 80, '', '', '', '', false, 300, '', false, false, 0, false, false, false);
 

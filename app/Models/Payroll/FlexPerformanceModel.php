@@ -1523,7 +1523,6 @@ function meals_deduction()
 	{
 		DB::table('allowances')->insert($data);
 		return true;
-
 	}
 
 	public function updateAllowance($data, $id)
@@ -2519,21 +2518,26 @@ function allLevels()
 		return true;
 	}
 
-	function activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate)
+	public function activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate)
 	{
-	     DB::transaction(function()  use($property, $datagroup, $datalog, $empID, $logID, $todate)
-       {
-        DB::table('company_property')->insert($property);
-        DB::table('company_property')->insert($datagroup);
-		DB::table('activation_deactivation')->insert($datalog);
-        $query = "UPDATE employee SET state = 1, last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
-		DB::insert(DB::raw($query));
-        $query = "UPDATE activation_deactivation SET current_state = 1 WHERE id ='".$logID."'";
-        DB::insert(DB::raw($query));
-        });
+	    $result = DB::transaction(function()  use($property, $datagroup, $datalog, $empID, $logID, $todate)
+                    {
+                        DB::table('company_property')->insert($property);
+                        DB::table('company_property')->insert($datagroup);
+		                DB::table('activation_deactivation')->insert($datalog);
 
-		return true;
+                        $query = "UPDATE employee SET state = 1, last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
 
+                        DB::insert(DB::raw($query));
+
+                        $query = "UPDATE activation_deactivation SET current_state = 1 WHERE id ='".$logID."'";
+
+                        DB::insert(DB::raw($query));
+
+                        return true;
+                    });
+
+		return $result;
 	}
 
 	function deactivateEmployee($empID, $datalog, $logID, $todate)
@@ -2579,20 +2583,24 @@ function allLevels()
 
 
 
-	function delete_employee($data, $id)
+	public function delete_employee($data, $id)
 	{
-		$DB::table('employee')->where('emp_id', $id)
-		->update($data);
+		DB::table('employee')->where('emp_id', $id)
+		    ->update($data);
 		return true;
 	}
+
 
 	public function employeestatelog($data){
 		$empID = $data['empID'];
 		$state = $data['state'];
 		$query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+
         DB::insert(DB::raw($query));
-		DB::table('activation_deactivation')->insert($data);
-//		return true;
+
+        DB::table('activation_deactivation')->insert($data);
+
+        // return true;
 	}
 
 
@@ -2776,7 +2784,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		$query = "SELECT @s:=@s+1 as SNo, g.* FROM groups g, (SELECT @s:=0) as s  WHERE type IN (0,1) ";
 
-		
+
 		return DB::select(DB::raw($query));
 	}
 
@@ -2824,7 +2832,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function nonmembers_roles_byid($id)
 	{
-		 
+
 		$query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id,  (SELECT @s:=0) as s  where  p.id NOT IN (SELECT roleID from role_groups  where group_name=".$id.")";
 
 		//dd(DB::select(DB::raw($query)));
@@ -3003,7 +3011,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		;
 	    $query = "INSERT INTO  employee_group(empID, group_name) VALUES ('".$empID."', ".$groupID.") ";
-		
+
 		DB::insert(DB::raw($query));
 		return true;
 	}

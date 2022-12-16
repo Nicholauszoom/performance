@@ -28,7 +28,7 @@
                     </a>
                 </li>
 
-{{--               
+{{--
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/flex/project/') }}">
                         <i class="ph-hard-drives"></i>
@@ -71,7 +71,7 @@
                 </li>
 
 
-               
+
 
               <!--
                 <li class="nav-item nav-item-submenu">
@@ -127,7 +127,7 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        
+
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/department') }}">Departments </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/costCenter') }}">Cost Center </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/branch') }}">Company Branches </a></li>

@@ -15,7 +15,7 @@
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
-
+ 
 /**
  * Creates an example PDF TEST document using TCPDF
  * @package com.tecnick.tcpdf
@@ -23,61 +23,56 @@
  * @author Nicola Asuni
  * @since 2008-03-04
  */
-
+ 
 // Include the main TCPDF library (search for installation path).
 // require_once('tcpdf_include.php');
-
+ 
 // create new PDF document
-// $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
+ 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Cits');
-$pdf->SetTitle('P9-' . date('d/m/Y'));
+$pdf->SetTitle('P9-'.date('d/m/Y'));
 $pdf->SetSubject('PAYE');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
+ 
 // set default header data
 
 // $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
 //  PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+$pdf->setFooterData(array(0,64,0), array(0,64,128));
 
 // remove default header/footer
 $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(true);
-
+ 
 // set header and footer fonts
-$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+ 
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
+ 
 // set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
+ 
 // set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
+ 
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
+ 
 // set some language-dependent strings (optional)
-// if (@file_exists(dirname(__FILE__) . url('') . '/application/libraries/tcpdf/examples/lang/eng.php')) {
-// 	require_once(dirname(__FILE__) . url('') . '/application/libraries/tcpdf/examples/lang/eng.php');
-// 	$pdf->setLanguageArray($l);
-// }
 
+ 
 // ---------------------------------------------------------
-
+ 
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
-
+ 
 // Set font
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
@@ -88,9 +83,9 @@ $pdf->SetFont('times', '', 14, '', true);
 $pdf->AddPage();
 
 $pdf->SetXY(70, 15);
-// $path = FCPATH . 'uploads/logo/TRAheader.png';
-// // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
-// $pdf->Image($path, '', '', 80, '', '', '', '', false, 300, '', false, false, 0, false, false, false);
+$path=public_path().'/img/logo/TRAheader.png';
+// Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
+$pdf->Image($path, '', '', 80, '', '', '', '', false, 300, '', false, false, 0, false, false, false);
 
 $pdf->SetXY(20, 45);
 $header1 = <<<"EOD"
@@ -98,19 +93,19 @@ $header1 = <<<"EOD"
 EOD;
 $pdf->writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
 
-$pdf->SetXY(25, 53);
+$pdf->SetXY(25,53);
 $header2 = <<<"EOD"
 <p align="center"><b>STATEMENT AND PAYMENT OF TAX WITHHELD</b></p>
 EOD;
 $pdf->writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
-
+ 
 // set text shadow effect
 // $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2,
 //  'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
 
 
-// YEAR
+ // YEAR
 
 $pdf->SetXY(30, 62);
 $year = <<<"EOD"
@@ -145,20 +140,21 @@ $pdf->MultiCell(5, 4, $Year[3], 1, 'L', 1, 0, '', '', true);
 
 // TIN NUMBER
 
-foreach ($info as $key) {
-	$name = $key->cname;
-	$tin = $key->tin;
-	$postal_address = $key->postal_address;
-	$postal_city = $key->postal_city;
-	$phone_no1 = $key->phone_no1;
-	$phone_no2 = $key->phone_no2;
-	$phone_no3 = $key->phone_no3;
-	$fax_no = $key->fax_no;
-	$email = $key->email;
-	$plot_no = $key->plot_no;
-	$block_no = $key->block_no;
-	$branch = $key->branch;
-	$street = $key->street;
+foreach($info as $key){
+		$name = $key->cname;
+		$tin = $key->tin;
+		$postal_address = $key->postal_address;
+		$postal_city = $key->postal_city;
+		$phone_no1 = $key->phone_no1;
+		$phone_no2 = $key->phone_no2;
+		$phone_no3 = $key->phone_no3;
+		$fax_no = $key->fax_no;
+		$email = $key->email;
+		$plot_no = $key->plot_no;
+		$block_no = $key->block_no;
+		$branch = $key->branch;
+		$street = $key->street;
+		 
 }
 
 $pdf->SetXY(30, 71);
@@ -224,7 +220,7 @@ $pdf->MultiCell(5, 4, $tinNo1[7], 1, 'L', 1, 0, '', '', true);
 $pdf->MultiCell(5, 4, $tinNo1[8], 1, 'L', 1, 0, '', '', true);
 
 // TIN NUMBER
-
+ 
 // Set some content to print
 
 
@@ -470,7 +466,7 @@ $pdf->SetFillColor(255, 255, 255);
 // Multicell test
 $pdf->MultiCell(50, 9, $fax_no, 1, 'C', 1, 0, '', '', true);
 
-
+ 
 
 // EMAIL ADDRESS
 $pdf->SetXY(12, 200);
@@ -616,7 +612,7 @@ $pdf->AddPage('L', 'A4');
 // $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
 // $pdf->SetXY(75, 10);
-// $path= url('').'uploads/logo/cits.png';
+// $path=url().'uploads/logo/cits.png';
 // $pdf->Image($path, 90, 10, 30, 30, '', '', 'T', false, 300, '', false, false, 1, false, false, false);
 
 $pdf->SetXY(0, 10);
@@ -624,23 +620,24 @@ $header1 = <<<"EOD"
 <p align="center"><b>P.A.Y.E. - DETAILS OF PAYMENT OF TAX WITHHELD</b></p>
 EOD;
 $pdf->writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
-
+ 
 // set text shadow effect
 // $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2,
 //  'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
 // EMPLOYER
-foreach ($info as $key) {
-	$name = $key->cname;
-	$tin = $key->tin;
+foreach($info as $key){
+		$name = $key->cname;
+		$tin = $key->tin;
+		 
 }
 
 
 $pdf->SetXY(8, 24);
-$employer = "<p><b>Name of Employer:  " . $NAME . " as of " . $payroll_date . "</b></p>";
+$employer = "<p><b>Name of Employer:  ".$NAME." as of " .$payroll_date."</b></p>";
 $pdf->writeHTMLCell(0, 12, '', '', $employer, 0, 1, 0, true, '', true);
 
-// TIN NUMBER
+ // TIN NUMBER
 
 $pdf->SetXY(200, 23);
 $TIN = "<p><b>TIN </b></p>";
@@ -703,7 +700,7 @@ $pdf->MultiCell(5, 4, $tinNo[7], 1, 'L', 1, 0, '', '', true);
 $pdf->MultiCell(5, 4, $tinNo[8], 1, 'L', 1, 0, '', '', true);
 
 // TIN NUMBER
-
+ 
 // Set some content to print
 $pdf->SetXY(5, 30);
 $html = <<<EOD
@@ -717,56 +714,48 @@ $html = <<<EOD
 		<thead>
 <tr>	<td width="50"><b>S/NO</b></td>
 				<th width="180"><b>NAME OF EMPLOYEE</b></th>
-				<th><b>TIN</b></th>
-				<th><b>NATIONAL ID</b></th>				
- 				<th><b>BASIC PAY</b></th>
- 				<th><b>GROSS PAY</b></th>
- 				<th><b>DEDUCTIONS</b></th>
- 				<th><b>TAXABLE AMOUNT</b></th>
- 				<th><b>TAX DUE</b></th>
+ 				<th width="140"><b>BASIC PAY</b></th>
+ 				<th width="140"><b>GROSS PAY</b></th>
+ 				<th width="140"><b>DEDUCTIONS</b></th>
+ 				<th width="140"><b>TAXABLE AMOUNT</b></th>
+ 				<th width="140"><b>TAX DUE</b></th>
  				</tr></thead>
 EOD;
 
 
-foreach ($paye as $key) {
-	$salary = $key->salary;
-	$gross = $key->salary + $key->allowances;
-	$name = $key->name;
-	$deductions = $key->pension_employee;
-	$taxable = $key->salary + $key->allowances - $key->pension_employee;
-	$taxdue = $key->taxdue;
-	$tin = $key->tin;
-	$national_id = $key->national_id;
+	foreach($paye as $key){ 
+		$salary = $key->salary;
+		$gross = $key->salary + $key->allowances;
+		$name = $key->name;
+		$deductions = $key->pension_employee;
+		$taxable = $key->salary + $key->allowances - $key->pension_employee; 
+		$taxdue = $key->taxdue;
 
-	$html .= '<tr>
-          <td width="50">' . $key->sNo . '</td>
-          <td width="180" align="left">' . $name . '</td>
-          <td align="left">' . $tin . '</td>
-          <td align="left">' . $national_id . '</td>
-          <td align="right">' . number_format($salary, 2) . '</td>
-          <td align="right">' . number_format($gross, 2) . '</td>
-          <td align="right">' . number_format($deductions, 2) . '</td>
-          <td align="right">' . number_format($taxable, 2) . '</td>
-          <td align="right">' . number_format($taxdue, 2) . '</td>
+$html .= '<tr>
+          <td width="50">'.$key->sNo.'</td>
+          <td align="left" width="180">'.$name.'</td>
+          <td width="140" align="right">'.number_format($salary,2).'</td>
+          <td width="140" align="right">'.number_format($gross,2).'</td>
+          <td width="140" align="right">'.number_format($deductions,2).'</td>
+          <td width="140" align="right">'.number_format($taxable,2).'</td>
+          <td width="140" align="right">'.number_format($taxdue,2).'</td>
        </tr>';
 }
-foreach ($total as $key) {
-	$salary = $key->sum_salary;
-	$gross = $key->sum_gross;
-	$deductions = $key->sum_deductions;
-	$taxable = $key->sum_taxable;
-	$taxdue = $key->sum_taxdue;
-	$html .= '<tr>
+foreach($total as $key){
+		$salary = $key->sum_salary;
+		$gross = $key->sum_gross;
+		$deductions = $key->sum_deductions;
+		$taxable = $key->sum_taxable; 
+		$taxdue = $key->sum_taxdue; 
+$html .= '<tr>
           <td colspan ="2" style="background-color:#FFFF00;">TOTAL</td>
-          <td align="right"></td>
-          <td align="right"></td>
-          <td align="right">' . number_format($salary, 2) . '</td>
-          <td align="right">' . number_format($gross, 2) . '</td>
-          <td align="right">' . number_format($deductions, 2) . '</td>
-          <td align="right">' . number_format($taxable, 2) . '</td>
-          <td align="right">' . number_format($taxdue, 2) . '</td>
+          <td align="right">'.number_format($salary,2).'</td>
+          <td align="right">'.number_format($gross,2).'</td>
+          <td align="right">'.number_format($deductions,2).'</td>
+          <td align="right">'.number_format($taxable,2).'</td>
+          <td align="right">'.number_format($taxdue,2).'</td>
           </tr>';
-}
+      }
 
 $html .= '</table>';
 // MYSQL DATA
@@ -783,17 +772,15 @@ $html .= '</table>';
 
 
 
-
+ 
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
-
+ 
 // ---------------------------------------------------------
-
+ 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-
-// dd("here");
-$pdf->Output('p9-' . date('d/m/Y') . '.pdf');
+$pdf->Output('p9-'.date('d/m/Y').'.pdf', 'I');
  
 //============================================================+
 // END OF FILE

@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use App\Models\AccessControll\Departments;
-use App\Models\AttendanceModel;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ImprestModel;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\ReportModel;
-use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\AccessControll\Departments;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class GeneralController extends Controller
 {
@@ -71,6 +72,7 @@ class GeneralController extends Controller
 //     }
 //     return $res;
 // }
+
 
     public function update_login_info(Request $request)
     {
@@ -3731,27 +3733,32 @@ class GeneralController extends Controller
     {
 
         $empID = $id;
+
         $datalog = array(
-            'state' => 0,
-            'empID' => $empID,
-            'author' => session('emp_id'),
-        );
+                        'state' =>0,
+                        'empID' =>$empID,
+                        'author' =>session('emp_id')
+                    );
 
         $this->flexperformance_model->employeestatelog($datalog);
-//                if($result ==true){
-//                    $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+
+        //  if($result ==true){
+        //      $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+
         $response_array['status'] = "OK";
         $response_array['title'] = "SUCCESS";
         $response_array['message'] = "<p class='alert alert-success text-center'>Deactivation Request For This Employee Has Been Sent Successifully</p>";
+
         header('Content-type: application/json');
         echo json_encode($response_array);
-//                } else {
-//                    $response_array['status'] = "ERR";
-//                    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
-//                    header('Content-type: application/json');
-//                    echo json_encode($response_array);
-//                }
-    }
+
+        //  } else {
+        //    $response_array['status'] = "ERR";
+        //    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
+        //    header('Content-type: application/json');
+        //    echo json_encode($response_array);
+        //  }
+      }
 
     public function deleteproperty($id, Request $request)
     {
@@ -3801,17 +3808,20 @@ class GeneralController extends Controller
 
     }
 
-    public function employeeActivationRequest(Request $request)
-    {
-        $empID = $this->uri->segment(3);
+    public function employeeActivationRequest($id, Request $request) {
+        $empID = $id;
+
         $datalog = array(
             'state' => 1,
             'empID' => $empID,
             'author' => session('emp_id'),
         );
-        $result = $this->flexperformance_model->updateemployeestatelog($datalog, $empID);
-        if ($result == true) {
-            $this->flexperformance_model->audit_log("Activation of Employee with ID =" . $empID . "");
+
+        $result = $this->flexperformance_model->updateemployeestatelog($datalog,$empID);
+
+        if($result ==true){
+            // $this->flexperformance_model->audit_log("Activation of Employee with ID =".$empID."");
+
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been Sent Successifully</p>";
@@ -3825,15 +3835,25 @@ class GeneralController extends Controller
         }
     }
 
-    public function cancelRequest(Request $request)
-    {
-        $logID = $this->uri->segment(3);
-        $empID = $this->uri->segment(4);
-        $updates = array(
-            'state' => 0,
-            'current_state' => 0,
-            'empID' => $empID,
-        );
+  public function cancelRequest($id, $empID, Request $request)
+  {
+    $updates = array(
+        'state' => 0,
+        'current_state' =>0,
+        'empID' => $empID
+    );
+
+    $result = $this->flexperformance_model->updateemployeestatelog($updates, $id);
+
+    $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =".$empID."");
+
+    SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =".$empID , $request);
+
+    $response_array['status'] = "OK";
+    $response_array['title'] = "SUCCESS";
+    $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+
+    header('Content-type: application/json');
 
         $result = $this->flexperformance_model->updateemployeestatelog($updates, $logID);
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
@@ -3843,24 +3863,22 @@ class GeneralController extends Controller
         header('Content-type: application/json');
         echo json_encode($response_array);
 
-//      if($result ==true){
-//            $response_array['status'] = "OK";
-//            $response_array['title'] = "SUCCESS";
-//            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        } else {
-//            $response_array['status'] = "ERR";
-//            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        }
+    //      if($result ==true){
+    //            $response_array['status'] = "OK";
+    //            $response_array['title'] = "SUCCESS";
+    //            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+    //            header('Content-type: application/json');
+    //            echo json_encode($response_array);
+    //        } else {
+    //            $response_array['status'] = "ERR";
+    //            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
+    //            header('Content-type: application/json');
+    //            echo json_encode($response_array);
+    //        }
     }
 
-    public function activateEmployee(Request $request)
-    {
-        $logID = $this->uri->segment(3);
-        $empID = $this->uri->segment(4);
+    public function activateEmployee($logID, $empID, Request $request) {
+
         $todate = date('Y-m-d');
 
         $property = array(
@@ -3876,15 +3894,16 @@ class GeneralController extends Controller
         );
 
         $datalog = array(
-            'state' => 1,
-            'current_state' => 1,
-            'empID' => $empID,
-            'author' => session('emp_id'),
+          'state' =>1,
+          'current_state' =>1,
+          'empID' =>$empID,
+          'author' =>session('emp_id')
         );
 
         $result = $this->flexperformance_model->activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate);
-        if ($result == true) {
-            $this->flexperformance_model->audit_log("Activated an Employee of ID =" . $empID . "");
+
+        if($result ==true){
+            //   $this->flexperformance_model->audit_log("Activated an Employee of ID =".$empID."");
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<p class='alert alert-success text-center'>Employee Has Activated Successifully</p>";
@@ -4451,8 +4470,10 @@ class GeneralController extends Controller
             $data['allowance'] = $this->flexperformance_model->allowance();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['title'] = "Allowances";
-            return view('app.allowance', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Allowances";
+
+            return view('allowance.allowance', $data);
         } else {
             echo "Unauthorized Access";
         }
@@ -4467,8 +4488,9 @@ class GeneralController extends Controller
             $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['title'] = "Overtime";
-            return view('app.allowance_overtime', $data);
+            $data['parent'] = "Settings";
+            $data['child'] = "Overtime";
+            return view('allowance.allowance_overtime', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -4491,8 +4513,10 @@ class GeneralController extends Controller
             $data['paye'] = $this->flexperformance_model->paye();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-            $data['title'] = "Statutory Deductions";
-            return view('app.statutory_deduction', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Statutory Deductions";
+
+            return view('app.statutory_deduction', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -4520,32 +4544,32 @@ class GeneralController extends Controller
 
     public function addAllowance(Request $request)
     {
-        $method = $request->method();
-        if ($method == 'POST') {
-            $policy = $request->input('policy');
-            if ($policy == 1) {
-                $amount = $request->input('amount');
-                $percent = 0;
-            } else {
-                $amount = 0;
-                $percent = 0.01 * ($request->input('rate'));
-            }
-            $data = array(
-                'name' => $request->input('name'),
-                'amount' => $amount,
-                'mode' => $request->input('policy'),
-                'state' => 1,
-                'percent' => $percent,
-            );
+        $policy = $request->policy;
 
-            $result = $this->flexperformance_model->addAllowance($data);
-            if ($result == true) {
-                // $this->flexperformance_model->audit_log("Created New Allowance ");
-                return back()->with('success', 'Allowance Registered Successifully');
-                // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
-            } else {
-                echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
-            }
+        if ($policy == 1) {
+            $amount = $request->amount;
+            $percent = 0;
+        } else {
+            $amount = 0;
+            $percent = 0.01 * ($request->rate);
+        }
+
+        $data = array(
+            'name' => $request->name,
+            'amount' => $amount,
+            'mode' => $request->policy,
+            'state' => 1,
+            'percent' => $percent,
+        );
+
+        $result = $this->flexperformance_model->addAllowance($data);
+
+        if ($result == true) {
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+            return Redirect::back();
+            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
         }
 
     }
@@ -4714,9 +4738,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function allowance_info(Request $request)
+    public function allowance_info($id)
     {
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($id);
+
         $data['title'] = 'Package';
         $data['allowance'] = $this->flexperformance_model->getallowancebyid($id);
         $data['group'] = $this->flexperformance_model->customgroup($id);
@@ -4726,7 +4751,10 @@ class GeneralController extends Controller
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
-        return view('app.allowance_info', $data);
+
+        // dd($data['allowance']);
+
+        return view('allowance.allowance_info', $data);
     }
 
     public function overtime_category_info(Request $request)
@@ -5341,7 +5369,7 @@ class GeneralController extends Controller
                 foreach ($arr as $value) {
                     $roleID = $value;
                     $emp_ids = $this->flexperformance_model->get_employee_by_position($roleID);
-                    
+
                     foreach ($emp_ids as $value) {
                         $empID = $value->emp_id;
                         if (!empty($group_allowances)) {
@@ -5386,7 +5414,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
 
 
-                    
+
                 }
 
                 if ($result == true) {
