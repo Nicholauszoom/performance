@@ -25,6 +25,7 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
+                
                 <div class="card">
                   <div class="card-head py-3">
                     <h2><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h2>
@@ -216,7 +217,7 @@
         if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Group?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/removeEmployeeFromGroup",
+                 url:"<?php echo  url(''); ?>/flex/removeEmployeeByRoleFromGroup",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

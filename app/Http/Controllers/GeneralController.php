@@ -5223,6 +5223,44 @@ class GeneralController extends Controller
         }
     }
 
+    //
+    public function removeEmployeeByRoleFromGroup(Request $request)
+    {
+        $method = $request->method();
+         
+        if ($method == "POST") {
+
+            $arr = $request->input('option');
+            $groupID = $request->input('groupID');
+            if (sizeof($arr) < 1) {
+                echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
+            } else {
+
+                foreach ($arr as $composite) {
+                    $values = explode('|', $composite);
+                    $refID = $values[0];
+                    $RoleID = $values[1];
+                    
+                    $emp_ids = $this->flexperformance_model->getEmpByGroupID($groupID,$RoleID);
+                    
+                    if(!empty($emp_ids)){
+                      //  dd($emp_ids); 
+                    foreach ($emp_ids as $ids) {
+                        $empID = $ids->empID;
+                      
+                       $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
+
+                    }
+                }
+
+                    $result = $this->flexperformance_model->delete_role_group($RoleID,$groupID);
+                }
+                if ($result == true) {
+                    echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
+                } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
+            }
+        }
+    }
     public function removeEmployeeFromGroup(Request $request)
     {
         $method = $request->method();
@@ -5239,6 +5277,8 @@ class GeneralController extends Controller
                     $values = explode('|', $composite);
                     $refID = $values[0];
                     $empID = $values[1];
+
+                   
 
                     $result = $this->flexperformance_model->removeEmployeeFromGroup($refID, $empID, $groupID);
                 }
@@ -5291,6 +5331,7 @@ class GeneralController extends Controller
             $arr = $request->input('option');
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
+          
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
             $group_deductions = $this->flexperformance_model->get_group_deductions($groupID);
             if (sizeof($arr) < 1) {

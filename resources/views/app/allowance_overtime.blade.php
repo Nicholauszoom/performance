@@ -15,6 +15,39 @@
     <!-- Basic datatable -->
     <div class="card">
         <div class="card-body">
+            <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a href="#incentivesTab" class="nav-link " data-bs-toggle="tab"
+                        aria-selected="false" role="tab" tabindex="-1">
+                        <i class="ph-at me-2"></i>
+                        Financial Froups
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link active show" data-bs-toggle="tab" aria-selected="false" role="tab"
+                        tabindex="-1">
+                        <i class="ph-list me-2"></i>
+                        Overtime
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="#imprestTab" class="nav-link" data-bs-toggle="tab"
+                        aria-selected="false" role="tab" tabindex="-1">
+                        <i class="ph-at me-2"></i>
+                        Imprest
+                    </a>
+                </li>
+            
+              
+                <li class="nav-item" role="presentation">
+                    <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab"
+                        aria-selected="false" role="tab" tabindex="-1">
+                        <i class="ph-at me-2"></i>
+                        Payroll
+                    </a>
+                </li>
+             
+            </ul>
             <div class="d-flex justify-content-between">
                 <h5>Overtime</h5>
 
