@@ -72,6 +72,7 @@ class GeneralController extends Controller
 //     return $res;
 // }
 
+
     public function update_login_info(Request $request)
     {
 
@@ -4508,8 +4509,10 @@ class GeneralController extends Controller
             $data['paye'] = $this->flexperformance_model->paye();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-            $data['title'] = "Statutory Deductions";
-            return view('app.statutory_deduction', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Statutory Deductions";
+
+            return view('app.statutory_deduction', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -5317,7 +5320,7 @@ class GeneralController extends Controller
                 foreach ($arr as $value) {
                     $roleID = $value;
                     $emp_ids = $this->flexperformance_model->get_employee_by_position($roleID);
-                    
+
                     foreach ($emp_ids as $value) {
                         $empID = $value->emp_id;
                         if (!empty($group_allowances)) {
@@ -5362,7 +5365,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
 
 
-                    
+
                 }
 
                 if ($result == true) {
