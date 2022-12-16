@@ -1523,7 +1523,6 @@ function meals_deduction()
 	{
 		DB::table('allowances')->insert($data);
 		return true;
-
 	}
 
 	public function updateAllowance($data, $id)
@@ -2591,7 +2590,7 @@ function allLevels()
 		return true;
 	}
 
-    
+
 	public function employeestatelog($data){
 		$empID = $data['empID'];
 		$state = $data['state'];
