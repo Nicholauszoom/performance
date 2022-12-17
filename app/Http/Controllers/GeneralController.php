@@ -3994,8 +3994,6 @@ class GeneralController extends Controller
 
     public function deduction_info($id, $pattern)
     {
-
-
         $deductionID = $id;
         $deductionType = $pattern;
 
@@ -4029,7 +4027,6 @@ class GeneralController extends Controller
         $data['parameter'] = $deductionType;
         $data['title'] = "Deductions";
         return view('app.deduction_info', $data);
-
     }
 
     public function assign_deduction_individual(Request $request)
@@ -4675,7 +4672,7 @@ class GeneralController extends Controller
     public function assign_allowance_group(Request $request)
     {
         $method = $request->method();
-         
+
         if ($method =="POST") {
 
             $members = $this->flexperformance_model->get_allowance_members($request->input('allowance'), $request->input('group'));
@@ -4700,7 +4697,7 @@ class GeneralController extends Controller
     {
 
         $method = $request->method();
-         
+
         if ($method =="POST") {
 
             $arr = $request->input('option');
@@ -4725,7 +4722,7 @@ class GeneralController extends Controller
     {
 
         $method = $request->method();
-         
+
         if ($method =="POST") {
 
             $arr = $request->input('option');
@@ -5263,7 +5260,7 @@ class GeneralController extends Controller
     public function removeEmployeeByRoleFromGroup(Request $request)
     {
         $method = $request->method();
-         
+
         if ($method == "POST") {
 
             $arr = $request->input('option');
@@ -5276,14 +5273,14 @@ class GeneralController extends Controller
                     $values = explode('|', $composite);
                     $refID = $values[0];
                     $RoleID = $values[1];
-                    
+
                     $emp_ids = $this->flexperformance_model->getEmpByGroupID($groupID,$RoleID);
-                    
+
                     if(!empty($emp_ids)){
-                      //  dd($emp_ids); 
+                      //  dd($emp_ids);
                     foreach ($emp_ids as $ids) {
                         $empID = $ids->empID;
-                      
+
                        $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
 
                     }
@@ -5314,7 +5311,7 @@ class GeneralController extends Controller
                     $refID = $values[0];
                     $empID = $values[1];
 
-                   
+
 
                     $result = $this->flexperformance_model->removeEmployeeFromGroup($refID, $empID, $groupID);
                 }
@@ -5367,7 +5364,7 @@ class GeneralController extends Controller
             $arr = $request->input('option');
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
-          
+
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
             $group_deductions = $this->flexperformance_model->get_group_deductions($groupID);
             if (sizeof($arr) < 1) {
