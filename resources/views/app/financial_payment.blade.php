@@ -267,7 +267,7 @@
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            {{-- <tbody>
+                                            <tbody>
                                                 <?php
                                                     foreach ($adv_overtime as $row) { ?>
                                                 <?php if ($row->status == 2) {
@@ -332,7 +332,7 @@
                                                         <br><br>
 
 
-                                                        <?php if ($row->status == 1 && /*session('mng_emp') &&*/ $pendingPayroll == 0) { ?>
+                                                        <?php if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) { ?>
 
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
@@ -388,7 +388,7 @@
                                                 </tr>
 
                                                 <?php } ?>
-                                            </tbody> --}}
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

@@ -77,7 +77,7 @@ class GeneralController extends Controller
     public function update_login_info(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $empID = session('emp_id');
 
             $username = $request->input('username');
@@ -187,7 +187,7 @@ class GeneralController extends Controller
 
     public function addContract(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
                 'duration' => $request->input('duration'),
@@ -362,7 +362,7 @@ class GeneralController extends Controller
     public function departmentAdd(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $values = explode('|', $request->input('parent'));
             $parent_id = $values[0];
             $parent_code = $values[1];
@@ -427,7 +427,7 @@ class GeneralController extends Controller
 
     public function addEmployeeNationality(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'name' => $request->input('name'),
@@ -461,7 +461,7 @@ class GeneralController extends Controller
 
     public function addCompanyBranch(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'name' => $request->input('name'),
@@ -489,7 +489,7 @@ class GeneralController extends Controller
 
     public function addCostCenter(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'name' => $request->input('name'),
@@ -679,7 +679,7 @@ class GeneralController extends Controller
 
     public function updateBankBranchName(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
                 'bank' => $request->input('bank'),
@@ -707,7 +707,7 @@ class GeneralController extends Controller
 
     public function updateBankName(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('bankID') != '') {
+        if ($request->method() == "POST" && $request->input('bankID') != '') {
             $bankID = $request->input('bankID');
             $data = array(
                 'name' => $request->input('name'),
@@ -730,7 +730,7 @@ class GeneralController extends Controller
 
     public function updateAbbrev(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('bankID') != '') {
+        if ($request->method() == "POST" && $request->input('bankID') != '') {
             $bankID = $request->input('bankID');
             $data = array(
                 'abbr' => $request->input('abbrev'),
@@ -753,7 +753,7 @@ class GeneralController extends Controller
 
     public function updateBankCode(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('bankID') != '') {
+        if ($request->method() == "POST" && $request->input('bankID') != '') {
             $bankID = $request->input('bankID');
             $data = array(
                 'bank_code' => $request->input('bank_code'),
@@ -776,7 +776,7 @@ class GeneralController extends Controller
 
     public function updateBranchName(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'name' => $request->input('name'),
@@ -799,7 +799,7 @@ class GeneralController extends Controller
 
     public function updateBranchCode(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'branch_code' => $request->input('branch_code'),
@@ -822,7 +822,7 @@ class GeneralController extends Controller
 
     public function updateBranchSwiftcode(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'swiftcode' => $request->input('swiftcode'),
@@ -844,7 +844,7 @@ class GeneralController extends Controller
     }
     public function updateBranchStreet(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'street' => $request->input('street'),
@@ -867,7 +867,7 @@ class GeneralController extends Controller
 
     public function updateBranchRegion(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'region' => $request->input('region'),
@@ -889,7 +889,7 @@ class GeneralController extends Controller
 
     public function updateBranchCountry(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'country' => $request->input('country'),
@@ -1019,7 +1019,7 @@ class GeneralController extends Controller
 
     public function updateBudgetDescription(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('budgetID') != '') {
+        if ($request->method() == "POST" && $request->input('budgetID') != '') {
             $budgetID = $request->input('budgetID');
             $data = array(
                 'description' => $request->input('description'),
@@ -1034,7 +1034,7 @@ class GeneralController extends Controller
 
     public function updateBudgetAmount(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('budgetID') != '') {
+        if ($request->method() == "POST" && $request->input('budgetID') != '') {
             $budgetID = $request->input('budgetID');
             $data = array(
                 'amount' => $request->input('amount'),
@@ -1049,7 +1049,7 @@ class GeneralController extends Controller
 
     public function updateBudgetDateRange(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('budgetID') != '') {
+        if ($request->method() == "POST" && $request->input('budgetID') != '') {
             $budgetID = $request->input('budgetID');
             $start = $request->input('start');
             $end = $request->input('end');
@@ -1194,7 +1194,7 @@ class GeneralController extends Controller
 
     public function requestTraining2(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $empID = session('emp_id');
             $course = $request->input('course');
             $data = array(
@@ -1430,7 +1430,7 @@ class GeneralController extends Controller
         $traineeID = $request->input('traineeID');
         $skillsID = $request->input('skillsID');
         $remarks = trim($request->input('remarks'));
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $namefile = "certificate_" . $traineeID . "_" . $skillsID;
 
             $config['upload_path'] = './uploads/graduation/';
@@ -1473,9 +1473,9 @@ class GeneralController extends Controller
         $traineeID = $request->input('traineeID');
         $skillsID = $request->input('skillsID');
         $remarks = trim($request->input('remarks'));
-        // if (Request::isMethod('post')&& $ID!='') {
+        // if ($request->method() == "POST"&& $ID!='') {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $namefile = "certificate_" . $traineeID . "_" . $skillsID;
 
@@ -1563,7 +1563,7 @@ class GeneralController extends Controller
 
     public function updatePositionName(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1590,7 +1590,7 @@ class GeneralController extends Controller
 
     public function updatePositionReportsTo(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1621,7 +1621,7 @@ class GeneralController extends Controller
 
     public function updatePositionCode(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1648,7 +1648,7 @@ class GeneralController extends Controller
 
     public function updatePositionOrganizationLevel(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1686,7 +1686,7 @@ class GeneralController extends Controller
     }
     public function addPosition(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('driving_licence') == "") {
                 $licence = 0;
@@ -2426,7 +2426,7 @@ class GeneralController extends Controller
     public function updateFirstName(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'fname' => $request->input('fname'),
                 'last_updated' => date('Y-m-d'),
@@ -2442,7 +2442,7 @@ class GeneralController extends Controller
     public function updateCode(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'emp_code' => $request->input('emp_code'),
                 'last_updated' => date('Y-m-d'),
@@ -2458,7 +2458,7 @@ class GeneralController extends Controller
     public function updateLevel(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'emp_level' => $request->input('emp_level'),
                 'last_updated' => date('Y-m-d'),
@@ -2474,7 +2474,7 @@ class GeneralController extends Controller
     public function updateMiddleName(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'mname' => $request->input('mname'),
                 'last_updated' => date('Y-m-d'),
@@ -2490,7 +2490,7 @@ class GeneralController extends Controller
     public function updateLastName(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'lname' => $request->input('lname'),
                 'last_updated' => date('Y-m-d'),
@@ -2506,7 +2506,7 @@ class GeneralController extends Controller
     public function updateGender(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'gender' => $request->input('gender'),
                 'last_updated' => date('Y-m-d'),
@@ -2522,7 +2522,7 @@ class GeneralController extends Controller
     public function updateDob(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'birthdate' => $request->input('dob'),
                 'last_updated' => date('Y-m-d'),
@@ -2538,7 +2538,7 @@ class GeneralController extends Controller
     public function updateExpatriate(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'is_expatriate' => $request->input('expatriate'),
                 'last_updated' => date('Y-m-d'),
@@ -2554,7 +2554,7 @@ class GeneralController extends Controller
     public function updateEmployeePensionFund(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'pension_fund' => $request->input('pension_fund'),
                 'last_updated' => date('Y-m-d'),
@@ -2570,7 +2570,7 @@ class GeneralController extends Controller
     public function updateEmployeePosition(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
 
             $data = array(
                 'empID' => $empID,
@@ -2596,7 +2596,7 @@ class GeneralController extends Controller
 
     /* public function updateEmployeeBranch(Request $request) {
     $empID = $request->input('empID');
-    if (Request::isMethod('post')&& $empID!='') {
+    if ($request->method() == "POST"&& $empID!='') {
     $data = array(
     'empID' =>$empID,
     'parameter' =>'Branch',
@@ -2619,7 +2619,7 @@ class GeneralController extends Controller
     public function updateEmployeeBranch(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'branch' => $request->input('branch'),
                 'last_updated' => date('Y-m-d'),
@@ -2635,7 +2635,7 @@ class GeneralController extends Controller
     public function updateEmployeeNationality(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'nationality' => $request->input('nationality'),
                 'last_updated' => date('Y-m-d'),
@@ -2651,7 +2651,7 @@ class GeneralController extends Controller
     public function updateDeptPos(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
 
             $data = array(
                 'empID' => $empID,
@@ -2779,7 +2779,7 @@ class GeneralController extends Controller
     public function updateSalary(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'salary' => $request->input('salary'),
             );
@@ -2806,7 +2806,7 @@ class GeneralController extends Controller
     public function updateEmail(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'email' => $request->input('email'),
                 'last_updated' => date('Y-m-d'),
@@ -2822,7 +2822,7 @@ class GeneralController extends Controller
     public function updatePostAddress(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $address_no = $request->input('address');
             $full_address = "P.O Box " . $address_no;
             $updates = array(
@@ -2840,7 +2840,7 @@ class GeneralController extends Controller
     public function updatePostCity(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'postal_city' => $request->input('city'),
                 'last_updated' => date('Y-m-d'),
@@ -2856,7 +2856,7 @@ class GeneralController extends Controller
     public function updatePhysicalAddress(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'physical_address' => $request->input('phys_address'),
                 'last_updated' => date('Y-m-d'),
@@ -2872,7 +2872,7 @@ class GeneralController extends Controller
     public function updateMobile(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'mobile' => $request->input('mobile'),
                 'last_updated' => date('Y-m-d'),
@@ -2888,7 +2888,7 @@ class GeneralController extends Controller
     public function updateHomeAddress(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'home' => $request->input('home_address'),
             );
@@ -2903,7 +2903,7 @@ class GeneralController extends Controller
     public function updateNationalID(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'national_id' => $request->input('nationalid'),
             );
@@ -2918,7 +2918,7 @@ class GeneralController extends Controller
     public function updateTin(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'tin' => $request->input('tin'),
             );
@@ -2933,7 +2933,7 @@ class GeneralController extends Controller
     public function updateBankAccountNo(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'account_no' => $request->input('acc_no'),
                 'last_updated' => date('Y-m-d'),
@@ -2951,7 +2951,7 @@ class GeneralController extends Controller
         $empID = $request->input('empID');
         $bank = $request->input('bank');
         $bank_branch = $request->input('bank_branch');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'bank' => $bank,
                 'bank_branch' => $bank_branch,
@@ -2970,7 +2970,7 @@ class GeneralController extends Controller
     public function updateLineManager(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'line_manager' => $request->input('line_manager'),
                 'last_updated' => date('Y-m-d'),
@@ -2986,7 +2986,7 @@ class GeneralController extends Controller
     public function updateEmployeeContract(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'contract_type' => $request->input('contract'),
                 'last_updated' => date('Y-m-d'),
@@ -3002,7 +3002,7 @@ class GeneralController extends Controller
     public function updateMeritalStatus(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'merital_status' => $request->input('merital_status'),
                 'last_updated' => date('Y-m-d'),
@@ -3018,7 +3018,7 @@ class GeneralController extends Controller
     public function updatePensionFundNo(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'pf_membership_no' => $request->input('pension_no'),
                 'last_updated' => date('Y-m-d'),
@@ -3034,7 +3034,7 @@ class GeneralController extends Controller
     public function updateOldID(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'old_emp_id' => $request->input('old_id'),
                 'last_updated' => date('Y-m-d'),
@@ -3056,7 +3056,7 @@ class GeneralController extends Controller
         //   unlink($photo_path);
         // }
 
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $namefile = "user_" . $empID;
             $config['upload_path'] = './uploads/userprofile/';
             $config['file_name'] = $namefile;
@@ -3158,7 +3158,7 @@ class GeneralController extends Controller
     public function apply_salary_advance(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $amount_normal = $request->input("amount");
             $amount_mid = $request->input("amount_mid");
             $advance_type = $request->input("advance_type");
@@ -3197,7 +3197,7 @@ class GeneralController extends Controller
     public function insert_directLoan(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $category = $request->input("type");
 
             if ($category == 2) {
@@ -3259,7 +3259,7 @@ class GeneralController extends Controller
 
     public function adv_loan_pay(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $state = 1;
             $loanID = $request->input('loanID');
             $accrued = $request->input('accrued');
@@ -3465,7 +3465,7 @@ class GeneralController extends Controller
 
     public function updateloan_info(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('loanID')) {
+        if ($request->method() == "POST" && $request->input('loanID')) {
             $loanID = $request->input('loanID');
             $updates = array(
                 'amount' => $request->input('amount'),
@@ -4035,7 +4035,7 @@ class GeneralController extends Controller
     public function assign_deduction_individual(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'empID' => $request->input('empID'),
@@ -4054,7 +4054,7 @@ class GeneralController extends Controller
     public function assign_deduction_group(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $members = $this->flexperformance_model->get_deduction_members($request->input('deduction'), $request->input('group'));
             foreach ($members as $row) {
@@ -4077,7 +4077,7 @@ class GeneralController extends Controller
     public function remove_individual_deduction(Request $request)
     {
 
-        if (Request::isMethod('post') && !empty($request->input('option'))) {
+        if ($request->method() == "POST" && !empty($request->input('option'))) {
 
             $arr = $request->input('option');
             $arrayString = implode(",", $arr);
@@ -4103,7 +4103,7 @@ class GeneralController extends Controller
     public function remove_group_deduction(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $arr = $request->input('option');
             $arrayString = implode(",", $arr);
@@ -4130,7 +4130,7 @@ class GeneralController extends Controller
 
     public function addpaye(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $minimum = $request->input('minimum');
             $maximum = $request->input('maximum');
             $excess = $request->input('excess');
@@ -4189,7 +4189,7 @@ class GeneralController extends Controller
 
     public function updatepaye(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $payeID = $request->input('payeID');
             $minimum = $request->input('minimum');
             $maximum = $request->input('maximum');
@@ -4229,7 +4229,7 @@ class GeneralController extends Controller
     }
     public function updateOvertimeAllowance(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('allowanceID') != '') {
+        if ($request->method() == "POST" && $request->input('allowanceID') != '') {
             $allowanceID = $request->input('allowanceID');
             $updates = array(
                 'name' => $request->input('name'),
@@ -4247,7 +4247,7 @@ class GeneralController extends Controller
 
     public function updateCommonDeductions(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('deductionID') != '') {
+        if ($request->method() == "POST" && $request->input('deductionID') != '') {
             $deductionID = $request->input('deductionID');
             $updates = array(
                 'name' => $request->input('name'),
@@ -4277,7 +4277,7 @@ class GeneralController extends Controller
     public function updatePensionName(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4292,7 +4292,7 @@ class GeneralController extends Controller
     public function updatePercentEmployee(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'amount_employee' => $request->input('employee_amount') / 100,
             );
@@ -4308,7 +4308,7 @@ class GeneralController extends Controller
     public function updatePercentEmployer(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'amount_employer' => $request->input('employer_amount') / 100,
             );
@@ -4324,7 +4324,7 @@ class GeneralController extends Controller
     public function updatePensionPolicy(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'deduction_from' => $request->input('policy'),
             );
@@ -4339,7 +4339,7 @@ class GeneralController extends Controller
     public function updateDeductionName(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4354,7 +4354,7 @@ class GeneralController extends Controller
     public function updateDeductionAmount(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'amount' => $request->input('amount'),
             );
@@ -4369,7 +4369,7 @@ class GeneralController extends Controller
     public function updateDeductionPercent(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'percent' => $request->input('percent') / 100,
             );
@@ -4384,7 +4384,7 @@ class GeneralController extends Controller
     public function updateDeductionPolicy(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'mode' => $request->input('policy'),
             );
@@ -4401,7 +4401,7 @@ class GeneralController extends Controller
     public function updateMealsName(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4416,7 +4416,7 @@ class GeneralController extends Controller
     public function updateMealsMargin(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'minimum_gross' => $request->input('margin'),
             );
@@ -4431,7 +4431,7 @@ class GeneralController extends Controller
     public function updateMealsLowerAmount(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'minimum_payment' => $request->input('amount_lower'),
             );
@@ -4446,7 +4446,7 @@ class GeneralController extends Controller
     public function updateMealsUpperAmount(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'maximum_payment' => $request->input('amount_upper'),
             );
@@ -4579,7 +4579,7 @@ class GeneralController extends Controller
     public function addOvertimeCategory(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
                 'day_percent' => ($request->input('day_percent') / 100),
@@ -4623,7 +4623,7 @@ class GeneralController extends Controller
     }
 //     public function addDeduction(Request $request)   {
 
-//       if (Request::isMethod('post')) {
+//       if ($request->method() == "POST") {
 //         $policy = $request->input('policy');
 //         if($policy==1){
 //           $amount = $request->input('amount');
@@ -4822,7 +4822,7 @@ class GeneralController extends Controller
     public function updateAllowanceName(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4837,7 +4837,7 @@ class GeneralController extends Controller
     public function updateAllowanceTaxable(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'taxable' => $request->input('taxable'),
             );
@@ -4852,7 +4852,7 @@ class GeneralController extends Controller
     public function updateAllowancePentionable(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'pentionable' => $request->input('pentionable'),
             );
@@ -4867,7 +4867,7 @@ class GeneralController extends Controller
     public function updateOvertimeName(Request $request)
     {
         $ID = $request->input('categoryID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4881,7 +4881,7 @@ class GeneralController extends Controller
     public function updateOvertimeRateDay(Request $request)
     {
         $ID = $request->input('categoryID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'day_percent' => ($request->input('day_percent') / 100),
             );
@@ -4895,7 +4895,7 @@ class GeneralController extends Controller
     public function updateOvertimeRateNight(Request $request)
     {
         $ID = $request->input('categoryID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() =="POST"  && $ID != '') {
             $updates = array(
                 'night_percent' => ($request->input('night_percent') / 100),
             );
@@ -4910,7 +4910,7 @@ class GeneralController extends Controller
     public function updateAllowanceAmount(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() =="POST" && $ID != '') {
             $updates = array(
                 'amount' => $request->input('amount'),
             );
@@ -4925,7 +4925,7 @@ class GeneralController extends Controller
     public function updateAllowancePercent(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() =="POST" && $ID != '') {
             $updates = array(
                 'percent' => $request->input('percent') / 100,
             );
@@ -4940,7 +4940,7 @@ class GeneralController extends Controller
     public function updateAllowanceApplyTo(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() =="POST"  && $ID != '') {
             $updates = array(
                 'apply_to' => $request->input('apply_to'),
             );
@@ -4955,7 +4955,7 @@ class GeneralController extends Controller
     public function updateAllowancePolicy(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() =="POST"  && $ID != '') {
             $updates = array(
                 'mode' => $request->input('policy'),
             );
@@ -5867,7 +5867,7 @@ class GeneralController extends Controller
     public function updateCompanyName(Request $request)
     {
         $id = 1;
-        if (Request::isMethod('post') && $id != '') {
+        if ($request->method() == "POST" && $id != '') {
             $data = array(
                 'cname' => $request->input('name'),
             );
@@ -5990,7 +5990,7 @@ class GeneralController extends Controller
 
         dd($request->all());
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             // DATE MANIPULATION
             $calendar = str_replace('/', '-', $request->input('birthdate'));
@@ -6873,7 +6873,7 @@ class GeneralController extends Controller
 
     public function partial(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             if ($request->input('to') == '' || $request->input('from') == '') {
                 $response_array['status'] = "no_date";
                 echo json_encode($response_array);
@@ -6925,7 +6925,7 @@ class GeneralController extends Controller
 
     public function updateGroupEdit(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $group_id = $request->input('group_id');
             $group_name = $request->input('group_name');
@@ -6975,7 +6975,7 @@ class GeneralController extends Controller
     public function updateContractStart(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $contract_start = str_replace('/', '-', $request->input('contract_start'));
             $updates = array(
                 'hire_date' => date('Y-m-d', strtotime($contract_start)),
@@ -6992,7 +6992,7 @@ class GeneralController extends Controller
     public function updateContractEnd(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $contract_end = str_replace('/', '-', $request->input('contract_end'));
             $updates = array(
                 'contract_end' => date('Y-m-d', strtotime($contract_end)),
