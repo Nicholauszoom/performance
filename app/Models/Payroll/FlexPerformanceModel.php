@@ -2471,7 +2471,7 @@ function allLevels()
 
             DB::insert(DB::raw($query));
 		    DB::table('company_property')->insert($property);
-            DB::table('company_property')->insert($datagroup);
+            DB::table('employee_group')->insert($datagroup);
         });
 
 		return true;

@@ -11,6 +11,7 @@
 @section('content')
 
 <?php
+ 
   foreach ($employee as $row) {
     $name = $row->fname." ".$row->mname." ".$row->lname;
     $state = $row->state;

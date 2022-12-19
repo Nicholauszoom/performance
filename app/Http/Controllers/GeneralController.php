@@ -4,17 +4,17 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use App\Models\AccessControll\Departments;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Payroll\ImprestModel;
+use App\Models\Payroll\Payroll;
+use App\Models\Payroll\ReportModel;
+use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
-use App\Models\AttendanceModel;
-use App\Models\Payroll\Payroll;
-use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
-use App\Models\Payroll\ReportModel;
-use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Redirect;
-use App\Models\AccessControll\Departments;
-use App\Models\Payroll\FlexPerformanceModel;
 
 class GeneralController extends Controller
 {
@@ -72,7 +72,6 @@ class GeneralController extends Controller
 //     }
 //     return $res;
 // }
-
 
     public function update_login_info(Request $request)
     {
@@ -138,6 +137,7 @@ class GeneralController extends Controller
     public function userprofile(Request $request)
     {
         $id = $request->input('id');
+        //dd($id);
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
         $data['kin'] = $this->flexperformance_model->getkin($id);
@@ -3735,10 +3735,10 @@ class GeneralController extends Controller
         $empID = $id;
 
         $datalog = array(
-                        'state' =>0,
-                        'empID' =>$empID,
-                        'author' =>session('emp_id')
-                    );
+            'state' => 0,
+            'empID' => $empID,
+            'author' => session('emp_id'),
+        );
 
         $this->flexperformance_model->employeestatelog($datalog);
 
@@ -3758,7 +3758,7 @@ class GeneralController extends Controller
         //    header('Content-type: application/json');
         //    echo json_encode($response_array);
         //  }
-      }
+    }
 
     public function deleteproperty($id, Request $request)
     {
@@ -3808,7 +3808,8 @@ class GeneralController extends Controller
 
     }
 
-    public function employeeActivationRequest($id, Request $request) {
+    public function employeeActivationRequest($id, Request $request)
+    {
         $empID = $id;
 
         $datalog = array(
@@ -3817,9 +3818,9 @@ class GeneralController extends Controller
             'author' => session('emp_id'),
         );
 
-        $result = $this->flexperformance_model->updateemployeestatelog($datalog,$empID);
+        $result = $this->flexperformance_model->updateemployeestatelog($datalog, $empID);
 
-        if($result ==true){
+        if ($result == true) {
             // $this->flexperformance_model->audit_log("Activation of Employee with ID =".$empID."");
 
             $response_array['status'] = "OK";
@@ -3835,25 +3836,25 @@ class GeneralController extends Controller
         }
     }
 
-  public function cancelRequest($id, $empID, Request $request)
-  {
-    $updates = array(
-        'state' => 0,
-        'current_state' =>0,
-        'empID' => $empID
-    );
+    public function cancelRequest($id, $empID, Request $request)
+    {
+        $updates = array(
+            'state' => 0,
+            'current_state' => 0,
+            'empID' => $empID,
+        );
 
-    $result = $this->flexperformance_model->updateemployeestatelog($updates, $id);
+        $result = $this->flexperformance_model->updateemployeestatelog($updates, $id);
 
-    $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =".$empID."");
+        $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
 
-    SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =".$empID , $request);
+        SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =" . $empID, $request);
 
-    $response_array['status'] = "OK";
-    $response_array['title'] = "SUCCESS";
-    $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+        $response_array['status'] = "OK";
+        $response_array['title'] = "SUCCESS";
+        $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
 
-    header('Content-type: application/json');
+        header('Content-type: application/json');
 
         $result = $this->flexperformance_model->updateemployeestatelog($updates, $logID);
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
@@ -3863,21 +3864,22 @@ class GeneralController extends Controller
         header('Content-type: application/json');
         echo json_encode($response_array);
 
-    //      if($result ==true){
-    //            $response_array['status'] = "OK";
-    //            $response_array['title'] = "SUCCESS";
-    //            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
-    //            header('Content-type: application/json');
-    //            echo json_encode($response_array);
-    //        } else {
-    //            $response_array['status'] = "ERR";
-    //            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
-    //            header('Content-type: application/json');
-    //            echo json_encode($response_array);
-    //        }
+        //      if($result ==true){
+        //            $response_array['status'] = "OK";
+        //            $response_array['title'] = "SUCCESS";
+        //            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+        //            header('Content-type: application/json');
+        //            echo json_encode($response_array);
+        //        } else {
+        //            $response_array['status'] = "ERR";
+        //            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
+        //            header('Content-type: application/json');
+        //            echo json_encode($response_array);
+        //        }
     }
 
-    public function activateEmployee($logID, $empID, Request $request) {
+    public function activateEmployee($logID, $empID, Request $request)
+    {
 
         $todate = date('Y-m-d');
 
@@ -3894,15 +3896,15 @@ class GeneralController extends Controller
         );
 
         $datalog = array(
-          'state' =>1,
-          'current_state' =>1,
-          'empID' =>$empID,
-          'author' =>session('emp_id')
+            'state' => 1,
+            'current_state' => 1,
+            'empID' => $empID,
+            'author' => session('emp_id'),
         );
 
         $result = $this->flexperformance_model->activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate);
 
-        if($result ==true){
+        if ($result == true) {
             //   $this->flexperformance_model->audit_log("Activated an Employee of ID =".$empID."");
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
@@ -3996,7 +3998,6 @@ class GeneralController extends Controller
     {$values = explode('|', $pattern);
         $deductionID = $values[0];
         $deductionType = $values[1];
-       
 
         /*
         PARAMETERS:
@@ -4065,7 +4066,7 @@ class GeneralController extends Controller
 
             }
             if ($result == true) {
-               // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
+                // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4089,7 +4090,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
                 }
                 if ($result == true) {
-                   // $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
+                    // $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
             }
@@ -4115,7 +4116,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_deduction($groupID, $deductionID);
                 }
                 if ($result == true) {
-                   // $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
+                    // $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-warning text-center'>Group Removed Successifully</p>";
                 } else {echo "<p class='alert alert-danger text-center'Group NOT Removed, Try Again</p>";}
             }
@@ -4663,7 +4664,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_allowance($data);
             if ($result == true) {
-               // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
+                // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4674,7 +4675,7 @@ class GeneralController extends Controller
     {
         $method = $request->method();
 
-        if ($method =="POST") {
+        if ($method == "POST") {
 
             $members = $this->flexperformance_model->get_allowance_members($request->input('allowance'), $request->input('group'));
             foreach ($members as $row) {
@@ -4687,7 +4688,7 @@ class GeneralController extends Controller
 
             }
             if ($result == true) {
-               // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
+                // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4699,7 +4700,7 @@ class GeneralController extends Controller
 
         $method = $request->method();
 
-        if ($method =="POST") {
+        if ($method == "POST") {
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
@@ -4712,7 +4713,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
-                  //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
+                    //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
             }
@@ -4724,7 +4725,7 @@ class GeneralController extends Controller
 
         $method = $request->method();
 
-        if ($method =="POST") {
+        if ($method == "POST") {
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
@@ -4737,7 +4738,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
                 }
                 if ($result == true) {
-                   // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
+                    // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
             }
@@ -4893,7 +4894,7 @@ class GeneralController extends Controller
     public function updateOvertimeRateNight(Request $request)
     {
         $ID = $request->input('categoryID');
-        if ($request->method() =="POST"  && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'night_percent' => ($request->input('night_percent') / 100),
             );
@@ -4908,7 +4909,7 @@ class GeneralController extends Controller
     public function updateAllowanceAmount(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if ($request->method() =="POST" && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'amount' => $request->input('amount'),
             );
@@ -4923,7 +4924,7 @@ class GeneralController extends Controller
     public function updateAllowancePercent(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if ($request->method() =="POST" && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'percent' => $request->input('percent') / 100,
             );
@@ -4938,7 +4939,7 @@ class GeneralController extends Controller
     public function updateAllowanceApplyTo(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if ($request->method() =="POST"  && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'apply_to' => $request->input('apply_to'),
             );
@@ -4953,7 +4954,7 @@ class GeneralController extends Controller
     public function updateAllowancePolicy(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if ($request->method() =="POST"  && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'mode' => $request->input('policy'),
             );
@@ -5275,19 +5276,19 @@ class GeneralController extends Controller
                     $refID = $values[0];
                     $RoleID = $values[1];
 
-                    $emp_ids = $this->flexperformance_model->getEmpByGroupID($groupID,$RoleID);
+                    $emp_ids = $this->flexperformance_model->getEmpByGroupID($groupID, $RoleID);
 
-                    if(!empty($emp_ids)){
-                      //  dd($emp_ids);
-                    foreach ($emp_ids as $ids) {
-                        $empID = $ids->empID;
+                    if (!empty($emp_ids)) {
+                        //  dd($emp_ids);
+                        foreach ($emp_ids as $ids) {
+                            $empID = $ids->empID;
 
-                       $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
+                            $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
 
+                        }
                     }
-                }
 
-                    $result = $this->flexperformance_model->delete_role_group($RoleID,$groupID);
+                    $result = $this->flexperformance_model->delete_role_group($RoleID, $groupID);
                 }
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
@@ -5311,8 +5312,6 @@ class GeneralController extends Controller
                     $values = explode('|', $composite);
                     $refID = $values[0];
                     $empID = $values[1];
-
-
 
                     $result = $this->flexperformance_model->removeEmployeeFromGroup($refID, $empID, $groupID);
                 }
@@ -5418,8 +5417,6 @@ class GeneralController extends Controller
                     }
 
                     $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
-
-
 
                 }
 
@@ -5986,7 +5983,7 @@ class GeneralController extends Controller
     public function registerEmployee(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->banck_branch);
 
         if ($request->method() == "POST") {
 
@@ -6028,7 +6025,7 @@ class GeneralController extends Controller
                     'mobile' => $request->input('mobile'),
                     'account_no' => $request->input("accno"),
                     'bank' => $request->input("bank"),
-                    'bank_branch' => $request->input("bank_branch"),
+                    'bank_branch' => $request->input("banck_branch"),
                     'pension_fund' => $request->input("pension_fund"),
                     'pf_membership_no' => $request->input("pf_membership_no"),
                     'home' => $request->input("haddress"),
@@ -6153,7 +6150,7 @@ class GeneralController extends Controller
                         $this->flexperformance_model->employeeTransfer($data_transfer);
                         /*end add employee in transfer*/
 
-                        $this->flexperformance_model->audit_log("Registered New Employee ");
+                       // $this->flexperformance_model->audit_log("Registered New Employee ");
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
                         $response_array['title'] = "SUCCESS";
