@@ -98,7 +98,7 @@
 
                     @if ($pendingPayroll == 0)
                     <td class="options-width">
-                        <a href="<?php echo base_url()."index.php/cipay/common_deductions_info/?id=".$row->id; ?>"  title="More Info" class="icon-2 info-tooltip">
+                        <a href="<?php echo url('')."flex/common_deductions_info/?id=".$row->id; ?>"  title="More Info" class="icon-2 info-tooltip">
                             <button type="button" class="btn btn-info btn-xs"><i class="ph-note-pencil"></i></button>
                         </a>
                     </td>
@@ -142,7 +142,7 @@
                     <td> {{ 100 * ($row->rate) .'%' }} </td>
                     @if ( $pendingPayroll == 0 )
                     <td class="options-width">
-                        <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo base_url()."index.php/cipay/paye_info/?id=".$row->id; ?>">
+                        <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo url('')."/flex/paye_info/?id=".$row->id; ?>">
                             <button type="button" class="btn btn-info btn-xs" ><i class='ph-note-pencil'></i></button>
                         </a>
                     </td>

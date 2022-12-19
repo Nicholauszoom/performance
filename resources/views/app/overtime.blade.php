@@ -3,11 +3,9 @@
 @push('head-script')
   <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
   <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-
   <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
   <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
   <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
-
 @endpush
 
 @push('head-scriptTwo')
