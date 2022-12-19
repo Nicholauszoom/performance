@@ -337,7 +337,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/updatepaye','updatepaye')->name('flex.updatepaye');
         Route::any('/updateOvertimeAllowance','updateOvertimeAllowance')->name('flex.updateOvertimeAllowance');
         Route::any('/updateCommonDeductions','updateCommonDeductions')->name('flex.updateCommonDeductions');
-        Route::any('/common_deductions_info','common_deductions_info')->name('flex.common_deductions_info');
+        Route::any('/common_deductions_info/{id}','common_deductions_info')->name('flex.common_deductions_info');
         Route::any('/updatePensionName','updatePensionName')->name('flex.updatePensionName');
         Route::any('/updatePercentEmployee','updatePercentEmployee')->name('flex.updatePercentEmployee');
         Route::any('/updatePercentEmployer','updatePercentEmployer')->name('flex.updatePercentEmployer');
@@ -392,7 +392,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');
         Route::any('/removeEmployeeByRoleFromGroup','removeEmployeeByRoleFromGroup')->name('flex.removeEmployeeByRoleFromGroup');
 
-        
+
         Route::any('/removeEmployeeFromRole','removeEmployeeFromRole')->name('flex.removeEmployeeFromRole');
         Route::any('/addEmployeeToGroup','addEmployeeToGroup')->name('flex.addEmployeeToGroup');
         Route::any('/addEmployeeToGroupByRoles','addEmployeeToGroupByRoles')->name('flex.addEmployeeToGroupByRoles');
