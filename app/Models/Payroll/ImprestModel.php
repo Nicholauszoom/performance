@@ -246,13 +246,9 @@ class ImprestModel {
 
     function getRecentImprest($empID)
 	{
-	    $query = "id WHERE empID ='".$empID."' ORDER BY id DESC LIMIT 1 ";
-
-        $row =  DB::table('imprest')
-            ->select(DB::raw($query))
-            ->first();
-
-		return $row->id;
+		$query ="SELECT id FROM imprest WHERE empID ='".$empID."' ORDER BY id DESC LIMIT 1 ";  
+		$row = DB::select(DB::raw($query));
+		return $row[0]->id;
 	}
 
 

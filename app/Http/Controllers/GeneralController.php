@@ -3992,10 +3992,11 @@ class GeneralController extends Controller
 
     }
 
-    public function deduction_info($id, $pattern)
-    {
-        $deductionID = $id;
-        $deductionType = $pattern;
+    public function deduction_info($pattern)
+    {$values = explode('|', $pattern);
+        $deductionID = $values[0];
+        $deductionType = $values[1];
+       
 
         /*
         PARAMETERS:
@@ -4041,7 +4042,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_deduction($data);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "");
+                //$this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4064,7 +4065,7 @@ class GeneralController extends Controller
 
             }
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
+               // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4088,7 +4089,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
+                   // $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
             }
@@ -4114,7 +4115,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_deduction($groupID, $deductionID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
+                   // $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-warning text-center'>Group Removed Successifully</p>";
                 } else {echo "<p class='alert alert-danger text-center'Group NOT Removed, Try Again</p>";}
             }

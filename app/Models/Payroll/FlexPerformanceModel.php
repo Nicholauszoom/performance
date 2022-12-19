@@ -1342,11 +1342,11 @@ function getMeaslById($deductionID)
 
 	function deduction_membersCount($deduction)
 	{
-		$query = "COUNT(DISTINCT ed.empID) members FROM  WHERE ed.deduction = ".$deduction."  ";
-		$row =DB::table('emp_deductions as ed')
-		->select(DB::raw($query))
-		->first();
-    	return $row->members;
+		$query = "SELECT COUNT(DISTINCT ed.empID) members FROM  emp_deductions ed WHERE ed.deduction = ".$deduction."  ";
+		
+		$row = DB::select(DB::raw($query));
+		
+    	return $row[0]->members;
 	}
 
 
