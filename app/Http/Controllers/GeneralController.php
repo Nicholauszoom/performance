@@ -14,6 +14,7 @@ use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
+use App\Models\Employee;
 use App\Models\Payroll\FlexPerformanceModel;
 
 class GeneralController extends Controller
@@ -4261,12 +4262,15 @@ class GeneralController extends Controller
 
     }
 
-    public function common_deductions_info(Request $request)
+    public function common_deductions_info($id)
     {
+        // dd("what");
 
-        $id = $request->input('id');
+        // $id = $request->input('id');
         $data['deductions'] = $this->flexperformance_model->getcommon_deduction($id);
         $data['title'] = "Deductions";
+        $data['parent'] = "Statutory Deduction";
+        $data['child'] = "Update";
         return view('app.updatededuction', $data);
 
     }

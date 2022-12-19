@@ -1596,10 +1596,8 @@ function OvertimeCategoryInfo($id)
 
 	function getpayebyid($id)
 	{
-		$this->load->database();
 		$data = DB::table('paye')->where('id', $id);
-
-
+        
 		return $data->get();
 	}
 
@@ -2871,11 +2869,11 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 	function roles_byid($id)
 	{
-		
+
 		$query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p INNER JOIN department d ON p.dept_id = d.id INNER JOIN role_groups rg ON p.id = rg.roleID,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = ".$id."  and p.id IN (SELECT roleID from role_groups where group_name=".$id.")";
-        
-		
-		
+
+
+
 		return DB::select(DB::raw($query));
 	}
 	function get_employee_by_position($position){
@@ -2919,17 +2917,17 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function getEmpByGroupID($group_id,$position){
 
 		$query = "SELECT eg.empID from employee_group eg INNER JOIN  employee e ON e.emp_id=eg.empID WHERE eg.group_name = ".$group_id." AND  e.position =".$position;
-		
+
 
 		//dd(count(DB::select(DB::raw($query))));
 		return DB::select(DB::raw($query));
 	}
 
 	function removeEmployeeByROleFromGroup($empID, $groupID)
-	{   
+	{
 	     DB::transaction(function() use($empID, $groupID)
        {
-		
+
 	    $query = "DELETE FROM employee_group  WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
         DB::insert(DB::raw($query));
 	    $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";

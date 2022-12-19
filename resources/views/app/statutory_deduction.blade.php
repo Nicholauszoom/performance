@@ -48,20 +48,9 @@
                     </td>
 
                     <td>
-
-                        {{-- <a href="<?php echo url(""); ?>flex/deduction_info/?pattern=<?php echo $row->id; ?>|1" title="Info and Details" class="icon-2 info-tooltip">
-                            <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
-                        </a> --}}
-
                         <a href="{{ route('flex.deduction_info', ['pattern' => $row->id , 'id' => 1 ]) }}" title="Info and Details" class="icon-2 info-tooltip">
                             <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                         </a>
-                        {{-- <a
-                            href="{{ url('flex/deduction_info', $row->id) }}"
-                            title="Info and Details"
-                        >
-                            <button type="button" class="btn btn-main btn-xs"><i class="ph-note-pencil"></i></button>
-                        </a> --}}
                     </td>
 
                 </tr>
@@ -98,7 +87,9 @@
 
                     @if ($pendingPayroll == 0)
                     <td class="options-width">
-                        <a href="<?php echo url('')."flex/common_deductions_info/?id=".$row->id; ?>"  title="More Info" class="icon-2 info-tooltip">
+                        <a
+
+                            href="{{ url('/flex/common_deductions_info', $row->id) }}"  title="More Info" class="icon-2 info-tooltip">
                             <button type="button" class="btn btn-info btn-xs"><i class="ph-note-pencil"></i></button>
                         </a>
                     </td>
