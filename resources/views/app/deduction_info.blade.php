@@ -565,6 +565,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_individual_deduction",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -594,6 +595,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_group_deduction",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -622,6 +624,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_deduction_individual",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -650,6 +653,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_deduction_group",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,

@@ -5,6 +5,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updatePensionName",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -31,6 +32,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updatePercentEmployee",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -55,6 +57,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updatePercentEmployer",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -80,6 +83,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updatePensionPolicy",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -107,6 +111,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateDeductionName",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -135,6 +140,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateDeductionAmount",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -161,6 +167,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateDeductionPercent",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -187,6 +194,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateDeductionPolicy",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -213,6 +221,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateMealsName",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -239,6 +248,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateMealsMargin",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -265,6 +275,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateMealsLowerAmount",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -291,6 +302,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateMealsUpperAmount",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -320,6 +332,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateCompanyName",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,

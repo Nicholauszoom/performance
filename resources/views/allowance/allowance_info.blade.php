@@ -137,7 +137,7 @@
                                     <option value="YES" <?php if($taxable == 'YES') echo "selected";   ?>>YES</option>
                                     <option value="NO" <?php if($taxable == 'NO') echo "selected";   ?>>NO</option>
                                 </select>
-                                <button  class="btn btn-primary">Update Taxable</button>
+                                <button  class="btn btn-main">Update Taxable</button>
                             </div>
                         </div>
                     </form>
@@ -155,7 +155,7 @@
                                     <option value="YES" <?php if($pentionable == 'YES') echo "selected";   ?>>YES</option>
                                     <option value="NO" <?php if($pentionable == 'NO') echo "selected";   ?>>NO</option>
                                 </select>
-                                <button  class="btn btn-primary">Update pentionable</button>
+                                <button  class="btn btn-main">Update pentionable</button>
                             </div>
                         </div>
                     </form>

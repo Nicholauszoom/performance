@@ -115,7 +115,7 @@
           <td><?php echo $row->title; ?></td>
           <td>
 
-            <a class="panel-heading collapsed" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="#collapseDescription<?php echo $row->id; ?>" aria-expanded="false">
+            <a class="panel-heading collapsed" role="tab" id="headingTwo" data-toggle="collapse" data-parent="#accordion" href="{{ route('imprest.imprest_info',$row->id) }}" aria-expanded="false">
               <span class="label label-default">DESCRIPTION</span>
             </a>
             <div id="collapseDescription<?php echo $row->id; ?>" class="panel-collapse collapse" role="tabpanel" >
@@ -266,6 +266,7 @@
           e.preventDefault();
                $.ajax({
                    url:'{{ url("/flex/imprest/requestImprest") }}',
+                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                    type:"post",
                    data:new FormData(this),
                    processData:false,
