@@ -48,7 +48,8 @@
                     </td>
 
                     <td>
-                        <a href="{{ route('flex.deduction_info', ['pattern' => $row->id , 'id' => 1 ]) }}" title="Info and Details" class="icon-2 info-tooltip">
+                        <?php $par = $row->id. "|1" ?>
+                        <a href="{{ route('flex.deduction_info', $par) }}" title="Info and Details" class="icon-2 info-tooltip">
                             <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                         </a>
                     </td>
