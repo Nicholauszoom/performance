@@ -4204,7 +4204,7 @@ class GeneralController extends Controller
                 );
                 $result = $this->flexperformance_model->updatepaye($updates, $payeID);
                 if ($result) {
-                    $this->flexperformance_model->audit_log("Updated PAYE Brackets");
+                    // $this->flexperformance_model->audit_log("Updated PAYE Brackets");
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Updated Successifully</p>";
