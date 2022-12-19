@@ -1,8 +1,4 @@
-
-        
-
-
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Update P.A.Y.E'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
@@ -14,8 +10,15 @@
 
 @section('content')
 
-<?php
-?>
+<div class="mb-3">
+    <h4 class="text-main">P.A.Y.E</h4>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="text-main"></h5>
+    </div>
+</div>
 
         <!-- page content -->
         <div class="right_col" role="main">
@@ -47,7 +50,7 @@
                   <div class="x_content">
 
                   <div id="feedBackSubmission"></div>
-                  
+
                      <?php
             if (isset($paye)){
                       foreach ($paye as $row) {
@@ -74,7 +77,7 @@
                       </div>
 
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >Maximum Amount 
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" >Maximum Amount
                         <span class="required">*</span>
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
@@ -123,16 +126,16 @@
 
 <script type="text/javascript">
   $('#updatePAYE').submit(function(e){
-  
+
     e.preventDefault(); // Prevent Default Submission
-  
+
     $.ajax({
  url: "<?php echo  url(''); ?>/flex/updatepaye",
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'
     })
-    .done(function(data){      
+    .done(function(data){
         alert(data.title);
 
       if(data.status == 'OK'){
@@ -152,7 +155,7 @@
               }
     })
     .fail(function(){
- alert('UPDATION Failed, Review Your Network Connection...'); 
+ alert('UPDATION Failed, Review Your Network Connection...');
     });
 
 });
