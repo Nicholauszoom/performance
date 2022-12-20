@@ -3660,45 +3660,44 @@ class GeneralController extends Controller
 
     }
 
-    public function addkin(Request $request)
+    public function addkin(Request $request, $id)
     {
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
-        if (isset($_POST['add'])) {
-            $id = $request->input('id');
+        $data = array(
+            'fname' => $request->input("fname"),
+            'mname' => $request->input("mname"),
+            'lname' => $request->input("lname"),
+            'mobile' => $request->input("mobile"),
+            'relationship' => $request->input("relationship"),
+            'employee_fk' => $id,
+            'postal_address' => $request->input("postal_address"),
+            'physical_address' => $request->input("physical_address"),
+            'office_no' => $request->input("office_no"),
+            'added_on' => date('Y-m-d'),
+        );
 
-            $data = array(
-                'fname' => $request->input("fname"),
-                'mname' => $request->input("mname"),
-                'lname' => $request->input("lname"),
-                'mobile' => $request->input("mobile"),
-                'relationship' => $request->input("relationship"),
-                'employee_fk' => $id,
-                'postal_address' => $request->input("postal_address"),
-                'physical_address' => $request->input("physical_address"),
-                'office_no' => $request->input("office_no"),
-                'added_on' => date('Y-m-d'),
-            );
+        $this->flexperformance_model->addkin($data);
+        //echo "Record Added";
+        session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
 
-            $this->flexperformance_model->addkin($data);
-            //echo "Record Added";
-            session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
+        $reload = '/flex/userprofile/?id=' . $id;
 
-            $reload = '/flex/userprofile/?id=' . $id;
-            return redirect($reload);
+        return redirect($reload);
 
-        }
-        // die();
     }
 
-    public function deletekin(Request $request)
+    public function deletekin($empID, $id)
     {
-        $id = $request->input("id");
-        $this->db->where('id', $id);
-        $this->db->delete('next_of_kin');
+        // $id = $request->input("id");
+        DB::table('next_of_kin')->where('id', $id)->delete();
+        // $this->db->where('id', $id);
+        // $this->db->delete('next_of_kin');
+
         session('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
 
-        $reload = '/flex/employee_info/';
+        $reload = '/flex/userprofile/?id=' . $empID;
+
         return redirect($reload);
 
     }
@@ -3706,28 +3705,25 @@ class GeneralController extends Controller
     public function addproperty(Request $request)
     {
 
-        if (isset($_POST['add'])) {
-            if ($request->input("type") != 'Others') {
-                // $id = $request->input('id');
-                $type = $request->input("type");
+        if ($request->input("type") != 'Others') {
+            // $id = $request->input('id');
+            $type = $request->input("type");
 
-            } else { $type = $request->input("type2");}
+        } else { $type = $request->input("type2");}
 
-            $data = array(
-                'prop_type' => $type,
-                'prop_name' => $request->input("name"),
-                'serial_no' => $request->input("serial"),
-                'given_by' => session('emp_id'),
-                'given_to' => $request->input("employee"),
-            );
+        $data = array(
+            'prop_type' => $type,
+            'prop_name' => $request->input("name"),
+            'serial_no' => $request->input("serial"),
+            'given_by' => session('emp_id'),
+            'given_to' => $request->input("employee"),
+        );
 
-            $this->flexperformance_model->addproperty($data);
-            session('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
+        $this->flexperformance_model->addproperty($data);
+        session('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
 
-            $reload = '/flex/userprofile/?id=' . $request->input("employee");
-            return redirect($reload);
-
-        }
+        $reload = '/flex/userprofile/?id=' . $request->input("employee");
+        return redirect($reload);
     }
 
     public function employee_exit($id)
@@ -3778,34 +3774,31 @@ class GeneralController extends Controller
 
     public function employeeDeactivationRequest(Request $request)
     {
-        if (isset($_POST['exit'])) {
-            $exit_date = str_replace('/', '-', $request->input('exit_date'));
+        $exit_date = str_replace('/', '-', $request->input('exit_date'));
 
-            $data = array(
-                'empID' => $request->input("empID"),
-                'initiator' => $request->input("initiator"),
-                'confirmed_by' => session('emp_id'),
-                'date_confirmed' => date('Y-m-d'),
-                'reason' => $request->input("reason"),
-                'exit_date' => date('Y-m-d', strtotime($exit_date)),
-            );
+        $data = array(
+            'empID' => $request->input("empID"),
+            'initiator' => $request->input("initiator"),
+            'confirmed_by' => session('emp_id'),
+            'date_confirmed' => date('Y-m-d'),
+            'reason' => $request->input("reason"),
+            'exit_date' => date('Y-m-d', strtotime($exit_date)),
+        );
 
-            $datalog = array(
-                'state' => 3,
-                'empID' => $request->input("empID"),
-                'author' => session('emp_id'),
-            );
+        $datalog = array(
+            'state' => 3,
+            'empID' => $request->input("empID"),
+            'author' => session('emp_id'),
+        );
 //          echo json_encode($data);
 
-            $this->flexperformance_model->employee_exit($data);
-            $this->flexperformance_model->employeestatelog($datalog);
-            $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =" . $request->input("empID") . "");
-            session('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
+        $this->flexperformance_model->employee_exit($data);
+        $this->flexperformance_model->employeestatelog($datalog);
+        // $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =" . $request->input("empID") . "");
+        session('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
 
-            $reload = '/flex/userprofile/?id=' . $request->input("empID");
-            return redirect($reload);
-
-        }
+        $reload = '/flex/userprofile/?id=' . $request->input("empID");
+        return redirect($reload);
 
     }
 
@@ -5746,34 +5739,33 @@ class GeneralController extends Controller
     public function assignrole(Request $request)
     {
 
-        if (isset($_POST['assign'])) {
-            $arr = $request->input('option');
+        $arr = $request->input('option');
 
-            $userID = $request->input('empID');
-            if (sizeof($arr) <= 0) {
-                session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID);
+        $userID = $request->input('empID');
 
+        if (sizeof($arr) <= 0) {
+            session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
+            return redirect('/flex/userprofile/?id=' . $userID);
+
+        } else {
+            for ($i = 0; $i < sizeof($arr); $i++) {
+                $rolevalue = $arr[$i];
+                $data = array(
+                    'userID' => $userID,
+                    'role' => $rolevalue,
+                );
+
+                $result = $this->flexperformance_model->assignrole($data);
+            }
+            if ($result == true) {
+                // $this->flexperformance_model->audit_log("Assigned a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
+
+                session('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
+                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
             } else {
-                for ($i = 0; $i < sizeof($arr); $i++) {
-                    $rolevalue = $arr[$i];
-                    $data = array(
-                        'userID' => $userID,
-                        'role' => $rolevalue,
-                    );
+                session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
+                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
 
-                    $result = $this->flexperformance_model->assignrole($data);
-                }
-                if ($result == true) {
-                    $this->flexperformance_model->audit_log("Assigned a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
-
-                    session('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
-                } else {
-                    session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
-
-                }
             }
         }
 
@@ -5782,34 +5774,34 @@ class GeneralController extends Controller
     public function revokerole(Request $request)
     {
 
-        if (isset($_POST['revoke'])) {
+        $arr = $request->input('option');
+        $userID = $request->input('empID');
+        $roleid = $request->input('roleid');
 
-            $arr = $request->input('option');
-            $userID = $request->input('empID');
-            $roleid = $request->input('roleid');
+        if (sizeof($arr) <= 0) {
 
-            if (sizeof($arr) <= 0) {
+            session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
+            return redirect('/flex/userprofile/?id=' . $userID);
 
-                session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
+        } else {
+            for ($i = 0; $i < sizeof($arr); $i++) {
+                $rolename = $arr[$i];
+                // echo $rolename;
+
+                $result = $this->flexperformance_model->revokerole($userID, $rolename, 0);
+            }
+
+            if ($result == true) {
+                // $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
+                session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
                 return redirect('/flex/userprofile/?id=' . $userID);
 
             } else {
-                for ($i = 0; $i < sizeof($arr); $i++) {
-                    $rolename = $arr[$i];
-                    // echo $rolename;
 
-                    $result = $this->flexperformance_model->revokerole($userID, $rolename, 0);
-                }
-                if ($result == true) {
-                    $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
-                    session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID);
-                } else {
-                    session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID);
-                }
-
+                session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
+                return redirect('/flex/userprofile/?id=' . $userID);
             }
+
         }
     }
 ######################PRIVELEGES######################################
