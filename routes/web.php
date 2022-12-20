@@ -317,8 +317,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/home','home')->name('flex.home');
         Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
         Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
-        Route::any('/addkin','addkin')->name('flex.addkin');
-        Route::any('/deletekin','deletekin')->name('flex.deletekin');
+        Route::any('/addkin/{id}','addkin')->name('flex.addkin');
+        Route::any('/deletekin/{empID}/{id}','deletekin')->name('flex.deletekin');
         Route::any('/addproperty','addproperty')->name('flex.addproperty');
         Route::any('/employee_exit/{id}','employee_exit')->name('flex.employee_exit');
         Route::any('/deleteproperty/$id','deleteproperty')->name('flex.deleteproperty');
