@@ -49,23 +49,23 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_content">
+                <div class="card">
+                  <div class="card-body">
                               <!-- start project-detail sidebar -->
                     <div class="col-md-12 col-sm-3 col-xs-12">
                       <section class="panel">
                         <div class="panel-body">
                                   <!--Start Tabs Content-->
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                              <div class="x_panel">
-                                <div class="x_title">
+                              <div class="card">
+                                <div class="card-head">
                                     <h3 class="green"><i class="fa fa-info-circle"></i> Info and Details</h3>
                                       @if(Session::has('note'))      {{ session('note') }}  @endif  
                                       <div id ="resultFeed"></div>
           
                                   <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">    
+                                <div class="card-body">    
                                   <div class="" role="tabpanel" data-example-id="togglable-tabs">
                                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                              
@@ -73,7 +73,7 @@
                                       <li class="nav-item" role="presentation">
                                           <a href="#description" class="nav-item active show " data-bs-toggle="tab"
                                               aria-selected="false" role="tab" tabindex="-1">
-                                              <i class="ph-at me-2"></i>
+                                              <i class="ph-list me-2"></i>
                                               Details
                                           </a>
                                       </li>
@@ -83,7 +83,7 @@
                                       <li class="nav-item" role="presentation">
                                         <a href="#updateImprest" class="nav-item" id="profile-tab2" data-bs-toggle="tab"
                                             aria-selected="false" role="tab" tabindex="-1">
-                                            <i class="ph-at me-2"></i>
+                                            <i class="ph-list me-2"></i>
                                             &nbsp;&nbsp;<b>UPDATE IMPREST
                                         </a>
                                     </li>
@@ -91,7 +91,7 @@
                                       <li class="nav-item" role="presentation">
                                         <a href="#requirement_tab" class="nav-item" id="profile-tab2" data-bs-toggle="tab"
                                             aria-selected="false" role="tab" tabindex="-1">
-                                            <i class="ph-at me-2"></i>
+                                            <i class="ph-list me-2"></i>
                                             Requirement
                                         </a>
                                     </li>
@@ -102,7 +102,7 @@
                                         <li class="nav-item" role="presentation">
                                           <a href="#add_new_requirement" class="nav-item" id="profile-tab2" data-bs-toggle="tab"
                                               aria-selected="false" role="tab" tabindex="-1">
-                                              <i class="ph-at me-2"></i>
+                                              <i class="ph-list me-2"></i>
                                               ADD NEW REQUIREMENTS
                                           </a>
                                       </li>
@@ -255,7 +255,7 @@
                                                 <div class="form-group">
                                                   <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    <input type="submit"  value="ADD" name="assign" class="btn btn-primary"/>
+                                                    <input type="submit"  value="ADD" name="assign" class="btn btn-main"/>
                                                   </div>
                                                 </div> 
                                                 </form>
@@ -267,13 +267,13 @@
                                        <div role="tabpanel" class="tab-pane fade" id="requirement_tab" aria-labelledby="profile-tab">
                                       <!-- START ASSIGNED TO OTHERs -->
                                     <div class="col-md-12 col-sm-12 col-xs-12">
-                                      <div class="x_panel">
-                                        <div class="x_title">
+                                      <div class="card">
+                                        <div class="card-head">
                                           <h2>Imprest Requirements &nbsp;&nbsp;&nbsp;<?php echo number_format($total_initial_cost, 2);?>/= 
                                           </h2>
                                           <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                       
                                         <?php
                       
@@ -343,7 +343,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-                                                                <input type="submit"  value="CONFIRM" name="confirm" class="btn btn-primary"/>
+                                                                <input type="submit"  value="CONFIRM" name="confirm" class="btn btn-main"/>
                                                             </div>
                                                           </form>
                                                         </div>
@@ -398,7 +398,7 @@
                                                       <a title="Update" class="icon-2 info-tooltip"><button type="button" id="modal" data-toggle="modal" data-target="#updateRequirementModal<?php echo $row->id; ?>" class="btn btn-info btn-xs"> <i class="fa fa-edit"></i></button>
                                                       </a>
                                                   
-                                                    <!-- <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                                    <!-- <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                                        -->
                                                       <?php } } ?> 
                                                    <!-- APPROVAL -->
@@ -408,7 +408,7 @@
                                                     if( $status != 3 && session('mng_paym')){ 
           
                                                    if($row->status==0 || $row->status==1){ ?>
-                                                   <!-- <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                                   <!-- <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                                      -->
                                                      <?php } if($row->status==0 || $row->status==5) { ?>
                                                   <a href="javascript:void(0)" onclick="approveRequirement(<?php echo $row->id;?>)"   title="Approve" class="icon-2 info-tooltip"><button class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
@@ -440,7 +440,7 @@
                                                   // END  RETIREMENT CONFIRMATION
           
                                                   if($row->status==0 || $row->status==5){ ?>
-                                                    <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                                    <a href="javascript:void(0)" onclick="deleteRequirement(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                                      
                                                 <?php   // UPDATE REQUIREMENT
                                                     if($applicant == session('emp_id')){  ?>
@@ -478,7 +478,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                <input type="submit"  value="UPDATE" name="update" class="btn btn-primary"/>
+                                                                <input type="submit"  value="UPDATE" name="update" class="btn btn-main"/>
                                                             </div>
                                                           </form>
                                                         </div>

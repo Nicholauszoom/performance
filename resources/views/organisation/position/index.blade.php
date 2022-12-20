@@ -135,7 +135,7 @@
         <div class="d-flex justify-content-between">
             <h5>List of Position</h5>
 
-            {{-- <a href="{{ route('employee.create') }}" class="btn btn-primary">Register Employee</a> --}}
+            {{-- <a href="{{ route('employee.create') }}" class="btn btn-main">Register Employee</a> --}}
         </div>
     </div>
 

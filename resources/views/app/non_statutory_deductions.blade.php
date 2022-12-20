@@ -11,18 +11,53 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="right_col" role="main">
-        <div class="">
-          <div class="page-title">
-            <div class="title_left">
-              <h3><?php echo($title) ?></h3>
-            </div>
-          </div>
+        <div class="card">
+          <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/financial_group')}}" class="nav-link "
+                    aria-selected="false" role="tab" tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Packages
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link " aria-selected="false" role="tab"
+                    tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Overtime
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/allowance')}}" class="nav-link" 
+                    aria-selected="false" role="tab" tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Allowance
+                </a>
+            </li>
+        
+          
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
+                    aria-selected="false" role="tab" tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Statutory Deductions
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link active show"
+                  aria-selected="false" role="tab" tabindex="-1">
+                  <i class="ph-list me-2"></i>
+                  Non Statutory Deductions
+              </a>
+          </li>
+         
+        </ul>
 
           <div class="clearfix"></div>
-
+<div class="row">
           <div class="col-md-8 col-xs-12">
-              <div class="x_panel">
-                <div class="x_title">
+              <div class="card">
+                <div class="card-header">
                   <h2>Deductions</h2>
 
                    <ul class="nav navbar-right panel_toolbox">
@@ -34,7 +69,7 @@
 
                   <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="card-body">
                  <?php //echo $this->session->flashdata("notepack");  ?>
                   <table  class="table ">
                     <thead>
@@ -64,8 +99,8 @@
                           </td>
                           <td class="options-width">
                                       <?php  $par = $row->id."|2"; ?>
-                              <a  href="{{ route('flex.deduction_info',$par) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                              <a href="javascript:void(0)" onclick="deletededuction(<?php echo $row->id; ?>)" title="Delete Deduction" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                              <a  href="{{ route('flex.deduction_info',$par) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
+                              <a href="javascript:void(0)" onclick="deletededuction(<?php echo $row->id; ?>)" title="Delete Deduction" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
                           </td>
                           </tr>
                         <?php } //} ?>
@@ -76,13 +111,13 @@
               </div>
 
             <div class="col-md-4 col-xs-12">
-              <div class="x_panel">
-                <div class="x_title">
+              <div class="card">
+                <div class="card-head px-2 py-2">
                   <h2>Add Deduction</h2>
                   
                   <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="card-body">
                   <div id="resultSubmissionDeduction"></div>
                   <form id="addDeduction" method="post" autocomplete="off" class="form-horizontal form-label-left">
                   <div class="form-group">
@@ -124,7 +159,7 @@
                     <div class="form-group">
                       <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                         <button type="reset" class="btn btn-warning">Cancel</button>
-                        <button  class="btn btn-success">Submit</button>
+                        <button  class="btn btn-main">Submit</button>
                       </div>
                     </div>
 
@@ -132,7 +167,7 @@
                 </div>
               </div>
             </div>              
-
+          </div>
         </div>
       </div>
 

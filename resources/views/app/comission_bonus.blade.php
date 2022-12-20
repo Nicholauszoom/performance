@@ -24,7 +24,7 @@
             <h2>Employee Incentivees</h2>
             <div class="clearfix"></div>
           </div>
-          <div class="x_content">
+          <div class="card-body">
               
         <!-- PANEL-->
         <div class="card">   
@@ -32,7 +32,7 @@
              <p class='alert alert-warning text-center'>No Incentive Payments Can Be Scheduled until the Pending Payoll is Responded</p>
            <?php } ?>             
           <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
-          <div class="x_title offset-3">
+          <div class="card-head offset-3">
             <h2> Incentives Tag</h2>
             <form autocomplete="off" id="addBonusTag" class="form-horizontal form-label-left">
               @csrf
@@ -122,13 +122,13 @@
                   <div class="ln_solid"></div>            
                 </form>
                 <?php } ?>
-          <div class="x_title">
+          <div class="card-head">
             <h2>Incentives Entittlement List</h2>
             <div class="clearfix"></div>
             <div id ="feedBack"></div>
           </div>
           <div class="card">
-          <div id="employeeList" class="x_content">
+          <div id="employeeList" class="card-body">
             <table id="datatable" class="table table-striped table-bordered">
               <thead>
                 <tr>

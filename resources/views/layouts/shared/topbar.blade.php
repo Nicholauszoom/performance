@@ -259,7 +259,7 @@
 
                         <div class="ms-auto">
                             <button type="button" class="btn btn-light">Cancel</button>
-                            <button type="button" class="btn btn-primary ms-2">Apply</button>
+                            <button type="button" class="btn btn-main ms-2">Apply</button>
                         </div>
                     </div>
                 </div>

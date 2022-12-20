@@ -34,8 +34,8 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
 
               <!-- Chart -->
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Performance &nbsp;&nbsp;&nbsp;&nbsp;
                     <a><button type="button" id="modal" data-toggle="modal" data-target="#performanceModal" class="btn btn-success">Custom Performance</button></a>
                      &nbsp;&nbsp;&nbsp;&nbsp;</a></h2>
@@ -48,7 +48,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <!-- <div id="mainb" style="height:450px;"></div> -->
 
@@ -56,12 +56,12 @@
                 </div>
               <!-- Chart -->
                    <!-- PANEL-->
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Employee Key Performance Indicator(KPI)</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     
                     <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/kpi"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                       <div class="form-group">
@@ -76,7 +76,7 @@
                                   <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
                                  </select>
                                 <span class="input-group-btn">
-                                  <button  class="btn btn-primary">SHOW KPI</button>
+                                  <button  class="btn btn-main">SHOW KPI</button>
                                 </span>
                             </div>
                         </div>
@@ -87,9 +87,9 @@
                 </div>
                 <!--PANEL-->
                 
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Individual Performance <button type="button" id="modal" data-toggle="modal" data-target="#indProdModal" class="btn btn-primary">PRINT REPORT</button>
+                <div class="card">
+                  <div class="card-head">
+                    <h2>Individual Performance <button type="button" id="modal" data-toggle="modal" data-target="#indProdModal" class="btn btn-main">PRINT REPORT</button>
                     </h2>
                     
 
@@ -102,7 +102,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
@@ -198,8 +198,8 @@
               </div>
 
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Department Level Performance </h2>
 
                     <ul class="nav navbar-right panel_toolbox">
@@ -220,7 +220,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
@@ -302,8 +302,8 @@
 
 
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Organization Level Performance</h2>
 
                     <ul class="nav navbar-right panel_toolbox">
@@ -314,7 +314,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
@@ -428,7 +428,7 @@
                       
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                          <input type="submit"  value="SHOW" name="show" class="btn btn-primary"/>
+                          <input type="submit"  value="SHOW" name="show" class="btn btn-main"/>
                       </div>
                       </form>
                   </div>
@@ -519,7 +519,7 @@
                           </div>                    
                           <div class="modal-footer">
                               <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
-                              <input type="submit"  value="PRINT" name="print" class="btn btn-primary"/>
+                              <input type="submit"  value="PRINT" name="print" class="btn btn-main"/>
                           </div>
                         </form>
                   </div>

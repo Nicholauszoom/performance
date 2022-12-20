@@ -1,10 +1,11 @@
 <script>
 
-
+  
     $('#applyLeave').submit(function(e){
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/attendance/apply_leave",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -202,6 +203,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveReason",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -226,6 +228,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveDateRange",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -250,6 +253,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveAddress",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -274,6 +278,7 @@
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/attendance/updateLeaveMobile",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,

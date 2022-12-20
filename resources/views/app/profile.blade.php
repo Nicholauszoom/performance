@@ -26,8 +26,8 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><?php echo session('fname')." ".session('mname')." ".session('lname'); ?> <small>User Details</small></h2><br>
 
                    <?php echo "<br>".session("note");  ?>
@@ -48,7 +48,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
                       <div class="profile_img">
                         <div id="crop-avatar">
@@ -278,8 +278,8 @@
                               </tbody>
                             </table>                      
                           </div><br><br>
-                      <div class="x_panel">
-                        <div class="x_title">
+                      <div class="card">
+                        <div class="card-head">
                           <h2>Next of Kin(s)</h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -287,14 +287,14 @@
                             <li>
                             <?php if(session('regemp')!=0)
                     { ?> 
-                            <button type="button" id="modal" data-toggle="modal" data-target="#nextkinModal" class="btn btn-primary">Add</button><?php } ?>
+                            <button type="button" id="modal" data-toggle="modal" data-target="#nextkinModal" class="btn btn-main">Add</button><?php } ?>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
                             </li>
                           </ul>
                           <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <table class="table">
                               <thead>
                                 <tr>
@@ -319,7 +319,7 @@
                                     <td><?php echo $row->postal_address; ?></td>
 
                                     <td class="options-width">
-                                   <a href="<?php echo  url(''); ?>/flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="<?php echo  url(''); ?>/flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                                    </td>
                                     </tr>
                                   <?php }  ?>
@@ -337,8 +337,8 @@
 
                             <!-- start user projects -->
                       <div class="col-md-6">
-                      <div class="x_panel">
-                        <div class="x_title">
+                      <div class="card">
+                        <div class="card-head">
                           <h2>Roles Already Granted</h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -350,7 +350,7 @@
                           </ul>
                           <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <form action="<?php echo  url(''); ?>/flex/revokerole/" method="post">
                     <table class="table">
                       <thead>
@@ -394,8 +394,8 @@
                               <?php if(session('managerole')!=0)
                     { ?> 
                       <div class="col-md-6">
-                      <div class="x_panel">
-                        <div class="x_title">
+                      <div class="card">
+                        <div class="card-head">
                           <h2>Roles Not Granted</h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -407,7 +407,7 @@
                           </ul>
                           <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <form action="<?php echo  url(''); ?>/flex/assignrole/?id=<?php echo session('emp_id'); ?>" method="post">
                     <table class="table">
                       <thead>
@@ -451,21 +451,21 @@
                         </div>
                         <!-- END ROLES --> <div role="tabpanel" class="tab-pane fade" id="tab_property" aria-labelledby="property-tab-tab">
                     <br><br>
-                      <div class="x_panel">
-                        <div class="x_title">
+                      <div class="card">
+                        <div class="card-head">
                           <h2>Company Proprty(ies)</h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li>
                             <?php if(session('regemp')!=0)
                     { ?> 
-                            <button type="button" id="modal" data-toggle="modal" data-target="#propertyModal" class="btn btn-primary">Assign More Property</button><?php } ?>
+                            <button type="button" id="modal" data-toggle="modal" data-target="#propertyModal" class="btn btn-main">Assign More Property</button><?php } ?>
                             <li><a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
                             </li>
                           </ul>
                           <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <table class="table">
                               <thead>
                                 <tr>
@@ -492,8 +492,8 @@
                                     <td><?php echo $row->dated_on; ?></td>
 
                                     <td class="options-width">
-                                   <a href="<?php echo  url(''); ?>/flex/deleteproperty/?id=".$row->id."&employee=".$empID; ?>"    title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
-                                   <a href="javascript:void(0)" onclick="deleteDomain(<?php echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="<?php echo  url(''); ?>/flex/deleteproperty/?id=".$row->id."&employee=".$empID; ?>"    title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="javascript:void(0)" onclick="deleteDomain(<?php echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php echo $row->id;?>">Please wait...</a>
                                    </td>
                                     </tr>
@@ -558,7 +558,7 @@
                       <div class="modal-footer">
                       <input hidden="hidden"  name="employee" value="<?php echo session('emp_id'); ?>">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="submit"  value="Add" name="add" class="btn btn-primary"/>
+                          <input type="submit"  value="Add" name="add" class="btn btn-main"/>
                       </div>
                       </form>
                   </div>
@@ -655,7 +655,7 @@
                       
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="submit"  value="Add" name="add" class="btn btn-primary"/>
+                          <input type="submit"  value="Add" name="add" class="btn btn-main"/>
                       </div>
                       </form>
                   </div>

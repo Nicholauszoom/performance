@@ -111,7 +111,7 @@
         <div class="card-footer">
             <div class="row">
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary px-5">Save</button>
+                    <button type="submit" class="btn btn-main px-5">Save</button>
                 </div>
             </div>
         </div>

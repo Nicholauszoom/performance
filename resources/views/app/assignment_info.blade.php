@@ -46,12 +46,12 @@
                 <!-- Groups -->
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <div class="row">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div id="feedBackAssignment"></div>
                                 <h5> <b>Name:</b>
                                     &nbsp;<?php echo $name; ?></h5>
@@ -73,12 +73,12 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Team Members</b></h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <table class="table table-striped table-bordered" style="width:100%">
                                     <?php $sn = 1;
                                     foreach ($assignments as $row) { ?>
@@ -86,7 +86,7 @@
                                         <td><?php echo $sn?></td>
                                         <td><?php echo $row->e_name?></td>
                                         <td>
-                                            <a href='javascript:void(0)' onclick='deleteEmployeeAssignment(<?php echo json_encode($row); ?>)' title="Delete Assignment" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                            <a href='javascript:void(0)' onclick='deleteEmployeeAssignment(<?php echo json_encode($row); ?>)' title="Delete Assignment" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                         </td>
                                     </tr>
                                     <?php $sn++; } ?>
@@ -101,12 +101,12 @@
                 <!--UPDATE-->
                 <?php if (session('mng_proj')) { ?>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Update</b></h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div id="feedbackResult"></div>
                                 <form id="assignActivity" enctype="multipart/form-data" method="post"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -194,7 +194,7 @@
 
                                     <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                            <button id="submitButton" class="btn btn-primary">Assign
+                                            <button id="submitButton" class="btn btn-main">Assign
                                             </button>
                                         </div>
                                     </div>
@@ -208,12 +208,12 @@
 
             <?php if (session('vw_proj') || session('mng_proj')) { ?>
                 <div class="row">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Cost</b></h2>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <table class="table table-striped table-bordered" style="width:100%">
                                  <thead>
                                     <tr>

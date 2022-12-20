@@ -91,7 +91,7 @@
                         <input hidden name ="fundID" value="<?php echo $fundID; ?>">
                         <textarea required="" name ="name"><?php echo $name; ?></textarea>
                         <span class="input-group-btn">
-                          <button  class="btn btn-primary">Update Name</button>
+                          <button  class="btn btn-main">Update Name</button>
                         </span>
                       </div>
                     </div>
@@ -105,7 +105,7 @@
                           <input hidden name ="fundID" value="<?php echo $fundID; ?>">
                         <input required="" type="textr" name="abbrv"  value="<?php echo $abbrv; ?>" class="form-control">
                         <span class="input-group-btn">
-                          <button  class="btn btn-primary">Update Abbreviation</button>
+                          <button  class="btn btn-main">Update Abbreviation</button>
                         </span>
                       </div>
                     </div>
@@ -119,7 +119,7 @@
                           <input hidden name ="fundID" value="<?php echo $fundID; ?>">
                         <input required="" type="number" name="employee_amount" step ="0.1" min="0" max="99" value="<?php echo 100*$employee_percent; ?>" class="form-control">
                         <span class="input-group-btn">
-                          <button  class="btn btn-primary">Update Amount Employee</button>
+                          <button  class="btn btn-main">Update Amount Employee</button>
                         </span>
                       </div>
                     </div>
@@ -133,7 +133,7 @@
                           <input hidden name ="fundID" value="<?php echo $fundID; ?>">
                         <input required="" type="number" name="employer_amount" step ="0.1" min="0" max="99" value="<?php echo 100*$employer_percent; ?>" class="form-control">
                         <span class="input-group-btn">
-                          <button  class="btn btn-primary">Update Amount Employer</button>
+                          <button  class="btn btn-main">Update Amount Employer</button>
                         </span>
                       </div>
                     </div>
@@ -219,7 +219,7 @@
                 <input type="text" hidden="hidden" name="deduction" value="<?php echo $deductionID; ?>">
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button  class="btn btn-primary">ADD</button>
+                    <button  class="btn btn-main">ADD</button>
                   </div>
                 </div>
               </form>
@@ -243,7 +243,7 @@
                 <input type="text" hidden="hidden" name="deduction" value="<?php echo $deductionID?>">
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button  class="btn btn-primary">ADD</button>
+                    <button  class="btn btn-main">ADD</button>
                   </div>
                 </div>
               </form>
@@ -270,7 +270,7 @@
                       <input hidden name ="deductionID" value="<?php echo $id; ?>">
                       <input required="" type="text" name ="name" value="<?php echo $name; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button  class="btn btn-primary">Update Name</button>
+                        <button  class="btn btn-main">Update Name</button>
                       </span>
                     </div>
                   </div>
@@ -285,7 +285,7 @@
                         <input hidden name ="deductionID" value="<?php echo $deductionID; ?>">
                       <input required="" type="number" name="amount" step ="1" min="1" max="10000000" value="<?php echo $amount; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button  class="btn btn-primary">Update Amount</button>
+                        <button  class="btn btn-main">Update Amount</button>
                       </span>
                     </div>
                   </div>
@@ -299,7 +299,7 @@
                         <input hidden name ="deductionID" value="<?php echo $deductionID; ?>">
                       <input required="" type="number" name="percent" min="0" max="99" step ="0.1" value="<?php echo 100*$percent; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button class="btn btn-primary">% Update Percent</button>
+                        <button class="btn btn-main">% Update Percent</button>
                       </span>
                     </div>
                   </div>
@@ -486,7 +486,7 @@
                       <input hidden name ="deductionID" value="<?php echo $deductionID; ?>">
                       <input required="" type="text" name ="name" value="<?php echo $name; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button  class="btn btn-primary">Update Name</button>
+                        <button  class="btn btn-main">Update Name</button>
                       </span>
                     </div>
                   </div>
@@ -499,7 +499,7 @@
                         <input hidden name ="deductionID" value="<?php echo $deductionID; ?>">
                       <input required="" type="number" name="margin" step ="1" min="0" max="10000000" value="<?php echo $margin; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button  class="btn btn-primary">Update Margin</button>
+                        <button  class="btn btn-main">Update Margin</button>
                       </span>
                     </div>
                   </div>
@@ -512,7 +512,7 @@
                         <input hidden name ="deductionID" value="<?php echo $deductionID; ?>">
                       <input required="" type="number" name="amount_lower" step ="1" min="0" max="10000000" value="<?php echo $min; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button  class="btn btn-primary">Update Amount(Lower)</button>
+                        <button  class="btn btn-main">Update Amount(Lower)</button>
                       </span>
                     </div>
                   </div>
@@ -525,7 +525,7 @@
                         <input hidden name ="deductionID" value="<?php echo $deductionID; ?>">
                       <input required="" type="number" name="amount_upper" step ="1" min="0" max="10000000" value="<?php echo $max; ?>" class="form-control">
                       <span class="input-group-btn">
-                        <button  class="btn btn-primary">Update Amount(Upper)</button>
+                        <button  class="btn btn-main">Update Amount(Upper)</button>
                       </span>
                     </div>
                   </div>

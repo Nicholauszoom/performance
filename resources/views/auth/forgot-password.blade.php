@@ -55,7 +55,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="btn btn-main w-100">
                                     <i class="ph-arrow-counter-clockwise me-2"></i>
                                     Reset password
                                 </button>

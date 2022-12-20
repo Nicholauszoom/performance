@@ -28,17 +28,17 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
+                <div class="card">
                   <div id ="resultFeedback"></div>
-                  <div class="x_title">
+                  <div class="card-head">
                       <h2>My Applications
                     <?php  //if($isBudgetPresent==0){ ?>
-                    <a><button type="button" id="modal" data-toggle="modal" data-target="#budgetModal" class="btn btn-primary">Add Budget for This Year</button></a> <?php //} else { ?>
+                    <a><button type="button" id="modal" data-toggle="modal" data-target="#budgetModal" class="btn btn-main">Add Budget for This Year</button></a> <?php //} else { ?>
                     <button type="button" disabled  class="btn btn-default">Budget Already Present</button><?php //} ?></h2>
                         <div class="clearfix"></div>
                       </div>
                     <div class="clearfix"></div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <table id="datatable-keytable" class="table table-striped table-bordered">
                       <thead>
@@ -80,7 +80,7 @@
 
                              <?php if($row->status==0){ ?> 
 
-                            <a href="javascript:void(0)" onclick="deleteBudget(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button> </a>
+                            <a href="javascript:void(0)" onclick="deleteBudget(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
 
                             <a href="javascript:void(0)" onclick="rejectBudget(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button> </a>
                     
@@ -90,7 +90,7 @@
                             <a href="javascript:void(0)" onclick="disapproveBudget(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button> </a>
                             <?php } if($row->status==2){ ?>
 
-                            <a href="javascript:void(0)" onclick="deleteBudget(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button> </a>
+                            <a href="javascript:void(0)" onclick="deleteBudget(<?php echo $row->id; ?>)" title="Reject" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
 
 
                             <a href="javascript:void(0)" onclick="approveBudget(<?php echo $row->id; ?>)" title="Accept" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs"><i class="fa fa-check"></i></button> </a>
@@ -108,12 +108,12 @@
                      
                           <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                           <h3 class="green">Training Applications</h3>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
     
     
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
@@ -134,8 +134,8 @@
                         <div role="tabpanel" class="tab-pane fade active in" id="recommended" aria-labelledby="home-tab">
                           
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Training Application and Enquires(HR Level) </h2>
                                 
             
@@ -146,7 +146,7 @@
             
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                <form action="<?php echo  url(''); ?>/flex/approve_training/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
@@ -209,8 +209,8 @@
                         <div role="tabpanel" class="tab-pane fade" id="application_line" aria-labelledby="profile-tab">
                             
                           <div class="col-md-12 col-sm-12 col-xs-12">  
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Applications at Line Manager Level  </h2>                       
             
                                  <ul class="nav navbar-right panel_toolbox">
@@ -218,7 +218,7 @@
                                 </ul>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                <form action="<?php echo  url(''); ?>/flex/response_training_linemanager/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
@@ -283,8 +283,8 @@
                         <div role="tabpanel" class="tab-pane fade" id="skillgap" aria-labelledby="profile-tab">
                             
                           <div class="col-md-12 col-sm-12 col-xs-12">  
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Skills Gap Analysis  </h2>
                                 
             
@@ -294,7 +294,7 @@
                                 </ul>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                <form action="<?php echo  url(''); ?>/flex/approve_training/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
@@ -357,8 +357,8 @@
                         <div role="tabpanel" class="tab-pane fade" id="confirmed" aria-labelledby="profile-tab">
                             
                           <div class="col-md-12 col-sm-12 col-xs-12">  
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Training Application and Enquires </h2>
                                 
             
@@ -368,7 +368,7 @@
                                 </ul>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                <!--<form action="<?php echo  url(''); ?>/flex/confirm_graduation/" method="post">-->
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
@@ -423,12 +423,12 @@
                         <div role="tabpanel" class="tab-pane fade" id="graduation" aria-labelledby="profile-tab">
                             
                           <div class="col-md-12 col-sm-12 col-xs-12">  
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Graduated Trainees  </h2>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                                @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                <form action="<?php echo  url(''); ?>/flex/confirm_graduation/" method="post">
                                @if(Session::has('note'))      {{ session('note_approved') }}  @endif
@@ -485,8 +485,8 @@
               <!-- End TABS SECTION-->
               
                 <div id="myForm" class="col-md-12 col-sm-12 col-xs-12">
-                    <div id="bottom" class="x_panel">
-                      <div class="x_title">
+                    <div id="bottom" class="card">
+                      <div class="card-head">
                         <h2><i class="fa fa-flag"></i> Request For Training</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -505,7 +505,7 @@
                         </ul>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
             
             
                         <form autocomplete="off" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/training_request"  data-parsley-validate class="form-horizontal form-label-left" >
@@ -536,7 +536,7 @@
                           <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              <input type="submit"  value="SEND REQUEST" name="apply" class="btn btn-primary"/>
+                              <input type="submit"  value="SEND REQUEST" name="apply" class="btn btn-main"/>
                             </div>
                           </div> 
                           </form>
@@ -599,7 +599,7 @@
                       
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="submit"  value="Add" name="request" class="btn btn-primary"/>
+                          <input type="submit"  value="Add" name="request" class="btn btn-main"/>
                       </div>
                       </form>
                   </div>

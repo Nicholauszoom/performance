@@ -229,11 +229,11 @@
                                 <div class="form-group row">
                                     <div class="col-lg-offset-2 col-lg-12">
                                         @if(!@empty($id))
-                                        <button class="btn btn-sm btn-primary float-right m-t-n-xs"
+                                        <button class="btn btn-sm btn-main float-right m-t-n-xs"
                                             data-toggle="modal" data-target="#myModal"
                                             type="submit">Update</button>
                                         @else
-                                        <button class="btn btn-sm btn-primary float-right m-t-n-xs"
+                                        <button class="btn btn-sm btn-main float-right m-t-n-xs"
                                             type="submit">Save</button>
                                         @endif
                                     </div>

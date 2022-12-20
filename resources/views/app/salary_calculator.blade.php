@@ -17,12 +17,12 @@
           <div class="">
             <div class="col-md-12 col-sm-6 col-xs-12">
                       <!-- PANEL-->
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Salary Calculator</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">  
+                  <div class="card-body">  
                       <form id="salaryCalculator" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
                           <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Basic Salary</label>
@@ -56,7 +56,7 @@
                           <div class="form-group">
                           <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary"/>COMPUTE</button>
+                            <button type="submit" class="btn btn-main"/>COMPUTE</button>
                           </div>
                         </div> 
                       </form>
@@ -66,7 +66,7 @@
                         </div> 
                         <div class="form-group">
                           <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <input onclick="cancel();"  value="OK" class="btn btn-primary"/>
+                            <input onclick="cancel();"  value="OK" class="btn btn-main"/>
                           </div>
                         </div> 
                       </form>

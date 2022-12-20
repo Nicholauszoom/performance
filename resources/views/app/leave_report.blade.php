@@ -148,7 +148,7 @@
 
       <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <input type="submit"  value="SHOW" name="view" class="btn btn-primary"/>
+          <input type="submit"  value="SHOW" name="view" class="btn btn-main"/>
           <input type="submit"  value="PRINT" name="print" class="btn btn-success"/>
       </div>
       </form>

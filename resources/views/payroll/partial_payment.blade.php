@@ -38,24 +38,24 @@ $partial_payments = $data['partial_payments'];
 
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
+        <div class="card">
             <div id="payrollFeedback"></div>
-            <div class="x_title"><br>
+            <div class="card-head"><br>
                 <h2>Partial Payment</h2>
                 <div class="clearfix"></div>
             </div>
-            <div class="x_content">
+            <div class="card-body">
 
                 <!-- PANEL-->
-                <div class="x_panel">
+                <div class="card">
 
-                    <div class="x_title">
+                    <div class="card-head">
                         <h2>Partial Payment List</h2>
                         <div class="clearfix"></div>
                         <div id="feedBack"></div>
                     </div>
 
-                    <div id="employeeList" class="x_content">
+                    <div id="employeeList" class="card-body">
                         <table id="datatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -92,7 +92,7 @@ $partial_payments = $data['partial_payments'];
                                             onclick="deletePayment(<?php echo $row->id; ?>)"
                                             title="Delete Payment" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-danger btn-xs"><i
-                                                    class="fa fa-trash"></i></button>
+                                                    class="ph-trash"></i></button>
                                         </a>
                                         <?php } ?>
                                     </td>
@@ -107,7 +107,7 @@ $partial_payments = $data['partial_payments'];
                         the Pending Payoll is Responded</p>
                     <?php } ?>
                     <?php if ($pendingPayroll == 0 /*&& session('mng_paym') */) { ?>
-                    <div class="x_title">
+                    <div class="card-head">
                         <h2> Partial Payment</h2>
                         <div class="clearfix"></div>
                         <div id="feedBackSubmission"></div>
@@ -158,7 +158,7 @@ $partial_payments = $data['partial_payments'];
                             <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                                 <?php if ($pendingPayroll == 0 /*&& session('mng_paym') */) { ?>
                                 <button type="reset" class="btn btn-default">Cancel</button>
-                                <button class="btn btn-primary">Submit</button>
+                                <button class="btn btn-main">Submit</button>
                                 <?php } else { ?>
                                 <?php } ?>
                             </div>

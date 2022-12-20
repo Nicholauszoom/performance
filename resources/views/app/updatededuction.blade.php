@@ -59,7 +59,7 @@
 
                     <div class="mb-3">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            {{-- <button type="reset" class="btn btn-primary">Cancel</button> --}}
+                            {{-- <button type="reset" class="btn btn-main">Cancel</button> --}}
                             <button type="submit"  class="btn btn-main">Update</button>
                         </div>
                     </div>

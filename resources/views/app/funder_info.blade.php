@@ -50,12 +50,12 @@
             <div class="row">
                 <!-- Groups -->
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <div id ="feedBackAssignment"></div>
                             <h5> Name:
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h5>
@@ -78,12 +78,12 @@
                 <!--UPDATE-->
                 <?php if(session('mng_proj')){  ?>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Update</b></h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div id ="feedBackSubmission"></div>
                                 <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
                                     <div class="form-group">
@@ -92,7 +92,7 @@
                                                 <input hidden name ="funderID" value="<?php echo $funderID; ?>">
                                                 <input required="" class="form-control col-md-7 col-xs-12" value="<?php echo $name; ?>" name ="name" placeholder="Project Name">
                                                 <span class="input-group-btn">
-                                                    <button  class="btn btn-primary">Update Name</button>
+                                                    <button  class="btn btn-main">Update Name</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -105,7 +105,7 @@
                                                 <input hidden name ="funderID" value="<?php echo $funderID; ?>">
                                                 <input required="" type="email" name ="email" value="<?php echo $email; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button  class="btn btn-primary">Update Email</button>
+                                                    <button  class="btn btn-main">Update Email</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -118,7 +118,7 @@
                                                 <input hidden name ="funderID" value="<?php echo $funderID; ?>">
                                                 <input required="" type="text" name ="phone" value="<?php echo $phone; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                        <button  class="btn btn-primary">Update Phone</button>
+                                                        <button  class="btn btn-main">Update Phone</button>
                                                     </span>
                                             </div>
                                         </div>
@@ -131,7 +131,7 @@
                                                 <input hidden name ="funderID" value="<?php echo $funderID; ?>">
                                                 <textarea required="" class="form-control col-md-7 col-xs-12" name ="description" placeholder="Project Description" rows="3"><?php echo $description; ?></textarea>
                                                 <span class="input-group-btn">
-                            <button  class="btn btn-primary">Update Description</button>
+                            <button  class="btn btn-main">Update Description</button>
                           </span>
                                             </div>
                                         </div>

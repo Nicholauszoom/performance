@@ -30,15 +30,15 @@
               <?php 
                     //if( session('line') != 0){ ?> 
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><?php echo $tag; ?> </h2>
 
                     
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                   <?php
 
@@ -137,8 +137,8 @@
                             </td>
                             <td class="options-width">
                                 <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $row->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>" ><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
+                                <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $row->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($row->strategy_ref."|".$row->outcome_ref."|".$row->id); ?>" ><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
                             </td>
                         </tr> 
                     <?php  }  ?>

@@ -16,9 +16,9 @@
 
 <?php $totalAccrued = number_format($leaveBalance,2); ?>
 
-<div class="card">
+<div class="card col-lg-6 offset-3">
     <div class="card-header">
-        <h5 class="text-main"><i class="fa fa-tasks"></i> Apply Leave</h5>
+        <h5 class="text-main"><i class="ph-tasks"></i> Apply Leave</h5>
     </div>
 
     <div class="card-body">
@@ -26,7 +26,7 @@
             <!-- START -->
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Start</label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
                         <input type="text" name="start" class="form-control col-xs-12 has-feedback-left" placeholder="Start Date" id="leave_startDate" required="" aria-describedby="inputSuccess2Status">
                         <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
@@ -39,7 +39,7 @@
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Finish
           </label>
-          <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div class="has-feedback">
             <input type="text" required="" placeholder="End Date" name="end" class="form-control col-xs-12 has-feedback-left" id="leave_endDate"  aria-describedby="inputSuccess2Status">
             <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
@@ -49,7 +49,7 @@
         </div>
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave</label>
-          <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
           <select required  name="nature"  class="select_leave_type form-control">
               <option></option>
               <?php  $sex = session('gender');
@@ -62,14 +62,14 @@
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address
           </label>
-          <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <input required="required" type="text" id="address" name="address" class="form-control col-md-7 col-xs-12">
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
         <div class="form-group">
           <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile</label>
-          <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <input required="required" class="form-control col-md-7 col-xs-12" type="text" name="mobile">
             <span class="text-danger"><?php// echo form_error("mname");?></span>
           </div>
@@ -77,15 +77,15 @@
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave(Optional)
           </label>
-          <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
             <!-- END -->
-            <div class="form-group">
-              <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                 <button  class="btn btn-primary" >APPLY</button>
+            <div class="form-group py-2">
+              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
+                 <button  class="btn btn-main" >APPLY</button>
               </div>
             </div>
             </form>
@@ -182,12 +182,12 @@
                   </div>
 
               </td>
-              <td class="options-width">
+              <td class="options-width d-flex">
               <?php if($row->status==0 || $row->status==3){ ?>
-              <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)">
-                  <button  class="btn btn-warning btn-xs">CANCEL</button></a>
+              <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)" title="cancel " class="me-2">
+                  <button  class="btn btn-danger btn-xs" ><i class="ph-x"></i></button></a>
               <?php } ?>
-              <a href="<?php echo  url('')."flex/attendance/leave_application_info/?id=".$row->id."&empID=".$row->empID; ?>"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+              <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
               </td>
               <td>
               <?php echo $row->remarks."<br>"; ?>
@@ -289,22 +289,22 @@
               if($row->status==0){ ?>
 
               <a href="javascript:void(0)" onclick="recommendLeave(<?php echo $row->id;?>)" title="Recommend">
-                  <button  class="btn btn-primary btn-xs"><i class="fa fa-check"></i></button></a>
+                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
 
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
-                  <button  class="btn btn-warning btn-xs"><i class="fa fa-times"></i></button></a>
+                  <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
               <?php }  if($row->status==1) { ?>
 
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
-                  <button  class="btn btn-warning btn-xs"><i class="fa fa-times"></i></button></a>
+                  <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
 
               <?php } if($row->status==3) {  ?>
               <a href="javascript:void(0)" onclick="recommendLeave(<?php echo $row->id;?>)" title="Recommend">
-                  <button  class="btn btn-primary btn-xs"><i class="fa fa-check"></i></button></a>
+                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
               <?php }} ?>
               <?php if($row->status==5){ ?>
                   <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)" title="Cancel">
-                  <button  class="btn btn-warning btn-xs"><i class="fa fa-times"></i></button></a>
+                  <button  class="btn btn-warning btn-xs"><i class="ph-times"></i></button></a>
               <?php } ?>
 
               <!-- HR -->
@@ -314,7 +314,7 @@
               if($row->status==1 ){ ?>
 
               <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
-                  <button  class="btn btn-success btn-xs"><i class="fa fa-check"></i></button></a>
+                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
 
               <?php }  if($row->status==2) { ?>
 <!--
@@ -323,14 +323,14 @@
 
               <?php } if($row->status==5) {  ?>
               <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
-                  <button  class="btn btn-success btn-xs"><i class="fa fa-check"></i></button></a>
+                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
               <?php } } ?>
               </td>
               <td>
               <?php echo $row->remarks."<br>"; ?>
-                <a href="<?php echo  url('')."flex/attendance/leave_remarks/?id=".$row->id; ?>">
-                <button type="submit" name="go" class="btn btn-info btn-xs">Add Remark</button></a>
-                <a href="<?php echo  url('')."flex/attendance/leave_application_info/?id=".$row->id."&empID=".$row->empID; ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                <a href="{{ route('attendance.leave_remarks',$row->id) }}">
+                <button type="submit" name="go" class="btn btn-main btn-xs" title="Add Remark"><i class="ph-check"></i></button></a>
+                <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
               </td>
               </tr>
 

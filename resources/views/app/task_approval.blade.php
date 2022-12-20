@@ -58,12 +58,12 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Fill The Task Approval Parameters Below </h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   <h2><b>Task Title: </b></h2>
                   <p ><?php echo $title; ?></p>
                        <?php if($end < date('Y-m-d')){ ?>
@@ -83,7 +83,7 @@
                             <div id ="resultfeedDes"></div> 
 
                               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                Total Cost: <button  class="btn btn-primary" disabled=""> <div id="totalCost"><b><?php echo number_format($totalResourceCost,2); ?> </b></div></button> 
+                                Total Cost: <button  class="btn btn-main" disabled=""> <div id="totalCost"><b><?php echo number_format($totalResourceCost,2); ?> </b></div></button> 
                               </div>
                             <input name="taskID" hidden value="<?php echo $id; ?>">
                             <table  class="table table-bordered">
@@ -107,7 +107,7 @@
                                       <input name="cost" min="1"  type="number" step="1" required=""  placeholder="Cost"   class="form-control">                                     
                                     </div>
                                     </td>                          
-                                    <td> <button <?php if($progress<100){ ?> disabled="" <?php } ?>   class="btn btn-primary">ADD</button>
+                                    <td> <button <?php if($progress<100){ ?> disabled="" <?php } ?>   class="btn btn-main">ADD</button>
                                      </td>
                                     </tr>
                               </tbody>
@@ -158,8 +158,8 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" >Behaviour
                         </label>
                         <div class="col-md-8 col-sm-6 col-xs-12">
-                        <div class="x_panel">
-                          <div class="x_content">
+                        <div class="card">
+                          <div class="card-body">
                             <table  class="table table-bordered">
                               <thead>
                                 <tr>

@@ -57,8 +57,8 @@
 
             <div class="row">
               <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                       <h2 class="green"><b>Outcome Name:</b> <?php echo $title; ?></h2>
                     <!--<h2><?php echo $title; ?></h2>-->
                     <ul class="nav navbar-right panel_toolbox">
@@ -79,7 +79,7 @@
                     <div class="clearfix"></div>
                   </div>
 
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <div class="col-md-12 col-sm-9 col-xs-12">
 
@@ -124,7 +124,7 @@
 
                       <section class="panel">
 
-                        <!--<div class="x_title">
+                        <!--<div class="card-head">
                           <h2 class="green">Project Description</h2>
                           <div class="clearfix"></div>
                         </div>-->
@@ -132,11 +132,11 @@
                           
                           <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                         <div id ="resultfeedDes"></div>
     
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
@@ -163,8 +163,8 @@
                             <!--UPDATE OUTCOME-->
                             <div role="tabpanel" class="tab-pane fade active" id="updateOutcome" aria-labelledby="profile-tab">
                                 <div class="col-md-12 col-sm-6 col-xs-12">
-                                <!--<div class="x_panel">-->
-                                <!--  <div class="x_content">-->
+                                <!--<div class="card">-->
+                                <!--  <div class="card-body">-->
                                 
                                       <!-- Title -->
                                     <form autocomplete="off" id="update_outcomeTitle" enctype="multipart/form-data"  method="post" data-parsley-validate class="form-horizontal form-label-left">
@@ -283,8 +283,8 @@
                             
                             <div role="tabpanel" class="tab-pane fade active" id="addoutput" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <!--<div class="x_panel">-->
-                                <!--  <div class="x_content">-->
+                                <!--<div class="card">-->
+                                <!--  <div class="card-body">-->
                                     <form autocomplete="off" id="formAddOutput" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
                 
                                       <!-- START -->
@@ -345,7 +345,7 @@
                                       <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                           <button  class="btn btn-primary"> ADD </button>
+                                           <button  class="btn btn-main"> ADD </button>
                                         </div>
                                       </div> 
                                       </form>
@@ -356,13 +356,13 @@
                              </div>  <!--END ADD OUTPUT-->
                             <div role="tabpanel" class="tab-pane fade" id="outputs" aria-labelledby="profile-tab">
                               <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                  <div class="x_title">
+                                <div class="card">
+                                  <div class="card-head">
                                     <h2>OUTPUTS </h2>
                 
                                     <div class="clearfix"></div>
                                   </div>
-                                  <div class="x_content">
+                                  <div class="card-body">
                 
                                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                   
@@ -461,8 +461,8 @@
                                           </td>
                                             <td class="options-width">
                                                 <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                                <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
+                                                <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
+                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
                                             </td>
                                         </tr> 
                                           <?php } //} ?>
@@ -490,7 +490,7 @@
                               
 
                               <div class="text-center mtop20">
-                                <a href="#" class="btn btn-sm btn-primary">Add files</a>
+                                <a href="#" class="btn btn-sm btn-main">Add files</a>
                                 <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                               </div>
                             </div>

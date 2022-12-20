@@ -26,8 +26,8 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                      <?php if ($mode==1){ ?>
                     <h2>Add Remarks(Comments) </h2>
                     <?php } if ($mode==2){ ?>
@@ -35,7 +35,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
                      
             <div class="col-lg-12">
@@ -58,9 +58,9 @@
                         </div>
                       </div>
                       <div class="text-center mtop20">
-                        <!--<a href="#" class="btn btn-sm btn-primary">Add files</a>-->
+                        <!--<a href="#" class="btn btn-sm btn-main">Add files</a>-->
                         <?php if($commit ==0){ ?>
-                        <button type ="submit" name ="apply" class="btn btn-sm btn-primary">COMMENT AND COMMIT</button>
+                        <button type ="submit" name ="apply" class="btn btn-sm btn-main">COMMENT AND COMMIT</button>
                         <?php } ?>
                       </div>
 
@@ -118,7 +118,7 @@
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button type="reset" class="btn btn-warning">Cancel</button>
-                          <input type="submit"  value="UPDATE" name="update_overtime" class="btn btn-primary"/>
+                          <input type="submit"  value="UPDATE" name="update_overtime" class="btn btn-main"/>
                         </div>
                       </div> 
                       </form>  <?php } ?>

@@ -37,13 +37,13 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>P.A.Y.E Ranges &nbsp;&nbsp;&nbsp;<a><button type="button" id="newPaye" data-toggle="modal"  class="btn btn-primary">Add New</button></a></h2>
+                <div class="card">
+                  <div class="card-head">
+                    <h2>P.A.Y.E Ranges &nbsp;&nbsp;&nbsp;<a><button type="button" id="newPaye" data-toggle="modal"  class="btn btn-main">Add New</button></a></h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                   
@@ -74,7 +74,7 @@
                             <td><?php echo 100*($row->rate)."%"; ?></td>
                             <?php if($pendingPayroll==0){ ?>
                             <td class="options-width">
-                           <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye/?id=".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='fa fa-trash'></i></button></a>&nbsp;&nbsp; -->
+                           <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye/?id=".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='ph-trash'></i></button></a>&nbsp;&nbsp; -->
 
                            <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo  url(''); ?>/flex/paye_info/?id=".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
 
@@ -90,13 +90,13 @@
 
 
               <div id="insertPaye" class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Add New P.A.Y.E Range </h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   <div id="feedBackSubmission"></div>
                     <form autocomplete="off" id="addPAYE" enctype="multipart/form-data"  method="post"    data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">

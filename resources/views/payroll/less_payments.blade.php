@@ -83,7 +83,7 @@ $payroll_state = $data['payroll_state'];
                         action="{{route('reports.employeeCostExport_temp') }}"
                         data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                         <input type="hidden" name="payrolldate" value="<?php echo $payroll_date; ?>">
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary">PRINT</button>
+                        <button type="submit" name="submit" value="submit" class="btn btn-main">PRINT</button>
                     </form>
                     <?php } ?>
                     <?php /*echo $this->session->flashdata("note"); */  ?>
@@ -105,7 +105,7 @@ $payroll_state = $data['payroll_state'];
                                     <input name="payroll_date" value="<?php echo $payrollMonth; ?>" type="hidden">
                                     <th>&nbsp;
                                         <button type="submit" name="submit" value="submit"
-                                            class="btn btn-primary">CONFIRM</button>
+                                            class="btn btn-main">CONFIRM</button>
                                     </th>
                                 </form>
 
@@ -154,7 +154,7 @@ $payroll_state = $data['payroll_state'];
                                         <input type="hidden" value="<?php echo $row->empID;?>" name="employee">
                                         <input type="hidden" value="<?php echo $payroll_date;?>" name="payrolldate">
                                         <input hidden name="profile" value="0">
-                                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                        <button type="submit" class="btn btn-sm btn-main"><i
                                                 class="fa fa-file-pdf-o"></i></button>
                                     </form>
                                 </td>

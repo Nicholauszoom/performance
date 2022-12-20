@@ -280,9 +280,7 @@ class GeneralController extends Controller
         $data['departments'] = Departments::all();
         $data['title'] = "Department";
 
-        return view('app.department', [
-            'data' => $data,
-        ]);
+        return view('app.department',$data);
     }
 
     public function organization_level(Request $request)
@@ -910,10 +908,10 @@ class GeneralController extends Controller
 
     }
 
-    public function deleteDepartment(Request $request)
+    public function deleteDepartment($id)
     {
 
-        $id = $this->uri->segment(3);
+       
         $data = array(
             'state' => 0,
         );
@@ -930,10 +928,10 @@ class GeneralController extends Controller
 
     }
 
-    public function activateDepartment(Request $request)
+    public function activateDepartment($id)
     {
 
-        $id = $this->uri->segment(3);
+        
         $data = array(
             'state' => 1,
         );
@@ -950,9 +948,9 @@ class GeneralController extends Controller
 
     }
 
-    public function position_info(Request $request)
+    public function position_info($id)
     {
-        $id = $this->input->get("id");
+        
         $data['all_position'] = $this->flexperformance_model->allposition();
         $data['organization_levels'] = $this->flexperformance_model->getAllOrganizationLevel();
         $data['skills'] = $this->flexperformance_model->getskills($id);
@@ -962,10 +960,8 @@ class GeneralController extends Controller
         return view('app.position_info', $data);
     }
 
-    public function department_info(Request $request)
+    public function department_info($id)
     {
-
-        $id = base64_decode($this->input->get("id"));
 
         $data['employee'] = $this->flexperformance_model->customemployee();
         $data['cost_center'] = $this->flexperformance_model->costCenter();
@@ -4491,7 +4487,8 @@ class GeneralController extends Controller
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['parent'] = "Settings";
             $data['child'] = "Overtime";
-            return view('allowance.allowance_overtime', $data);
+            $data['title'] = "Overtime";
+            return view('app.allowance_overtime', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -4589,7 +4586,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Created New Overtime ");
+               // $this->flexperformance_model->audit_log("Created New Overtime ");
                 echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Overtime Registration FAILED, Please Try Again</p>";
@@ -4767,9 +4764,9 @@ class GeneralController extends Controller
         return view('allowance.allowance_info', $data);
     }
 
-    public function overtime_category_info(Request $request)
+    public function overtime_category_info($id)
     {
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($id);
         $data['title'] = 'Overtime Category';
         $data['category'] = $this->flexperformance_model->OvertimeCategoryInfo($id);
         return view('app.overtime_category_info', $data);

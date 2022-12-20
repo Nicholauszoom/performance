@@ -75,7 +75,7 @@
         <h4 class="text-muted">Details</h4>
     </div>
 
-    <div id="employeeList" class="x_content">
+    <div id="employeeList" class="card-body">
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
@@ -177,7 +177,7 @@
 </div>
 
 <div class="card">
-    <div id="employeeList" class="x_content">
+    <div id="employeeList" class="card-body">
         <table class="table table-striped table-bordered">
             <thead>
             <th><b>Staff changes</b></th>
@@ -198,7 +198,7 @@
 </div>
 
 <div class="card">
-    <div id="employeeList" class="x_content">
+    <div id="employeeList" class="card-body">
         <table class="table table-striped table-bordered">
             <thead>
             <th><b>Staff Exit</b></th>
@@ -234,7 +234,7 @@
 </div>
 
 <div class="card">
-    <div id="employeeList" class="x_content">
+    <div id="employeeList" class="card-body">
         <table class="table table-striped table-bordered">
             <thead>
             <th><b>Staff Joining</b></th>

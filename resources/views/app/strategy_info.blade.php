@@ -44,9 +44,9 @@
 
             <div class="row">
               <div class="col-md-12">
-                <div class="x_panel">
+                <div class="card">
 
-                  <div class="x_content">
+                  <div class="card-body">
 
                    
 
@@ -58,12 +58,12 @@
                           
                           <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                           <h3 class="green"><i class="fa fa-info-circle"></i> <?php echo $strategyTitle; ?></h3>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                         <div id ="resultfeedDes"></div>
     
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
@@ -91,8 +91,8 @@
                             <!--UPDATE OUTCOME-->
                             <div role="tabpanel" class="tab-pane fade" id="updateStrategy" aria-labelledby="profile-tab">
                                 <div class="col-md-12 col-sm-6 col-xs-12">
-                                <!--<div class="x_panel">-->
-                                <!--  <div class="x_content">-->
+                                <!--<div class="card">-->
+                                <!--  <div class="card-body">-->
                                 
                                       <!-- Title -->
 
@@ -189,8 +189,8 @@
                             
                             <div role="tabpanel" id="addOutcomeTab" class="tab-pane fade active"  aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <!--<div class="x_panel">-->
-                                <!--  <div class="x_content">-->
+                                <!--<div class="card">-->
+                                <!--  <div class="card-body">-->
                                     <form autocomplete="off"  id="addOutcome" enctype="multipart/form-data"  method="post"   data-parsley-validate class="form-horizontal form-label-left">
                 
                                       <!-- START -->
@@ -252,8 +252,8 @@
 
                                       <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                           <button type="submit" class="btn btn-primary" >ADD</button>
-                                          <!-- <input type="submit"  value="Add" name="add" class="btn btn-primary"/> -->
+                                           <button type="submit" class="btn btn-main" >ADD</button>
+                                          <!-- <input type="submit"  value="Add" name="add" class="btn btn-main"/> -->
                                         </div>
                                       </div> 
                                       </form>
@@ -264,13 +264,13 @@
                              </div>  <!--END ADD OUTPUT-->
                             <div role="tabpanel" class="tab-pane fade" id="outputs" aria-labelledby="profile-tab">
                               <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                  <div class="x_title">
+                                <div class="card">
+                                  <div class="card-head">
                                     <h2>OUTCOME &nbsp;&nbsp;&nbsp;</h2>
                 
                                     <div class="clearfix"></div>
                                   </div>
-                                  <div class="x_content">
+                                  <div class="card-body">
                 
                                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                   
@@ -372,8 +372,8 @@
                             </td>
                             <td class="options-width">
                                 <a href="<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id; ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a> -->
+                                <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
+                                <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id; ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a> -->
                                 
                                 </td>
                                         </tr> 
@@ -402,7 +402,7 @@
                               
 
                               <div class="text-center mtop20">
-                                <a href="#" class="btn btn-sm btn-primary">Add files</a>
+                                <a href="#" class="btn btn-sm btn-main">Add files</a>
                                 <a href="#" class="btn btn-sm btn-warning">Report contact</a>
                               </div>
                             </div>

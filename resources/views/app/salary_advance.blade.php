@@ -30,9 +30,9 @@
               
               
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Salary Advance Applications &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="apply"  class="btn btn-primary">Apply Salary Advance</button>
+                <div class="card">
+                  <div class="card-head">
+                    <h2>Salary Advance Applications &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="apply"  class="btn btn-main">Apply Salary Advance</button>
                     </h2>
 
                     <ul class="nav navbar-right panel_toolbox">
@@ -44,7 +44,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div>
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
@@ -124,8 +124,8 @@
                 
               <?php if(session('recom_paym') || session('appr_paym')){ ?>
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Others` Salary Advance Applications(Need To Respond)
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                  
@@ -140,7 +140,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div>
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
@@ -205,11 +205,11 @@
                             
                             <?php if(session('mng_emp') && $row->status==0){ ?>
                             <a href="javascript:void(0)" onclick="hrrecommendLoan(<?php echo $row->id;?>)" title="Recommend">
-                            <button  class="btn btn-primary"><i class="fa fa-check-circle"></i></button></a>
+                            <button  class="btn btn-main"><i class="fa fa-check-circle"></i></button></a>
 
                             <?php }else if($row->status==6 && session('recom_paym')) {  ?>
                            <a href="javascript:void(0)" onclick="recommendLoan(<?php echo $row->id;?>)" title="Recommend">
-                           <button  class="btn btn-primary"><i class="fa fa-check-circle"></i></button></a>
+                           <button  class="btn btn-main"><i class="fa fa-check-circle"></i></button></a>
 
                             <?php  }  ?>
                             
@@ -240,8 +240,8 @@
               <!--APPLY SALARY ADVANCE-->
                <div id="applyForm" class="col-md-12 col-sm-12 col-xs-12">
                             
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                         <h2><i class="fa fa-tasks"></i> Apply Salary Advance</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -251,7 +251,7 @@
                         </ul>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                         <div id ="resultfeedSubmission"></div>
                         <form id="applyLoan" autocomplete=""  method="post"  data-parsley-validate class="form-horizontal form-label-left">
                           <!-- START -->
@@ -300,7 +300,7 @@
                           <!-- END -->
                           <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                               <button  class="btn btn-primary" >APPLY</button>
+                               <button  class="btn btn-main" >APPLY</button>
                             </div>
                           </div> 
                           </form>
@@ -317,8 +317,8 @@
                 <?php if(session('mng_emp')){ ?>
                <div id="insertDirectForm"  class="col-md-12 col-sm-12 col-xs-12">
                             
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                         <h2><i class="fa fa-tasks"></i> Insert Direct Deduction (HESLB, Custom Deductions, etc..)</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -328,7 +328,7 @@
                         </ul>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                         <div id ="resultfeedSubmissionDirect"></div>
                         <form id="directLoan" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
                           <!-- START -->
@@ -387,7 +387,7 @@
                           <!-- END -->
                           <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                               <button  class="btn btn-primary" >INSERT</button>
+                               <button  class="btn btn-main" >INSERT</button>
                             </div>
                           </div> 
                           </form>
