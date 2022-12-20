@@ -11,7 +11,7 @@
 @section('content')
 
 <?php 
-
+$performance_model = new \App\Models\Payroll\FlexPerformanceModel;
     if (isset($position)){
         foreach ($position as $row) {
             $positionId=$row->id; 
@@ -25,14 +25,13 @@
             }  
 
     if ($parent_code){
-        $parent_name = $CI_Model->flexperformance_model->getParentPositionName($parent_code);
+        $parent_name = $performance_model->getParentPositionName($parent_code);
 
     }else{
         $parent_name = '';
 
     }
     //$CI_Model = get_instance();
-    $CI_Model->load->model('flexperformance_model');
 
     
     
@@ -43,34 +42,29 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Position Info: &nbsp;&nbsp;&nbsp;<b><?php echo $positionName; ?></b> </h3>
-              </div>
-
-            </div>
+         
 
             <div class="clearfix"></div>
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-
+                <div class="card">
+                  <div class="card-head">
+                    <h3>Position Info: &nbsp;&nbsp;&nbsp;<b><?php echo $positionName; ?></b> </h3>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                   @if(Session::has('note'))      {{ session('note') }}  @endif  
                   
                     
                   <div class="col-lg-12"> 
                   <div id="updateFeedBack"></div>                     
                       <!--POSITION NAME-->
-                    <div class="col-lg-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-6 col-sm-6 col-xs-12 offset-3">
                       <form autocomplete="off" id="updatePositionName" align="center" enctype="multipart/form-data" method="post"   data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
-                        
+                        @csrf
                         <input hidden="" type="text" name="positionID" id="positionID" value="<?php echo $positionId; ?>">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Name 
                         </label>
@@ -78,7 +72,7 @@
                             <div class="input-group">
                                 <input required="" type="text" name="name" value="<?php echo $positionName; ?>" class="form-control col-md-7 col-xs-12">
                                 <span class="input-group-btn">
-                                  <button  type="submit"  name="updatename" class="btn btn-success"><small>UPDATE</small></button>
+                                  <button  type="submit"  name="updatename" class="btn btn-main  mx-2"><small>UPDATE</small></button>
                                 </span>
                               </div>
                         <!--</div>-->
@@ -94,7 +88,7 @@
                             <div class="input-group">
                                 <input required="" type="text" name="code" value="<?php echo $positionCode; ?>" class="form-control col-md-7 col-xs-12">
                                 <span class="input-group-btn">
-                                  <button  type="submit"  name="updatecode" class="btn btn-success"><small>UPDATE</small></button>
+                                  <button  type="submit"  name="updatecode" class="btn btn-main  mx-2"><small>UPDATE</small></button>
                                 </span>
                               </div>
                         <!--</div>-->
@@ -115,7 +109,7 @@
                           <option value="<?php echo $row->position_code."|".$row->level; ?>"><?php echo $row->name; ?></option> <?php } ?>
                                 </select>
                                 <span class="input-group-btn">
-                                  <button  type="submit"  name="updateparent" class="btn btn-success"><small>UPDATE</small></button>
+                                  <button  type="submit"  name="updateparent" class="btn btn-main  mx-2"><small>UPDATE</small></button>
                                 </span>
                               </div>
                         <!--</div>-->
@@ -135,7 +129,7 @@
                           <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option> <?php } ?>
                                 </select>
                                 <span class="input-group-btn">
-                                  <button  type="submit"  name="updatelevel" class="btn btn-success"><small>UPDATE</small></button>
+                                  <button  type="submit"  name="updatelevel" class="btn btn-main   mx-2"><small>UPDATE</small></button>
                                 </span>
                               </div>
                         <!--</div>-->
@@ -149,13 +143,13 @@
                   </div>
                   <!-- /.col-lg-6 (nested) -->
                 <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Requirement and Qualification For This position</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       
                       <li>
-                      <button type="button" id="modal" data-toggle="modal" data-target="#positionModal" class="btn btn-primary">Add New Skills Requirement </button>
+                      <button type="button" id="modal" data-toggle="modal" data-target="#positionModal" class="btn btn-main  mx-2">Add New Skills Requirement </button>
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -164,7 +158,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <table class="table table-bordered" >
                       <thead>
@@ -277,21 +271,21 @@
                    <!-- /.col-lg-6 (nested) -->
                 <!-- /.col-lg-6 (nested) -->
                 <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Accountabilities For This position</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li>
-                      <button type="button" id="modal" data-toggle="modal" data-target="#accountabilityModal" class="btn btn-primary">Add New Accountability In This Position </button>
+                      <button type="button" id="modal" data-toggle="modal" data-target="#accountabilityModal" class="btn btn-main  mx-2">Add New Accountability In This Position </button>
                       <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <table class="table table-bordered">
                       <thead>
@@ -400,8 +394,8 @@
                       
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <!--<button  class="btn btn-primary">REGISTER</button>-->
-                          <input type="submit"  value="Add" name="add" class="btn btn-primary"/>
+                          <!--<button  class="btn btn-main  mx-2">REGISTER</button>-->
+                          <input type="submit"  value="Add" name="add" class="btn btn-main  mx-2"/>
                       </div>
                       </form>
                   </div>
@@ -449,7 +443,7 @@
                       
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="submit"  value="Add" name="add" class="btn btn-primary"/>
+                          <input type="submit"  value="Add" name="add" class="btn btn-main  mx-2"/>
                       </div>
                       </form>
                   </div>
@@ -545,6 +539,7 @@
         }else{
           $.ajax({
                url:"<?php echo  url(''); ?>/flex/updatePositionCode",
+               headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                type:"post",
                data:new FormData(this),
                processData:false,
@@ -575,6 +570,7 @@
           }else{
             $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updatePositionOrganizationLevel",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,

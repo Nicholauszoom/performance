@@ -28,14 +28,14 @@
         <div class="clearfix"></div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2>Employee Profile
                         </h2>
 
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                         <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/employeeReport" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
 
                             <div class="form-group">
@@ -53,7 +53,7 @@
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                     <button type="reset" class="btn btn-success">Cancel</button>
-                                    <input type="submit"  value="PRINT" name="print" class="btn btn-primary"/>
+                                    <input type="submit"  value="PRINT" name="print" class="btn btn-main"/>
                                 </div>
                             </div>
                         </form>

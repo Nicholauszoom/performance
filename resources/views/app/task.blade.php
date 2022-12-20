@@ -31,16 +31,16 @@
             <div class="row">
             <!-- MY TASK -->
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2> My <?php echo $tag; if($active>0 && session('line') != 0){ ?> 
-                    <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
+                    <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-main">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
 
                     
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                   <?php
 
@@ -77,7 +77,7 @@
                               </p>
                               <?php }  ?>
 
-                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
+                            <button type="button" class="btn btn-main btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
 
                             <div class="modal fade bs-example-modal-lg<?php echo $row->SNo; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                               <div class="modal-dialog modal-lg">
@@ -184,11 +184,11 @@
                           <a href="javascript:void(0)" onclick="pauseTask(<?php echo $row->id;?>)"   title="PAUSE" class="icon-2 info-tooltip">
                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">PAUSE</button></a>
                             <?php if($row->progress==0){ ?>
-                          <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                          <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
 
                           <!-- Line Manager WHO  ASSIGNED The Task -->
                           <?php }  } if($row->status==1 && $row->progress == 100){ ?>
-                            <a download= '' href ="<?php echo url('uploads/task/').$row->attachment; ?>"> <button type="submit" name="notdone" class="btn btn-primary btn-xs">DOWNLOAD</button></a> 
+                            <a download= '' href ="<?php echo url('uploads/task/').$row->attachment; ?>"> <button type="submit" name="notdone" class="btn btn-main btn-xs">DOWNLOAD</button></a> 
                             <a href="<?php echo  url('')."flex/performance/comment/?mode=2&id=".$row->id; ?>">
                             <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button></a>
 
@@ -203,10 +203,10 @@
                             <?php if($active>0){ ?> 
 
                             <td>
-                                <a href="<?php echo  url('')."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>                               
+                                <a href="<?php echo  url('')."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>                               
 
                                 <?php if( $row->status!=2 && $row->progress==100 ){ ?>
-                                <a href="<?php echo  url('')."flex/performance/comment/?mode=3&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">SUBMIT</button></a>
+                                <a href="<?php echo  url('')."flex/performance/comment/?mode=3&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">SUBMIT</button></a>
                                 <?php }  ?>
                             </td>
                             <?php } ?> 
@@ -222,17 +222,17 @@
               <!-- START ASSIGNED TO OTHERs -->
               <?php  if( session('line') != 0){ ?> 
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><?php echo $tag; ?> (Others)
                     <?php if($active>0){ ?> 
-                    <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
+                    <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($strategyID."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-main">CREATE AD-HOC TASK</button></a> <?php } ?></h2>
 
                     
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                   <?php
 
@@ -269,7 +269,7 @@
                               </p>
                               <?php }  ?>
 
-                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
+                            <button type="button" class="btn btn-main btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
 
                             <div class="modal fade bs-example-modal-lg<?php echo $row->SNo; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                               <div class="modal-dialog modal-lg">
@@ -394,14 +394,14 @@
                           <?php } ?>
                             <!--</form>-->
                             
-                            <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                            <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                             <?php } ?> 
 
                             </td>
                             <?php if($active>0){ ?> 
 
                             <td>
-                                <a href="<?php echo  url('')."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                                <a href="<?php echo  url('')."flex/performance/comment/?mode=1&id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>
                                 <?php if( $row->status!=2 && $row->progress==100 ){ ?>
                                 <a href="javascript:void(0)" onclick="submitTask(<?php echo $row->id;?>)" ><button  class="btn btn-info btn-xs">Submit</button></a>
                                 <?php }  ?>

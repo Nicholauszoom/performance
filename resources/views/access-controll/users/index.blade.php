@@ -17,7 +17,7 @@
         <div class="d-flex justify-content-between">
             <h5></h5>
 
-            <a href="{{ route('users.create') }}" class="btn btn-primary">ADD</a>
+            <a href="{{ route('users.create') }}" class="btn btn-main">ADD</a>
         </div>
     </div>
 

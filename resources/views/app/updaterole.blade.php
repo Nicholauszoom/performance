@@ -29,14 +29,14 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Role Info</h2>
 
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                   
@@ -51,12 +51,12 @@
                   
                      
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Change Role Name</b></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <form  align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/updaterole/?id=<?php echo $roleID; ?>"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
                             
 
@@ -93,14 +93,14 @@
 
               <!-- Groups -->
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-plus"></i>&nbsp;&nbsp;<b>Add Members</b></h2>
 
                    
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
 
                     <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/assignrole2"  data-parsley-validate class="form-horizontal form-label-left">
@@ -121,7 +121,7 @@
                       <input type="text" hidden="hidden" name="roleID" value="<?php echo $roleID; ?>">
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <input type="submit"  value="ADD" name="assign" class="btn btn-primary"/>
+                          <input type="submit"  value="ADD" name="assign" class="btn btn-main"/>
                         </div>
                       </div> 
                     </form>
@@ -149,7 +149,7 @@
                       <input type="text" hidden="hidden" name="roleID" value="<?php echo $roleID; ?>">
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <input type="submit"  value="ADD" name="addgroup" class="btn btn-primary"/>
+                          <input type="submit"  value="ADD" name="addgroup" class="btn btn-main"/>
                         </div>
                       </div> 
                     </form>
@@ -159,13 +159,13 @@
               </div>
               <!-- /.col-lg-6 (nested) -->
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-lock"></i> Permissions In This Role</h2>
                     
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <div class="col-xs-3">
                       <!-- required for floating -->
@@ -393,7 +393,7 @@
                 </div>
               </div>
 
-              <div class="x_content">
+              <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                    <div id="feedBackRemove"></div>
                     <form id="removeFromRole"  method="post">

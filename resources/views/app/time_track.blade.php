@@ -47,12 +47,12 @@
                 <!-- Groups -->
                 <div class="col-md-12 col-sm-6 col-xs-12">
                     <div class="row">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Assignment Details</b></h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div id="feedBackAssignment"></div>
                                 <p><b>Name:</b>
                                     &nbsp;<?php echo $name; ?>,  &nbsp&nbsp&nbsp <b>Project:</b> <?php echo $project; ?>, &nbsp&nbsp&nbsp
@@ -69,9 +69,9 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="x_panel">
+                        <div class="card">
 
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div class="" role="tabpanel" data-example-id="togglable-tabs">
                                     <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                                         <li role="presentation" class="active"><a href="#overtimeTab" id="home-tab" role="tab"
@@ -85,21 +85,21 @@
                                         <div role="tabpanel" class="tab-pane fade active in" id="overtimeTab"
                                              aria-labelledby="home-tab">
                                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <div class="x_panel">
-                                                    <div class="x_title">
+                                                <div class="card">
+                                                    <div class="card-head">
                                                         <div class="row">
                                                             <div class="col-sm-10">
                                                                 <h2>Tasks </h2>
                                                             </div>
                                                             <div class="col-sm-2">
                                                                 <a href="#bottom">
-                                                                    <button class="btn btn-primary btn-md">New Task</button>
+                                                                    <button class="btn btn-main btn-md">New Task</button>
                                                                     </a>
                                                             </div>
                                                         </div>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="x_content">
+                                                    <div class="card-body">
                                                         <table id="datatable" class="table table-striped table-bordered">
                                                             <thead>
                                                             <tr>
@@ -148,7 +148,7 @@
                                                                         <?php }?>
                                                                     <?php } ?>
                                                                     <a href="<?php echo url('flex/project/commentInfo?code=') . base64_encode($assignID); ?>">
-                                                                        <button type="button" class="btn btn-primary btn-xs" title="Comment"><i class="fa fa-comment"></i></button>
+                                                                        <button type="button" class="btn btn-main btn-xs" title="Comment"><i class="fa fa-comment"></i></button>
                                                                     </a>
                                                                 </td>
                                                             </tr>
@@ -160,12 +160,12 @@
                                             </div>
                                             <div id="bottom" class="col-md-12 col-sm-6 col-xs-12">
                                                 <!-- PANEL-->
-                                                <div class="x_panel">
-                                                    <div class="x_title">
+                                                <div class="card">
+                                                    <div class="card-head">
                                                         <h2>New Task</h2>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="x_content">
+                                                    <div class="card-body">
                                                         <div id="feedbackResult"></div>
                                                         <form id="addTask" enctype="multipart/form-data" method="post"
                                                               data-parsley-validate class="form-horizontal form-label-left">
@@ -216,7 +216,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                                    <button id="submitButton" class="btn btn-primary">Save
+                                                                    <button id="submitButton" class="btn btn-main">Save
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -230,21 +230,21 @@
                                         <div role="tabpanel" class="tab-pane fade" id="exception"
                                              aria-labelledby="home-tab">
                                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <div class="x_panel">
-                                                    <div class="x_title">
+                                                <div class="card">
+                                                    <div class="card-head">
                                                         <div class="row">
                                                             <div class="col-sm-10">
                                                                 <h2>Exception </h2>
                                                             </div>
                                                             <div class="col-sm-2">
                                                                 <a href="#bottom1">
-                                                                    <button class="btn btn-primary btn-md">New Exception</button>
+                                                                    <button class="btn btn-main btn-md">New Exception</button>
                                                                     </a>
                                                             </div>
                                                         </div>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="x_content">
+                                                    <div class="card-body">
                                                         <table id="datatable1" class="table table-striped table-bordered">
                                                             <thead>
                                                             <tr>
@@ -275,12 +275,12 @@
                                             </div>
                                             <div id="bottom1" class="col-md-12 col-sm-6 col-xs-12">
                                                 <!-- PANEL-->
-                                                <div class="x_panel">
-                                                    <div class="x_title">
+                                                <div class="card">
+                                                    <div class="card-head">
                                                         <h2>New Exception</h2>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="x_content">
+                                                    <div class="card-body">
                                                         <div id="feedbackResult"></div>
                                                         <form id="addException" enctype="multipart/form-data" method="post"
                                                               data-parsley-validate class="form-horizontal form-label-left">
@@ -335,7 +335,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                                    <button id="submitButton" class="btn btn-primary">Save
+                                                                    <button id="submitButton" class="btn btn-main">Save
                                                                     </button>
                                                                 </div>
                                                             </div>

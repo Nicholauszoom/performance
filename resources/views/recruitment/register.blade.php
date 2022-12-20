@@ -128,7 +128,7 @@
 
                                 <button type="submit" class="btn btn-teal w-100">Register</button>
                                 {{-- <a  title="Don't have an account? Register here"
-                                class="icon-2 info-tooltip"><button type="button" onclick='get()' class="btn btn-primary w-100 border-0">Test</button></a> --}}
+                                class="icon-2 info-tooltip"><button type="button" onclick='get()' class="btn btn-main w-100 border-0">Test</button></a> --}}
                                 <a href="{{route('recruitment.login')}}"><p>Already Have an Account? Login</p></a>
                             </div>
                         </div>

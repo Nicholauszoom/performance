@@ -60,12 +60,12 @@ $remained = null;
             <div class="row">
               
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <h5> Salaries:
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format($salary,2); ?></b></h5>
                       <h5>Total Allowances:
@@ -93,13 +93,13 @@ $remained = null;
               
               <?php if($payrollState == 0){ ?>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <div class="x_panel">
+                  <div class="card">
                   <div id="resultConfirmation"></div>
-                    <div class="x_title">
+                    <div class="card-head">
                       <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>More Details</b></h2>
                       <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                     <?php if($payrollState == 1){ ?>
                         <h5> Normal Allowances:
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo number_format(($total_allowances-$total_overtimes-$total_bonuses),2); ?></b></h5>
@@ -131,7 +131,7 @@ $remained = null;
                     </div>
 
                 
-                    <div class="x_content">
+                    <div class="card-body">
                     <?php if($payrollState == 0 &&  session('mng_emp')){ ?>
                       <a href="javascript:void(0)" onclick="generate_checklist()"><button type="button"  class="btn btn-success"><b>PAY CHECKLIST<br>
                       <small>Full Payment</b></small></button></a>
@@ -149,7 +149,7 @@ $remained = null;
                       <?php } ?>
                         <br>
                         <br>
-                        <a target="_blank" href ="<?php echo  url(''); ?>/flex/payroll/less_payments_print/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-primary"><b>PRINT<br></button></a>
+                        <a target="_blank" href ="<?php echo  url(''); ?>/flex/payroll/less_payments_print/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-main"><b>PRINT<br></button></a>
                         <?php if($payrollState == 0) {?>
                           <a target="_self" href ="<?php echo  url(''); ?>/flex/payroll/grossReconciliation/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>GROSS RECON<br></button></a>
                           <a target="_self" href ="<?php echo  url(''); ?>/flex/payroll/netReconciliation/?pdate=<?php echo base64_encode($payrollMonth); ?>" ><button type="button" name="print_payroll" class="btn btn-info"><b>NET RECON<br></button></a>
@@ -165,8 +165,8 @@ $remained = null;
 
             <!-- <div class="row">                        
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Employees in this Payroll <b>(<?php echo date("F, Y", strtotime($payroll_date));?>)</b>  </h2>
                      <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -177,7 +177,7 @@ $remained = null;
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <div id ="resultfeedOvertime"></div>
                     <table id="datatable-keytable" class="table table-striped table-bordered">

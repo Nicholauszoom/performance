@@ -37,15 +37,15 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2> My Approved Loans  </h2>
 
                     <div class="clearfix"></div>
                   </div>
 
                   <div id="feedBack"></div>
-                  <div id="loanList" class="x_content">
+                  <div id="loanList" class="card-body">
 
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
@@ -83,8 +83,8 @@
               <?php if(session('appr_loan')!=''){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                  <div class="x_panel">
-                    <div class="x_title">
+                  <div class="card">
+                    <div class="card-head">
                       <h2> Approved Loans By Others  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <a><button type="button" id="modal" data-toggle="modal" data-target="#loanModal" class="btn btn-success">Print Report</button></a></h2>
 
@@ -92,7 +92,7 @@
                     </div>
 
                     <div id="feedBack"></div>
-                    <div id="loanList" class="x_content">
+                    <div id="loanList" class="card-body">
 
                       <table id="datatable" class="table table-striped table-bordered">
                         <thead>

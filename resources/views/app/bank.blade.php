@@ -44,7 +44,7 @@
                                   <i class="fa fa-info-circle"></i></button> </a>
                             <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
                                 class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
-                                        class="fa fa-trash-o"></i></button> </a>
+                                        class="ph-trash-o"></i></button> </a>
                         </td>
                         <td></td>
                         <td></td>
@@ -89,7 +89,7 @@
                                     class="fa fa-info-circle"></i></button> </a>
                             <a href="javascript:void(0)" onclick="deleteBank(<?php echo $row->id; ?>)" title="Delete"
                                 class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
-                                        class="fa fa-trash-o"></i></button> </a>
+                                        class="ph-trash-o"></i></button> </a>
                         </td>
                     </tr>
                 @endforeach

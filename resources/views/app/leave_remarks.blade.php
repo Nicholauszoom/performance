@@ -20,30 +20,25 @@
                           ?>
         <div class="right_col" role="main">
           <div class="">
-            <div class="page-title">
-              <div class="title_left">
-                <h3>Remarks</h3>
-              </div>
 
-            </div>
 
             <div class="clearfix"></div>
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head px-4">
                     <h2>Add Remarks </h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
                      
-            <div class="col-lg-6">
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/attendance/leave_remarks/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+            <div class="col-lg-6 offset-3">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="{{ route('attendance.leave_remarks',$id) }}"   data-parsley-validate class="form-horizontal form-label-left">
                       
-                      
+                      @csrf
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Remarks 
                         </label>
@@ -53,7 +48,7 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-2">
                         <input type="hidden" name="sid" value="<?php //echo $data[0]->id; ?>">
                           <button  type="submit"  name="edit_remarks" class="btn btn-success">Edit</button>
                         </div>

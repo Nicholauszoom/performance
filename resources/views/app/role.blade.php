@@ -130,7 +130,7 @@
       <div class="card-header">
         <div class="d-flex justify-content-between">
           <h3 class="text-muted lead">
-            Financial Groups <br> <small>Allowances, Bonuses and Deductions</small>
+            Packages <br> <small>Allowances, Bonuses and Deductions</small>
           </h3>
 
           <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-finance-group">
@@ -210,7 +210,7 @@
 
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addrole" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addrole" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -247,7 +247,7 @@
 
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addgroup" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -285,7 +285,7 @@
 
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addgroup" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>

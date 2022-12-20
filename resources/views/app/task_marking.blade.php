@@ -26,8 +26,8 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Quantity and Behaviour</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -37,7 +37,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                         <div id ="feedbackBasics"></div>
                   
@@ -84,8 +84,8 @@
                 <!-- TASK ELAPSED TIME -->
               </div>
               <div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Percentage of Time Elapsed<br><small> For Task To Be Marked As Delayed</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -95,7 +95,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <form autocomplete="off" id="updateTimeElapse" class="form-horizontal form-label-left"> 
                         <div class="col-sm-9">
                         <div id ="feedbackTime"></div>
@@ -104,7 +104,7 @@
                              <div class="input-group">
                                 <input required="" type="number" name ="percent" min="1" max="100" step="1" value="<?php echo $delay_percent; ?>" class="form-control">
                                 <span class="input-group-btn">
-                                  <button  class="btn btn-primary">UPDATE</button>
+                                  <button  class="btn btn-main">UPDATE</button>
                                 </span>
                               </div>
                           </div>
@@ -116,8 +116,8 @@
             </div>
             <div class="row">
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Behaviour Parameters &nbsp;&nbsp;
                     <!-- <button type="button" id="modal" data-toggle="modal" data-target="#parameterModal" class="btn btn-success">ADD NEW</button> -->
                     </h2>
@@ -129,7 +129,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">                  
+                  <div class="card-body">                  
                       <div id ="feedbackAddNew"></div>
                     <table id="clearList"  class="table table-bordered">
                       <thead>
@@ -156,7 +156,7 @@
                             </td>                          
                             <td> 
                             <div class="form-group">
-                              <button class="btn btn-primary">ADD NEW</button>
+                              <button class="btn btn-main">ADD NEW</button>
                             </div>
                             </td></form>
                             </tr>
@@ -179,8 +179,8 @@
                 </div>
               </div>
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Update Behaviour Parameters<small><b>Total Marks <?php echo $totalMarks; ?></b/></small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -190,7 +190,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">                  
+                  <div class="card-body">                  
                     <div id ="feedbackUpdates"></div>
                   <form id="updateParameter"  method="post" data-parsley-validate class="form-horizontal form-label-left">
                     <table id="updateList" class="table table-bordered">
@@ -238,8 +238,8 @@
             </div>
             <div class="row">
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Ratings</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -249,7 +249,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">  
+                  <div class="card-body">  
                   <!-- <input type="text" id="input">  <input id="input2" type="text">  <input id="input3" type="text">                -->
                     <div id ="feedbackRatings"></div>
                   <form id="updateRatings"  method="post" data-parsley-validate class="form-horizontal form-label-left">
@@ -343,7 +343,7 @@
                   </div>                 
                   <div class="modal-footer">
                       <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                      <input type="submit"  value="ADD" name="add" class="btn btn-primary"/>
+                      <input type="submit"  value="ADD" name="add" class="btn btn-main"/>
                   </div>
                 </form>
               </div>

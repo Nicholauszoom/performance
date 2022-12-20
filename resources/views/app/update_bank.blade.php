@@ -50,8 +50,8 @@
 
             <div class="row">              
               <div class="col-md-12 col-sm-12 col-xs-12">                          
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                         <h2><i class="fa fa-tasks"></i> Add Branch</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -61,7 +61,7 @@
                         </ul>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                       <div class="col-lg-12">
 
                           <div class="col-lg-6">
@@ -79,7 +79,7 @@
                                         <input hidden name ="bankID" value="<?php echo $bankID; ?>">
                                         <input required="" type="text" name ="name" value="<?php echo $bankName; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -96,7 +96,7 @@
                                         <input hidden name ="bankID" value="<?php echo $bankID; ?>">
                                         <input type="text" name ="abbrev" value="<?php echo $abbrev; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -114,7 +114,7 @@
                                         <input hidden name ="branchID" value="<?php echo $branchID; ?>">
                                         <input required="" type="text" name ="name" value="<?php echo $branchName; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -131,7 +131,7 @@
                                         <input hidden name ="branchID" value="<?php echo $branchID; ?>">
                                         <input required="" type="text" name ="branch_code" value="<?php echo $branchCode; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -148,7 +148,7 @@
                                         <input hidden name ="branchID" value="<?php echo $branchID; ?>">
                                         <input required="" type="text" name ="swiftcode" value="<?php echo $swiftcode; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -173,7 +173,7 @@
                                         <input hidden name ="bankID" value="<?php echo $bankID; ?>">
                                         <input required="" type="text" name ="bank_code" value="<?php echo $bankCode; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -191,7 +191,7 @@
                                         <input hidden name ="branchID" value="<?php echo $branchID; ?>">
                                         <input required="" type="text" name ="street" value="<?php echo $street; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -206,7 +206,7 @@
                                         <input hidden name ="branchID" value="<?php echo $branchID; ?>">
                                         <input required="" type="text" name ="region" value="<?php echo $region; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>
@@ -222,7 +222,7 @@
                                         <input hidden name ="branchID" value="<?php echo $branchID; ?>">
                                         <input required="" type="text" name ="country" value="<?php echo $country; ?>" class="form-control">
                                         <span class="input-group-btn">
-                                          <button  class="btn btn-primary">UPDATE</button>
+                                          <button  class="btn btn-main">UPDATE</button>
                                         </span>
                                       </div>
                                   </div>

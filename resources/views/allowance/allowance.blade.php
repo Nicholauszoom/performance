@@ -16,8 +16,8 @@
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/financial_group')}}" class="nav-link" aria-selected="false" role="tab"
                     tabindex="-1">
-                    <i class="ph-at me-2"></i>
-                    Financial Groups
+                    <i class="ph-list me-2"></i>
+                    Packages
                 </a>
             </li>
             <li class="nav-item" role="presentation">
@@ -30,7 +30,7 @@
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/allowance') }}" class="nav-link  active show" aria-selected="false" role="tab"
                     tabindex="-1">
-                    <i class="ph-at me-2"></i>
+                    <i class="ph-list me-2"></i>
                     Allowance
                 </a>
             </li>
@@ -39,22 +39,18 @@
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
                     tabindex="-1">
-                    <i class="ph-at me-2"></i>
+                    <i class="ph-list me-2"></i>
                     Statutory Deductions
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/non_statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
                     tabindex="-1">
-                    <i class="ph-at me-2"></i>
+                    <i class="ph-list me-2"></i>
                     Non Statutory Deductions
                 </a>
             </li>
         </ul>
-            <div class="mb-3">
-                <h4 class="text-muted">Allowance</h4>
-            </div>
-
             <div class="row">
                 <div class="col-md-7">
                     <div class="card">

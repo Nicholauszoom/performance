@@ -1048,12 +1048,12 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
 
     function staffPayrollInputJournalExport($payroll_date)	{
         $query = "SELECT eav.*,  pl.*, p.name as positionName, e.fname, e.mname,e.lname,CONCAT(trim(e.fname),' ', trim(e.mname),' ', trim(e.lname)) AS empName,
-	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
-	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
-	IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id and e.contract_type != 2 AND  ll.payment_date = pl.payroll_date GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = pl.payroll_date GROUP BY l.empID),0) AS loans,
-	IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID),0) AS deductions,
-	b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
-	FROM employee e, payroll_logs pl, position p,  bank_branch bb, bank b, vw_employee_activity eav WHERE pl.empID = eav.empID and pl.empID = e.emp_id AND p.id = e.position AND bb.id= e.bank_branch AND b.id = e.bank and e.contract_type != 2 AND isActive = 1 AND pl.payroll_date = '".$payroll_date."' and eav.payroll_date = '".$payroll_date."'";
+        IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
+        pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
+        IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id and e.contract_type != 2 AND  ll.payment_date = pl.payroll_date GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = pl.payroll_date GROUP BY l.empID),0) AS loans,
+        IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID),0) AS deductions,
+        b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
+        FROM employee e, payroll_logs pl, position p,  bank_branch bb, bank b, vw_employee_activity eav WHERE pl.empID = eav.empID and pl.empID = e.emp_id AND p.id = e.position AND bb.id= e.bank_branch AND b.id = e.bank and e.contract_type != 2 AND isActive = 1 AND pl.payroll_date = '".$payroll_date."' and eav.payroll_date = '".$payroll_date."'";
         return DB::select(DB::raw($query));
     }
 

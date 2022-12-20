@@ -32,8 +32,8 @@
 
             <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-user"></i> Employee Of The Month </h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -43,7 +43,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                   <?php if (session('manage_strat') !='') { ?>
 
@@ -72,7 +72,7 @@
                       </div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button type="reset" class="btn btn-primary">Cancel</button>
+                          <button type="reset" class="btn btn-main">Cancel</button>
                           <input type="submit"  value="UPDATE" name="update" class="btn btn-success"/>
                         </div>
                       </div> 
@@ -80,8 +80,8 @@
 
                       <!-- Whole View -->
                <div class="col-md-12 col-sm-4 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Current Employee Of the Month</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -91,7 +91,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <!-- Appreciation  -->
                       <div class="col-lg-12 col-sm-4 col-xs-12 profile_details">
@@ -114,7 +114,7 @@
                               <p><strong>Position: </strong><?php echo $position; ?> </p>
                               <p><strong>Department: </strong><?php echo $department; ?> </p>
                   <?php if (session('regemp') !='') { ?>
-                              <a href="<?php echo  url(''); ?>/flex/userprofile/?id=".$id; ?>"><button type="button" class="btn btn-primary btn-xs">
+                              <a href="<?php echo  url(''); ?>/flex/userprofile/?id=".$id; ?>"><button type="button" class="btn btn-main btn-xs">
                                 <i class="fa fa-user"> </i> View Profile
                               </button></a> <?php } ?>
                             </div>

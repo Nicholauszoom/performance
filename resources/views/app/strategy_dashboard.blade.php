@@ -49,22 +49,22 @@
               <div class="title_left">
                 <h3>Performance 
                   <?php if( session('manage_strat') != ''){ ?>
-                  <a href ="<?php echo  url(''); ?>/flex/home" style="float: right;"><button type="button" class="btn btn-primary btn-xs">
+                  <a href ="<?php echo  url(''); ?>/flex/home" style="float: right;"><button type="button" class="btn btn-main btn-xs">
                         Switch to Home Dashboard
                         </button></a> <?php } ?>
                         </h3>
               </div>
             </div>
             <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>TRACK TO COMPLETION<small>Strategy. Outcome, Output and Tasks</small>
                       <a href ="<?php echo  url(''); ?>/flex/performance/printDashboard" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
 
                     </h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <table class="table table-bordered">
                         
@@ -111,18 +111,18 @@
               </div>
               
             <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>TRACK TO SCHEDULE<small> Outcome, Output and Tasks</small>
 
                     </h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                        
                        <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="x_panel">
-                          <div class="x_title">
+                        <div class="card">
+                          <div class="card-head">
                             <h2>Outcome Analysis</h2>
                             <div class="clearfix"></div>
                           </div>        
@@ -136,8 +136,8 @@
                       </div>
                        
                        <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="x_panel">
-                          <div class="x_title">
+                        <div class="card">
+                          <div class="card-head">
                             <h2>Output Analysis</h2>
                             <div class="clearfix"></div>
                           </div>        
@@ -151,8 +151,8 @@
                       </div>
                        
                        <div class="col-md-4 col-sm-4 col-xs-12">
-                        <div class="x_panel">
-                          <div class="x_title">
+                        <div class="card">
+                          <div class="card-head">
                             <h2>Task Analysis</h2>
                             <div class="clearfix"></div>
                           </div>        
@@ -171,8 +171,8 @@
             <div class="row">               
               <!-- bar chart -->
               <div class="col-md-12 col-sm-8 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>PROGRESS TO COMPLETION (Outcomes)</h2>
                      <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -182,19 +182,19 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <div id="outcomechart" style="width: 100%; height: 400px;"></div>
 
                   </div>
                 </div>
               </div>
               <div class="col-md-12 col-sm-8 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>PROGRESS TO COMPLETION (Outputs)</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <div id="outputchart" style="width: 100%; height: 400px;"></div>
                   </div>
                    

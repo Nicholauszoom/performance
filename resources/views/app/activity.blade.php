@@ -37,9 +37,9 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Activities   <a><button type="button" id="modal" data-toggle="modal" data-target="#departmentModal" class="btn btn-primary">Add New</button></a></h2>
+                <div class="card">
+                  <div class="card-head">
+                    <h2>Activities   <a><button type="button" id="modal" data-toggle="modal" data-target="#departmentModal" class="btn btn-main">Add New</button></a></h2>
 
                     <!-- <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -59,7 +59,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
@@ -85,7 +85,7 @@
 <!-- $this->encrypt->encode($this->input->get("id")) -->
 
                             <td class="options-width">
-                           <a href="<?php echo  url(''); ?>/flex/desletedepartment/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                           <a href="<?php echo  url(''); ?>/flex/desletedepartment/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
 
                             <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php echo  url('')."flex/deepartment_info/?id=".base64_encode($row->id); ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                             </tr>
@@ -122,7 +122,7 @@
                       
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="submit"  value="Add" name="add" class="btn btn-primary"/>
+                          <input type="submit"  value="Add" name="add" class="btn btn-main"/>
                       </div>
                       </form>
                   </div>

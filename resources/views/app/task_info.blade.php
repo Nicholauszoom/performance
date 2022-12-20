@@ -93,23 +93,23 @@
   <div class="clearfix"></div>
   <div class="row">
     <div class="col-md-12">
-      <div class="x_panel">
-        <div class="x_content">
+      <div class="card">
+        <div class="card-body">
                     <!-- start project-detail sidebar -->
           <div class="col-md-12 col-sm-3 col-xs-12">
             <section class="panel">
               <div class="panel-body">
                         <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                           <h3 class="green"><i class="fa fa-info-circle"></i> Info and Details</h3>
                             @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                             <div id ="resultfeedDes"></div>
 
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">    
+                      <div class="card-body">    
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
                           <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#description" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">DESCRIPTIONS</a>
@@ -370,14 +370,14 @@
                              <div role="tabpanel" class="tab-pane fade" id="resource_tab" aria-labelledby="profile-tab">
                             <!-- START ASSIGNED TO OTHERs -->
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Task Resources &nbsp;&nbsp;&nbsp;<?php echo number_format($totalResources, 2);?>/=          
                                 <!-- <a href="javascript:void(0)" onclick="commitTask(<?php echo $taskID;?>)" ><button class="btn btn-info">COMMIT TASK</button> </a> -->
                                 </h2>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
             
                               <?php
             
@@ -407,7 +407,7 @@
                                         <td class="options-width">
                                             <a title="Update" class="icon-2 info-tooltip"><button type="button" id="modal" data-toggle="modal" data-target="#resourceModal<?php echo $row->id; ?>" class="btn btn-info "> <i class="fa fa-edit"></i></button> </a>
                                         
-                                        <a href="javascript:void(0)" onclick="deleteResource(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger"><i class="fa fa-trash-o"></i></button> </a>
+                                        <a href="javascript:void(0)" onclick="deleteResource(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger"><i class="ph-trash-o"></i></button> </a>
 
 
           
@@ -444,7 +444,7 @@
                                                   </div>
                                                   <div class="modal-footer">
                                                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                      <input type="submit"  value="UPDATE" name="update" class="btn btn-primary"/>
+                                                      <input type="submit"  value="UPDATE" name="update" class="btn btn-main"/>
                                                   </div>
                                               </form>
                                           </div>

@@ -757,7 +757,7 @@ function retire_list()
 	}
 	function updatedepartment($data, $id)
 	{
-		DB::table('deepartment')->where('id', $id)
+		DB::table('department')->where('id', $id)
 		->update($data);
 		return true;
 	}
@@ -1995,11 +1995,10 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function employee_hire_date($empID)
 	{
-		$query="hire_date  WHERE emp_id='".$empID."'";
-		$row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
-		return $row->hire_date;
+		$query="SELECT hire_date from employee  WHERE emp_id='".$empID."'";
+		$row = DB::select(DB::raw($query));
+		
+		return $row[0]->hire_date;
 	}
 
 
@@ -2469,7 +2468,7 @@ function allLevels()
 
             DB::insert(DB::raw($query));
 		    DB::table('company_property')->insert($property);
-            DB::table('company_property')->insert($datagroup);
+            DB::table('employee_group')->insert($datagroup);
         });
 
 		return true;
@@ -3363,11 +3362,9 @@ DB::insert(DB::raw($query));
 
 	function getParentPositionName($id)
 	{
-		$query = " name  WHERE position_code = '".$id."'";
-		$row = DB::table('position')
-		->select(DB::raw($query))
-		->first();
-    	return !empty($row)? $row->name:"";
+		$query = "SELECT name from position  WHERE position_code = '".$id."'";
+		$row = DB::select(DB::raw($query));
+    	return !empty($row)? $row[0]->name:"";
 	}
 
 	function get_allowance_name($id)

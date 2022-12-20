@@ -25,8 +25,8 @@
         <?php if ($action == 0 && session('mng_proj')) { ?>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2><i class="fa fa-tasks"></i> Create New Project</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -36,7 +36,7 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                         <div id="feedBack"></div>
                         <form autocomplete="off" id="addProject" enctype="multipart/form-data" method="post"
                             data-parsley-validate class="form-horizontal form-label-left">
@@ -143,7 +143,7 @@
                             <!-- END -->
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button class="btn btn-primary">CREATE</button>
+                                    <button class="btn btn-main">CREATE</button>
                                 </div>
                             </div>
                         </form>
@@ -174,12 +174,12 @@
         <div class="row">
             <!-- Groups -->
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                         <div id="feedBackAssignment"></div>
                         <h5> Name:
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h5>
@@ -206,12 +206,12 @@
             <!--UPDATE-->
             <?php if (session('mng_proj')) { ?>
             <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Activities</b></h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
 
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
                             <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -228,8 +228,8 @@
                                 <div role="tabpanel" class="tab-pane fade active in" id="overtimeTab"
                                     aria-labelledby="home-tab">
                                     <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="x_panel">
-                                            <div class="x_title">
+                                        <div class="card">
+                                            <div class="card-head">
                                                 <div class="row">
                                                     <div class="col-sm-9">
                                                         <h2>Activities </h2>
@@ -240,7 +240,7 @@
                                                 </div>
                                                 <div class="clearfix"></div>
                                             </div>
-                                            <div class="x_content">
+                                            <div class="card-body">
                                                 <div id="resultfeedOvertime"></div>
                                                 <table id="datatable-keytable"
                                                     class="table table-striped table-bordered">
@@ -295,8 +295,8 @@
                                     aria-labelledby="profile-tab">
                                     <div id="resultfeedImprest"></div>
                                     <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="x_panel">
-                                            <div class="x_title">
+                                        <div class="card">
+                                            <div class="card-head">
                                                 <div class="row">
                                                     <div class="col-sm-9">
                                                         <h2>Add Activity</h2>
@@ -307,7 +307,7 @@
                                                 </div>
                                                 <div class="clearfix"></div>
                                             </div>
-                                            <div class="x_content">
+                                            <div class="card-body">
                                                 <form autocomplete="off" id="saveActivity"
                                                     enctype="multipart/form-data" method="post"  data-parsley-validate
                                                     class="form-horizontal form-label-left">
@@ -411,7 +411,7 @@
                                                     <!-- END -->
                                                     <div class="form-group">
                                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                            <button class="btn btn-primary">Save</button>
+                                                            <button class="btn btn-main">Save</button>
                                                         </div>
                                                     </div>
                                                 </form>

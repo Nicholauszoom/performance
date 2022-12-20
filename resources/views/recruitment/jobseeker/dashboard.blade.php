@@ -15,7 +15,7 @@
             <!-- Members online -->
 
             <!-- /members online -->
-            <button type="submit" onclick="get()" id="demo" class="btn btn-primary w-100 border-0" style="background: #012972">Log In</button>
+            <button type="submit" onclick="get()" id="demo" class="btn btn-main w-100 border-0" style="background: #012972">Log In</button>
 
         </div>
 
