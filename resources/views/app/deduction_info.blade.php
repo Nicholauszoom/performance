@@ -79,93 +79,45 @@
         <!--UPDATE-->
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="card">
-              <div class="card-header">
-                <h2 class="text-main">Update</h2>
-              </div>
-              <div class="card-body">
-                  <div id ="feedBackSubmission"></div>
-                  <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
-                  <div class="form-group">
-                    <div class="col-sm-9">
-                      <div class="input-group">
-                        <input hidden name ="fundID" value="<?php echo $fundID; ?>">
-                        <textarea required="" name ="name"><?php echo $name; ?></textarea>
-                        <span class="input-group-btn">
-                          <button  class="btn btn-main">Update Name</button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  </form>
+                <div class="card-header">
+                    <h2 class="text-main">Update</h2>
+                </div>
 
-                  <form autocomplete="off"  id="percentAbbrv" class="form-horizontal form-label-left">
-                  <div class="form-group">
-                    <div class="col-sm-9">
-                      <div class="input-group">
+                <div class="card-body">
+                    <div id ="feedBackSubmission"></div>
+
+                    <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input hidden name ="fundID" value="<?php echo $fundID; ?>">
+                                <textarea required class="form-control" name ="name"><?php echo $name; ?></textarea>
+                                <button  class="btn btn-main">Update Name</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form autocomplete="off"  id="percentAbbrv" class="form-horizontal form-label-left">
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input hidden name ="fundID" value="<?php echo $fundID; ?>">
+                                <input required="" type="textr" name="abbrv"  value="<?php echo $abbrv; ?>" class="form-control">
+                                <button  class="btn btn-main">Update Abbreviation</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id ="policy">
+                        <form autocomplete="off"  id="percentEmployee" class="form-horizontal form-label-left">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input hidden name ="fundID" value="<?php echo $fundID; ?>">
+                                    <input required type="number" name="employee_amount" step ="0.1" min="0" max="99" value="<?php echo 100*$employee_percent; ?>" class="form-control">
+                                    <button  class="btn btn-main">Update Amount Employee</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                           <input hidden name ="fundID" value="<?php echo $fundID; ?>">
-                        <input required="" type="textr" name="abbrv"  value="<?php echo $abbrv; ?>" class="form-control">
-                        <span class="input-group-btn">
-                          <button  class="btn btn-main">Update Abbreviation</button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  </form>
-                  <div id ="policy">
-                  <form autocomplete="off"  id="percentEmployee" class="form-horizontal form-label-left">
-                  <div class="form-group">
-                    <div class="col-sm-9">
-                      <div class="input-group">
-                          <input hidden name ="fundID" value="<?php echo $fundID; ?>">
-                        <input required="" type="number" name="employee_amount" step ="0.1" min="0" max="99" value="<?php echo 100*$employee_percent; ?>" class="form-control">
-                        <span class="input-group-btn">
-                          <button  class="btn btn-main">Update Amount Employee</button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  </form>
-                  </div>
-                  <form autocomplete="off"  id="percentEmployer" class="form-horizontal form-label-left">
-                  <div class="form-group">
-                    <div class="col-sm-9">
-                      <div class="input-group">
-                          <input hidden name ="fundID" value="<?php echo $fundID; ?>">
-                        <input required="" type="number" name="employer_amount" step ="0.1" min="0" max="99" value="<?php echo 100*$employer_percent; ?>" class="form-control">
-                        <span class="input-group-btn">
-                          <button  class="btn btn-main">Update Amount Employer</button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  </form>
-                  </div>
-                  <form autocomplete="off" id="deductionFrom" method = "post" class="form-horizontal form-label-left">
-                  <div class="form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Deduction From
-                    </label>
-                    <input hidden name ="fundID" value="<?php echo $fundID; ?>">
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <label class="containercheckbox">Basic Salary
-                        <input <?php if($mode ==1){ ?> checked=""  <?php } ?>  type="radio" value="1" name="policy">
-                        <span class="checkmarkradio"></span>
-                      </label>
-                      <label class="containercheckbox">Gross Salary
-                        <input <?php if($mode ==2){ ?> checked=""  <?php } ?>  type="radio" value="2" name="policy">
-                        <span class="checkmarkradio"></span>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                      <button  class="btn btn-success">Update</button>
-                    </div>
-                  </div>
-                  </form>
-              </div>
-          </div>
-          </div>
-          <!--UPDATE-->
     </div>
 
     <?php } if($parameter == 2 ){
@@ -564,7 +516,7 @@
         if (confirm("Are You Sure You Want To Delete The selected Employee(s) From  This Deduction?") == true ) {
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/remove_individual_deduction",
+                 url:'{{ url("/flex/remove_individual_deduction") }}',
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
@@ -594,7 +546,7 @@
         if (confirm("Are You Sure You Want To Delete The selected Group(s) From This Deduction?") == true) {
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/remove_group_deduction",
+                 url:'{{ url("/flex/remove_group_deduction") }}',
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
@@ -623,7 +575,7 @@
     $('#assignIndividual').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/assign_deduction_individual",
+                 url:'{{ url("/flex/assign_deduction_individual") }}',
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
@@ -652,7 +604,7 @@
     $('#assignGroup').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/assign_deduction_group",
+                 url:'{{ url("/flex/assign_deduction_group") }}',
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),

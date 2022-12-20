@@ -3991,7 +3991,8 @@ class GeneralController extends Controller
     }
 
     public function deduction_info($pattern)
-    {$values = explode('|', $pattern);
+    {
+        $values = explode('|', $pattern);
         $deductionID = $values[0];
         $deductionType = $values[1];
 
@@ -4024,6 +4025,8 @@ class GeneralController extends Controller
 
         $data['parameter'] = $deductionType;
         $data['title'] = "Deductions";
+        $data['parent'] = "Statutory Deduction";
+
         return view('app.deduction_info', $data);
     }
 
@@ -4198,7 +4201,7 @@ class GeneralController extends Controller
                 );
                 $result = $this->flexperformance_model->updatepaye($updates, $payeID);
                 if ($result) {
-                    $this->flexperformance_model->audit_log("Updated PAYE Brackets");
+                    // $this->flexperformance_model->audit_log("Updated PAYE Brackets");
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Updated Successifully</p>";
@@ -4242,7 +4245,11 @@ class GeneralController extends Controller
 
     public function updateCommonDeductions(Request $request)
     {
-        if ($request->method() == "POST" && $request->input('deductionID') != '') {
+        // dd('update');
+
+
+
+        if ( isset($request->deductionID)) {
             $deductionID = $request->input('deductionID');
             $updates = array(
                 'name' => $request->input('name'),
@@ -4251,7 +4258,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateCommonDeductions($updates, $deductionID);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Deductions with ID = " . $deductionID . "");
+                // $this->flexperformance_model->audit_log("Updated Deductions with ID = " . $deductionID . "");
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
 
             } else {echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";}
@@ -4296,7 +4303,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updatePension($updates, $fundID);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employee Value of " . $request->input('employee_amount') . " ");
+                // $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employee Value of " . $request->input('employee_amount') . " ");
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 
@@ -4312,7 +4319,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updatePension($updates, $fundID);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employer Value of " . $request->input('employee_amount') . " ");
+                // $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employer Value of " . $request->input('employee_amount') . " ");
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 

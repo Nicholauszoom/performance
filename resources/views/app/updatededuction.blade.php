@@ -84,6 +84,7 @@
             $.ajax({
                 url: '{{ url("/flex/updateCommonDeductions/") }}',
                 type: 'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 data: $(this).serialize(), // it will serialize the form data
                 dataType: 'html'
             })
@@ -100,7 +101,7 @@
             .fail(function(){
                 alert('Updation Failed!');
             });
-        
+
         });
     </script>
 @endpush
