@@ -338,7 +338,7 @@
         </div>
 
         <div class="card-footer">
-            <button class="btn btn-sm btn-primary" type="submit">Register Employee</button>
+            <button class="btn btn-sm btn-main" type="submit">Register Employee</button>
         </div>
     </div>
 </form>

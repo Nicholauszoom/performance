@@ -39,8 +39,8 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Edit Allowance</h2>
                     <!-- <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -59,7 +59,7 @@
                     </ul> -->
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                   @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                   
@@ -96,7 +96,7 @@
                       <!-- <div class="ln_solid"></div> -->
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button type="submit" class="btn btn-primary">Cancel</button>
+                          <button type="submit" class="btn btn-main">Cancel</button>
                           <button type="submit" name="update" class="btn btn-success">Update</button>
                         </div>
                       </div>

@@ -38,7 +38,7 @@
 </div>
             <div class="card-footer bg-light d-flex justify-content-between align-items-center">
                 <button type="reset" class="btn btn-link">Cancel</button>
-                <button type="submit" class="btn btn-primary">Request </button>
+                <button type="submit" class="btn btn-main">Request </button>
             </div>
         </div>
     </form>

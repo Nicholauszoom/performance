@@ -138,6 +138,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowanceName",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -163,6 +164,8 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowanceTaxable",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -187,6 +190,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowancePentionable",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -214,6 +218,8 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowanceAmount",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -239,6 +245,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowancePercent",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -265,6 +272,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateAllowancePolicy",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -293,6 +301,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_allowance_individual",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -322,6 +331,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/assign_allowance_group",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -350,6 +360,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_individual_from_allowance",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -380,6 +391,7 @@ function deleteBonus(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -462,6 +474,8 @@ function deleteAllowance(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addToBonus",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+
                  type:"post",
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  data:new FormData(this),
@@ -497,6 +511,8 @@ function deleteAllowance(id)
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addBonusTag",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+
                  type:"post",
                  data:new FormData(this),
                  processData:false,

@@ -6,8 +6,7 @@
 
 @push('head-scriptTwo')
 <!-- notification Js -->
-<script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
+
 
 
 <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
@@ -33,7 +32,7 @@
                         <li class="nav-item" role="presentation">
                             <a href="#incentivesTab" class="nav-link active show" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 Incentives
                             </a>
                         </li>
@@ -47,7 +46,7 @@
                         <li class="nav-item" role="presentation">
                             <a href="#imprestTab" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 Imprest
                             </a>
                         </li>
@@ -55,7 +54,7 @@
                         <li class="nav-item" role="presentation">
                             <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
                                 tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 Salary Advance
                             </a>
                         </li> -->
@@ -63,28 +62,28 @@
                         <li class="nav-item" role="presentation">
                             <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 Payroll
                             </a>
                         </li>
                         {{-- <li class="nav-item" role="presentation">
                             <a href="#arrearsTab" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 Arrears
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#arrearsTabPending" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 (pending)Arrears
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#arrearsReportTab" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
-                                <i class="ph-at me-2"></i>
+                                <i class="ph-list me-2"></i>
                                 (all)Arrears
                             </a>
                         </li> --}}
@@ -247,12 +246,12 @@
                         </div>
                         <div role="tabpanel" class="tab-pane " id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
+                                <div class="card">
+                                    <div class="card-head">
                                         <h2>Overtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="x_content">
+                                    <div class="card-body">
                                         <?php //echo $this->session->flashdata("note"); ?>
                                         <div id="resultfeedOvertime"></div>
                                         <table id="datatable-keytable" class="table table-striped table-bordered">
@@ -267,7 +266,7 @@
                                                     <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            {{-- <tbody>
+                                            <tbody>
                                                 <?php
                                                     foreach ($adv_overtime as $row) { ?>
                                                 <?php if ($row->status == 2) {
@@ -332,12 +331,12 @@
                                                         <br><br>
 
 
-                                                        <?php if ($row->status == 1 && /*session('mng_emp') &&*/ $pendingPayroll == 0) { ?>
+                                                        <?php if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) { ?>
 
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="hrapproveOvertime(<?php echo $row->eoid; ?>)">
-                                                            <button class="btn btn-primary btn-xs"><i
+                                                            <button class="btn btn-main btn-xs"><i
                                                                     class="fa fa-check"></i></button>
                                                         </a>
 
@@ -354,7 +353,7 @@
                                                         <a href="javascript:void(0)" title="Recommend"
                                                             class="icon-2 info-tooltip"
                                                             onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
-                                                            <button class="btn btn-primary btn-xs"><i
+                                                            <button class="btn btn-main btn-xs"><i
                                                                     class="fa fa-check"></i></button>
                                                         </a>
 
@@ -388,7 +387,7 @@
                                                 </tr>
 
                                                 <?php } ?>
-                                            </tbody> --}}
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -397,8 +396,8 @@
                         <!--
                         <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
+                                <div class="card">
+                                    <div class="card-head">
                                         <h2>Others` Salary Advance
                                             <ul class="nav navbar-right panel_toolbox">
                                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -409,7 +408,7 @@
 
                                             <div class="clearfix"></div>
                                     </div>
-                                    <div class="x_content">
+                                    <div class="card-body">
                                         <div id="resultfeed"></div>
                                         <div id="resultfeedCancel"></div>
                                         <?php //echo $this->session->flashdata("note"); ?>
@@ -478,7 +477,7 @@
                                                             <a href="javascript:void(0)"
                                                                 onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
                                                                 title="Recommend">
-                                                                <button class="btn btn-primary btn-xs"><i
+                                                                <button class="btn btn-main btn-xs"><i
                                                                         class="fa fa-check"></i></button>
                                                             </a>
 
@@ -486,7 +485,7 @@
                                                             <a href="javascript:void(0)"
                                                                 onclick="recommendLoan(<?php echo $row->id; ?>)"
                                                                 title="Recommend">
-                                                                <button class="btn btn-primary btn-xs"><i
+                                                                <button class="btn btn-main btn-xs"><i
                                                                         class="fa fa-check"></i></button>
                                                             </a>
                                                             <?php } ?>
@@ -525,13 +524,13 @@
                         aria-labelledby="profile-tab">
                         <div id="resultfeedImprest"></div>
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
+                            <div class="card">
+                                <div class="card-head">
                                     <h2>Imprests </h2>
 
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">
+                                <div class="card-body">
                                     <?php //echo $this->session->flashdata("note"); ?>
                                     <div id="resultfeedImprest"></div>
                                     <table id="datatable-keytable"
@@ -632,7 +631,7 @@
                                                         <a href="javascript:void(0)"
                                                             onclick="hr_recommendImprest(<?php echo $row->id; ?>)"
                                                             title="Recommend">
-                                                            <button class="btn btn-primary btn-xs"><i
+                                                            <button class="btn btn-main btn-xs"><i
                                                                     class="ph-check"></i></button>
                                                         </a>
 
@@ -684,14 +683,14 @@
                                                         if ($pendings > 0) { ?>
                                                             <a href="javascript:void(0)"
                                                                 onclick="pendingConfirmationAlert()">
-                                                                <button class="btn btn-primary btn-xs">
+                                                                <button class="btn btn-main btn-xs">
                                                                     <i class="ph-check"></i></button>
                                                             </a>
                                                             <?php } else { ?>
 
                                                             <a href="javascript:void(0)"
                                                                 onclick="recommendImprest(<?php echo $row->id; ?>)">
-                                                                <button class="btn btn-primary btn-xs">
+                                                                <button class="btn btn-main btn-xs">
                                                                     <i class="ph-check"></i></button>
                                                             </a>
 
@@ -760,13 +759,13 @@
                     aria-labelledby="profile-tab">
                     <div id="resultfeedArrears"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2>Arrears </h2>
 
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <table id="datatable-arrears"
                                     class="table table-striped table-bordered">
                                     <thead>
@@ -838,7 +837,7 @@
                                                     title="Recommend Payment"
                                                     class="icon-2 info-tooltip">
                                                     <button type="button"
-                                                        class="btn btn-primary btn-xs"><i
+                                                        class="btn btn-main btn-xs"><i
                                                             class="fa fa-check"></i></button>
                                                 </a>
 
@@ -873,14 +872,14 @@
                 aria-labelledby="profile-tab">
                 <div id="resultfeedArrears"></div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2><i class="fa fa-list"></i>&nbsp;&nbsp;All Arrears Over a Time
                             </h2>
 
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <table id="datatable-task-table"
                                 class="table table-striped table-bordered">
                                 <thead>
@@ -943,13 +942,13 @@
             aria-labelledby="profile-tab">
 
             <div class="col-md-6 col-sm-6 col-xs-6">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2><i class="fa fa-pie-chart"></i>&nbsp;&nbsp;<b>Arrears
                                 Reports</b></h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                         <div id="feedBackSubmission"></div>
                         <form method="post" class="form-horizontal form-label-left"
                             action="{route('reports.all_arrears')}}" target="blank">
@@ -987,7 +986,7 @@
                             </div>
                             <div align="right" class="form-group">
                                 <button type="submit" name="print"
-                                    class="btn btn-primary">Print
+                                    class="btn btn-main">Print
                                     Report
                                 </button>
                             </div>
@@ -1002,13 +1001,13 @@
             <div id="resultfeedImprest"></div>
 
             <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
+            <div class="card">
+                <div class="card-head">
                     <h2>Incentives </h2>
 
                     <div class="clearfix"></div>
                 </div>
-                <div id="employeeList" class="x_content">
+                <div id="employeeList" class="card-body">
                     <table id="datatable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -1076,7 +1075,7 @@
                                         title="Recommend Incentive"
                                         class="icon-2 info-tooltip">
                                         <button type="button"
-                                            class="btn btn-primary btn-xs"><i
+                                            class="btn btn-main btn-xs"><i
                                                 class="ph-check"></i></button>
                                     </a>
                                     <?php } else { ?>

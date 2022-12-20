@@ -40,12 +40,12 @@
             {{-- <div class="row">
               <!-- Groups -->
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <div id ="feedBackAssignment"></div>
                       <h5> Name:
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h5>
@@ -60,12 +60,12 @@
               
               <!--UPDATE-->
               <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Update</b></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <div id ="feedBackSubmission"></div>
                       <form autocomplete="off" id="updateOvertimeName" class="form-horizontal form-label-left">
                       <div class="form-group">
@@ -74,7 +74,7 @@
                             <input hidden name ="categoryID" value="<?php echo $categoryID; ?>">
                             <input required="" type="text" name ="name" value="<?php echo $name; ?>" class="form-control">
                             <span class="input-group-btn">
-                              <button  class="btn btn-primary">Update Name</button>
+                              <button  class="btn btn-main">Update Name</button>
                             </span>
                           </div>
                         </div>
@@ -87,7 +87,7 @@
                               <input hidden name ="categoryID" value="<?php echo $categoryID; ?>">
                             <input required="" type="number" step="0.01" name="day_percent" step ="1" min="0.01" max="300" value="<?php echo (100*$day_percent); ?>" class="form-control">
                             <span class="input-group-btn">
-                              <button  class="btn btn-primary">UPDATE DAY RATE</button>
+                              <button  class="btn btn-main">UPDATE DAY RATE</button>
                             </span>
                           </div>
                         </div>
@@ -100,7 +100,7 @@
                               <input hidden name ="categoryID" value="<?php echo $categoryID; ?>">
                             <input required="" type="number" step="0.01" name="night_percent" step ="1" min="0.01" max="300" value="<?php echo (100*$night_percent); ?>" class="form-control">
                             <span class="input-group-btn">
-                              <button  class="btn btn-primary">UPDATE NIGHT RATE</button>
+                              <button  class="btn btn-main">UPDATE NIGHT RATE</button>
                             </span>
                           </div>
                         </div>
@@ -211,12 +211,12 @@
 
 
               {{-- <div class="col-md-6 col-sm-6 col-xs-12">
-                  <div class="x_panel">
-                      <div class="x_title">
+                  <div class="card">
+                      <div class="card-head">
                           <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Update</b></h2>
                           <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                           <div id="feedBackSubmission"></div>
                           <form autocomplete="off" id="updateLevelName" class="form-horizontal form-label-left">
                               <div class="form-group">
@@ -226,7 +226,7 @@
                                           <input required="" type="text" name="name" value="<?php echo $name; ?>"
                                               class="form-control">
                                           <span class="input-group-btn">
-                                              <button class="btn btn-primary">Update Name</button>
+                                              <button class="btn btn-main">Update Name</button>
                                           </span>
                                       </div>
                                   </div>
@@ -247,7 +247,7 @@
 
                                       <div class="btn-group flex-shrink-0 ms-md-3">
                                           <button type="button"
-                                              class="btn btn-primary multiselect-order-options-button">Order</button>
+                                              class="btn btn-main multiselect-order-options-button">Order</button>
                                       </div>
                                   </div>
                               </div>
@@ -260,7 +260,7 @@
                                               step="1" min="1" max="1000000000" value="<?php echo $minSalary; ?>"
                                               class="form-control">
                                           <span class="input-group-btn">
-                                              <button class="btn btn-primary">UPDATE MIN SALARY</button>
+                                              <button class="btn btn-main">UPDATE MIN SALARY</button>
                                           </span>
                                       </div>
                                   </div>
@@ -275,7 +275,7 @@
                                               step="1" min="1" max="1000000000" value="<?php echo $maxSalary; ?>"
                                               class="form-control">
                                           <span class="input-group-btn">
-                                              <button class="btn btn-primary">UPDATE MAX SALARY</button>
+                                              <button class="btn btn-main">UPDATE MAX SALARY</button>
                                           </span>
                                       </div>
                                   </div>

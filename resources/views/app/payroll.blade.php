@@ -22,12 +22,12 @@
     <div class="row">
         <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
             <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2>Run Payroll</h2>
 
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                         <div id="payrollFeedback"></div>
                         <form autocomplete="off" id="initPayroll" method="POST" class="form-horizontal form-label-left">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Payroll Month</label>
@@ -51,15 +51,15 @@
         <?php } ?>
 
         <div id="hideList" class="col-md-12 col-sm-6 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
+            <div class="card">
+                <div class="card-head">
                     <h2>Payslip Mail Delivery List
 
 
                     </h2>
 
                 </div>
-                <div class="x_content">
+                <div class="card-body">
                     <div id="feedBackMail"></div>
                     <table id="datatable" class="table table-striped table-bordered">
                         <thead>

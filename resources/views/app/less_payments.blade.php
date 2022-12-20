@@ -30,8 +30,8 @@
             <div class="clearfix"></div>
             <div class="row">                        
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Employees in this Payroll<b>(<?php echo date("F, Y", strtotime($payroll_date));?>)</b>  </h2>
                      <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -42,11 +42,11 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <?php if(isset($previous)) {?>
                       <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/reports/employeeCostExport_temp" data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                           <input type="hidden" name="payrolldate" value="<?php echo $payroll_date; ?>">
-                          <button type="submit" name="submit" value ="submit" class="btn btn-primary">PRINT</button>
+                          <button type="submit" name="submit" value ="submit" class="btn btn-main">PRINT</button>
                       </form>
                       <?php } ?>
                       @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
@@ -67,7 +67,7 @@
                             <form method="post" id="lessPaymentForm">
                                 <input name="payroll_date" value="<?php echo $payrollMonth; ?>" type="hidden" >
                             <th>&nbsp;
-                                <button type="submit" name="submit" value ="submit" class="btn btn-primary">CONFIRM</button>
+                                <button type="submit" name="submit" value ="submit" class="btn btn-main">CONFIRM</button>
                             </th>
                             </form>
 
@@ -113,7 +113,7 @@
                                             <input type="hidden" value="<?php echo $row->empID;?>" name="employee">
                                             <input type="hidden" value="<?php echo $payroll_date;?>" name="payrolldate">
                                             <input hidden name ="profile" value="0">
-                                            <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-file-pdf-o"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-main"><i class="fa fa-file-pdf-o"></i></button>
                                         </form>
                                     </td>
                                     <?php }?>

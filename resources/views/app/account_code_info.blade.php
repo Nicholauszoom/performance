@@ -29,8 +29,8 @@
             <div class="clearfix"></div>
             <div class="row">
                <div id="bottom" class="col-md-12 col-sm-12 col-xs-12">                            
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                         <h2><i class="fa fa-tasks"></i> Add Country</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -40,7 +40,7 @@
                         </ul>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                         <div id="feedBackUpdate"></div>
                         <form autocomplete="off" id="updateAccountingCode" enctype="multipart/form-data"  method="post" data-parsley-validate class="form-horizontal form-label-left">
                           <input required="" hidden="" value="<?php echo $id; ?>" class="form-control col-md-7 col-xs-12" name="accountingId"  /> 
@@ -64,7 +64,7 @@
                           <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                <button type="reset" class="btn btn-warning" >CANCEL</button>
-                               <button class="btn btn-primary" >ADD</button>
+                               <button class="btn btn-main" >ADD</button>
                             </div>
                           </div> 
                           </form>

@@ -38,7 +38,7 @@
                             <input type="text" name="group_name" value="<?php echo $groupName; ?>" class="form-control">
                               <input type="hidden" name="group_id" value="<?php echo $groupID;?>">
                               <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary">UPDATE</button>
+                                <button type="submit" class="btn btn-main">UPDATE</button>
                             </span>
                           </div>
                         </div>

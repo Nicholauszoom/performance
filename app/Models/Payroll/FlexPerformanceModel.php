@@ -757,7 +757,7 @@ function retire_list()
 	}
 	function updatedepartment($data, $id)
 	{
-		DB::table('deepartment')->where('id', $id)
+		DB::table('department')->where('id', $id)
 		->update($data);
 		return true;
 	}
@@ -1342,11 +1342,11 @@ function getMeaslById($deductionID)
 
 	function deduction_membersCount($deduction)
 	{
-		$query = "COUNT(DISTINCT ed.empID) members FROM  WHERE ed.deduction = ".$deduction."  ";
-		$row =DB::table('emp_deductions as ed')
-		->select(DB::raw($query))
-		->first();
-    	return $row->members;
+		$query = "SELECT COUNT(DISTINCT ed.empID) members FROM  emp_deductions ed WHERE ed.deduction = ".$deduction."  ";
+		
+		$row = DB::select(DB::raw($query));
+		
+    	return $row[0]->members;
 	}
 
 
@@ -1596,10 +1596,8 @@ function OvertimeCategoryInfo($id)
 
 	function getpayebyid($id)
 	{
-		$this->load->database();
 		$data = DB::table('paye')->where('id', $id);
-
-
+        
 		return $data->get();
 	}
 
@@ -1997,11 +1995,10 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function employee_hire_date($empID)
 	{
-		$query="hire_date  WHERE emp_id='".$empID."'";
-		$row = DB::table('employee')
-		->select(DB::raw($query))
-		->first();
-		return $row->hire_date;
+		$query="SELECT hire_date from employee  WHERE emp_id='".$empID."'";
+		$row = DB::select(DB::raw($query));
+		
+		return $row[0]->hire_date;
 	}
 
 
@@ -2471,7 +2468,7 @@ function allLevels()
 
             DB::insert(DB::raw($query));
 		    DB::table('company_property')->insert($property);
-            DB::table('company_property')->insert($datagroup);
+            DB::table('employee_group')->insert($datagroup);
         });
 
 		return true;
@@ -2872,7 +2869,8 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function roles_byid($id)
 	{
 
-		$query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p, department d, role_groups rg,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = ".$id."  and p.id IN (SELECT roleID from role_groups where group_name=".$id.")";
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo, rg.id as RGID,  p.id as ID, d.name as DEPARTMENT, p.name as POSITION FROM  position p INNER JOIN department d ON p.dept_id = d.id INNER JOIN role_groups rg ON p.id = rg.roleID,  (SELECT @s:=0) as s  where  p.id = rg.roleID  and rg.group_name = ".$id."  and p.id IN (SELECT roleID from role_groups where group_name=".$id.")";
+
 
 
 		return DB::select(DB::raw($query));
@@ -2915,7 +2913,32 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 		return DB::select(DB::raw($query));
 	}
 
+	function getEmpByGroupID($group_id,$position){
 
+		$query = "SELECT eg.empID from employee_group eg INNER JOIN  employee e ON e.emp_id=eg.empID WHERE eg.group_name = ".$group_id." AND  e.position =".$position;
+
+
+		//dd(count(DB::select(DB::raw($query))));
+		return DB::select(DB::raw($query));
+	}
+
+	function removeEmployeeByROleFromGroup($empID, $groupID)
+	{
+	     DB::transaction(function() use($empID, $groupID)
+       {
+
+	    $query = "DELETE FROM employee_group  WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
+        DB::insert(DB::raw($query));
+	    $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
+	    DB::insert(DB::raw($query));
+		$query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
+	    DB::insert(DB::raw($query));
+		$query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
+		DB::insert(DB::raw($query));
+	    });
+
+		return true;
+	}
 
 
 	function removeEmployeeFromGroup($refID, $empID, $groupID)
@@ -2931,6 +2954,14 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 		$query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
 		DB::insert(DB::raw($query));
 	    });
+
+		return true;
+	}
+	function delete_role_group($roleID,$GroupID){
+		DB::table('role_groups')
+		->where('roleID',$roleID)
+		->where('Group_name',$GroupID)
+		->delete();
 
 		return true;
 	}
@@ -2975,7 +3006,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function addEmployeeToGroup($empID, $groupID)
 	{
-		//dd($groupID);
+		;
 	    $query = "INSERT INTO  employee_group(empID, group_name) VALUES ('".$empID."', ".$groupID.") ";
 
 		DB::insert(DB::raw($query));
@@ -3331,11 +3362,9 @@ DB::insert(DB::raw($query));
 
 	function getParentPositionName($id)
 	{
-		$query = " name  WHERE position_code = '".$id."'";
-		$row = DB::table('position')
-		->select(DB::raw($query))
-		->first();
-    	return !empty($row)? $row->name:"";
+		$query = "SELECT name from position  WHERE position_code = '".$id."'";
+		$row = DB::select(DB::raw($query));
+    	return !empty($row)? $row[0]->name:"";
 	}
 
 	function get_allowance_name($id)

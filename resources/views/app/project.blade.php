@@ -22,8 +22,8 @@
     <div class="">
         <!-- Tabs -->
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
+            <div class="card">
+                <div class="card-head">
                     <h2><i class="fa fa-bars"></i> Projects, Deliverables and Activities</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -43,7 +43,7 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="card-body">
 
 
                     <div class="" role="tabpanel" data-example-id="togglable-tabs">
@@ -74,8 +74,8 @@
                             <div role="tabpanel" class="tab-pane fade active in" id="overtimeTab"
                                 aria-labelledby="home-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <div class="row">
                                                 <div class="col-sm-9">
                                                     <h2>Projects </h2>
@@ -83,7 +83,7 @@
                                                 <div class="col-sm-3">
                                                     <?php if (session('mng_proj')) { ?>
                                                     <a href="<?php echo url('flex/project/newProject'); ?>">
-                                                        <button class="btn btn-primary btn-md">CREATE NEW PROJECT
+                                                        <button class="btn btn-main btn-md">CREATE NEW PROJECT
                                                         </button>
                                                     </a>
                                                     <?php } ?>
@@ -91,7 +91,7 @@
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedOvertime"></div>
                                             <table id="datatable-keytable" class="table table-striped table-bordered">
                                                 <thead>
@@ -150,8 +150,8 @@
                             <div role="tabpanel" class="tab-pane fade" id="imprestTab" aria-labelledby="profile-tab">
                                 <div id="resultfeedImprest"></div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <div class="row">
                                                 <div class="col-sm-9">
                                                     <h2>Grants</h2>
@@ -159,7 +159,7 @@
                                                 <div class="col-sm-3">
                                                     <?php if (session('mng_proj')) { ?>
                                                     <a href="<?php echo url('flex/project/newGrant'); ?>">
-                                                        <button class="btn btn-primary btn-md">CREATE NEW
+                                                        <button class="btn btn-main btn-md">CREATE NEW
                                                             GRANT
                                                         </button>
                                                     </a>
@@ -168,7 +168,7 @@
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <table id="datatable" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -211,8 +211,8 @@
                             <div role="tabpanel" class="tab-pane fade" id="arrearsTab" aria-labelledby="profile-tab">
                                 <div id="feedBackActivityTable"></div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <div class="row">
                                                 <div class="col-sm-9">
                                                     <h2>Activities</h2>
@@ -220,7 +220,7 @@
                                                 <div class="col-sm-3">
                                                     <?php if (session('mng_proj')) { ?>
                                                     <a href="<?php echo url('flex/project/newActivity'); ?>">
-                                                        <button class="btn btn-primary btn-md">CREATE NEW ACTIVITY
+                                                        <button class="btn btn-main btn-md">CREATE NEW ACTIVITY
                                                         </button>
                                                     </a>
                                                     <?php } ?>
@@ -228,7 +228,7 @@
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <table id="datatable-arrears" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -285,8 +285,8 @@
                             <div role="tabpanel" class="tab-pane fade active" id="arrearsReportTab"
                                 aria-labelledby="profile-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <div class="row">
                                                 <div class="col-sm-9">
                                                     <h2>Activity Allocations</h2>
@@ -294,7 +294,7 @@
                                                 <div class="col-sm-3">
                                                     <?php if (session('mng_proj')) { ?>
                                                     <a href="#bottom">
-                                                        <button type="button" class="btn btn-primary">NEW
+                                                        <button type="button" class="btn btn-main">NEW
                                                             ALLOCATION
                                                         </button>
                                                     </a>
@@ -304,7 +304,7 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div id="feedBackAllocationTable"></div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <table id="datatable-task-table" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -347,7 +347,7 @@
                                                         <td><?php echo $row->percent; ?>%</td>
                                                         <?php if (session('mng_proj')) { ?>
                                                         <td class="options-width">
-                                                            <!--                                          <a href="javascript:void(0)" onclick="deleteAllocation(<?php echo $row->id; ?>)" title="Delete Allocation" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>-->
+                                                            <!--                                          <a href="javascript:void(0)" onclick="deleteAllocation(<?php echo $row->id; ?>)" title="Delete Allocation" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>-->
 
                                                             <?php if (!($row->grant_code == 'VSO' || $row->activity_code == 'AC0018')) { ?>
                                                             <a href="javascript:void(0)"
@@ -367,7 +367,7 @@
                                                                     data-activity="<?php echo $row->activity_code; ?>"
                                                                     data-percent="<?php echo $row->percent; ?>"
                                                                     data-target="#edit"
-                                                                    class="btn btn-primary btn-xs"><i
+                                                                    class="btn btn-main btn-xs"><i
                                                                         class="fa fa-minus-circle"></i>
                                                                 </button>
                                                             </a>
@@ -387,12 +387,12 @@
                                 <?php if (session('mng_proj')) { ?>
                                 <div id="bottom" class="col-md-12 col-sm-6 col-xs-12">
                                     <!-- PANEL-->
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>New Project Allocation</h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="feedbackResult"></div>
                                             <form id="allocateActivity" enctype="multipart/form-data" method="post"
                                                 data-parsley-validate class="form-horizontal form-label-left">
@@ -458,7 +458,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                        <button id="submitButton" class="btn btn-primary">ALLOCATE
+                                                        <button id="submitButton" class="btn btn-main">ALLOCATE
                                                         </button>
                                                     </div>
                                                 </div>
@@ -472,8 +472,8 @@
                             <div role="tabpanel" class="tab-pane fade active" id="assignment"
                                 aria-labelledby="profile-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <div class="row">
                                                 <div class="col-sm-9">
                                                     <h2>Activity Assignment</h2>
@@ -481,7 +481,7 @@
                                                 <div class="col-sm-3">
                                                     <?php if (session('mng_proj')) { ?>
                                                     <a href="#bottom1">
-                                                        <button type="button" class="btn btn-primary">New Assignment
+                                                        <button type="button" class="btn btn-main">New Assignment
                                                         </button>
                                                     </a>
                                                     <?php } ?>
@@ -490,7 +490,7 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div id="feedBackAllocationTable"></div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <table id="datatable1" class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -545,7 +545,7 @@
                                                             <?php } ?>
                                                             <a
                                                                 href="<?php echo url('flex/project/timeTrackInfo?code=') . base64_encode($row->id); ?>">
-                                                                <button type="button" class="btn btn-primary btn-xs"
+                                                                <button type="button" class="btn btn-main btn-xs"
                                                                     title="Time Track"><i
                                                                         class="fa fa-clock-o"></i></button>
                                                             </a>
@@ -562,12 +562,12 @@
                                 <?php if (session('mng_proj')) { ?>
                                 <div id="bottom1" class="col-md-12 col-sm-6 col-xs-12">
                                     <!-- PANEL-->
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>New Assignment</h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="feedbackResult"></div>
                                             <form id="assignActivity" enctype="multipart/form-data" method="post"
                                                 data-parsley-validate class="form-horizontal form-label-left">
@@ -654,7 +654,7 @@
 
                                                 <div class="form-group">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                        <button id="submitButton" class="btn btn-primary">Assign
+                                                        <button id="submitButton" class="btn btn-main">Assign
                                                         </button>
                                                     </div>
                                                 </div>
@@ -665,12 +665,12 @@
 
                                 <div id="bottom2" class="col-md-12 col-sm-6 col-xs-12">
                                     <!-- PANEL-->
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>Assignment Progress</h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="feedbackResult"></div>
                                             <form id="progressActivity" enctype="multipart/form-data" method="post"
                                                 data-parsley-validate class="form-horizontal form-label-left">
@@ -704,7 +704,7 @@
                                                 <input type="hidden" name="progress_form" value="pf">
                                                 <div class="form-group">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                        <button id="submitButton" class="btn btn-primary">Save
+                                                        <button id="submitButton" class="btn btn-main">Save
                                                         </button>
                                                     </div>
                                                 </div>
@@ -834,7 +834,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="save_btn">Save</button>
+                            <button type="submit" class="btn btn-main" id="save_btn">Save</button>
                         </div>
                     </form>
                 </div>
@@ -946,7 +946,7 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" id="save_btn">Save</button>
+                            <button type="submit" class="btn btn-main" id="save_btn">Save</button>
                         </div>
                     </form>
                 </div>
@@ -971,7 +971,7 @@
 
                 </div>
                 <div class="col-sm-6">
-                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-main btn-sm" data-dismiss="modal">No</button>
                     <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
                 </div>
                 <div class="col-sm-2">

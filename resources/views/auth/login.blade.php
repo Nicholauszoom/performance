@@ -102,7 +102,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary w-100 border-0" style="background: #012972">Log In</button>
+                                        <button type="submit" class="btn btn-main w-100 border-0" style="background: #012972">Log In</button>
                                     </div>
 
                                   </div>

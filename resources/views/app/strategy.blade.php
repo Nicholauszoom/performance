@@ -40,12 +40,12 @@
               <div class="col-md-12 col-sm-6 col-xs-12">
 
                    <!-- PANEL-->
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Strategy Report</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">               
+                  <div class="card-body">               
 
                     <form  enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/performance/strategy_report"  data-parsley-validate class="form-horizontal form-label-left" target="_blank">
                     <input type="text"  hidden="" value="<?php echo $strategyID;?>" name="strategyID" />
@@ -86,8 +86,8 @@
                   </div>
                 </div>
                 <!--PANEL-->
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                       <div id ="resultFeedback"></div>
                     <!--<h2><i class="fa fa-bars"></i> Tabs <small>Float left</small></h2>-->
                     <ul class="nav navbar-right panel_toolbox">
@@ -107,7 +107,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
 
                     <div class="" role="tabpanel" data-example-id="togglable-tabs">
@@ -124,16 +124,16 @@
                       <div id="myTabContent" class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
+                                <div class="card">
 
 
-                                  <div class="x_title">
-                                    <h2>Strategy &nbsp;&nbsp;&nbsp;<a><button type="button" id="modal" data-toggle="modal" data-target="#strategyModal" class="btn btn-primary">Add New Strategy or Project </button></a></h2>
+                                  <div class="card-head">
+                                    <h2>Strategy &nbsp;&nbsp;&nbsp;<a><button type="button" id="modal" data-toggle="modal" data-target="#strategyModal" class="btn btn-main">Add New Strategy or Project </button></a></h2>
                                               
                 
                                     <div class="clearfix"></div>
                                   </div>
-                                  <div class="x_content">
+                                  <div class="card-body">
                 
                 
                                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
@@ -224,9 +224,9 @@
                                             <a href="<?php echo  url('')."flex/performance/strategy_info/?id=".base64_encode($row->id); ?>"   title="Strategy Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                             
                                             <?php if($strategyID == $row->id) { ?>
-                                            <a title="Current Selected Strategy Can Not Be Deleted, Change Selection and Try to Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i>  NOT ALLOWED</button> </a>
+                                            <a title="Current Selected Strategy Can Not Be Deleted, Change Selection and Try to Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i>  NOT ALLOWED</button> </a>
                                             <?php } else { ?>
-                                            <a href="javascript:void(0)" onclick="deleteStrategy(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                            <a href="javascript:void(0)" onclick="deleteStrategy(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                             <?php } ?>
 
                                              <a href="javascript:void(0)" onclick="selectStrategy(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-success btn-xs">MAKE DEFAULT</button> </a>
@@ -246,15 +246,15 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Outcome
                                 <a href ="<?php echo  url(''); ?>/flex/performance/outcome_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                 </h2>
             
                                 <div class="clearfix"></div>
                               </div>
-                              <div id = "loadTable-outcome" class="x_content">
+                              <div id = "loadTable-outcome" class="card-body">
                                  @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                 <table  id="datatable" class="table table-striped table-bordered">
                                   <thead>
@@ -352,8 +352,8 @@
                                           </td>
                                           <td class="options-width">
                                               <a href="<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                              <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                              <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id."/".$rowOutcome->strategy_ref; ?>"><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a> -->
+                                              <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
+                                              <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id."/".$rowOutcome->strategy_ref; ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a> -->
                                               
                                               </td>
                                       </tr> 
@@ -367,15 +367,15 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="tab_output" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                  <div class="x_title">
+                                <div class="card">
+                                  <div class="card-head">
                                     <h2>Output 
                                     <a href ="<?php echo  url(''); ?>/flex/performance/output_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                     </h2>
                 
                                     <div class="clearfix"></div>
                                   </div>
-                                  <div id="loadTable-output" class="x_content">
+                                  <div id="loadTable-output" class="card-body">
                                      @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                                     <table   id="datatable-keytable" class="table table-striped table-bordered">
                                       <thead>
@@ -486,8 +486,8 @@
                                                             </td>
                                                             <td class="options-width">
                                                                 <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
-                                                                <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
-                                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>" ><button type="button" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i></button></a>
+                                                                <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
+                                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>" ><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
                                                             </td>
                                                         </tr> 
                                                     <?php  }  ?>
@@ -504,17 +504,17 @@
                         <div role="tabpanel" class="tab-pane fade" id="tab_task" aria-labelledby="profile-tab">
                             <!-- START ASSIGNED TO OTHERs -->
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Tasks
             
-                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($currentStrategy."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-primary">CREATE AD-HOC TASK</button></a>
+                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($currentStrategy."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-main">CREATE AD-HOC TASK</button></a>
             
                                 <a href ="<?php echo  url(''); ?>/flex/performance/task_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                 </h2>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
             
                               <?php
             
@@ -549,7 +549,7 @@
                                           </p>
                                           <?php }  ?>
             
-                                        <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
+                                        <button type="button" class="btn btn-main btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
             
                                         <div class="modal fade bs-example-modal-lg<?php echo $row->SNo; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                           <div class="modal-dialog modal-lg">
@@ -657,12 +657,12 @@
                                       <?php } ?>
                                         <!--</form>-->
                                         
-                                        <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                        <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
             
                                             <!--ACTIONS-->
                                             </td>
             
-                                        <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                                        <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>
             
             
                                         
@@ -765,7 +765,7 @@
                       </div>
                       <div class="modal-footer">
                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <input type="submit"  value="ADD" name="addstrategy" class="btn btn-primary"/>
+                          <input type="submit"  value="ADD" name="addstrategy" class="btn btn-main"/>
                       </div>
                       </form>
                   </div>

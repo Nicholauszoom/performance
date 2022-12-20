@@ -25,22 +25,22 @@
 
               <!-- Tabs -->
               <div class="col-md-12 col-sm-12 col-xs-12">                
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Task Description</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <?php echo $row->description; ?>                
                   </div>
                 </div>
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h3><?php if($commentMode == 2){ ?> Reject Task with Comments <?php } elseif($commentMode == 1){ ?>Add Remarks(Comments) <?php }elseif($commentMode == 3){ ?>Submit Task <?php } else{  ?>Add Remarks(Comments)<?php } ?></h3>
                     
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <div class="" role="tabpanel" data-example-id="togglable-tabs">
                       <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -61,7 +61,7 @@
                         <div id="refreshComment" class="col-lg-12">
                             <!-- /.panel -->
                             <div class="chat-panel panel panel-default">
-                              <div class="x_title">
+                              <div class="card-head">
                                 <h2><i class="fa fa-comments fa-fw"></i>&nbsp;&nbsp;<b>Comments and Submissions</b></h2>
                                 <div class="clearfix"></div>
                               </div>
@@ -151,7 +151,7 @@
                                         <?php if($commentMode == 1) { ?>
                                         <!-- Comment ACTION -->
                                         <input name="action" type="text" value="1" hidden="" />
-                                            <button class="btn btn-primary btn-sm" id="btn-chat">
+                                            <button class="btn btn-main btn-sm" id="btn-chat">
                                                 Send Comment
                                             </button>
                                         <?php } elseif($commentMode == 2) { ?>
@@ -177,7 +177,7 @@
                                     <div class="input-group">
                                         <textarea id="btn-input" rows="3" name="comment" required type="text" class="form-control input-sm" placeholder="Type Your Submission Remarks Here..." ></textarea>
                                         <span class="input-group-btn">
-                                            <button class="btn btn-primary btn-sm"  id="btn-chat">
+                                            <button class="btn btn-main btn-sm"  id="btn-chat">
                                                 SUBMIT TASK
                                             </button>
                                         </span>
@@ -196,12 +196,12 @@
 
                         <div role="tabpanel" class="tab-pane fade" id="activityTab" aria-labelledby="profile-tab">                          
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2>Funders</h2>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                                 <div id ="resultfeedbackGet"></div>
                                 <table id="datatable-keytable" class="table table-striped table-bordered">
                                   <thead>
@@ -244,12 +244,12 @@
                         <div role="tabpanel" class="tab-pane fade" id="newActivityTab" aria-labelledby="profile-tab">
 
                           <div class="col-md-12 col-sm-6 col-xs-6">
-                            <div class="x_panel">
-                              <div class="x_title">
+                            <div class="card">
+                              <div class="card-head">
                                 <h2><i class="fa fa-pie-plus"></i>&nbsp;&nbsp;<b>New Activity</b></h2>
                                 <div class="clearfix"></div>
                               </div>
-                              <div class="x_content">
+                              <div class="card-body">
                               <div id="resultfeedSubmission"></div>
                                 <form id="addActivity" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
                                    
@@ -313,8 +313,8 @@
                                   <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                       <button type="reset" class="btn btn-warning">Cancel</button>
-                                      <button type="submit" class="btn btn-primary">ADD ACTIVITY</button>
-                                      <!-- <input type="submit"  value="SEND REQUEST" name="apply" class="btn btn-primary"/> -->
+                                      <button type="submit" class="btn btn-main">ADD ACTIVITY</button>
+                                      <!-- <input type="submit"  value="SEND REQUEST" name="apply" class="btn btn-main"/> -->
                                     </div>
                                   </div> 
                                   </form>

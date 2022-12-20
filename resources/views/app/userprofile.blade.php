@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Employee Profile'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
@@ -11,6 +11,7 @@
 @section('content')
 
 <?php
+ 
   foreach ($employee as $row) {
     $name = $row->fname." ".$row->mname." ".$row->lname;
     $state = $row->state;
@@ -212,165 +213,471 @@
       @if (session('mng_roles_grp') || session('emp_id') == $empID)
       <div class="row">
         <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h6 class="text-muted">Permissons</h6>
-            </div>
+            <div class="card">
+                <div class="card-body border-0">
+                    <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a href="#work" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
+                                Work
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#permission" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                               Permission
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#asset" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                               Asset
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#l-d" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                               L & D
+                            </a>
+                        </li>
 
-            <div class="row">
-              <div class="col-md-6">
-                <div class="card border-0 shadow-none">
-                  <div class="card-header border-0">
-                    <h6 class="text-muted">Roles Granted</h6>
-                  </div>
-
-                  <div class="card-body">
-                    <form action="{{ url('/flex/revokerole') }}" method="post">
-                      <input type="text" hidden="hidden" name="empID" value="<?php echo $empID; ?>" />
-                      <table  class="table table-striped table-bordered">
-                        <thead>
-                          <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <?php if(session('mng_roles_grp')) { ?>
-                            <th>Option</th>
-                            <?php } ?>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php  foreach ($role as $row) {   ?>
-                            <tr >
-                              <td><?php echo $row->SNo; ?></td>
-                              <td><?php echo $row->NAME; ?></td>
-                              <?php if(session('mng_roles_grp'))  { ?>
-                              <td class="options-width">
-                                <label class="containercheckbox">
-                                  <input type="checkbox" name="option[]" value="<?php echo $row->role; ?>">
-                                  <span class="checkmark"></span>
-                                </label>
-                                <input type="text" hidden="hidden" name="roleid" value="<?php echo $row->id; ?>" />
-                              </td><?php } ?>
-                            </tr>
-                          <?php }  ?>
-                        </tbody>
-                      </table>
-                      <?php if(session('mng_roles_grp'))  { ?>
-                      <div class="form-group mt-3">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button  type="submit"  name="revoke" class="btn btn-main">REVOKE</button>
-                        </div>
-                      </div>
-                      <?php } ?>
-                      </form>
-                  </div>
+                        <li class="nav-item" role="presentation">
+                            <a href="#exit" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                               Exit
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-              </div>
 
-              <div class="col-md-6">
-                <div class="card border-0 shadow-none">
-                  <div class="card-header border-0">
-                    <h6 class="text-muted">Roles Not Granted</h6>
-                  </div>
+                <div class="tab-content" id="myTabContent">
+                    {{-- work --}}
+                    <div role="tabpanel" class="tab-pane fade active show " id="work" aria-labelledby="work-tab">
 
-                  <div class="card-body">
-                    <form action="{{ url('/flex/assignrole/') }}" method="post">
-                      <input type="text" hidden="hidden" name="empID" value="<?php echo $empID; ?>" />
-                      <table  class="table table-striped table-bordered">
-                        <thead>
-                          <tr>
-                            <th>S/N</th>
-                            <th>Name</th>
-                            <th>Option</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <?php foreach ($allrole as $row) {  ?>
-                            <tr >
-                              <td><?php echo $row->SNo; ?></td>
-                              <td><?php echo $row->name; ?></td>
+                        <div class="card m-2 shadow-none">
+                            <div class="card-header d-flex justify-content-between">
+                                <h5 class="text-main">Next of Kin(s)</h5>
 
-                              <td class="options-width">
+                                @if (session('mng_emp'))
+                                <button class="btn btn-main" id="modal" data-toggle="modal" data-target="#nextkinModal">
+                                    <i class="ph-plus me-2"></i> Add Next of kin
+                                </button>
+                                @endif
+                            </div>
 
-                              <label class="containercheckbox">
-                              <input type="checkbox" name="option[]" value="<?php echo $row->id; ?>">
-                              <span class="checkmark"></span>
-                              </label>
+                            <table  class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Relationship</th>
+                                    <th>Mobile</th>
+                                    <th>Postal Address</th>
+                                    <th>Option</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <?php foreach ($kin as $row) { ?>
+                                  <tr>
+                                    <td width="1px"><?php echo $row->id; ?></td></td>
+                                    <td><?php echo $row->fname." ".$row->mname." ".$row->lname; ?></td>
+                                    <td><?php echo $row->relationship; ?></td>
+                                    <td><?php echo $row->mobile; ?></td>
+                                    <td><?php echo $row->postal_address; ?></td>
 
-                              </td>
-                            </tr>
-                          <?php }   ?>
-                        </tbody>
-                      </table>
-                      <?php if($rolecount > 0) { ?>
-                        <div class="form-group mt-3">
-                          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <button  type="submit"  name="assign" class="btn btn-main">GRANT</button>
+                                    <td class="options-width">
+                                      <a href="<?php echo base_url()."index.php/cipay/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                    </td>
+                                  </tr>
+                                  <?php }  ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    {{-- / --}}
+
+                    {{-- Permission --}}
+                    <div role="tabpanel" class="tab-pane " id="permission" aria-labelledby="permission-tab">
+                        <div class="card border-0 shadow-none">
+                            <div class="card-header">
+                              <h6 class="text-muted">Permissons</h6>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card border-0 shadow-none">
+                                    <div class="card-header border-0">
+                                        <h6 class="text-muted">Roles Granted</h6>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <form action="{{ url('/flex/revokerole') }}" method="post">
+                                        <input type="text" hidden="hidden" name="empID" value="<?php echo $empID; ?>" />
+                                        <table  class="table table-striped table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>Name</th>
+                                                <?php if(session('mng_roles_grp')) { ?>
+                                                <th>Option</th>
+                                                <?php } ?>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php  foreach ($role as $row) {   ?>
+                                                <tr >
+                                                <td><?php echo $row->SNo; ?></td>
+                                                <td><?php echo $row->NAME; ?></td>
+                                                <?php if(session('mng_roles_grp'))  { ?>
+                                                <td class="options-width">
+                                                    <label class="containercheckbox">
+                                                    <input type="checkbox" name="option[]" value="<?php echo $row->role; ?>">
+                                                    <span class="checkmark"></span>
+                                                    </label>
+                                                    <input type="text" hidden="hidden" name="roleid" value="<?php echo $row->id; ?>" />
+                                                </td><?php } ?>
+                                                </tr>
+                                            <?php }  ?>
+                                            </tbody>
+                                        </table>
+                                        <?php if(session('mng_roles_grp'))  { ?>
+                                        <div class="form-group mt-3">
+                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                            <button  type="submit"  name="revoke" class="btn btn-main">REVOKE</button>
+                                            </div>
+                                        </div>
+                                        <?php } ?>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="card border-0 shadow-none">
+                                    <div class="card-header border-0">
+                                        <h6 class="text-muted">Roles Not Granted</h6>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <form action="{{ url('/flex/assignrole/') }}" method="post">
+                                        <input type="text" hidden="hidden" name="empID" value="<?php echo $empID; ?>" />
+                                        <table  class="table table-striped table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>Name</th>
+                                                <th>Option</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php foreach ($allrole as $row) {  ?>
+                                                <tr >
+                                                <td><?php echo $row->SNo; ?></td>
+                                                <td><?php echo $row->name; ?></td>
+
+                                                <td class="options-width">
+
+                                                <label class="containercheckbox">
+                                                <input type="checkbox" name="option[]" value="<?php echo $row->id; ?>">
+                                                <span class="checkmark"></span>
+                                                </label>
+
+                                                </td>
+                                                </tr>
+                                            <?php }   ?>
+                                            </tbody>
+                                        </table>
+                                        <?php if($rolecount > 0) { ?>
+                                            <div class="form-group mt-3">
+                                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                                <button  type="submit"  name="assign" class="btn btn-main">GRANT</button>
+                                            </div>
+                                            </div>
+                                        <?php } ?>
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                           </div>
+                     </div>
+                    {{-- / --}}
+
+                    {{-- asset --}}
+                    <div role="tabpanel" class="tab-pane " id="asset" aria-labelledby="asset-tab">
+
+
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h5 class="text-main">Company Proprty(ies)</h5>
+
+                                @if (session('mng_emp'))
+                                <button type="button" id="modal" data-toggle="modal" data-target="#propertyModal" class="btn btn-main">Assign More Property</button>
+                                @endif
+                            </div>
+
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>S/N</th>
+                                    <th>Type</th>
+                                    <th>Name</th>
+                                    <th>Serial No</th>
+                                    <th>Assigned By</th>
+                                    <th>Date</th>
+                                    <?php if(session('mng_emp'))  { ?>
+                                    <th>Option</th><?php }  ?>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <?php foreach ($property as $row) { ?>
+                                  <tr id="domain<?php echo $row->id;?>">
+                                    <td width="1px"><?php echo $row->SNo; ?></td></td>
+                                    <td><?php echo $row->prop_type; ?></td>
+                                    <td><?php echo $row->prop_name; ?></td>
+                                    <td><?php echo $row->serial_no; ?></td>
+                                    <td><?php echo $row->PROVIDER; ?></td>
+                                    <td><?php echo $row->dated_on; ?></td>
+                                    <?php if($this->session->userdata('mng_emp'))  { ?>
+                                    <td class="options-width">
+                                     <a href="javascript:void(0)" onclick="deleteDomain(<?php echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                                    </td><?php }  ?>
+                                  </tr>
+                                  <?php } ?>
+                                </tbody>
+                            </table>
                         </div>
-                      <?php } ?>
-                      </form>
-                  </div>
+
+                     </div>
+                    {{-- / --}}
+
+                    {{-- L & D --}}
+                    <div role="tabpanel" class="tab-pane " id="l-d" aria-labelledby="l-d-tab">
+                        <div class="card border-0 shadow-none mb-3">
+                            <div class="card-header">
+                                <h4 class="text-main">Skills Acquired </h4>
+                            </div>
+
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($skills_have as $row) {  ?>
+                                    <tr >
+                                        <td><?php echo $row->SNo; ?></td>
+                                        <td><?php echo $row->NAME; ?></td>
+                                    </tr>
+                                    <?php }  ?>
+                                </tbody>
+                              </table>
+                        </div>
+
+
+                        <?php if(session('mng_emp')) { ?>
+                            <hr class="my-4">
+
+
+                            <div class="card border-0 shadow-none">
+                                <div class="card-header">
+                                  <h5 class="text-main">Skills Not Acquired (To be Trained)</h5>
+                                </div>
+
+                                <table  class="table table-striped table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th>S/N</th>
+                                        <th>Name</th>
+                                        <th>Mandatory</th>
+                                        <th>Option</th>
+                                      </tr>
+                                    </thead>
+
+                                    <tbody>
+                                      <?php
+
+                                        foreach ($skills_missing as $row) {  ?>
+                                        <tr id="recordSkills<?php echo $row->id;?>" >
+                                          <td><?php echo $row->SNo; ?></td>
+                                          <td><?php echo $row->name; ?></td>
+                                          <td><?php if($row->mandatory == 1){ ?>
+
+                                          <div class="col-md-12">
+                                              <span class="label label-success">YES</span></div><?php }
+                                          else{ ?>
+                                          <div class="col-md-12">
+                                              <span class="label label-warning">NO</span></div><?php } ?></td>
+
+                                          <td class="options-width">
+                                          <?php if($row->status==9 ){ ?>
+
+
+                                        <a href = "<?php echo base_url(); ?>index.php/cipay/employeeCertification/?val=<?php echo $empID."|".$row->id; ?>"><button class="btn btn-success btn-xs">ASSIGN SKILL</button></a>
+                                        <?php } else{ ?>
+                                        <div class="col-md-12"><span class="label label-default">REQUESTED</span></div>
+
+                                          <?php if($row->status==0){ ?> <div class="col-md-12"><span class="label label-default">WAITING FOR APPROVAL</span></div><?php }
+                                          elseif($row->status==1){ ?><div class="col-md-12"><span class="label label-primary">RECOMMENDED</span></div><?php }
+                                          elseif($row->status==2){ ?><div class="col-md-12"><span class="label label-info">APPROVED</span></div><?php }
+                                          elseif($row->status==3){ ?><div class="col-md-12"><span class="label label-success">CONFIRMED</span></div><?php }
+                                          elseif($row->status==4){ ?><div class="col-md-12"><span class="label label-warning">SUSPENDED</span></div><?php }
+                                          elseif($row->status==5){ ?><div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div><?php }
+                                          elseif($row->status==6){ ?><div class="col-md-12"><span class="label label-danger">UNCONFIRMED</span></div><?php } ?>
+
+
+                                          <?php } ?>
+                                         </td>
+                                         </tr>
+                                        <?php }  ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php }  ?>
+
+                        <hr class="my-4">
+
+                        <div class="card border-0 shadow-none">
+                            <div class="card-header">
+                                <h4 class="text-main">Skills Requested For Training</h4>
+                            </div>
+                            <table id="skillsTable" class="table table-striped table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Mandatory</th>
+                                    <th>State</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <?php
+
+                                    foreach ($requested_skills as $row) {  ?>
+                                    <tr >
+                                      <td><?php echo $row->SNo; ?></td>
+                                      <td><?php echo $row->name; ?></td>
+                                      <td><?php if($row->mandatory == 1){ ?>
+
+                                      <div class="col-md-12">
+                                          <span class="label label-success">YES</span></div><?php }
+                                      else{ ?>
+                                      <div class="col-md-12">
+                                          <span class="label label-warning">NO</span></div><?php } ?></td>
+
+                                      <td>
+
+                                      <div id ="status<?php echo $row->id; ?>">
+                                        <?php if($row->status==0){ ?> <div class="col-md-12"><span class="label label-default">WAITING</span></div><?php }
+                                        elseif($row->status==1){ ?><div class="col-md-12"><span class="label label-primary">RECOMMENDED</span></div><?php }
+                                        elseif($row->status==2){ ?><div class="col-md-12"><span class="label label-info">APPROVED</span></div><?php }
+                                        elseif($row->status==3){ ?><div class="col-md-12"><span class="label label-success">CONFIRMED</span></div><?php }
+                                        elseif($row->status==4){ ?><div class="col-md-12"><span class="label label-warning">SUSPENDED</span></div><?php }
+                                        elseif($row->status==5){ ?><div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div><?php }
+                                        elseif($row->status==6){ ?><div class="col-md-12"><span class="label label-danger">UNCONFIRMED</span></div><?php } ?>
+                                      </div>
+
+                                      </td>
+
+                                     </tr>
+                                    <?php }  ?>
+                                </tbody>
+                              </table>
+                          </div>
+                    </div>
+                    {{-- / --}}
+
+                    {{-- Exit --}}
+                    <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
+                        <div class="card border-0 shadow-none">
+
+                            <div class="card-body">
+                                <form
+                                  id="upload_form"
+                                  method = "post"
+                                  enctype="multipart/form-data"
+                                  action="<?php echo url(''); ?>index.php/cipay/employeeDeactivationRequest"
+                                  data-parsley-validate
+                                  {{-- class="form-horizontal form-label-left" --}}
+                                >
+
+                                    <!--   index.php/cipay/employee_exit-->
+                                    <?php if ($state != 3): ?>
+                                    <div class="mb-3" align="center">
+                                        <label class="form-label"></label>
+
+                                        <div class="">
+                                            <div class="d-inline-flex align-items-center me-3">
+                                                <input type="radio" name="initiator" value="Employee" id="dc_li_c">
+                                                <label class="ms-2" for="dc_li_c">Employee Initiated</label>
+                                            </div>
+
+                                            <div class="d-inline-flex align-items-center">
+                                                <input type="radio" name="initiator" value="Employer" id="dc_li_u">
+                                                <label class="ms-2" for="dc_li_u">Employer Initiated</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- <div class="form-group">
+                                        <label class="form-label" for="last-name"></label>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label class="containercheckbox">Employee Initiated
+                                                <input checked type="radio" value="Employee" name="initiator">
+                                                <span class="checkmarkradio"></span>
+                                            </label>
+                                            <label class="containercheckbox">Employer Initiated
+                                                <input type="radio" value="Employer" name="initiator">
+                                                <span class="checkmarkradio"></span>
+                                            </label>
+                                        </div>
+                                    </div> --}}
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="stream" >Exit Date</label>
+                                                <input type="date" required name="exit_date" autocomplete="off" placeholder="Exit Date" class="form-control" id="exit_date"  aria-describedby="inputSuccess2Status">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="last-name">Interview Notes</label>
+                                                <textarea placeholder="Message or Reason  For Exit"  cols="10" class="form-control"  name="reason"  rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="mt-3">
+                                        <input type ="text" hidden name = "empID" value = "<?php echo $empID; ?>" />
+                                        <input type ="text" hidden name = "state" value = "disable" />
+                                        <button  type="submit" name="exit" value = "exit" class="btn btn-main">Confirm Exit</button>
+                                    <?php else: ?>
+                                        <input type ="text" hidden name = "empID" value = "<?php echo $empID; ?>" />
+                                        <input type ="text" hidden name = "state" value = "enable" />
+                                        <button  type="submit" name="exit" disabled value = "exit" class="btn btn-main">Confirm Exit</button>
+                                    <?php endif; ?>
+                                    <!-- <?php if($state = 0 ){ ?>
+                                        <h5><?php echo number_format($allowances,2); ?></h5> <?php } ?>
+                                        <button  type="submit" <?php if($state == 1 || $numActive > 0) { ?> disabled <?php } ?> name="exit" value = "exit" class="btn btn-warning">CONFIRM EXIT</button> -->
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                     </div>
+                    {{-- / --}}
+
                 </div>
-              </div>
             </div>
-          </div>
+
         </div>
       </div>
       @endif
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <div class="d-flex justify-content-between">
-                <h6 class="text-muted">Next of Kin</h6>
-                @if (session('mng_emp'))
-                <button class="btn btn-main" id="modal" data-toggle="modal" data-target="#nextkinModal">
-                  <i class="ph-plus me-2"></i> Add Next of kin
-                </button>
-                @endif
-              </div>
-            </div>
-
-            <table  class="table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Relationship</th>
-                  <th>Mobile</th>
-                  <th>Postal Address</th>
-                  <th>Option</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($kin as $row) { ?>
-                <tr>
-                  <td width="1px"><?php echo $row->id; ?></td></td>
-                  <td><?php echo $row->fname." ".$row->mname." ".$row->lname; ?></td>
-                  <td><?php echo $row->relationship; ?></td>
-                  <td><?php echo $row->mobile; ?></td>
-                  <td><?php echo $row->postal_address; ?></td>
-                  <td class="options-width">
-                    <a href="<?php echo  url('') .'/flex/deletekin/?id='.$row->id; ?>" title="Delete" class="icon-2 info-tooltip">
-                      <font color="red"> <i class="ph-trash"></i></font>
-                    </a>
-                  </td>
-                </tr>
-                <?php }  ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header"></div>
-          </div>
-        </div>
-      </div>
 
     </div>
   </div>
@@ -463,7 +770,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <input type="submit"  value="Add" name="add" class="btn btn-primary"/>
+                <input type="submit"  value="Add" name="add" class="btn btn-main"/>
             </div>
             </form>
         </div>
@@ -476,7 +783,7 @@
 <!-- /.modal -->
  @endsection
 
- @push('footer-script')
+@push('footer-script')
 
 <script>
 

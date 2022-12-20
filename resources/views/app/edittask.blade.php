@@ -42,8 +42,8 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Edit Task:   Current Duration: <?php
                             $date1=date_create($row->start);
                             $date2=date_create($row->end);
@@ -68,7 +68,7 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
                     <!-- <table id="datatable" class="table table-striped table-bordered"> -->
                      
@@ -150,21 +150,21 @@
                   </div>
                   <!-- /.col-lg-6 (nested) -->
                   <!-- <div class="col-md-6 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Positions for this Department</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li>
-                      <button type="button" id="modal" data-toggle="modal" data-target="#positionModal" class="btn btn-primary">New Position</button>
+                      <button type="button" id="modal" data-toggle="modal" data-target="#positionModal" class="btn btn-main">New Position</button>
                       <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
                       </li>
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <table class="table">
                       <thead>
@@ -179,7 +179,7 @@
                           <th scope="row">1</th>
                           <td>Mark</td>
                           <td class="options-width">
-                           <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                           <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php //echo $row->id;?>">Please wait...</a>
                             <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user/?id=".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                         </tr>
@@ -187,7 +187,7 @@
                           <th scope="row">2</th>
                           <td>Otto</td>
                           <td class="options-width">
-                           <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
+                           <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php //echo $row->id;?>">Please wait...</a>
                             <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user/?id=".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                         </tr>

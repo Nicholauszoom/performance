@@ -48,11 +48,9 @@
                     </td>
 
                     <td>
-                        <a
-                            href="<?php echo url(); ?>{{ url('flex/deduction_info/?pattern=').$row->id }}<?php echo $row->id; ?>|1"
-                            title="Info and Details"
-                        >
-                            <button type="button" class="btn btn-main btn-xs"><i class="ph-note-pencil"></i></button>
+                        <?php $par = $row->id. "|1" ?>
+                        <a href="{{ route('flex.deduction_info', $par) }}" title="Info and Details" class="icon-2 info-tooltip">
+                            <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
                         </a>
                     </td>
 
@@ -90,8 +88,10 @@
 
                     @if ($pendingPayroll == 0)
                     <td class="options-width">
-                        <a href="<?php echo base_url()."index.php/cipay/common_deductions_info/?id=".$row->id; ?>"  title="More Info" class="icon-2 info-tooltip">
-                            <button type="button" class="btn btn-info btn-xs"><i class="ph-note-pencil"></i></button>
+                        <a
+
+                            href="{{ url('/flex/common_deductions_info', $row->id) }}"  title="More Info" class="icon-2 info-tooltip">
+                            <button type="button" class="btn btn-main btn-xs"><i class="ph-note-pencil"></i></button>
                         </a>
                     </td>
                     @endif
@@ -106,7 +106,7 @@
         <div class="d-flex justify-content-between">
             <h5 class="mb-0">P .A .Y .E Ranges</h5>
             <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#save_department">
-                <i class="ph-plus me-2"></i> Overtime
+                <i class="ph-plus me-2"></i> Add New P.A.Y.E Range
             </button>
         </div>
     </div>
@@ -134,8 +134,8 @@
                     <td> {{ 100 * ($row->rate) .'%' }} </td>
                     @if ( $pendingPayroll == 0 )
                     <td class="options-width">
-                        <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo base_url()."index.php/cipay/paye_info/?id=".$row->id; ?>">
-                            <button type="button" class="btn btn-info btn-xs" ><i class='ph-note-pencil'></i></button>
+                        <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo url('')."/flex/paye_info/?id=".$row->id; ?>">
+                            <button type="button" class="btn btn-main btn-xs" ><i class='ph-note-pencil'></i></button>
                         </a>
                     </td>
                     @endif
@@ -155,43 +155,84 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
-                <form
-                    action="{{ route('flex.addOvertimeCategory') }}"
-                    method="POST"
-                    class="form-horizontal"
-                >
-                    @csrf
+                <div class="modal-body">
 
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="col-form-label col-sm-3">Minimum</label>
-                            <input type="text" name="minimum"  value="{{ old('minimum') }}" class="form-control">
+                    <form autocomplete="off" id="addPAYE" enctype="multipart/form-data"  method="post"    data-parsley-validate class="form-horizontal form-label-left">
+                        <div class="mb-3">
+                            <label class="form-label" for="first-name">Minimum Amount</label>
+                            <input required="" type="number" min="0" max="100000000" step="1" name="minimum" class="form-control">
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-form-label col-sm-3">Maxmum</label>
-                            <input type="number" name="maximum"  value="{{ old('maximum') }}" class="form-control">
+                        <div class="mb-3">
+                            <label class="form-label" for="first-name">Maximum Amount</label>
+                            <input required="" type="number" min="0" max="100000000" step="1" name="maximum" class="form-control">
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-form-label col-sm-3">Excess added</label>
-                            <input type="number" name="excess_added"  value="{{ old('excess_added') }}" class="form-control">
+                        <div class="mb-3">
+                            <label class="form-label" for="first-name">Excess Added To an Amount Exceeding the Minimum Amount </label>
+                            <input required="" type="number" min="0" max="100000000" step="1" name="excess" class="form-control">
                         </div>
-
-                        <div class="form-group">
-                            <label class="col-form-label col-sm-3">Rate to an Amount Excess of Minimum</label>
-                            <input type="number" name="rate"  value="{{ old('rate') }}" class="form-control">
+                        <div class="mb-3">
+                             <label class="form-label mb" for="first-name">Percentage Contribution to Amount that Exceed the Minimum Amount</label>
+                            <input required="" type="number" min="0" max="99" step="1" name="rate" class="form-control">
                         </div>
-                    <div>
+                        <!-- END -->
+                        <div class="mb-3">
+                          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                            <button  class="btn btn-main">ADD</button>
+                          </div>
+                        </div>
+                    </form>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-perfrom">Save Range</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @endsection
+
+@push('footer-script')
+<script type="text/javascript">
+    $('#addPAYE').submit(function(e){
+        e.preventDefault(); // Prevent Default Submission
+
+        $.ajax({
+            url: '{{ url("/flex/addpaye") }}',
+            type: 'POST',
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            data: $(this).serialize(), // it will serialize the form data
+            dataType: 'json'
+        })
+        .done(function(data){
+            alert(data.title);
+
+            if(data.status == 'OK'){
+                // alert(data.title);
+                $('#feedBackSubmission').fadeOut('fast', function(){
+                    $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                });
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload()// then reload the page.(3)
+                }, 2000);
+
+            } else{
+                // alert(data.title);
+                $('#feedBackSubmission').fadeOut('fast', function(){
+                    $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                });
+            }
+        })
+        .fail(function(){
+            alert('Registration Failed, Review Your Network Connection...');
+        });
+    });
+
+
+    $("#newPaye").click(function() {
+        $('html,body').animate({
+            scrollTop: $("#insertPaye").offset().top},
+            'slow');
+    });
+</script>
+@endpush

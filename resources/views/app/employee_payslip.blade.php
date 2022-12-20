@@ -17,12 +17,12 @@
           <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">
                       <!-- PANEL-->
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Employee Payslip llll</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                     <form id="demo-form2" enctype="multipart/form-data"  method="post" action="{{ url("/flex/reports/payslip") }}" target="_blank"  data-parsley-validate class="form-horizontal form-label-left">
 
@@ -64,7 +64,7 @@
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button type="reset" class="btn btn-success">CANCEL</button>
-                          <input type="submit"  value="PRINT" id="print" name="print" class="btn btn-primary"/>
+                          <input type="submit"  value="PRINT" id="print" name="print" class="btn btn-main"/>
                         </div>
                       </div>
                         <hr>
@@ -98,12 +98,12 @@
               </div>
 
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Payslip Mail Delivery List</h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    <div id="feedBackMail"></div>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>

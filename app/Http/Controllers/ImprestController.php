@@ -17,8 +17,9 @@ class ImprestController extends Controller
 {
 
 
-  public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
+  public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null,$imprest_model=null)
   {
+    $this->imprest_model = new ImprestModel;
     $this->payroll_model = new Payroll;
     $this->reports_model = new ReportModel;
     $this->flexperformance_model = new FlexPerformanceModel;
@@ -74,9 +75,9 @@ class ImprestController extends Controller
     return view('app.imprest', $data);
   }
 
-  public function imprest_info(Request $request)
+  public function imprest_info($id)
   {
-    $imprestID =  base64_decode($request->id);
+    $imprestID =  $id;
 
     $imprest_details =  $this->imprest_model->getImprest($imprestID);
     $requirements =  $this->imprest_model->getImprestRequirements($imprestID);

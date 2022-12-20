@@ -244,7 +244,7 @@ function heslb(Request $request)  {
 
 function pension(Request $request)  {
 
-    
+
     $payrollMonth =$request->input('payrolldate');
     $pensionFund =$request->input('fund');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -783,6 +783,9 @@ function backup_payslip(Request $request)  {
 
 
     function attendance(Request $request)  {
+
+        dd($request->all());
+        
           if ($request->input('print')) {
 
         // DATE MANIPULATION

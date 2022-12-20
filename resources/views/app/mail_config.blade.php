@@ -37,8 +37,8 @@
 
         <!-- Tabs -->
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
+            <div class="card">
+                <div class="card-head">
                     <h2><i class="fa fa-bars"></i> Mail Configuration</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -48,7 +48,7 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="card-body">
 
                     <form autocomplete="off" id="addMail" method="post" class="form-horizontal form-label-left">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Host</label>

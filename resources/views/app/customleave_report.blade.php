@@ -34,8 +34,8 @@
 
             <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-user"></i> Individual Leave Report </h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -54,7 +54,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
 
                     <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/attendance/customleavereport"  data-parsley-validate class="form-horizontal form-label-left" autocomplete="off" >
@@ -75,7 +75,7 @@
                       
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <!-- <input type="submit"  value="SHOW" name="viewindividual" class="btn btn-primary"/> -->
+                          <!-- <input type="submit"  value="SHOW" name="viewindividual" class="btn btn-main"/> -->
                           <input type="submit"  value="PRINT" name="printindividual" class="btn btn-success"/>
                         </div>
                       </div> 
@@ -93,14 +93,14 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Leaves Already Accepted
                     <a></a></h2>
                     
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
 
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                   

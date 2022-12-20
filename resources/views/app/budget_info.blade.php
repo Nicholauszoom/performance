@@ -41,8 +41,8 @@
 
     <div class="row">
       <div class="col-md-12">
-        <div class="x_panel">
-          <div class="x_content"> 
+        <div class="card">
+          <div class="card-body"> 
                     <!-- start project-detail sidebar -->
             <div class="col-md-12 col-sm-3 col-xs-12">
               <section class="panel">
@@ -50,12 +50,12 @@
                           
                           <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                           <h3 class="green"><i class="fa fa-info-circle"></i> <?php echo $description; ?></h3>
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
                         <div id ="resultFeedDes"></div>
     
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">

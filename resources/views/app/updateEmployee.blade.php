@@ -72,12 +72,12 @@
         <div class="clearfix"></div>
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2>Edit Employee</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content"> <br>
+                    <div class="card-body"> <br>
                         <?php
 
                      echo session("note");  ?>
@@ -96,7 +96,7 @@
                                                 <input type="text" name="fname" value="<?php echo $fname; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -114,7 +114,7 @@
                                                 <input type="text" name="mname" value="<?php echo $mname; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -132,7 +132,7 @@
                                                 <input type="text" name="lname" value="<?php echo $lname; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -150,7 +150,7 @@
                                                 <input type="text" name="old_id" value="<?php echo $old_empID; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -176,7 +176,7 @@
                                                     <span class="checkmarkradio"></span>
                                                 </label>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -204,7 +204,7 @@
                                                     <span class="checkmarkradio"></span>
                                                 </label>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -237,7 +237,7 @@
                                 <!--                                <span class="input-group-btn">-->
                                 <!--                                  <button --><?php //if($positionTransfer>0 || $departmentTransfer>0){ ?>
                                 <!--disabled="" --><?php //} ?>
-                                <!-- class="btn btn-primary">UPDATE</button>-->
+                                <!-- class="btn btn-main">UPDATE</button>-->
                                 <!--                                </span>-->
                                 <!--                              </div>-->
                                 <!--                          </div>-->
@@ -277,7 +277,7 @@
                                                     <span class="input-group-btn">
                                                         <button
                                                             <?php if($positionTransfer>0 || $departmentTransfer>0){ ?>disabled=""
-                                                            <?php } ?> class="btn btn-primary">UPDATE</button>
+                                                            <?php } ?> class="btn btn-main">UPDATE</button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -302,7 +302,7 @@
                                                         <?php echo $row->name; ?></option> <?php } ?>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -325,7 +325,7 @@
                                                         <?php echo $row->name; ?></option> <?php } ?>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -352,7 +352,7 @@
                                                         <?php } ?> value="Widowed">Widowed</option>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -377,7 +377,7 @@
                                                         <?php echo $row->NAME; ?></option> <?php } ?>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -396,7 +396,7 @@
                                                 <input type="text" name="emp_code" value="<?php echo $emp_code; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -414,7 +414,7 @@
                                                 <input type="text" name="emp_level" value="<?php echo $emp_level; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -434,7 +434,7 @@
                                                 <input hidden name="empID" value="<?php echo $empID; ?>">
                                                 <input required type='file' id="imgInp" name='userfile' />
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -465,7 +465,7 @@
                                                     class="form-control">
                                                 <span class="input-group-btn">
                                                     <button <?php if($salaryTransfer>0){ ?> disabled="" <?php } ?>
-                                                        class="btn btn-primary">UPDATE</button>
+                                                        class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -502,7 +502,7 @@
                                                     </select>
                                                     <span class="input-group-btn">
                                                         <button <?php if($pendingPayroll>0){ ?> disabled="" <?php } ?>
-                                                            class="btn btn-primary">UPDATE</button>
+                                                            class="btn btn-main">UPDATE</button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -524,7 +524,7 @@
                                                     value="<?php echo $account_no; ?>" class="form-control">
                                                 <span class="input-group-btn">
                                                     <button <?php if($pendingPayroll>0){ ?> disabled="" <?php } ?>
-                                                        class="btn btn-primary">UPDATE</button>
+                                                        class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -542,7 +542,7 @@
                                                 <input type="text" required="" name="email"
                                                     value="<?php echo $email; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -560,7 +560,7 @@
                                                 <input type="text" required="" name="address"
                                                     value="<?php echo $postal_address; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -578,7 +578,7 @@
                                                 <input type="text" required="" name="city"
                                                     value="<?php echo $postal_city; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -596,7 +596,7 @@
                                                 <input type="text" required="" name="phys_address"
                                                     value="<?php echo $physical_address; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -620,7 +620,7 @@
                                                     </option> <?php } ?>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -638,7 +638,7 @@
                                                 <input type="text" required="" name="mobile"
                                                     value="<?php echo $mobile; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -656,7 +656,7 @@
                                                 <input type="text" required="" name="home_address"
                                                     value="<?php echo $home_address; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -682,7 +682,7 @@
                                                         <?php echo $row->name; ?></option> <?php } ?>
                                                 </select>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -701,7 +701,7 @@
                                                 <input type="text" required="" name="pension_no"
                                                     value="<?php echo $pf_membership_no; ?>" class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -718,7 +718,7 @@
                                                 <input type="text" name="nationalid" value="<?php echo $national_id; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -735,7 +735,7 @@
                                                 <input type="text" name="tin" value="<?php echo $tin; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -752,7 +752,7 @@
                                                 <input type="text" name="dob" value="<?php echo $birthdate; ?>"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -775,7 +775,7 @@
                                                 <span class="fa fa-calendar-o form-control-feedback right"
                                                     aria-hidden="true"></span>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -798,7 +798,7 @@
                                                 <span class="fa fa-calendar-o form-control-feedback right"
                                                     aria-hidden="true"></span>
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">UPDATE</button>
+                                                    <button class="btn btn-main">UPDATE</button>
                                                 </span>
                                             </div>
                                         </div>

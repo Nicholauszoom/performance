@@ -30,20 +30,20 @@
             <div class="row">
               
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <?php if($pendingPayroll > 0){ ?>
                        <p class='alert alert-warning text-center'>No Arrears Payments Can Be Scheduled until the Pending Payoll is Responded</p>
                      <?php } ?>
                     <h2>Arrears Payments <small><?php echo date('F, Y',strtotime($payroll_month)); ?></small> &nbsp;&nbsp;&nbsp;
                       <?php if($pendingPayroll==0 && session('mng_paym')){ ?>
-                     <button type="button" onclick="payAll('<?php echo $payroll_month;?>');" class="btn btn-primary btn-md">PAY ALL ARREARS IN THIS MONTH</button>
+                     <button type="button" onclick="payAll('<?php echo $payroll_month;?>');" class="btn btn-main btn-md">PAY ALL ARREARS IN THIS MONTH</button>
                    <?php } ?>
                    </h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                    <div id="feedBackSubmission"></div>
                     <table id="datatable-task-table" class="table table-striped table-bordered">

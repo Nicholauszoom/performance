@@ -17,8 +17,8 @@
 
         <!-- Tabs -->
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-                <div class="x_title">
+            <div class="card">
+                <div class="card-head">
                     <h2><i class="fa fa-bars"></i> Funders</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -28,7 +28,7 @@
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="card-body">
 
                     <div class="" role="tabpanel" data-example-id="togglable-tabs">
                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -55,8 +55,8 @@
                             <div role="tabpanel" class="tab-pane fade active in" id="overtimeTab"
                                  aria-labelledby="home-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>Funders</h2>
                                             <div class="clearfix"></div>
                                         </div>
@@ -66,12 +66,12 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#bottom">
-                                                    <button type="button" class="btn btn-primary">New Funder</button>
+                                                    <button type="button" class="btn btn-main">New Funder</button>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedbackGet"></div>
                                             <table id="datatable-keytable" class="table table-striped table-bordered">
                                                 <thead>
@@ -122,12 +122,12 @@
                                     </div>
                                 </div>
                                 <div id="bottom" class="col-md-8 col-sm-6 col-xs-6">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2><i class="fa fa-pie-plus"></i>&nbsp;&nbsp;<b>New Funder</b></h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedback"></div>
                                             <form method="post" class="form-horizontal form-label-left" id="addFunder">
                                                 <div class="form-group">
@@ -197,7 +197,7 @@
                                                     </div>
                                                 </div>
                                                 <div align="right" class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-main">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -207,8 +207,8 @@
 
                             <div role="tabpanel" class="tab-pane fade" id="arrearsReportTab" aria-labelledby="home-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>Project Segment</h2>
                                             <div class="clearfix"></div>
                                         </div>
@@ -218,12 +218,12 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#bottom1">
-                                                    <button type="button" class="btn btn-primary">New Segment</button>
+                                                    <button type="button" class="btn btn-main">New Segment</button>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedbackGet"></div>
                                             <table id="datatable" class="table table-striped table-bordered">
                                                 <thead>
@@ -252,7 +252,7 @@
                                                                    class="icon-2 info-tooltip">
                                                                     <button type="button"
                                                                             class="btn btn-danger btn-xs"><i
-                                                                                class="fa fa-trash"></i></button>
+                                                                                class="ph-trash"></i></button>
                                                                 </a>
                                                             </td>
                                                         <?php } ?>
@@ -265,13 +265,13 @@
                                     </div>
                                 </div>
                                 <div id="bottom1" class="col-md-8 col-sm-6 col-xs-6">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2><i class="fa fa-pie-plus"></i>&nbsp;&nbsp;<b>New Project Segment</b>
                                             </h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedback"></div>
                                             <form method="post" class="form-horizontal form-label-left" id="addSegment">
                                                 <div class="form-group">
@@ -286,7 +286,7 @@
                                                 </div>
 
                                                 <div align="right" class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-main">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -296,8 +296,8 @@
 
                              <div role="tabpanel" class="tab-pane fade" id="arrearsReportTab1" aria-labelledby="home-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>Expense Category</h2>
                                             <div class="clearfix"></div>
                                         </div>
@@ -307,12 +307,12 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#bottom2">
-                                                    <button type="button" class="btn btn-primary">New Category</button>
+                                                    <button type="button" class="btn btn-main">New Category</button>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedbackGet"></div>
                                             <table id="datatable1" class="table table-striped table-bordered">
                                                 <thead>
@@ -341,7 +341,7 @@
                                                                    class="icon-2 info-tooltip">
                                                                     <button type="button"
                                                                             class="btn btn-danger btn-xs"><i
-                                                                                class="fa fa-trash"></i></button>
+                                                                                class="ph-trash"></i></button>
                                                                 </a>
                                                             </td>
                                                         <?php } ?>
@@ -354,13 +354,13 @@
                                     </div>
                                 </div>
                                 <div id="bottom2" class="col-md-8 col-sm-6 col-xs-6">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2><i class="fa fa-pie-plus"></i>&nbsp;&nbsp;<b>New Expense Category</b>
                                             </h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedback"></div>
                                             <form method="post" class="form-horizontal form-label-left" id="addCategory">
                                                 <div class="form-group">
@@ -375,7 +375,7 @@
                                                 </div>
 
                                                 <div align="right" class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-main">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -385,8 +385,8 @@
 
                             <div role="tabpanel" class="tab-pane fade" id="arrearsReportTab2" aria-labelledby="home-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>Exception Type</h2>
                                             <div class="clearfix"></div>
                                         </div>
@@ -396,12 +396,12 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#bottom3">
-                                                    <button type="button" class="btn btn-primary">New Exception</button>
+                                                    <button type="button" class="btn btn-main">New Exception</button>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedbackGet"></div>
                                             <table id="datatable2" class="table table-striped table-bordered">
                                                 <thead>
@@ -430,7 +430,7 @@
                                                                    class="icon-2 info-tooltip">
                                                                     <button type="button"
                                                                             class="btn btn-danger btn-xs"><i
-                                                                                class="fa fa-trash"></i></button>
+                                                                                class="ph-trash"></i></button>
                                                                 </a>
                                                             </td>
                                                         <?php } ?>
@@ -443,13 +443,13 @@
                                     </div>
                                 </div>
                                 <div id="bottom3" class="col-md-8 col-sm-6 col-xs-6">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2><i class="fa fa-pie-plus"></i>&nbsp;&nbsp;<b>New Exception Type Category</b>
                                             </h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedback"></div>
                                             <form method="post" class="form-horizontal form-label-left" id="addException">
                                                 <div class="form-group">
@@ -464,7 +464,7 @@
                                                 </div>
 
                                                 <div align="right" class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-main">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -474,8 +474,8 @@
 
                             <div role="tabpanel" class="tab-pane fade" id="arrearsReportTab3" aria-labelledby="home-tab">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>Request Fund</h2>
                                             <div class="clearfix"></div>
                                         </div>
@@ -485,12 +485,12 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#bottom4">
-                                                    <button type="button" class="btn btn-primary">New Request</button>
+                                                    <button type="button" class="btn btn-main">New Request</button>
                                                 </a>
                                             </div>
                                         </div>
 
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedbackGet"></div>
                                             <table id="datatable3" class="table table-striped table-bordered">
                                                 <thead>
@@ -521,13 +521,13 @@
                                     </div>
                                 </div>
                                 <div id="bottom4" class="col-md-8 col-sm-6 col-xs-6">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2><i class="fa fa-pie-plus"></i>&nbsp;&nbsp;<b>New Request Fund</b>
                                             </h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="resultfeedback"></div>
                                             <form method="post" class="form-horizontal form-label-left" id="addRequest">
 
@@ -581,7 +581,7 @@
                                                 </div>
 
                                                 <div align="right" class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-main">Submit</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -611,7 +611,7 @@
 
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-main btn-sm" data-dismiss="modal">No</button>
                             <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">

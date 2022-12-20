@@ -54,12 +54,12 @@
                             if($checkEmployee>0){ ?>
                         <a title="Country Can Not Be Deleted, Some Employee Have Nationality From This Country"
                             class="icon-2 info-tooltip"><button disabled="" type="button"
-                                class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                         <?php } else { ?>
 
                         <a href="javascript:void(0)" onclick="deleteCounty(<?php echo $row->code; ?>)" title="Delete Country"
                             class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i
-                                    class="fa fa-trash-o"></i></button> </a>
+                                    class="ph-trash-o"></i></button> </a>
                         <?php } ?>
 
                     </td>

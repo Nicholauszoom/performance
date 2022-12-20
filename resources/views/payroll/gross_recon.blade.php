@@ -56,23 +56,23 @@ $payroll_state = $data['payroll_state'];
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
+                            <div class="card">
                                 <div id="payrollFeedback"></div>
-                                <div class="x_title"><br>
+                                <div class="card-head"><br>
                                     <!--                        <h2>Partial Payment</h2>-->
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">
+                                <div class="card-body">
 
-                                    <div class="x_panel">
+                                    <div class="card">
 
-                                        <div class="x_title">
+                                        <div class="card-head">
                                             <h2>Gross Summary</h2>
                                             <div class="clearfix"></div>
                                             <div id="feedBack"></div>
                                         </div>
 
-                                        <div id="employeeList" class="x_content">
+                                        <div id="employeeList" class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -98,15 +98,15 @@ $payroll_state = $data['payroll_state'];
                                     </div>
 
                                     <!-- PANEL-->
-                                    <div class="x_panel">
+                                    <div class="card">
 
-                                        <div class="x_title">
+                                        <div class="card-head">
                                             <h2>Details</h2>
                                             <div class="clearfix"></div>
                                             <div id="feedBack"></div>
                                         </div>
 
-                                        <div id="employeeList" class="x_content">
+                                        <div id="employeeList" class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <tr>
@@ -181,15 +181,15 @@ $payroll_state = $data['payroll_state'];
 
                                     </div>
 
-                                    <div class="x_panel">
+                                    <div class="card">
 
-                                        <div class="x_title">
+                                        <div class="card-head">
                                             <!--                                <h2>Notes</h2>-->
                                             <div class="clearfix"></div>
                                             <div id="feedBack"></div>
                                         </div>
 
-                                        <div id="employeeList" class="x_content">
+                                        <div id="employeeList" class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <th><b>Staff changes</b></th>
@@ -210,15 +210,15 @@ $payroll_state = $data['payroll_state'];
 
                                     </div>
 
-                                    <div class="x_panel">
+                                    <div class="card">
 
-                                        <div class="x_title">
+                                        <div class="card-head">
                                             <!--                                <h2>Notes</h2>-->
                                             <div class="clearfix"></div>
                                             <div id="feedBack"></div>
                                         </div>
 
-                                        <div id="employeeList" class="x_content">
+                                        <div id="employeeList" class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <th><b>Staff Exit</b></th>
@@ -249,15 +249,15 @@ $payroll_state = $data['payroll_state'];
 
                                     </div>
 
-                                    <div class="x_panel">
+                                    <div class="card">
 
-                                        <div class="x_title">
+                                        <div class="card-head">
                                             <!--                                <h2>Notes</h2>-->
                                             <div class="clearfix"></div>
                                             <div id="feedBack"></div>
                                         </div>
 
-                                        <div id="employeeList" class="x_content">
+                                        <div id="employeeList" class="card-body">
                                             <table class="table table-striped table-bordered">
                                                 <thead>
                                                     <th><b>Staff Joining</b></th>
@@ -307,7 +307,7 @@ $payroll_state = $data['payroll_state'];
                         action="{{route('reports.employeeCostExport_temp') }}" data-parsley-validate
                         class="form-horizontal form-label-left" target="_blank">
                         <input type="hidden" name="payrolldate" value="<?php echo $payroll_date; ?>">
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary">PRINT</button>
+                        <button type="submit" name="submit" value="submit" class="btn btn-main">PRINT</button>
                     </form>
                     <?php } ?>
                     <?php /*echo $this->session->flashdata("note"); */  ?>
@@ -329,7 +329,7 @@ $payroll_state = $data['payroll_state'];
                                     <input name="payroll_date" value="<?php echo $payrollMonth; ?>" type="hidden">
                                     <th>&nbsp;
                                         <button type="submit" name="submit" value="submit"
-                                            class="btn btn-primary">CONFIRM</button>
+                                            class="btn btn-main">CONFIRM</button>
                                     </th>
                                 </form>
 
@@ -378,7 +378,7 @@ $payroll_state = $data['payroll_state'];
                                         <input type="hidden" value="<?php echo $row->empID;?>" name="employee">
                                         <input type="hidden" value="<?php echo $payroll_date;?>" name="payrolldate">
                                         <input hidden name="profile" value="0">
-                                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                        <button type="submit" class="btn btn-sm btn-main"><i
                                                 class="fa fa-file-pdf-o"></i></button>
                                     </form>
                                 </td>

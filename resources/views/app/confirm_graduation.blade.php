@@ -36,8 +36,8 @@
     <div class="row">
          
      <div class="col-md-12 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
+            <div class="card">
+              <div class="card-head">
                 <h2><button class="btn btn-info">SKILLS NAME: </button> <?php echo $courseTitle; ?></h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -47,7 +47,7 @@
                 </ul>
                 <div class="clearfix"></div>
               </div>
-              <div class="x_content">
+              <div class="card-body">
             <div id ="resultfeedBackSubmission"></div>
                 <form autocomplete="off" enctype="multipart/form-data" <?php if($mode==1){ ?>  id="employeeCertification" <?php } else { ?> id="confirmGraduation" <?php } ?>  class="form-horizontal form-label-left input_mask" method ="POST">
 
@@ -75,7 +75,7 @@
                   <div class="form-group">
                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                       <button type="reset" class="btn btn-default">CANCEL</button>
-                      <button class="btn btn-primary">CONFIRM</button>
+                      <button class="btn btn-main">CONFIRM</button>
                     </div>
                   </div>
     
