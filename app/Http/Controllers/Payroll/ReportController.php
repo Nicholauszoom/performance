@@ -63,7 +63,7 @@ class ReportController extends Controller
  }
 
  function pay_checklist(Request $request)  {
-    // dd($request->all());
+    dd($request->all());
       if (1) {
         $payroll_date =$request->input('payrolldate');
         $isReady = $this->reports_model->payCheklistStatus($payroll_date);
@@ -120,7 +120,7 @@ class ReportController extends Controller
 
    function p9(Request $request)  {
 
-        dd($request->all());
+        // dd($request->all());
 
 
       if (1) {
@@ -144,7 +144,7 @@ class ReportController extends Controller
 
         // dd(app_path());
 
-        include(app_path() . '\reports\p9.php');
+        include(app_path() . '/reports/p9.php');
 
         //  return view('app.reports/p9', $data);
     }
@@ -185,7 +185,7 @@ function p10(Request $request)  {
         $total=$data['total'];
         $info=$data['info'];
 
-        include(app_path() . '\reports\p10.php');
+        include(app_path() . '/reports/p10.php');
     }
     elseif($period==2 && $checkup2>=1){
         // exit($date2start."<br>".$date2end);
@@ -207,7 +207,7 @@ function p10(Request $request)  {
         $info=$data['info'];
 
         dd('here');
-        include(app_path() . '\reports\p10.php');
+        include(app_path() . '/reports/p10.php');
         //  return view('app.reports/p10', $data);
     }
     else{
@@ -236,7 +236,7 @@ function heslb(Request $request)  {
     $info=$data['info'];
 
 
-    include(app_path() . '\reports\heslb.php');
+    include(app_path() . '/reports/heslb.php');
 
     //  return view('app.reports/heslb', $data);
 
@@ -273,7 +273,7 @@ $info=$data['info'];
 $payroll_month=$data['payroll_month'];
 $pension_fund=$data['pension_fund'];
 
-include(app_path() . '\reports\pension.php');
+include(app_path() . '/reports/pension.php');
     //  return view('app.reports/pension', $data);
 
 }
@@ -281,7 +281,7 @@ include(app_path() . '\reports\pension.php');
 
 
 function wcf(Request $request)  {
-    dd($request->all());
+    // dd($request->all());
 
     if (1) {
         $calendar =$request->input('payrolldate');
@@ -309,7 +309,7 @@ function wcf(Request $request)  {
         $info=$data['info'];
         $payroll_month=$data['payroll_month'];
 
-        include(app_path() . '\reports\wcf.php');
+        include(app_path() . '/reports/wcf.php');
         //  return view('app.reports/wcf', $data);
     }
 
@@ -372,7 +372,7 @@ $total_overtimes=$data['total_overtimes'];
 $payroll_date=$data['payroll_date'];
 $payroll_month=$data['payroll_month'];
 
-include(app_path() . '\reports\employment_cost.php');
+include(app_path() . '/reports/employment_cost.php');
         //  return view('app.reports/employment_cost', $data);
     //}
 
@@ -418,7 +418,7 @@ public function loanreport(Request $request)
 
   $loan=$data['loan'];
 $title=$data['title'];
-include(app_path() . '\reports\loan_report.php');
+include(app_path() . '/reports/loan_report.php');
 
     //  return view('app.reports/loan_report', $data);
   }
@@ -453,7 +453,7 @@ include(app_path() . '\reports\loan_report.php');
       $leave=$data['leave'];
       $title=$data['title'];
 
-      include(app_path() . '\reports\customleave_report.php');
+      include(app_path() . '/reports/customleave_report.php');
     //  return view('app.customleave_report', $data);
   }
 
@@ -473,7 +473,7 @@ include(app_path() . '\reports\loan_report.php');
       $leave=$data['leave'];
       $title=$data['title'];
 
-      include(app_path() . '\reports\customleave_report.php');
+      include(app_path() . '/reports/customleave_report.php');
 
     }
 
@@ -486,12 +486,12 @@ include(app_path() . '\reports\loan_report.php');
       $leave=$data['leave'];
       $title=$data['title'];
 
-      include(app_path() . '\reports\customleave_report.php');
+      include(app_path() . '/reports/customleave_report.php');
 
       }
 
     public function payslip(Request $request)  {
-        dd($request->all());
+        // dd($request->all());
 
         if ($request->input('print')) {
 
@@ -561,7 +561,7 @@ include(app_path() . '\reports\loan_report.php');
                 $paid_with_arrears_d=$data['paid_with_arrears_d'];
                 $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                 include(app_path() . '\reports\customleave_report.php');
+                 include(app_path() . '/reports/customleave_report.php');
 
             }
         }else{
@@ -634,7 +634,7 @@ include(app_path() . '\reports\loan_report.php');
                         $paid_with_arrears_d=$data['paid_with_arrears_d'];
                         $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                        include(app_path() . '\reports\payslip.php');
+                        include(app_path() . '/reports/payslip.php');
                 }
 
                 $data_all['emp_id'] = $payroll_emp_ids;
@@ -712,7 +712,7 @@ include(app_path() . '\reports\loan_report.php');
                 $paid_with_arrears_d=$data['paid_with_arrears_d'];
                 $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                include(app_path() . '\reports\payslip.php');
+                include(app_path() . '/reports/payslip.php');
                 //  return view('app.reports/payslip', $data);
 
             }
@@ -755,7 +755,7 @@ function backup_payslip(Request $request)  {
                 $slipinfo=$data['slipinfo'];
                 $companyinfo=$data['companyinfo'];
 
-                include(app_path() . '\reports\payslip_test.php');
+                include(app_path() . '/reports/payslip_test.php');
 
             }
 
@@ -776,7 +776,7 @@ function backup_payslip(Request $request)  {
         $empInfo=$data['empInfo'];
         $empID=$data['empID'];
 
-        include(app_path() . '\reports\payslip_test.php');
+        include(app_path() . '/reports/payslip_test.php');
         //  return view('app.reports/kpi', $data);
 
     }
@@ -785,7 +785,7 @@ function backup_payslip(Request $request)  {
     function attendance(Request $request)  {
 
         dd($request->all());
-        
+
           if ($request->input('print')) {
 
         // DATE MANIPULATION
@@ -805,7 +805,7 @@ function backup_payslip(Request $request)  {
             $employee_list=$data['employee_list'];
             $payroll_month=$data['payroll_month'];
 
-            include(app_path() . '\reports\attendance_report.php');
+            include(app_path() . '/reports/attendance_report.php');
             //  return view('app.reports/attendance_report', $data);
         }
 
@@ -815,7 +815,7 @@ function backup_payslip(Request $request)  {
     #################################END PROJECT REPORTS##############################
 
     public function payrollInputJournalExport(Request $request) {
-        // dd($request->all());
+        dd($request->all());
 
         if (1 ) {
             $payroll_date =$request->input('payrolldate');
@@ -1168,7 +1168,7 @@ function backup_payslip(Request $request)  {
                 $count++;
             }
 
-            $writer = new Xlsx($object); // instantiate Xlsx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1189,7 +1189,7 @@ function backup_payslip(Request $request)  {
     }
 
     public function payrollInputJournalExportTime(Request $request) {
-        // dd($request->all());
+        dd($request->all());
         if (1 ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -1398,8 +1398,8 @@ function backup_payslip(Request $request)  {
 
                             foreach ($project_activity_time as $p_a_t) {
                                 try {
-                                        $d1 = DateTime($p_a_t->start_date);
-                                        $d2 = DateTime($p_a_t->end_date);
+                                        $d1 = new DateTime($p_a_t->start_date);
+                                        $d2 = new DateTime($p_a_t->end_date);
                                         $diff = $d2->diff($d1);
 
                                         if (($p_a_t->project == $p_a->project) && ($p_a_t->activity == $p_a->activity) && ($row->empID == $p_a->emp_id)) {
@@ -1605,7 +1605,7 @@ function backup_payslip(Request $request)  {
                  $count++;
              }
 
-            $writer = new Xlsx($object); // instantiate Xlsx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1624,7 +1624,7 @@ function backup_payslip(Request $request)  {
     }
 
     public function staffPayrollBankExport(Request $request) {
-        // dd($request->all());
+        dd($request->all());
         if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -1726,7 +1726,7 @@ function backup_payslip(Request $request)  {
              $data_row++;
             }
 
-            $writer = new Xlsx($object); // instantiate Xlsx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1743,7 +1743,7 @@ function backup_payslip(Request $request)  {
 
 
     public function volunteerAllowanceMWPExport(Request $request) {
-        dd($request->all());
+        // dd($request->all());
 
         if (1 ) {
             $payroll_date = $request->input('payrolldate');
@@ -1826,7 +1826,7 @@ function backup_payslip(Request $request)  {
             }
 
 
-            $writer = new Xlsx($object); // instantiate Xlsx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -1857,56 +1857,56 @@ function dynamic_pdf(Request $request)  {
 
 
 // set document information
-$pdf::SetCreator(PDF_CREATOR);
-$pdf::SetAuthor('Cits');
-$pdf::SetTitle('P9-'.date('d/m/Y'));
-$pdf::SetSubject('PAYE');
-$pdf::SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('Cits');
+$pdf->SetTitle('P9-'.date('d/m/Y'));
+$pdf->SetSubject('PAYE');
+$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
 // set default header data
 
-// $pdf::SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
+// $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
 //  PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-$pdf::setFooterData(array(0,64,0), array(0,64,128));
+$pdf->setFooterData(array(0,64,0), array(0,64,128));
 
 // remove default header/footer
-$pdf::setPrintHeader(false);
-$pdf::setPrintFooter(true);
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(true);
 
 // set header and footer fonts
-$pdf::setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf::setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
-$pdf::SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf::SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf::SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf::SetFooterMargin(PDF_MARGIN_FOOTER);
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 // set auto page breaks
-$pdf::SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 // set image scale factor
-$pdf::setImageScale(PDF_IMAGE_SCALE_RATIO);
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
 // set some language-dependent strings (optional)
 if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
                require_once(dirname(__FILE__).'/lang/eng.php');
-               $pdf::setLanguageArray($l);
+               $pdf->setLanguageArray($l);
 }
 
 // ---------------------------------------------------------
 
 // set default font subsetting mode
-$pdf::setFontSubsetting(true);
+$pdf->setFontSubsetting(true);
 
 // Set font
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
-$pdf::SetFont('times', '', 12, '', true);
+$pdf->SetFont('times', '', 12, '', true);
 
 // TIN NUMBER
 
@@ -1929,16 +1929,16 @@ foreach($info as $key){
 
 
 // This method has several options, check the source code documentation for more information.
-// $pdf::AddPage();
-$pdf::AddPage('L', 'A4');
-// $pdf::Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
+// $pdf->AddPage();
+$pdf->AddPage('L', 'A4');
+// $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
 
-$pdf::SetXY(0, 18);
+$pdf->SetXY(0, 18);
 $header1 = <<<"EOD"
 <p align="center">HESLB LOAN REPAYMENT SCHEDULE<br>(To be submitted duly completed with every payment to HESLB)</p>
 EOD;
-$pdf::writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
 
 
 // EMPLOYER
@@ -1964,31 +1964,31 @@ $payrollmonth = date('F, Y', strtotime($payrolldate));
 
 
 
-$pdf::SetFont('times', '', 10, '', true);
-$pdf::SetXY(40, 34);
+$pdf->SetFont('times', '', 10, '', true);
+$pdf->SetXY(40, 34);
 $header = "<p><b>NAME OF EMPLOYER:&nbsp;&nbsp;</b>  ".strtoupper($name)."<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>POSTAL ADDRESS:&nbsp;&nbsp;&nbsp;</b>".$postal_address."<br><br><br>";
 
-$pdf::writeHTMLCell(0, 12, '', '', $header, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 12, '', '', $header, 0, 1, 0, true, '', true);
 
 
 
-$pdf::SetXY(55, 54);
+$pdf->SetXY(55, 54);
 $htm = "<p><b>TELEPHONE:&nbsp;&nbsp;&nbsp;</b>".$phone_no1."<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>EMAIL:&nbsp;&nbsp;&nbsp;</b>".$email."</p>";
-$pdf::writeHTMLCell(0, 12, '', '', $htm, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 12, '', '', $htm, 0, 1, 0, true, '', true);
 
 
-$pdf::SetXY(190, 34);
+$pdf->SetXY(190, 34);
 $header2 = "<p><b>EMPLOYER HESLB CODE NO:&nbsp;&nbsp;</b>&nbsp;&nbsp;&nbsp;".$heslbcode."<br><br><br><br>
       <b>PAYROLL MONTH:&nbsp;&nbsp;</b>".$payrollmonth;
-$pdf::writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
 
 
 
-$pdf::SetFont('times', '', 12, '', true);
+$pdf->SetFont('times', '', 12, '', true);
 // Set some content to print
-$pdf::SetXY(38, 30);
+$pdf->SetXY(38, 30);
 
 $html = '<table align="center" border="1px">';
 
@@ -2057,14 +2057,14 @@ $html .= '</table>
 // MYSQL DATA
 
 // Print text using writeHTMLCell()
-$pdf::writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
 // ---------------------------------------------------------
 
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
-// $pdf::Output('heslb-'.date('d/m/Y').'.pdf', 'I');
-$pdfString = $pdf::Output('quotation.pdf', 'S');
+// $pdf->Output('heslb-'.date('d/m/Y').'.pdf', 'I');
+$pdfString = $pdf->Output('quotation.pdf', 'S');
 
 // SEND EMAIL
 // SMTP configuration
@@ -2122,7 +2122,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
     }
 
     public function employeeCostExport(Request $request) {
-        // dd($request->all());
+        dd($request->all());
         if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -2247,7 +2247,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
                 $data_row++;
             }
 
-            $writer = new Xlsx($object); // instantiate Xlsx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -2376,7 +2376,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
                 $data_row++;
             }
 
-            $writer = new Xlsx($object); // instantiate Xlsx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -2391,7 +2391,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
     }
 
     public function employeeBioDataExport(Request $request) {
-        // dd($request->all());
+        dd($request->all());
 
         if (1 && $request->input('status')!='' ) {
             $payroll_date = $request->input('payrolldate');
@@ -2503,7 +2503,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
                 $data_row++;
             }
 
-            $writer = new Xlsx($object); // instantiate Xlsxx
+            $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
             header('Content-Disposition: attachment;filename="'. $filename .'.xls"');
             header('Cache-Control: max-age=0');
@@ -2519,7 +2519,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
 
     public function grossReconciliation(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
 
         if (1 ) {
             $current_payroll_month = $request->input('payrolldate');
@@ -2560,7 +2560,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
 
     public function netReconciliation(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
 
         if (1 ) {
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -2599,7 +2599,7 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
     }
 
     public function loanReports(Request $request)  {
-        // dd($request->all());
+        dd($request->all());
 
         if (1 ) {
             $payroll_date = $request->input('payrolldate');
@@ -2607,22 +2607,22 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
-                $loans = $this->reports_model->s_loanReport($payroll_date);
+                $data['loans'] = $this->reports_model->s_loanReport($payroll_date);
             }else{
                 $suffix = "Allowance";
-                $loans = $this->reports_model->v_loanReport($payroll_date);
+                $data['loans'] = $this->reports_model->v_loanReport($payroll_date);
             }
-            $info= $this->reports_model->company_info();
-            $payroll_date = $payroll_date;
+            $data['info']= $this->reports_model->company_info();
+            $data['payroll_date'] = $payroll_date;
 
-            include(app_path() . '\reports\loan_report_new.php');
+             return view('app.reports/loan_report_new', $data);
 
 
         }
     }
 
     public function projectTime(Request $request)  {
-        // dd($request->input('project'));
+        dd($request->input('project'));
         if (1 ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];
@@ -2637,12 +2637,11 @@ $pdfString = $pdf::Output('quotation.pdf', 'S');
             if ($reportType == 1){
                 $data['project_time'] = $this->reports_model->projectTime($project_code
                     ,date('Y-m-d',strtotime($duration[0])),date('Y-m-d',strtotime($duration[1])));
-                 include(app_path() . '\reports\project_time');
-                 
+                 return view('app.reports/project_time', $data);
             }else{
                 $data['project_time'] = $this->reports_model->projectCost($project_code
                     ,date('Y-m-d',strtotime($duration[0])),date('Y-m-d',strtotime($duration[1])));
-                 include(app_path() . '\reports\project_cost');
+                 return view('app.reports/project_cost', $data);
             }
 
 
