@@ -725,16 +725,51 @@ class PayrollController extends Controller
         }
     }
 
-    function recommendpayroll(Request $request)
-    {
+    function recommendpayrollByFinance(Request $request)
+    {   
         $payrollMonth = $request->pdate;
+        $state = 1;
+     
         if ($payrollMonth != "") {
             $empID = session('emp_id');
             $todate = date('Y-m-d');
 
             $check = $this->payroll_model->pendingPayrollCheck();
             if ($check > 0) {
-                $result = $this->payroll_model->recommendPayroll($empID, $todate);
+                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state);
+                if ($result == true) {
+
+                    $description ="Recommendation of payroll of date " . $todate;
+
+                  //  $result = SysHelpers::auditLog(1,$description,$request);
+
+                    $response_array['status'] = "OK";
+                    $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Recommended Successifully </p>";
+                } else {
+                    $response_array['status'] = "ERR";
+                    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! Payroll NOT Recommended, Please Try again, If the Error persists Contact Your System Admin</p>";
+                }
+            } else {
+                $response_array['status'] = "ERR";
+                $response_array['message'] = "<p class='alert alert-warning text-center'>Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
+            }
+            header('Content-type: application/json');
+            echo json_encode($response_array);
+        }
+
+    }
+    function recommendpayrollByHr(Request $request)
+    {   
+        $payrollMonth = $request->pdate;
+        $state = 3;
+       
+        if ($payrollMonth != "") {
+            $empID = session('emp_id');
+            $todate = date('Y-m-d');
+
+            $check = $this->payroll_model->pendingPayrollCheck();
+            if ($check > 0) {
+                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state);
                 if ($result == true) {
 
                     $description ="Recommendation of payroll of date " . $todate;
@@ -1269,9 +1304,9 @@ class PayrollController extends Controller
         }
     }
 
-    function cancelpayroll()
+    function cancelpayroll($type)
     {
-
+       dd($type);
         /*get the payroll month*/
         $result_month = $this->payroll_model->getPayrollMonth1();
         $this_payroll = $this->payroll_model->payrollMonthListpending();

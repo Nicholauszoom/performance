@@ -137,7 +137,31 @@
         }
     }
     
-
+    function recommendLeaveByHod(id)
+    {
+        if (confirm("Are You Sure You Want to Recommend This Leave Request") == true) {
+        var leaveid = id;
+  
+            $.ajax({
+                url: "<?php echo url('flex/attendance/recommendLeaveByHod');?>/"+leaveid
+            })
+            .done(function(data){
+             $('#resultfeed').fadeOut('fast', function(){
+                  $('#resultfeed').fadeIn('fast').html(data);
+                });
+             $('#status'+id).fadeOut('fast', function(){
+                  $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>');
+                });
+             alert('Request Recommended Successifully!! ...'); 
+             setTimeout(function(){
+                     location.reload();
+                }, 1500); 
+                })
+            .fail(function(){
+             alert('Leave Recommendation Failed!! ...'); 
+                });
+        }
+    }
     
 
     function cancelLeave(id)

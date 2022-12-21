@@ -2981,12 +2981,11 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function employeeFromGroup($refID)
 	{
-		$query = "select group_name FROM emp_role WHERE id ='".$refID."'";
-		$row = DB::table("emp_role")
-		->select(DB::raw($query))
-		->first();
-		if (row){
-			return $row()->group_name;
+		$query = "SELECT group_name FROM emp_role WHERE id ='".$refID."'";
+		$row = DB::select(DB::raw($query));
+		
+		if (count($row) > 0){
+			return $row[0]->group_name;
 		}else{
 			return null;
 		}
@@ -3087,7 +3086,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 	function deleteRole($roleID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($roleID)
        {
 
 	    $query = "DELETE FROM role WHERE id ='".$roleID."'";
@@ -3207,10 +3206,12 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 	function revokerole($id, $role, $isGroup)
 	{
-		DB::table('role')->where('userID', $id)
+		DB::table('emp_role')->where('userID', $id)
 		->where('role', $role)
 		->where('group_name', $isGroup)
 		->delete();
+
+	
 		return true;
 	}
 

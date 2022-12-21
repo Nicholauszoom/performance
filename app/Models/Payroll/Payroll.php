@@ -197,6 +197,7 @@ class Payroll extends Model
         $row = DB::table('payroll_months')
         ->where('state',1)
         ->orWhere('state',2)
+        ->orWhere('state',3)
         ->select(DB::raw('COUNT(id) as counts '))
         ->first();
 
@@ -208,6 +209,7 @@ class Payroll extends Model
         $row = DB::table('payroll_months')
         ->where('state',1)
         ->orWhere('state',2)
+        ->orWhere('state',3)
         ->select(DB::raw('*'))
         ->limit(1)
         ->first();
@@ -217,11 +219,18 @@ class Payroll extends Model
     }
 
 
-    public function recommendPayroll($author,$date){
-        $query = ["state" => 1,"recom_author" =>$author,"recom_date" =>$date];
+    public function recommendPayroll($author,$date,$state){
+    
+        if($state == 1){
+        $query = ["state" => $state,"recom_author2" =>$author,"recom_date2" =>$date];
+        }
+        else{
+        $query = ["state" => $state,"recom_author" =>$author,"recom_date" =>$date];
+        }
 
         DB::table('payroll_months')
         ->where('state',2)
+        ->orWhere('state',3)
         ->update($query);
         return true;
     }

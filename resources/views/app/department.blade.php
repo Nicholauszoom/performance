@@ -10,8 +10,7 @@
     {{-- <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script> --}}
     <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-    <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
+   
 @endpush
 
 @section('content')

@@ -72,40 +72,41 @@ Route::middleware('auth')->group(function () {
     //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
 
     //route for payroll
-    // Route::group(['prefix' => 'payroll'], function () {
-    //     Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
-    //     Route::any('temp_payroll_info',[PayrollController::class,'temp_payroll_info'])->name('temp_payroll_info');
-    //     Route::any('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
-    //     Route::post('payroll_report',[PayrollController::class,'payroll_report'])->name('payroll_report');
-    //     Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
-    //     Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
-    //     Route::any('send_payslips',[PayrollController::class,'send_payslips'])->name('send_payslips');
-    //     Route::any('recommendpayroll',[PayrollController::class,'recommendpayroll'])->name('recommendpayroll');
-    //     Route::any('cancelpayroll',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
-    //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
-    //     Route::any('less_payments_print',[PayrollController::class,'less_payments_print'])->name('less_payments_print');
-    //     Route::any('grossReconciliation',[PayrollController::class,'grossReconciliation'])->name('grossReconciliation');
-    //     Route::any('netReconciliation',[PayrollController::class,'netReconciliation'])->name('netReconciliation');
-    //     Route::any('sendReviewEmail',[PayrollController::class,'sendReviewEmail'])->name('sendReviewEmail');
-    //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
-    //     Route::any('generate_checklist',[PayrollController::class,'generate_checklist'])->name('generate_checklist');
-    //     Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
-    //     Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
-    //     Route::any('submitLessPayments', [PayrollController::class, 'submitLessPayments'])->name('submitLessPayments');
-    //     Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
-    //     Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
-    //     Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
-    //     Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
-    //     Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
-    //     Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
-    //     Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
-    //     Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
-    //     Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
-    //     Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
-    //     Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
-    //     Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
-    //     Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
-    // });
+    Route::group(['prefix' => 'payroll'], function () {
+        Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
+        Route::any('temp_payroll_info',[PayrollController::class,'temp_payroll_info'])->name('temp_payroll_info');
+        Route::any('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
+        Route::post('payroll_report',[PayrollController::class,'payroll_report'])->name('payroll_report');
+        Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
+        Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
+        Route::any('send_payslips',[PayrollController::class,'send_payslips'])->name('send_payslips');
+        Route::any('recommendpayrollByHr',[PayrollController::class,'recommendpayrollByHr'])->name('recommendpayrollByHr');
+        Route::any('recommendpayrollByFinance',[PayrollController::class,'recommendpayrollByFinance'])->name('recommendpayrollByFinance');
+        Route::any('cancelpayroll/{type}',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
+        Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
+        Route::any('less_payments_print',[PayrollController::class,'less_payments_print'])->name('less_payments_print');
+        Route::any('grossReconciliation',[PayrollController::class,'grossReconciliation'])->name('grossReconciliation');
+        Route::any('netReconciliation',[PayrollController::class,'netReconciliation'])->name('netReconciliation');
+        Route::any('sendReviewEmail',[PayrollController::class,'sendReviewEmail'])->name('sendReviewEmail');
+        Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
+        Route::any('generate_checklist',[PayrollController::class,'generate_checklist'])->name('generate_checklist');
+        Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
+        Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
+        Route::any('submitLessPayments', [PayrollController::class, 'submitLessPayments'])->name('submitLessPayments');
+        Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
+        Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
+        Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
+        Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
+        Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
+        Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
+        Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
+        Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
+        Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
+        Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
+        Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
+        Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
+        Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
+    });
 
     Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
 
@@ -115,6 +116,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
+        Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
+
         Route::any('/holdLeave' ,'holdLeave')->name('attendance.holdLeave');
         Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
         Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
@@ -403,7 +406,7 @@ Route::middleware('auth')->group(function () {
 
 
         Route::any('/updategroup','updategroup')->name('flex.updategroup');
-        Route::any('/deleteRole','deleteRole')->name('flex.deleteRole');
+        Route::any('/deleteRole/{id}','deleteRole')->name('flex.deleteRole');
         Route::any('/deleteGroup','deleteGroup')->name('flex.deleteGroup');
         Route::any('/permission','permission')->name('flex.permission');
         Route::any('/assignrole2','assignrole2')->name('flex.assignrole2');
@@ -488,47 +491,48 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
 
-        Route::any('/initPayroll','initPayroll')->name('pyaroll.initPayroll');
-        Route::any('/financial_reports','financial_reports')->name('pyaroll.financial_reports');
-        Route::any('/employee_payslip','employee_payslip')->name('pyaroll.employee_payslip');
-        Route::any('/payroll','payroll')->name('pyaroll.payroll');
-        Route::any('/temp_payroll_info','temp_payroll_info')->name('pyaroll.temp_payroll_info');
-        Route::any('/payroll_info','payroll_info')->name('pyaroll.payroll_info');
-        Route::any('/temp_less_payments','temp_less_payments')->name('pyaroll.temp_less_payments');
-        Route::any('/ADVtemp_less_payments','ADVtemp_less_payments')->name('pyaroll.ADVtemp_less_payments');
-        Route::any('/less_payments','less_payments')->name('pyaroll.less_payments');
-        Route::any('/less_payments_print','less_payments_print')->name('pyaroll.less_payments_print');
-        Route::any('/concatArrays','concatArrays')->name('pyaroll.concatArrays');
-        Route::any('/grossReconciliation','grossReconciliation')->name('pyaroll.grossReconciliation');
-        Route::any('/netReconciliation','netReconciliation')->name('pyaroll.netReconciliation');
-        Route::any('/sendReviewEmail','sendReviewEmail')->name('pyaroll.sendReviewEmail');
-        Route::any('/sendMail','sendMail')->name('pyaroll.sendMail');
-        Route::any('/comission_bonus','comission_bonus')->name('pyaroll.comission_bonus');
-        Route::any('/partial_payment','partial_payment')->name('pyaroll.partial_payment');
-        Route::any('/salary_calculator','salary_calculator')->name('pyaroll.salary_calculator');
-        Route::any('/calculateSalary','calculateSalary')->name('pyaroll.calculateSalary');
-        Route::any('/recommendpayroll','recommendpayroll')->name('pyaroll.recommendpayroll');
-        Route::any('/runpayroll/{pdate}','runpayroll')->name('pyaroll.runpayroll');
-        Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('pyaroll.partial_payment_manipulation');
-        Route::any('/generate_checklist','generate_checklist')->name('pyaroll.generate_checklist');
-        Route::any('/arrearsPayment','arrearsPayment')->name('pyaroll.arrearsPayment');
-        Route::any('/temp_submitLessPayments','temp_submitLessPayments')->name('pyaroll.temp_submitLessPayments');
-        Route::any('/submitLessPayments','submitLessPayments')->name('pyaroll.submitLessPayments');
-        Route::any('/arrearsPayment_schedule','arrearsPayment_schedule')->name('pyaroll.arrearsPayment_schedule');
-        Route::any('/monthlyArrearsPayment_schedule','monthlyArrearsPayment_schedule')->name('pyaroll.monthlyArrearsPayment_schedule');
-        Route::any('/cancelArrearsPayment','cancelArrearsPayment')->name('pyaroll.cancelArrearsPayment');
-        Route::any('/confirmArrearsPayment','confirmArrearsPayment')->name('pyaroll.confirmArrearsPayment');
-        Route::any('/recommendArrearsPayment','recommendArrearsPayment')->name('pyaroll.recommendArrearsPayment');
-        Route::any('/cancelpayroll','cancelpayroll')->name('pyaroll.cancelpayroll');
-        Route::any('/temp_payroll_review','temp_payroll_review')->name('pyaroll.temp_payroll_review');
-        Route::any('/payroll_review','payroll_review')->name('pyaroll.payroll_review');
-        Route::any('/send_payslips','send_payslips')->name('pyaroll.send_payslips');
-        Route::any('/payslip_attachments','payslip_attachments')->name('pyaroll.payslip_attachments');
-        Route::any('/mailConfiguration','mailConfiguration')->name('pyaroll.mailConfiguration');
-        Route::any('/saveMail','saveMail')->name('pyaroll.saveMail');
-        Route::any('/employeeFilter','employeeFilter')->name('pyaroll.employeeFilter');
-        Route::any('/password_generator','password_generator')->name('pyaroll.password_generator');
-        Route::any('/TestMail','TestMail')->name('pyaroll.TestMail');
+        Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
+        Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
+        Route::any('/employee_payslip','employee_payslip')->name('payroll.employee_payslip');
+        Route::any('/payroll','payroll')->name('payroll.payroll');
+        Route::any('/temp_payroll_info','temp_payroll_info')->name('payroll.temp_payroll_info');
+        Route::any('/payroll_info','payroll_info')->name('payroll.payroll_info');
+        Route::any('/temp_less_payments','temp_less_payments')->name('payroll.temp_less_payments');
+        Route::any('/ADVtemp_less_payments','ADVtemp_less_payments')->name('payroll.ADVtemp_less_payments');
+        Route::any('/less_payments','less_payments')->name('payroll.less_payments');
+        Route::any('/less_payments_print','less_payments_print')->name('payroll.less_payments_print');
+        Route::any('/concatArrays','concatArrays')->name('payroll.concatArrays');
+        Route::any('/grossReconciliation','grossReconciliation')->name('payroll.grossReconciliation');
+        Route::any('/netReconciliation','netReconciliation')->name('payroll.netReconciliation');
+        Route::any('/sendReviewEmail','sendReviewEmail')->name('payroll.sendReviewEmail');
+        Route::any('/sendMail','sendMail')->name('payroll.sendMail');
+        Route::any('/comission_bonus','comission_bonus')->name('payroll.comission_bonus');
+        Route::any('/partial_payment','partial_payment')->name('payroll.partial_payment');
+        Route::any('/salary_calculator','salary_calculator')->name('payroll.salary_calculator');
+        Route::any('/calculateSalary','calculateSalary')->name('payroll.calculateSalary');
+        Route::any('/recommendpayrollByHr','recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
+        Route::any('/recommendpayrollByFinance','recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
+        Route::any('/runpayroll/{pdate}','runpayroll')->name('payroll.runpayroll');
+        Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
+        Route::any('/generate_checklist','generate_checklist')->name('payroll.generate_checklist');
+        Route::any('/arrearsPayment','arrearsPayment')->name('payroll.arrearsPayment');
+        Route::any('/temp_submitLessPayments','temp_submitLessPayments')->name('payroll.temp_submitLessPayments');
+        Route::any('/submitLessPayments','submitLessPayments')->name('payroll.submitLessPayments');
+        Route::any('/arrearsPayment_schedule','arrearsPayment_schedule')->name('payroll.arrearsPayment_schedule');
+        Route::any('/monthlyArrearsPayment_schedule','monthlyArrearsPayment_schedule')->name('payroll.monthlyArrearsPayment_schedule');
+        Route::any('/cancelArrearsPayment','cancelArrearsPayment')->name('payroll.cancelArrearsPayment');
+        Route::any('/confirmArrearsPayment','confirmArrearsPayment')->name('payroll.confirmArrearsPayment');
+        Route::any('/recommendArrearsPayment','recommendArrearsPayment')->name('payroll.recommendArrearsPayment');
+        Route::any('/cancelpayroll/{type}','cancelpayroll')->name('payroll.cancelpayroll');
+        Route::any('/temp_payroll_review','temp_payroll_review')->name('payroll.temp_payroll_review');
+        Route::any('/payroll_review','payroll_review')->name('payroll.payroll_review');
+        Route::any('/send_payslips','send_payslips')->name('payroll.send_payslips');
+        Route::any('/payslip_attachments','payslip_attachments')->name('payroll.payslip_attachments');
+        Route::any('/mailConfiguration','mailConfiguration')->name('payroll.mailConfiguration');
+        Route::any('/saveMail','saveMail')->name('payroll.saveMail');
+        Route::any('/employeeFilter','employeeFilter')->name('payroll.employeeFilter');
+        Route::any('/password_generator','password_generator')->name('payroll.password_generator');
+        Route::any('/TestMail','TestMail')->name('payroll.TestMail');
 
     });
 

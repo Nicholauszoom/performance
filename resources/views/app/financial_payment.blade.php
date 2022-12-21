@@ -18,6 +18,14 @@
     $imprest_model = new App\Models\Payroll\ImprestModel;
 @endphp
 
+@foreach ($payrollList as $row)
+    @if($row->state == 3 || $row->state == 1 || $row->state == 2 && !$row->pay_checklist == 0)
+   <?php $state = 1; break;  ?>
+    @else
+    <?php $state = 0;  ?>
+    @endif
+@endforeach
+
 
     <div class="card">
         <div class="card-header border-0">
@@ -106,7 +114,7 @@
                                                 <p class="lead"><small> Payroll Month: {{ $pendingPayroll_month; }} </small></p>
                                                 @endif
                                             </div>
-
+                                            @if($state == 1)
                                             @if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym'))
                                             <div>
                                                 <a href="javascript:void(0)" onclick="approvePayroll()" title="Approve Payroll" class="me-2">
@@ -116,7 +124,7 @@
                                                     </button>
                                                 </a>
 
-                                                <a href="javascript:void(0)" onclick="cancelPayroll()" title="Cancel Payroll" class="icon-2 info-tooltip">
+                                                <a href="javascript:void(0)" onclick="cancelPayroll('director')" title="Cancel Payroll" class="icon-2 info-tooltip">
                                                     <button type="button" class="btn btn-danger text-white">
                                                         <i class="ph-x me-2"></i>
                                                         CANCEL PENDING PAYROLL
@@ -125,20 +133,38 @@
                                             </div>
                                             @elseif($pendingPayroll == 1 && $payroll->state == 2)
                                             <div>
-                                                <a href="javascript:void(0)" onclick="recomendPayroll()" title="Approve Payroll" class="me-2">
+                                                <a href="javascript:void(0)" onclick="recomendPayrollByHr()" title="Approve Payroll" class="me-2">
                                                     <button type="button" class="btn btn-success text-white">
                                                         <i class="ph-check me-2"></i>
                                                         RECOMMEND PENDING PAYROLL
                                                     </button>
                                                 </a>
 
-                                                <a href="javascript:void(0)" onclick="cancelPayroll()" title="Cancel Payroll" class="icon-2 info-tooltip">
+                                                <a href="javascript:void(0)" onclick="cancelPayroll('hr')" title="Cancel Payroll" class="icon-2 info-tooltip">
                                                     <button type="button" class="btn btn-danger text-white">
                                                         <i class="ph-x me-2"></i>
                                                         CANCEL PENDING PAYROLL
                                                     </button>
                                                 </a>
                                             </div>
+                                            
+                                            @elseif($pendingPayroll == 1 && $payroll->state == 3)
+                                            <div>
+                                                <a href="javascript:void(0)" onclick="recomendPayrollByFinance()" title="Approve Payroll" class="me-2">
+                                                    <button type="button" class="btn btn-success text-white">
+                                                        <i class="ph-check me-2"></i>
+                                                        RECOMMEND PENDING PAYROLL 
+                                                    </button>
+                                                </a>
+
+                                                <a href="javascript:void(0)" onclick="cancelPayroll('finance')" title="Cancel Payroll By Head of Finance" class="icon-2 info-tooltip">
+                                                    <button type="button" class="btn btn-danger text-white">
+                                                        <i class="ph-x me-2"></i>
+                                                        CANCEL PENDING PAYROLL
+                                                    </button>
+                                                </a>
+                                            </div>
+                                            @endif
                                             @endif
                                         </div>
                                     </div>
@@ -158,16 +184,21 @@
 
                                         <tbody>
                                             <?php foreach ($payrollList as $row) { ?>
-                                                <?php if ($row->state == 1 || $row->state == 2 && !$row->pay_checklist == 0) { ?>
+                                                <?php if ($row->state == 3 || $row->state == 1 || $row->state == 2 && !$row->pay_checklist == 0) { ?>
 
                                             <tr id="domain<?php echo $row->id; ?>">
                                                 <td width="1px"><?php echo $row->SNo; ?></td>
                                                 <td><?php //echo $row->payroll_date; ?><?php echo date('F, Y', strtotime($row->payroll_date));; ?>
                                                 </td>
                                                 <td>
-                                                    <?php if ($row->state == 1 || $row->state == 2) { ?>
-                                                    <span class="badge bg-warning">PENDING</span><br>
-                                                    <?php } else { ?>
+                                                    <?php if ($row->state == 1 ) { ?>
+                                                    <span class="badge bg-warning">Reccomended by Head of Finance </span><br>
+                                                    <?php }elseif($row->state == 2){ ?>
+                                                        <span class="badge bg-warning">Initiated by HR<br>
+
+                                                            <?php }elseif($row->state == 3){ ?>
+                                                                <span class="badge bg-warning">Reccomended by Head of Human Capital<br>
+                                                   <?php } elseif($row->state == 0) { ?>
                                                     <span class="badge bg-success">APPROVED</span>
                                                     <br>
                                                     <?php } ?>
@@ -190,7 +221,7 @@
                                                         </button>
                                                     </a>
                                                     <?php } else { ?>
-                                                    <a href="<?php echo base_url('index.php/payroll/payroll_info/?pdate=' . base64_encode($row->payroll_date)); ?>"
+                                                    <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}"
                                                         title="Info and Details" class="icon-2 info-tooltip">
                                                         <button type="button" class="btn btn-info btn-xs"><i
                                                                 class="ph-info"></i>
@@ -199,7 +230,7 @@
 
                                                     <?php if ($row->state == 0) { ?>
                                                     <?php if ($row->pay_checklist == 1) { ?>
-                                                    <a href="<?php echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
+                                                    <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}"
                                                         target="blank" title="Print Report" class="icon-2 info-tooltip">
                                                         <button type="button" class="btn btn-info btn-xs"><i
                                                                 class="ph-file-text"></i>
@@ -247,11 +278,11 @@
                         <div role="tabpanel" class="tab-pane " id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card">
-                                    <div class="card-head">
+                                    <div class="x_title">
                                         <h2>Overtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="x_content">
                                         <?php //echo $this->session->flashdata("note"); ?>
                                         <div id="resultfeedOvertime"></div>
                                         <table id="datatable-keytable" class="table table-striped table-bordered">
@@ -397,7 +428,7 @@
                         <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card">
-                                    <div class="card-head">
+                                    <div class="x_title">
                                         <h2>Others` Salary Advance
                                             <ul class="nav navbar-right panel_toolbox">
                                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -408,7 +439,7 @@
 
                                             <div class="clearfix"></div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="x_content">
                                         <div id="resultfeed"></div>
                                         <div id="resultfeedCancel"></div>
                                         <?php //echo $this->session->flashdata("note"); ?>
@@ -525,12 +556,12 @@
                         <div id="resultfeedImprest"></div>
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="card">
-                                <div class="card-head">
+                                <div class="x_title">
                                     <h2>Imprests </h2>
 
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="card-body">
+                                <div class="x_content">
                                     <?php //echo $this->session->flashdata("note"); ?>
                                     <div id="resultfeedImprest"></div>
                                     <table id="datatable-keytable"
@@ -760,12 +791,12 @@
                     <div id="resultfeedArrears"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
-                            <div class="card-head">
+                            <div class="x_title">
                                 <h2>Arrears </h2>
 
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="card-body">
+                            <div class="x_content">
                                 <table id="datatable-arrears"
                                     class="table table-striped table-bordered">
                                     <thead>
@@ -873,13 +904,13 @@
                 <div id="resultfeedArrears"></div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="card-head">
+                        <div class="x_title">
                             <h2><i class="fa fa-list"></i>&nbsp;&nbsp;All Arrears Over a Time
                             </h2>
 
                             <div class="clearfix"></div>
                         </div>
-                        <div class="card-body">
+                        <div class="x_content">
                             <table id="datatable-task-table"
                                 class="table table-striped table-bordered">
                                 <thead>
@@ -943,12 +974,12 @@
 
             <div class="col-md-6 col-sm-6 col-xs-6">
                 <div class="card">
-                    <div class="card-head">
+                    <div class="x_title">
                         <h2><i class="fa fa-pie-chart"></i>&nbsp;&nbsp;<b>Arrears
                                 Reports</b></h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="card-body">
+                    <div class="x_content">
                         <div id="feedBackSubmission"></div>
                         <form method="post" class="form-horizontal form-label-left"
                             action="{route('reports.all_arrears')}}" target="blank">
@@ -1002,12 +1033,12 @@
 
             <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="card">
-                <div class="card-head">
+                <div class="x_title">
                     <h2>Incentives </h2>
 
                     <div class="clearfix"></div>
                 </div>
-                <div id="employeeList" class="card-body">
+                <div id="employeeList" class="x_content">
                     <table id="datatable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -1407,7 +1438,7 @@
 
     }
 
-    function recomendPayroll() {
+    function recomendPayrollByHr() {
 
         const message = "Are you sure you want to recommend this payroll?";
         $('#delete').modal('show');
@@ -1417,7 +1448,7 @@
             $('#hideList').hide();
 
             $.ajax({
-                url: "{{ route('pyaroll.recommendpayroll',['pdate'=>$pendingPayroll_month]) }}",
+                url: "{{ route('payroll.recommendpayrollByHr',['pdate'=>$pendingPayroll_month]) }}",
                 success: function (data) {
                     var data = JSON.parse(data); 
                     if (data.status == 'OK') {
@@ -1456,7 +1487,56 @@
 
     }
 
-    function cancelPayroll() {
+    function recomendPayrollByFinance() {
+
+const message = "Are you sure you want to recommend this payroll?";
+$('#delete').modal('show');
+$('#delete').find('.modal-body #message').text(message);
+
+$("#yes_delete").click(function () {
+    $('#hideList').hide();
+
+    $.ajax({
+        url: "{{ route('payroll.recommendpayrollByFinance',['pdate'=>$pendingPayroll_month]) }}",
+        success: function (data) {
+            var data = JSON.parse(data); 
+            if (data.status == 'OK') {
+                // alert("Payroll Recommend Successifully");
+
+
+                // $('#payrollFeedback').fadeOut('fast', function(){
+                //     $('#payrollFeedback').fadeIn('fast').html(data.message);
+                // });
+                $('#delete').modal('hide');
+                notify('Payroll recommended successfully!', 'top', 'right', 'success');
+                setTimeout(function () {// wait for 2 secs(2)
+                    location.reload(); // then reload the div to clear the success notification
+                }, 1500);
+            } else {
+                // alert("Payroll Recommendation FAILED, Try again,  If the Error persists Contact Your System Admin.");
+                //
+                // $('#payrollFeedback').fadeOut('fast', function(){
+                //     $('#payrollFeedback').fadeIn('fast').html(data.message);
+                // });
+
+                $('#delete').modal('hide');
+                notify('Payroll recommendation failed!', 'top', 'right', 'danger');
+                setTimeout(function () {// wait for 2 secs(2)
+                    location.reload(); // then reload the div to clear the success notification
+                }, 1500);
+
+            }
+
+        }
+
+    });
+
+
+});
+
+}
+
+    function cancelPayroll(type) {
 
         const message = "Are you sure you want to cancel this payroll?";
         $('#delete').modal('show');
@@ -1465,16 +1545,10 @@
         $("#yes_delete").click(function () {
             $('#hideList').hide();
             $.ajax({
-                url: "<?php echo url('flex/payroll/cancelpayroll');?>",
+                url: "<?php echo url('flex/payroll/cancelpayroll');?>/"+type,
                 success: function (data) {
                     var data = JSON.parse(data);
                     if (data.status == 'OK') {
-                        // alert("Payroll was Cancelled Successifully!");
-                        //
-                        // $('#payrollFeedback').fadeOut('fast', function(){
-                        //     $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        // });
-
                         $('#delete').modal('hide');
                          notify('Payroll cancelled successfully!', 'top', 'right', 'success');
 
@@ -1482,11 +1556,6 @@
                             location.reload(); // then reload the div to clear the success notification
                         }, 1500);
                     } else {
-                        // alert("FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin.");
-                        //
-                        // $('#payrollFeedback').fadeOut('fast', function(){
-                        //     $('#payrollFeedback').fadeIn('fast').html(data.message);
-                        // });
                         $('#delete').modal('hide');
                         notify('Payroll cancellation failed!', 'top', 'right', 'danger');
                         setTimeout(function () {// wait for 2 secs(2)

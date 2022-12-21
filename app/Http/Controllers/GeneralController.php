@@ -5169,7 +5169,7 @@ class GeneralController extends Controller
     public function role(Request $request)
     {
         if (session('mng_roles_grp')) {
-            if (isset($_POST['addrole'])) {
+            if ( $request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
                     'created_by' => session('emp_id'),
@@ -5177,14 +5177,14 @@ class GeneralController extends Controller
 
                 $result = $this->flexperformance_model->addrole($data);
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+                   // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
                     session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
                     return redirect('/flex/role');
                 } else {
                     echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
                 }
-
-            } elseif (isset($_POST['addgroup'])) {
+               
+            } elseif ( $request->type == "addgroup") {
 
                 $data = array(
                     'name' => $request->input('name'),
@@ -5195,7 +5195,7 @@ class GeneralController extends Controller
                 $this->flexperformance_model->addgroup($data);
 
                 session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
-                $this->department();
+                //$this->department();
                 return redirect('/flex/role');
             } else {
                 // $id =session('emp_id');
@@ -5566,9 +5566,9 @@ class GeneralController extends Controller
 
     }
 
-    public function deleteRole(Request $request)
+    public function deleteRole($id)
     {
-        $roleID = $this->uri->segment(3);
+        $roleID = $id;
         $result = $this->flexperformance_model->deleteRole($roleID);
         if ($result == true) {
             $response_array['status'] = "OK";
@@ -5702,7 +5702,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
+                //$this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
@@ -5720,7 +5720,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
+                //$this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
                 session('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
                 return redirect('/flex/role');
             } else {
