@@ -556,7 +556,8 @@
         $('#import_form').on('submit', function(event) {
             event.preventDefault();
             $.ajax({
-                url: '{{ url("/flex/import") }}',
+                //url: '{{ url("/flex/import") }}',
+                url: '{{ route("import.employee") }}',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: "POST",
                 data: new FormData(this),

@@ -56,7 +56,7 @@ class ReportController extends Controller
       $data['total_heslb'] =  $this->payroll_model->total_heslb("loan_logs",$payrollMonth);
 
 
-      return view('reports.payroll_report',compact('data'));
+      return view('app.reports.payroll_report',$data);
 
 
     }
@@ -634,7 +634,7 @@ include(app_path() . '/reports/loan_report.php');
                         $paid_with_arrears_d=$data['paid_with_arrears_d'];
                         $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                        include(app_path() . '/reports/payslip.php');
+                       include(app_path() . '/reports/payslip.php');
                 }
 
                 $data_all['emp_id'] = $payroll_emp_ids;

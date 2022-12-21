@@ -289,7 +289,7 @@ function generate_checklist() {
         // var id = id;
         $('#hideList').hide();
         $.ajax({
-            url: "{{route('generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
+            url: "{{route('payroll.generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
             success: function(data) {
                 if (data.status == 1) {
                     alert("Pay CheckList Generated Successiful!");

@@ -33,6 +33,9 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
 
+
+    Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
+    Route::post('import','Import\ImportEmployeeController@import')->name('import.employee');
     // Dashboard
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
