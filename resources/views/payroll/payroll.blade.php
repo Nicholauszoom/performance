@@ -216,7 +216,7 @@
             e.preventDefault();
             $('#initPayroll').hide();
             $.ajax({
-                url: "{{route('initPayroll')}}",
+                url: "{{route('payroll.initPayroll')}}",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 type: "post",
                 data: new FormData(this),
@@ -245,7 +245,7 @@
                 // var id = id;
                 $('#hideList').hide();
                 $.ajax({
-                    url: "{{route('runpayroll',['pendingPayroll_month'=>$pendingPayroll_month])}}",
+                    url: "{{route('payroll.runpayroll',$pendingPayroll_month)}}",
                     success: function(data) {
                         if (data.status == 'OK') {
                             alert("Payroll Approved Successifully");
@@ -255,7 +255,7 @@
                                     "Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??"
                                 ) == true) {
                                 $.ajax({
-                                    url: "{{route('send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
+                                    url: "{{route('payroll.send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
                                     success: function(data) {}
                                 });
                                 // SEND EMAILS
@@ -285,38 +285,7 @@
     </script>
 
     <script>
-        function recomendPayroll() {
-            if (confirm("Are You Sure You Want To Recommend This Payroll") == true) {
-                // var id = id;
-                $('#hideList').hide();
-                $.ajax({
-                    url: "{{route('recommendpayroll',['pendingPayroll_month'=>$pendingPayroll_month])}}",
-                    success: function(data) {
-                        if (data.status == 'OK') {
-                            alert("Payroll Recommend Successifully");
-
-
-                            $('#payrollFeedback').fadeOut('fast', function() {
-                                $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            });
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
-                        } else {
-                            alert(
-                                "Payroll Recommendation FAILED, Try again,  If the Error persists Contact Your System Admin."
-                                );
-
-                            $('#payrollFeedback').fadeOut('fast', function() {
-                                $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            });
-                        }
-
-                    }
-
-                });
-            }
-        }
+       
     </script>
 
 
@@ -326,7 +295,7 @@
                 // var id = id;
                 $('#hideList').hide();
                 $.ajax({
-                    url: "{{route('cancelpayroll','none')}}",
+                    url: "{{route('payroll.cancelpayroll','none')}}",
                     success: function(data) {
                         var data = JSON.parse(data);
                         if (data.status == 'OK') {
@@ -393,7 +362,7 @@
                 ) == true) {
 
                 $.ajax({
-                    url: "{{route('send_payslips',['payrollDate'=>" + payrollDate + "])}}",
+                    url: "{{route('payroll.send_payslips',['payrollDate'=>" + payrollDate + "])}}",
                     success: function(data) {
                         let jq_json_obj = $.parseJSON(data);
                         let jq_obj = eval(jq_json_obj);

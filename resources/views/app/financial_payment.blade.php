@@ -1164,7 +1164,7 @@
 
                     <div class="row">
                         <div class="col-sm-4">
-
+                         <textarea name="message" placeholder="Enter yourcomment here"></textarea>
                         </div>
                         <div class="col-sm-6">
                             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>

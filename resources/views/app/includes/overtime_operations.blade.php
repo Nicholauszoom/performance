@@ -1,3 +1,5 @@
+<script>
+
 function holdOvertime(id)
     {
         if (confirm("Are You Sure You Want to Hold This Overtime Request") == true) {
