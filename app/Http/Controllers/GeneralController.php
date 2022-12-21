@@ -279,6 +279,8 @@ class GeneralController extends Controller
         $data['inactive_department'] = $this->flexperformance_model->inactive_department();
         $data['departments'] = Departments::all();
         $data['title'] = "Department";
+        $data['parent'] = "Organisation";
+        $data['child'] = "Departments";
 
         return view('app.department',$data);
     }
@@ -2408,6 +2410,8 @@ class GeneralController extends Controller
         }*/
 
         $data['title'] = "Employee";
+        $data['parent'] = "Employee";
+        $data['child'] = "Active Employee";
         return view('app.employee', $data);
 
     }
