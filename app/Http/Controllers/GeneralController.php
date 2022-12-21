@@ -5958,8 +5958,10 @@ class GeneralController extends Controller
 
 //upload Employee
 
-    public function import()
+    public function import(Request $request)
     {
+        dd($request->all());
+
         if (isset($_FILES["file"]["name"])) {
 
             $path = $_FILES["file"]["tmp_name"];
