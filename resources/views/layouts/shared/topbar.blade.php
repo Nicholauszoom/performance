@@ -277,10 +277,10 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    {{-- <a href="{{ route('employee.profile') }}" class="dropdown-item">
+                    <a href="<?php echo  url('') .'/flex/userprofile/?id='.session('emp_id'); ?>" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
-                    </a> --}}
+                    </a>
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-currency-circle-dollar me-2"></i>
                         My subscription

@@ -26,6 +26,7 @@ use App\Http\Controllers\WorkforceManagement\EmployeeController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\CostCenterController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -111,6 +112,8 @@ Route::middleware('auth')->group(function () {
     //     Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
     // });
 
+
+
     Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
 
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
@@ -137,6 +140,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
+
     Route::prefix('')->controller(BaseController::class)->group(function (){
 
         Route::any('/index' ,'index')->name('index');
@@ -149,6 +153,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/getPermissions' ,'getPermissions')->name('getPermissions');
 
     });
+
 
     Route::prefix('flex')->controller(GeneralController::class)->group(function (){
 
@@ -458,6 +463,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
+
     Route::prefix('flex/imprest')->controller(ImprestController::class)->group(function (){
 
         Route::any('/confirmed_imprest','confirmed_imprest')->name('imprest.confirmed_imprest');
@@ -655,7 +661,6 @@ Route::middleware('auth')->group(function () {
     });
 
 
-
     Route::prefix('flex/project')->controller(ProjectController::class)->group(function (){
 
         Route::any('/index','index')->name('project.index');
@@ -756,7 +761,10 @@ Route::middleware('auth')->group(function () {
     });
 
 
+    // new cost center report
+    Route::prefix('flex/cost-center')->controller(CostCenterController::class)->group(function (){
 
+    });
 
 
 });

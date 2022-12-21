@@ -28,8 +28,8 @@
                     </a>
                 </li>
 
-{{--
-                <li class="nav-item">
+                {{--
+                    <li class="nav-item">
                     <a class="nav-link" href="{{ url('/flex/project/') }}">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
