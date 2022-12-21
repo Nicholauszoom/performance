@@ -911,7 +911,7 @@ class GeneralController extends Controller
     public function deleteDepartment($id)
     {
 
-       
+
         $data = array(
             'state' => 0,
         );
@@ -931,7 +931,7 @@ class GeneralController extends Controller
     public function activateDepartment($id)
     {
 
-        
+
         $data = array(
             'state' => 1,
         );
@@ -950,7 +950,7 @@ class GeneralController extends Controller
 
     public function position_info($id)
     {
-        
+
         $data['all_position'] = $this->flexperformance_model->allposition();
         $data['organization_levels'] = $this->flexperformance_model->getAllOrganizationLevel();
         $data['skills'] = $this->flexperformance_model->getskills($id);
@@ -1830,7 +1830,9 @@ class GeneralController extends Controller
         $finish = $request->input('time_finish');
         $reason = $request->input('reason');
         $category = $request->input('category');
+
         $empID = session('emp_id');
+
 
         $split_start = explode("  at  ", $start);
         $split_finish = explode("  at  ", $finish);
@@ -1848,23 +1850,35 @@ class GeneralController extends Controller
         $finish_final = date('Y-m-d ', strtotime($finish_calendar));
 
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
-        $line = $this->flexperformance_model->get_linemanagerID($empID);
-        foreach ($line as $row) {
-            $linemanager = $row->line_manager;
-        }
+
+        $linemanager = $this->flexperformance_model->get_linemanagerID($empID);
+
+        // foreach ($line as $row) {
+        //     $linemanager = $row->line_manager;
+        // }
         //Overtime Should range between 24 Hrs;
+
         if ($maxRange > 24) {
+
             echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
+
         } else {
 
             $end_night_shift = "6:00";
             $start_night_shift = "20:00";
+
             if ($start_date == $finish_date) {
+
                 if (strtotime($start_time) >= strtotime($finish_time)) {
+
                     echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
+
                 } else {
+
                     if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
+
                         $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
+
                         $data = array(
                             'time_start' => $start_final . " " . $start_time,
                             'time_end' => $finish_final . " " . $finish_time,
@@ -1877,12 +1891,19 @@ class GeneralController extends Controller
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
                         );
+
                         $result = $this->flexperformance_model->apply_overtime($data);
+
                         if ($result == true) {
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";}
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+
                     } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
+
                         $type = 0; // echo "DAY OVERTIME";
+
                         $data = array(
                             'time_start' => $start_final . " " . $start_time,
                             'time_end' => $finish_final . " " . $finish_time,
@@ -1895,10 +1916,15 @@ class GeneralController extends Controller
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
                         );
+
                         $result = $this->flexperformance_model->apply_overtime($data);
+
                         if ($result == true) {
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";}
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+
                     } else {
                         echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
                     }
@@ -2229,19 +2255,21 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
             echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";}
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
+        }
 
     }
 
     public function cancelOvertime($id)
     {
-
-        //   $overtimeID = $this->uri->segment(3);
         $result = $this->flexperformance_model->deleteOvertime($id);
+
         if ($result == true) {
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";}
-
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
+        }
     }
 
     public function confirmOvertimePayment(Request $request)

@@ -349,8 +349,15 @@ class FlexPerformanceModel extends Model
 
 
 	function get_linemanagerID($id){
-		$query = "SELECT line_manager  FROM employee WHERE emp_id = '".$id."' LIMIT 1";
-		return DB::select(DB::raw($query));
+		// $query = "SELECT line_manager  FROM employee WHERE emp_id = '".$id."' LIMIT 1";
+
+        $query = DB::table('employee')->select('line_manager')->where('emp_id', $id)->limit(1)->first();
+
+        // dd($query->line_manager);
+
+        // return DB::select(DB::raw($query));
+        return $query->line_manager;
+
 	}
 
 	function approvedOvertimes()
@@ -410,11 +417,10 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
-	function apply_overtime($data)
+	public function apply_overtime($data)
 	{
 		DB::table('employee_overtime')->insert($data);
 		return true;
-
 	}
 
     function update_overtime($data, $id)
@@ -424,17 +430,17 @@ class FlexPerformanceModel extends Model
 		return true;
 	}
 
-    function deny_overtime($id)
+    public function deny_overtime($id)
 	{
-	     DB::transaction(function() use($id)
-       {
+	    DB::transaction(function() use($id)
+        {
+	        $query = "UPDATE employee_overtime SET status = 4 WHERE id ='".$id."'";
 
-	    $query = "UPDATE employee_overtime SET status = 4 WHERE id ='".$id."'";
-		DB::insert(DB::raw($query));
+		    DB::insert(DB::raw($query));
 
-	    $query = "DELETE FROM overtimes WHERE overtimeID ='".$id."'";
-		DB::insert(DB::raw($query));
+	        $query = "DELETE FROM overtimes WHERE overtimeID ='".$id."'";
 
+		    DB::insert(DB::raw($query));
 	    });
 
 		return true;
@@ -523,10 +529,8 @@ class FlexPerformanceModel extends Model
 
 	public function deleteOvertime($id) {
 
-        DB::table('employee_overtime')->where('id',$id)
-        ->delete('employee_overtime');
+        DB::table('employee_overtime')->where('id',$id)->delete();
         return true;
-
     }
 
 
@@ -1343,9 +1347,9 @@ function getMeaslById($deductionID)
 	function deduction_membersCount($deduction)
 	{
 		$query = "SELECT COUNT(DISTINCT ed.empID) members FROM  emp_deductions ed WHERE ed.deduction = ".$deduction."  ";
-		
+
 		$row = DB::select(DB::raw($query));
-		
+
     	return $row[0]->members;
 	}
 
@@ -1597,7 +1601,7 @@ function OvertimeCategoryInfo($id)
 	function getpayebyid($id)
 	{
 		$data = DB::table('paye')->where('id', $id);
-        
+
 		return $data->get();
 	}
 
@@ -1997,7 +2001,7 @@ function run_payroll($payroll_date, $payroll_month){
 	{
 		$query="SELECT hire_date from employee  WHERE emp_id='".$empID."'";
 		$row = DB::select(DB::raw($query));
-		
+
 		return $row[0]->hire_date;
 	}
 
