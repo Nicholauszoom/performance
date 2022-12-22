@@ -27,6 +27,7 @@ use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\CostCenterController;
+use App\Http\Controllers\Import\ImportEmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -35,8 +36,8 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
 
 
-    Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
-    Route::post('import','Import\ImportEmployeeController@import')->name('import.employee');
+    //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
+    Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
     // Dashboard
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 

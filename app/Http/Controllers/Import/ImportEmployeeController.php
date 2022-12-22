@@ -16,8 +16,9 @@ class ImportEmployeeController extends Controller
     
     public function import(Request $request){
         
+      
+        $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
         
-        //$data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
         $response_array['title'] = "SUCCESS";
         header('Content-type: application/json');
         echo json_encode($response_array);
