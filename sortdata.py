@@ -24,190 +24,474 @@ while r<30:
 for key, *values in wsheet.iter_rows():
     temp={}
     if(k>=1):
-
-
         # date='25/'+str(values[2].value)+'/'+str(values[1].value)
         date='25/'+str(values[2].value)+'/'+str(values[1].value)
         # print(date)
         # for value in values:
-        if date not in data:
-            
-            
+        if str(values[4].value)+date not in data:
+
             data[str(values[4].value)+date]=temp
+            # print("Here")
 
         # dataDict[key.value] = [v.value for v in values]
         # print(dataDict[key.value])
 
+
+            data[str(values[4].value)+date]['taxable_gross']='0'  #taxable gross
+
+            data[str(values[4].value)+date]['gross_pay']='0'  #gross pay
+
+            data[str(values[4].value)+date]['total_deduction']='0'  #Total Deduction
+
+            data[str(values[4].value)+date]['tax_free_pension']='0'  #Total Deduction
+
+            data[str(values[4].value)+date]['take_home']='0'  #less_takehome
+
+            data[str(values[4].value)+date]['take_home']='0'  #less_takehome
+
+            data[str(values[4].value)+date]['salary']='0'  #salary
+
+            data[str(values[4].value)+date]['net_tax']='0'  #Net Tax
+
+            data[str(values[4].value)+date]['paye']='0'  #salary
+
+            data[str(values[4].value)+date]['salary']='0'  #salary
+
+            data[str(values[4].value)+date]['gross_salary']='0'  #salary
+
+            data[str(values[4].value)+date]['salary']='0'  #salary
+
+            data[str(values[4].value)+date]['o/t']='0'  #o/t
+
+            data[str(values[4].value)+date]['arrears']='0'  #arrears
+
+            data[str(values[4].value)+date]['leave_balance']='0'  #leave balance
+
+            data[str(values[4].value)+date]['teller_back_office']='0'  #leave balance
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['task_allowances']='0'  #task_allowances
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['normal_overtime']='0'  #normal_overtime
+
+            data[str(values[4].value)+date]['sunday_overtime']='0'  #sunday_overtime
+
+            data[str(values[4].value)+date]['weekday_overtime']='0'  #weekday_overtime
+
+            data[str(values[4].value)+date]['sunday_overtime2']='0'  #sunday_overtime2
+
+            data[str(values[4].value)+date]['rounding']='0'  #rounding
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['acting_allowance']='0'  #acting_allowance
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['disturbance']='0'  #helsb
+
+            data[str(values[4].value)+date]['shift_allowance']='0'  #helsb
+
+            data[str(values[4].value)+date]['transport_allow']='0'  #transport_allow
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['unpdaid_leave']='0'  #unpdaid_leave
+
+            data[str(values[4].value)+date]['o/stand_leave']='0'  #o/stand_leave
+
+            data[str(values[4].value)+date]['leave_allowances']='0'  #allowances
+
+            data[str(values[4].value)+date]['helsb']='0'  #helsb
+
+            data[str(values[4].value)+date]['house_rent']='0'  #house rent
+
+            data[str(values[4].value)+date]['air_ticket']='0'  #air_ticket
+
+            data[str(values[4].value)+date]['hse_loan']='0'  #hse_loan
+
+            data[str(values[4].value)+date]['vehicle_benefit']='0'  #vehicle_benefit
+
+            data[str(values[4].value)+date]['bonus']='0'  #bonus
+
+            data[str(values[4].value)+date]['advance']='0'  #advance
+
+            data[str(values[4].value)+date]['mid_month_advance']='0'  #mid_month_advance
+
+            data[str(values[4].value)+date]['sunday_overtime']='0'  #sunday_overtime
+
+            data[str(values[4].value)+date]['service_award']='0'  #service_award
+
+            data[str(values[4].value)+date]['share_all_payment']='0'  #share_all_payment
+
+            data[str(values[4].value)+date]['salary']='0'  #salary
+
+            data[str(values[4].value)+date]['loan_benefit']='0'  #loan_benefit
+
+            data[str(values[4].value)+date]['level_i/o']='0'  #loan_benefit
+
+            data[str(values[4].value)+date]['long_service']='0'  #loan_benefit
+
+            data[str(values[4].value)+date]['recognition']='0'  #loan_benefit
+
+            data[str(values[4].value)+date]['tra_cost']='0'  #loan_benefit
+
+            data[str(values[4].value)+date]['unpaid_days']='0'  #loan_benefit
+
+            data[str(values[4].value)+date]['employer_contribution']=0
+            
+            data[str(values[4].value)+date]['employee_contribution']=0
+            data[str(values[1].value)+date]['membership_no']=0
+
+        # data[str(values[4].value)+date]['pension_employee']=values[2].value  #pension_employee
+
+        # data[str(values[4].value)+date]['pension_employer']=values[2].value  #pension_employer
+
+        # data[str(values[4].value)+date]['medical_employee']=values[2].value  #medical_employee
+
+        # data[str(values[4].value)+date]['medical_employer']=values[2].value  #medical_employer
+
+        # data[str(values[4].value)+date]['taxdue']=values[2].value  #taxdue
+
+        # data[str(values[4].value)+date]['meals']=values[2].value  #meals
+
+        # data[str(values[4].value)+date]['department']=values[2].value  #department
+
+        # data[str(values[4].value)+date]['position']=values[2].value  #position
+
+        # data[str(values[4].value)+date]['branch']=values[2].value  #branch
+
+        # data[str(values[4].value)+date]['pension_fund']=values[2].value  #pension_fund
+
+        # data[str(values[4].value)+date]['membership_no']=values[2].value  #membership_no
+
+        # data[str(values[4].value)+date]['sdl']=values[2].value  #sdl
+
+        # data[str(values[4].value)+date]['wcf']=values[2].value  #wcf
+
+        # data[str(values[4].value)+date]['less_takehome']=values[2].value  #less_takehome
+
+        data[str(values[4].value)+date]['date']=date  #due_date
+
+        # data[str(values[4].value)+date]['payroll_date']=date  #payroll_date
+
+    #     data[str(values[4].value)+date]['bank']=values[2].value  #bank
+
+    #     data[str(values[4].value)+date]['bank_branch']=values[2].value  #bank_branch
+
+    #     data[str(values[4].value)+date]['account_no']=values[2].value  #account_no
+
+    #     data[str(values[4].value)+date]['created_at']=values[2].value  #created_at
+
+
         # for key in dataDict:
         #     print(dataDict[key][3])
-        data[str(values[4].value)+date][1]=values[4].value  #empID
+        data[str(values[4].value)+date]['empID']=values[4].value  #empID
         # print(values[8].value)
 
-        if(values[8].value == "    Desc"):
+        if(values[8].value== "    Desc".replace(" ", "")):
             j=0
-        # elif(values[8].value == "9"):
+        # elif(str(values[8].value).replace(" ", "") == "9".replace(" ", "")):
 
-        # elif(values[8].value == "Taxable Gross"):
+        
 
-        # elif(values[8].value == "Gross pay"):
+        elif(str(values[8].value).replace(" ", "") == "Taxable Gross".replace(" ", "")):
+             data[str(values[4].value)+date]['taxable_gross']=values[9].value  #taxable gross
 
-        # elif(values[8].value == "Total Deduction"):
+        elif(str(values[8].value).replace(" ", "") == "Gross pay".replace(" ", "")):
+            data[str(values[4].value)+date]['gross_pay']=values[9].value  #gross pay
 
-        # elif(values[8].value == "Less: Tax free Pension"):
+        elif(str(values[8].value).replace(" ", "") == "Total Deduction".replace(" ", "")):
+             data[str(values[4].value)+date]['total_deduction']=values[9].value  #Total Deduction
 
-        # elif(values[8].value == "Take home"):
+        elif(str(values[8].value).replace(" ", "") == "Less: Tax free Pension".replace(" ", "")):
+            data[str(values[4].value)+date]['tax_free_pension']=values[9].value  #Total Deduction
 
-        # elif(values[8].value == "NULL"):
+        elif(str(values[8].value).replace(" ", "") == "Take home".replace(" ", "")):
+             data[str(values[4].value)+date]['take_home']=values[9].value  #less_takehome
 
-        # elif(values[8].value == "Net pay"):
+        # elif(str(values[8].value).replace(" ", "") == "NULL".replace(" ", "")):
 
-        # elif(values[8].value == "Total Income"):
+        elif(str(values[8].value).replace(" ", "") == "Net pay".replace(" ", "")):
+             data[str(values[4].value)+date]['take_home']=values[9].value  #less_takehome
 
-        # elif(values[8].value == "Net Tax"):
+        elif(str(values[8].value).replace(" ", "") == "Total Income".replace(" ", "")):
+            data[str(values[4].value)+date]['salary']=values[9].value  #salary
 
-        # elif(values[8].value == "PAYE"):
+        elif(str(values[8].value).replace(" ", "") == "Net Tax".replace(" ", "")):
+            data[str(values[4].value)+date]['net_tax']=values[9].value  #Net Tax
 
-        elif(values[8].value == "Basic Pay"):
-            data[str(values[4].value)+date][2]=values[9].value  #salary
+        elif(str(values[8].value).replace(" ", "") == "PAYE".replace(" ", "")):
+            data[str(values[4].value)+date]['paye']=values[9].value  #salary
 
-        elif(values[8].value == "Net Basic"):
-            data[str(values[4].value)+date][2]=values[9].value  #salary
+        elif(str(values[8].value).replace(" ", "") == "Basic Pay".replace(" ", "")):
+            data[str(values[4].value)+date]['salary']=values[9].value  #salary
 
-        # elif(values[8].value == "NSSF"):
+        elif(str(values[8].value).replace(" ", "") == "Net Basic".replace(" ", "")):
+            data[str(values[4].value)+date]['gross_salary']=values[9].value  #salary
 
-        # elif(values[8].value == "Normal O/T Amount"):
+        elif(str(values[8].value).replace(" ", "") == "NSSF".replace(" ", "")):
+            data[str(values[4].value)+date]['salary']=values[9].value  #salary
 
-        # elif(values[8].value == "Arrears"):
+        elif(str(values[8].value).replace(" ", "") == "Normal O/T Amount".replace(" ", "")):
+            data[str(values[4].value)+date]['o/t']=values[9].value  #o/t
 
-        elif(values[8].value == "Leave Balance"):
-            data[str(values[4].value)+date][3]=values[9].value  #allowances
 
-        # elif(values[8].value == "Teller/Back Off"):
+        elif(str(values[8].value).replace(" ", "") == "Arrears".replace(" ", "")):
+            data[str(values[4].value)+date]['arrears']=values[9].value  #arrears
 
-        # elif(values[8].value == "S0263.0001.2003"):
+        elif(str(values[8].value).replace(" ", "") == "Leave Balance".replace(" ", "")):
+            data[str(values[4].value)+date]['leave_balance']=values[9].value  #leave balance
 
-        # elif(values[8].value == "S2476.0032.2007"):
+        elif(str(values[8].value).replace(" ", "") == "Teller/Back Off".replace(" ", "")):
+            data[str(values[4].value)+date]['teller_back_office']=values[9].value  #leave balance
 
-        # elif(values[8].value == "E0015.3226.2012"):
+        elif(str(values[8].value).replace(" ", "") == "S0263.0001.0032".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S0302.0218.2010"):
+        elif(str(values[8].value).replace(" ", "") == "S2476.0032.0072".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S0208.0041.2005"):
 
-        # elif(values[8].value == "S0306.0193.2011"):
+        elif(str(values[8].value).replace(" ", "") == "E0015.3226.0122".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S0222.0156.2010"):
 
-        elif(values[8].value == "Task Allowance"):
-            data[str(values[4].value)+date][3]=values[9].value  #allowances
+        elif(str(values[8].value).replace(" ", "") == "S0302.0218.0102".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S1818.0246.2010"):
 
-        # elif(values[8].value == "S0756.0003.2009"):
+        elif(str(values[8].value).replace(" ", "") == "S0208.0041.0052".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S0195.0094.2012"):
 
-        # elif(values[8].value == "S0731.0115.2008"):
+        elif(str(values[8].value).replace(" ", "") == "S0306.0193.0112".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "Normal Overtime Hrs"):
 
-        # elif(values[8].value == "Sundays O/T Hours"):
+        elif(str(values[8].value).replace(" ", "") == "S0222.0156.0102".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "WeekDay Overtime @1.5"):
 
-        # elif(values[8].value == "Sundays Overtime @2.0"):
+        elif(str(values[8].value).replace(" ", "") == "Task Allowance".replace(" ", "")):
+            data[str(values[4].value)+date]['task_allowances']=values[9].value  #task_allowances
 
-        # elif(values[8].value == "Rounding"):
+        elif(str(values[8].value).replace(" ", "") == "S1818.0246.0102".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S0264.0062.2008"):
 
-        # elif(values[8].value == "Acting Allowanc"):
+        elif(str(values[8].value).replace(" ", "") == "S0756.0003.0092".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S1626.0095.2011"):
 
-        # elif(values[8].value == "Disturbance All"):
+        elif(str(values[8].value).replace(" ", "") == "S0195.0094.0122".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        elif(values[8].value == "N/Shift Allowan"):
-            data[str(values[4].value)+date][3]=values[9].value  #allowances
 
-        # elif(values[8].value == "Transport Allow"):
+        elif(str(values[8].value).replace(" ", "") == "S0731.0115.0082".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "S0423.0180.2006"):
 
-        # elif(values[8].value == "Unpaid Leave"):
+        elif(str(values[8].value).replace(" ", "") == "Normal Overtime Hrs".replace(" ", "")):
+            data[str(values[4].value)+date]['normal_overtime']=values[9].value  #normal_overtime
 
-        # elif(values[8].value == "O/Stand Leave"):
 
-        elif(values[8].value == "Leave Allowance"):
-            data[str(values[4].value)+date][3]=values[9].value  #allowances
+        elif(str(values[8].value).replace(" ", "") == "Sundays O/T Hours".replace(" ", "")):
+            data[str(values[4].value)+date]['sunday_overtime']=values[9].value  #sunday_overtime
 
-        # elif(values[8].value == "S0960.0313.2009"):
+        elif(str(values[8].value).replace(" ", "") == "WeekDay Overtime @1.5".replace(" ", "")):
+            data[str(values[4].value)+date]['weekday_overtime']=values[9].value  #weekday_overtime
 
-        # elif(values[8].value == "House Rent"):
 
-        # elif(values[8].value == "Air Ticket Allo"):
+        elif(str(values[8].value).replace(" ", "") == "Sundays Overtime @.2".replace(" ", "")):
+            data[str(values[4].value)+date]['sunday_overtime2']=values[9].value  #sunday_overtime2
 
-        # elif(values[8].value == "Hse Loan/Rent"):
 
-        # elif(values[8].value == "Vehicle Benefit"):
+        elif(str(values[8].value).replace(" ", "") == "Rounding".replace(" ", "")):
+            data[str(values[4].value)+date]['rounding']=values[9].value  #rounding
 
-        # elif(values[8].value == "Bonus"):
+        elif(str(values[8].value).replace(" ", "") == "S0264.0062.0082".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "ADVANCE"):
 
-        # elif(values[8].value == "Mid Month Advances"):
+        elif(str(values[8].value).replace(" ", "") == "Acting Allowanc".replace(" ", "")):
+            data[str(values[4].value)+date]['acting_allowance']=values[9].value  #acting_allowance
 
-        # elif(values[8].value == "Sundays O/T Amount"):
+        elif(str(values[8].value).replace(" ", "") == "S1626.0095.0112".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        elif(values[8].value == "Leave allowance"):
-            data[str(values[4].value)+date][3]=values[9].value  #allowances
 
-        # elif(values[8].value == "Services Award"):
+        elif(str(values[8].value).replace(" ", "") == "Disturbance All".replace(" ", "")):
+            data[str(values[4].value)+date]['disturbance']=values[9].value  #helsb
 
-        # elif(values[8].value == "Share All. Pymt"):
 
-        elif(values[8].value == "SalaryPaid"):
-            data[str(values[4].value)+date][2]=values[9].value  #salary
+        elif(str(values[8].value).replace(" ", "") == "N/Shift Allowan".replace(" ", "")):
+            data[str(values[4].value)+date]['shift_allowance']=values[9].value  #helsb
 
-        # elif(values[8].value == "E"):
+        elif(str(values[8].value).replace(" ", "") == "Transport Allow".replace(" ", "")):
+             data[str(values[4].value)+date]['transport_allow']=values[9].value  #transport_allow
 
-        # elif(values[8].value == " Add:  Loan benefit"):
+        elif(str(values[8].value).replace(" ", "") == "S0423.0180.0062".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "Leavel&O/Stand"):
+        elif(str(values[8].value).replace(" ", "") == "Unpaid Leave".replace(" ", "")):
+            data[str(values[4].value)+date]['unpdaid_leave']=values[9].value  #unpdaid_leave
 
-        # elif(values[8].value == "Long Service"):
+        elif(str(values[8].value).replace(" ", "") == "O/Stand Leave".replace(" ", "")):
+            data[str(values[4].value)+date]['o/stand_leave']=values[9].value  #o/stand_leave
 
-        # elif(values[8].value == "Recognition"):
+        elif(str(values[8].value).replace(" ", "") == "Leave Allowance".replace(" ", "")):
+            data[str(values[4].value)+date]['leave_allowances']=values[9].value  #allowances
 
-        # elif(values[8].value == "TRA Cost"):
+        elif(str(values[8].value).replace(" ", "") == "S0960.0313.0092".replace(" ", "")):
+            data[str(values[4].value)+date]['helsb']=values[9].value  #helsb
 
-        # elif(values[8].value == "Unpaid Days"):
+        elif(str(values[8].value).replace(" ", "") == "House Rent".replace(" ", "")):
+            data[str(values[4].value)+date]['house_rent']=values[9].value  #house rent
 
-        data[str(values[4].value)+date][4]=values[2].value  #pension_employee
-        data[str(values[4].value)+date][5]=values[2].value  #pension_employer
-        data[str(values[4].value)+date][6]=values[2].value  #medical_employee
-        data[str(values[4].value)+date][7]=values[2].value  #medical_employer
-        data[str(values[4].value)+date][8]=values[2].value  #taxdue
-        data[str(values[4].value)+date][9]=values[2].value  #meals
-        data[str(values[4].value)+date][10]=values[2].value  #department
-        data[str(values[4].value)+date][12]=values[2].value  #position
-        data[str(values[4].value)+date][13]=values[2].value  #branch
-        data[str(values[4].value)+date][14]=values[2].value  #pension_fund
-        data[str(values[4].value)+date][15]=values[2].value  #membership_no
-        data[str(values[4].value)+date][16]=values[2].value  #sdl
-        data[str(values[4].value)+date][17]=values[2].value  #wcf
-        data[str(values[4].value)+date][18]=values[2].value  #less_takehome
-        data[str(values[4].value)+date][19]=date  #due_date
-        data[str(values[4].value)+date][20]=date  #payroll_date
-        data[str(values[4].value)+date][21]=values[2].value  #bank
-        data[str(values[4].value)+date][22]=values[2].value  #bank_branch
-        data[str(values[4].value)+date][23]=values[2].value  #account_no
-        data[str(values[4].value)+date][24]=values[2].value  #created_at
+        elif(str(values[8].value).replace(" ", "") == "Air Ticket Allo".replace(" ", "")):
+            data[str(values[4].value)+date]['air_ticket']=values[9].value  #air_ticket
+
+        elif(str(values[8].value).replace(" ", "") == "Hse Loan/Rent".replace(" ", "")):
+            data[str(values[4].value)+date]['hse_loan']=values[9].value  #hse_loan
+
+        elif(str(values[8].value).replace(" ", "") == "Vehicle Benefit".replace(" ", "")):
+            data[str(values[4].value)+date]['vehicle_benefit']=values[9].value  #vehicle_benefit
+
+        elif(str(values[8].value).replace(" ", "") == "Bonus".replace(" ", "")):
+            data[str(values[4].value)+date]['bonus']=values[9].value  #bonus
+
+        elif(str(values[8].value).replace(" ", "") == "ADVANCE".replace(" ", "")):
+            data[str(values[4].value)+date]['advance']=values[9].value  #advance
+
+        elif(str(values[8].value).replace(" ", "") == "Mid Month Advances".replace(" ", "")):
+            data[str(values[4].value)+date]['mid_month_advance']=values[9].value  #mid_month_advance
+
+        elif(str(values[8].value).replace(" ", "") == "Sundays O/T Amount".replace(" ", "")):
+            data[str(values[4].value)+date]['sunday_overtime']=values[9].value  #sunday_overtime
+
+        elif(str(values[8].value).replace(" ", "") == "Services Award".replace(" ", "")):
+            data[str(values[4].value)+date]['service_award']=values[9].value  #service_award
+
+        elif(str(values[8].value).replace(" ", "") == "Share All. Pymt".replace(" ", "")):
+            data[str(values[4].value)+date]['share_all_payment']=values[9].value  #share_all_payment
+
+        elif(str(values[8].value).replace(" ", "") == "SalaryPaid".replace(" ", "")):
+            data[str(values[4].value)+date]['salary']=values[9].value  #salary
+
+        # elif(str(values[8].value).replace(" ", "") == "E".replace(" ", "")):
+
+        elif(str(values[8].value).replace(" ", "") == " Add:  Loan benefit".replace(" ", "")):
+            data[str(values[4].value)+date]['loan_benefit']=values[9].value  #loan_benefit
+
+        elif(str(values[8].value).replace(" ", "") == "Leavel&O/Stand".replace(" ", "")):
+            data[str(values[4].value)+date]['level_i/o']=values[9].value  #loan_benefit
+
+        elif(str(values[8].value).replace(" ", "") == "Long Service".replace(" ", "")):
+            data[str(values[4].value)+date]['long_service']=values[9].value  #loan_benefit
+
+        elif(str(values[8].value).replace(" ", "") == "Recognition".replace(" ", "")):
+            data[str(values[4].value)+date]['recognition']=values[9].value  #loan_benefit
+
+        elif(str(values[8].value).replace(" ", "") == "TRA Cost".replace(" ", "")):
+            data[str(values[4].value)+date]['tra_cost']=values[9].value  #loan_benefit
+
+        elif(str(values[8].value).replace(" ", "") == "Unpaid Days".replace(" ", "")):
+            data[str(values[4].value)+date]['unpaid_days']=values[9].value  #loan_benefit
+
+        # data[str(values[4].value)+date]['pension_employee']=values[2].value  #pension_employee
+        # data[str(values[4].value)+date]['pension_employer']=values[2].value  #pension_employer
+        # data[str(values[4].value)+date]['medical_employee']=values[2].value  #medical_employee
+        # data[str(values[4].value)+date]['medical_employer']=values[2].value  #medical_employer
+        # data[str(values[4].value)+date]['taxdue']=values[2].value  #taxdue
+        # data[str(values[4].value)+date]['meals']=values[2].value  #meals
+        # data[str(values[4].value)+date]['department']=values[2].value  #department
+        # data[str(values[4].value)+date]['position']=values[2].value  #position
+        # data[str(values[4].value)+date]['branch']=values[2].value  #branch
+        # data[str(values[4].value)+date]['pension_fund']=values[2].value  #pension_fund
+        # data[str(values[4].value)+date]['membership_no']=values[2].value  #membership_no
+        # data[str(values[4].value)+date]['sdl']=values[2].value  #sdl
+        # data[str(values[4].value)+date]['wcf']=values[2].value  #wcf
+        # data[str(values[4].value)+date]['less_takehome']=values[2].value  #less_takehome
+        data[str(values[4].value)+date]['date']=date  #due_date
+        # data[str(values[4].value)+date]['payroll_date']=date  #payroll_date
+    #     data[str(values[4].value)+date]['bank']=values[2].value  #bank
+    #     data[str(values[4].value)+date]['bank_branch']=values[2].value  #bank_branch
+    #     data[str(values[4].value)+date]['account_no']=values[2].value  #account_no
+    #     data[str(values[4].value)+date]['created_at']=values[2].value  #created_at
     k+=1
+
+
+file = "test.xlsx" #load the work book
+wb_obj = load_workbook(filename = 'pension payments.xlsx')
+wsheet = wb_obj['Sheet1']
+dataDict = {}
+
+# data={}
+
+#ID	CompanyCode	FISCALYEAR	Mon	MonthName	CODENO	Group	GroupNo	Position	Desc	Value	Name	Department	Description	BANKNAME	BRANCH	PayMethod	NPFNUMBER	JobTitle	msg1	msg2	msg3	Wstation	WStation_Name	Hired_Date	STATUS	upsize_ts
+#0	 1	              2   	3	       4	5	      6	       7    	8	     9	        10	11	      12	     13	           14	      15	16	           17	       18	     19	      20	21	      22	      23	            24	       25	26
+
+
+
+#id	empID	salary	allowances	pension_employee	pension_employer	medical_employee	medical_employer	taxdue	meals	department	position	branch	pension_fund	membership_no	sdl	wcf	less_takehome	due_date	payroll_date	bank	bank_branch	account_no	created_at	updated_at
+#1   	2	 3	     4	         5	                  6	                  7	                    8	              9	     10	     11	         12	          13	    14	              15         16	 17 	18	        19	        20	            21	        22	                    23	        24	25
+k=0
+r=0
+temp=[]
+while r<30:
+    temp.append('')
+    r+=1
+    # print(r)
+for key, *values in wsheet.iter_rows():
+    temp={}
+    if(k>=1):
+        # print(values[2].value)
+
+#ID	CompanyCode	CODENO	FISCALYEAR	MON	Month	LASTDAY	NAME	PAYDOLLAR	EXCHANGE	NSSF Number	Income	Employee Cotribution	Employer Contribution	Total	Receipt Number	Receipt Date	NPFPPS	upsize_ts
+#       0          1	       2     3 	   4	     3	  6	       7	    8	         9	            10	              11                        12	      13	    14	         15  	        16	      17	                      9
+
+        # # date='25/'+str(values[2].value)+'/'+str(values[1].value)
+        date='25/'+str(values[3].value)+'/'+str(values[2].value)
+        # print(date)
+        # # for value in values:
+        if str(values[1].value)+date in data:
+
+            # data[str(values[1].value)+date]=temp
+
+            # data[str(values[1].value)+date]['date']=date
+            data[str(values[1].value)+date]['employer_contribution']=values[11].value
+            data[str(values[1].value)+date]['employee_contribution']=values[12].value
+            data[str(values[1].value)+date]['membership_no']=values[9].value
+    k=k+1
 
 i=0
 for key in data:
     print(data[key])
-    # if(values[8].value == "i+=1"):
+    print(k)
+# for key in data:
+#     print(data[key])
+    # if(str(values[8].value).replace(" ", "") == "i+=1.replace(" ", "")"):
 
 # prelse int(i)
