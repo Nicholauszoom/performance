@@ -113,7 +113,7 @@
                                         <script>
                                         setTimeout(function() {
                                             var url =
-                                                "{{route('temp_payroll_info',['pdate'=>base64_encode($payrollList[0]->payroll_date)])}}"
+                                                "{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($payrollList[0]->payroll_date)])}}"
                                             window.location.href = url;
                                         }, 1000)
                                         </script>
@@ -148,7 +148,7 @@
                                             </span>
 
                                             <span style="margin-right: 4px">
-                                                <a href="{{route('temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
+                                                <a href="{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                                     onclick="cancelPayroll()" title="Resend Pay Slip as Email"
                                                     class="icon-2 info-tooltip">
                                                     <button type="button"
