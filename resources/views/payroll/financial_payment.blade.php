@@ -2,10 +2,6 @@
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-
-
-
 @endpush
 
 @push('head-scriptTwo')
@@ -17,37 +13,32 @@
 <script src="{{ asset('assets/date-picker/daterangepicker.js') }}"></script>
 @endpush
 
-@section('page-header')
-@include('layouts.shared.page-header')
-@endsection
 
 @section('content')
 @php
-$imprest_model = new App\Models\Payroll\ImprestModel;
-$overtime = $data['overtime'];
-$imprests = $data['imprests'];
-$pending_arrears = $data['pending_arrears'];
-$monthly_arrears = $data['monthly_arrears'];
-$month_list = $data['month_list'];
-$bonus = $data['bonus'];
-$pendingPayroll = $data['pendingPayroll'];
-$incentives = $data['incentives'];
-$employee = $data['employee'];
-$otherloan = $data['otherloan'];
+    $imprest_model = new App\Models\Payroll\ImprestModel;
+    $overtime = $data['overtime'];
+    $imprests = $data['imprests'];
+    $pending_arrears = $data['pending_arrears'];
+    $monthly_arrears = $data['monthly_arrears'];
+    $month_list = $data['month_list'];
+    $bonus = $data['bonus'];
+    $pendingPayroll = $data['pendingPayroll'];
+    $incentives = $data['incentives'];
+    $employee = $data['employee'];
+    $otherloan = $data['otherloan'];
 
-$pendingPayroll_month = $data['pendingPayroll_month'];
-$pendingPayroll = $data['pendingPayroll'];
-$payroll = $data['payroll'];
-$payrollList = $data['payrollList'];
-$other_imprests = $data['other_imprests'];
-$adv_overtime = $data['adv_overtime'];
-
-
+    $pendingPayroll_month = $data['pendingPayroll_month'];
+    $pendingPayroll = $data['pendingPayroll'];
+    $payroll = $data['payroll'];
+    $payrollList = $data['payrollList'];
+    $other_imprests = $data['other_imprests'];
+    $adv_overtime = $data['adv_overtime'];
 @endphp
 
 <div class="card">
     <div class="card-header border-0">
-        <h2><i class="fa fa-bars"></i> Pending Payments <small>Need To Be Responded On</small></h2>
+        <h4 class="text-main">Pending Payments <small>Need To Be Responded On</small></h4>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -72,7 +63,7 @@ $adv_overtime = $data['adv_overtime'];
 
     <div class="card-body">
         <div class="col-lg-12">
-          
+
             <div class="border rounded p-3 mb-3">
                 <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -107,7 +98,7 @@ $adv_overtime = $data['adv_overtime'];
                         <a href="#incentivesTab" class="nav-link" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
                             <i class="ph-list me-2"></i>
-                            Incentives 
+                            Incentives
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -801,7 +792,7 @@ $adv_overtime = $data['adv_overtime'];
                     </div>
                 </div>
 
-                    
+
 
             <div role="tabpanel" class="tab-pane fade" id="arrearsTab"
                 aria-labelledby="profile-tab">
@@ -1138,7 +1129,7 @@ $adv_overtime = $data['adv_overtime'];
         </div>
     </div>
 </div>
-                    
+
                 </div>
             </div>
         </div>

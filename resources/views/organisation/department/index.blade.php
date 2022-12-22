@@ -21,7 +21,7 @@
                     data-bs-toggle="modal"
                     data-bs-target="#save_department"
                 >
-                    <i class="ph-plus me-2"></i> Department
+                    <i class="ph-plus me-2"></i> Department clic
                 </button>
             </div>
         </div>
