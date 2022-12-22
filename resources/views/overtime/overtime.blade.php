@@ -149,9 +149,7 @@
 <div class="card mt-4">
     <div class="card-header">
         <h4 class="text-main">Others Overtime</h4>
-    </div>
 
-    <div class="card-body border-0 shadow-none">
         <?php session("note"); ?>
         <div id ="myResultfeedOvertime"></div>
     </div>
@@ -180,21 +178,21 @@
                     <td><?php echo $row->reason; ?></td>
 
                     <td>
-                        <div id ="record<?php echo $row->eoid; ?>">
-                            <?php if($row->status==0){ ?> <div class="col-md-12"><span class="label label-default">REQUESTED</span></div><?php }
-                            elseif($row->status==1 && $pendingPayroll==0){ ?><div class="col-md-12"><span class="label label-info">RECOMENDED BY LINE MANAGER</span></div><?php }
-                            elseif($row->status==4 && $pendingPayroll==0){ ?><div class="col-md-12"><span class="label label-success">APPROVED BY FINANCE</span></div><?php }
-                            elseif($row->status==3 && $pendingPayroll==0 ){ ?><div class="col-md-12"><span class="label label-success">APPROVED BY HR</span></div><?php }
-                            elseif($row->status==2){ ?><div class="col-md-12"><span class="label label-success">APPROVED BY CD</span></div><?php }
-                            elseif($row->status==5){ ?><div class="col-md-12"><span class="label label-success">RETIREMENT CONFIRMED</span></div><?php }
-                            elseif($row->status==6){ ?><div class="col-md-12"><span class="label label-danger">DISSAPPROVED</span></div><?php }
-                            elseif($row->status==7){ ?><div class="col-md-12"><span class="label label-danger">UNCONFIRMED</span></div><?php }
-                            elseif($row->status==8){ ?><div class="col-md-12"><span class="label label-danger">UNCONFIRMED RETIREMENT</span></div><?php } ?>
+                        <div id ="record<?php echo $row->eoid; ?>" class="mb-2">
+                            <?php if($row->status==0){ ?> <span class="badge bg-default">REQUESTED</span><?php }
+                            elseif($row->status==1 && $pendingPayroll==0){ ?><span class="badge bg-info">RECOMENDED BY LINE MANAGER</span><?php }
+                            elseif($row->status==4 && $pendingPayroll==0){ ?><span class="badge bg-success">APPROVED BY FINANCE</span><?php }
+                            elseif($row->status==3 && $pendingPayroll==0 ){ ?><span class="badge bg-success">APPROVED BY HR</span><?php }
+                            elseif($row->status==2){ ?><span class="badge bg-success">APPROVED BY CD</span><?php }
+                            elseif($row->status==5){ ?><span class="badge bg-success">RETIREMENT CONFIRMED</span><?php }
+                            elseif($row->status==6){ ?><span class="badge bg-danger">DISSAPPROVED</span><?php }
+                            elseif($row->status==7){ ?><span class="badge bg-danger">UNCONFIRMED</span><?php }
+                            elseif($row->status==8){ ?><span class="badge bg-danger">UNCONFIRMED RETIREMENT</span><?php } ?>
                         </div>
 
 
                         <?php  if ($row->status==0) {   ?>
-                            <a href="javascript:void(0)" title="Approve" class="icon-2 info-tooltip" onclick="lineapproveOvertime(<?php echo $row->eoid;?>)">
+                            <a href="javascript:void(0)" title="Approve" class="me-2" onclick="lineapproveOvertime(<?php echo $row->eoid;?>)">
                                 <button class="btn btn-success btn-xs" ><i class="ph-check"></i></button>
                             </a>
 
@@ -208,7 +206,7 @@
                     <td class="options-width">
                         <?php //if($row->status==1 || $this->session->userdata('line') !=0 ){ ?> <?php //} ?>
                         <?php //if ($row->status==2) {   ?>
-                        <a href="<?php echo url('')."flex/fetchOvertimeComment/".$row->eoid; ?>">
+                        <a href="{{ route('flex.fetchOvertimeComment', $row->eoid) }}">
                             <button  class='btn btn-primary btn-xs'>Comment</i></button>
                         </a>
                         <?php //}  ?>
@@ -260,6 +258,7 @@
 
      function approveOvertime(id)
     {
+
         if (confirm("Are You Sure You Want to Approve This Overtime Request") == true) {
         var overtimeid = id;
 
@@ -291,29 +290,35 @@
 
     function lineapproveOvertime(id)
     {
-        if (confirm("Are You Sure You Want to Approve This Overtime Request") == true) {
-        var overtimeid = id;
+        if ( confirm("Are You Sure You Want to Approve This Overtime Request") == true) {
+
+            var overtimeid = id;
 
             $.ajax({
                 url: "{{ url('flex/lineapproveOvertime') }}/"+overtimeid
             })
             .done(function(data){
-             $('#resultfeedOvertime').fadeOut('fast', function(){
-                  $('#resultfeedOvertime').fadeIn('fast').html(data);
+
+                $('#resultfeedOvertime').fadeOut('fast', function(){
+                    $('#resultfeedOvertime').fadeIn('fast').html(data);
                 });
-             /*$('#status'+id).fadeOut('fast', function(){
-                  $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                });
-             $('#record'+id).fadeOut('fast', function(){
-                  $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                });*/
-             setTimeout(function() {
-                location.reload();
-             }, 2000);
-                })
+
+                /*$('#status'+id).fadeOut('fast', function(){
+                    $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                    });
+                $('#record'+id).fadeOut('fast', function(){
+                    $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                    });*/
+
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            })
             .fail(function(){
-             alert('Overtime Approval Failed!! ...');
-                });
+                // Basic initialization
+
+                alert('Overtime Approval Failed!! ...');
+            });
         }
     }
     function hrapproveOvertime(id)
@@ -376,7 +381,7 @@
     function denyOvertime(id)
     {
         if (confirm("Are You Sure You Want to Dissaprove This Overtime Request") == true) {
-        var overtimeid = id;
+            var overtimeid = id;
 
             $.ajax({
                 url: "{{ url('flex/denyOvertime') }}/"+overtimeid
@@ -467,20 +472,23 @@
                 url: "{{ url('flex/cancelOvertime') }}/"+overtimeid
             })
             .done(function(data){
-               $('#resultfeedOvertime').fadeOut('fast', function(){
-                  $('#resultfeedOvertime').fadeIn('fast').html(data);
+                $('#resultfeedOvertime').fadeOut('fast', function(){
+                    $('#resultfeedOvertime').fadeIn('fast').html(data);
                 });
-             $('#status'+id).fadeOut('fast', function(){
-                  $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>');
+
+                $('#status'+id).fadeOut('fast', function(){
+                    $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>');
                 });
-             alert('Request Cancelled Successifully!! ...');
-             setTimeout(function() {
-                location.reload();
-             }, 1000);
-                })
+
+                alert('Request Cancelled Successifully!! ...');
+
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            })
             .fail(function(){
-             alert('Overtime Cancellation Failed!! ...');
-                });
+                alert('Overtime Cancellation Failed!! ...');
+            });
         }
     }
 
@@ -489,116 +497,125 @@
 
 
 <script type="text/javascript">
-  $(".select_category").select2({
-    placeholder: "Select Category",
-    allowClear: true
+    $(".select_category").select2({
+        placeholder: "Select Category",
+        allowClear: true
+    });
+
+    $(function() {
+
+        $('#time_range').daterangepicker({
+            autoUpdateInput: false,
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerIncrement: 30,
+                singleClasses: "picker_1",
+            locale: {
+                cancelLabel: 'Clear',
+                format: 'DD/MM/YYYY H:mm'
+            }
+        });
+
+        $('#time_range').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY H:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY H:mm'));
+        });
+
+        $('#time_range').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+
   });
+</script>
 
-  $(function() {
+<script>
+    $(function() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
 
-    $('#time_range').daterangepicker({
-        autoUpdateInput: false,
-          timePicker: true,
-          timePicker24Hour: true,
-          timePickerIncrement: 30,
-              singleClasses: "picker_1",
-        locale: {
-            cancelLabel: 'Clear',
-            format: 'DD/MM/YYYY H:mm'
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
         }
-    });
 
-    $('#time_range').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('DD/MM/YYYY H:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY H:mm'));
-    });
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
 
-    $('#time_range').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
+        var dateToday = dd + '-' + mm + '-' + yyyy;
 
-  });
+        $('#time_start').daterangepicker({
+            drops: 'down',
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerIncrement: 30,
+            startDate:dateToday,
+            minDate:dateToday,
+            locale: {
+                format: 'DD-MM-YYYY H:mm'
+            },
+            singleClasses: "picker_4"
+        }, function(start, end, label) {
+            // var years = moment().diff(start, 'years');
+            // alert("The Employee is " + years+ " Years Old!");
+        });
+
+        $('#time_start').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY')+'  at  '+picker.startDate.format('H:mm'));
+        });
+
+        $('#time_start').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+    });
 </script>
 
 <script>
-$(function() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth() + 1; //January is 0!
+    $(function() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
 
-  var yyyy = today.getFullYear();
-  if (dd < 10) {
-    dd = '0' + dd;
-  }
-  if (mm < 10) {
-    mm = '0' + mm;
-  }
-    var dateToday = dd + '-' + mm + '-' + yyyy;
-    $('#time_start').daterangepicker({
-      drops: 'down',
-      singleDatePicker: true,
-      autoUpdateInput: false,
-      timePicker: true,
-      timePicker24Hour: true,
-      timePickerIncrement: 30,
-      startDate:dateToday,
-      minDate:dateToday,
-      locale: {
-        format: 'DD-MM-YYYY H:mm'
-      },
-      singleClasses: "picker_4"
-    }, function(start, end, label) {
-      // var years = moment().diff(start, 'years');
-      // alert("The Employee is " + years+ " Years Old!");
+        var yyyy = today.getFullYear();
 
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        var dateToday = dd + '-' + mm + '-' + yyyy;
+
+        $('#time_end').daterangepicker({
+            drops: 'down',
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerIncrement: 30,
+            startDate:dateToday,
+            minDate:dateToday,
+            locale: {
+            format: 'DD-MM-YYYY H:mm'
+            },
+            singleClasses: "picker_4"
+        }, function(start, end, label) {
+            // var years = moment().diff(start, 'years');
+            // alert("The Employee is " + years+ " Years Old!");
+        });
+
+        $('#time_end').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY')+'  at  '+picker.startDate.format('H:mm'));
+        });
+
+        $('#time_end').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
     });
-      $('#time_start').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('DD-MM-YYYY')+'  at  '+picker.startDate.format('H:mm'));
-    });
-      $('#time_start').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
-  });
-</script>
-
-<script>
-$(function() {
-  var today = new Date();
-  var dd = today.getDate();
-  var mm = today.getMonth() + 1; //January is 0!
-
-  var yyyy = today.getFullYear();
-  if (dd < 10) {
-    dd = '0' + dd;
-  }
-  if (mm < 10) {
-    mm = '0' + mm;
-  }
-  var dateToday = dd + '-' + mm + '-' + yyyy;
-  $('#time_end').daterangepicker({
-    drops: 'down',
-    singleDatePicker: true,
-    autoUpdateInput: false,
-    timePicker: true,
-    timePicker24Hour: true,
-    timePickerIncrement: 30,
-    startDate:dateToday,
-    minDate:dateToday,
-    locale: {
-      format: 'DD-MM-YYYY H:mm'
-    },
-    singleClasses: "picker_4"
-  }, function(start, end, label) {
-    // var years = moment().diff(start, 'years');
-    // alert("The Employee is " + years+ " Years Old!");
-
-  });
-    $('#time_end').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('DD-MM-YYYY')+'  at  '+picker.startDate.format('H:mm'));
-  });
-    $('#time_end').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-  });
-});
 </script>
 
 <script type="text/javascript">
@@ -617,16 +634,18 @@ $(function() {
                  async:false
              })
         .done(function(data){
-         $('#resultfeedSubmission').fadeOut('fast', function(){
-              $('#resultfeedSubmission').fadeIn('fast').html(data);
+            $('#resultfeedSubmission').fadeOut('slow', function(){
+                $('#resultfeedSubmission').fadeIn('slow').html(data);
             });
+
             setTimeout(function(){// wait for 5 secs(2)
-          location.reload(); // then reload the page.(3)
-        }, 1000);
-    //   $('#updateName')[0].reset();
+                location.reload(); // then reload the page.(3)
+            }, 1000);
+
+            //   $('#updateName')[0].reset();
         })
         .fail(function(){
-     alert('Request Failed!! ...');
+            alert('Request Failed!! ...');
         });
     });
 
