@@ -3561,7 +3561,9 @@ class GeneralController extends Controller
 
         // dd(session()->all());
 
-        $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+        //$strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+        $strategyStatistics = $this->performanceModel->strategy_info(1);
+
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
         // dd($strategyStatistics);
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));

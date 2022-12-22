@@ -10,5 +10,5 @@ class ImportsEmployee extends Model
     use HasFactory;
     
     protected $guarded = ["id"];
-    protected $table  = "employee2";
+    protected $table  = "employee";
 }

@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Support\Str;
 use App\Models\ImportsEmployee;
+use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -21,7 +22,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
     */
     public function collection(Collection $collection)
     {
-        $flexperformance_model = new PerformanceModel();
+        $flexperformance_model = new FlexPerformanceModel();
         $project_model = new ProjectModel();
         
         foreach ($collection as $row) 
@@ -49,7 +50,9 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             'password'=>"$2y$10$"."cuAOvfpGSYPLmwONROf9J.WpmZf0.sIq/si7gkSZZSjr7KmV5SrXG",
 
           ];
-         $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+         //$recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+         $recordID = ImportsEmployee::create($data);
+
           
           $data = array(
             'empID' => $row['empno'],
@@ -73,7 +76,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
               'group_name' => 1,
           );
 
-          $result = $flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+          //$result = $flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
           $data_transfer = array(
             'empID' => $row['empno'],
             'parameter' => 'New Employee',
@@ -81,9 +84,9 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             'old' => 0,
             'new' => $row['basicpay'],
             'old_department' => 0,
-            'new_department' => $request->input("department"),
+            'new_department' => 1,
             'old_position' => 0,
-            'new_position' => $request->input("position"),
+            'new_position' => 1,
             'status' => 5, //new employee
             'recommended_by' => session('emp_id'),
             'approved_by' => '',
