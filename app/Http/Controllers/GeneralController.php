@@ -1999,7 +1999,7 @@ class GeneralController extends Controller
         $data['parent'] = 'Workforce';
         $data['child'] = 'Overtime';
 
-        return view('app.overtime', $data);
+        return view('overtime.overtime', $data);
 
     }
 
@@ -2043,6 +2043,7 @@ class GeneralController extends Controller
             $this->flexperformance_model->update_overtime($data, $overtimeID);
 
             session('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
+
             return redirect('/flex/overtime');
 
         }
@@ -2199,9 +2200,13 @@ class GeneralController extends Controller
             $signatory = session('emp_id');
             $time_approved = date('Y-m-d');
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
+
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+            }
+
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         }
@@ -2302,32 +2307,30 @@ class GeneralController extends Controller
         }
     }
 
-    public function fetchOvertimeComment(Request $request)
+    public function fetchOvertimeComment(Request $request, $id)
     {
 
-        $overtimeID = $this->uri->segment(3);
-        $data['comment'] = $this->flexperformance_model->fetchOvertimeComment($overtimeID);
+        $data['comment'] = $this->flexperformance_model->fetchOvertimeComment($id);
         $data['mode'] = 1; // Mode 1 fo Comment Purpose and Mode 2 for Update Purpose
+        $data['parent'] = 'Overtime Remarks';
 
-        return view('app.overtime_info', $data);
+        return view('overtime.overtime_info', $data);
     }
 
     public function commentOvertime(Request $request)
     {
+        $overtimeID = $request->input('overtimeID');
 
-        if (isset($_POST['apply'])) {
-            $overtimeID = $request->input('overtimeID');
-            $data = array(
-                'final_line_manager_comment' => $request->input('comment'),
-                'commit' => 1,
-            );
+        $data = array(
+            'final_line_manager_comment' => $request->input('comment'),
+            'commit' => 1,
+        );
 
-            $this->flexperformance_model->update_overtime($data, $overtimeID);
+        $this->flexperformance_model->update_overtime($data, $overtimeID);
 
-            session('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
-            return redirect('/flex/overtime');
+        session('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
 
-        }
+        return redirect(route('flex.overtime'));
 
     }
 
@@ -4524,7 +4527,8 @@ class GeneralController extends Controller
             $data['parent'] = "Settings";
             $data['child'] = "Overtime";
             $data['title'] = "Overtime";
-            return view('app.allowance_overtime', $data);
+
+            return view('overtime.allowance_overtime', $data);
 
         } else {
             echo "Unauthorized Access";

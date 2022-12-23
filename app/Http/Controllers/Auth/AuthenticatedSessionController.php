@@ -17,6 +17,7 @@ class AuthenticatedSessionController extends Controller
     public function __construc( $flexperformance_model = null  ){
         $this->flexperformance_model = new FlexPerformanceModel();
     }
+    
     /**
      * Display the login view.
      *

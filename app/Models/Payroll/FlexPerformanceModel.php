@@ -425,9 +425,11 @@ class FlexPerformanceModel extends Model
 
     function update_overtime($data, $id)
 	{
-		DB::table('employee_overtime')->where('id', $id)
-		->update($data);
-		return true;
+		DB::table('employee_overtime')
+            ->where('id', $id)
+		    ->update($data);
+
+        return true;
 	}
 
     public function deny_overtime($id)
@@ -477,10 +479,13 @@ class FlexPerformanceModel extends Model
 
     function checkApprovedOvertime($overtimID)
 	{
-	    $query = "COUNT(id) as counts  WHERE id = ".$overtimID." AND status = 2 ";
 		$row = DB::table('employee_overtime')
-		->select(DB::raw($query))
-		->first();
+		    ->select(DB::raw('COUNT(id) as counts'))
+            ->where('id', $overtimID)
+            ->where('status', 2)
+            ->limit(1)
+		    ->first();
+
 		return $row->counts;
 	}
 
@@ -498,15 +503,20 @@ class FlexPerformanceModel extends Model
 		return true;
 	}
 
-	function lineapproveOvertime($id, $time_approved) {
-	     DB::transaction(function() use($id, $time_approved)
-       {
-	    $query = "UPDATE employee_overtime SET status = 1,time_recommended_line ='".$time_approved."'  WHERE id ='".$id."'";
-		DB::insert(DB::raw($query));
-	    });
+	public function lineapproveOvertime($id, $time_approved) {
 
-		return true;
+        $query = DB::transaction(function() use($id, $time_approved)
+                {
+                    $query = "UPDATE employee_overtime SET status = 1, time_recommended_line ='".$time_approved."'  WHERE id ='".$id."'";
+
+                    DB::insert(DB::raw($query));
+
+                    return true;
+                });
+
+		return $query;
 	}
+
 	function hrapproveOvertime($id,$signatory, $time_approved) {
 	     DB::transaction(function() use($id,$signatory, $time_approved)
        {

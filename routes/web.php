@@ -254,14 +254,14 @@ Route::middleware('auth')->group(function () {
         Route::any('/individual_arrears_info','individual_arrears_info')->name('flex.individual_arrears_info');
         Route::any('/holdOvertime','holdOvertime')->name('flex.holdOvertime');
         Route::any('/approveOvertime/{id}','approveOvertime')->name('flex.approveOvertime');
-        Route::any('/lineapproveOvertime','lineapproveOvertime')->name('flex.lineapproveOvertime');
+        Route::any('/lineapproveOvertime/{id}','lineapproveOvertime')->name('flex.lineapproveOvertime');
         Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
         Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
         Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
         Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
-        Route::any('/fetchOvertimeComment','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
+        Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
         Route::any('/commentOvertime','commentOvertime')->name('flex.commentOvertime');
         Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
