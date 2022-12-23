@@ -12,7 +12,7 @@
         <script src="{{ asset('assets/js/app.js') }}"></script>
     </head>
 
-    <body style="background: #001949;">
+    <body style="background: #00204e;">
 
         <div class="page-content">
             <div class="content-wrapper">
@@ -28,6 +28,7 @@
                         @csrf
 
                             <div class="card mb-0">
+
                                 <div class="card-body">
                                     <div class="text-center mb-3">
                                         <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
@@ -40,7 +41,14 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Username</label>
+                                        <ul>
+                                            <li class="text-danger">Wrong Username</li>
+                                            <li class="text-danger">Wrong Password</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-main">Username</label>
 
                                         <div class="form-control-feedback form-control-feedback-start">
                                             <input
@@ -67,7 +75,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label">Password</label>
+                                        <label class="form-label text-main">Password</label>
 
                                         <div class="form-control-feedback form-control-feedback-start">
                                             <input
@@ -93,16 +101,11 @@
                                     </div>
 
                                     <div class="d-flex align-items-center mb-3">
-                                        <label class="form-check">
-                                            <input type="checkbox" name="remember" class="form-check-input" checked>
-                                            <span class="form-check-label">Remember</span>
-                                        </label>
-
-                                        <a href="/forgot-password" class="ms-auto">Forgot password?</a>
+                                        <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
                                     </div>
 
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-main w-100 border-0" style="background: #012972">Log In</button>
+                                        <button type="submit" class="btn btn-main w-100 border-0" style="background: #00204e">Log In</button>
                                     </div>
 
                                   </div>
