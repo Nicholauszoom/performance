@@ -300,7 +300,12 @@
                         Account settings
                     </a> --}}
 
-                    <a
+
+
+                    <form action="{{ route('logout') }}" method="POST" >
+                        @csrf
+
+                        <a
                         href="{{ route('logout') }}"
                         class="dropdown-item"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -308,8 +313,6 @@
                         <i class="ph-sign-out me-2"></i>
                         Logout
                     </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
                     </form>
                 </div>
             </li>
