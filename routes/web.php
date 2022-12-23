@@ -520,8 +520,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/partial_payment','partial_payment')->name('payroll.partial_payment');
         Route::any('/salary_calculator','salary_calculator')->name('payroll.salary_calculator');
         Route::any('/calculateSalary','calculateSalary')->name('payroll.calculateSalary');
-        Route::any('/recommendpayrollByHr','recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
-        Route::any('/recommendpayrollByFinance','recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
+        Route::any('/recommendpayrollByHr/{pdate}/{message}','recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
+        Route::any('/recommendpayrollByFinance/{pdate}/{message}','recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
         Route::any('/runpayroll/{pdate}','runpayroll')->name('payroll.runpayroll');
         Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
         Route::any('/generate_checklist','generate_checklist')->name('payroll.generate_checklist');

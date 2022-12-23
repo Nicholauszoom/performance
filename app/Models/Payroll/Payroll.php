@@ -219,7 +219,7 @@ class Payroll extends Model
     }
 
 
-    public function recommendPayroll($author,$date,$state){
+    public function recommendPayroll($author,$date,$state,$message){
     
         if($state == 1){
         $query = ["state" => $state,"recom_author2" =>$author,"recom_date2" =>$date];
@@ -232,6 +232,14 @@ class Payroll extends Model
         ->where('state',2)
         ->orWhere('state',3)
         ->update($query);
+        
+        $row = DB::table('payroll_months')->where('state',2)->orWhere('state',3)->select('payroll_date')->first();
+        $query = ["message" => $message,"payroll_date"=>$row->payroll_date,"emp_id" =>$author,"type"=>1,"date" =>$date];
+
+        DB::table('payroll_comments')
+        ->insert($query);
+
+
         return true;
     }
 

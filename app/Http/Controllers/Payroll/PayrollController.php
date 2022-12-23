@@ -725,9 +725,10 @@ class PayrollController extends Controller
         }
     }
 
-    function recommendpayrollByFinance(Request $request)
+    function recommendpayrollByFinance($pdate,$message)
     {   
-        $payrollMonth = $request->pdate;
+        
+        $payrollMonth = $pdate;
         $state = 1;
      
         if ($payrollMonth != "") {
@@ -736,7 +737,7 @@ class PayrollController extends Controller
 
             $check = $this->payroll_model->pendingPayrollCheck();
             if ($check > 0) {
-                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state);
+                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state,$message);
                 if ($result == true) {
 
                     $description ="Recommendation of payroll of date " . $todate;
@@ -758,9 +759,10 @@ class PayrollController extends Controller
         }
 
     }
-    function recommendpayrollByHr(Request $request)
+    function recommendpayrollByHr($pdate,$message)
     {   
-        $payrollMonth = $request->pdate;
+        
+        $payrollMonth = $pdate;
         $state = 3;
        
         if ($payrollMonth != "") {
@@ -769,7 +771,7 @@ class PayrollController extends Controller
 
             $check = $this->payroll_model->pendingPayrollCheck();
             if ($check > 0) {
-                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state);
+                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state,$message);
                 if ($result == true) {
 
                     $description ="Recommendation of payroll of date " . $todate;

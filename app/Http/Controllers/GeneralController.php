@@ -2089,6 +2089,8 @@ class GeneralController extends Controller
         $data['monthly_arrears'] = $this->payroll_model->all_arrears_payroll_month();
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
+        $data['latest_comment'] = $this->flexperformance_model->get_comment();
+
         $data['bonus'] = $this->payroll_model->selectBonus();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['incentives'] = $this->payroll_model->employee_bonuses();
