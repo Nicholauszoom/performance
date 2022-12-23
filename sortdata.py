@@ -1,8 +1,8 @@
 from openpyxl import load_workbook
 
 file = "test.xlsx" #load the work book
-wb_obj = load_workbook(filename = 'payslips_xls.xlsx')
-wsheet = wb_obj['payslips']
+wb_obj = load_workbook(filename = 'all_payslips.xlsx')
+wsheet = wb_obj['all_payslips']
 dataDict = {}
 
 data={}
@@ -11,7 +11,7 @@ data={}
 #0	 1	              2   	3	       4	5	      6	       7    	8	     9	        10	11	      12	     13	           14	      15	16	           17	       18	     19	      20	21	      22	      23	            24	       25	26
 
 
-
+#id	empID	salary	allowances	pension_employee	pension_employer	medical_employee	medical_employer	taxdue	meals	department	position	branch	pension_fund	membership_no	sdl	wcf	less_takehome 0-Complete Take Home	due_date	payroll_date	bank	bank_branch	account_no	created_at	updated_at
 #id	empID	salary	allowances	pension_employee	pension_employer	medical_employee	medical_employer	taxdue	meals	department	position	branch	pension_fund	membership_no	sdl	wcf	less_takehome	due_date	payroll_date	bank	bank_branch	account_no	created_at	updated_at
 #1   	2	 3	     4	         5	                  6	                  7	                    8	              9	     10	     11	         12	          13	    14	              15         16	 17 	18	        19	        20	            21	        22	                    23	        24	25
 k=0
@@ -25,13 +25,14 @@ for key, *values in wsheet.iter_rows():
     temp={}
     if(k>=1):
         # date='25/'+str(values[2].value)+'/'+str(values[1].value)
-        date='25/'+str(values[2].value)+'/'+str(values[1].value)
+        date='25-'+str(values[2].value)+'-'+str(values[1].value)
         # print(date)
         # for value in values:
         if str(values[4].value)+date not in data:
 
             data[str(values[4].value)+date]=temp
             # print("Here")
+            
 
         # dataDict[key.value] = [v.value for v in values]
         # print(dataDict[key.value])
@@ -162,7 +163,7 @@ for key, *values in wsheet.iter_rows():
             data[str(values[4].value)+date]['employer_contribution']=0
             
             data[str(values[4].value)+date]['employee_contribution']=0
-            data[str(values[1].value)+date]['membership_no']=0
+            data[str(values[4].value)+date]['membership_no']=0
 
         # data[str(values[4].value)+date]['pension_employee']=values[2].value  #pension_employee
 
@@ -441,7 +442,7 @@ for key, *values in wsheet.iter_rows():
     #     data[str(values[4].value)+date]['account_no']=values[2].value  #account_no
     #     data[str(values[4].value)+date]['created_at']=values[2].value  #created_at
     k+=1
-
+print(k)
 
 file = "test.xlsx" #load the work book
 wb_obj = load_workbook(filename = 'pension payments.xlsx')
@@ -473,7 +474,7 @@ for key, *values in wsheet.iter_rows():
 #       0          1	       2     3 	   4	     3	  6	       7	    8	         9	            10	              11                        12	      13	    14	         15  	        16	      17	                      9
 
         # # date='25/'+str(values[2].value)+'/'+str(values[1].value)
-        date='25/'+str(values[3].value)+'/'+str(values[2].value)
+        date='25-'+str(values[3].value)+'-'+str(values[2].value)
         # print(date)
         # # for value in values:
         if str(values[1].value)+date in data:
@@ -484,14 +485,69 @@ for key, *values in wsheet.iter_rows():
             data[str(values[1].value)+date]['employer_contribution']=values[11].value
             data[str(values[1].value)+date]['employee_contribution']=values[12].value
             data[str(values[1].value)+date]['membership_no']=values[9].value
+        # else:
+        #     print(date)
     k=k+1
+print(k)
 
 i=0
-for key in data:
-    print(data[key])
-    print(k)
+# for key in data:
+    # print(data[key])
+    # print(k)
 # for key in data:
 #     print(data[key])
     # if(str(values[8].value).replace(" ", "") == "i+=1.replace(" ", "")"):
 
 # prelse int(i)
+# {'taxable_gross': '0', 'gross_pay': '0', 'total_deduction': 740700, 'tax_free_pension': 230000, 'take_home': 1559300, 'salary': '0', 'net_tax': '0', 'paye': '0',
+#  'gross_salary': '0', 'o/t': '0', 'arrears': '0', 'leave_balance': '0', 'teller_back_office': '0', 'helsb': '0', 'task_allowances': '0', 'normal_overtime': '0', 
+#  'sunday_overtime': '0', 'weekday_overtime': '0', 'sunday_overtime2': '0', 'rounding': '0', 'acting_allowance': '0', 'disturbance': '0', 'shift_allowance': '0',
+#   'transport_allow': '0', 'unpdaid_leave': '0', 'o/stand_leave': '0', 'leave_allowances': '0', 'house_rent': '0', 'air_ticket': '0', 'hse_loan': '0', 
+#   'vehicle_benefit': '0', 'bonus': '0', 'advance': '0', 'mid_month_advance': '0', 'service_award': '0', 'share_all_payment': '0', 'loan_benefit': '0', 
+#   'level_i/o': '0', 'long_service': '0', 'recognition': '0', 'tra_cost': '0',
+#  'unpaid_days': '0', 'employer_contribution': 230000, 'employee_contribution': 230000, 'membership_no': 50045301, 'date': '25/11/2013', 'empID': 100223}
+
+#id	empID	salary	allowances	pension_employee	pension_employer	medical_employee	medical_employer	taxdue	meals	department	position	branch	pension_fund	membership_no	sdl	wcf	less_takehome	due_date	payroll_date	bank	bank_branch	account_no	created_at	updated_at
+#1   	2	 3	     4	         5	                  6	                  7	                    8	              9	     10	     11	         12	          13	    14	              15         16	 17 	18	        19	        20	            21	        22	                    23	        24	25
+
+import csv
+i=0
+with open("test.csv", "wt") as fp:
+    writer = csv.writer(fp, delimiter=",")
+    # writer.writerow(["your", "header", "foo"])  # write header
+    for key in data:
+        print(data[key])
+        if(data[key]['membership_no'] is None):
+            data[key]['membership_no']=0
+        if(data[key]['membership_no'] == 'Null'):
+            data[key]['membership_no']=0
+
+        writer.writerow([
+        i,      #id
+        data[key]['empID'],      #empID
+        data[key]['salary'],      #salary
+        data[key]['shift_allowance'],      #allowances
+        data[key]['employee_contribution'],      #pension_employee
+        data[key]['employer_contribution'],      #pension_employer
+        data[key]['shift_allowance'],      #medical_employee
+        data[key]['shift_allowance'],      #medical_employer
+        data[key]['shift_allowance'],      #taxdue
+        data[key]['shift_allowance'],      #meals
+        data[key]['shift_allowance'],      #department
+        data[key]['shift_allowance'],      #position
+        data[key]['shift_allowance'],      #branch
+        data[key]['shift_allowance'],      #pension_fund
+        data[key]['membership_no'],      #membership_no
+        data[key]['shift_allowance'],      #sdl
+        data[key]['shift_allowance'],      #wcf
+        data[key]['take_home'],      #less_takehome
+        data[key]['date'],      #due_date
+        data[key]['date'],      #payroll_date
+        data[key]['shift_allowance'],      #bank
+        data[key]['shift_allowance'],      #bank_branch
+        data[key]['shift_allowance'],      #account_no
+        data[key]['date'],
+        data[key]['date']]    #created_at
+       
+        )
+        i=i+1
