@@ -502,212 +502,143 @@
                                 </div>
                             </div>
                         </div> -->
-
-                                        <tbody>
-                                            <?php
-                                foreach ($other_imprests as $row) { ?>
-                                            <?php if ($row->status == 5) {
-                                        continue;
-                                    } ?>
-
-                                            <tr id="recordImprest<?php echo $row->id; ?>">
-                                                <td width="1px"><?php echo $row->SNo; ?></td>
-                                                <td><?php echo $row->name; ?></td>
-                                                <td>
-                                                    <a class="panel-heading collapsed" role="tab"
-                                                        id="headingTwo" data-toggle="collapse"
-                                                        data-parent="#accordion"
-                                                        href="#collapseDescription2<?php echo $row->id; ?>"
-                                                        aria-expanded="false">
-                                                        <span
-                                                            class="label label-default">DESCRIPTION</span>
-                                                    </a>
-                                                    <div id="collapseDescription2<?php echo $row->id; ?>"
-                                                        class="panel-collapse collapse" role="tabpanel">
-                                                        <p><?php echo $row->description; ?> </p>
-                                                    </div>
-                                                </td>
-
-                                                <td><?php echo $row->application_date ?> </td>
-                                                <td><?php echo "<b><font class='green'>REQUESTED: </font></b>" . number_format($row->requested_amount, 2) . "<br><b><font class='green'>APPROVED: </font></b>" . number_format($row->approved_amount, 2) . "<br><b><font class='green'>CONFIRMED: </font></b>" . number_format($row->confirmed_amount, 2); ?>
-                                                </td>
-
-
-                                                <td>
-                                                    <div id="record<?php echo $row->id; ?>">
-                                                        <?php if ($row->status == 0 && !$pendingPayroll == 0) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-danger">PENDING
-                                                                PAYROLL</span>
-                                                        </div><?php } elseif ($row->status == 0) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-default">REQUESTED</span>
-                                                        </div><?php } elseif ($row->status == 1) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-info">RECOMENDED BY
-                                                                FINANCE</span>
-                                                        </div><?php } elseif ($row->status == 9) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-info">RECOMENDED BY
-                                                                HR</span>
-                                                        </div><?php } elseif ($row->status == 2) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-success">APPROVED NOT
-                                                                RETIRED</span>
-                                                        </div><?php } elseif ($row->status == 3) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-success">CONFIRMED</span>
-                                                        </div><?php } elseif ($row->status == 4) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-success">RETIRED</span>
-                                                        </div><?php } elseif ($row->status == 5) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-success">RETIREMENT
-                                                                CONFIRMED</span>
-                                                        </div><?php } elseif ($row->status == 6) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-danger">DISSAPPROVED</span>
-                                                        </div><?php } elseif ($row->status == 7) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-danger">UNCONFIRMED</span>
-                                                        </div><?php } elseif ($row->status == 8) { ?>
-                                                        <div class="col-md-12"><span
-                                                                class="label label-danger">UNCONFIRMED
-                                                                RETIREMENT</span>
-                                                        </div><?php } ?>
-                                                    </div>
-
-
-                                                    <div style="padding: 10px;">
-                                                        <?php
-                                                $pendings = $imprest_model->notApprovedRequirement($row->id);
-                                                if (/*session('mng_emp') &&*/ $row->status == 0 && $pendingPayroll == 0 && !$pendings > 0){ ?>
-
-                                                        <a href="javascript:void(0)"
-                                                            onclick="hr_recommendImprest(<?php echo $row->id; ?>)"
-                                                            title="Recommend">
-                                                            <button class="btn btn-main btn-xs"><i
-                                                                    class="ph-check"></i></button>
-                                                        </a>
-
-                                                        <?php }else if (/*session('mng_emp') &&*/ $pendings > 0){ ?>
-
-                                                        <a href="javascript:void(0)"
-                                                            onclick="pendingApprovalAlert()"
-                                                            <?php if ($row->status == 0) { ?>
-                                                            title="Recommend" <?php } else { ?>
-                                                            title="Confirm retirement" <?php } ?>>
-                                                            <button class="btn btn-success btn-xs"><i
-                                                                    class="ph-check"></i></button>
-                                                        </a>
-                                                        <?php }else{ ?>
-                                                        <?php if (/*session('mng_emp') &&*/ $row->status == 2){
-                                                $pending = $imprest_model->notRetiredRequirement($row->id);
-                                                if ($pending == 0){
-                                                ?>
-                                                        <a href="javascript:void(0)"
-                                                            onclick="confirmImprestRetirement(<?php echo $row->id; ?>)"
-                                                            title="Approve Retirement">
-                                                            <button type="button"
-                                                                class="btn btn-success btn-xs"><i
-                                                                    class="ph-check"></i></button>
-                                                            <?php }
-                                                    }
-                                                    }
-
-                                                    if (/*session('appr_paym') &&*/ $pendingPayroll == 0) {
-                                                        if ($row->status == 1 || $row->status == 5) { ?>
-
-                                                            <a href="javascript:void(0)"
-                                                                onclick="approveImprest(<?php echo $row->id; ?>)"
-                                                                title="Approve">
-                                                                <button class="btn btn-success btn-xs">
-                                                                    <i class="ph-check"></i>aprove</button>
-                                                            </a>
-                                                            <?php }
-                                                    }
-                                                    if ($row->status == 1 || $row->status == 2) { ?>
-                                                            <!-- <a href="javascript:void(0)" onclick="disapproveImprest(<?php echo $row->id; ?>)">
-                <button class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></a> -->
-                                                            <?php }
-
-                                                    if (/*session('recom_paym') && */ $row->status == 9){
-
-                                                    if ($row->status == 9) {
-                                                        $pendings = $imprest_model->notConfirmedRequirement($row->id);
-                                                        if ($pendings > 0) { ?>
-                                                            <a href="javascript:void(0)"
-                                                                onclick="pendingConfirmationAlert()">
-                                                                <button class="btn btn-main btn-xs">
-                                                                    <i class="ph-check"></i></button>
-                                                            </a>
-                                                            <?php } else { ?>
-
-                                                            <a href="javascript:void(0)"
-                                                                onclick="recommendImprest(<?php echo $row->id; ?>)">
-                                                                <button class="btn btn-main btn-xs">
-                                                                    <i class="ph-check"></i></button>
-                                                            </a>
-
-                                                            <?php }
-                                                    }
-                                                    if ($row->status == 2 || $row->status == 3) { ?>
-
-                                                            <a href="javascript:void(0)"
-                                                                onclick="unconfirmImprest(<?php echo $row->id; ?>)">
-                                                                <button
-                                                                    class="btn btn-warning btn-xs"><i
-                                                                        class="ph-x"></i>
-                                                                </button>
-                                                            </a>
-
-                                                            <?php }
-                                                    if ($row->status == 4 || $row->status == 3 || $row->status == 8) {
-                                                    $pendings = $imprest_model->notRetiredRequirement($row->id);
-                                                    if ($pendings > 0) { ?>
-                                                            <a href="javascript:void(0)"
-                                                                onclick="pendingRetireAlert()">
-                                                                <button type="button"
-                                                                    class="btn btn-danger btn-xs"><i
-                                                                        class="ph-x"></i></button>
-                                                                <?php } else { ?>
-
-
-                                                                <?php }
-                                                        }
-                                                        } ?>
-
-                                                    </div>
-
-                                                </td>
-
-
-                                                <td class="options-width">
-                                                    <a href="{{route('imprest.imprest_info',['id'=>base64_encode($row->id)])}}"
-                                                        title="Info and Details"
-                                                        class="icon-2 info-tooltip">
-                                                        <button type="button"
-                                                            class="btn btn-info btn-xs"><i
-                                                                class="fa ph-circle"></i></button>
-                                                    </a>
-
-                                                    <a href="javascript:void(0)"
-                                                        onclick="deleteImprest(<?php echo $row->id; ?>)">
-                                                        <button type="button"
-                                                            class="btn btn-danger btn-xs"><i
-                                                                class="ph-x"></i></button>
-                                                    </a>
-
+                        <div role="tabpanel" class="tab-pane " id="overtimeTab">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="x_panel">
+                                    <div class="x_title">
+                                        <h2>Overtime</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="x_content">
+                                        <?php //echo $this->session->flashdata("note"); ?>
+                                        <div id="resultfeedOvertime"></div>
+                                        <table id="datatable-keytable" class="table table-striped table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>Employee Name</th>
+                                                <th>Department</th>
+                                                <th>Total Overtime(in Hrs.)</th>
+                                                <th>Reason(Description)</th>
+                                                <th>Amount(Tsh)</th>
+                                                <th>Status</th>
                                             </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php
+                                            foreach ($adv_overtime as $row) { ?>
+                                                <?php if ($row->status == 2) {
+                                                    continue;
+                                                } ?>
+                                                <tr>
+
+                                                    <td width="1px"><?php echo $row->SNo; ?></td>
+                                                    <td><?php echo $row->name; ?></td>
+                                                    <td><?php echo "<b>Department: </b>" . $row->DEPARTMENT . "<br><b>Position: </b>" . $row->POSITION; ?></td>
+
+                                                    <td>
+                                                        <?php
+                                                        echo "<b>On: </b>" . date('d-m-Y', strtotime($row->applicationDATE)) . "<br><b>Duration: </b>" . $row->totoalHOURS . " Hrs.<br><b>From: </b>" . $row->time_in . " <b> To </b>" . $row->time_out;
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo $row->reason; ?></td>
+                                                    <td><?php echo number_format($row->earnings, 2); ?></td>
+
+                                                    <td>
+                                                        <div id="record<?php echo $row->eoid; ?>">
+                                                            <?php if ($row->status == 0) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-default">REQUESTED</span>
+                                                                </div><?php } elseif ($row->status == 1 && $pendingPayroll == 0) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-info">RECOMENDED BY LINE MANAGER</span>
+                                                                </div><?php } elseif ($row->status == 4 && $pendingPayroll == 0) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-success">APPROVED BY FINANCE</span>
+                                                                </div><?php } elseif ($row->status == 3 && $pendingPayroll == 0) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-success">APPROVED BY HR</span>
+                                                                </div><?php } elseif ($row->status == 2) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-success">APPROVED BY CD</span>
+                                                                </div><?php } elseif ($row->status == 5) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-success">RETIREMENT CONFIRMED</span>
+                                                                </div><?php } elseif ($row->status == 6) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-danger">DISSAPPROVED</span>
+                                                                </div><?php } elseif ($row->status == 7) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-danger">UNCONFIRMED</span>
+                                                                </div><?php } elseif ($row->status == 8) { ?>
+                                                                <div class="col-md-12"><span
+                                                                            class="label label-danger">UNCONFIRMED RETIREMENT</span>
+                                                                </div><?php } ?></div>
+                                                        <br><br>
+
+
+                                                        <?php if ($row->status == 1 && $this->session->userdata('mng_emp') && $pendingPayroll == 0) { ?>
+
+                                                            <a href="javascript:void(0)" title="Approve"
+                                                               class="icon-2 info-tooltip"
+                                                               onclick="hrapproveOvertime(<?php echo $row->eoid; ?>)">
+                                                                <button class="btn btn-primary btn-xs"><i
+                                                                            class="fa fa-check"></i></button>
+                                                            </a>
+
+                                                            <a href="javascript:void(0)" title="Cancel"
+                                                               class="icon-2 info-tooltip"
+                                                               onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
+                                                                <button class="btn btn-danger btn-xs"><i
+                                                                            class="fa fa-times-circle"></i></button>
+                                                            </a>
+
+
+                                                        <?php }
+                                                        if ($row->status == 3 && $this->session->userdata('recom_paym')) { ?>
+                                                            <a href="javascript:void(0)" title="Recommend"
+                                                               class="icon-2 info-tooltip"
+                                                               onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
+                                                                <button class="btn btn-primary btn-xs"><i
+                                                                            class="fa fa-check"></i></button>
+                                                            </a>
+
+                                                            <a href="javascript:void(0)" title="Cancel"
+                                                               class="icon-2 info-tooltip"
+                                                               onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
+                                                                <button class="btn btn-danger btn-xs"><i
+                                                                            class="fa fa-times-circle"></i></button>
+                                                            </a>
+
+                                                        <?php }
+                                                        if ($row->status == 4 && $this->session->userdata('appr_paym')) { ?>
+                                                            <a href="javascript:void(0)" title="Approve"
+                                                               class="icon-2 info-tooltip"
+                                                               onclick="approveOvertime(<?php echo $row->eoid; ?>)">
+                                                                <button class="btn btn-success btn-xs"><i
+                                                                            class="fa fa-check"></i></button>
+                                                            </a>
+
+                                                            <a href="javascript:void(0)" title="Cancel"
+                                                               class="icon-2 info-tooltip"
+                                                               onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
+                                                                <button class="btn btn-danger btn-xs"><i
+                                                                            class="fa fa-times-circle"></i></button>
+                                                            </a>
+                                                        <?php } ?>
+
+
+                                                    </td>
+
+                                                </tr>
 
                                             <?php } ?>
-                                        </tbody> --}}
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
 
 
                 <div role="tabpanel" class="tab-pane fade" id="arrearsTab"
@@ -1349,7 +1280,7 @@
         });
 
     }
-
+    
     function recomendPayrollByHr() {
 
         const message = "Are you sure you want to recommend this payroll?";

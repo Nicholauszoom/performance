@@ -183,8 +183,7 @@
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/audit_logs')}}">Audit Trail</a></li>
                         @endif
 
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/performance/funder')}}"></i> Funders </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality')}}">Nationality</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality')}}">Nationality</a></li>  --}}
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/mailConfiguration')}}"></i> Mail Configuration </a></li>
                     </ul>
                 </li>
