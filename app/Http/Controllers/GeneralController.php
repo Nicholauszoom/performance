@@ -6160,7 +6160,6 @@ class GeneralController extends Controller
                         //         ->subject('Welcome to Laravel')
                         //         ->from('flex_performance@gmail.com', '');
                         // });
-                        dd('Hello');
                         $senderInfo = $this->payroll_model->senderInfo();
 
                         //         /* EMAIL*/
@@ -6236,11 +6235,6 @@ class GeneralController extends Controller
                         /*end add employee in transfer*/
 
                        // $this->flexperformance_model->audit_log("Registered New Employee ");
-                       $email_data = array(
-                        'name' => $employee['username'],
-                        'email'=> $employee['email']);
-
-                        return $email_data;
 
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
