@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
+use App\Helpers\SysHelpers;
 
 class GeneralController extends Controller
 {
@@ -3880,7 +3881,7 @@ class GeneralController extends Controller
 
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
 
-        SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =" . $empID, $request);
+        SysHelpers::AuditLog(1,"Exit Cancelled of an Employee with ID =" . $empID, $request);
 
         $response_array['status'] = "OK";
         $response_array['title'] = "SUCCESS";
@@ -4084,7 +4085,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_deduction($data);
             if ($result == true) {
-                //$this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "");
+                SysHelpers::AuditLog(1,"Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -5754,7 +5755,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                //$this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
+                SysHelpers::AuditLog(1,"Added Permissions to a Role  permission tag as " . implode("", $arr) . " ",$request);
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
@@ -5772,7 +5773,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                //$this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
+                SysHelpers::AuditLog(1,"Updated Role Name to   " . $request->input('name') . " ",$request);
                 session('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
                 return redirect('/flex/role');
             } else {

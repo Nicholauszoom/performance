@@ -385,7 +385,8 @@ include(app_path() . '/reports/employment_cost.php');
 
 
 public function loanreport(Request $request)
-      {
+      { 
+       
         if ($request->input('print')) {
 
         $type = $request->input("type");
@@ -400,12 +401,15 @@ public function loanreport(Request $request)
         $yyyys = $datewells[2];
         $dates = $yyyys."-".$mms."-".$dds;
 
+        
         $mme = $datewelle[1];
         $dde = $datewelle[0];
         $yyyye = $datewelle[2];
         $datee = $yyyye."-".$mme."-".$dde;
 
     $data['info']= $this->reports_model->company_info();
+
+    
     if($type==3){
     $data['loan'] =  $this->reports_model->loanreport1($dates, $datee);
     $data['title']="List of ALL Loans From ".$dates. " to ".$datee;
