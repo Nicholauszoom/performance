@@ -798,5 +798,5 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
+// Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';

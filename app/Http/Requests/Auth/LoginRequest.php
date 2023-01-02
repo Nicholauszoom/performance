@@ -48,34 +48,33 @@ class LoginRequest extends FormRequest
     public function authenticate()
     {
 
-       $result = $this->activated($this->input('emp_id'));
+       $state = $this->activated($this->input('emp_id'));
 
-       if($result == 0){
+       if ($state == 0) {
 
         throw ValidationException::withMessages([
             'emp_id' => trans('auth.deactivated'),
         ]);
 
-        }elseif($result === 'UNKNOWN' ){
+       } elseif($state === 'UNKNOWN' || $state == 4) {
 
             throw ValidationException::withMessages([
                 'emp_id' => trans('auth.failed'),
             ]);
 
-       }else{
+       } else {
 
-        $this->ensureIsNotRateLimited();
+            $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('emp_id', 'password'))) {
-            RateLimiter::hit($this->throttleKey());
+            if (! Auth::attempt($this->only('emp_id', 'password'))) {
+                RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'emp_id' => trans('auth.failed'),
-            ]);
-        }
+                throw ValidationException::withMessages([
+                    'emp_id' => trans('auth.failed'),
+                ]);
+            }
 
-        RateLimiter::clear($this->throttleKey());
-
+            RateLimiter::clear($this->throttleKey());
        }
 
     }
@@ -95,7 +94,13 @@ class LoginRequest extends FormRequest
 
         $empID = $this->input('emp_id');
 
-        DB::table('sys_account')->where('emp_id', $empID)->update(['account' => 0]);
+        $datalog = array(
+            'state' => 0,
+            'empID' => $empID,
+            'author' => $empID,
+        );
+
+        $this->employeestatelog($datalog);
 
         event(new Lockout($this));
 
@@ -125,16 +130,35 @@ class LoginRequest extends FormRequest
 
     public function activated($empID)
     {
-        $query = DB::table('sys_account')
-                ->select('account')
+        $query = DB::table('employee')
+                ->select('state')
                 ->where('emp_id', $empID)
                 ->limit(1)
                 ->first();
 
         if($query){
-            return $query->account;
+            return $query->state;
         }else{
             return 'UNKNOWN';
         }
     }
+
+    public function employeestatelog($data){
+
+        $query = DB::transaction(function()use($data){
+
+            $empID = $data['empID'];
+		    $state = $data['state'];
+		    $query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+
+            DB::insert(DB::raw($query));
+
+            DB::table('activation_deactivation')->insert($data);
+
+            return true;
+        });
+
+
+        return $query;
+	}
 }

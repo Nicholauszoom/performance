@@ -3922,6 +3922,8 @@ class GeneralController extends Controller
             'given_by' => session('emp_id'),
             'given_to' => $empID,
         );
+
+
         $datagroup = array(
             'empID' => $empID,
             'group_name' => 1,
@@ -4001,6 +4003,9 @@ class GeneralController extends Controller
             $data['employee3'] = $this->flexperformance_model->inactive_employee3();
 
             $data['title'] = "Employee";
+            $data['parent'] = "Inactive employee";
+
+            // dd($data['employee2']);
             return view('app.inactive_employee', $data);
         } else {
             echo 'Unauthorized Access';
@@ -4765,7 +4770,7 @@ class GeneralController extends Controller
         }
     }
 
-  
+
 
     public function remove_group_from_allowance(Request $request)
     {
@@ -5230,7 +5235,7 @@ class GeneralController extends Controller
                 } else {
                     echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
                 }
-               
+
             } elseif ( $request->type == "addgroup") {
 
                 $data = array(
