@@ -1,32 +1,33 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AccessControll\RoleController;
-use App\Http\Controllers\Recruitment\RegisterController;
-use App\Http\Controllers\Recruitment\LoginController;
-use App\Http\Controllers\AccessControll\PermissionController;
-use App\Http\Controllers\AccessControll\SystemController;
-use App\Http\Controllers\AccessControll\UsersController;
-use App\Http\Controllers\AccessControll\DesignationController;
-use App\Http\Controllers\AccessControll\DepartmentController;
-use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Recruitment\JobController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Payroll\PayrollController;
-use App\Http\Controllers\ImprestController;
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\GeneralController;
-use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\ImprestController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\setting\BranchController;
-use App\Http\Controllers\setting\PositionController;
-use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Controllers\Payroll\ReportController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\CostCenterController;
+use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\Payroll\ReportController;
+use App\Http\Controllers\setting\BranchController;
+use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\Recruitment\JobController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\setting\PositionController;
+use App\Http\Controllers\Recruitment\LoginController;
+use App\Http\Controllers\AccessControll\RoleController;
+use App\Http\Controllers\AccessControll\UsersController;
+use App\Http\Controllers\Recruitment\RegisterController;
+use App\Http\Controllers\AccessControll\SystemController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\AccessControll\DepartmentController;
+use App\Http\Controllers\AccessControll\PermissionController;
+use App\Http\Controllers\AccessControll\DesignationController;
+use App\Http\Controllers\WorkforceManagement\EmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -157,7 +158,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/login_info','login_info')->name('flex.login_info');
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
-        Route::any('/logout','logout')->name('flex.logout');
+        // Route::any('/logout','logout')->name('flex.logout');
         Route::any('/userprofile','userprofile')->name('flex.userprofile');
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
@@ -784,30 +785,6 @@ Route::middleware('auth')->group(function () {
 // Route::get('/reset-password/{token}', function ($token) {
 //     return view('auth.reset-password', ['token' => $token]);
 // })->middleware('guest')->name('password.reset');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

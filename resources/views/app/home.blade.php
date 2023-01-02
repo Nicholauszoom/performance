@@ -1,10 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Home'])
-
-@push('head-script')
-@endpush
-
-@push('head-scriptTwo')
-@endpush
+@extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @section('content')
     <?php
@@ -61,9 +55,9 @@
         $net = $row->takehome - $arrears;
     }
 
-    if (session('pass_age') > 89 || 90 - session('pass_age') == 0 || 90 - session('pass_age') < 0) {
-        redirect('cipay/login_info');
-    }
+    // if (session('pass_age') > 89 || 90 - session('pass_age') == 0 || 90 - session('pass_age') < 0) {
+    //     redirect('cipay/login_info');
+    // }
 
     ?>
 

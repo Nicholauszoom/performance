@@ -300,19 +300,13 @@
                         Account settings
                     </a> --}}
 
-
-
-                    <form action="{{ route('logout') }}" method="POST" >
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
 
-                        <a
-                        href="{{ route('logout') }}"
-                        class="dropdown-item"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                    >
-                        <i class="ph-sign-out me-2"></i>
-                        Logout
-                    </a>
+                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
+                            <i class="ph-sign-out me-2"></i>
+                            Logout
+                        </a>
                     </form>
                 </div>
             </li>
