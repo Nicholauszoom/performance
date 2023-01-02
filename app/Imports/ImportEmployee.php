@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 
+
 class ImportEmployee implements ToCollection,WithHeadingRow
 {
     /**
@@ -29,8 +30,20 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         foreach ($collection as $row) 
         {  
             //check status of employee
-            if($row['status'] == 'InActive')
-            $state = 4;
+            if($row['status'] == 'InActive'){
+                $state = 4;
+                $todate = date('Y-m-d');
+                $datalog = array(
+                    'state' => 4,
+                    'current_state' => 4,
+                    'empID' => $row['empno'],
+                    'author' => session('emp_id'),
+                );
+        //        echo json_encode($datalog);
+        
+                $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
+            }
+            
             else
             $state=1;
 
@@ -68,9 +81,9 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'emp_id'=>$row['empno'],
             // 'emp_code'=>$row['codeno'],
             // 'company'=>$row['company'],
-            // 'state'=>$state,
+             'state'=>$state,
             // 'emp_level'=>4,
-            'leave_days_entitled'=>$row['leavedaysentitle'],
+            //'leave_days_entitled'=>$row['leavedaysentitle'],
             // 'bank'=>1,
             // 'bank_branch'=>1,
             // 'pension_fund'=>1,
@@ -132,6 +145,10 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         //     'date_approved' => '',
         // );
         // $flexperformance_model->employeeTransfer($data_transfer);
+
+       
+
+
         }
 
     }

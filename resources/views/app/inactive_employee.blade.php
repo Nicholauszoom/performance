@@ -79,6 +79,83 @@
 </div>
 {{-- /Deativated Employees --}}
 
+{{-- exit Request employee --}}
+<div class="card">
+  <div class="card-body">Exit Requests</div>
+
+  <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Position</th>
+        <th>Linemanager</th>
+        <th>Contacts</th>
+        <th>Status</th>
+        <th>Options</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <?php
+      //if ($employee->num_rows() > 0){
+        foreach ($employee2 as $row) {
+          $empid= $row->emp_id; ?>
+        <tr id="activeRecord<?php echo $row->logID; ?>">
+          <td width="1px"><?php echo $row->SNo; ?></td>
+          <td>
+            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/?id='.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
+          </td>
+          <td ><?php echo $row->gender; ?></td>
+          <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+          <td><?php echo $row->LINEMANAGER; ?></td>
+          <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
+          <td >
+            <?php if ($row->current_state==1 && $row->log_state==1){  ?>
+              <span class="badge bg-success">ACTIVE</span>
+            <?php } elseif($row->current_state==1 && $row->log_state==0){ ?>
+              <span class="badge bg-danger">INACTIVE</span>
+            <?php }  if ($row->log_state==2){ ?>
+              <span class="badge bg-danger">INACTIVE</span>
+            <?php  } if ($row->log_state=="3"){ ?>
+              <span class="badge bg-danger">Exit</span>
+            <?php  } if ($row->log_state=="4"){   } ?>
+          </td>
+
+
+          <td class="options-width">
+            <?php if ($row->current_state==0){
+              if( session('appr_emp')){
+                if ($row->log_state==2){  ?>
+                  <a href="javascript:void(0)" onclick="activateEmployee(<?php echo $row->logID.','.$row->emp_id; ?>)"  title="Confirm and Activate Employee" class="me-2 text-body">
+                    <span class="badge bg-success">ACTIVATE</span>
+                  </a>
+                <?php }
+
+                if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
+                  <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
+                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                  </a>
+                <?php }
+              }
+
+              if( session('mng_emp')){ ?>
+                <a href="javascript:void(0)" onclick="cancelRequest(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Cancel exit" class="me-2 text-body">
+                  <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
+                </a>
+              <?php } }  else { ?>
+                <span class="label label-primary">comitted</span>
+              <?php  } ?>
+
+            </td>
+          </tr>
+        <?php } //} ?>
+    </tbody>
+  </table>
+</div>
+{{-- /exit request employee --}}
+
 {{-- exit employee --}}
 <div class="card">
   <div class="card-body">Exit Employee List</div>
@@ -100,7 +177,7 @@
     <tbody>
       <?php
       //if ($employee->num_rows() > 0){
-        foreach ($employee2 as $row) {
+        foreach ($employee3 as $row) {
           $empid= $row->emp_id; ?>
         <tr id="activeRecord<?php echo $row->logID; ?>">
           <td width="1px"><?php echo $row->SNo; ?></td>

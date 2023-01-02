@@ -28,6 +28,7 @@ use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
+use App\Http\Controllers\Import\ImportEmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');

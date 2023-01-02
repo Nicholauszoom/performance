@@ -3570,6 +3570,7 @@ class GeneralController extends Controller
     public function home(Request $request)
     {
 
+        
         $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
 
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
@@ -3997,6 +3998,7 @@ class GeneralController extends Controller
         if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
             $data['employee1'] = $this->flexperformance_model->inactive_employee1();
             $data['employee2'] = $this->flexperformance_model->inactive_employee2();
+            $data['employee3'] = $this->flexperformance_model->inactive_employee3();
 
             $data['title'] = "Employee";
             return view('app.inactive_employee', $data);

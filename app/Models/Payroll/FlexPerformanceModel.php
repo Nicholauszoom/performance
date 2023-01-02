@@ -600,6 +600,14 @@ function retire_list()
 		return DB::select(DB::raw($query));
 	}
 
+	function inactive_employee3()
+	{
+		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, ad.state as log_state, ad.current_state, ad.author as initiator,
+		e.*, ad.id as logID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 4  ORDER BY ad.id DESC, ad.current_state ASC ";
+
+		return DB::select(DB::raw($query));
+	}
+
 	function updateemployeestatelog($data, $id)
 	{
 		$state = $data['state'];
