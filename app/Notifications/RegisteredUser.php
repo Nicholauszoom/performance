@@ -46,9 +46,12 @@ class RegisteredUser extends Notification
     {
         return (new MailMessage)
             ->subject('VSO User Credentials')
-            ->greeting('Dear ' . $this->arr['username'])
-            ->salutation('Your Flex Performance Account login credential are  username:' . $this->arr['username'] . ' and password ' . $this->arr['password'])
-            ->line('You are advised not to share your password with anyone. If you dont know this activity or you received this email by accident, please report this incident to the system administrator')
+            // ->greeting('Dear ' . $this->arr['username'])
+            ->greeting('Dear '. $this->arr['fname'] . ' ' . $this->arr['lname'])
+            ->line('Your Flex Performance Account login credential are: ')
+            ->line('Username: ' . $this->arr['username'])
+            ->line('Password: ' . $this->arr['password'])
+            ->line('You are advised not to share your password with anyone. If you don\'t know this activity or you received this email by accident, please report this incident to the system administrator')
             ->action('Login Link', url('/login'))
             ->line('Thank you')
             ->line('Flex Performance Software Self Service');
