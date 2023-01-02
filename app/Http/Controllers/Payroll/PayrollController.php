@@ -552,6 +552,13 @@ class PayrollController extends Controller
 
     }
 
+    public function getComment($date){
+
+        $data = $this->flexperformance_model->get_comment($date);
+        
+        return json_encode($data);
+    }
+
     function sendMail($empEmail, $empName, $email, $subject, $message)
     {
         $this->load->library('phpmailer_lib');
@@ -615,7 +622,7 @@ class PayrollController extends Controller
 
     public function comission_bonus()
     {
-       // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
@@ -626,9 +633,9 @@ class PayrollController extends Controller
 
 
             return view('app.comission_bonus',$data);
-        // } else {
-        //     echo "Unauthorized Access";
-        // }
+        } else {
+            echo "Unauthorized Access";
+        }
     }
 
     public function partial_payment()
@@ -1308,7 +1315,7 @@ class PayrollController extends Controller
 
     function cancelpayroll($type)
     {
-       dd($type);
+       //dd($type);
         /*get the payroll month*/
         $result_month = $this->payroll_model->getPayrollMonth1();
         $this_payroll = $this->payroll_model->payrollMonthListpending();

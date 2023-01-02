@@ -191,6 +191,7 @@ $html = '
     $name= $row->name;
     $member_no= $row->pf_membership_no;
     $salary= $row->salary + $row->allowances;
+    if($salary == 0)dd($row->emp_id);
     $rate1= ($row->pension_employee/$salary);
     $rate2= ($row->pension_employer/$salary);
     $amount1= $row->pension_employee;

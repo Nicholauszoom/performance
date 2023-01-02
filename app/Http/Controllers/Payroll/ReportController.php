@@ -130,6 +130,7 @@ class ReportController extends Controller
               $data['paye']= $this->reports_model->s_p9($payrolldate);
               $data['total']= $this->reports_model->s_totalp9($payrolldate);
           }else{
+          
               $data['paye']= $this->reports_model->v_p9($payrolldate);
               $data['total']= $this->reports_model->v_totalp9($payrolldate);
           }
@@ -1624,7 +1625,7 @@ function backup_payslip(Request $request)  {
     }
 
     public function staffPayrollBankExport(Request $request) {
-        dd($request->all());
+        //dd($request->all());
         if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2

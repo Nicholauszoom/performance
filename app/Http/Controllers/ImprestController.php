@@ -91,7 +91,7 @@ class ImprestController extends Controller
     $imprestID = $request->input('imprestID');
     $description = trim($request->input('description'));
     $initial_amount = $request->input('initial_amount');
-    if (Request::isMethod('post') && $imprestID != '') {
+    if ($request->method()== "POST" && $imprestID != '') {
       $database = array(
         'evidence' => '0',
         'status' => 0,
@@ -168,12 +168,12 @@ class ImprestController extends Controller
     }
   }
 
-  public function deleteImprest(Request $request)
+  public function deleteImprest($id)
   {
 
-    if ($this->uri->segment(3) != '') {
+    if ($id != '') {
 
-      $imprestID = $this->uri->segment(3);
+      $imprestID = $id;
 
       $result = $this->imprest_model->deleteImprest($imprestID);
       if ($result == true) {
@@ -216,12 +216,12 @@ class ImprestController extends Controller
     }
   }
 
-  public function approveRequirement(Request $request)
+  public function approveRequirement($id)
   {
 
-    if ($this->uri->segment(3) != '') {
+    if ($id != '') {
 
-      $requirementID = $this->uri->segment(3);
+      $requirementID = $id;
       $updates = array(
         'status' => 2
       );

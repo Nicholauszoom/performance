@@ -60,13 +60,13 @@
                             </a>
                         </li>
                         <!--
-                            <li class="nav-item" role="presentation">
-                                <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
-                                    tabindex="-1">
-                                    <i class="ph-list me-2"></i>
-                                    Salary Advance
-                                </a>
-                            </li> -->
+                                <li class="nav-item" role="presentation">
+                                    <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
+                                        tabindex="-1">
+                                        <i class="ph-list me-2"></i>
+                                        Salary Advance
+                                    </a>
+                                </li> -->
 
                         <li class="nav-item" role="presentation">
                             <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
@@ -225,6 +225,14 @@
                                                 </td>
 
                                                 <td class="options-width">
+                                                    <a href="javascript:void(0)"
+                                                        onclick="viewComment('{{ $row->payroll_date }}')"
+                                                        title="View Comment" class="icon-2 info-tooltip">
+                                                        <button type="button" class="btn btn-info text-white">
+
+                                                            view comment
+                                                        </button>
+                                                    </a>
                                                     <?php if ($row->state == 1 || $row->state == 2) { ?>
                                                     <a href="{{ route('payroll.temp_payroll_info', ['pdate' => base64_encode($row->payroll_date)]) }}"
                                                         title="Info and Details" class="icon-2 info-tooltip">
@@ -239,6 +247,8 @@
                                                                 class="ph-info"></i>
                                                         </button>
                                                     </a>
+
+
 
                                                     <?php if ($row->state == 0) { ?>
                                                     <?php if ($row->pay_checklist == 1) { ?>
@@ -439,133 +449,133 @@
                             </div>
                         </div>
                         <!--
-                            <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
-                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="card">
-                                        <div class="x_title">
-                                            <h2>Others` Salary Advance
-                                                <ul class="nav navbar-right panel_toolbox">
-                                                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                                    </li>
-                                                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                                    </li>
-                                                </ul>
+                                <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <div class="card">
+                                            <div class="x_title">
+                                                <h2>Others` Salary Advance
+                                                    <ul class="nav navbar-right panel_toolbox">
+                                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                        </li>
+                                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                                        </li>
+                                                    </ul>
 
-                                                <div class="clearfix"></div>
-                                        </div>
-                                        <div class="x_content">
-                                            <div id="resultfeed"></div>
-                                            <div id="resultfeedCancel"></div>
-                                            <?php //echo $this->session->flashdata("note");
-                                            ?>
-                                            <table id="datatable" class="table table-striped table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>S/N</th>
-                                                        <th>Name</th>
-                                                        <th>Position</th>
-                                                        <th>Type</th>
-                                                        <th>Amount</th>
-                                                        <th>Application Date</th>
-                                                        <th>Status</th>
+                                                    <div class="clearfix"></div>
+                                            </div>
+                                            <div class="x_content">
+                                                <div id="resultfeed"></div>
+                                                <div id="resultfeedCancel"></div>
+                                                <?php //echo $this->session->flashdata("note");
+                                                ?>
+                                                <table id="datatable" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S/N</th>
+                                                            <th>Name</th>
+                                                            <th>Position</th>
+                                                            <th>Type</th>
+                                                            <th>Amount</th>
+                                                            <th>Application Date</th>
+                                                            <th>Status</th>
 
-                                                    </tr>
-                                                </thead>
+                                                        </tr>
+                                                    </thead>
 
 
-                                                <tbody>
-                                                    <?php
+                                                    <tbody>
+                                                        <?php
                                                     foreach ($otherloan as $row) { ?>
-                                                    <?php if ($row->status == 2 || (!$row->status == 6 && session('recom_paym'))) {
-                                                        continue;
-                                                    } ?>
-                                                    <tr id="domain<?php echo $row->id; ?>">
-                                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                                        <td><?php echo $row->NAME; ?></td>
-                                                        <td><?php echo $row->DEPARTMENT; ?><br>
-                                                            <?php echo $row->POSITION; ?>
-                                                        </td>
-                                                        <td><?php echo $row->TYPE; ?></td>
-                                                        <td><?php echo $row->amount; ?></td>
-                                                        <td><?php $datewell = explode('-', $row->application_date);
-                                                        $mm = $datewell[1];
-                                                        $dd = $datewell[2];
-                                                        $yyyy = $datewell[0];
-                                                        $clear_date = $dd . '-' . $mm . '-' . $yyyy;
-                                                        echo $clear_date; ?>
-                                                        </td>
-                                                        <td>
-                                                            <div id="status<?php echo $row->id; ?>">
-                                                                <?php if ($row->status == 0) { ?>
-                                                                <div class="col-md-12">
-                                                                    <span class="label label-default">SENT</span>
-                                                                </div><?php } elseif ($row->status == 6) {
+                                                        <?php if ($row->status == 2 || (!$row->status == 6 && session('recom_paym'))) {
+                                                            continue;
+                                                        } ?>
+                                                        <tr id="domain<?php echo $row->id; ?>">
+                                                            <td width="1px"><?php echo $row->SNo; ?></td>
+                                                            <td><?php echo $row->NAME; ?></td>
+                                                            <td><?php echo $row->DEPARTMENT; ?><br>
+                                                                <?php echo $row->POSITION; ?>
+                                                            </td>
+                                                            <td><?php echo $row->TYPE; ?></td>
+                                                            <td><?php echo $row->amount; ?></td>
+                                                            <td><?php $datewell = explode('-', $row->application_date);
+                                                            $mm = $datewell[1];
+                                                            $dd = $datewell[2];
+                                                            $yyyy = $datewell[0];
+                                                            $clear_date = $dd . '-' . $mm . '-' . $yyyy;
+                                                            echo $clear_date; ?>
+                                                            </td>
+                                                            <td>
+                                                                <div id="status<?php echo $row->id; ?>">
+                                                                    <?php if ($row->status == 0) { ?>
+                                                                    <div class="col-md-12">
+                                                                        <span class="label label-default">SENT</span>
+                                                                    </div><?php } elseif ($row->status == 6) {
                                                                         ?>
-                                                                <div class="col-md-12">
-                                                                    <span class="label label-info">RECOMMENDED
-                                                                        BY
-                                                                        HR</span>
-                                                                </div><?php } elseif ($row->status == 2) { ?>
-                                                                <div class="col-md-12">
-                                                                    <span class="label label-success">APPROVED</span>
-                                                                </div><?php } elseif ($row->status == 1) {
+                                                                    <div class="col-md-12">
+                                                                        <span class="label label-info">RECOMMENDED
+                                                                            BY
+                                                                            HR</span>
+                                                                    </div><?php } elseif ($row->status == 2) { ?>
+                                                                    <div class="col-md-12">
+                                                                        <span class="label label-success">APPROVED</span>
+                                                                    </div><?php } elseif ($row->status == 1) {
                                                                         ?>
-                                                                <div class="col-md-12">
-                                                                    <span class="label label-info">RECOMMENDED
-                                                                        BY
-                                                                        FINANCE</span>
+                                                                    <div class="col-md-12">
+                                                                        <span class="label label-info">RECOMMENDED
+                                                                            BY
+                                                                            FINANCE</span>
+                                                                    </div>
+                                                                    <?php } elseif ($row->status == 5) { ?><?php } ?>
                                                                 </div>
-                                                                <?php } elseif ($row->status == 5) { ?><?php } ?>
-                                                            </div>
 
-                                                            <div style="margin: 10px;">
-                                                                <?php if (/*session('mng_emp') &&*/ $row->status == 0) { ?>
-                                                                <a href="javascript:void(0)"
-                                                                    onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
-                                                                    title="Recommend">
-                                                                    <button class="btn btn-main btn-xs"><i
-                                                                            class="fa fa-check"></i></button>
-                                                                </a>
+                                                                <div style="margin: 10px;">
+                                                                    <?php if (/*session('mng_emp') &&*/ $row->status == 0) { ?>
+                                                                    <a href="javascript:void(0)"
+                                                                        onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
+                                                                        title="Recommend">
+                                                                        <button class="btn btn-main btn-xs"><i
+                                                                                class="fa fa-check"></i></button>
+                                                                    </a>
 
-                                                                <?php } else if ($row->status == 6 && session('recom_paym')) { ?>
-                                                                <a href="javascript:void(0)"
-                                                                    onclick="recommendLoan(<?php echo $row->id; ?>)"
-                                                                    title="Recommend">
-                                                                    <button class="btn btn-main btn-xs"><i
-                                                                            class="fa fa-check"></i></button>
-                                                                </a>
-                                                                <?php } ?>
+                                                                    <?php } else if ($row->status == 6 && session('recom_paym')) { ?>
+                                                                    <a href="javascript:void(0)"
+                                                                        onclick="recommendLoan(<?php echo $row->id; ?>)"
+                                                                        title="Recommend">
+                                                                        <button class="btn btn-main btn-xs"><i
+                                                                                class="fa fa-check"></i></button>
+                                                                    </a>
+                                                                    <?php } ?>
 
-                                                                <?php if (/*session('appr_paym') &&*/ $row->status == 1 && $pendingPayroll == 0) { ?>
+                                                                    <?php if (/*session('appr_paym') &&*/ $row->status == 1 && $pendingPayroll == 0) { ?>
 
-                                                                <a href="javascript:void(0)"
-                                                                    onclick="approveLoan(<?php echo $row->id; ?>)">
-                                                                    <button class="btn btn-success btn-xs"><i
-                                                                            class="fa fa-check"></i></button>
-                                                                </a>
+                                                                    <a href="javascript:void(0)"
+                                                                        onclick="approveLoan(<?php echo $row->id; ?>)">
+                                                                        <button class="btn btn-success btn-xs"><i
+                                                                                class="fa fa-check"></i></button>
+                                                                    </a>
 
-                                                                <a href="javascript:void(0)" title="Cancel"
-                                                                    class="icon-2 info-tooltip"
-                                                                    onclick="cancelLoan(<?php echo $row->id; ?>)">
-                                                                    <button class="btn btn-danger btn-xs"><i
-                                                                            class="fa fa-times-circle"></i>
-                                                                    </button>
-                                                                </a>
+                                                                    <a href="javascript:void(0)" title="Cancel"
+                                                                        class="icon-2 info-tooltip"
+                                                                        onclick="cancelLoan(<?php echo $row->id; ?>)">
+                                                                        <button class="btn btn-danger btn-xs"><i
+                                                                                class="fa fa-times-circle"></i>
+                                                                        </button>
+                                                                    </a>
 
-                                                                <?php } ?>
-                                                            </div>
+                                                                    <?php } ?>
+                                                                </div>
 
-                                                        </td>
+                                                            </td>
 
 
-                                                    </tr>
-                                                    <?php } ?>
-                                                </tbody>
-                                            </table>
+                                                        </tr>
+                                                        <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div> -->
+                                </div> -->
                         <div role="tabpanel" class="tab-pane fade" id="imprestTab" aria-labelledby="profile-tab">
                             <div id="resultfeedImprest"></div>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -854,7 +864,7 @@
 
                                                     <td><?php echo date('d-M-Y', strtotime($row->last_paid_date)); ?>
                                                     </td>
-                                                    <?php// if (session('recom_paym') || session('appr_paym')) { ?> ?>
+                                                    <?php// if (session('recom_paym') || session('appr_paym')) { ?> ?> ?>
                                                     <td>
                                                         <?php if (/*session('appr_paym') &&*/ $row->status == 2) { ?>
                                                         <a href="javascript:void(0)"
@@ -897,7 +907,7 @@
                                                     <?php } ?>
 
                                                 </tr>
-                                                <?php// } ?> ?>
+                                                <?php// } ?> ?> ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -960,6 +970,9 @@
                                                                     class="fa fa-info-circle"></i>
                                                             </button>
                                                         </a>
+                                                        &nbsp;&nbsp;
+
+
                                                     </td>
                                                     <?php } ?>
                                                 </tr>
@@ -1135,13 +1148,14 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-sm-4">
 
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-default btn-sm" onclick="hidemodel()"
+                                    data-dismiss="modal">No</button>
                                 <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
                             </div>
                             <div class="col-sm-2">
@@ -1158,7 +1172,9 @@
                 <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                     <div class="modal-content py-3">
                         <div class="modal-body">
-                            <div id="message"></div>
+                            <center>
+                                <div id="message"></div>
+                            </center>
                         </div>
 
                         <div class="row">
@@ -1166,8 +1182,7 @@
 
                             </div>
                             <div class="col-sm-6">
-                                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">No</button>
-                                <button type="button" id="yes_delete1" class="btn btn-main btn-sm">Yes</button>
+
                             </div>
                             <div class="col-sm-2">
 
@@ -1371,64 +1386,27 @@
                     success: function(data) {
                         var data = JSON.parse(data);
                         if (data.status == 'OK') {
-                            // alert("Payroll Approved Successifully");
 
                             $('#delete').modal('hide');
-                            notify('Payroll approved successfully!', 'top', 'right', 'success');
+                            new Noty({
+                                    text: 'Payroll approved successfully!',
+                                    type: 'success'
+                                }).show();
+                            
 
-                            //$('#delete1').modal('show');
-                            //$('#delete1').find('.modal-body #message').text(message1);
-                            //
-                            //$('#delete1').on('shown.bs.modal', function (e) {
-                            //    $("#yes_delete1").click(function () {
-                            //        $.ajax({
-                            //            url:"<?php //echo url('flex/payroll/send_payslips');
-                            ?>///<?php //echo $pendingPayroll_month;
-                            ?>//",
-                            //            success:function(data) {
-                            //                $('#delete1').modal('hide');
-                            //                setTimeout(function(){// wait for 2 secs(2)
-                            //                    location.reload(); // then reload the div to clear the success notification
-                            //                }, 1500);
-                            //            }
-                            //        });
-                            //    });
-                            //
-                            //});
-
-
-                            // SEND EMAILS
-                            // if (confirm("Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??") == true) {
-                            //     $.ajax({
-                            //        url:"<?php //echo url('flex/payroll/send_payslips');
-                            ?>///<?php //echo $pendingPayroll_month;
-                            ?>//",
-                            //         success:function(data) { }
-                            //     });
-                            //     SEND EMAILS
-                            // }
-                            //
-                            // $('#payrollFeedback').fadeOut('fast', function(){
-                            //     $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            // });
 
                             setTimeout(function() { // wait for 2 secs(2)
                                 location
-                            .reload(); // then reload the div to clear the success notification
+                                    .reload(); // then reload the div to clear the success notification
                             }, 1500);
 
                         } else {
-                            // alert("Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin.");
-                            //
-                            // $('#payrollFeedback').fadeOut('fast', function(){
-                            //     $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            // });
 
                             $('#delete').modal('hide');
                             notify('Payroll approval failed!', 'top', 'right', 'danger');
                             setTimeout(function() { // wait for 2 secs(2)
                                 location
-                            .reload(); // then reload the div to clear the success notification
+                                    .reload(); // then reload the div to clear the success notification
                             }, 1500);
                         }
 
@@ -1448,92 +1426,124 @@
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
                 var message = document.getElementById('comment').value;
-             var url = "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month,'message'=>':msg']) }}";
-             url = url.replace(':msg', message);
-               if(message != ""){
-                $.ajax({
-                    url: url,
-                    success: function(data) {
-                        var data = JSON.parse(data);
-                        if (data.status == 'OK') {
-                            $('#delete').modal('hide');
-                            new Noty({
-	                 text: 'Payroll recommended successfully!',
-	                 type: 'success'
-                     }).show();
-                        } else {
-                            $('#delete').modal('hide');
-                            new Noty({
-	                 text: 'Payroll recommendation failed!',
-	                 type: 'error'
-                     }).show();
-                           
+                var url =
+                    "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
+                url = url.replace(':msg', message);
+                if (message != "") {
+                    $.ajax({
+                        url: url,
+                        success: function(data) {
+                            var data = JSON.parse(data);
+                            if (data.status == 'OK') {
+                                $('#delete').modal('hide');
+                                new Noty({
+                                    text: 'Payroll recommended successfully!',
+                                    type: 'success'
+                                }).show();
+                                location.reload();
+                            } else {
+                                $('#delete').modal('hide');
+                                new Noty({
+                                    text: 'Payroll recommendation failed!',
+                                    type: 'error'
+                                }).show();
+
+
+                            }
 
                         }
 
-                    }
+                    });
+                } else {
+                    $('#delete').modal('hide');
 
-                });
-            }else{
-                $('#delete').modal('hide');
-                
-                new Noty({
-	                 text: 'Failed, Comment should not be empty',
-	                 type: 'error'
-                     }).show();
-            }
+                    new Noty({
+                        text: 'Failed, Comment should not be empty',
+                        type: 'error'
+                    }).show();
+                }
 
             });
 
         }
 
-        function recomendPayrollByFinance() {
+        function viewComment(date) {
 
-const message = "Are you sure you want to recommend this payroll?";
-$('#delete').modal('show');
-$('#delete').find('.modal-body #message').text(message);
+            var url = "{{ route('payroll.getComment', ':date') }}";
+            url = url.replace(':date', date);
+            $.ajax({
+                url: url,
+                success: function(data) {
+                    var data = JSON.parse(data);
 
-$("#yes_delete").click(function() {
-    $('#hideList').hide();
-    var message = document.getElementById('comment').value;
- var url = "{{ route('payroll.recommendpayrollByFinance', ['pdate' => $pendingPayroll_month,'message'=>':msg']) }}";
- url = url.replace(':msg', message);
-   if(message != ""){
-    $.ajax({
-        url: url,
-        success: function(data) {
-            var data = JSON.parse(data);
-            if (data.status == 'OK') {
-                $('#delete').modal('hide');
-                new Noty({
-         text: 'Payroll recommended successfully!',
-         type: 'success'
-         }).show();
-            } else {
-                $('#delete').modal('hide');
-                new Noty({
-         text: 'Payroll recommendation failed!',
-         type: 'error'
-         }).show();
-               
+                    const message = data;
+                    $('#delete1').modal('show');
+                    $('#delete1').find('.modal-body #message').text(message);
 
-            }
+                }
+
+            });
+
+
+
 
         }
 
-    });
-}else{
-    $('#delete').modal('hide');
-    
-    new Noty({
-         text: 'Failed, Comment should not be empty',
-         type: 'error'
-         }).show();
-}
+        function recomendPayrollByFinance() {
 
-});
+            const message = "Are you sure you want to recommend this payroll?";
+            $('#delete').modal('show');
+            $('#delete').find('.modal-body #message').text(message);
 
-}
+            $("#yes_delete").click(function() {
+                $('#hideList').hide();
+                var message = document.getElementById('comment').value;
+
+                var url =
+                    "{{ route('payroll.recommendpayrollByFinance', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
+                url = url.replace(':msg', message);
+                if (message != "") {
+                    $.ajax({
+                        url: url,
+                        success: function(data) {
+                            var data = JSON.parse(data);
+                            if (data.status == 'OK') {
+                                $('#delete').modal('hide');
+                                new Noty({
+                                    text: 'Payroll recommended successfully!',
+                                    type: 'success'
+                                }).show();
+                            } else {
+                                $('#delete').modal('hide');
+                                new Noty({
+                                    text: 'Payroll recommendation failed!',
+                                    type: 'error'
+                                }).show();
+
+
+                            }
+
+                        }
+
+                    });
+                } else {
+                    $('#delete').modal('hide');
+
+                    new Noty({
+                        text: 'Failed, Comment should not be empty',
+                        type: 'error'
+                    }).show();
+                }
+
+            });
+
+        }
+
+        function hidemodel() {
+
+            $('#delete').hide();
+            location.reload();
+        }
 
         function cancelPayroll(type) {
 
@@ -1544,7 +1554,7 @@ $("#yes_delete").click(function() {
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
                 $.ajax({
-                    url: "<?php echo url('flex/payroll/cancelpayroll'); ?>/" + type,
+                    url: "<?php echo url('flex/payroll/cancelpayroll'); ?>/" + +type,
                     success: function(data) {
                         var data = JSON.parse(data);
                         if (data.status == 'OK') {
@@ -1553,14 +1563,14 @@ $("#yes_delete").click(function() {
 
                             setTimeout(function() { // wait for 2 secs(2)
                                 location
-                            .reload(); // then reload the div to clear the success notification
+                                    .reload(); // then reload the div to clear the success notification
                             }, 1500);
                         } else {
                             $('#delete').modal('hide');
                             notify('Payroll cancellation failed!', 'top', 'right', 'danger');
                             setTimeout(function() { // wait for 2 secs(2)
                                 location
-                            .reload(); // then reload the div to clear the success notification
+                                    .reload(); // then reload the div to clear the success notification
                             }, 1500);
 
                         }
@@ -1577,7 +1587,7 @@ $("#yes_delete").click(function() {
 
             if (confirm(
                     "Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??"
-                    ) == true) {
+                ) == true) {
 
                 $.ajax({
                     url: "<?php echo url('flex/payroll/send_payslips'); ?>/" + payrollDate,

@@ -257,9 +257,9 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="text-muted">Groups(s)</h5>
+                    <h5 class="text-muted">Employee(s)</h5>
                 </div>
-                <form autocomplete="off" id = "removeGroup" method="post"  >
+                <form autocomplete="off" id = "removeIndividual" method="post"  >
                     <input type="text" hidden="hidden" name="allowanceID" value="<?php echo $allowanceID; ?>">
                     <table class="table" >
                         <thead>
@@ -297,7 +297,7 @@
     </div>
 
 
-    {{-- @include('app/includes/update_allowances') --}}
+
 @endsection
 
 @push('footer-script')

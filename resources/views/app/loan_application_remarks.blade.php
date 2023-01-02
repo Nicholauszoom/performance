@@ -54,9 +54,9 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-2">
                         <input type="hidden" name="sid" value="<?php //echo $data[0]->id; ?>">
-                          <button  type="submit"  name="add" class="btn btn-success">Edit</button>
+                          <button  type="submit"  name="add" class="btn btn-main">Add</button>
                         </div>
                       </div>
 

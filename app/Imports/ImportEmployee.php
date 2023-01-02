@@ -28,24 +28,49 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         
         foreach ($collection as $row) 
         {  
-            if($row['department']!= NULL){
-            $data  =  DB::table('department')
-             ->where('name',$row['department'])
-             ->select('id')
-             ->first();
-             if($data!= NULL){
-                $data = [
-                'job_title'=>$row['jobtitle'],];
-                $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+            //check status of employee
+            if($row['status'] == 'InActive')
+            $state = 4;
+            else
+            $state=1;
 
-             }else{
-                dd($row['department']);
-             }
-        //   $data = [
-        //     'department'=>!empty($data)?$data->id:100,
+            //check position
+            //  if($row['position']!= NULL){
+            // $data  =  DB::table('position')
+            //  ->where('name',$row['position'])
+            //  ->select('id')
+            //  ->first();
+            //  if($data!= NULL){
+            //     $data = [
+            //     'position'=>$data->id,];
+            //     $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+
+            //  }else{
+            //     dd($row['position']);
+            //  }
+
+             //check department
+            //if($row['department']!= NULL){
+            // $data  =  DB::table('department')
+            //  ->where('name',$row['department'])
+            //  ->select('id')
+            //  ->first();
+            //  if($data!= NULL){
+            //     $data = [
+            //     'job_title'=>$row['jobtitle'],];
+            //     $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+
+            //  }else{
+            //     dd($row['department']);
+            //  }
+         $data = [
+            // 'department'=>!empty($data)?$data->id:100,
             // 'emp_id'=>$row['empno'],
             // 'emp_code'=>$row['codeno'],
+            // 'company'=>$row['company'],
+            // 'state'=>$state,
             // 'emp_level'=>4,
+            'leave_days_entitled'=>$row['leavedaysentitle'],
             // 'bank'=>1,
             // 'bank_branch'=>1,
             // 'pension_fund'=>1,
@@ -62,10 +87,10 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'username'=>$row['empno'],
             // 'password'=>"$2y$10$"."cuAOvfpGSYPLmwONROf9J.WpmZf0.sIq/si7gkSZZSjr7KmV5SrXG",
 
-          //];
-        // $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+          ];
+         $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
          //$recordID = ImportsEmployee::create($data);
-        }
+        //}
           
         //   $data = array(
         //     'empID' => $row['empno'],

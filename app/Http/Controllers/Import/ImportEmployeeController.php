@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\ImportBranches;
 use App\Imports\ImportDepartment;
 use App\Imports\ImportEmployee;
+use App\Imports\ImportPosition;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -19,7 +20,8 @@ class ImportEmployeeController extends Controller
     public function import(Request $request){
         
         //$data2 = Excel::import(new ImportDepartment, $request->file('file')->store('files'));
-        //$data1 = Excel::import(new ImportBranches, $request->file('file')->store('files'));
+        //$data2 = Excel::import(new ImportDepartment, $request->file('file')->store('files'));
+        //$data1 = Excel::import(new ImportPosition, $request->file('file')->store('files'));
 
         $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
         

@@ -2080,6 +2080,8 @@ class GeneralController extends Controller
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
+
+
     public function approved_financial_payments(Request $request)
     {
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
@@ -2090,7 +2092,6 @@ class GeneralController extends Controller
         $data['monthly_arrears'] = $this->payroll_model->all_arrears_payroll_month();
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
 
-        $data['latest_comment'] = $this->flexperformance_model->get_comment();
 
         $data['bonus'] = $this->payroll_model->selectBonus();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -3339,12 +3340,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function recommendLoan(Request $request)
+    public function recommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_finance' => date('Y-m-d'),
@@ -3357,12 +3358,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function hrrecommendLoan()
+    public function hrrecommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_hr' => date('Y-m-d'),
@@ -3375,12 +3376,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function holdLoan(Request $request)
+    public function holdLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 3,
                 'notification' => 1,
@@ -3390,12 +3391,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function approveLoan(Request $request)
+    public function approveLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $todate = date('Y-m-d');
 
             $result = $this->flexperformance_model->approve_loan($loanID, session('emp_id'), $todate);
@@ -3408,10 +3409,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function pauseLoan(Request $request)
+    public function pauseLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 2,
             );
@@ -3425,10 +3426,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function resumeLoan(Request $request)
+    public function resumeLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 1,
             );
@@ -3442,12 +3443,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function rejectLoan(Request $request)
+    public function rejectLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 5,
                 'notification' => 1,
@@ -4759,6 +4760,8 @@ class GeneralController extends Controller
             }
         }
     }
+
+  
 
     public function remove_group_from_allowance(Request $request)
     {
