@@ -55,6 +55,7 @@ class AuthenticatedSessionController extends Controller
             if (session('pass_age') >= 90) {
 
                 return redirect('/change-password')->with('status', 'You password has expired');
+                
             }else{
                 $employeeName = Auth::user()->fname.' '.Auth::user()->mname;
 

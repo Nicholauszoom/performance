@@ -48,34 +48,33 @@ class LoginRequest extends FormRequest
     public function authenticate()
     {
 
-       $result = $this->activated($this->input('emp_id'));
+       $state = $this->activated($this->input('emp_id'));
 
-       if($result == 0){
+       if ($state == 0) {
 
         throw ValidationException::withMessages([
             'emp_id' => trans('auth.deactivated'),
         ]);
 
-        }elseif($result === 'UNKNOWN' ){
+       } elseif($state === 'UNKNOWN' || $state == 4) {
 
             throw ValidationException::withMessages([
                 'emp_id' => trans('auth.failed'),
             ]);
 
-       }else{
+       } else {
 
-        $this->ensureIsNotRateLimited();
+            $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('emp_id', 'password'))) {
-            RateLimiter::hit($this->throttleKey());
+            if (! Auth::attempt($this->only('emp_id', 'password'))) {
+                RateLimiter::hit($this->throttleKey());
 
-            throw ValidationException::withMessages([
-                'emp_id' => trans('auth.failed'),
-            ]);
-        }
+                throw ValidationException::withMessages([
+                    'emp_id' => trans('auth.failed'),
+                ]);
+            }
 
-        RateLimiter::clear($this->throttleKey());
-
+            RateLimiter::clear($this->throttleKey());
        }
 
     }
@@ -125,14 +124,14 @@ class LoginRequest extends FormRequest
 
     public function activated($empID)
     {
-        $query = DB::table('sys_account')
-                ->select('account')
+        $query = DB::table('employee')
+                ->select('state')
                 ->where('emp_id', $empID)
                 ->limit(1)
                 ->first();
 
         if($query){
-            return $query->account;
+            return $query->state;
         }else{
             return 'UNKNOWN';
         }
