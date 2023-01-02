@@ -158,6 +158,7 @@ class AuthenticatedSessionController extends Controller
         session(['vw_proj'=> $this->getpermission($empID, 'u')]);
         session(['vw_trans'=> $this->getpermission($empID, 'v')]);
         session(['vw_org'=> $this->getpermission($empID, 'w')]);
+        session(['appr_loan'=> $this->getpermission($empID, 'q')]);
 
 
         //set default strategy as current strategy
