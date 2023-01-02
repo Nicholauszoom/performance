@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\SysHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\AccountCheck;
 use App\Models\Payroll\FlexPerformanceModel;
 
 
 class AuthenticatedSessionController extends Controller
 {
 
-    public function __construc( $flexperformance_model = null  ){
-        $this->flexperformance_model = new FlexPerformanceModel();
+    public function __construct(FlexPerformanceModel $flexperformance_model){
+        $this->flexperformance_model = $flexperformance_model;
     }
-    
+
     /**
      * Display the login view.
      *
@@ -36,47 +39,80 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
 
-        $request->session()->regenerate();
+        $request->authenticate();
 
         $this->setPermissions(Auth::user()->emp_id);
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $request->session()->regenerate();
+
+        if(session('password_set') == 1){
+
+            return redirect('/change-password');
+
+        }else{
+
+            if (session('pass_age') >= 90) {
+
+                return redirect('/change-password')->with('status', 'You password has expired');
+            }else{
+                $employeeName = Auth::user()->fname.' '.Auth::user()->mname;
+
+                SysHelpers::AuditLog(1, 'Logged in with '.$employeeName , $request);
+
+                return redirect()->intended(RouteServiceProvider::HOME);
+            }
+        }
+
+    }
+
+    /**
+     * Checking if the employee account has been activated
+     *
+     * @param [type] $emp_id
+     * @return status
+     */
+    public function checkActiveAccount($emp_id)
+    {
+        $status = DB::table('sys_account')
+            ->select('account')
+            ->where('emp_id', $emp_id)
+            ->first();
+
+        if(empty($status)){
+            return "404";
+        } else {
+            return $status->account;
+        }
     }
 
 
 
     public function setPermissions($emp_id)  {
 
-        // dd($username);
-
         $query = "SELECT e.*, d.name as dname, c.name as CONTRACT, d.id as departmentID, p.id as positionID, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as lineManager from employee e, contract c, department d, position p WHERE d.id=e.department and e.contract_type = c.id and p.id=e.position and (e.state = '1' or e.state = '3')  and e.emp_id ='".$emp_id."'";
 
 		$data = DB::select(DB::raw($query));
 
-        // dd($row);
+        // dd($data);
 
 		// if(count($row)>0) {
 		// 	return $row;
 		// }
 
-        // $data = $data[];
         $data = $data[0];
         $data = json_encode($data);
         $data = json_decode($data, true);
 
-
-        $from="";
-        $last_pass_date = $this->password_age(Auth::user()->emp_id);
-        foreach($last_pass_date as $row){
-          $from = $row->time;
-        }
+        $from = $this->password_age(Auth::user()->emp_id);
 
         $from = date_create($from);
+
         $today=date_create(date('Y-m-d'));
+
         $diff=date_diff($from, $today);
-        $accrued = $diff->format("%a%")+1;
+
+        $accrued = $diff->format("%a%") + 1;
 
 
         $this->getPermissions();
@@ -176,7 +212,7 @@ class AuthenticatedSessionController extends Controller
         // $result = $this->insertAuditLog($logData);
 
 
-      }
+    }
 
     public function getpermission($empID, $permissionID)
 	{
@@ -199,8 +235,15 @@ class AuthenticatedSessionController extends Controller
 
     public function password_age($empID)
 	{
-		$query = "SELECT u.time FROM user_passwords u WHERE empID = '".$empID."' ORDER BY id DESC LIMIT 1";
-		return DB::select(DB::raw($query));
+
+        $query = DB::table('user_passwords')
+        ->select('time')
+        ->where('empID', Auth::user()->emp_id)
+        ->limit(1)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        return $query->time;
 	}
 
     function getCurrentStrategy()
@@ -208,10 +251,10 @@ class AuthenticatedSessionController extends Controller
 		// $query = "id as strategyID  ORDER BY id DESC limit 1";
 
         $row =  DB::table('strategy')
-        ->select('id as strategyID')
-        ->orderBy('id', 'DESC')
-        ->limit(1)
-        ->first();
+            ->select('id as strategyID')
+            ->orderBy('id', 'DESC')
+            ->limit(1)
+            ->first();
 
         // $row = DB::
     	return $row;
@@ -231,6 +274,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return  redirect('/flex/');
+        return  redirect('/');
     }
 }

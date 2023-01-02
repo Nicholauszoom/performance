@@ -2464,13 +2464,15 @@ function allLevels()
 	}
 
 	// FORM
-	public function employeeAdd($employee)
+	public function employeeAdd($employee, $newEmp)
 	{
-	    $result  =   DB::transaction(function() use($employee){
+	    $result  =   DB::transaction(function() use($employee, $newEmp){
                         DB::table('employee')->insert($employee);
 
                         // ->insert("company_property", $property);
                         // ->insert("employee_group", $datagroup);
+
+                        DB::table('sys_account')->insert($newEmp);
 
                         $row = DB::table('employee')
                             ->select('id')

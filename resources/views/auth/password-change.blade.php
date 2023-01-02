@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        @include('layouts.shared.title-meta', ['title' => "Log In"])
+        @include('layouts.shared.title-meta', ['title' => "Change Password"])
 
         <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}">
+
 
         <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
@@ -22,8 +23,10 @@
                 <div class="content-inner">
                     <div class="content d-flex justify-content-center align-items-center">
 
-                        <form action="{{ route('login') }}" method="POST" class="login-form" autocomplete="off">
+                        {{-- Login card --}}
+                        <form action="{{ route('password.update') }}" method="POST" class="login-form" autocomplete="off">
                             @csrf
+                            @method('PUT')
 
                             <div class="card mb-0">
 
@@ -56,35 +59,35 @@
                                     @endif
 
                                     <div class="mb-3">
-                                        <label class="form-label text-main">Username</label>
+                                        <label class="form-label text-main" for="current_password">Current Password</label>
 
                                         <div class="form-control-feedback form-control-feedback-start">
                                             <input
-                                                class="form-control @if($errors->has('emp_id')) is-invalid @endif"
-                                                name="emp_id"
-                                                type="text"
-                                                id="emp-id"
+                                                class="form-control @if($errors->has('current_password')) is-invalid @endif"
+                                                name="current_password"
+                                                type="password"
+                                                id="current_password"
                                                 required
-                                                placeholder="username"
+                                                value="{{ old('current_password')}}"
                                                 autocomplete="off"
                                             >
 
                                             <div class="form-control-feedback-icon">
-                                                <i class="ph-user-circle text-muted"></i>
+                                                <i class="ph-lock text-muted"></i>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label text-main">Password</label>
+                                        <label class="form-label text-main" for="password">New Password</label>
 
                                         <div class="form-control-feedback form-control-feedback-start">
                                             <input
                                                 type="password"
                                                 id="password"
                                                 class="form-control @if($errors->has('password')) is-invalid @endif"
-                                                placeholder="password"
                                                 name="password"
+                                                value="{{ old('password') }}"
                                                 required
                                                 autocomplete="off"
                                             >
@@ -95,9 +98,25 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="d-flex align-items-center mb-3">
-                                        <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
-                                    </div> --}}
+                                    <div class="mb-3">
+                                        <label class="form-label text-main" for="password_confirmation">Confirm Password</label>
+
+                                        <div class="form-control-feedback form-control-feedback-start">
+                                            <input
+                                                type="password"
+                                                id="password_confirmation"
+                                                class="form-control @if($errors->has('password_confirmation')) is-invalid @endif"
+                                                name="password_confirmation"
+                                                value="{{ old('password_confirmation') }}"
+                                                required
+                                                autocomplete="off"
+                                            >
+
+                                            <div class="form-control-feedback-icon">
+                                                <i class="ph-lock text-muted"></i>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-main w-100 border-0" style="background: #00204e">Log In</button>

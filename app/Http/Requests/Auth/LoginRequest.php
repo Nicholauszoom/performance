@@ -2,11 +2,15 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
+use App\Helpers\SysHelpers;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
+
+use Illuminate\Support\Facades\RateLimiter;
+use function PHPUnit\Framework\throwException;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
@@ -43,6 +47,23 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
+
+       $result = $this->activated($this->input('emp_id'));
+
+       if($result == 0){
+
+        throw ValidationException::withMessages([
+            'emp_id' => trans('auth.deactivated'),
+        ]);
+
+        }elseif($result === 'UNKNOWN' ){
+
+            throw ValidationException::withMessages([
+                'emp_id' => trans('auth.failed'),
+            ]);
+
+       }else{
+
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('emp_id', 'password'))) {
@@ -54,6 +75,9 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+
+       }
+
     }
 
     /**
@@ -69,16 +93,24 @@ class LoginRequest extends FormRequest
             return;
         }
 
+        $empID = $this->input('emp_id');
+
+        DB::table('sys_account')->where('emp_id', $empID)->update(['account' => 0]);
+
         event(new Lockout($this));
 
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
         throw ValidationException::withMessages([
-            'emp_id' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'emp_id' => trans('auth.deactivated'),
         ]);
+
+        // $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        // throw ValidationException::withMessages([
+        //     'emp_id' => trans('auth.throttle', [
+        //         'seconds' => $seconds,
+        //         'minutes' => ceil($seconds / 60),
+        //     ]),
+        // ]);
     }
 
     /**
@@ -89,5 +121,20 @@ class LoginRequest extends FormRequest
     public function throttleKey()
     {
         return Str::transliterate(Str::lower($this->input('emp_id')).'|'.$this->ip());
+    }
+
+    public function activated($empID)
+    {
+        $query = DB::table('sys_account')
+                ->select('account')
+                ->where('emp_id', $empID)
+                ->limit(1)
+                ->first();
+
+        if($query){
+            return $query->account;
+        }else{
+            return 'UNKNOWN';
+        }
     }
 }

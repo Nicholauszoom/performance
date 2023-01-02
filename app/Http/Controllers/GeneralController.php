@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use App\Models\AccessControll\Departments;
-use App\Models\AttendanceModel;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ImprestModel;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\ReportModel;
-use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\AccessControll\Departments;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class GeneralController extends Controller
 {
@@ -140,6 +141,7 @@ class GeneralController extends Controller
         //dd($id);
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
+
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -158,6 +160,9 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+
+        $data['parent'] = "Employee Profile";
+
         return view('app.userprofile', $data);
     }
 
@@ -2418,7 +2423,7 @@ class GeneralController extends Controller
         $data['title'] = "Employee";
         $data['parent'] = "Employee";
         $data['child'] = "Active Employee";
-        return view('app.employee', $data);
+        return view('employee.employee', $data);
 
     }
 
@@ -3556,25 +3561,23 @@ class GeneralController extends Controller
 
     public function viewrecords(Request $request)
     {
-
         $data['viewrecords'] = $this->flexperformance_model->viewrecords();
         return view('app.viewrecords', $data);
-
     }
+
+
 
     public function home(Request $request)
     {
 
-        // dd(session()->all());
-
-        //$strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
-        $strategyStatistics = $this->performanceModel->strategy_info(1);
+        $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
 
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
-        // dd($strategyStatistics);
+
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
+
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         foreach ($strategyStatistics as $key) {
@@ -3626,10 +3629,9 @@ class GeneralController extends Controller
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
         if (session('password_set') == "1") {
-            $this->login_info();
+            return view('auth.password-change');
         } else {
             $data['parent'] = 'Dashboard';
-            $data['child'] = 'Work';
             return view('app.home', $data);
         }
 
@@ -6027,8 +6029,6 @@ class GeneralController extends Controller
     public function registerEmployee(Request $request)
     {
 
-        // dd($request->banck_branch);
-
         if ($request->method() == "POST") {
 
             // DATE MANIPULATION
@@ -6047,15 +6047,19 @@ class GeneralController extends Controller
             if (($required / 365) > 16) {
 
                 $countryCode = $request->input("nationality");
-                $randomPassword = $this->password_generator(8);
+
+                // $randomPassword = $this->password_generator(8);
+
+                $password = "@2022". $request->fname;
+
                 $employee = array(
                     'fname' => $request->input("fname"),
                     'mname' => $request->input("mname"),
 
                     'emp_code' => $request->input("emp_code"),
                     'emp_level' => $request->input("emp_level"),
-                    //'lname' =>$request->input("lname"),
-                    'lname' => $randomPassword,
+                    'lname' =>$request->input("lname"),
+                    // 'lname' => $randomPassword,
                     'salary' => $request->input("salary"),
                     'gender' => $request->input("gender"),
                     'email' => $request->input("email"),
@@ -6083,16 +6087,24 @@ class GeneralController extends Controller
                     'contract_renewal_date' => date('Y-m-d'),
                     'emp_id' => $request->input("emp_id"),
                     'username' => $request->input("emp_id"),
-                    'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                    // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                    'password' => Hash::make($password),
                     'contract_end' => date('Y-m-d', strtotime($contract_end)),
                     'state' => 5,
                     'national_id' => $request->input("nationalid"),
                     'tin' => $request->input("tin"),
 
                 );
+
+                $newEmp = array(
+                    'emp_id' => $request->emp_id,
+                    'account' => 1,
+                );
+
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
 
-                $recordID = $this->flexperformance_model->employeeAdd($employee);
+                $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
+
 
                 if ($recordID > 0) {
 
@@ -6103,9 +6115,11 @@ class GeneralController extends Controller
                         'grant_code' => 'VSO',
                         'percent' => 100.00,
                     );
+
                     $this->project_model->allocateActivity($data);
 
                     // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+
                     $empID = $request->input("emp_id");
 
                     $property = array(
@@ -6121,9 +6135,11 @@ class GeneralController extends Controller
                     );
 
                     $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+
                     if ($result == true) {
 
                         $senderInfo = $this->payroll_model->senderInfo();
+
                         //         /* EMAIL*/
                         //     foreach ($senderInfo as $keyInfo) {
                         //       $host = $keyInfo->host;
@@ -6175,6 +6191,7 @@ class GeneralController extends Controller
                         //       }
 
                         /*add in transfer with status = 5 (registered, waiting for approval)*/
+
                         $data_transfer = array(
                             'empID' => $request->input("emp_id"),
                             'parameter' => 'New Employee',
@@ -6191,6 +6208,7 @@ class GeneralController extends Controller
                             'date_recommended' => date('Y-m-d'),
                             'date_approved' => '',
                         );
+
                         $this->flexperformance_model->employeeTransfer($data_transfer);
                         /*end add employee in transfer*/
 
@@ -6199,17 +6217,17 @@ class GeneralController extends Controller
                         $response_array['status'] = "OK";
                         $response_array['title'] = "SUCCESS";
                         $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
-                    </div>";
+                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
+                        </div>";
                         header('Content-type: application/json');
-                        $response_array['credentials'] = "username ni " . $request->input("emp_id") . "password:" . $randomPassword;
+                        $response_array['credentials'] = "username ni " . $request->input("emp_id") . "password:" . $password;
                         echo json_encode($response_array);
                     } else {
                         $response_array['status'] = "ERR";
                         $response_array['title'] = "FAILED";
                         $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
-                    </div>';
+                        </div>';
                         header('Content-type: application/json');
                         echo json_encode($response_array);
                     }
@@ -6218,10 +6236,9 @@ class GeneralController extends Controller
                     $response_array['title'] = "FAILED";
                     $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
-                  </div>';
+                    </div>';
                     header('Content-type: application/json');
                     echo json_encode($response_array);
-
                 }
 
             }
