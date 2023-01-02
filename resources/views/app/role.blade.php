@@ -21,7 +21,7 @@
             <h3 class="text-muted">Roles and Permission Groups</h3>
 
             @if (session('mng_roles_grp'))
-            <button type="button" class="btn btn-perfrom" data-bs-toggle="modal" data-bs-target="#add-role-group">
+            <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-role-group">
               <i class="ph-plus me-2"></i>New Group
           </button>
             @endif
@@ -125,56 +125,7 @@
 
 
 
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <h3 class="text-muted lead">
-            Financial Groups <br> <small>Allowances, Bonuses and Deductions</small>
-          </h3>
 
-          <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-finance-group">
-            <i class="ph-plus me-2"></i>New Group
-          </button>
-
-
-        </div>
-      </div>
-
-      <table  class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>S/N</th>
-            <th>Name</th>
-            <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
-            <th>Option</th>
-            <?php } ?>
-          </tr>
-        </thead>
-
-
-        <tbody>
-          <?php
-            foreach ($financialgroups as $row) { ?>
-            <tr id = "recordFinanceGroup<?php echo $row->id; ?>">
-              <td width="1px"><?php echo $row->SNo; ?></td>
-              <td><?php echo $row->name; ?></td>
-              <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
-              <td class="options-width">
-              <?php if($row->type>0){ ?>
-
-              <a  href="<?php echo  url(''); ?>/flex/groups/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button> </a>
-
-             <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
-             <?php } ?>
-              </td>
-               <?php } ?>
-              </tr>
-            <?php } ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
   {{-- /col --}}
 </div>
 
@@ -197,7 +148,7 @@
                 </div>
                   <div class="modal-body">
                           <!-- Modal Form -->
-                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="{{ route('flex.role') }}"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Role Name
                           </label>
@@ -210,7 +161,7 @@
 
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addrole" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addrole" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -232,7 +183,7 @@
                 </div>
                   <div class="modal-body">
                           <!-- Modal Form -->
-                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="{{ route('flex.role') }}"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name
                           </label>
@@ -247,7 +198,7 @@
 
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addgroup" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -270,7 +221,7 @@
                 </div>
                   <div class="modal-body">
                           <!-- Modal Form -->
-                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/role"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form autocomplete="off" id="demo-form2" enctype="multipart/form-data"  method="post" action="{{ route('flex.role') }}"  data-parsley-validate class="form-horizontal form-label-left">
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Group Name
                           </label>
@@ -285,7 +236,7 @@
 
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addgroup" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -336,6 +287,7 @@
               url:"<?php echo url('flex/deleteRole');?>/"+id,
               success:function(data)
               {
+                var data = JSON.parse(data);
                 if(data.status == 'OK'){
                 alert("DELETED Successifully");
                  $('#feedBackRole').fadeOut('fast', function(){

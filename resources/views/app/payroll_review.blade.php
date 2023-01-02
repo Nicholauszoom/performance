@@ -54,13 +54,13 @@
 
               <!-- Roles and Permission Groups -->
               <div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>EARNINGS AND ALLOWANCES</h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <table  class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -99,13 +99,13 @@
 
               <!-- deductions -->
               <div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>DEDUCTIONS</h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <table  class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -166,13 +166,13 @@
               <!-- loans-->             
               
               <div class="col-md-8 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>LOANS</h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <table  class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -242,7 +242,7 @@
                                            
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addrole" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addrole" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -279,7 +279,7 @@
                                            
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addgroup" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>
@@ -317,7 +317,7 @@
                                            
                       <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <input type="submit"  value="Add" name="addgroup" class="btn btn-primary"/>
+                            <input type="submit"  value="Add" name="addgroup" class="btn btn-main"/>
                       </div>
                     </form>
                   </div>

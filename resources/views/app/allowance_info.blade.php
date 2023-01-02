@@ -1,11 +1,9 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
@@ -117,12 +115,12 @@
                     </div>
                 </div>
                 {{-- <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Details</b></h2>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <div id="feedBackAssignment"></div>
                             <h5> Name:
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h5>
@@ -158,7 +156,7 @@
                                 <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID; ?>">
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <button class="btn btn-primary">ADD</button>
+                                        <button class="btn btn-main">ADD</button>
                                     </div>
                                 </div>
                             </form>
@@ -185,7 +183,7 @@
                                 <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID; ?>">
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <button class="btn btn-primary">ADD</button>
+                                        <button class="btn btn-main">ADD</button>
                                     </div>
                                 </div>
                             </form>
@@ -323,22 +321,22 @@
 
                 {{--<div class="row">
                 <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2><i class="fa fa-list"></i>&nbsp;&nbsp;<b>Allowance Beneficiaries in Details</b>
                             </h2>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
 
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
+                                <div class="card">
+                                    <div class="card-head">
                                         <h2>Groups(s)</h2>
 
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="x_content">
+                                    <div class="card-body">
                                         <div id="feedBackRemoveGroup"></div>
                                         <form autocomplete="off" id="removeGroup" method="post">
                                             <input type="text" hidden="hidden" name="allowanceID"
@@ -350,7 +348,7 @@
                                                         <th>Mark &nbsp;&nbsp;&nbsp;<a title="Remove Selected"><button
                                                                     type="submit" name="removeSelected"
                                                                     class="btn  btn-danger btn-xs"><i
-                                                                        class="fa fa-trash"></i></button></a></th>
+                                                                        class="ph-trash"></i></button></a></th>
                                                     </tr>
                                                 </thead>
 
@@ -379,12 +377,12 @@
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                    <div class="x_title">
+                                <div class="card">
+                                    <div class="card-head">
                                         <h2>Individual Employees </h2>
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="x_content">
+                                    <div class="card-body">
                                         <div id="feedBackRemove"></div>
                                         <form autocomplete="off" id="removeIndividual" method="post">
                                             <input type="text" hidden="hidden" name="allowanceID"
@@ -398,7 +396,7 @@
                                                         <th>Mark &nbsp;&nbsp;&nbsp;<a title="Remove Selected"><button
                                                                     type="submit" name="removeSelected"
                                                                     class="btn  btn-danger btn-xs"><i
-                                                                        class="fa fa-trash"></i></button></a></th>
+                                                                        class="ph-trash"></i></button></a></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -440,7 +438,7 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Groups</h5>
                             </div>
-    
+
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -462,9 +460,9 @@
                             <div class="card-header">
                                 <h5 class="mb-0">Individual Employee</h5>
                             </div>
-                            
-                                
-                           
+
+
+
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>

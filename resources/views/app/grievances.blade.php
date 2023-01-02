@@ -21,8 +21,8 @@
 
             <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-user"></i> Complaints </h2>
                     <!--<h2><i class="fa fa-user"></i> Grievances and Discplinary </h2>-->
                     <ul class="nav navbar-right panel_toolbox">
@@ -33,7 +33,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
 
                     <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/grievances/" method="post" data-parsley-validate class="form-horizontal form-label-left">
@@ -85,8 +85,8 @@
 
                       <!-- Whole View -->
                <div class="col-md-12 col-sm-4 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <!--<h2>All Grievances </h2>-->
                     <h2>My  Complaints </h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -97,7 +97,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     
                     <!--Table Grievances HR-->
                     
@@ -156,8 +156,8 @@
               <?php if(session('griev_board')!='' || session('griev_hr')!='') { ?>
 
               <div class="col-md-12 col-sm-4 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <!--<h2>All Grievances </h2>-->
                     <h2>All Complaints </h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -168,7 +168,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content"> 
+                  <div class="card-body"> 
                   <div id ="feedBack" ></div>    
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>

@@ -120,11 +120,11 @@ foreach ($total as $row) {
 
 $pdf->SetXY(117, 6);
 if($pension_fund==1){
-  $path=FCPATH.'uploads/img/psssf.png';
+  $path=public_path().'/img/logo/psssf.png';
   // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
   $pdf->Image($path, '', '', 43, 45, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 }else{
-  $path=FCPATH.'uploads/img/nssf.png';
+  $path=public_path().'/img/logo/nssf.png';
   // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
   $pdf->Image($path, '', '', 43, 45, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 }
@@ -191,6 +191,7 @@ $html = '
     $name= $row->name;
     $member_no= $row->pf_membership_no;
     $salary= $row->salary + $row->allowances;
+    if($salary == 0)dd($row->emp_id);
     $rate1= ($row->pension_employee/$salary);
     $rate2= ($row->pension_employer/$salary);
     $amount1= $row->pension_employee;

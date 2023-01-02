@@ -25,13 +25,13 @@
             <div class="row">
 
                 {{-- <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2>Organisation Levels</h2>
 
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             @if (Session::has('note'))
                                 {{ session('note') }}
                             @endif
@@ -148,8 +148,8 @@
 
                 {{-- <?php if(session('mng_org')){ ?>
                 <div id="bottom" class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2><i class="fa fa-tasks"></i> Add Organization Level</h2>
                             <ul class="nav navbar-right panel_toolbox">
                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -159,7 +159,7 @@
                             </ul>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <div id="orgAddFeedBack"></div>
                             <form autocomplete="off" id="organizationLevelAdd" enctype="multipart/form-data" method="post"
                                 data-parsley-validate class="form-horizontal form-label-left">
@@ -198,7 +198,7 @@
                                 <!-- END -->
                                 <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                        <input type="submit" value="ADD" name="add" class="btn btn-primary" />
+                                        <input type="submit" value="ADD" name="add" class="btn btn-main" />
                                     </div>
                                 </div>
                             </form>

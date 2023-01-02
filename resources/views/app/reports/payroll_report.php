@@ -141,7 +141,7 @@ foreach ($take_home as $row) {
 if ($net>=$net_less) {
   $amount_takehome = $net;
   // if($arrears>0) $hint = "(Including Arrears Payments)"; else 
-  $hint="; 
+  $hint=""; 
 
 }else{
  $amount_takehome = $net_less; 
@@ -154,7 +154,9 @@ $style = array('width' => 0.25, 'dash' => 0, 'color' => array(0, 0, 0));
 
 $date = date('F, Y', strtotime($payroll_month));
 $pdf->SetXY(127, 10);
-$path=FCPATH.'uploads/logo/logo.png';
+//$path=FCPATH.'uploads/logo/logo.png';
+$path='uploads/logo/logo.png';
+
 
 $pdf->Image($path, '', '',  35, 30, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 

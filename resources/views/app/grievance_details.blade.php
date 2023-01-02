@@ -49,14 +49,14 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Grievance Info</h2>
 
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
                    @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                   
@@ -66,12 +66,12 @@
                   
                   
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-info-circle"></i>&nbsp;&nbsp;<b>Details and Description</b></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content"> 
+                  <div class="card-body"> 
 
 
                     <h5> Author:
@@ -109,12 +109,12 @@
               <?php if( session('griev_hr')!='' || session('griev_board')!='') { ?> 
               <?php if($status == 0){  ?>
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Grievance Conclusion</b></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                       <p>Additional Details</p>
 
                     <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url('').'flex/grievance_details/?id='.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">

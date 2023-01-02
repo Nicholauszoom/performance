@@ -28,8 +28,8 @@
                     </a>
                 </li>
 
-{{--               
-                <li class="nav-item">
+                {{--
+                    <li class="nav-item">
                     <a class="nav-link" href="{{ url('/flex/project/') }}">
                         <i class="ph-hard-drives"></i>
                         <span>Projects</span>
@@ -71,19 +71,19 @@
                 </li>
 
 
-               
 
-              <!--
+
+              
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-bank"></i>
-                        <span> Salary Advance</span>
+                        <span>Loans</span>
                     </a>
-
                     <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Applications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Loans</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?php echo  url(''); ?>/flex/confirmed_loans">Approved Loans</a></li> 
                     </ul>
-                </li> -->
+                </li> 
 
 
                 <li class="nav-item nav-item-submenu">
@@ -127,7 +127,7 @@
                         <span>Organisation</span>
                     </a>
                     <ul class="nav-group-sub collapse">
-                        
+
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/department') }}">Departments </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/costCenter') }}">Cost Center </a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/branch') }}">Company Branches </a></li>
@@ -168,12 +168,12 @@
                         @if (session('mng_roles_grp'))
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/role') }}">Roles and Groups</a></li>
                         @endif
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_group')}}">Financial Groups</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/financial_group')}}">Financial Settings</a></li>
 
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance')}}">Allowances</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance')}}">Allowances</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/allowance_overtime')}}">Overtime</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/statutory_deductions')}}">Statutory Deductions</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/non_statutory_deductions')}}">Non-Statutory Deductions</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/non_statutory_deductions')}}">Non-Statutory Deductions</a></li> --}}
 
                         @if (session('mng_bank_info'))
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/bank')}}">Banking Information</a></li>
@@ -183,8 +183,7 @@
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/audit_logs')}}">Audit Trail</a></li>
                         @endif
 
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/performance/funder')}}"></i> Funders </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality')}}">Nationality</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality')}}">Nationality</a></li>  --}}
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/mailConfiguration')}}"></i> Mail Configuration </a></li>
                     </ul>
                 </li>

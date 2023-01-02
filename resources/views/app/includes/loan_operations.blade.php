@@ -17,6 +17,7 @@ $("#insertDirect").click(function() {
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/insert_directLoan",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -45,6 +46,7 @@ $("#insertDirect").click(function() {
         e.preventDefault(); 
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/apply_salary_advance",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,

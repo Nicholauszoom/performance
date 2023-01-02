@@ -37,8 +37,8 @@
 
             <div class="">
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><i class="fa fa-tasks"></i>
                     <?php if($referenceOutputID==0) { ?> Create Adhoc Task <?php } else { ?>Add Task to an Output <?php } ?></h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -58,7 +58,7 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                     <div id ="resultfeedDes"></div>
                     <form id="createNewTask" enctype="multipart/form-data"  autocomplete="off" method="post"  data-parsley-validate class="form-horizontal form-label-left">
 
@@ -148,7 +148,7 @@
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                            <button type="reset" class="btn btn-default" >CANCEL</button>
-                           <button  class="btn btn-primary">ADD</button>
+                           <button  class="btn btn-main">ADD</button>
                         </div>
                       </div> 
                       </form>
@@ -156,9 +156,9 @@
                   </div>
                 </div>
                 <!-- Task List-->
-                <div class="x_panel">
-                  <div class="x_content">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-body">
+                  <div class="card-head">
                     <h2><i class="fa fa-tasks"></i>
                     <?php //if($referenceOutputID==0) { ?> Task List <?php // } else { ?> <?php //} ?> </h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -203,7 +203,7 @@
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><p><b><?php echo $row->title; ?></b></p>
 
-                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
+                            <button type="button" class="btn btn-main btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
 
                             <div class="modal fade bs-example-modal-lg<?php echo $row->SNo; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                               <div class="modal-dialog modal-lg">
@@ -302,12 +302,12 @@
                           <?php } ?>
                             <!--</form>-->
                             
-                            <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                            <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
 
                                 <!--ACTIONS-->
                                 </td>
 
-                            <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                            <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>
 
 
                             

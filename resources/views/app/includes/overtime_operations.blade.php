@@ -1,28 +1,31 @@
 <script>
 
-    function holdOvertime(id)
+function holdOvertime(id)
     {
         if (confirm("Are You Sure You Want to Hold This Overtime Request") == true) {
-        var overtimeid = id;
+            var overtimeid = id;
 
             $.ajax({
                 url: "{{ url('flex/holdOvertime') }}/"+overtimeid
             })
             .done(function(data){
-             $('#resultfeedOvertime').fadeOut('fast', function(){
-                  $('#resultfeedOvertime').fadeIn('fast').html(data);
+                $('#resultfeedOvertime').fadeOut('fast', function(){
+                    $('#resultfeedOvertime').fadeIn('fast').html(data);
                 });
-             $('#status'+id).fadeOut('fast', function(){
-                  $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">HELD</span></div>');
+
+                $('#status'+id).fadeOut('fast', function(){
+                    $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">HELD</span></div>');
                 });
-             alert('Request Canceled!');
-             setTimeout(function() {
-                location.reload();
-             }, 2000);
-                })
+
+                alert('Request Canceled!');
+
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            })
             .fail(function(){
-             alert('Overtime Hold Failed!! ...');
-                });
+                alert('Overtime Hold Failed!! ...');
+            });
         }
     }
 
@@ -228,7 +231,8 @@
     function cancelOvertime(id)
     {
         if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
-        var overtimeid = id;
+
+            var overtimeid = id;
 
             $.ajax({
                 url: "{{ url('flex/cancelOvertime') }}/"+overtimeid

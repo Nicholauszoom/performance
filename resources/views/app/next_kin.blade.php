@@ -36,8 +36,8 @@
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Add New </h2>
                     <!-- <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -56,7 +56,7 @@
                     </ul> -->
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content"> <br>
+                  <div class="card-body"> <br>
                   <?php
 
                      echo session("note");  ?>
@@ -81,10 +81,10 @@
                         <label >Gender</label>
                         <div >
                           <div id="gender" class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <label class="btn btn-default" data-toggle-class="btn-main" data-toggle-passive-class="btn-default">
                               <input id="gender" type="radio" name="gender" value="Male"> &nbsp; Male &nbsp;
                             </label>
-                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <label class="btn btn-main" data-toggle-class="btn-main" data-toggle-passive-class="btn-default">
                               <input id="gender"  type="radio" name="gender" value="Female"> Female
                             </label>
                           </div>
@@ -171,7 +171,7 @@
                   <!-- test -->
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button type="reset" class="btn btn-primary">Cancel</button>
+                          <button type="reset" class="btn btn-main">Cancel</button>
                           <button type="submit" name="add" class="btn btn-success">Register</button>
                         </div>
                       </div> 

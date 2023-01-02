@@ -292,7 +292,8 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
     FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '".$date."'";
-
+       
+       
         return DB::select(DB::raw($query));
     }
 
@@ -453,8 +454,9 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     }
 
     function s_pension($date, $pensionFund){
-        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
- FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND pl.pension_fund = '".$pensionFund."' AND pl.payroll_date LIKE '%".$date."%'";
+        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,e.emp_id, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
+ FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00 AND pl.pension_fund = '".$pensionFund."' AND pl.payroll_date LIKE '%".$date."%'";
+       
         return DB::select(DB::raw($query));
 
     }
@@ -807,11 +809,9 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
         return DB::select(DB::raw($query));
     }
     function annualLeaveSpent($empID, $payroll_month_end){
-        $query = "IF( (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."'  GROUP BY l.empID, l.nature)>0, (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."' GROUP BY l.empID, l.nature), 0 ) AS days ";
-        $row = DB::table('employee e')
-        ->select(DB::raw($query))
-        ->first();
-        return $row->days;
+        $query = "SELECT IF( (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."'  GROUP BY l.empID, l.nature)>0, (SELECT SUM(l.days) FROM leaves l WHERE e.emp_id = l.empID AND l.nature = 1 AND l.start BETWEEN e.hire_date AND '".$payroll_month_end."' AND e.emp_id = '".$empID."' GROUP BY l.empID, l.nature), 0 ) AS days FROM employee e";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->days;
     }
 
     function allowances($empID, $payroll_month){
@@ -844,11 +844,9 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     }*/
     function total_allowances($empID, $payroll_month){
-        $query = " IF( (SUM(amount)  WHERE empID = '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID)>0, (SUM(amount)   WHERE empID =  '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
-        $row = DB::table('allowance_logs')
-        ->select(DB::raw($query))
-        ->first();
-        return $row->total;
+        $query = "SELECT IF( (SELECT SUM(amount)  FROM allowance_logs WHERE empID = '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID)>0, (SELECT SUM(amount)  FROM allowance_logs WHERE empID =  '".$empID."' and payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->total;
 
     }
 
@@ -883,11 +881,10 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     }*/
     function total_deductions($empID, $payroll_month){
-        $query = " IF( (SUM(paid) WHERE  empID = '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID)>0, ( SUM(paid)  WHERE  empID =  '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
-        $row = DB::table('deduction_logs')
-        ->select(DB::raw($query))
-        ->first();
-        return $row->total;
+        $query = "SELECT IF( (SELECT SUM(paid) FROM deduction_logs WHERE  empID = '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID)>0, (SELECT SUM(paid) FROM deduction_logs WHERE  empID =  '".$empID."' AND payment_date like '%".$payroll_month."%' GROUP BY empID), 0) AS total";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->total;
 
     }
 
@@ -928,16 +925,19 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
 
     function loansAmountRemained($empID, $payroll_month){
         $query = "SELECT remained
-    FROM (
-      SELECT remained
-      FROM loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
-      ORDER BY remained ASC LIMIT 2
-    ) z
-    where remained != 0 ORDER BY remained asc LIMIT 1";
+        FROM (
+          SELECT remained
+          FROM loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
+          ORDER BY remained ASC LIMIT 2
+        ) z
+        where remained != 0 ORDER BY remained asc LIMIT 1";
 
-        if($query->row()){
-            $row = $query->row();
-            return $row->remained;
+
+    $row = DB::select(DB::raw($query));
+    
+
+        if($row){
+            return $row[0]->remained;
         }else{
             return null;
         }
@@ -945,21 +945,24 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     }
 
     function temp_loansAmountRemained($empID, $payroll_month){
-        $query = "SELECT remained
-    FROM (
-      SELECT remained
-      FROM temp_loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
-      ORDER BY remained ASC LIMIT 2
-    ) z
-    where remained != 0 ORDER BY remained asc LIMIT 1";
 
-        if($query->row()){
-            $row = $query->row();
-            return $row->remained;
+        $query = "SELECT remained
+        FROM (
+          SELECT remained
+          FROM temp_loan_logs ll, loan l where l.id = ll.loanID and l.empID = '".$empID."' and last_paid_date = '".$payroll_month."'
+          ORDER BY remained ASC LIMIT 2
+        ) z
+        where remained != 0 ORDER BY remained asc LIMIT 1";
+
+
+    $row = DB::select(DB::raw($query));
+    
+
+        if($row){
+            return $row[0]->remained;
         }else{
             return null;
         }
-
     }
 
 
@@ -1047,12 +1050,12 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
 
     function staffPayrollInputJournalExport($payroll_date)	{
         $query = "SELECT eav.*,  pl.*, p.name as positionName, e.fname, e.mname,e.lname,CONCAT(trim(e.fname),' ', trim(e.mname),' ', trim(e.lname)) AS empName,
-	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
-	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
-	IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id and e.contract_type != 2 AND  ll.payment_date = pl.payroll_date GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = pl.payroll_date GROUP BY l.empID),0) AS loans,
-	IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID),0) AS deductions,
-	b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
-	FROM employee e, payroll_logs pl, position p,  bank_branch bb, bank b, vw_employee_activity eav WHERE pl.empID = eav.empID and pl.empID = e.emp_id AND p.id = e.position AND bb.id= e.bank_branch AND b.id = e.bank and e.contract_type != 2 AND isActive = 1 AND pl.payroll_date = '".$payroll_date."' and eav.payroll_date = '".$payroll_date."'";
+        IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type != 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
+        pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
+        IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id and e.contract_type != 2 AND  ll.payment_date = pl.payroll_date GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = pl.payroll_date GROUP BY l.empID),0) AS loans,
+        IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id and e.contract_type != 2 AND dl.payment_date = pl.payroll_date GROUP BY dl.empID),0) AS deductions,
+        b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
+        FROM employee e, payroll_logs pl, position p,  bank_branch bb, bank b, vw_employee_activity eav WHERE pl.empID = eav.empID and pl.empID = e.emp_id AND p.id = e.position AND bb.id= e.bank_branch AND b.id = e.bank and e.contract_type != 2 AND isActive = 1 AND pl.payroll_date = '".$payroll_date."' and eav.payroll_date = '".$payroll_date."'";
         return DB::select(DB::raw($query));
     }
 

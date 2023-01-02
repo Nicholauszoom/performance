@@ -15,11 +15,52 @@
 <div class="row">
 
   <div class="col-md-12 col-lg-12 col-sm-6">
+    
     <div class="card">
+      <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a href="{{ url('/flex/financial_group')}}" class="nav-link active show"
+                aria-selected="false" role="tab" tabindex="-1">
+                <i class="ph-list me-2"></i>
+                Packages
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link" aria-selected="false" role="tab"
+                tabindex="-1">
+                <i class="ph-list me-2"></i>
+                Overtime
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a href="{{ url('/flex/allowance')}}" class="nav-link" 
+                aria-selected="false" role="tab" tabindex="-1">
+                <i class="ph-list me-2"></i>
+                Allowance
+            </a>
+        </li>
+    
+      
+        <li class="nav-item" role="presentation">
+            <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
+                aria-selected="false" role="tab" tabindex="-1">
+                <i class="ph-list me-2"></i>
+                Statutory Deductions
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link "
+              aria-selected="false" role="tab" tabindex="-1">
+              <i class="ph-list me-2"></i>
+              Non Statutory Deductions
+          </a>
+      </li>
+     
+    </ul>
       <div class="card-header">
         <div class="d-flex justify-content-between">
           <h3 class="text-muted lead">
-            Financial Groups <br> <small>Allowances, Bonuses and Deductions</small>
+            Packages <br> <small>Allowances, Bonuses and Deductions</small>
           </h3>
 
           <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#add-finance-group">
@@ -54,9 +95,9 @@
               <td class="options-width">
               <?php if($row->type>0){ ?>
                 @if($row->grouped_by == 1) 
-              <a  href="<?php echo  url(''); ?>/flex/financial_groups_details/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button> </a>
+              <a  href="<?php echo  url(''); ?>/flex/financial_groups_details/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
                @else 
-               <a  href="<?php echo  url(''); ?>/flex/financial_groups_byRole_details/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button> </a>
+               <a  href="<?php echo  url(''); ?>/flex/financial_groups_byRole_details/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
                @endif
              <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
              <?php } ?>

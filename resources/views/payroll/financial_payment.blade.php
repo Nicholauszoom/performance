@@ -2,10 +2,6 @@
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-
-
-
 @endpush
 
 @push('head-scriptTwo')
@@ -17,37 +13,32 @@
 <script src="{{ asset('assets/date-picker/daterangepicker.js') }}"></script>
 @endpush
 
-@section('page-header')
-@include('layouts.shared.page-header')
-@endsection
 
 @section('content')
 @php
-$imprest_model = new App\Models\Payroll\ImprestModel;
-$overtime = $data['overtime'];
-$imprests = $data['imprests'];
-$pending_arrears = $data['pending_arrears'];
-$monthly_arrears = $data['monthly_arrears'];
-$month_list = $data['month_list'];
-$bonus = $data['bonus'];
-$pendingPayroll = $data['pendingPayroll'];
-$incentives = $data['incentives'];
-$employee = $data['employee'];
-$otherloan = $data['otherloan'];
+    $imprest_model = new App\Models\Payroll\ImprestModel;
+    $overtime = $data['overtime'];
+    $imprests = $data['imprests'];
+    $pending_arrears = $data['pending_arrears'];
+    $monthly_arrears = $data['monthly_arrears'];
+    $month_list = $data['month_list'];
+    $bonus = $data['bonus'];
+    $pendingPayroll = $data['pendingPayroll'];
+    $incentives = $data['incentives'];
+    $employee = $data['employee'];
+    $otherloan = $data['otherloan'];
 
-$pendingPayroll_month = $data['pendingPayroll_month'];
-$pendingPayroll = $data['pendingPayroll'];
-$payroll = $data['payroll'];
-$payrollList = $data['payrollList'];
-$other_imprests = $data['other_imprests'];
-$adv_overtime = $data['adv_overtime'];
-
-
+    $pendingPayroll_month = $data['pendingPayroll_month'];
+    $pendingPayroll = $data['pendingPayroll'];
+    $payroll = $data['payroll'];
+    $payrollList = $data['payrollList'];
+    $other_imprests = $data['other_imprests'];
+    $adv_overtime = $data['adv_overtime'];
 @endphp
 
 <div class="card">
     <div class="card-header border-0">
-        <h2><i class="fa fa-bars"></i> Pending Payments <small>Need To Be Responded On</small></h2>
+        <h4 class="text-main">Pending Payments <small>Need To Be Responded On</small></h4>
         <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -72,13 +63,13 @@ $adv_overtime = $data['adv_overtime'];
 
     <div class="card-body">
         <div class="col-lg-12">
-          
+
             <div class="border rounded p-3 mb-3">
                 <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                     <li class="nav-item" role="presentation">
                         <a href="#payrollReportTab" class="nav-link active show" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-at me-2"></i>
+                            <i class="ph-list me-2"></i>
                             Payroll
                         </a>
                     </li>
@@ -92,42 +83,42 @@ $adv_overtime = $data['adv_overtime'];
                     <li class="nav-item" role="presentation">
                         <a href="#imprestTab" class="nav-link" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-at me-2"></i>
+                            <i class="ph-list me-2"></i>
                             Imprest
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
                             tabindex="-1">
-                            <i class="ph-at me-2"></i>
+                            <i class="ph-list me-2"></i>
                             Salary Advance
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a href="#incentivesTab" class="nav-link" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-at me-2"></i>
-                            Incentives 
+                            <i class="ph-list me-2"></i>
+                            Incentives
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a href="#arrearsTab" class="nav-link" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-at me-2"></i>
+                            <i class="ph-list me-2"></i>
                             Arrears
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a href="#arrearsTabPending" class="nav-link" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-at me-2"></i>
+                            <i class="ph-list me-2"></i>
                             (pending)Arrears
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a href="#arrearsReportTab" class="nav-link" data-bs-toggle="tab"
                             aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-at me-2"></i>
+                            <i class="ph-list me-2"></i>
                             (all)Arrears
                         </a>
                     </li>
@@ -141,8 +132,8 @@ $adv_overtime = $data['adv_overtime'];
                         <?php } ?>
 
                         <div class="col-md-12 col-sm-6 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
+                            <div class="card">
+                                <div class="card-head">
                                     <h2>Payslip Mail Delivery List
 
 
@@ -191,7 +182,7 @@ $adv_overtime = $data['adv_overtime'];
                                     </h2>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">
+                                <div class="card-body">
                                     <div id="feedBackMail"></div>
                                     <table id="datatable" class="table table-striped table-bordered">
                                         <thead>
@@ -295,12 +286,12 @@ $adv_overtime = $data['adv_overtime'];
                     </div>
                     <div role="tabpanel" class="tab-pane " id="overtimeTab">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
+                            <div class="card">
+                                <div class="card-head">
                                     <h2>Overtime</h2>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">
+                                <div class="card-body">
                                     <?php //echo $this->session->flashdata("note"); ?>
                                     <div id="resultfeedOvertime"></div>
                                     <table id="datatable-keytable" class="table table-striped table-bordered">
@@ -385,7 +376,7 @@ $adv_overtime = $data['adv_overtime'];
                                                     <a href="javascript:void(0)" title="Approve"
                                                         class="icon-2 info-tooltip"
                                                         onclick="hrapproveOvertime(<?php echo $row->eoid; ?>)">
-                                                        <button class="btn btn-primary btn-xs"><i
+                                                        <button class="btn btn-main btn-xs"><i
                                                                 class="fa fa-check"></i></button>
                                                     </a>
 
@@ -402,7 +393,7 @@ $adv_overtime = $data['adv_overtime'];
                                                     <a href="javascript:void(0)" title="Recommend"
                                                         class="icon-2 info-tooltip"
                                                         onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
-                                                        <button class="btn btn-primary btn-xs"><i
+                                                        <button class="btn btn-main btn-xs"><i
                                                                 class="fa fa-check"></i></button>
                                                     </a>
 
@@ -444,8 +435,8 @@ $adv_overtime = $data['adv_overtime'];
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
+                            <div class="card">
+                                <div class="card-head">
                                     <h2>Others` Salary Advance
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -456,7 +447,7 @@ $adv_overtime = $data['adv_overtime'];
 
                                         <div class="clearfix"></div>
                                 </div>
-                                <div class="x_content">
+                                <div class="card-body">
                                     <div id="resultfeed"></div>
                                     <div id="resultfeedCancel"></div>
                                     <?php //echo $this->session->flashdata("note"); ?>
@@ -525,7 +516,7 @@ $adv_overtime = $data['adv_overtime'];
                                                         <a href="javascript:void(0)"
                                                             onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
                                                             title="Recommend">
-                                                            <button class="btn btn-primary btn-xs"><i
+                                                            <button class="btn btn-main btn-xs"><i
                                                                     class="fa fa-check"></i></button>
                                                         </a>
 
@@ -533,7 +524,7 @@ $adv_overtime = $data['adv_overtime'];
                                                         <a href="javascript:void(0)"
                                                             onclick="recommendLoan(<?php echo $row->id; ?>)"
                                                             title="Recommend">
-                                                            <button class="btn btn-primary btn-xs"><i
+                                                            <button class="btn btn-main btn-xs"><i
                                                                     class="fa fa-check"></i></button>
                                                         </a>
                                                         <?php } ?>
@@ -572,13 +563,13 @@ $adv_overtime = $data['adv_overtime'];
                     aria-labelledby="profile-tab">
                     <div id="resultfeedImprest"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2>Imprests </h2>
 
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <?php //echo $this->session->flashdata("note"); ?>
                                 <div id="resultfeedImprest"></div>
                                 <table id="datatable-keytable"
@@ -679,7 +670,7 @@ $adv_overtime = $data['adv_overtime'];
                                                     <a href="javascript:void(0)"
                                                         onclick="hr_recommendImprest(<?php echo $row->id; ?>)"
                                                         title="Recommend">
-                                                        <button class="btn btn-primary btn-xs"><i
+                                                        <button class="btn btn-main btn-xs"><i
                                                                 class="fa fa-check"></i></button>
                                                     </a>
 
@@ -731,14 +722,14 @@ $adv_overtime = $data['adv_overtime'];
                                                     if ($pendings > 0) { ?>
                                                         <a href="javascript:void(0)"
                                                             onclick="pendingConfirmationAlert()">
-                                                            <button class="btn btn-primary btn-xs">
+                                                            <button class="btn btn-main btn-xs">
                                                                 <i class="fa fa-check"></i></button>
                                                         </a>
                                                         <?php } else { ?>
 
                                                         <a href="javascript:void(0)"
                                                             onclick="recommendImprest(<?php echo $row->id; ?>)">
-                                                            <button class="btn btn-primary btn-xs">
+                                                            <button class="btn btn-main btn-xs">
                                                                 <i class="fa fa-check"></i></button>
                                                         </a>
 
@@ -801,19 +792,19 @@ $adv_overtime = $data['adv_overtime'];
                     </div>
                 </div>
 
-                    
+
 
             <div role="tabpanel" class="tab-pane fade" id="arrearsTab"
                 aria-labelledby="profile-tab">
                 <div id="resultfeedArrears"></div>
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="x_panel">
-                        <div class="x_title">
+                    <div class="card">
+                        <div class="card-head">
                             <h2>Arrears </h2>
 
                             <div class="clearfix"></div>
                         </div>
-                        <div class="x_content">
+                        <div class="card-body">
                             <table id="datatable-arrears"
                                 class="table table-striped table-bordered">
                                 <thead>
@@ -885,7 +876,7 @@ $adv_overtime = $data['adv_overtime'];
                                                 title="Recommend Payment"
                                                 class="icon-2 info-tooltip">
                                                 <button type="button"
-                                                    class="btn btn-primary btn-xs"><i
+                                                    class="btn btn-main btn-xs"><i
                                                         class="fa fa-check"></i></button>
                                             </a>
 
@@ -920,14 +911,14 @@ $adv_overtime = $data['adv_overtime'];
             aria-labelledby="profile-tab">
             <div id="resultfeedArrears"></div>
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2><i class="fa fa-list"></i>&nbsp;&nbsp;All Arrears Over a Time
                         </h2>
 
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
                         <table id="datatable-task-table"
                             class="table table-striped table-bordered">
                             <thead>
@@ -990,13 +981,13 @@ $adv_overtime = $data['adv_overtime'];
         aria-labelledby="profile-tab">
 
         <div class="col-md-6 col-sm-6 col-xs-6">
-            <div class="x_panel">
-                <div class="x_title">
+            <div class="card">
+                <div class="card-head">
                     <h2><i class="fa fa-pie-chart"></i>&nbsp;&nbsp;<b>Arrears
                             Reports</b></h2>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="card-body">
                     <div id="feedBackSubmission"></div>
                     <form method="post" class="form-horizontal form-label-left"
                         action="{route('reports.all_arrears')}}" target="blank">
@@ -1034,7 +1025,7 @@ $adv_overtime = $data['adv_overtime'];
                         </div>
                         <div align="right" class="form-group">
                             <button type="submit" name="print"
-                                class="btn btn-primary">Print
+                                class="btn btn-main">Print
                                 Report
                             </button>
                         </div>
@@ -1048,13 +1039,13 @@ $adv_overtime = $data['adv_overtime'];
     aria-labelledby="profile-tab">
     <div id="resultfeedImprest"></div>
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="x_panel">
-            <div class="x_title">
+        <div class="card">
+            <div class="card-head">
                 <h2>Incentives </h2>
 
                 <div class="clearfix"></div>
             </div>
-            <div id="employeeList" class="x_content">
+            <div id="employeeList" class="card-body">
                 <table id="datatable" class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -1101,7 +1092,7 @@ $adv_overtime = $data['adv_overtime'];
                                     class="icon-2 info-tooltip">
                                     <button type="button"
                                         class="btn btn-danger btn-xs">
-                                        <i class="fa fa-trash"></i></button>
+                                        <i class="ph-trash"></i></button>
                                 </a>
                                 <?php } ?>
                             </td>
@@ -1122,7 +1113,7 @@ $adv_overtime = $data['adv_overtime'];
                                     title="Recommend Incentive"
                                     class="icon-2 info-tooltip">
                                     <button type="button"
-                                        class="btn btn-primary btn-xs"><i
+                                        class="btn btn-main btn-xs"><i
                                             class="fa fa-check"></i></button>
                                 </a>
                                 <?php } else { ?>
@@ -1138,7 +1129,7 @@ $adv_overtime = $data['adv_overtime'];
         </div>
     </div>
 </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -1158,7 +1149,7 @@ $adv_overtime = $data['adv_overtime'];
 
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-main btn-sm" data-dismiss="modal">No</button>
                             <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">
@@ -1183,7 +1174,7 @@ $adv_overtime = $data['adv_overtime'];
 
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-main btn-sm" data-dismiss="modal">No</button>
                             <button type="button" id="yes_delete1" class="btn btn-danger btn-sm">Yes</button>
                         </div>
                         <div class="col-sm-2">

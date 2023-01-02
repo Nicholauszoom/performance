@@ -60,10 +60,10 @@
                         <label >Gender</label>
                         <div >
                           <div id="gender" class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <label class="btn btn-default" data-toggle-class="btn-main" data-toggle-passive-class="btn-default">
                               <input id="gender" type="radio" name="gender" value="M"> &nbsp; Male &nbsp;
                             </label>
-                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                            <label class="btn btn-main" data-toggle-class="btn-main" data-toggle-passive-class="btn-default">
                               <input id="gender"  type="radio" name="gender" value="F"> Female
                             </label>
                           </div>
@@ -132,7 +132,7 @@
                       </div><br><br>
                       <!-- <div class="ln_solid"></div> -->
                       <div class="form-group">
-                          <button type="reset" class="btn btn-primary">Cancel</button>
+                          <button type="reset" class="btn btn-main">Cancel</button>
                           <button type="submit" id="submit" name="register" class="btn btn-success">Submit</button>
                        
                       </div>

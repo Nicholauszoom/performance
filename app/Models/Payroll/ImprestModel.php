@@ -246,24 +246,26 @@ class ImprestModel {
 
     function getRecentImprest($empID)
 	{
-	    $query = "id WHERE empID ='".$empID."' ORDER BY id DESC LIMIT 1 ";
-
-        $row =  DB::table('imprest')
-            ->select(DB::raw($query))
-            ->first();
-
-		return $row->id;
+		$query ="SELECT id FROM imprest WHERE empID ='".$empID."' ORDER BY id DESC LIMIT 1 ";  
+		$row = DB::select(DB::raw($query));
+		return $row[0]->id;
 	}
 
 
 	function deleteImprest($imprestID)
 	{
-		DB::transaction(function($imprestID)
+		DB::transaction(function() use($imprestID)
         {
-            $query = "DELETE FROM imprest_requirement WHERE imprestID ='".$imprestID."'";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM imprest WHERE id ='".$imprestID."'";
-            DB::insert(DB::raw($query));
+
+            DB::table('imprest_requirement')
+			->where('imprestID',$imprestID)
+			->delete();
+
+			DB::table('imprest')
+			->where('id',$imprestID)
+			->delete();
+			
+         
 		});
 		return true;
 

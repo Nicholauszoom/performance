@@ -31,8 +31,8 @@
 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                    <div class="x_title">
+                <div class="card">
+                    <div class="card-head">
                         <h2>Statutory Reports</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -42,7 +42,7 @@
                         </ul>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
 
 
                         <!--PANEL-->
@@ -73,8 +73,8 @@
                                             </select>
                                         </div>
                                         <span class="input-group-btn">
-                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>
-                      </span>
+                                        <input type="submit" value="PRINT" name="run" class="btn btn-main"/>
+                                    </span>
                                     </div>
 
                                     <div class="form-group">
@@ -101,12 +101,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2>Skills Development Levy SDL (P10)</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                       action="<?php echo  url(''); ?>/flex/reports/p10" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -125,7 +125,7 @@
 <!--                                            </select>-->
 <!--                                        </div>-->
 <!--                                        <span class="input-group-btn">-->
-<!--                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>-->
+<!--                          <input type="submit" value="PRINT" name="run" class="btn btn-main"/>-->
 <!--                      </span>-->
 <!--                                    </div>-->
                                       
@@ -141,7 +141,7 @@
                                             </select>
                                         </div>
                                         <span class="input-group-btn">
-                          <input type="submit"  value="PRINT" name="run" class="btn btn-primary"/>
+                          <input type="submit"  value="PRINT" name="run" class="btn btn-main"/>
                       </span>
                                     </div>
                                     <br>
@@ -187,12 +187,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2>Pension Fund</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                       action="<?php echo  url(''); ?>/flex/reports/pension" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -211,7 +211,7 @@
                                             </select>
                                         </div>
                                         <span class="input-group-btn">
-                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>
+                          <input type="submit" value="PRINT" name="run" class="btn btn-main"/>
                       </span>
                                     </div>
                                     <br>
@@ -258,12 +258,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2>Workers Compasation Fund</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                       action="<?php echo  url(''); ?>/flex/reports/wcf" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -280,7 +280,7 @@
                                             </select>
                                         </div>
                                         <span class="input-group-btn">
-                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>
+                          <input type="submit" value="PRINT" name="run" class="btn btn-main"/>
                       </span>
                                     </div>
 
@@ -308,12 +308,12 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2>HESLB</h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <form id="demo-form2" enctype="multipart/form-data" method="post"
                                       action="<?php echo  url(''); ?>/flex/reports/heslb" target="_blank"
                                       data-parsley-validate class="form-horizontal form-label-left">
@@ -331,7 +331,7 @@
                                             </select>
                                         </div>
                                         <span class="input-group-btn">
-                          <input type="submit" value="PRINT" name="run" class="btn btn-primary"/>
+                          <input type="submit" value="PRINT" name="run" class="btn btn-main"/>
                       </span>
                                     </div>
 

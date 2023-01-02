@@ -154,7 +154,7 @@ $style = array('width' => 0.25, 'dash' => 0, 'color' => array(0, 0, 0));
 
 $date = date('F, Y', strtotime($payroll_month));
 $pdf->SetXY(127, 10);
-$path=FCPATH.'uploads/logo/logo.png';
+$path=public_path().'/img/logo/logo.png';
 
 $pdf->Image($path, '', '',  35, 30, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 

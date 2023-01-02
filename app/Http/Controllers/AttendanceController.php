@@ -132,14 +132,14 @@ class AttendanceController extends Controller
 
    }
     
-    public function apply_leave() { 
+    public function apply_leave(Request $request) { 
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
         
-        if ($_POST) {
+        if ($request->method() == "POST") {
             
                 // DATE MANIPULATION
-            $start = $this->input->post("start");
-            $end =$this->input->post("end");
+            $start = $request->start;
+            $end =$request->end;
             $datewells = explode("/",$start);
             $datewelle = explode("/",$end);
             $mms = $datewells[1];
@@ -152,7 +152,7 @@ class AttendanceController extends Controller
             $yyyye = $datewelle[2];  
             $datee = $yyyye."-".$mme."-".$dde; 
     
-            $limit=$this->input->post("limit");
+            $limit=$request->limit;
             $date1=date_create($dates);
             $date2=date_create($datee);
             $date_today=date_create(date('Y-m-d'));
@@ -162,9 +162,9 @@ class AttendanceController extends Controller
             
             // START
             
-            if ($this->input->post("start")==$this->input->post("end")) {
+            if ($request->start==$request->end) {
                 echo "<p class='alert alert-warning text-center'>Invalid Start date or End date Selection</p>";
-            } elseif ($this->input->post("nature")==1 && ($diff->format("%R%a"))>($limit)) {
+            } elseif ($request->nature==1 && ($diff->format("%R%a"))>($limit)) {
                 echo "<p class='alert alert-warning text-center'>Days Requested Exceed the Allowed Days</p>";
             }  elseif ($diff2->format("%R%a")<0 || $diff->format("%R%a")<0) {
                 echo "<p class='alert alert-danger text-center'>Invalid Start date or End date Selection, Choose The Correct One</p>";
@@ -174,10 +174,10 @@ class AttendanceController extends Controller
                     'empID' =>session('emp_id'),
                     'start' =>$dates,
                     'end' =>$datee,
-                    'leave_address' =>$this->input->post("address"),
-                    'mobile' =>$this->input->post("mobile"),
-                    'nature' =>$this->input->post("nature"),
-                    'reason' =>$this->input->post("reason"),
+                    'leave_address' =>$request->address,
+                    'mobile' =>$request->mobile,
+                    'nature' =>$request->nature,
+                    'reason' =>$request->reason,
                     'application_date' =>date('Y-m-d')
                 );
 
@@ -194,10 +194,10 @@ class AttendanceController extends Controller
    }    
     
    ################## START LEAVE OPERATIONS ###########################   
-    public function cancelLeave()  { 
-          
-      if($this->uri->segment(3)!=''){              
-        $leaveID = $this->uri->segment(3); 
+    public function cancelLeave($id)  { 
+          //dd($id);
+      if($id!=''){              
+        $leaveID = $id; 
 
         $result = $this->attendance_model->deleteLeave($leaveID);
         if($result ==true){
@@ -208,12 +208,12 @@ class AttendanceController extends Controller
       }
    } 
       
-    public function recommendLeave()  
+    public function recommendLeave($id)  
       { 
           
-          if($this->uri->segment(3)!=''){
+          if($id!=''){
               
-        $leaveID = $this->uri->segment(3);
+        $leaveID = $id;
         $data = array( 
             
                  'approved_date_line' =>date('Y-m-d'),
@@ -225,6 +225,23 @@ class AttendanceController extends Controller
           echo "<p class='alert alert-primary text-center'>Leave Recommended Successifully</p>";
           }
    } 
+   public function recommendLeaveByHod($id)  
+   { 
+       
+       if($id!=''){
+           
+     $leaveID = $id;
+     $data = array( 
+         
+              'approved_date_hod' =>date('Y-m-d'),
+              'approved_by_hod' =>session('emp_id'),
+              'status' =>6,
+              'notification' => 5
+         );   
+       $this->attendance_model->update_leave($data, $leaveID);
+       echo "<p class='alert alert-primary text-center'>Leave Recommended Successifully</p>";
+       }
+} 
       
     public function holdLeave()  
       { 
@@ -241,12 +258,12 @@ class AttendanceController extends Controller
           }
    } 
       
-    public function approveLeave()  
+    public function approveLeave($id)  
       { 
           
-          if($this->uri->segment(3)!=''){
+          if($id!=''){
               
-        $leaveID = $this->uri->segment(3);
+        $leaveID = $id;
         $todate = date('Y-m-d');
         $data = array( 
                  'status' =>2,
@@ -412,9 +429,9 @@ class AttendanceController extends Controller
 
 
 
-    public function leave_remarks()  
+    public function leave_remarks($id)  
       {    
-        $id = $this->input->get('id');
+    
 
       
       $data['data'] =  $this->attendance_model->get_leave_application($id);
@@ -434,9 +451,8 @@ class AttendanceController extends Controller
     }
   }
 
-  public function leave_application_info() {    
-    $id = $this->input->get('id');   
-    $empID = $this->input->get('empID'); 
+  public function leave_application_info($id,$empID) { 
+    
     $hireDate = $this->flexperformance_model->employee_hire_date($empID);     
     $data['data'] =  $this->attendance_model->get_leave_application($id);
     $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID, $hireDate, date('Y-m-d'));

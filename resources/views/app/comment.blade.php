@@ -46,12 +46,12 @@
                 <!-- Groups -->
                 <div class="col-md-12 col-sm-6 col-xs-12">
                     <div class="row">
-                        <div class="x_panel">
-                            <div class="x_title">
+                        <div class="card">
+                            <div class="card-head">
                                 <h2><i class="fa fa-info-cycle"></i>&nbsp;&nbsp;<b>Assignment Details</b></h2>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div id="feedBackAssignment"></div>
                                 <p>Name:
                                     &nbsp;<b><?php echo $name; ?></b>,  &nbsp&nbsp&nbsp Project: <b><?php echo $project; ?></b>, &nbsp&nbsp&nbsp
@@ -67,12 +67,12 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="x_panel">
+                        <div class="card">
 
-                            <div class="x_content">
+                            <div class="card-body">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <div class="row">
                                                 <div class="col-sm-10">
                                                     <?php
@@ -89,13 +89,13 @@
                                                 </div>
                                                 <div class="col-sm-2">
                                                     <a href="#bottom">
-                                                        <button class="btn btn-primary btn-md">New Comment</button>
+                                                        <button class="btn btn-main btn-md">New Comment</button>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <table class="table table-striped table-bordered" style="width:100%">
                                                 <?php $sn = 1;
                                                 foreach ($comments as $row) { ?>
@@ -106,7 +106,7 @@
                                                         <td><?php echo $row->remarks?></td>
                                                         <?php if (session('mng_proj')) { ?>
                                                         <td>
-                                                            <a href='javascript:void(0)' onclick='deleteComment(<?php echo json_encode($row); ?>)' title="Delete Assignment" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                                            <a href='javascript:void(0)' onclick='deleteComment(<?php echo json_encode($row); ?>)' title="Delete Assignment" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                                         </td>
                                                         <?php } ?>
                                                     </tr>
@@ -118,12 +118,12 @@
                                 <div id="bottom" class="col-md-12 col-sm-6 col-xs-12">
                                     <!-- PANEL-->
 
-                                    <div class="x_panel">
-                                        <div class="x_title">
+                                    <div class="card">
+                                        <div class="card-head">
                                             <h2>New Comment</h2>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="x_content">
+                                        <div class="card-body">
                                             <div id="feedbackResult"></div>
                                             <form id="commentTask" enctype="multipart/form-data" method="post">
                                                 <div class="row">
@@ -143,7 +143,7 @@
                                                 <div class="col-md-3">
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <button type="submit" class="btn btn-primary" id="save_btn">Save</button>
+                                                    <button type="submit" class="btn btn-main" id="save_btn">Save</button>
                                                 </div>
                                             </form>
                                         </div>
@@ -183,7 +183,7 @@
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" id="save_btn">Save</button>
+                                            <button type="submit" class="btn btn-main" id="save_btn">Save</button>
                                         </div>
                                     </form>
                                 </div>

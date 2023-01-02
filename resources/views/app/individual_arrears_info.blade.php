@@ -37,13 +37,13 @@ $sum_arrears = $sum_paid = $sum_outstanding = $sum_last_paid=$sum_takehome=$sum_
             <div class="row">
               
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Arrears Payments<small>Enter The Amount to Pay</small></h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                    @if(Session::has('note'))      {{ session('note') }}  @endif 
                    if($pendingPayroll > 0){ ?>
                    <p class='alert alert-warning text-center'>No Arrears Payments Can Be Scheduled until the Pending Payoll is Responded</p>
@@ -63,7 +63,7 @@ $sum_arrears = $sum_paid = $sum_outstanding = $sum_last_paid=$sum_takehome=$sum_
                           <th><b>Outstanding</b></th>
                           <th><b>Last Payment</b></th>
                           <?php if($pendingPayroll== 0 && session('mng_paym')){ ?>
-                            <th>&nbsp;&nbsp;<button type="submit" name="submit" value ="submit" class="btn btn-primary">CONFIRM PAYMENT</button></th>
+                            <th>&nbsp;&nbsp;<button type="submit" name="submit" value ="submit" class="btn btn-main">CONFIRM PAYMENT</button></th>
                           <?php }  ?>
                         </tr>
                       </thead>

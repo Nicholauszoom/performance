@@ -264,7 +264,7 @@ class PayrollController extends Controller
     }
 
     // public function temp_less_payments(Request $request)  {
-    //   $payrollMonth = base64_decode($this->input->get('pdate'));
+    //   $payrollMonth = base64_decode($request->input('pdate'));
     //   $data['payroll_list'] =  $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");
     //   $data['confirmed'] =1;
     //   $data['payroll_date']= $payrollMonth;
@@ -296,9 +296,9 @@ class PayrollController extends Controller
 
     }
 
-    public function less_payments()
+    public function less_payments(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         $data['payroll_list'] = $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
         // /*check if temp payroll*/
         //     $temp_check = $this->payroll_model->temp_payroll_check($payrollMonth);
@@ -324,9 +324,9 @@ class PayrollController extends Controller
     }
 
 
-    public function less_payments_print()
+    public function less_payments_print(Request $request)
     {
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         $data['employee_list'] = $this->reports_model->temp_pay_checklist($payrollMonth);
         $data['authorization'] = $this->reports_model->payrollAuthorization($payrollMonth);
         //$data['employee_list'] =  $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
@@ -552,6 +552,13 @@ class PayrollController extends Controller
 
     }
 
+    public function getComment($date){
+
+        $data = $this->flexperformance_model->get_comment($date);
+        
+        return json_encode($data);
+    }
+
     function sendMail($empEmail, $empName, $email, $subject, $message)
     {
         $this->load->library('phpmailer_lib');
@@ -615,7 +622,7 @@ class PayrollController extends Controller
 
     public function comission_bonus()
     {
-       // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
@@ -626,9 +633,9 @@ class PayrollController extends Controller
 
 
             return view('app.comission_bonus',$data);
-        // } else {
-        //     echo "Unauthorized Access";
-        // }
+        } else {
+            echo "Unauthorized Access";
+        }
     }
 
     public function partial_payment()
@@ -725,16 +732,53 @@ class PayrollController extends Controller
         }
     }
 
-    function recommendpayroll(Request $request)
-    {
-        $payrollMonth = $request->pdate;
+    function recommendpayrollByFinance($pdate,$message)
+    {   
+        
+        $payrollMonth = $pdate;
+        $state = 1;
+     
         if ($payrollMonth != "") {
             $empID = session('emp_id');
             $todate = date('Y-m-d');
 
             $check = $this->payroll_model->pendingPayrollCheck();
             if ($check > 0) {
-                $result = $this->payroll_model->recommendPayroll($empID, $todate);
+                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state,$message);
+                if ($result == true) {
+
+                    $description ="Recommendation of payroll of date " . $todate;
+
+                  //  $result = SysHelpers::auditLog(1,$description,$request);
+
+                    $response_array['status'] = "OK";
+                    $response_array['message'] = "<p class='alert alert-success text-center'>Payroll was Recommended Successifully </p>";
+                } else {
+                    $response_array['status'] = "ERR";
+                    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED! Payroll NOT Recommended, Please Try again, If the Error persists Contact Your System Admin</p>";
+                }
+            } else {
+                $response_array['status'] = "ERR";
+                $response_array['message'] = "<p class='alert alert-warning text-center'>Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
+            }
+            header('Content-type: application/json');
+            echo json_encode($response_array);
+        }
+
+    }
+    function recommendpayrollByHr($pdate,$message)
+    {   
+        
+        $payrollMonth = $pdate;
+        $state = 3;
+       
+        if ($payrollMonth != "") {
+            $empID = session('emp_id');
+            $todate = date('Y-m-d');
+
+            $check = $this->payroll_model->pendingPayrollCheck();
+            if ($check > 0) {
+                $result = $this->payroll_model->recommendPayroll($empID, $todate,$state,$message);
                 if ($result == true) {
 
                     $description ="Recommendation of payroll of date " . $todate;
@@ -1269,9 +1313,9 @@ class PayrollController extends Controller
         }
     }
 
-    function cancelpayroll()
+    function cancelpayroll($type)
     {
-
+       //dd($type);
         /*get the payroll month*/
         $result_month = $this->payroll_model->getPayrollMonth1();
         $this_payroll = $this->payroll_model->payrollMonthListpending();
@@ -1315,8 +1359,8 @@ class PayrollController extends Controller
 
     public function temp_payroll_review()
     {
-        $empID = base64_decode($this->input->get('id'));
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $empID = base64_decode($request->input('id'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         if ($empID == '') {
 
         } else {
@@ -1337,8 +1381,8 @@ class PayrollController extends Controller
 
     public function payroll_review()
     {
-        $empID = base64_decode($this->input->get('id'));
-        $payrollMonth = base64_decode($this->input->get('pdate'));
+        $empID = base64_decode($request->input('id'));
+        $payrollMonth = base64_decode($request->input('pdate'));
         if ($empID == '') {
 
         } else {

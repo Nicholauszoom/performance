@@ -32,31 +32,27 @@
 <!-- page content -->
 <div class="right_col" role="main">
 <div class="">
-  <div class="page-title">
-    <div class="title_left">
-      <h3>Leave Application Info and Details</h3>
-    </div>
-  </div>            
+             
   <div class="clearfix"></div>
   <div class="row">
     <div class="col-md-12">
-      <div class="x_panel">
-        <div class="x_content">
+      <div class="card">
+        <div class="card-body">
                     <!-- start project-detail sidebar -->
           <div class="col-md-12 col-sm-3 col-xs-12">
             <section class="panel">
               <div class="panel-body">
                         <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                           <h3 class="green"><i class="fa fa-info-circle"></i> Info and Details</h3>
-                            @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                            @if(Session::has('note'))      {{ session('note') }}  @endif  
                             <div id ="resultFeed"></div>
 
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">    
+                      <div class="card-body">    
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
                           <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#description" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">DETAILS</a>
@@ -242,7 +238,7 @@
 </div>
         <!-- /page content -->
 
-@include("app/includes/leave_operations
+@include("app/includes/leave_operations")
 
 
  @endsection

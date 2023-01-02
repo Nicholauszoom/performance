@@ -201,19 +201,19 @@
                     </a>
                     <?php } ?>
 
-                    <a class="my-3" target="_blank" href="{{route('less_payments_print',['pdate',base64_encode($payrollMonth)])}}">
+                    <a class="my-3" target="_blank" href="{{route('payroll.less_payments_print',['pdate',base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-main">Print Checklist</button>
                     </a>
 
                     <?php if($payrollState == 0) {?>
-                    <a class="m-3" target="_self" href="{{route('grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
+                    <a class="m-3" target="_self" href="{{route('payroll.grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">Gross Recon</button>
                     </a>
 
-                    <a class="m-3" target="_self" href="{{route('netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
+                    <a class="m-3" target="_self" href="{{route('payroll.netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">Net Recon</button>
                     </a>
-                    <!-- <a class="m-3" target="_self" href="{{route('sendReviewEmail',['pdate'=>base64_encode($payrollMonth)])}}"><button
+                    <!-- <a class="m-3" target="_self" href="{{route('payroll.sendReviewEmail',['pdate'=>base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>
                 </div>
@@ -289,7 +289,7 @@ function generate_checklist() {
         // var id = id;
         $('#hideList').hide();
         $.ajax({
-            url: "{{route('generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
+            url: "{{route('payroll.generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
             success: function(data) {
                 if (data.status == 1) {
                     alert("Pay CheckList Generated Successiful!");

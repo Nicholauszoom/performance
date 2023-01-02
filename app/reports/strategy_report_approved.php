@@ -138,7 +138,7 @@ $pdf->writeHTMLCell(0, 12, '', '', $headertable, 0, 1, 0, true, '', true);
 
 
 $pdf->SetXY(124, $pdf->GetY()-7);
-$path=FCPATH.'uploads/img/cits.jpg';
+$path=public_path().'/img/img/cits.jpg';
 // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
 $pdf->Image($path, '', '', 30, 23, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 

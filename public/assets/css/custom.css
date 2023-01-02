@@ -3,6 +3,26 @@
     color: #fff;
 }
 
+.logout-btn {
+    /* background-color: red; */
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+}
+
+.text-main {
+    color: #00204e;
+}
+
+.swal-button {
+    background-color: #00204e;
+}
+
+.bg-default {
+    background-color: #00204e;
+}
+
 .bg-danger {
     background: #c20430;
 }

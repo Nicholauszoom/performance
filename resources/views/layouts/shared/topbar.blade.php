@@ -259,7 +259,7 @@
 
                         <div class="ms-auto">
                             <button type="button" class="btn btn-light">Cancel</button>
-                            <button type="button" class="btn btn-primary ms-2">Apply</button>
+                            <button type="button" class="btn btn-main ms-2">Apply</button>
                         </div>
                     </div>
                 </div>
@@ -277,10 +277,10 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    {{-- <a href="{{ route('employee.profile') }}" class="dropdown-item">
+                    <a href="<?php echo  url('') .'/flex/userprofile/?id='.session('emp_id'); ?>" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
-                    </a> --}}
+                    </a>
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ph-currency-circle-dollar me-2"></i>
                         My subscription
@@ -300,16 +300,13 @@
                         Account settings
                     </a> --}}
 
-                    <a
-                        href="{{ route('logout') }}"
-                        class="dropdown-item"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                    >
-                        <i class="ph-sign-out me-2"></i>
-                        Logout
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
+
+                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
+                            <i class="ph-sign-out me-2"></i>
+                            Logout
+                        </a>
                     </form>
                 </div>
             </li>

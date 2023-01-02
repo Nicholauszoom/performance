@@ -25,6 +25,7 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
+                
                 <div class="card">
                   <div class="card-head py-3">
                     <h2><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h2>
@@ -37,7 +38,7 @@
                             <input type="text" name="group_name" value="<?php echo $groupName; ?>" class="form-control">
                               <input type="hidden" name="group_id" value="<?php echo $groupID;?>">
                               <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary">UPDATE</button>
+                                <button type="submit" class="btn btn-main">UPDATE</button>
                             </span>
                           </div>
                         </div>
@@ -216,7 +217,7 @@
         if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Group?") == true ) {
         e.preventDefault(); 
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/removeEmployeeFromGroup",
+                 url:"<?php echo  url(''); ?>/flex/removeEmployeeByRoleFromGroup",
                  type:"post",
                  data:new FormData(this),
                  processData:false,

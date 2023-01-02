@@ -258,7 +258,7 @@
                 <div class="col-md-4 col-lg-4">
                     <div class="mb-3">
                         <label class="form-label">Bank Branch:</label>
-                        <select class="form-control select_bank_branch select @error('bank_branch') is-invalid @enderror" id="bank_branch" name="banck_branch"></select>
+                        <select class="form-control select_bank_branch select" id="bank_branch" name="bank_branch"></select>
                     </div>
                 </div>
 
@@ -556,7 +556,8 @@
         $('#import_form').on('submit', function(event) {
             event.preventDefault();
             $.ajax({
-                url: '{{ url("/flex/import") }}',
+                //url: '{{ url("/flex/import") }}',
+                url: '{{ route("import.employee") }}',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 method: "POST",
                 data: new FormData(this),

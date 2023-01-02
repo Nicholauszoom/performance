@@ -24,13 +24,13 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>User Activity Logs 
-                    <?php if(!empty($logs)){ ?><a href="javascript:void(0)" onclick="exportLogs()" title="Export and Delete" class="icon-2 info-tooltip" ><button type="button"  class="btn btn-primary">PURGE LOGS</button></a> <?php } ?></h2>
+                    <?php if(!empty($logs)){ ?><a href="javascript:void(0)" onclick="exportLogs()" title="Export and Delete" class="icon-2 info-tooltip" ><button type="button"  class="btn btn-main">PURGE LOGS</button></a> <?php } ?></h2>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   <div id="feedBack"></div>
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>

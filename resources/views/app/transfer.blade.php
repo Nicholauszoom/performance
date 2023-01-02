@@ -1,11 +1,11 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -151,7 +151,7 @@
                 </thead>
                 <tbody>
                     <?php foreach ($transfers as $row) {
-                        if($row->status<5 || $row->status > 5 ) continue; ?>
+                        if($row->status<5 || $row->status > 5) continue; ?>
                             <tr>
                                 <td width="1px"><?php echo $row->SNo; ?></td>
                                 <td><?php  echo $row->empName; ?></td>

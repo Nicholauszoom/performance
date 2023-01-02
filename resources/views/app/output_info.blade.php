@@ -61,8 +61,8 @@
 
             <div class="row">
               <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2><?php echo $title;?></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -82,7 +82,7 @@
                     <div class="clearfix"></div>
                   </div>
 
-                  <div class="x_content">
+                  <div class="card-body">
 
                     <div class="col-md-12 col-sm-9 col-xs-12">
 
@@ -126,7 +126,7 @@
 
                       <section class="panel">
 
-                        <div class="x_title">
+                        <div class="card-head">
                           <h2 class="green">Project Description</h2>
                           
                           <div class="clearfix"></div>
@@ -137,15 +137,15 @@
                           
                           <!--Start Tabs Content-->
                   <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="x_panel">
-                      <div class="x_title">
+                    <div class="card">
+                      <div class="card-head">
                           <h3 class="green"><i class="fa fa-info-circle"></i> Info and Details</h3>
                             @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
                             <div id ="resultfeedDes"></div>
 
                         <div class="clearfix"></div>
                       </div>
-                      <div class="x_content">
+                      <div class="card-body">
     
                         <div class="" role="tabpanel" data-example-id="togglable-tabs">
                           <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -172,8 +172,8 @@
                             
                             <div role="tabpanel" class="tab-pane fade active" id="addTask" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <!--<div class="x_panel">-->
-                                <!--  <div class="x_content">-->
+                                <!--<div class="card">-->
+                                <!--  <div class="card-body">-->
                                     <form autocomplete="off" id="createNewTask" enctype="multipart/form-data"  method="post"   data-parsley-validate class="form-horizontal form-label-left">
                 
                                       <!-- START -->
@@ -261,7 +261,7 @@
                                       <div class="form-group">
                                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                          <input type="submit"  value="ADD" name="assign" class="btn btn-primary"/>
+                                          <input type="submit"  value="ADD" name="assign" class="btn btn-main"/>
                                         </div>
                                       </div> 
                                       </form>
@@ -275,8 +275,8 @@
                              <!--Update OUPUT-->
                             <div role="tabpanel" class="tab-pane fade active" id="updateOutput" aria-labelledby="profile-tab">
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <!--<div class="x_panel">-->
-                                <!--  <div class="x_content">-->
+                                <!--<div class="card">-->
+                                <!--  <div class="card-body">-->
                                       <!-- Title -->
                                     <form autocomplete="off" id="update_outputTitle" enctype="multipart/form-data"  method="post" data-parsley-validate class="form-horizontal form-label-left">
                                       <div class="form-group">
@@ -408,8 +408,8 @@
                              
                             <div role="tabpanel" class="tab-pane fade" id="outputs" aria-labelledby="profile-tab">
                               <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="x_panel">
-                                  <div class="x_content">
+                                <div class="card">
+                                  <div class="card-body">
                 
                 
                                      <!--@if(Session::has('note'))      {{ session('note') }}  @endif  ?>-->
@@ -435,7 +435,7 @@
                                             <td width="1px"><?php echo $row->SNo; ?></td>
                                             <td><p><b>Name: &nbsp;</b><?php echo $row->title; ?></p>
 
-                                            <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
+                                            <button type="button" class="btn btn-main btn-xs" data-toggle="modal" data-target=".bs-example-modal-lg<?php echo $row->SNo; ?>">More Description</button>
 
                                             <div class="modal fade bs-example-modal-lg<?php echo $row->SNo; ?>" tabindex="-1" role="dialog" aria-hidden="true">
                                               <div class="modal-dialog modal-lg">
@@ -550,12 +550,12 @@
                                           <?php } ?>
                                             <!--</form>-->
                                             
-                                            <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
+                                            <a href="javascript:void(0)" onclick="deleteTask(<?php echo $row->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                 
                                                 <!--ACTIONS-->
                                                 </td>
                 
-                                            <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-primary btn-xs">Progress<br>and<br>Comments</button></a>
+                                            <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>
 
                                             
                                             

@@ -11,7 +11,18 @@ use App\CustomModels\ReportsModel;
 use App\Models\Payroll\Payroll;
 use App\Models\Payroll\FlexPerformanceModel;
 use App\Models\Payroll\ReportModel;
+use App\Models\ProjectModel;
 use Elibyy\TCPDF\Facades\TCPDF;
+use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use Excel;
+
+
+use function GuzzleHttp\Promise\all;
 
 // use PDF;
 // use App\Helpers\SysHelpers;
@@ -22,6 +33,7 @@ class ReportController extends Controller
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
+        $this->project_model = new ProjectModel();
     }
 
  function payroll_report(Request $request){
@@ -44,14 +56,15 @@ class ReportController extends Controller
       $data['total_heslb'] =  $this->payroll_model->total_heslb("loan_logs",$payrollMonth);
 
 
-      return view('reports.payroll_report',compact('data'));
+      return view('app.reports.payroll_report',$data);
 
 
     }
  }
 
  function pay_checklist(Request $request)  {
-      if ($request->input('run')) {
+    dd($request->all());
+      if (1) {
         $payroll_date =$request->input('payrolldate');
         $isReady = $this->reports_model->payCheklistStatus($payroll_date);
         $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -94,7 +107,7 @@ class ReportController extends Controller
  }
 
  function employee_arrears(Request $request)  {
-    $empID = base64_decode($this->input->get('empid'));
+    $empID = base64_decode($request->input('empid'));
     if($empID=='' || ($this->reports_model->employeeInfo($empID))==false){
         exit("Employee ID Not Found");
     } else {
@@ -107,16 +120,17 @@ class ReportController extends Controller
 
    function p9(Request $request)  {
 
-        dd($request->all());
+        // dd($request->all());
 
 
-      if ($request->input('run')) {
+      if (1) {
         $payrolldate =$request->input('payrolldate');
           $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
           if ($reportType == 1) {
               $data['paye']= $this->reports_model->s_p9($payrolldate);
               $data['total']= $this->reports_model->s_totalp9($payrolldate);
           }else{
+          
               $data['paye']= $this->reports_model->v_p9($payrolldate);
               $data['total']= $this->reports_model->v_totalp9($payrolldate);
           }
@@ -139,7 +153,7 @@ class ReportController extends Controller
 
 function p10(Request $request)  {
 
-    dd("here");
+    // dd("here");
 
     $period =$request->input('period');
     $year =$request->input('payrolldate');
@@ -166,7 +180,13 @@ function p10(Request $request)  {
             $data['sdl']= $this->reports_model->v_p10($year,$year);
             $data['total']= $this->reports_model->v_totalp10($year,$year);
         }
-         return view('app.reports/p10', $data);
+
+        $paye=$data['paye'];
+        $sdl=$data['sdl'];
+        $total=$data['total'];
+        $info=$data['info'];
+
+        include(app_path() . '/reports/p10.php');
     }
     elseif($period==2 && $checkup2>=1){
         // exit($date2start."<br>".$date2end);
@@ -224,6 +244,8 @@ function heslb(Request $request)  {
 }
 
 function pension(Request $request)  {
+
+
     $payrollMonth =$request->input('payrolldate');
     $pensionFund =$request->input('fund');
     $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -260,9 +282,9 @@ include(app_path() . '/reports/pension.php');
 
 
 function wcf(Request $request)  {
-    dd($request->all());
+    // dd($request->all());
 
-    if ($request->input('run')) {
+    if (1) {
         $calendar =$request->input('payrolldate');
         $datewell = explode("-",$calendar);
         $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
@@ -296,7 +318,7 @@ function wcf(Request $request)  {
 
 
 // function employment_cost_old(Request $request)  {
-//     //if ($request->input('run')) {
+//     //if (1) {
 
 //         //DATE MANIPULATION
 //         $calendar =$request->input('payrolldate');
@@ -322,7 +344,7 @@ function wcf(Request $request)  {
 // }
 
 function employment_cost(Request $request)  {
-        $payrollMonth = '2009-01-22'; //base64_decode($this->input->get("pdate"));
+        $payrollMonth = '2009-01-22'; //base64_decode($request->input("pdate"));
         $data['info']= $this->reports_model->company_info();
         $data['authorization']= $this->reports_model->payrollAuthorization($payrollMonth);
         $toDate = date('Y-m-d');
@@ -470,7 +492,7 @@ include(app_path() . '/reports/loan_report.php');
       }
 
     public function payslip(Request $request)  {
-        dd($request->all());
+        // dd($request->all());
 
         if ($request->input('print')) {
 
@@ -613,7 +635,7 @@ include(app_path() . '/reports/loan_report.php');
                         $paid_with_arrears_d=$data['paid_with_arrears_d'];
                         $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                        include(app_path() . '/reports/payslip.php');
+                       include(app_path() . '/reports/payslip.php');
                 }
 
                 $data_all['emp_id'] = $payroll_emp_ids;
@@ -762,6 +784,9 @@ function backup_payslip(Request $request)  {
 
 
     function attendance(Request $request)  {
+
+        dd($request->all());
+
           if ($request->input('print')) {
 
         // DATE MANIPULATION
@@ -791,7 +816,9 @@ function backup_payslip(Request $request)  {
     #################################END PROJECT REPORTS##############################
 
     public function payrollInputJournalExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        dd($request->all());
+
+        if (1 ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -832,7 +859,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -850,7 +877,7 @@ function backup_payslip(Request $request)  {
                 $object->getActiveSheet()->getStyle("$value")->applyFromArray(
                         array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -888,7 +915,7 @@ function backup_payslip(Request $request)  {
                 array(
                     'borders' => array(
                         'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'style' => Border::BORDER_THIN,
                             'color' => array('rgb' => '000000')
                         )
                     )
@@ -900,7 +927,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -908,7 +935,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("I9:N9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'FFFF00')
                         )
                     )
@@ -918,7 +945,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1020,7 +1047,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1065,7 +1092,7 @@ function backup_payslip(Request $request)  {
                     // $object->getActiveSheet()->getStyle("D$i:H$i")->applyFromArray(
                     //     // array(
                     //     //     'fill' => array(
-                    //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    //     //         'type' => Fill::FILL_SOLID,
                     //     //         'color' => array('rgb' => 'AAD08E')
                     //     //     )
                     //     // )
@@ -1083,7 +1110,7 @@ function backup_payslip(Request $request)  {
                     // $object->getActiveSheet()->getStyle("F$i:H$i")->applyFromArray(
                     //     // array(
                     //     //     'fill' => array(
-                    //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    //     //         'type' => Fill::FILL_SOLID,
                     //     //         'color' => array('rgb' => 'ED7C31')
                     //     //     )
                     //     // )
@@ -1120,7 +1147,7 @@ function backup_payslip(Request $request)  {
                     // $object->getActiveSheet()->getStyle("D$nextRepeated:H$nextRepeated")->applyFromArray(
                     //     // array(
                     //     //     'fill' => array(
-                    //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                    //     //         'type' => Fill::FILL_SOLID,
                     //     //         'color' => array('rgb' => 'FFFF00')
                     //     //     )
                     //     // )
@@ -1132,7 +1159,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -1163,7 +1190,8 @@ function backup_payslip(Request $request)  {
     }
 
     public function payrollInputJournalExportTime(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        dd($request->all());
+        if (1 ) {
             $payroll_date =$request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
 
@@ -1204,7 +1232,7 @@ function backup_payslip(Request $request)  {
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -1222,7 +1250,7 @@ function backup_payslip(Request $request)  {
                 $object->getActiveSheet()->getStyle("$value")->applyFromArray(
                         array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1260,7 +1288,7 @@ function backup_payslip(Request $request)  {
                 array(
                     'borders' => array(
                         'allborders' => array(
-                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                            'style' => Border::BORDER_THIN,
                             'color' => array('rgb' => '000000')
                         )
                     )
@@ -1272,7 +1300,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1280,7 +1308,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("I9:N9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'FFFF00')
                         )
                     )
@@ -1290,7 +1318,7 @@ function backup_payslip(Request $request)  {
             $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray(
                     array(
                         'fill' => array(
-                            'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                            'type' => Fill::FILL_SOLID,
                             'color' => array('rgb' => 'AD0076')
                         )
                     )
@@ -1447,7 +1475,7 @@ function backup_payslip(Request $request)  {
                                 array(
                                     'borders' => array(
                                         'allborders' => array(
-                                            'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                            'style' => Border::BORDER_THIN,
                                             'color' => array('rgb' => '000000')
                                         )
                                     )
@@ -1501,7 +1529,7 @@ function backup_payslip(Request $request)  {
                      // $object->getActiveSheet()->getStyle("D$i:H$i")->applyFromArray(
                      //     // array(
                      //     //     'fill' => array(
-                     //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                     //     //         'type' => Fill::FILL_SOLID,
                      //     //         'color' => array('rgb' => 'AAD08E')
                      //     //     )
                      //     // )
@@ -1519,7 +1547,7 @@ function backup_payslip(Request $request)  {
                      // $object->getActiveSheet()->getStyle("F$i:H$i")->applyFromArray(
                      //     // array(
                      //     //     'fill' => array(
-                     //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                     //     //         'type' => Fill::FILL_SOLID,
                      //     //         'color' => array('rgb' => 'ED7C31')
                      //     //     )
                      //     // )
@@ -1556,7 +1584,7 @@ function backup_payslip(Request $request)  {
                      // $object->getActiveSheet()->getStyle("D$nextRepeated:H$nextRepeated")->applyFromArray(
                      //     // array(
                      //     //     'fill' => array(
-                     //     //         'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                     //     //         'type' => Fill::FILL_SOLID,
                      //     //         'color' => array('rgb' => 'FFFF00')
                      //     //     )
                      //     // )
@@ -1568,7 +1596,7 @@ function backup_payslip(Request $request)  {
                          array(
                              'borders' => array(
                                  'allborders' => array(
-                                     'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                     'style' => Border::BORDER_THIN,
                                      'color' => array('rgb' => '000000')
                                  )
                              )
@@ -1597,7 +1625,8 @@ function backup_payslip(Request $request)  {
     }
 
     public function staffPayrollBankExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        //dd($request->all());
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -1637,7 +1666,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1688,7 +1717,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1715,7 +1744,9 @@ function backup_payslip(Request $request)  {
 
 
     public function volunteerAllowanceMWPExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        // dd($request->all());
+
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             //start
             $todayDate = date('d/m/Y');
@@ -1746,7 +1777,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -1785,7 +1816,7 @@ function backup_payslip(Request $request)  {
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2092,7 +2123,8 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function employeeCostExport(Request $request) {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        dd($request->all());
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -2134,7 +2166,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2206,7 +2238,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -2266,7 +2298,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2335,7 +2367,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -2360,7 +2392,9 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function employeeBioDataExport(Request $request) {
-        if ($request->input('run') && $request->input('status')!='' ) {
+        dd($request->all());
+
+        if (1 && $request->input('status')!='' ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $status = $request->input('status'); //active = 1, exited = 4
@@ -2401,7 +2435,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                     array(
                         'borders' => array(
                             'allborders' => array(
-                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'style' => Border::BORDER_THIN,
                                 'color' => array('rgb' => '000000')
                             )
                         )
@@ -2460,7 +2494,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
                         array(
                             'borders' => array(
                                 'allborders' => array(
-                                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                    'style' => Border::BORDER_THIN,
                                     'color' => array('rgb' => '000000')
                                 )
                             )
@@ -2484,9 +2518,11 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
         }
     }
 
-    public function grossReconciliation()
+    public function grossReconciliation(Request $request)
     {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        dd($request->all());
+
+        if (1 ) {
             $current_payroll_month = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
@@ -2523,9 +2559,11 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
 
     }
 
-    public function netReconciliation()
+    public function netReconciliation(Request $request)
     {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        dd($request->all());
+
+        if (1 ) {
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $current_payroll_month = $request->input('payrolldate');
             $previous_payroll_month_raw = date('Y-m',strtotime( date('Y-m-d',strtotime($current_payroll_month."-1 month"))));
@@ -2562,7 +2600,9 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function loanReports(Request $request)  {
-        if ($request->input('run') && $request->input('payrolldate')!='' ) {
+        dd($request->all());
+
+        if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
             $suffix = "";
@@ -2583,7 +2623,8 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function projectTime(Request $request)  {
-        if ($request->input('run') && $request->input('project')!='' ) {
+        dd($request->input('project'));
+        if (1 ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];
             $duration = explode('-',$request->input('duration'));
@@ -2611,7 +2652,7 @@ $pdfString = $pdf->Output('quotation.pdf', 'S');
     }
 
     public function funder(Request $request)  {
-        if ($request->input('run') && $request->input('project')!='' ) {
+        if (1 ) {
             $project = $request->input('project');
             $project_code = explode('~',$project)[0];
             $duration = explode('-',$request->input('duration'));

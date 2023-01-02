@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
-	<!-- Global stylesheets -->
-	<link href="../../../assets/fonts/inter/inter.css" rel="stylesheet" type="text/css">
-	<link href="../../../assets/icons/phosphor/styles.min.css" rel="stylesheet" type="text/css">
-	<link href="assets/css/ltr/all.min.css" id="stylesheet" rel="stylesheet" type="text/css">
-	<!-- /global stylesheets -->
-
-	<!-- Core JS files -->
-	<script src="../../../assets/demo/demo_configurator.js"></script>
-	<script src="../../../assets/js/bootstrap/bootstrap.bundle.min.js"></script>
-	<!-- /core JS files -->
-
-	<!-- Theme JS files -->
-	<script src="../../../assets/js/jquery/jquery.min.js"></script>
-	<script src="../../../assets/js/vendor/tables/datatables/datatables.min.js"></script>
-
-	<script src="assets/js/app.js"></script>
-	<script src="../../../assets/demo/pages/datatables_basic.js"></script>
 	<!-- /theme JS files -->
     @extends('layouts.vertical', ['title' => 'Dashboard'])
 
@@ -34,7 +10,7 @@
     <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
     @endpush
 
-    @section('content')('content')
+    @section('content')
 </head>
 
 <body>

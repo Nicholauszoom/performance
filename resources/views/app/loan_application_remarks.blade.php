@@ -31,13 +31,13 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+                <div class="card">
+                  <div class="card-head">
                     <h2>Add Remarks </h2>
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   
                      
             <div class="col-lg-6">
@@ -54,9 +54,9 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-2">
                         <input type="hidden" name="sid" value="<?php //echo $data[0]->id; ?>">
-                          <button  type="submit"  name="add" class="btn btn-success">Edit</button>
+                          <button  type="submit"  name="add" class="btn btn-main">Add</button>
                         </div>
                       </div>
 

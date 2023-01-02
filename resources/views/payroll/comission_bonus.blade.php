@@ -32,22 +32,22 @@
 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
+                <div class="card">
                     <div id="payrollFeedback"></div>
-                    <div class="x_title"><br>
+                    <div class="card-head"><br>
                         <h2>Employee Incentivees</h2>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="x_content">
+                    <div class="card-body">
 
                         <!-- PANEL-->
-                        <div class="x_panel">
+                        <div class="card">
                             <?php if($pendingPayroll > 0){ ?>
                             <p class='alert alert-warning text-center'>No Incentive Payments Can Be Scheduled until the
                                 Pending Payoll is Responded</p>
                             <?php } ?>
                             <?php if($pendingPayroll==0 /* && session('mng_paym')*/){ ?>
-                            <div class="x_title">
+                            <div class="card-head">
                                 <h2> Incentives Tag</h2>
                                 <form autocomplete="off" id="addBonusTag" class="form-horizontal form-label-left">
                                     <div class="form-group">
@@ -56,7 +56,7 @@
                                                 <input type="text" required="" name="name" placeholder="Incentive Name"
                                                     class="form-control">
                                                 <span class="input-group-btn">
-                                                    <button class="btn btn-primary">Add Incentive Name</button>
+                                                    <button class="btn btn-main">Add Incentive Name</button>
                                                 </span>
                                             </div>
                                         </div>
@@ -140,7 +140,7 @@
                                     <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                                         <?php if($pendingPayroll==0 /*&& session('mng_paym')*/){ ?>
                                         <button type="reset" class="btn btn-default">Cancel</button>
-                                        <button class="btn btn-primary">Add To Incentive</button>
+                                        <button class="btn btn-main">Add To Incentive</button>
                                         <?php }else { ?>
                                         <button type="button" class="btn btn-warning">Incentivees Not Allowed Until the
                                             Current Pending Payroll is Confirmed</button>
@@ -150,12 +150,12 @@
                                 <div class="ln_solid"></div>
                             </form>
                             <?php } ?>
-                            <div class="x_title">
+                            <div class="card-head">
                                 <h2>List Of Employees Entitled For Incentive This Month</h2>
                                 <div class="clearfix"></div>
                                 <div id="feedBack"></div>
                             </div>
-                            <div id="employeeList" class="x_content">
+                            <div id="employeeList" class="card-body">
                                 <table id="datatable" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -188,7 +188,7 @@
                                                     onclick="deleteBonus(<?php echo $row->id; ?>)"
                                                     title="Delete Incentive" class="icon-2 info-tooltip"><button
                                                         type="button" class="btn btn-danger btn-xs"><i
-                                                            class="fa fa-trash"></i></button> </a>
+                                                            class="ph-trash"></i></button> </a>
                                                 <?php }  ?>
                                             </td>
                                         </tr>

@@ -17,8 +17,9 @@ class ImprestController extends Controller
 {
 
 
-  public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
+  public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null,$imprest_model=null)
   {
+    $this->imprest_model = new ImprestModel;
     $this->payroll_model = new Payroll;
     $this->reports_model = new ReportModel;
     $this->flexperformance_model = new FlexPerformanceModel;
@@ -74,9 +75,9 @@ class ImprestController extends Controller
     return view('app.imprest', $data);
   }
 
-  public function imprest_info(Request $request)
+  public function imprest_info($id)
   {
-    $imprestID =  base64_decode($request->id);
+    $imprestID =  $id;
 
     $imprest_details =  $this->imprest_model->getImprest($imprestID);
     $requirements =  $this->imprest_model->getImprestRequirements($imprestID);
@@ -90,7 +91,7 @@ class ImprestController extends Controller
     $imprestID = $request->input('imprestID');
     $description = trim($request->input('description'));
     $initial_amount = $request->input('initial_amount');
-    if (Request::isMethod('post') && $imprestID != '') {
+    if ($request->method()== "POST" && $imprestID != '') {
       $database = array(
         'evidence' => '0',
         'status' => 0,
@@ -167,12 +168,12 @@ class ImprestController extends Controller
     }
   }
 
-  public function deleteImprest(Request $request)
+  public function deleteImprest($id)
   {
 
-    if ($this->uri->segment(3) != '') {
+    if ($id != '') {
 
-      $imprestID = $this->uri->segment(3);
+      $imprestID = $id;
 
       $result = $this->imprest_model->deleteImprest($imprestID);
       if ($result == true) {
@@ -215,12 +216,12 @@ class ImprestController extends Controller
     }
   }
 
-  public function approveRequirement(Request $request)
+  public function approveRequirement($id)
   {
 
-    if ($this->uri->segment(3) != '') {
+    if ($id != '') {
 
-      $requirementID = $this->uri->segment(3);
+      $requirementID = $id;
       $updates = array(
         'status' => 2
       );

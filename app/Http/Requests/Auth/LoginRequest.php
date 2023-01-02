@@ -2,11 +2,15 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
+use App\Helpers\SysHelpers;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Events\Lockout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Http\FormRequest;
+
+use Illuminate\Support\Facades\RateLimiter;
+use function PHPUnit\Framework\throwException;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
@@ -43,17 +47,36 @@ class LoginRequest extends FormRequest
      */
     public function authenticate()
     {
-        $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('emp_id', 'password'))) {
-            RateLimiter::hit($this->throttleKey());
+       $state = $this->activated($this->input('emp_id'));
+
+       if ($state == 0) {
+
+        throw ValidationException::withMessages([
+            'emp_id' => trans('auth.deactivated'),
+        ]);
+
+       } elseif($state === 'UNKNOWN' || $state == 4) {
 
             throw ValidationException::withMessages([
                 'emp_id' => trans('auth.failed'),
             ]);
-        }
 
-        RateLimiter::clear($this->throttleKey());
+       } else {
+
+            $this->ensureIsNotRateLimited();
+
+            if (! Auth::attempt($this->only('emp_id', 'password'))) {
+                RateLimiter::hit($this->throttleKey());
+
+                throw ValidationException::withMessages([
+                    'emp_id' => trans('auth.failed'),
+                ]);
+            }
+
+            RateLimiter::clear($this->throttleKey());
+       }
+
     }
 
     /**
@@ -69,16 +92,30 @@ class LoginRequest extends FormRequest
             return;
         }
 
+        $empID = $this->input('emp_id');
+
+        $datalog = array(
+            'state' => 0,
+            'empID' => $empID,
+            'author' => $empID,
+        );
+
+        $this->employeestatelog($datalog);
+
         event(new Lockout($this));
 
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
         throw ValidationException::withMessages([
-            'emp_id' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'emp_id' => trans('auth.deactivated'),
         ]);
+
+        // $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        // throw ValidationException::withMessages([
+        //     'emp_id' => trans('auth.throttle', [
+        //         'seconds' => $seconds,
+        //         'minutes' => ceil($seconds / 60),
+        //     ]),
+        // ]);
     }
 
     /**
@@ -90,4 +127,38 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->input('emp_id')).'|'.$this->ip());
     }
+
+    public function activated($empID)
+    {
+        $query = DB::table('employee')
+                ->select('state')
+                ->where('emp_id', $empID)
+                ->limit(1)
+                ->first();
+
+        if($query){
+            return $query->state;
+        }else{
+            return 'UNKNOWN';
+        }
+    }
+
+    public function employeestatelog($data){
+
+        $query = DB::transaction(function()use($data){
+
+            $empID = $data['empID'];
+		    $state = $data['state'];
+		    $query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+
+            DB::insert(DB::raw($query));
+
+            DB::table('activation_deactivation')->insert($data);
+
+            return true;
+        });
+
+
+        return $query;
+	}
 }

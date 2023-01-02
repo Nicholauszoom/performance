@@ -40,7 +40,7 @@
                     </h5>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
+                  <div class="card-body">
                   <div id="feedBack"></div>
                     <table id="datatable" class="table datatable-basic">
                       <thead>

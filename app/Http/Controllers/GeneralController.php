@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use App\Models\AccessControll\Departments;
-use App\Models\AttendanceModel;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ImprestModel;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\ReportModel;
-use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\AccessControll\Departments;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class GeneralController extends Controller
 {
@@ -75,7 +77,7 @@ class GeneralController extends Controller
     public function update_login_info(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $empID = session('emp_id');
 
             $username = $request->input('username');
@@ -136,8 +138,10 @@ class GeneralController extends Controller
     public function userprofile(Request $request)
     {
         $id = $request->input('id');
+        //dd($id);
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
+
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -156,6 +160,9 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+
+        $data['parent'] = "Employee Profile";
+
         return view('app.userprofile', $data);
     }
 
@@ -185,7 +192,7 @@ class GeneralController extends Controller
 
     public function addContract(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
                 'duration' => $request->input('duration'),
@@ -277,10 +284,10 @@ class GeneralController extends Controller
         $data['inactive_department'] = $this->flexperformance_model->inactive_department();
         $data['departments'] = Departments::all();
         $data['title'] = "Department";
+        $data['parent'] = "Organisation";
+        $data['child'] = "Departments";
 
-        return view('app.department', [
-            'data' => $data,
-        ]);
+        return view('app.department',$data);
     }
 
     public function organization_level(Request $request)
@@ -360,7 +367,7 @@ class GeneralController extends Controller
     public function departmentAdd(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $values = explode('|', $request->input('parent'));
             $parent_id = $values[0];
             $parent_code = $values[1];
@@ -425,7 +432,7 @@ class GeneralController extends Controller
 
     public function addEmployeeNationality(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'name' => $request->input('name'),
@@ -459,7 +466,7 @@ class GeneralController extends Controller
 
     public function addCompanyBranch(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'name' => $request->input('name'),
@@ -487,7 +494,7 @@ class GeneralController extends Controller
 
     public function addCostCenter(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'name' => $request->input('name'),
@@ -677,7 +684,7 @@ class GeneralController extends Controller
 
     public function updateBankBranchName(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
                 'bank' => $request->input('bank'),
@@ -705,7 +712,7 @@ class GeneralController extends Controller
 
     public function updateBankName(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('bankID') != '') {
+        if ($request->method() == "POST" && $request->input('bankID') != '') {
             $bankID = $request->input('bankID');
             $data = array(
                 'name' => $request->input('name'),
@@ -728,7 +735,7 @@ class GeneralController extends Controller
 
     public function updateAbbrev(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('bankID') != '') {
+        if ($request->method() == "POST" && $request->input('bankID') != '') {
             $bankID = $request->input('bankID');
             $data = array(
                 'abbr' => $request->input('abbrev'),
@@ -751,7 +758,7 @@ class GeneralController extends Controller
 
     public function updateBankCode(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('bankID') != '') {
+        if ($request->method() == "POST" && $request->input('bankID') != '') {
             $bankID = $request->input('bankID');
             $data = array(
                 'bank_code' => $request->input('bank_code'),
@@ -774,7 +781,7 @@ class GeneralController extends Controller
 
     public function updateBranchName(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'name' => $request->input('name'),
@@ -797,7 +804,7 @@ class GeneralController extends Controller
 
     public function updateBranchCode(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'branch_code' => $request->input('branch_code'),
@@ -820,7 +827,7 @@ class GeneralController extends Controller
 
     public function updateBranchSwiftcode(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'swiftcode' => $request->input('swiftcode'),
@@ -842,7 +849,7 @@ class GeneralController extends Controller
     }
     public function updateBranchStreet(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'street' => $request->input('street'),
@@ -865,7 +872,7 @@ class GeneralController extends Controller
 
     public function updateBranchRegion(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'region' => $request->input('region'),
@@ -887,7 +894,7 @@ class GeneralController extends Controller
 
     public function updateBranchCountry(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('branchID') != '') {
+        if ($request->method() == "POST" && $request->input('branchID') != '') {
             $branchID = $request->input('branchID');
             $data = array(
                 'country' => $request->input('country'),
@@ -908,10 +915,10 @@ class GeneralController extends Controller
 
     }
 
-    public function deleteDepartment(Request $request)
+    public function deleteDepartment($id)
     {
 
-        $id = $this->uri->segment(3);
+
         $data = array(
             'state' => 0,
         );
@@ -928,10 +935,10 @@ class GeneralController extends Controller
 
     }
 
-    public function activateDepartment(Request $request)
+    public function activateDepartment($id)
     {
 
-        $id = $this->uri->segment(3);
+
         $data = array(
             'state' => 1,
         );
@@ -948,9 +955,9 @@ class GeneralController extends Controller
 
     }
 
-    public function position_info(Request $request)
+    public function position_info($id)
     {
-        $id = $this->input->get("id");
+
         $data['all_position'] = $this->flexperformance_model->allposition();
         $data['organization_levels'] = $this->flexperformance_model->getAllOrganizationLevel();
         $data['skills'] = $this->flexperformance_model->getskills($id);
@@ -960,10 +967,8 @@ class GeneralController extends Controller
         return view('app.position_info', $data);
     }
 
-    public function department_info(Request $request)
+    public function department_info($id)
     {
-
-        $id = base64_decode($this->input->get("id"));
 
         $data['employee'] = $this->flexperformance_model->customemployee();
         $data['cost_center'] = $this->flexperformance_model->costCenter();
@@ -1017,7 +1022,7 @@ class GeneralController extends Controller
 
     public function updateBudgetDescription(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('budgetID') != '') {
+        if ($request->method() == "POST" && $request->input('budgetID') != '') {
             $budgetID = $request->input('budgetID');
             $data = array(
                 'description' => $request->input('description'),
@@ -1032,7 +1037,7 @@ class GeneralController extends Controller
 
     public function updateBudgetAmount(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('budgetID') != '') {
+        if ($request->method() == "POST" && $request->input('budgetID') != '') {
             $budgetID = $request->input('budgetID');
             $data = array(
                 'amount' => $request->input('amount'),
@@ -1047,7 +1052,7 @@ class GeneralController extends Controller
 
     public function updateBudgetDateRange(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('budgetID') != '') {
+        if ($request->method() == "POST" && $request->input('budgetID') != '') {
             $budgetID = $request->input('budgetID');
             $start = $request->input('start');
             $end = $request->input('end');
@@ -1192,7 +1197,7 @@ class GeneralController extends Controller
 
     public function requestTraining2(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $empID = session('emp_id');
             $course = $request->input('course');
             $data = array(
@@ -1428,7 +1433,7 @@ class GeneralController extends Controller
         $traineeID = $request->input('traineeID');
         $skillsID = $request->input('skillsID');
         $remarks = trim($request->input('remarks'));
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $namefile = "certificate_" . $traineeID . "_" . $skillsID;
 
             $config['upload_path'] = './uploads/graduation/';
@@ -1471,9 +1476,9 @@ class GeneralController extends Controller
         $traineeID = $request->input('traineeID');
         $skillsID = $request->input('skillsID');
         $remarks = trim($request->input('remarks'));
-        // if (Request::isMethod('post')&& $ID!='') {
+        // if ($request->method() == "POST"&& $ID!='') {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $namefile = "certificate_" . $traineeID . "_" . $skillsID;
 
@@ -1561,7 +1566,7 @@ class GeneralController extends Controller
 
     public function updatePositionName(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1588,7 +1593,7 @@ class GeneralController extends Controller
 
     public function updatePositionReportsTo(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1619,7 +1624,7 @@ class GeneralController extends Controller
 
     public function updatePositionCode(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1646,7 +1651,7 @@ class GeneralController extends Controller
 
     public function updatePositionOrganizationLevel(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('positionID') != '') {
                 $positionID = $request->input('positionID');
@@ -1684,7 +1689,7 @@ class GeneralController extends Controller
     }
     public function addPosition(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             if ($request->input('driving_licence') == "") {
                 $licence = 0;
@@ -1832,7 +1837,9 @@ class GeneralController extends Controller
         $finish = $request->input('time_finish');
         $reason = $request->input('reason');
         $category = $request->input('category');
+
         $empID = session('emp_id');
+
 
         $split_start = explode("  at  ", $start);
         $split_finish = explode("  at  ", $finish);
@@ -1850,23 +1857,35 @@ class GeneralController extends Controller
         $finish_final = date('Y-m-d ', strtotime($finish_calendar));
 
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
-        $line = $this->flexperformance_model->get_linemanagerID($empID);
-        foreach ($line as $row) {
-            $linemanager = $row->line_manager;
-        }
+
+        $linemanager = $this->flexperformance_model->get_linemanagerID($empID);
+
+        // foreach ($line as $row) {
+        //     $linemanager = $row->line_manager;
+        // }
         //Overtime Should range between 24 Hrs;
+
         if ($maxRange > 24) {
+
             echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
+
         } else {
 
             $end_night_shift = "6:00";
             $start_night_shift = "20:00";
+
             if ($start_date == $finish_date) {
+
                 if (strtotime($start_time) >= strtotime($finish_time)) {
+
                     echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
+
                 } else {
+
                     if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
+
                         $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
+
                         $data = array(
                             'time_start' => $start_final . " " . $start_time,
                             'time_end' => $finish_final . " " . $finish_time,
@@ -1879,12 +1898,19 @@ class GeneralController extends Controller
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
                         );
+
                         $result = $this->flexperformance_model->apply_overtime($data);
+
                         if ($result == true) {
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";}
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+
                     } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
+
                         $type = 0; // echo "DAY OVERTIME";
+
                         $data = array(
                             'time_start' => $start_final . " " . $start_time,
                             'time_end' => $finish_final . " " . $finish_time,
@@ -1897,10 +1923,15 @@ class GeneralController extends Controller
                             'time_approved_hr' => date('Y-m-d'),
                             'time_confirmed_line' => date('Y-m-d h:i:s'),
                         );
+
                         $result = $this->flexperformance_model->apply_overtime($data);
+
                         if ($result == true) {
                             echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";}
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+
                     } else {
                         echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
                     }
@@ -1973,7 +2004,7 @@ class GeneralController extends Controller
         $data['parent'] = 'Workforce';
         $data['child'] = 'Overtime';
 
-        return view('app.overtime', $data);
+        return view('overtime.overtime', $data);
 
     }
 
@@ -2017,6 +2048,7 @@ class GeneralController extends Controller
             $this->flexperformance_model->update_overtime($data, $overtimeID);
 
             session('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
+
             return redirect('/flex/overtime');
 
         }
@@ -2053,6 +2085,8 @@ class GeneralController extends Controller
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
+
+
     public function approved_financial_payments(Request $request)
     {
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
@@ -2062,6 +2096,7 @@ class GeneralController extends Controller
         $data['pending_arrears'] = $this->payroll_model->pending_arrears_payment();
         $data['monthly_arrears'] = $this->payroll_model->all_arrears_payroll_month();
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+
 
         $data['bonus'] = $this->payroll_model->selectBonus();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -2171,9 +2206,13 @@ class GeneralController extends Controller
             $signatory = session('emp_id');
             $time_approved = date('Y-m-d');
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
+
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+            }
+
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         }
@@ -2231,19 +2270,21 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
             echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";}
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
+        }
 
     }
 
     public function cancelOvertime($id)
     {
-
-        //   $overtimeID = $this->uri->segment(3);
         $result = $this->flexperformance_model->deleteOvertime($id);
+
         if ($result == true) {
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";}
-
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
+        }
     }
 
     public function confirmOvertimePayment(Request $request)
@@ -2272,32 +2313,30 @@ class GeneralController extends Controller
         }
     }
 
-    public function fetchOvertimeComment(Request $request)
+    public function fetchOvertimeComment(Request $request, $id)
     {
 
-        $overtimeID = $this->uri->segment(3);
-        $data['comment'] = $this->flexperformance_model->fetchOvertimeComment($overtimeID);
+        $data['comment'] = $this->flexperformance_model->fetchOvertimeComment($id);
         $data['mode'] = 1; // Mode 1 fo Comment Purpose and Mode 2 for Update Purpose
+        $data['parent'] = 'Overtime Remarks';
 
-        return view('app.overtime_info', $data);
+        return view('overtime.overtime_info', $data);
     }
 
     public function commentOvertime(Request $request)
     {
+        $overtimeID = $request->input('overtimeID');
 
-        if (isset($_POST['apply'])) {
-            $overtimeID = $request->input('overtimeID');
-            $data = array(
-                'final_line_manager_comment' => $request->input('comment'),
-                'commit' => 1,
-            );
+        $data = array(
+            'final_line_manager_comment' => $request->input('comment'),
+            'commit' => 1,
+        );
 
-            $this->flexperformance_model->update_overtime($data, $overtimeID);
+        $this->flexperformance_model->update_overtime($data, $overtimeID);
 
-            session('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
-            return redirect('/flex/overtime');
+        session('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
 
-        }
+        return redirect(route('flex.overtime'));
 
     }
 
@@ -2382,7 +2421,9 @@ class GeneralController extends Controller
         }*/
 
         $data['title'] = "Employee";
-        return view('app.employee', $data);
+        $data['parent'] = "Employee";
+        $data['child'] = "Active Employee";
+        return view('employee.employee', $data);
 
     }
 
@@ -2424,7 +2465,7 @@ class GeneralController extends Controller
     public function updateFirstName(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'fname' => $request->input('fname'),
                 'last_updated' => date('Y-m-d'),
@@ -2440,7 +2481,7 @@ class GeneralController extends Controller
     public function updateCode(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'emp_code' => $request->input('emp_code'),
                 'last_updated' => date('Y-m-d'),
@@ -2456,7 +2497,7 @@ class GeneralController extends Controller
     public function updateLevel(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'emp_level' => $request->input('emp_level'),
                 'last_updated' => date('Y-m-d'),
@@ -2472,7 +2513,7 @@ class GeneralController extends Controller
     public function updateMiddleName(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'mname' => $request->input('mname'),
                 'last_updated' => date('Y-m-d'),
@@ -2488,7 +2529,7 @@ class GeneralController extends Controller
     public function updateLastName(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'lname' => $request->input('lname'),
                 'last_updated' => date('Y-m-d'),
@@ -2504,7 +2545,7 @@ class GeneralController extends Controller
     public function updateGender(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'gender' => $request->input('gender'),
                 'last_updated' => date('Y-m-d'),
@@ -2520,7 +2561,7 @@ class GeneralController extends Controller
     public function updateDob(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'birthdate' => $request->input('dob'),
                 'last_updated' => date('Y-m-d'),
@@ -2536,7 +2577,7 @@ class GeneralController extends Controller
     public function updateExpatriate(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'is_expatriate' => $request->input('expatriate'),
                 'last_updated' => date('Y-m-d'),
@@ -2552,7 +2593,7 @@ class GeneralController extends Controller
     public function updateEmployeePensionFund(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'pension_fund' => $request->input('pension_fund'),
                 'last_updated' => date('Y-m-d'),
@@ -2568,7 +2609,7 @@ class GeneralController extends Controller
     public function updateEmployeePosition(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
 
             $data = array(
                 'empID' => $empID,
@@ -2594,7 +2635,7 @@ class GeneralController extends Controller
 
     /* public function updateEmployeeBranch(Request $request) {
     $empID = $request->input('empID');
-    if (Request::isMethod('post')&& $empID!='') {
+    if ($request->method() == "POST"&& $empID!='') {
     $data = array(
     'empID' =>$empID,
     'parameter' =>'Branch',
@@ -2617,7 +2658,7 @@ class GeneralController extends Controller
     public function updateEmployeeBranch(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'branch' => $request->input('branch'),
                 'last_updated' => date('Y-m-d'),
@@ -2633,7 +2674,7 @@ class GeneralController extends Controller
     public function updateEmployeeNationality(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'nationality' => $request->input('nationality'),
                 'last_updated' => date('Y-m-d'),
@@ -2649,7 +2690,7 @@ class GeneralController extends Controller
     public function updateDeptPos(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
 
             $data = array(
                 'empID' => $empID,
@@ -2777,7 +2818,7 @@ class GeneralController extends Controller
     public function updateSalary(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'salary' => $request->input('salary'),
             );
@@ -2804,7 +2845,7 @@ class GeneralController extends Controller
     public function updateEmail(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'email' => $request->input('email'),
                 'last_updated' => date('Y-m-d'),
@@ -2820,7 +2861,7 @@ class GeneralController extends Controller
     public function updatePostAddress(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $address_no = $request->input('address');
             $full_address = "P.O Box " . $address_no;
             $updates = array(
@@ -2838,7 +2879,7 @@ class GeneralController extends Controller
     public function updatePostCity(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'postal_city' => $request->input('city'),
                 'last_updated' => date('Y-m-d'),
@@ -2854,7 +2895,7 @@ class GeneralController extends Controller
     public function updatePhysicalAddress(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'physical_address' => $request->input('phys_address'),
                 'last_updated' => date('Y-m-d'),
@@ -2870,7 +2911,7 @@ class GeneralController extends Controller
     public function updateMobile(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'mobile' => $request->input('mobile'),
                 'last_updated' => date('Y-m-d'),
@@ -2886,7 +2927,7 @@ class GeneralController extends Controller
     public function updateHomeAddress(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'home' => $request->input('home_address'),
             );
@@ -2901,7 +2942,7 @@ class GeneralController extends Controller
     public function updateNationalID(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'national_id' => $request->input('nationalid'),
             );
@@ -2916,7 +2957,7 @@ class GeneralController extends Controller
     public function updateTin(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'tin' => $request->input('tin'),
             );
@@ -2931,7 +2972,7 @@ class GeneralController extends Controller
     public function updateBankAccountNo(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'account_no' => $request->input('acc_no'),
                 'last_updated' => date('Y-m-d'),
@@ -2949,7 +2990,7 @@ class GeneralController extends Controller
         $empID = $request->input('empID');
         $bank = $request->input('bank');
         $bank_branch = $request->input('bank_branch');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'bank' => $bank,
                 'bank_branch' => $bank_branch,
@@ -2968,7 +3009,7 @@ class GeneralController extends Controller
     public function updateLineManager(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'line_manager' => $request->input('line_manager'),
                 'last_updated' => date('Y-m-d'),
@@ -2984,7 +3025,7 @@ class GeneralController extends Controller
     public function updateEmployeeContract(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'contract_type' => $request->input('contract'),
                 'last_updated' => date('Y-m-d'),
@@ -3000,7 +3041,7 @@ class GeneralController extends Controller
     public function updateMeritalStatus(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'merital_status' => $request->input('merital_status'),
                 'last_updated' => date('Y-m-d'),
@@ -3016,7 +3057,7 @@ class GeneralController extends Controller
     public function updatePensionFundNo(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'pf_membership_no' => $request->input('pension_no'),
                 'last_updated' => date('Y-m-d'),
@@ -3032,7 +3073,7 @@ class GeneralController extends Controller
     public function updateOldID(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $updates = array(
                 'old_emp_id' => $request->input('old_id'),
                 'last_updated' => date('Y-m-d'),
@@ -3054,7 +3095,7 @@ class GeneralController extends Controller
         //   unlink($photo_path);
         // }
 
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $namefile = "user_" . $empID;
             $config['upload_path'] = './uploads/userprofile/';
             $config['file_name'] = $namefile;
@@ -3156,7 +3197,7 @@ class GeneralController extends Controller
     public function apply_salary_advance(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $amount_normal = $request->input("amount");
             $amount_mid = $request->input("amount_mid");
             $advance_type = $request->input("advance_type");
@@ -3195,7 +3236,7 @@ class GeneralController extends Controller
     public function insert_directLoan(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $category = $request->input("type");
 
             if ($category == 2) {
@@ -3257,7 +3298,7 @@ class GeneralController extends Controller
 
     public function adv_loan_pay(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $state = 1;
             $loanID = $request->input('loanID');
             $accrued = $request->input('accrued');
@@ -3304,12 +3345,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function recommendLoan(Request $request)
+    public function recommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_finance' => date('Y-m-d'),
@@ -3322,12 +3363,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function hrrecommendLoan()
+    public function hrrecommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_hr' => date('Y-m-d'),
@@ -3340,12 +3381,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function holdLoan(Request $request)
+    public function holdLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 3,
                 'notification' => 1,
@@ -3355,12 +3396,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function approveLoan(Request $request)
+    public function approveLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $todate = date('Y-m-d');
 
             $result = $this->flexperformance_model->approve_loan($loanID, session('emp_id'), $todate);
@@ -3373,10 +3414,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function pauseLoan(Request $request)
+    public function pauseLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 2,
             );
@@ -3390,10 +3431,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function resumeLoan(Request $request)
+    public function resumeLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 1,
             );
@@ -3407,12 +3448,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function rejectLoan(Request $request)
+    public function rejectLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 5,
                 'notification' => 1,
@@ -3463,7 +3504,7 @@ class GeneralController extends Controller
 
     public function updateloan_info(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('loanID')) {
+        if ($request->method() == "POST" && $request->input('loanID')) {
             $loanID = $request->input('loanID');
             $updates = array(
                 'amount' => $request->input('amount'),
@@ -3520,23 +3561,23 @@ class GeneralController extends Controller
 
     public function viewrecords(Request $request)
     {
-
         $data['viewrecords'] = $this->flexperformance_model->viewrecords();
         return view('app.viewrecords', $data);
-
     }
+
+
 
     public function home(Request $request)
     {
 
-        // dd(session()->all());
-
         $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
-        // dd($strategyStatistics);
+
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
+
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         foreach ($strategyStatistics as $key) {
@@ -3588,10 +3629,9 @@ class GeneralController extends Controller
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
         if (session('password_set') == "1") {
-            $this->login_info();
+            return view('auth.password-change');
         } else {
             $data['parent'] = 'Dashboard';
-            $data['child'] = 'Work';
             return view('app.home', $data);
         }
 
@@ -3657,45 +3697,44 @@ class GeneralController extends Controller
 
     }
 
-    public function addkin(Request $request)
+    public function addkin(Request $request, $id)
     {
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
-        if (isset($_POST['add'])) {
-            $id = $request->input('id');
+        $data = array(
+            'fname' => $request->input("fname"),
+            'mname' => $request->input("mname"),
+            'lname' => $request->input("lname"),
+            'mobile' => $request->input("mobile"),
+            'relationship' => $request->input("relationship"),
+            'employee_fk' => $id,
+            'postal_address' => $request->input("postal_address"),
+            'physical_address' => $request->input("physical_address"),
+            'office_no' => $request->input("office_no"),
+            'added_on' => date('Y-m-d'),
+        );
 
-            $data = array(
-                'fname' => $request->input("fname"),
-                'mname' => $request->input("mname"),
-                'lname' => $request->input("lname"),
-                'mobile' => $request->input("mobile"),
-                'relationship' => $request->input("relationship"),
-                'employee_fk' => $id,
-                'postal_address' => $request->input("postal_address"),
-                'physical_address' => $request->input("physical_address"),
-                'office_no' => $request->input("office_no"),
-                'added_on' => date('Y-m-d'),
-            );
+        $this->flexperformance_model->addkin($data);
+        //echo "Record Added";
+        session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
 
-            $this->flexperformance_model->addkin($data);
-            //echo "Record Added";
-            session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
+        $reload = '/flex/userprofile/?id=' . $id;
 
-            $reload = '/flex/userprofile/?id=' . $id;
-            return redirect($reload);
+        return redirect($reload);
 
-        }
-        // die();
     }
 
-    public function deletekin(Request $request)
+    public function deletekin($empID, $id)
     {
-        $id = $request->input("id");
-        $this->db->where('id', $id);
-        $this->db->delete('next_of_kin');
+        // $id = $request->input("id");
+        DB::table('next_of_kin')->where('id', $id)->delete();
+        // $this->db->where('id', $id);
+        // $this->db->delete('next_of_kin');
+
         session('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
 
-        $reload = '/flex/employee_info/';
+        $reload = '/flex/userprofile/?id=' . $empID;
+
         return redirect($reload);
 
     }
@@ -3703,34 +3742,32 @@ class GeneralController extends Controller
     public function addproperty(Request $request)
     {
 
-        if (isset($_POST['add'])) {
-            if ($request->input("type") != 'Others') {
-                // $id = $request->input('id');
-                $type = $request->input("type");
+        if ($request->input("type") != 'Others') {
+            // $id = $request->input('id');
+            $type = $request->input("type");
 
-            } else { $type = $request->input("type2");}
+        } else { $type = $request->input("type2");}
 
-            $data = array(
-                'prop_type' => $type,
-                'prop_name' => $request->input("name"),
-                'serial_no' => $request->input("serial"),
-                'given_by' => session('emp_id'),
-                'given_to' => $request->input("employee"),
-            );
+        $data = array(
+            'prop_type' => $type,
+            'prop_name' => $request->input("name"),
+            'serial_no' => $request->input("serial"),
+            'given_by' => session('emp_id'),
+            'given_to' => $request->input("employee"),
+        );
 
-            $this->flexperformance_model->addproperty($data);
-            session('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
+        $this->flexperformance_model->addproperty($data);
+        session('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
 
-            $reload = '/flex/userprofile/?id=' . $request->input("employee");
-            return redirect($reload);
-
-        }
+        $reload = '/flex/userprofile/?id=' . $request->input("employee");
+        return redirect($reload);
     }
 
     public function employee_exit($id)
     {
 
         $empID = $id;
+
         $datalog = array(
             'state' => 0,
             'empID' => $empID,
@@ -3738,19 +3775,23 @@ class GeneralController extends Controller
         );
 
         $this->flexperformance_model->employeestatelog($datalog);
-//                if($result ==true){
-//                    $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+
+        //  if($result ==true){
+        //      $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =".$empID."");
+
         $response_array['status'] = "OK";
         $response_array['title'] = "SUCCESS";
         $response_array['message'] = "<p class='alert alert-success text-center'>Deactivation Request For This Employee Has Been Sent Successifully</p>";
+
         header('Content-type: application/json');
         echo json_encode($response_array);
-//                } else {
-//                    $response_array['status'] = "ERR";
-//                    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
-//                    header('Content-type: application/json');
-//                    echo json_encode($response_array);
-//                }
+
+        //  } else {
+        //    $response_array['status'] = "ERR";
+        //    $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Deactivation Request Not Sent</p>";
+        //    header('Content-type: application/json');
+        //    echo json_encode($response_array);
+        //  }
     }
 
     public function deleteproperty($id, Request $request)
@@ -3770,48 +3811,49 @@ class GeneralController extends Controller
 
     public function employeeDeactivationRequest(Request $request)
     {
-        if (isset($_POST['exit'])) {
-            $exit_date = str_replace('/', '-', $request->input('exit_date'));
+        $exit_date = str_replace('/', '-', $request->input('exit_date'));
 
-            $data = array(
-                'empID' => $request->input("empID"),
-                'initiator' => $request->input("initiator"),
-                'confirmed_by' => session('emp_id'),
-                'date_confirmed' => date('Y-m-d'),
-                'reason' => $request->input("reason"),
-                'exit_date' => date('Y-m-d', strtotime($exit_date)),
-            );
+        $data = array(
+            'empID' => $request->input("empID"),
+            'initiator' => $request->input("initiator"),
+            'confirmed_by' => session('emp_id'),
+            'date_confirmed' => date('Y-m-d'),
+            'reason' => $request->input("reason"),
+            'exit_date' => date('Y-m-d', strtotime($exit_date)),
+        );
 
-            $datalog = array(
-                'state' => 3,
-                'empID' => $request->input("empID"),
-                'author' => session('emp_id'),
-            );
+        $datalog = array(
+            'state' => 3,
+            'empID' => $request->input("empID"),
+            'author' => session('emp_id'),
+        );
 //          echo json_encode($data);
 
-            $this->flexperformance_model->employee_exit($data);
-            $this->flexperformance_model->employeestatelog($datalog);
-            $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =" . $request->input("empID") . "");
-            session('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
+        $this->flexperformance_model->employee_exit($data);
+        $this->flexperformance_model->employeestatelog($datalog);
+        // $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =" . $request->input("empID") . "");
+        session('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
 
-            $reload = '/flex/userprofile/?id=' . $request->input("empID");
-            return redirect($reload);
-
-        }
+        $reload = '/flex/userprofile/?id=' . $request->input("empID");
+        return redirect($reload);
 
     }
 
-    public function employeeActivationRequest(Request $request)
+    public function employeeActivationRequest($id, Request $request)
     {
-        $empID = $this->uri->segment(3);
+        $empID = $id;
+
         $datalog = array(
             'state' => 1,
             'empID' => $empID,
             'author' => session('emp_id'),
         );
+
         $result = $this->flexperformance_model->updateemployeestatelog($datalog, $empID);
+
         if ($result == true) {
-            $this->flexperformance_model->audit_log("Activation of Employee with ID =" . $empID . "");
+            // $this->flexperformance_model->audit_log("Activation of Employee with ID =".$empID."");
+
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been Sent Successifully</p>";
@@ -3825,15 +3867,25 @@ class GeneralController extends Controller
         }
     }
 
-    public function cancelRequest(Request $request)
+    public function cancelRequest($id, $empID, Request $request)
     {
-        $logID = $this->uri->segment(3);
-        $empID = $this->uri->segment(4);
         $updates = array(
             'state' => 0,
             'current_state' => 0,
             'empID' => $empID,
         );
+
+        $result = $this->flexperformance_model->updateemployeestatelog($updates, $id);
+
+        $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
+
+        SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =" . $empID, $request);
+
+        $response_array['status'] = "OK";
+        $response_array['title'] = "SUCCESS";
+        $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+
+        header('Content-type: application/json');
 
         $result = $this->flexperformance_model->updateemployeestatelog($updates, $logID);
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
@@ -3843,24 +3895,23 @@ class GeneralController extends Controller
         header('Content-type: application/json');
         echo json_encode($response_array);
 
-//      if($result ==true){
-//            $response_array['status'] = "OK";
-//            $response_array['title'] = "SUCCESS";
-//            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        } else {
-//            $response_array['status'] = "ERR";
-//            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        }
+        //      if($result ==true){
+        //            $response_array['status'] = "OK";
+        //            $response_array['title'] = "SUCCESS";
+        //            $response_array['message'] = "<p class='alert alert-success text-center'>Activation Request For This Employee Has Been CANCELLED Successifully</p>";
+        //            header('Content-type: application/json');
+        //            echo json_encode($response_array);
+        //        } else {
+        //            $response_array['status'] = "ERR";
+        //            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Cancel this Request</p>";
+        //            header('Content-type: application/json');
+        //            echo json_encode($response_array);
+        //        }
     }
 
-    public function activateEmployee(Request $request)
+    public function activateEmployee($logID, $empID, Request $request)
     {
-        $logID = $this->uri->segment(3);
-        $empID = $this->uri->segment(4);
+
         $todate = date('Y-m-d');
 
         $property = array(
@@ -3870,6 +3921,8 @@ class GeneralController extends Controller
             'given_by' => session('emp_id'),
             'given_to' => $empID,
         );
+
+
         $datagroup = array(
             'empID' => $empID,
             'group_name' => 1,
@@ -3883,8 +3936,9 @@ class GeneralController extends Controller
         );
 
         $result = $this->flexperformance_model->activateEmployee($property, $datagroup, $datalog, $empID, $logID, $todate);
+
         if ($result == true) {
-            $this->flexperformance_model->audit_log("Activated an Employee of ID =" . $empID . "");
+            //   $this->flexperformance_model->audit_log("Activated an Employee of ID =".$empID."");
             $response_array['status'] = "OK";
             $response_array['title'] = "SUCCESS";
             $response_array['message'] = "<p class='alert alert-success text-center'>Employee Has Activated Successifully</p>";
@@ -3947,6 +4001,9 @@ class GeneralController extends Controller
             $data['employee2'] = $this->flexperformance_model->inactive_employee2();
 
             $data['title'] = "Employee";
+            $data['parent'] = "Inactive employee";
+
+            // dd($data['employee2']);
             return view('app.inactive_employee', $data);
         } else {
             echo 'Unauthorized Access';
@@ -3973,10 +4030,8 @@ class GeneralController extends Controller
 
     }
 
-    public function deduction_info(Request $request)
+    public function deduction_info($pattern)
     {
-
-        $pattern = $request->input('pattern');
         $values = explode('|', $pattern);
         $deductionID = $values[0];
         $deductionType = $values[1];
@@ -4010,14 +4065,15 @@ class GeneralController extends Controller
 
         $data['parameter'] = $deductionType;
         $data['title'] = "Deductions";
-        return view('app.deduction_info', $data);
+        $data['parent'] = "Statutory Deduction";
 
+        return view('app.deduction_info', $data);
     }
 
     public function assign_deduction_individual(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $data = array(
                 'empID' => $request->input('empID'),
@@ -4026,7 +4082,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_deduction($data);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "");
+                //$this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4036,7 +4092,7 @@ class GeneralController extends Controller
     public function assign_deduction_group(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $members = $this->flexperformance_model->get_deduction_members($request->input('deduction'), $request->input('group'));
             foreach ($members as $row) {
@@ -4049,7 +4105,7 @@ class GeneralController extends Controller
 
             }
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
+                // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4059,7 +4115,7 @@ class GeneralController extends Controller
     public function remove_individual_deduction(Request $request)
     {
 
-        if (Request::isMethod('post') && !empty($request->input('option'))) {
+        if ($request->method() == "POST" && !empty($request->input('option'))) {
 
             $arr = $request->input('option');
             $arrayString = implode(",", $arr);
@@ -4073,7 +4129,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
+                    // $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
             }
@@ -4085,7 +4141,7 @@ class GeneralController extends Controller
     public function remove_group_deduction(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $arr = $request->input('option');
             $arrayString = implode(",", $arr);
@@ -4099,7 +4155,7 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_deduction($groupID, $deductionID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
+                    // $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-warning text-center'>Group Removed Successifully</p>";
                 } else {echo "<p class='alert alert-danger text-center'Group NOT Removed, Try Again</p>";}
             }
@@ -4112,7 +4168,7 @@ class GeneralController extends Controller
 
     public function addpaye(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $minimum = $request->input('minimum');
             $maximum = $request->input('maximum');
             $excess = $request->input('excess');
@@ -4171,7 +4227,7 @@ class GeneralController extends Controller
 
     public function updatepaye(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $payeID = $request->input('payeID');
             $minimum = $request->input('minimum');
             $maximum = $request->input('maximum');
@@ -4185,7 +4241,7 @@ class GeneralController extends Controller
                 );
                 $result = $this->flexperformance_model->updatepaye($updates, $payeID);
                 if ($result) {
-                    $this->flexperformance_model->audit_log("Updated PAYE Brackets");
+                    // $this->flexperformance_model->audit_log("Updated PAYE Brackets");
                     $response_array['status'] = "OK";
                     $response_array['title'] = "SUCCESS";
                     $response_array['message'] = "<p class='alert alert-success text-center'>Updated Successifully</p>";
@@ -4211,7 +4267,7 @@ class GeneralController extends Controller
     }
     public function updateOvertimeAllowance(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('allowanceID') != '') {
+        if ($request->method() == "POST" && $request->input('allowanceID') != '') {
             $allowanceID = $request->input('allowanceID');
             $updates = array(
                 'name' => $request->input('name'),
@@ -4229,7 +4285,11 @@ class GeneralController extends Controller
 
     public function updateCommonDeductions(Request $request)
     {
-        if (Request::isMethod('post') && $request->input('deductionID') != '') {
+        // dd('update');
+
+
+
+        if ( isset($request->deductionID)) {
             $deductionID = $request->input('deductionID');
             $updates = array(
                 'name' => $request->input('name'),
@@ -4238,7 +4298,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->updateCommonDeductions($updates, $deductionID);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Deductions with ID = " . $deductionID . "");
+                // $this->flexperformance_model->audit_log("Updated Deductions with ID = " . $deductionID . "");
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
 
             } else {echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";}
@@ -4246,12 +4306,15 @@ class GeneralController extends Controller
 
     }
 
-    public function common_deductions_info(Request $request)
+    public function common_deductions_info($id)
     {
+        // dd("what");
 
-        $id = $request->input('id');
+        // $id = $request->input('id');
         $data['deductions'] = $this->flexperformance_model->getcommon_deduction($id);
         $data['title'] = "Deductions";
+        $data['parent'] = "Statutory Deduction";
+        $data['child'] = "Update";
         return view('app.updatededuction', $data);
 
     }
@@ -4259,7 +4322,7 @@ class GeneralController extends Controller
     public function updatePensionName(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4274,13 +4337,13 @@ class GeneralController extends Controller
     public function updatePercentEmployee(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'amount_employee' => $request->input('employee_amount') / 100,
             );
             $result = $this->flexperformance_model->updatePension($updates, $fundID);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employee Value of " . $request->input('employee_amount') . " ");
+                // $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employee Value of " . $request->input('employee_amount') . " ");
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 
@@ -4290,13 +4353,13 @@ class GeneralController extends Controller
     public function updatePercentEmployer(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'amount_employer' => $request->input('employer_amount') / 100,
             );
             $result = $this->flexperformance_model->updatePension($updates, $fundID);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employer Value of " . $request->input('employee_amount') . " ");
+                // $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employer Value of " . $request->input('employee_amount') . " ");
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 
@@ -4306,7 +4369,7 @@ class GeneralController extends Controller
     public function updatePensionPolicy(Request $request)
     {
         $fundID = $request->input('fundID');
-        if (Request::isMethod('post') && $fundID != '') {
+        if ($request->method() == "POST" && $fundID != '') {
             $updates = array(
                 'deduction_from' => $request->input('policy'),
             );
@@ -4321,7 +4384,7 @@ class GeneralController extends Controller
     public function updateDeductionName(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4336,7 +4399,7 @@ class GeneralController extends Controller
     public function updateDeductionAmount(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'amount' => $request->input('amount'),
             );
@@ -4351,7 +4414,7 @@ class GeneralController extends Controller
     public function updateDeductionPercent(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'percent' => $request->input('percent') / 100,
             );
@@ -4366,7 +4429,7 @@ class GeneralController extends Controller
     public function updateDeductionPolicy(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'mode' => $request->input('policy'),
             );
@@ -4383,7 +4446,7 @@ class GeneralController extends Controller
     public function updateMealsName(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4398,7 +4461,7 @@ class GeneralController extends Controller
     public function updateMealsMargin(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'minimum_gross' => $request->input('margin'),
             );
@@ -4413,7 +4476,7 @@ class GeneralController extends Controller
     public function updateMealsLowerAmount(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'minimum_payment' => $request->input('amount_lower'),
             );
@@ -4428,7 +4491,7 @@ class GeneralController extends Controller
     public function updateMealsUpperAmount(Request $request)
     {
         $deductionID = $request->input('deductionID');
-        if (Request::isMethod('post') && $deductionID != '') {
+        if ($request->method() == "POST" && $deductionID != '') {
             $updates = array(
                 'maximum_payment' => $request->input('amount_upper'),
             );
@@ -4451,8 +4514,10 @@ class GeneralController extends Controller
             $data['allowance'] = $this->flexperformance_model->allowance();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['title'] = "Allowances";
-            return view('app.allowance', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Allowances";
+
+            return view('allowance.allowance', $data);
         } else {
             echo "Unauthorized Access";
         }
@@ -4467,9 +4532,15 @@ class GeneralController extends Controller
             $data['overtimess'] = $this->flexperformance_model->overtime_allowances();
             $data['meals'] = $this->flexperformance_model->meals_deduction();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+            $data['parent'] = "Settings";
+            $data['child'] = "Overtime";
             $data['title'] = "Overtime";
-            return view('app.allowance_overtime', $data);
 
+            return view('overtime.allowance_overtime', $data);
+
+        } else {
+            echo "Unauthorized Access";
+        }
 
     }
 
@@ -4488,8 +4559,10 @@ class GeneralController extends Controller
             $data['paye'] = $this->flexperformance_model->paye();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
-            $data['title'] = "Statutory Deductions";
-            return view('app.statutory_deduction', compact('data'));
+            $data['parent'] = "Settings";
+            $data['child'] = "Statutory Deductions";
+
+            return view('app.statutory_deduction', $data);
 
         } else {
             echo "Unauthorized Access";
@@ -4517,40 +4590,43 @@ class GeneralController extends Controller
 
     public function addAllowance(Request $request)
     {
-        $method = $request->method();
-        if ($method == 'POST') {
-            $policy = $request->input('policy');
-            if ($policy == 1) {
-                $amount = $request->input('amount');
-                $percent = 0;
-            } else {
-                $amount = 0;
-                $percent = 0.01 * ($request->input('rate'));
-            }
-            $data = array(
-                'name' => $request->input('name'),
-                'amount' => $amount,
-                'mode' => $request->input('policy'),
-                'state' => 1,
-                'percent' => $percent,
-            );
+        // $policy = $request->policy;
 
-            $result = $this->flexperformance_model->addAllowance($data);
-            if ($result == true) {
-                // $this->flexperformance_model->audit_log("Created New Allowance ");
-                return back()->with('success', 'Allowance Registered Successifully');
-                // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
-            } else {
-                echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
-            }
-        }
+        // if ($policy == 1) {
+        //     $amount = $request->amount;
+        //     $percent = 0;
+        // } else {
+        //     $amount = 0;
+        //     $percent = 0.01 * ($request->rate);
+        // }
+
+        // $data = array(
+        //     'name' => $request->name,
+        //     'amount' => $amount,
+        //     'mode' => $request->policy,
+        //     'taxable' => $request->taxable,
+        //     'pentionable' => $request->pentionable ,
+        //     'state' => 1,
+        //     'percent' => $percent,
+        // );
+
+        // $result = $this->flexperformance_model->addAllowance($data);
+
+        // if ($result == true) {
+        //     // $this->flexperformance_model->audit_log("Created New Allowance ");
+        //     return back()->with('success', 'Saved');
+        //     // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        // } else {
+        //     echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
+        // }
+        return back()->with('success', 'Saved');
 
     }
 
     public function addOvertimeCategory(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             $data = array(
                 'name' => $request->input('name'),
                 'day_percent' => ($request->input('day_percent') / 100),
@@ -4558,7 +4634,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Created New Overtime ");
+               // $this->flexperformance_model->audit_log("Created New Overtime ");
                 echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Overtime Registration FAILED, Please Try Again</p>";
@@ -4594,7 +4670,7 @@ class GeneralController extends Controller
     }
 //     public function addDeduction(Request $request)   {
 
-//       if (Request::isMethod('post')) {
+//       if ($request->method() == "POST") {
 //         $policy = $request->input('policy');
 //         if($policy==1){
 //           $amount = $request->input('amount');
@@ -4626,7 +4702,8 @@ class GeneralController extends Controller
     public function assign_allowance_individual(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+        if ($method == "POST") {
 
             $data = array(
                 'empID' => $request->input('empID'),
@@ -4635,7 +4712,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_allowance($data);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
+                // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4644,8 +4721,9 @@ class GeneralController extends Controller
 
     public function assign_allowance_group(Request $request)
     {
+        $method = $request->method();
 
-        if (Request::isMethod('post')) {
+        if ($method == "POST") {
 
             $members = $this->flexperformance_model->get_allowance_members($request->input('allowance'), $request->input('group'));
             foreach ($members as $row) {
@@ -4658,7 +4736,7 @@ class GeneralController extends Controller
 
             }
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
+                // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4668,7 +4746,9 @@ class GeneralController extends Controller
     public function remove_individual_from_allowance(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+
+        if ($method == "POST") {
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
@@ -4681,17 +4761,21 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
+                    //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
             }
         }
     }
 
+
+
     public function remove_group_from_allowance(Request $request)
     {
 
-        if (Request::isMethod('post')) {
+        $method = $request->method();
+
+        if ($method == "POST") {
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
@@ -4704,16 +4788,17 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
                 }
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
+                    // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
                 } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
             }
         }
     }
 
-    public function allowance_info(Request $request)
+    public function allowance_info($id)
     {
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($id);
+
         $data['title'] = 'Package';
         $data['allowance'] = $this->flexperformance_model->getallowancebyid($id);
         $data['group'] = $this->flexperformance_model->customgroup($id);
@@ -4723,12 +4808,15 @@ class GeneralController extends Controller
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
-        return view('app.allowance_info', $data);
+
+        // dd($data['allowance']);
+
+        return view('allowance.allowance_info', $data);
     }
 
-    public function overtime_category_info(Request $request)
+    public function overtime_category_info($id)
     {
-        $id = base64_decode($this->input->get('id'));
+        $id = base64_decode($id);
         $data['title'] = 'Overtime Category';
         $data['category'] = $this->flexperformance_model->OvertimeCategoryInfo($id);
         return view('app.overtime_category_info', $data);
@@ -4757,33 +4845,48 @@ class GeneralController extends Controller
         }
     }
 
-public function allowance_info(Request $request,$id)  {
-  // $id = base64_decode($this->input->get('id'));
-  $data['title'] =  'Package';
-  $data['allowance'] =  $this->flexperformance_model->getallowancebyid($id);
-  $data['group'] =  $this->flexperformance_model->customgroup($id);
-  $data['employeein'] =  $this->flexperformance_model->get_individual_employee($id);
-  $data['membersCount'] =  $this->flexperformance_model->allowance_membersCount($id);
-  $data['groupin'] =  $this->flexperformance_model->get_allowance_group_in($id);
-  $data['employee'] =  $this->flexperformance_model->employee_allowance($id);
-  $data['allowanceID'] =  $id;
-  $data['title'] =  "Allowances";
-  // dd($data);
-  return view('app.allowance_info', $data);
-}
+    public function activateAllowance(Request $request)
+    {
+        $ID = $this->uri->segment(3);
+        if ($ID != '') {
+            $updates = array(
+                'state' => 1,
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                $json_array['status'] = "OK";
+                $json_array['message'] = "<p class='alert alert-success text-center'>Allowance Activated</p>";
 
+                echo "";
+            } else {
 
-  public function overtime_category_info(Request $request,$id)  {
-      // $id = base64_decode($this->input->get('id'));
-      $data['title'] =  'Overtime Category';
-      $data['category'] =  $this->flexperformance_model->OvertimeCategoryInfo($id);
-      return view('app.overtime_category_info', $data);
+                $json_array['status'] = "ERR";
+                $json_array['message'] = "<p class='alert alert-danger text-center'>Activation Failed</p>";}
+            header("Content-type: application/json");
+            echo json_encode($json_array);
+
+        }
+    }
+
+    public function updateAllowanceName(Request $request)
+    {
+        $ID = $request->input('allowanceID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'name' => $request->input('name'),
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
+
+        }
     }
 
     public function updateAllowanceTaxable(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'taxable' => $request->input('taxable'),
             );
@@ -4798,7 +4901,7 @@ public function allowance_info(Request $request,$id)  {
     public function updateAllowancePentionable(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'pentionable' => $request->input('pentionable'),
             );
@@ -4813,7 +4916,7 @@ public function allowance_info(Request $request,$id)  {
     public function updateOvertimeName(Request $request)
     {
         $ID = $request->input('categoryID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'name' => $request->input('name'),
             );
@@ -4827,7 +4930,7 @@ public function allowance_info(Request $request,$id)  {
     public function updateOvertimeRateDay(Request $request)
     {
         $ID = $request->input('categoryID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'day_percent' => ($request->input('day_percent') / 100),
             );
@@ -4841,7 +4944,7 @@ public function allowance_info(Request $request,$id)  {
     public function updateOvertimeRateNight(Request $request)
     {
         $ID = $request->input('categoryID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'night_percent' => ($request->input('night_percent') / 100),
             );
@@ -4850,116 +4953,13 @@ public function allowance_info(Request $request,$id)  {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 
-                $json_array['status'] = "ERR";
-                $json_array['message'] = "<p class='alert alert-danger text-center'>Activation Failed</p>"; }
-              header("Content-type: application/json");
-              echo json_encode($json_array);
-
-      }
-   }
-
-
-  public function updateAllowanceName(Request $request) {
-    $ID = $request->input('allowanceID');
-      if (Request::isMethod('post')&& $ID!='') {
-          $updates = array(
-                      'name' =>$request->input('name')
-                  );
-              $result = $this->flexperformance_model->updateAllowance($updates, $ID);
-              if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-              } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
-
-      }
-   }
-
-   public function updateAllowanceTaxable(Request $request) {
-    $ID = $request->input('allowanceID');
-      if (Request::isMethod('post')&& $ID!='') {
-          $updates = array(
-                      'taxable' =>$request->input('taxable')
-                  );
-              $result = $this->flexperformance_model->updateAllowance($updates, $ID);
-              if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-              } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
-
-      }
-   }
-
-   public function updateAllowancePentionable(Request $request) {
-    $ID = $request->input('allowanceID');
-      if (Request::isMethod('post')&& $ID!='') {
-          $updates = array(
-                      'pentionable' =>$request->input('pentionable')
-                  );
-              $result = $this->flexperformance_model->updateAllowance($updates, $ID);
-              if($result==true) {
-                  echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-              } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
-
-      }
-   }
-
-   public function updateOvertimeName(Request $request) {
-    $ID = $request->input('categoryID');
-    if ($request->method()=='POST' && $ID!='') {
-        $updates = array(
-                    'name' =>$request->input('name')
-                );
-            $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
-            if($result==true) {
-                return back()->with('success', 'Updated Successifully!');
-                // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
-
+        }
     }
- }
-public function updateOvertimeRateDay(Request $request) {
-  $ID = $request->input('categoryID');
-  if ($request->method()=='POST' && $ID!='') {
-        $updates = array(
-                    'day_percent' =>($request->input('day_percent')/100)
-                );
-            $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
-            if($result==true) {
-              return back()->with('success', 'Updated Successifully!');
-                // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
-
-    }
- }
-public function updateOvertimeRateNight(Request $request) {
-  $ID = $request->input('categoryID');
-  if ($request->method()=='POST' && $ID!='') {
-        $updates = array(
-                    'night_percent' =>($request->input('night_percent')/100)
-                );
-            $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
-            if($result==true) {
-              return back()->with('success', 'Updated Successifully!');
-                // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else { echo "<p class='alert alert-danger text-center'>Update Failed</p>"; }
-
-    }
- }
-
-
-    public function updateAllowanceAmount(Request $request) {
-          $ID = $request->input('allowanceID');
-            if (Request::isMethod('post')&& $ID!='') {
-                $updates = array(
-                            'amount' =>$request->input('amount')
-                        );
-                    $result = $this->flexperformance_model->updateAllowance($updates, $ID);
-                    if($result==true) {
-                        echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-                    } else { echo "<p class='alert alert-danger text-center'>Updation Failed</p>"; }
 
     public function updateAllowanceAmount(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'amount' => $request->input('amount'),
             );
@@ -4974,7 +4974,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function updateAllowancePercent(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'percent' => $request->input('percent') / 100,
             );
@@ -4989,7 +4989,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function updateAllowanceApplyTo(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'apply_to' => $request->input('apply_to'),
             );
@@ -5004,7 +5004,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function updateAllowancePolicy(Request $request)
     {
         $ID = $request->input('allowanceID');
-        if (Request::isMethod('post') && $ID != '') {
+        if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'mode' => $request->input('policy'),
             );
@@ -5219,7 +5219,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function role(Request $request)
     {
         if (session('mng_roles_grp')) {
-            if (isset($_POST['addrole'])) {
+            if ( $request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
                     'created_by' => session('emp_id'),
@@ -5227,14 +5227,14 @@ public function updateOvertimeRateNight(Request $request) {
 
                 $result = $this->flexperformance_model->addrole($data);
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+                   // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
                     session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
                     return redirect('/flex/role');
                 } else {
                     echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
                 }
 
-            } elseif (isset($_POST['addgroup'])) {
+            } elseif ( $request->type == "addgroup") {
 
                 $data = array(
                     'name' => $request->input('name'),
@@ -5245,7 +5245,7 @@ public function updateOvertimeRateNight(Request $request) {
                 $this->flexperformance_model->addgroup($data);
 
                 session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
-                $this->department();
+                //$this->department();
                 return redirect('/flex/role');
             } else {
                 // $id =session('emp_id');
@@ -5308,6 +5308,44 @@ public function updateOvertimeRateNight(Request $request) {
         }
     }
 
+    //
+    public function removeEmployeeByRoleFromGroup(Request $request)
+    {
+        $method = $request->method();
+
+        if ($method == "POST") {
+
+            $arr = $request->input('option');
+            $groupID = $request->input('groupID');
+            if (sizeof($arr) < 1) {
+                echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
+            } else {
+
+                foreach ($arr as $composite) {
+                    $values = explode('|', $composite);
+                    $refID = $values[0];
+                    $RoleID = $values[1];
+
+                    $emp_ids = $this->flexperformance_model->getEmpByGroupID($groupID, $RoleID);
+
+                    if (!empty($emp_ids)) {
+                        //  dd($emp_ids);
+                        foreach ($emp_ids as $ids) {
+                            $empID = $ids->empID;
+
+                            $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
+
+                        }
+                    }
+
+                    $result = $this->flexperformance_model->delete_role_group($RoleID, $groupID);
+                }
+                if ($result == true) {
+                    echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
+                } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
+            }
+        }
+    }
     public function removeEmployeeFromGroup(Request $request)
     {
         $method = $request->method();
@@ -5376,6 +5414,7 @@ public function updateOvertimeRateNight(Request $request) {
             $arr = $request->input('option');
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
+
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
             $group_deductions = $this->flexperformance_model->get_group_deductions($groupID);
             if (sizeof($arr) < 1) {
@@ -5385,7 +5424,7 @@ public function updateOvertimeRateNight(Request $request) {
                 foreach ($arr as $value) {
                     $roleID = $value;
                     $emp_ids = $this->flexperformance_model->get_employee_by_position($roleID);
-                    
+
                     foreach ($emp_ids as $value) {
                         $empID = $value->emp_id;
                         if (!empty($group_allowances)) {
@@ -5429,8 +5468,6 @@ public function updateOvertimeRateNight(Request $request) {
 
                     $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
 
-
-                    
                 }
 
                 if ($result == true) {
@@ -5579,9 +5616,9 @@ public function updateOvertimeRateNight(Request $request) {
 
     }
 
-    public function deleteRole(Request $request)
+    public function deleteRole($id)
     {
-        $roleID = $this->uri->segment(3);
+        $roleID = $id;
         $result = $this->flexperformance_model->deleteRole($roleID);
         if ($result == true) {
             $response_array['status'] = "OK";
@@ -5715,7 +5752,7 @@ public function updateOvertimeRateNight(Request $request) {
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
+                //$this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
@@ -5733,7 +5770,7 @@ public function updateOvertimeRateNight(Request $request) {
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
+                //$this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
                 session('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
                 return redirect('/flex/role');
             } else {
@@ -5746,34 +5783,33 @@ public function updateOvertimeRateNight(Request $request) {
     public function assignrole(Request $request)
     {
 
-        if (isset($_POST['assign'])) {
-            $arr = $request->input('option');
+        $arr = $request->input('option');
 
-            $userID = $request->input('empID');
-            if (sizeof($arr) <= 0) {
-                session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID);
+        $userID = $request->input('empID');
 
+        if (sizeof($arr) <= 0) {
+            session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
+            return redirect('/flex/userprofile/?id=' . $userID);
+
+        } else {
+            for ($i = 0; $i < sizeof($arr); $i++) {
+                $rolevalue = $arr[$i];
+                $data = array(
+                    'userID' => $userID,
+                    'role' => $rolevalue,
+                );
+
+                $result = $this->flexperformance_model->assignrole($data);
+            }
+            if ($result == true) {
+                // $this->flexperformance_model->audit_log("Assigned a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
+
+                session('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
+                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
             } else {
-                for ($i = 0; $i < sizeof($arr); $i++) {
-                    $rolevalue = $arr[$i];
-                    $data = array(
-                        'userID' => $userID,
-                        'role' => $rolevalue,
-                    );
+                session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
+                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
 
-                    $result = $this->flexperformance_model->assignrole($data);
-                }
-                if ($result == true) {
-                    $this->flexperformance_model->audit_log("Assigned a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
-
-                    session('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
-                } else {
-                    session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
-
-                }
             }
         }
 
@@ -5782,34 +5818,34 @@ public function updateOvertimeRateNight(Request $request) {
     public function revokerole(Request $request)
     {
 
-        if (isset($_POST['revoke'])) {
+        $arr = $request->input('option');
+        $userID = $request->input('empID');
+        $roleid = $request->input('roleid');
 
-            $arr = $request->input('option');
-            $userID = $request->input('empID');
-            $roleid = $request->input('roleid');
+        if (sizeof($arr) <= 0) {
 
-            if (sizeof($arr) <= 0) {
+            session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
+            return redirect('/flex/userprofile/?id=' . $userID);
 
-                session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
+        } else {
+            for ($i = 0; $i < sizeof($arr); $i++) {
+                $rolename = $arr[$i];
+                // echo $rolename;
+
+                $result = $this->flexperformance_model->revokerole($userID, $rolename, 0);
+            }
+
+            if ($result == true) {
+                // $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
+                session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
                 return redirect('/flex/userprofile/?id=' . $userID);
 
             } else {
-                for ($i = 0; $i < sizeof($arr); $i++) {
-                    $rolename = $arr[$i];
-                    // echo $rolename;
 
-                    $result = $this->flexperformance_model->revokerole($userID, $rolename, 0);
-                }
-                if ($result == true) {
-                    $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
-                    session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID);
-                } else {
-                    session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
-                    return redirect('/flex/userprofile/?id=' . $userID);
-                }
-
+                session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
+                return redirect('/flex/userprofile/?id=' . $userID);
             }
+
         }
     }
 ######################PRIVELEGES######################################
@@ -5875,7 +5911,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function updateCompanyName(Request $request)
     {
         $id = 1;
-        if (Request::isMethod('post') && $id != '') {
+        if ($request->method() == "POST" && $id != '') {
             $data = array(
                 'cname' => $request->input('name'),
             );
@@ -5944,8 +5980,10 @@ public function updateOvertimeRateNight(Request $request) {
 
 //upload Employee
 
-    public function import()
+    public function import(Request $request)
     {
+        dd($request->all());
+
         if (isset($_FILES["file"]["name"])) {
 
             $path = $_FILES["file"]["tmp_name"];
@@ -5996,9 +6034,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function registerEmployee(Request $request)
     {
 
-        dd($request->all());
-
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             // DATE MANIPULATION
             $calendar = str_replace('/', '-', $request->input('birthdate'));
@@ -6016,15 +6052,19 @@ public function updateOvertimeRateNight(Request $request) {
             if (($required / 365) > 16) {
 
                 $countryCode = $request->input("nationality");
-                $randomPassword = $this->password_generator(8);
+
+                // $randomPassword = $this->password_generator(8);
+
+                $password = "@2022". $request->fname;
+
                 $employee = array(
                     'fname' => $request->input("fname"),
                     'mname' => $request->input("mname"),
 
                     'emp_code' => $request->input("emp_code"),
                     'emp_level' => $request->input("emp_level"),
-                    //'lname' =>$request->input("lname"),
-                    'lname' => $randomPassword,
+                    'lname' =>$request->input("lname"),
+                    // 'lname' => $randomPassword,
                     'salary' => $request->input("salary"),
                     'gender' => $request->input("gender"),
                     'email' => $request->input("email"),
@@ -6038,7 +6078,7 @@ public function updateOvertimeRateNight(Request $request) {
                     'mobile' => $request->input('mobile'),
                     'account_no' => $request->input("accno"),
                     'bank' => $request->input("bank"),
-                    'bank_branch' => $request->input("bank_branch"),
+                    'bank_branch' => $request->input("banck_branch"),
                     'pension_fund' => $request->input("pension_fund"),
                     'pf_membership_no' => $request->input("pf_membership_no"),
                     'home' => $request->input("haddress"),
@@ -6052,16 +6092,24 @@ public function updateOvertimeRateNight(Request $request) {
                     'contract_renewal_date' => date('Y-m-d'),
                     'emp_id' => $request->input("emp_id"),
                     'username' => $request->input("emp_id"),
-                    'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                    // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                    'password' => Hash::make($password),
                     'contract_end' => date('Y-m-d', strtotime($contract_end)),
                     'state' => 5,
                     'national_id' => $request->input("nationalid"),
                     'tin' => $request->input("tin"),
 
                 );
+
+                $newEmp = array(
+                    'emp_id' => $request->emp_id,
+                    'account' => 1,
+                );
+
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
 
-                $recordID = $this->flexperformance_model->employeeAdd($employee);
+                $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
+
 
                 if ($recordID > 0) {
 
@@ -6072,9 +6120,11 @@ public function updateOvertimeRateNight(Request $request) {
                         'grant_code' => 'VSO',
                         'percent' => 100.00,
                     );
+
                     $this->project_model->allocateActivity($data);
 
                     // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+
                     $empID = $request->input("emp_id");
 
                     $property = array(
@@ -6090,9 +6140,11 @@ public function updateOvertimeRateNight(Request $request) {
                     );
 
                     $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+
                     if ($result == true) {
 
                         $senderInfo = $this->payroll_model->senderInfo();
+
                         //         /* EMAIL*/
                         //     foreach ($senderInfo as $keyInfo) {
                         //       $host = $keyInfo->host;
@@ -6144,6 +6196,7 @@ public function updateOvertimeRateNight(Request $request) {
                         //       }
 
                         /*add in transfer with status = 5 (registered, waiting for approval)*/
+
                         $data_transfer = array(
                             'empID' => $request->input("emp_id"),
                             'parameter' => 'New Employee',
@@ -6160,25 +6213,26 @@ public function updateOvertimeRateNight(Request $request) {
                             'date_recommended' => date('Y-m-d'),
                             'date_approved' => '',
                         );
+
                         $this->flexperformance_model->employeeTransfer($data_transfer);
                         /*end add employee in transfer*/
 
-                        $this->flexperformance_model->audit_log("Registered New Employee ");
+                       // $this->flexperformance_model->audit_log("Registered New Employee ");
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
                         $response_array['title'] = "SUCCESS";
                         $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
-                    </div>";
+                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
+                        </div>";
                         header('Content-type: application/json');
-                        $response_array['credentials'] = "username ni " . $request->input("emp_id") . "password:" . $randomPassword;
+                        $response_array['credentials'] = "username ni " . $request->input("emp_id") . "password:" . $password;
                         echo json_encode($response_array);
                     } else {
                         $response_array['status'] = "ERR";
                         $response_array['title'] = "FAILED";
                         $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
-                    </div>';
+                        </div>';
                         header('Content-type: application/json');
                         echo json_encode($response_array);
                     }
@@ -6187,10 +6241,9 @@ public function updateOvertimeRateNight(Request $request) {
                     $response_array['title'] = "FAILED";
                     $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
-                  </div>';
+                    </div>';
                     header('Content-type: application/json');
                     echo json_encode($response_array);
-
                 }
 
             }
@@ -6881,7 +6934,7 @@ public function updateOvertimeRateNight(Request $request) {
 
     public function partial(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
             if ($request->input('to') == '' || $request->input('from') == '') {
                 $response_array['status'] = "no_date";
                 echo json_encode($response_array);
@@ -6933,7 +6986,7 @@ public function updateOvertimeRateNight(Request $request) {
 
     public function updateGroupEdit(Request $request)
     {
-        if (Request::isMethod('post')) {
+        if ($request->method() == "POST") {
 
             $group_id = $request->input('group_id');
             $group_name = $request->input('group_name');
@@ -6983,7 +7036,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function updateContractStart(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $contract_start = str_replace('/', '-', $request->input('contract_start'));
             $updates = array(
                 'hire_date' => date('Y-m-d', strtotime($contract_start)),
@@ -7000,7 +7053,7 @@ public function updateOvertimeRateNight(Request $request) {
     public function updateContractEnd(Request $request)
     {
         $empID = $request->input('empID');
-        if (Request::isMethod('post') && $empID != '') {
+        if ($request->method() == "POST" && $empID != '') {
             $contract_end = str_replace('/', '-', $request->input('contract_end'));
             $updates = array(
                 'contract_end' => date('Y-m-d', strtotime($contract_end)),
