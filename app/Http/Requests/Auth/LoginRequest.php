@@ -94,7 +94,13 @@ class LoginRequest extends FormRequest
 
         $empID = $this->input('emp_id');
 
-        DB::table('sys_account')->where('emp_id', $empID)->update(['account' => 0]);
+        $datalog = array(
+            'state' => 0,
+            'empID' => $empID,
+            'author' => $empID,
+        );
+
+        $this->employeestatelog($datalog);
 
         event(new Lockout($this));
 
@@ -136,4 +142,23 @@ class LoginRequest extends FormRequest
             return 'UNKNOWN';
         }
     }
+
+    public function employeestatelog($data){
+
+        $query = DB::transaction(function()use($data){
+
+            $empID = $data['empID'];
+		    $state = $data['state'];
+		    $query = "UPDATE employee SET state = '".$state."' WHERE emp_id = '".$empID."'";
+
+            DB::insert(DB::raw($query));
+
+            DB::table('activation_deactivation')->insert($data);
+
+            return true;
+        });
+
+
+        return $query;
+	}
 }
