@@ -2085,6 +2085,8 @@ class GeneralController extends Controller
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
+
+
     public function approved_financial_payments(Request $request)
     {
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
@@ -2094,6 +2096,7 @@ class GeneralController extends Controller
         $data['pending_arrears'] = $this->payroll_model->pending_arrears_payment();
         $data['monthly_arrears'] = $this->payroll_model->all_arrears_payroll_month();
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+
 
         $data['bonus'] = $this->payroll_model->selectBonus();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -3342,12 +3345,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function recommendLoan(Request $request)
+    public function recommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_finance' => date('Y-m-d'),
@@ -3360,12 +3363,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function hrrecommendLoan()
+    public function hrrecommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_hr' => date('Y-m-d'),
@@ -3378,12 +3381,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function holdLoan(Request $request)
+    public function holdLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 3,
                 'notification' => 1,
@@ -3393,12 +3396,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function approveLoan(Request $request)
+    public function approveLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $todate = date('Y-m-d');
 
             $result = $this->flexperformance_model->approve_loan($loanID, session('emp_id'), $todate);
@@ -3411,10 +3414,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function pauseLoan(Request $request)
+    public function pauseLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 2,
             );
@@ -3428,10 +3431,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function resumeLoan(Request $request)
+    public function resumeLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 1,
             );
@@ -3445,12 +3448,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function rejectLoan(Request $request)
+    public function rejectLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 5,
                 'notification' => 1,
@@ -4760,6 +4763,8 @@ class GeneralController extends Controller
         }
     }
 
+  
+
     public function remove_group_from_allowance(Request $request)
     {
 
@@ -5209,7 +5214,7 @@ class GeneralController extends Controller
     public function role(Request $request)
     {
         if (session('mng_roles_grp')) {
-            if (isset($_POST['addrole'])) {
+            if ( $request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
                     'created_by' => session('emp_id'),
@@ -5217,14 +5222,14 @@ class GeneralController extends Controller
 
                 $result = $this->flexperformance_model->addrole($data);
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+                   // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
                     session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
                     return redirect('/flex/role');
                 } else {
                     echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
                 }
-
-            } elseif (isset($_POST['addgroup'])) {
+               
+            } elseif ( $request->type == "addgroup") {
 
                 $data = array(
                     'name' => $request->input('name'),
@@ -5235,7 +5240,7 @@ class GeneralController extends Controller
                 $this->flexperformance_model->addgroup($data);
 
                 session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
-                $this->department();
+                //$this->department();
                 return redirect('/flex/role');
             } else {
                 // $id =session('emp_id');
@@ -5606,9 +5611,9 @@ class GeneralController extends Controller
 
     }
 
-    public function deleteRole(Request $request)
+    public function deleteRole($id)
     {
-        $roleID = $this->uri->segment(3);
+        $roleID = $id;
         $result = $this->flexperformance_model->deleteRole($roleID);
         if ($result == true) {
             $response_array['status'] = "OK";
@@ -5742,7 +5747,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
+                //$this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
@@ -5760,7 +5765,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
+                //$this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
                 session('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
                 return redirect('/flex/role');
             } else {

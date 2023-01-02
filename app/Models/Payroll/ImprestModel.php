@@ -254,12 +254,18 @@ class ImprestModel {
 
 	function deleteImprest($imprestID)
 	{
-		DB::transaction(function($imprestID)
+		DB::transaction(function() use($imprestID)
         {
-            $query = "DELETE FROM imprest_requirement WHERE imprestID ='".$imprestID."'";
-            DB::insert(DB::raw($query));
-            $query = "DELETE FROM imprest WHERE id ='".$imprestID."'";
-            DB::insert(DB::raw($query));
+
+            DB::table('imprest_requirement')
+			->where('imprestID',$imprestID)
+			->delete();
+
+			DB::table('imprest')
+			->where('id',$imprestID)
+			->delete();
+			
+         
 		});
 		return true;
 

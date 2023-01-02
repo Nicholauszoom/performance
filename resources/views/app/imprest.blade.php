@@ -148,7 +148,7 @@
           <?php
             if($row->status==0 || $row->status==1 || $row->status==6){ ?>
           <a href="javascript:void(0)" onclick="deleteImprest(<?php echo $row->id;?>)">
-          <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button></a>
+          <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button></a>
           <?php }
           if($row->status==3){
 
@@ -163,11 +163,11 @@
           <?php } } if($row->status==4){  ?>
 
           <a href="javascript:void(0)" onclick="unretirementImprest(<?php echo $row->id;?>)">
-          <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
+          <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
           <?php }   ?>
           <a  href="<?php echo  url('')."flex/imprest/imprest_info/?id=".base64_encode($row->id); ?>"
             title="Info and Details" class="icon-2 info-tooltip">
-            <button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+            <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
           </td>
           </tr>
         <?php }  ?>
@@ -275,7 +275,7 @@
                    async:false
                })
           .done(function(data){
-
+             var data = JSON.parse(data);
             if(data.status == 'OK'){
             alert("Imprest Request Sent Successifully");
             $('#resultfeedSubmission').fadeOut('fast', function(){

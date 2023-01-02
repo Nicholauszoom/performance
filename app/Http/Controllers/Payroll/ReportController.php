@@ -56,7 +56,7 @@ class ReportController extends Controller
       $data['total_heslb'] =  $this->payroll_model->total_heslb("loan_logs",$payrollMonth);
 
 
-      return view('reports.payroll_report',compact('data'));
+      return view('app.reports.payroll_report',$data);
 
 
     }
@@ -130,6 +130,7 @@ class ReportController extends Controller
               $data['paye']= $this->reports_model->s_p9($payrolldate);
               $data['total']= $this->reports_model->s_totalp9($payrolldate);
           }else{
+          
               $data['paye']= $this->reports_model->v_p9($payrolldate);
               $data['total']= $this->reports_model->v_totalp9($payrolldate);
           }
@@ -634,7 +635,7 @@ include(app_path() . '/reports/loan_report.php');
                         $paid_with_arrears_d=$data['paid_with_arrears_d'];
                         $salary_advance_loan_remained=$data['salary_advance_loan_remained'];
 
-                        include(app_path() . '/reports/payslip.php');
+                       include(app_path() . '/reports/payslip.php');
                 }
 
                 $data_all['emp_id'] = $payroll_emp_ids;
@@ -1624,7 +1625,7 @@ function backup_payslip(Request $request)  {
     }
 
     public function staffPayrollBankExport(Request $request) {
-        dd($request->all());
+        //dd($request->all());
         if (1 ) {
             $payroll_date = $request->input('payrolldate');
             $reportType = $request->input('type'); //Staff = 1, Volunteer = 2

@@ -73,17 +73,17 @@
 
 
 
-              <!--
+              
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-bank"></i>
-                        <span> Salary Advance</span>
+                        <span>Loans</span>
                     </a>
-
                     <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Applications</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Loans</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?php echo  url(''); ?>/flex/confirmed_loans">Approved Loans</a></li> 
                     </ul>
-                </li> -->
+                </li> 
 
 
                 <li class="nav-item nav-item-submenu">
@@ -183,8 +183,7 @@
                             <li class="nav-item"><a class="nav-link" href="{{ url('/flex/audit_logs')}}">Audit Trail</a></li>
                         @endif
 
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/performance/funder')}}"></i> Funders </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality')}}">Nationality</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/nationality')}}">Nationality</a></li>  --}}
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/payroll/mailConfiguration')}}"></i> Mail Configuration </a></li>
                     </ul>
                 </li>

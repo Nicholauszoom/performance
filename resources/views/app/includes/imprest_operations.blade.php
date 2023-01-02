@@ -41,6 +41,7 @@
         url:"<?php echo url('flex/imprest/deleteImprest');?>/"+id,
         success:function(data)
         {
+          var data = JSON.parse(data);
           if(data.status == 'OK'){
           alert("Imprest Deleted Sussessifully!");
           setTimeout(function(){// wait for 5 secs(2)
@@ -282,6 +283,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/add_imprest_requirement",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -312,6 +314,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/updateImprestTitle",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -343,6 +346,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/updateImprestDescription",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,
@@ -374,6 +378,7 @@
         e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/imprest/updateImprestDateRange",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),
                  processData:false,

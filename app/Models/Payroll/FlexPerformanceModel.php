@@ -120,8 +120,7 @@ class FlexPerformanceModel extends Model
 
 	function addCompanyBranch($data)
 	{
-		 DB::transaction(function() use($data)
-       {
+		
         DB::table('branch')->insert($data);
 
         $query = " id ORDER BY id DESC LIMIT 1";
@@ -129,18 +128,17 @@ class FlexPerformanceModel extends Model
         ->select(DB::raw($query))
         ->first();
 
-		});
+		
 
     	return $row->id;
 	}
 
 	function addCostCenter($data)
 	{
-		 DB::transaction(function() use($data)
-       {
+		
 		DB::table('cost_center')->insert($data);
 		$query = "id  ORDER BY id DESC LIMIT 1";
-		});
+	
 		$row = DB::table('cost_center')
 		->select(DB::raw($query))
 		->first();
@@ -192,7 +190,7 @@ class FlexPerformanceModel extends Model
 	function checkEmployeeNationality($code)
 	{
 		$query = "COUNT(emp_id) AS counts  WHERE nationality = ".$code." ";
-        Db::table('employee')
+        $row = Db::table('employee')
 		->select(DB::raw($query))
 		->first();
 
@@ -627,9 +625,21 @@ function retire_list()
 		return true;
 	}
 
+	function get_comment($date){
+		$row = DB::table('payroll_comments')
+		->where('payroll_date',$date)
+		->select('message')
+		->first();
+
+		return $row->message;
+
+	}
+
+
+
 	function employeeTransfers()
 	{
-		$query="SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, p.name as position_name, d.name as department_name, br.name as branch_name, tr.*, CONCAT(e.fname,'  ', e.lname) as empName FROM employee e, transfer tr, department d, position p, branch br, (SELECT @s:=0) as s WHERE tr.empID = e.emp_id AND e.branch = br.id AND  p.id=e.position AND d.id=e.department  ORDER BY tr.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2556,7 +2566,7 @@ function allLevels()
 	function deactivateEmployee($empID, $datalog, $logID, $todate)
 	{	//set status to 4 as is confirm exit
 		$state = $datalog['state'];
-	     DB::transaction(function()
+	     DB::transaction(function() use($empID, $datalog, $logID, $todate,$state)
        {
         $query = "UPDATE employee SET state = '".$state."', last_updated = '".$todate."' WHERE emp_id ='".$empID."'";
 		DB::insert(DB::raw($query));
@@ -2626,20 +2636,20 @@ function allLevels()
 
 	// to be checked
 	public function login_user($username, $password){
-		$query = "SELECT e.*, d.name as dname, c.name as CONTRACT, d.id as departmentID, p.id as positionID, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as lineManager from employee e, contract c, department d, position p WHERE d.id=e.department and e.contract_type = c.id and p.id=e.position and (e.state = '1' or e.state = '3')  and e.username ='".$username."'";
-		$row = DB::select(DB::raw($query));
-		if(count($query)>0) {
-			$row = $query->row();
-			$password_hash = $row->password;
+		// $query = "SELECT e.*, d.name as dname, c.name as CONTRACT, d.id as departmentID, p.id as positionID, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as lineManager from employee e, contract c, department d, position p WHERE d.id=e.department and e.contract_type = c.id and p.id=e.position and (e.state = '1' or e.state = '3')  and e.username ='".$username."'";
+		// $row = DB::select(DB::raw($query));
+		// if(count($row)>0) {
+		// 	$row = $row->row();
+		// 	$password_hash = $row->password;
 
-	        if (password_verify($password, $password_hash)){
-	        	return $query->row_array();
-	        }else{
-			    return false;
-			}
-		} else{
-		    return false;
-		}
+	    //     if (password_verify($password, $password_hash)){
+	    //     	return $query->row_array();
+	    //     }else{
+		// 	    return false;
+		// 	}
+		// } else{
+		//     return false;
+		// }
 	}
 
 	public function get_login_user($username){
@@ -2997,12 +3007,11 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function employeeFromGroup($refID)
 	{
-		$query = "select group_name FROM emp_role WHERE id ='".$refID."'";
-		$row = DB::table("emp_role")
-		->select(DB::raw($query))
-		->first();
-		if (row){
-			return $row()->group_name;
+		$query = "SELECT group_name FROM emp_role WHERE id ='".$refID."'";
+		$row = DB::select(DB::raw($query));
+		
+		if (count($row) > 0){
+			return $row[0]->group_name;
 		}else{
 			return null;
 		}
@@ -3075,6 +3084,8 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
         return true;
     }
 
+	
+
 
 
 	function addrole($data)
@@ -3085,7 +3096,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 	function deleteGroup($groupID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($groupID)
        {
 
 	    $query = "DELETE FROM groups WHERE id ='".$groupID."'";
@@ -3103,7 +3114,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 	function deleteRole($roleID)
 	{
-	     DB::transaction(function()
+	     DB::transaction(function() use($roleID)
        {
 
 	    $query = "DELETE FROM role WHERE id ='".$roleID."'";
@@ -3223,10 +3234,12 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 	function revokerole($id, $role, $isGroup)
 	{
-		DB::table('role')->where('userID', $id)
+		DB::table('emp_role')->where('userID', $id)
 		->where('role', $role)
 		->where('group_name', $isGroup)
 		->delete();
+
+	
 		return true;
 	}
 
@@ -3329,7 +3342,7 @@ DB::insert(DB::raw($query));
         $row = DB::table('employee as e','contract as c')
 		->select(DB::raw($query))
 		->count();
-		return $query->num_rows();
+		return $row;
 	}
 
 
@@ -3507,7 +3520,7 @@ function my_grievances($empID)
 	}
 
 	function updatePayrollLog($empID, $payroll_date, $data){
-		 DB::transaction(function()
+		 DB::transaction(function() use($empID, $payroll_date, $data)
        {
 		$query = "update payroll_logs set salary = '".$data['salary']."', pension_employee = '".$data['pension_employee']."',
 		 pension_employer = '".$data['pension_employer']."', taxdue = '".$data['taxdue']."', sdl = '".$data['sdl']."',
