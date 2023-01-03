@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class GeneralController extends Controller
 {
@@ -6147,18 +6148,16 @@ class GeneralController extends Controller
                     if ($result == true) {
 
                         $email_data = array(
+                            'email'=>$request->email,
                             'fname' => $request->fname,
                             'lname' => $request->lname,
                             'username' => $request->emp_id,
                             'password'=> $password
                         );
                         
-                        $user=User::first();
-                        $user->notify(new RegisteredUser($email_data));
-                        // Mail::send('app.welcome_email', $email_data, function ($message) use ($email_data) {
-                        //     $message->to($email_data['email'], $email_data['name'])
-                        //         ->subject('Welcome to Laravel')
-                        //         ->from('flex_performance@gmail.com', '');
+                        // $user=User::first();
+                        // $user->notify(new RegisteredUser($email_data));
+                        Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
                         // });
                         $senderInfo = $this->payroll_model->senderInfo();
 
@@ -6213,7 +6212,7 @@ class GeneralController extends Controller
                         //       }
 
                         /*add in transfer with status = 5 (registered, waiting for approval)*/
-
+                            
                         $data_transfer = array(
                             'empID' => $request->input("emp_id"),
                             'parameter' => 'New Employee',
@@ -6232,13 +6231,10 @@ class GeneralController extends Controller
                         );
 
                         $this->flexperformance_model->employeeTransfer($data_transfer);
-                        /*end add employee in transfer*/
-
-                       // $this->flexperformance_model->audit_log("Registered New Employee ");
 
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
-                        $response_array['title'] = "SUCCESS";
+                        $response_array['title'] = "Registered Successfully";
                         $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
                         </div>";

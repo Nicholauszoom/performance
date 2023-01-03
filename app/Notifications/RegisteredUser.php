@@ -46,6 +46,8 @@ class RegisteredUser extends Notification
     {
         return (new MailMessage)
             ->subject('VSO User Credentials')
+            // ->to($this->arr['email'])
+            // ->to($this->arr['email'])
             // ->greeting('Dear ' . $this->arr['username'])
             ->greeting('Dear '. $this->arr['fname'] . ' ' . $this->arr['lname'])
             ->line('Your Flex Performance Account login credential are: ')
