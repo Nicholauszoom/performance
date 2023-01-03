@@ -58,7 +58,7 @@
         <div class="card border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="../../../assets/images/demo/users/face11.jpg" width="150" height="150" alt="">
+                  <img class="img-fluid rounded-circle" src="https://ui-avatars.com/api/?name={{ urlencode($name) }}&background=00204e&color=fff" width="150" height="150" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>

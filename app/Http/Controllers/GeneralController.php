@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Notifications\RegisteredUser;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
@@ -16,7 +18,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
-use App\Helpers\SysHelpers;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class GeneralController extends Controller
 {
@@ -6036,7 +6039,7 @@ class GeneralController extends Controller
      */
     public function registerEmployee(Request $request)
     {
-
+        
         if ($request->method() == "POST") {
 
             // DATE MANIPULATION
@@ -6058,7 +6061,7 @@ class GeneralController extends Controller
 
                 // $randomPassword = $this->password_generator(8);
 
-                $password = "@2022". $request->fname;
+                $password = "@2023". $request->fname;
 
                 $employee = array(
                     'fname' => $request->input("fname"),
@@ -6081,7 +6084,7 @@ class GeneralController extends Controller
                     'mobile' => $request->input('mobile'),
                     'account_no' => $request->input("accno"),
                     'bank' => $request->input("bank"),
-                    'bank_branch' => $request->input("banck_branch"),
+                    'bank_branch' => $request->input("bank_branch"),
                     'pension_fund' => $request->input("pension_fund"),
                     'pf_membership_no' => $request->input("pf_membership_no"),
                     'home' => $request->input("haddress"),
@@ -6146,6 +6149,18 @@ class GeneralController extends Controller
 
                     if ($result == true) {
 
+                        $email_data = array(
+                            'email'=>$request->email,
+                            'fname' => $request->fname,
+                            'lname' => $request->lname,
+                            'username' => $request->emp_id,
+                            'password'=> $password
+                        );
+                        
+                        // $user=User::first();
+                        // $user->notify(new RegisteredUser($email_data));
+                        Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
+                        // });
                         $senderInfo = $this->payroll_model->senderInfo();
 
                         //         /* EMAIL*/
@@ -6178,7 +6193,7 @@ class GeneralController extends Controller
                         //     // Email subject
                         //     $mail->Subject = "VSO User Credentials";
 
-                        //     // Set email format to HTML
+                        //9     // Set email format to HTML
                         //     $mail->isHTML(true);
 
                         //     // Email body content
@@ -6199,7 +6214,7 @@ class GeneralController extends Controller
                         //       }
 
                         /*add in transfer with status = 5 (registered, waiting for approval)*/
-
+                            
                         $data_transfer = array(
                             'empID' => $request->input("emp_id"),
                             'parameter' => 'New Employee',
@@ -6218,12 +6233,10 @@ class GeneralController extends Controller
                         );
 
                         $this->flexperformance_model->employeeTransfer($data_transfer);
-                        /*end add employee in transfer*/
 
-                       // $this->flexperformance_model->audit_log("Registered New Employee ");
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
-                        $response_array['title'] = "SUCCESS";
+                        $response_array['title'] = "Registered Successfully";
                         $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
                         </div>";
