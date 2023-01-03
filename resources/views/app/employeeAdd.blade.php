@@ -6,7 +6,6 @@
     <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
     <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
-
 @endpush
 
 @push('head-scriptTwo')
@@ -76,7 +75,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input type="email" maxlength="30" class="form-control @error('email') is-invalid @enderror"
+                            <input id="email" type="email" maxlength="30" class="form-control @error('email') is-invalid @enderror"
                                 name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com">
                         </div>
                     </div>
@@ -558,8 +557,10 @@
                     dataType: 'json'
                 })
                 .done(function(data) {
-                        
-                    // alert(data.title);
+                    new Noty({
+                        text: data.title+', and We have sent an email to '+ document.getElementById("email").value,
+                        type: 'success'
+                    }).show();
 
                     if (data.status == 'OK') {
                         $('#feedBackSubmission').fadeOut('fast', function() {
