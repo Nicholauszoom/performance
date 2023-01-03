@@ -67,7 +67,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="gender" value="Female" id="dc_li_u">
-                                <label class="ms-2" for="dc_li_u">Femal</label>
+                                <label class="ms-2" for="dc_li_u">Female</label>
                             </div>
                         </div>
                     </div>
