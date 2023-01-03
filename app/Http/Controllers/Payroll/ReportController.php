@@ -145,9 +145,9 @@ class ReportController extends Controller
 
         // dd(app_path());
 
-        include(app_path() . '/reports/p9.php');
+        //include(app_path() . '/reports/p9.php');
 
-        //  return view('app.reports/p9', $data);
+          return view('reports/p9', $data);
     }
 }
 
@@ -274,8 +274,8 @@ $info=$data['info'];
 $payroll_month=$data['payroll_month'];
 $pension_fund=$data['pension_fund'];
 
-include(app_path() . '/reports/pension.php');
-    //  return view('app.reports/pension', $data);
+//include(app_path() . '/reports/pension.php');
+      return view('reports/pension', $data);
 
 }
 

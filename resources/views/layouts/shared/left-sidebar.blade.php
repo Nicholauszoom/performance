@@ -74,16 +74,7 @@
 
 
               
-                <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
-                        <i class="ph-bank"></i>
-                        <span>Loans</span>
-                    </a>
-                    <ul class="nav-group-sub collapse">
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Loans</a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?php echo  url(''); ?>/flex/confirmed_loans">Approved Loans</a></li> 
-                    </ul>
-                </li> 
+           
 
 
                 <li class="nav-item nav-item-submenu">
@@ -109,17 +100,28 @@
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">
                         <i class="ph-calendar-check"></i>
-                        <span> Leave and Attendance</span>
+                        <span> Leave Management</span>
                     </a>
 
                     <ul class="nav-group-sub collapse">
                         @if (session('mng_attend'))
-                            <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li>
+                            {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li> --}}
                         @endif
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leave') }}">Leave Applications</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/leavereport') }}">Leave Reports</a></li>
                     </ul>
                 </li>
+
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-bank"></i>
+                        <span>Loan Management</span>
+                    </a>
+                    <ul class="nav-group-sub collapse">
+                        <li class="nav-item"><a class="nav-link" href="{{ url('/flex/salary_advance') }}">Loan Seting</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?php echo  url(''); ?>/flex/confirmed_loans">Approved Loans</a></li> 
+                    </ul>
+                </li> 
 
                 <li class="nav-item nav-item-submenu">
                     <a href="#" class="nav-link">

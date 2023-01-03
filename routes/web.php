@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
     //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
     Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
+    Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
     // Dashboard
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
