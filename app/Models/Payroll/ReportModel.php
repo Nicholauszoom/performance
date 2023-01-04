@@ -412,6 +412,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     function s_heslb($payrolldate){
         $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE l.empID = e.emp_id and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 AND ll.payment_date = '".$payrolldate."'";
+        //dd(DB::select(DB::raw($query)));
         return DB::select(DB::raw($query));
 
     }

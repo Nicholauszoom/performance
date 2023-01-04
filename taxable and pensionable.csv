@@ -1,18 +1,18 @@
-﻿PayntNo,Desc
+PayntNo,desc
 1,Task Allowance
-2,Training Allowa
-3,Medical All.
-4,Acting Allowanc
-5,Settling Allowa
+2,Training Allowance
+3,Medical Allowance
+4,Acting Allowance
+5,Settling Allowance
 6,Meal Allowance
 7,Transport allow
-8,Medical Allowan
-9,Long Serving
-10,House Rent
+8,Medical Allowance
+9,Long Serving allowance
+10,House Rent allowance
 11,Leave Allowance
-12,Teller Allowanc
-13,Arrear_Training
-14,Arrears_Rescue
+12,Teller Allowance
+13,Arrear_Training allowance
+14,Arrears_Rescue allowance
 15,Per'Bonus
 16,In Liue Pay
 17,5% Sev. All
@@ -21,9 +21,9 @@
 20,March Salary
 21,Severance Pay
 22,Discr Exgracia
-23,Overtime Allowa
-24,Repatriation Al
+23,Overtime Allowance
+24,Repatriation Allowance
 25,Milk Allowance
-26,Air Ticket allo
+26,Air Ticket allowance
 27,Task Allowance
-28,Teller Allowanc
+28,Teller Allowance

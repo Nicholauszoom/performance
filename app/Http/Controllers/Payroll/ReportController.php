@@ -237,9 +237,9 @@ function heslb(Request $request)  {
     $info=$data['info'];
 
 
-    include(app_path() . '/reports/heslb.php');
+    //include(app_path() . '/reports/heslb.php');
 
-    //  return view('app.reports/heslb', $data);
+      return view('reports/heslb', $data);
 
 }
 

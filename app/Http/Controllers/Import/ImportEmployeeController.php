@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Import;
 
 use App\Http\Controllers\Controller;
 use App\Exports\ExportHESLB;
+use App\Imports\ImportAllowances;
 use App\Imports\ImportBranches;
 use App\Imports\ImportDepartment;
 use App\Imports\ImportEmployee;
@@ -23,6 +24,8 @@ class ImportEmployeeController extends Controller
         //$data2 = Excel::import(new ImportDepartment, $request->file('file')->store('files'));
         //$data2 = Excel::import(new ImportDepartment, $request->file('file')->store('files'));
         //$data1 = Excel::import(new ImportPosition, $request->file('file')->store('files'));
+
+        $data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
 
         // $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
         
