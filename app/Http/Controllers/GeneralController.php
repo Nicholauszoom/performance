@@ -6159,7 +6159,7 @@ class GeneralController extends Controller
                         
                         // $user=User::first();
                         // $user->notify(new RegisteredUser($email_data));
-                        Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
+                        //Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
                         // });
                         $senderInfo = $this->payroll_model->senderInfo();
 

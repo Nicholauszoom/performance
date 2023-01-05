@@ -2480,7 +2480,7 @@ function allLevels()
                         // ->insert("company_property", $property);
                         // ->insert("employee_group", $datagroup);
 
-                        DB::table('sys_account')->insert($newEmp);
+                        //DB::table('sys_account')->insert($newEmp);
 
                         $row = DB::table('employee')
                             ->select('id')

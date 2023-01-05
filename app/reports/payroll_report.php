@@ -88,6 +88,7 @@ $pdf->SetFont('times', '', 12, '', true);
 $pdf->AddPage('L','A4');
 
 // EMPLOYER INFO
+$info = $data['info'];
 foreach ($info as $row) {
       $logo = $row->logo;
       $companyname = $row->cname;
@@ -122,8 +123,10 @@ foreach ($authorization as $row) {
   $init = $row->initName;
   $conf = $row->confName;
   $recom = $row->recomName;
+  $financeRecom = $row->financeRecomName;
   $initDate = date('d-M-Y', strtotime($row->init_date));
   $confDate = date('d-M-Y', strtotime($row->appr_date));
+  $financeRecomDate = date('d-M-Y', strtotime($row->recom_date2));
   $recomDate = date('d-M-Y', strtotime($row->recom_date));
 }
 
@@ -141,7 +144,7 @@ foreach ($take_home as $row) {
 if ($net>=$net_less) {
   $amount_takehome = $net;
   // if($arrears>0) $hint = "(Including Arrears Payments)"; else 
-  $hint="; 
+  $hint=""; 
 
 }else{
  $amount_takehome = $net_less; 
@@ -196,6 +199,12 @@ $authorization = '
         <th width="100"><b>Date:</b></th>
         <th width="180">'.$recomDate.'</th>
     </tr>
+    <tr align="left">
+    <th width="150"><b>Recommended By:</b></th>
+    <th width="230">'.$financeRecom.'</th>
+    <th width="100"><b>Date:</b></th>
+    <th width="180">'.$financeRecomDate.'</th>
+</tr>
     <tr align="left">
         <td align "left"><b>Approved By:</b></td>
         <td align "left">'.$conf.'</td>

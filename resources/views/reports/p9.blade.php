@@ -51,7 +51,7 @@
                                         <td width="140" align="right">{{ number_format($taxdue,2) }}</td>
                                      </tr>
                                      <?php } ?>
-                                     <?php foreach($total as $key){
+                                     {{-- <?php foreach($total as $key){
                                         $salary = $key->sum_salary;
                                         $gross = $key->sum_gross;
                                         $deductions = $key->sum_deductions;
@@ -66,7 +66,7 @@
                                           <td align="right">{{ number_format($taxable,2) }}</td>
                                           <td align="right">{{ number_format($taxdue,2) }}</td>
                                           </tr>
-                                     <?php } ?>
+                                     <?php } ?> --}}
                             </tbody>
 						</table>
 					</div>

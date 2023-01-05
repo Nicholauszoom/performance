@@ -8,14 +8,47 @@
 
 @section('content')
 
-<div class="mb-3">
-    <h3 class="text-main">Deductions </h3>
-</div>
+<div class="card" role="main">
+  <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a href="{{ url('/flex/financial_group')}}" class="nav-link "
+            aria-selected="false" role="tab" tabindex="-1">
+            <i class="ph-list me-2"></i>
+            Packages
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link " aria-selected="false" role="tab"
+            tabindex="-1">
+            <i class="ph-list me-2"></i>
+            Overtime
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a href="{{ url('/flex/allowance')}}" class="nav-link" 
+            aria-selected="false" role="tab" tabindex="-1">
+            <i class="ph-list me-2"></i>
+            Allowance
+        </a>
+    </li>
 
-
-
-<div class="card-test" role="main">
-
+  
+    <li class="nav-item" role="presentation">
+        <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link @if($parameter == 1 )active show @endif"
+            aria-selected="false" role="tab" tabindex="-1">
+            <i class="ph-list me-2"></i>
+            Statutory Deductions
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link @if($parameter == 2 )active show @endif"
+          aria-selected="false" role="tab" tabindex="-1">
+          <i class="ph-list me-2"></i>
+          Non Statutory Deductions
+      </a>
+  </li>
+ 
+</ul>
     <?php  if($parameter == 1 ){
 
         foreach($pension as $row){
@@ -281,7 +314,7 @@
                 </div>
                 <div class="form-group">
                   <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button  name="updatename" class="btn btn-success">Update</button>
+                    <button  name="updatename" class="btn btn-main">Update</button>
                   </div>
                 </div>
                 </form>
