@@ -17,6 +17,7 @@ use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
+use App\Models\AuditTrail;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -3574,7 +3575,7 @@ class GeneralController extends Controller
     public function home(Request $request)
     {
 
-        
+
         $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
 
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
@@ -6039,7 +6040,7 @@ class GeneralController extends Controller
      */
     public function registerEmployee(Request $request)
     {
-        
+
         if ($request->method() == "POST") {
 
             // DATE MANIPULATION
@@ -6156,7 +6157,7 @@ class GeneralController extends Controller
                             'username' => $request->emp_id,
                             'password'=> $password
                         );
-                        
+
                         // $user=User::first();
                         // $user->notify(new RegisteredUser($email_data));
                         //Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
@@ -6214,7 +6215,7 @@ class GeneralController extends Controller
                         //       }
 
                         /*add in transfer with status = 5 (registered, waiting for approval)*/
-                            
+
                         $data_transfer = array(
                             'empID' => $request->input("emp_id"),
                             'parameter' => 'New Employee',
@@ -6601,13 +6602,52 @@ class GeneralController extends Controller
     public function audit_logs(Request $request)
     {
         if (session('mng_audit')) {
+
+            // getting all audit trail logs
             $data['logs'] = $this->flexperformance_model->audit_logs();
+
+            // selecting audit trail for someone who deleted all tha audit logs
             $data['purge_logs'] = $this->flexperformance_model->audit_purge_logs();
-            $data['title'] = "Audit Trail";
-            return view('app.audit_logs', $data);
+
+            $data['parent'] = "Settings";
+            $data['child'] = "Audit Log";
+
+            return view('audit-trail.audit_logs', $data);
+
         } else {
-            echo "Unauthorized Access";
+
+            abort(403, 'Unauthorized action.');
         }
+    }
+
+    public function auditLogsDestry(Request $request)
+    {
+        $logData = array(
+            'empID' => session('emp_id'),
+            'description' => "Cleared Audit logs",
+            'agent' => $request->userAgent(),
+            'ip_address' => $request->ip(),
+            'due_date' => date('Y_m_d_H_i_s'),
+        );
+
+        $result = DB::transaction(function() use($logData)
+        {
+            DB::table('audit_trails')->delete();
+
+            $this->flexperformance_model->insertAuditPurgeLog($logData);
+
+            return 1;
+        });
+
+        if($result == 1){
+            return redirect()->route('flex.audit_logs');
+        }else{
+            abort(400, 'Bad Request');
+        }
+
+
+
+    //    retrun redirectback();
     }
 
     public function export_audit_logs(Request $request)
