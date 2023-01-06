@@ -3292,7 +3292,7 @@ class GeneralController extends Controller
 
     public function loan_advanced_payments(Request $request)
     {
-        $loanID = base64_decode($this->input->get('key'));
+        $loanID = base64_decode($request->key);
 
         $data['loan_info'] = $this->flexperformance_model->getloan($loanID);
         $data['title'] = "Advanced Loan Payments";
@@ -3624,9 +3624,9 @@ class GeneralController extends Controller
         $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
         $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
         $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
-        $data['v_net_c'] = $this->reports_model->volunteer_sum_take_home($payrollMonth);
+        $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
         $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
-        $data['v_net_p'] = $this->reports_model->volunteer_sum_take_home($previous_payroll_month);
+        $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
         $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
         $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
         $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
@@ -7021,9 +7021,9 @@ class GeneralController extends Controller
     public function netTotalSummation($payroll_date)
     {
         //FROM DATABASE
-        $volunteer_mwp_total = $this->reports_model->volunteerAllowanceMWPExport($payroll_date);
+        $temporary_mwp_total = $this->reports_model->temporaryAllowanceMWPExport($payroll_date);
         $staff_bank_totals = $this->reports_model->staffPayrollBankExport($payroll_date);
-        $volunteer_bank_totals = $this->reports_model->volunteerPayrollBankExport($payroll_date);
+        $temporary_bank_totals = $this->reports_model->temporaryPayrollBankExport($payroll_date);
 
         /*amount bank staff*/
         $amount_staff_bank = 0;
@@ -7031,19 +7031,19 @@ class GeneralController extends Controller
             $amount_staff_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
-        /*amount bank volunteer*/
-        $amount_volunteer_bank = 0;
-        foreach ($volunteer_bank_totals as $row) {
-            $amount_volunteer_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+        /*amount bank temporary*/
+        $amount_temporary_bank = 0;
+        foreach ($temporary_bank_totals as $row) {
+            $amount_temporary_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
-        foreach ($volunteer_mwp_total as $row) {
+        foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
-        $total = $amount_mwp + $amount_staff_bank + $amount_volunteer_bank;
+        $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
 
         return $total;
 

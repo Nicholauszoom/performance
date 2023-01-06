@@ -201,9 +201,9 @@
                     </a>
                     <?php } ?>
 
-                    <a class="my-3" target="_blank" href="{{route('payroll.less_payments_print',['pdate',base64_encode($payrollMonth)])}}">
+                    {{-- <a class="my-3" target="_blank" href="{{route('payroll.less_payments_print',['pdate',base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-main">Print Checklist</button>
-                    </a>
+                    </a> --}}
 
                     <?php if($payrollState == 0) {?>
                     <a class="m-3" target="_self" href="{{route('payroll.grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">

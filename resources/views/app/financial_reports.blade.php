@@ -86,7 +86,7 @@
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">Volunteer Payroll
+                                            <label class="containercheckbox">temporary Payroll
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -172,7 +172,7 @@
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">Volunteer Payroll
+                                            <label class="containercheckbox">temporary Payroll
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -243,7 +243,7 @@
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">Volunteer Payroll
+                                            <label class="containercheckbox">temporary Payroll
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -293,7 +293,7 @@
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">Volunteer Payroll
+                                            <label class="containercheckbox">temporary Payroll
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -344,7 +344,7 @@
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">Volunteer Payroll
+                                            <label class="containercheckbox">temporary Payroll
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>

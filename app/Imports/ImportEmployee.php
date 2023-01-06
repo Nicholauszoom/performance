@@ -30,22 +30,22 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         foreach ($collection as $row) 
         {  
             //check status of employee
-            if($row['status'] == 'InActive'){
-                $state = 4;
-                $todate = date('Y-m-d');
-                $datalog = array(
-                    'state' => 4,
-                    'current_state' => 4,
-                    'empID' => $row['empno'],
-                    'author' => session('emp_id'),
-                );
-        //        echo json_encode($datalog);
+        //     if($row['status'] == 'InActive'){
+        //         $state = 4;
+        //         $todate = date('Y-m-d');
+        //         $datalog = array(
+        //             'state' => 4,
+        //             'current_state' => 4,
+        //             'empID' => $row['empno'],
+        //             'author' => session('emp_id'),
+        //         );
+        // //        echo json_encode($datalog);
         
-                $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
-            }
+        //         $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
+        //     }
             
-            else
-            $state=1;
+        //     else
+        //     $state=1;
 
             //check position
             //  if($row['position']!= NULL){
@@ -81,7 +81,8 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'emp_id'=>$row['empno'],
             // 'emp_code'=>$row['codeno'],
             // 'company'=>$row['company'],
-             'state'=>$state,
+            // 'state'=>$state,
+            'pf_membership_no'=>$row['nssf'],
             // 'emp_level'=>4,
             //'leave_days_entitled'=>$row['leavedaysentitle'],
             // 'bank'=>1,
@@ -101,7 +102,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'password'=>"$2y$10$"."cuAOvfpGSYPLmwONROf9J.WpmZf0.sIq/si7gkSZZSjr7KmV5SrXG",
 
           ];
-         $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+         $recordID = ImportsEmployee::where('emp_code',$row['codeno'])->update($data);
          //$recordID = ImportsEmployee::create($data);
         //}
           

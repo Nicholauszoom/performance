@@ -432,7 +432,7 @@ $pdf->Rect(16.5, $pdf->GetY()-5, 177.5, 0, '', $style4);
 
 if(!empty($loans)){
     $pdf->SetXY(15, $pdf->GetY()-6);
-    $subtitle4 = "<p><br>OUTSTANDINGS(SALARY ADVANCE AND LOANS):";
+    $subtitle4 = "<p><br>OUTSTANDINGS(LOANS):";
     $outstandings = '
   <table width = "100%">';
     foreach($loans as $row){

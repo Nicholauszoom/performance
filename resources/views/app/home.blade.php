@@ -212,10 +212,10 @@
 
                 @php
                     $staff = 0;
-                    $volunteer = 0;
+                    $temporary = 0;
 
                     $staff_p = 0;
-                    $volunteer_p = 0;
+                    $temporary_p = 0;
                 @endphp
 
                 @foreach ($s_staff as $s)
@@ -227,11 +227,11 @@
                 @endforeach
 
                 @foreach ($v_staff as $v)
-                    @php  $volunteer++; @endphp
+                    @php  $temporary++; @endphp
                 @endforeach
 
                 @foreach ($v_staff_p as $vp)
-                    @php $volunteer_p++; @endphp
+                    @php $temporary_p++; @endphp
                 @endforeach
 
                 <table class="table table-striped table-bordered" style="width:100%">
@@ -277,9 +277,9 @@
                     </tr>
                     <tr>
                         <td><b>Temporary</b></td>
-                        <td align="right">{{ $volunteer }}</td>
-                        <td align="right">{{ $volunteer_p }} </td>
-                        <td align="right">{{ $volunteer - $volunteer_p }}</td>
+                        <td align="right">{{ $temporary }}</td>
+                        <td align="right">{{ $temporary_p }} </td>
+                        <td align="right">{{ $temporary - $temporary_p }}</td>
                     </tr>
                 </table>
 
