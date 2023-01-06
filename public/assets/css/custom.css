@@ -15,16 +15,6 @@
     color: #00204e;
 }
 
-.sweetDanger {
-    border: none;
-    background: #ed0303;
-    color: #fff;
-}
-
-.swal-button {
-    background-color: #00204e;
-}
-
 .bg-default {
     background-color: #00204e;
 }
@@ -91,7 +81,7 @@ bg-extra {
     font-weight: 500;
 }
 
-.sidebar-control {
+/* .sidebar-control {
     color: #000;
 }
 
@@ -126,4 +116,13 @@ bg-extra {
 
 .sidebar-section ul li .nav-group-sub.show li .nav-link.active {
     background: #001a4943;
+} */
+
+.nav-sidebar .nav-link {
+    color: #00204e;
+}
+
+.nav-sidebar .nav-link.active {
+    background-color: #00204e;
+    color: #fff;
 }
