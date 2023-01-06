@@ -3636,9 +3636,12 @@ class GeneralController extends Controller
 
         if (session('password_set') == "1") {
             return view('auth.password-change');
+
         } else {
+            
             $data['parent'] = 'Dashboard';
-            return view('app.home', $data);
+
+            return view('dashboard', $data);
         }
 
     }
