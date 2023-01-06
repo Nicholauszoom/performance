@@ -1,244 +1,314 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
-@push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
-@endpush
-
-@push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
-@endpush
-
 @section('content')
+    <?php
 
-<div class="row">
-    <div class="col-lg-4">
+    foreach ($appreciated as $row) {
+        $name = $row->NAME;
+        $id = $row->empID;
+        $position = $row->POSITION;
+        $department = $row->DEPARTMENT;
+        $description = $row->description;
+        $date = $row->date_apprd;
+        $photo = $row->photo;
+    }
 
-        <!-- Members online -->
-        <div class="card bg-teal text-white">
-            <div class="card-body">
-                <div class="d-flex">
-                    <h3 class="mb-0">354</h3>
-                    <span class="badge bg-black bg-opacity-50 rounded-pill align-self-center ms-auto">100%</span>
-                </div>
+    foreach ($overview as $row) {
+        $employees = $row->emp_count;
+        $males = $row->males;
+        $females = $row->females;
+        $inactive = $row->inactive;
+        $expatriate = $row->expatriate;
+        $local_employee = $row->local_employee;
+    }
 
-                <div>
-                    Active Employees
-                    <div class="fs-sm opacity-75">354</div>
+    foreach ($taskline as $row) {
+        $all = $row->ALL_TASKS;
+        $completed = $row->COMPLETED;
+    }
+
+    foreach ($taskstaff as $row) {
+        $allstaff = $row->ALL_TASKSTAFF;
+        $allstaff_completed = $row->COMPLETEDSTAFF;
+    }
+
+    foreach ($payroll_totals as $row) {
+        $salary = $row->salary;
+        $net_less = $row->takehome_less;
+        $pension_employee = $row->pension_employee;
+        $pension_employer = $row->pension_employer;
+
+        $medical_employee = $row->medical_employee;
+        $medical_employer = $row->medical_employer;
+        $sdl = $row->sdl;
+        $wcf = $row->wcf;
+        $allowances = $row->allowances;
+        $taxdue = $row->taxdue;
+        $meals = $row->meals;
+    }
+    foreach ($total_loans as $key) {
+        $paid = $key->paid;
+        $remained = $key->remained;
+    }
+
+    foreach ($take_home as $row) {
+        $net = $row->takehome - $arrears;
+    }
+
+    // if (session('pass_age') > 89 || 90 - session('pass_age') == 0 || 90 - session('pass_age') < 0) {
+    //     redirect('cipay/login_info');
+    // }
+
+    ?>
+
+
+    <div class="row">
+        <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h3 class="text-muted">
+                        Welcome to Fléx Performance! <strong> {{ session('fname') . ' ' . session('lname') }} </strong>
+                    </h3>
+
+                    <p  <?php if(session('pass_age') > 84){?> style="color:red" <?php } ?>>Password Expires in <?php echo 90 - session('pass_age'); ?> Days</p>
                 </div>
             </div>
-
-            <div class="rounded-bottom overflow-hidden mx-3" id="members-online"><svg width="858" height="50">
-                    <g width="858">
-                        <rect class="d3-random-bars" width="24.716049382716047" x="10.592592592592592"
-                            height="39.473684210526315" y="10.526315789473685" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="45.90123456790123" height="50" y="0"
-                            style="fill: rgba(255, 255, 255, 0.5);"></rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="81.20987654320987"
-                            height="36.84210526315789" y="13.15789473684211" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="116.51851851851852"
-                            height="44.73684210526316" y="5.2631578947368425" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="151.82716049382714"
-                            height="34.21052631578947" y="15.789473684210527" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="187.13580246913577"
-                            height="47.368421052631575" y="2.631578947368425" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="222.44444444444443"
-                            height="26.31578947368421" y="23.68421052631579" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="257.75308641975306"
-                            height="31.57894736842105" y="18.42105263157895" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="293.0617283950617"
-                            height="47.368421052631575" y="2.631578947368425" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="328.3703703703704"
-                            height="34.21052631578947" y="15.789473684210527" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="363.679012345679"
-                            height="39.473684210526315" y="10.526315789473685" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="398.98765432098764"
-                            height="47.368421052631575" y="2.631578947368425" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="434.2962962962963"
-                            height="31.57894736842105" y="18.42105263157895" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="469.6049382716049"
-                            height="31.57894736842105" y="18.42105263157895" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="504.91358024691357"
-                            height="44.73684210526316" y="5.2631578947368425" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="540.2222222222222"
-                            height="34.21052631578947" y="15.789473684210527" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="575.5308641975308"
-                            height="36.84210526315789" y="13.15789473684211" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="610.8395061728395"
-                            height="31.57894736842105" y="18.42105263157895" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="646.1481481481482"
-                            height="39.473684210526315" y="10.526315789473685" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="681.4567901234567"
-                            height="39.473684210526315" y="10.526315789473685" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="716.7654320987654"
-                            height="39.473684210526315" y="10.526315789473685" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="752.074074074074"
-                            height="44.73684210526316" y="5.2631578947368425" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="787.3827160493827"
-                            height="36.84210526315789" y="13.15789473684211" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                        <rect class="d3-random-bars" width="24.716049382716047" x="822.6913580246913"
-                            height="26.31578947368421" y="23.68421052631579" style="fill: rgba(255, 255, 255, 0.5);">
-                        </rect>
-                    </g>
-                </svg></div>
         </div>
-        <!-- /members online -->
+        {{-- /col --}}
 
-    </div>
+        @if (session('vw_emp_sum'))
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <h4 class="col-md-6 text-muted">Active Employess :</h4>
+                            <h4 class="col-md-6 text-muted">{{ $employees }}</h4>
+                        </div>
 
-    <div class="col-lg-4">
+                        <div class="row">
+                            <h4 class="col-md-6 text-muted">Males :</h4>
+                            <h4 class="col-md-6 text-muted">{{ $males }}</h4>
+                        </div>
 
-        <!-- Current server load -->
-        <div class="card bg-pink text-white">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <h3 class="mb-0">1</h3>
-                    <div class="dropdown d-inline-flex ms-auto">
-                        <a href="#" class="text-white d-inline-flex align-items-center dropdown-toggle"
-                            data-bs-toggle="dropdown">
-                            <i class="ph-gear"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#" class="dropdown-item">
-                                <i class="ph-arrows-clockwise me-2"></i>
-                                View payroll
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i class="ph-list-dashes me-2"></i>
-                                aprrove
-                            </a>
-                           
+                        <div class="row">
+                            <h4 class="col-md-6 text-muted">Females :</h4>
+                            <h4 class="col-md-6 text-muted">{{ $females }}</h4>
+                        </div>
+
+                        <div class="row">
+                            <h4 class="col-md-6 text-muted">Local Employees :</h4>
+                            <h4 class="col-md-6 text-muted">{{ $local_employee }}</h4>
+                        </div>
+
+                        <div class="row">
+                            <h4 class="col-md-6 text-muted">Expatriates :</h4>
+                            <h4 class="col-md-6 text-muted">{{ $expatriate }}</h4>
                         </div>
                     </div>
                 </div>
-
-                <div>
-                    Pending Payroll
-                    <div class="fs-sm opacity-75">1</div>
-                </div>
             </div>
+        @endif
+        {{-- /col --}}
 
-            <div class="rounded-bottom overflow-hidden" id="server-load"><svg width="898" height="50">
-                    <g transform="translate(0,0)" width="898">
-                        <defs>
-                            <clipPath id="load-clip-server-load">
-                                <rect class="load-clip" width="898" height="50"></rect>
-                            </clipPath>
-                        </defs>
-                        <g clip-path="url(#load-clip-server-load)">
-                            <path
-                                d="M-34.53846153846154,3.6666666666666625L-28.78205128205128,8.777777777777775C-23.025641025641026,13.888888888888886,-11.512820512820513,24.11111111111111,0,28.555555555555557C11.512820512820513,33,23.025641025641026,31.666666666666664,34.53846153846154,27.888888888888886C46.05128205128205,24.11111111111111,57.56410256410256,17.888888888888886,69.07692307692308,17.666666666666664C80.58974358974359,17.444444444444443,92.1025641025641,23.22222222222222,103.61538461538461,27.666666666666664C115.12820512820514,32.111111111111114,126.64102564102564,35.22222222222222,138.15384615384616,31.22222222222222C149.66666666666669,27.222222222222225,161.17948717948718,16.11111111111111,172.6923076923077,13.888888888888888C184.20512820512823,11.666666666666664,195.71794871794873,18.333333333333332,207.23076923076925,20.555555555555554C218.74358974358972,22.777777777777775,230.25641025641022,20.555555555555557,241.76923076923075,19C253.28205128205127,17.444444444444446,264.79487179487177,16.555555555555557,276.3076923076923,19.444444444444443C287.8205128205128,22.333333333333332,299.3333333333333,28.999999999999996,310.8461538461538,26.777777777777775C322.35897435897436,24.555555555555554,333.87179487179486,13.444444444444443,345.3846153846154,7.666666666666666C356.8974358974359,1.888888888888888,368.4102564102564,1.4444444444444422,379.9230769230769,0.9999999999999978C391.43589743589746,0.5555555555555536,402.94871794871796,0.11111111111111072,414.46153846153845,1C425.974358974359,1.8888888888888893,437.48717948717945,4.111111111111111,449,5.444444444444444C460.51282051282044,6.777777777777777,472.025641025641,7.222222222222221,483.53846153846143,12.333333333333332C495.051282051282,17.444444444444443,506.5641025641024,27.22222222222222,518.076923076923,30.555555555555554C529.5897435897435,33.888888888888886,541.1025641025641,30.777777777777775,552.6153846153845,26.999999999999996C564.1282051282051,23.22222222222222,575.6410256410256,18.777777777777775,587.1538461538462,18.555555555555554C598.6666666666666,18.33333333333333,610.1794871794871,22.33333333333333,621.6923076923076,21.666666666666664C633.2051282051282,20.999999999999996,644.7179487179486,15.666666666666664,656.2307692307693,14.33333333333333C667.7435897435897,13,679.2564102564103,15.666666666666668,690.7692307692308,16.333333333333332C702.2820512820513,17,713.7948717948718,15.666666666666664,725.3076923076924,17.666666666666664C736.8205128205128,19.666666666666664,748.3333333333333,25,759.8461538461538,22.77777777777778C771.3589743589744,20.555555555555554,782.8717948717948,10.777777777777775,794.3846153846154,9.444444444444441C805.8974358974358,8.111111111111107,817.4102564102564,15.22222222222222,828.9230769230769,18.11111111111111C840.4358974358975,21,851.948717948718,19.666666666666668,863.4615384615385,19.444444444444443C874.9743589743589,19.22222222222222,886.4871794871794,20.11111111111111,898,21.88888888888889C909.5128205128206,23.666666666666664,921.0256410256411,26.333333333333332,932.5384615384615,27.22222222222222C944.051282051282,28.111111111111107,955.5641025641025,27.22222222222222,961.3205128205127,26.777777777777775L967.076923076923,26.333333333333332L967.076923076923,50L961.3205128205127,49.999999999999986C955.5641025641025,49.99999999999999,944.051282051282,49.99999999999999,932.5384615384615,49.999999999999986C921.0256410256411,49.99999999999999,909.5128205128206,49.99999999999999,898,49.999999999999986C886.4871794871794,49.99999999999999,874.9743589743589,49.99999999999999,863.4615384615385,49.999999999999986C851.948717948718,49.99999999999999,840.4358974358975,49.99999999999999,828.923076923077,49.999999999999986C817.4102564102564,49.99999999999999,805.8974358974358,49.99999999999999,794.3846153846154,49.999999999999986C782.8717948717948,49.99999999999999,771.3589743589744,49.99999999999999,759.8461538461538,49.999999999999986C748.3333333333333,49.99999999999999,736.8205128205128,49.99999999999999,725.3076923076924,49.999999999999986C713.7948717948718,49.99999999999999,702.2820512820513,49.99999999999999,690.7692307692307,49.999999999999986C679.2564102564103,49.99999999999999,667.7435897435897,49.99999999999999,656.2307692307692,49.999999999999986C644.7179487179486,49.99999999999999,633.2051282051282,49.99999999999999,621.6923076923076,49.999999999999986C610.1794871794871,49.99999999999999,598.6666666666666,49.99999999999999,587.1538461538462,49.999999999999986C575.6410256410256,49.99999999999999,564.1282051282051,49.99999999999999,552.6153846153846,49.999999999999986C541.1025641025641,49.99999999999999,529.5897435897435,49.99999999999999,518.076923076923,49.999999999999986C506.5641025641024,49.99999999999999,495.051282051282,49.99999999999999,483.53846153846143,49.999999999999986C472.025641025641,49.99999999999999,460.51282051282044,49.99999999999999,449,49.999999999999986C437.48717948717945,49.99999999999999,425.974358974359,49.99999999999999,414.46153846153845,49.999999999999986C402.94871794871796,49.99999999999999,391.43589743589746,49.99999999999999,379.9230769230769,49.999999999999986C368.4102564102564,49.99999999999999,356.8974358974359,49.99999999999999,345.3846153846154,49.999999999999986C333.87179487179486,49.99999999999999,322.35897435897436,49.99999999999999,310.8461538461538,49.999999999999986C299.3333333333333,49.99999999999999,287.8205128205128,49.99999999999999,276.30769230769226,49.999999999999986C264.79487179487177,49.99999999999999,253.28205128205127,49.99999999999999,241.76923076923075,49.999999999999986C230.25641025641022,49.99999999999999,218.74358974358972,49.99999999999999,207.23076923076923,49.999999999999986C195.71794871794873,49.99999999999999,184.20512820512823,49.99999999999999,172.6923076923077,49.999999999999986C161.17948717948718,49.99999999999999,149.66666666666669,49.99999999999999,138.15384615384616,49.999999999999986C126.64102564102564,49.99999999999999,115.12820512820514,49.99999999999999,103.61538461538461,49.999999999999986C92.1025641025641,49.99999999999999,80.58974358974359,49.99999999999999,69.07692307692308,49.999999999999986C57.56410256410256,49.99999999999999,46.05128205128205,49.99999999999999,34.53846153846154,49.999999999999986C23.025641025641026,49.99999999999999,11.512820512820513,49.99999999999999,0,49.999999999999986C-11.512820512820513,49.99999999999999,-23.025641025641026,49.99999999999999,-28.78205128205128,49.999999999999986L-34.53846153846154,50Z"
-                                class="d3-area" style="fill: rgba(255, 255, 255, 0.5); opacity: 1;"
-                                transform="translate(-30.670152282714845,0)"></path>
-                        </g>
-                    </g>
-                </svg></div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
+                </div>
+
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Basic Salaries</th>
+                            <td>{{ number_format($salary, 2) }}</td>
+                        </tr>
+                        <tr>
+                            @if ($allowances > 0)
+                                <th>Allowances</th>
+                                <td>{{ number_format($allowances, 2) }}</td>
+                            @endif
+                        </tr>
+                        <tr>
+                            <th>Gross Salaries (Total)</th>
+                            <td>{{ number_format($salary + $allowances, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Net Salary</th>
+                            <td>{{ number_format($net_total, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Pension</th>
+                            <td>{{ number_format($pension_employer + $pension_employee, 2) }}</td>
+                        </tr>
+                        @if ($arrears > 0)
+                            <tr>
+                                <th>Arrears</th>
+                                <td>{{ number_format($arrears, 2) }}</td>
+                            </tr>
+                        @endif
+                        @if ($medical_employer + $medical_employee > 0)
+                            <tr>
+                                <th>Total Medical</th>
+                                <td>{{ number_format($medical_employer + $medical_employee) }}</td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <th>Taxdue (PAYE)</th>
+                            <td>{{ number_format($taxdue, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <th>WCF</th>
+                            <td>{{ number_format(($salary + $allowances) * 0.01, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <th>SDL</th>
+                            <td>{{ number_format($taxdue, 2) }}</td>
+                        </tr>
+                        @if ($total_heslb > 0)
+                            <tr>
+                                <th>HESLB</th>
+                                <td>{{ number_format($total_heslb, 2) }}</td>
+                            </tr>
+                        @endif
+                        <tr>
+                            <th>Total Employees Cost</th>
+                            <th>{{ number_format($salary + $allowances + $sdl + ($salary + $allowances) * 0.01 + $pension_employer + $medical_employer, 2) }}
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <!-- /current server load -->
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="text-muted">Payroll Reconciliation Summary (Current & Previous)</h4>
+                </div>
+
+
+                @foreach ($s_net_c as $c)
+                    @php
+                        $s_net_c_ = $c->takehome;
+                    @endphp
+                @endforeach
+
+                @foreach ($s_net_p as $p)
+                    @php
+                        $s_net_p_ = $p->takehome;
+                    @endphp
+                @endforeach
+
+                @foreach ($v_net_c as $vc)
+                    @php
+                    $v_net_c_ = $vc->takehome; @endphp
+                @endforeach
+
+                @foreach ($v_net_p as $vp)
+                    @php
+                        $v_net_p_ = $vp->takehome;
+                    @endphp
+                @endforeach
+
+                @php
+                    $staff = 0;
+                    $volunteer = 0;
+
+                    $staff_p = 0;
+                    $volunteer_p = 0;
+                @endphp
+
+                @foreach ($s_staff as $s)
+                    @php $staff++; @endphp
+                @endforeach
+
+                @foreach ($s_staff_p as $sp)
+                    @php  $staff_p++; @endphp
+                @endforeach
+
+                @foreach ($v_staff as $v)
+                    @php  $volunteer++; @endphp
+                @endforeach
+
+                @foreach ($v_staff_p as $vp)
+                    @php $volunteer_p++; @endphp
+                @endforeach
+
+                <table class="table table-striped table-bordered" style="width:100%">
+                    <tr>
+                        <th></th>
+                        <th><b>Contract type</b></th>
+                        <th class="text-center"><b>Current</b></th>
+                        <th class="text-center"><b>Previous</b></th>
+                        <th class="text-center"><b>Movement</b></th>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><b>Gross Salary</b></td>
+                        <td><b>Staff</b></td>
+                        <td align="right">{{ number_format($s_gross_c, 2) }}</td>
+                        <td align="right">{{ number_format($s_gross_p, 2) }}</td>
+                        <td align="right">{{ number_format($s_gross_c - $s_gross_p, 2) }} </td>
+                    </tr>
+                    <tr>
+                        <td><b>Temporary</b></td>
+                        <td align="right">{{ number_format($v_gross_c, 2) }}</td>
+                        <td align="right">{{ number_format($v_gross_p, 2) }}</td>
+                        <td align="right">{{ number_format($v_gross_c - $v_gross_p, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><b>Net Salary</b></td>
+                        <td><b>Staff</b></td>
+                        <td align="right">{{ number_format($s_net_c_, 2) }}</td>
+                        <td align="right">{{ number_format($s_net_p_, 2) }}</td>
+                        <td align="right">{{ number_format($s_net_c_ - $s_net_p_, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Temporary</b></td>
+                        <td align="right">{{ number_format($v_net_c_, 2) }}</td>
+                        <td align="right">{{ number_format($v_net_p_, 2) }}</td>
+                        <td align="right">{{ number_format($v_net_c_ - $v_net_p_, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2"><b>Head Count</b></td>
+                        <td><b>Staff</b></td>
+                        <td align="right">{{ $staff }}</td>
+                        <td align="right">{{ $staff_p }}</td>
+                        <td align="right">{{ $staff - $staff_p }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Temporary</b></td>
+                        <td align="right">{{ $volunteer }}</td>
+                        <td align="right">{{ $volunteer_p }} </td>
+                        <td align="right">{{ $volunteer - $volunteer_p }}</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
 
     </div>
-
-    <div class="col-lg-4">
-
-        <!-- Today's revenue -->
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <h3 class="mb-0">TZS 37,578,000,454</h3>
-                    <div class="ms-auto">
-                        <a class="text-white" data-card-action="reload">
-                            <i class="ph-arrows-clockwise"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    Amount in Thsh Payed during last payroll
-                    <div class="fs-sm opacity-75">TZS 37,578,000,454</div>
-                </div>
-            </div>
-
-            <div class="rounded-bottom overflow-hidden" id="today-revenue"><svg width="898" height="50">
-                    <g transform="translate(0,0)" width="898">
-                        <defs>
-                            <clipPath id="clip-line-small">
-                                <rect class="clip" width="898" height="50"></rect>
-                            </clipPath>
-                        </defs>
-                        <path
-                            d="M20,8.46153846153846L162.99999999999997,25.76923076923077L305.99999999999994,5L449,15.384615384615383L591.9999999999999,5L735.0000000000001,36.15384615384615L878,8.46153846153846"
-                            clip-path="url(#clip-line-small)" class="d3-line d3-line-medium"
-                            style="stroke: rgb(255, 255, 255);"></path>
-                        <g>
-                            <line class="d3-line-guides" x1="20" y1="50" x2="20" y2="8.46153846153846"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                            <line class="d3-line-guides" x1="162.99999999999997" y1="50" x2="162.99999999999997"
-                                y2="25.76923076923077"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                            <line class="d3-line-guides" x1="305.99999999999994" y1="50" x2="305.99999999999994" y2="5"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                            <line class="d3-line-guides" x1="449" y1="50" x2="449" y2="15.384615384615383"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                            <line class="d3-line-guides" x1="591.9999999999999" y1="50" x2="591.9999999999999" y2="5"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                            <line class="d3-line-guides" x1="735.0000000000001" y1="50" x2="735.0000000000001"
-                                y2="36.15384615384615"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                            <line class="d3-line-guides" x1="878" y1="50" x2="878" y2="8.46153846153846"
-                                style="stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 4, 2; shape-rendering: crispedges;">
-                            </line>
-                        </g>
-                        <g>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="20" cy="8.46153846153846" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="162.99999999999997"
-                                cy="25.76923076923077" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="305.99999999999994" cy="5" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="449" cy="15.384615384615383" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="591.9999999999999" cy="5" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="735.0000000000001"
-                                cy="36.15384615384615" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                            <circle class="d3-line-circle d3-line-circle-medium" cx="878" cy="8.46153846153846" r="3"
-                                style="stroke: rgb(255, 255, 255); fill: rgb(255, 255, 255); opacity: 1;"></circle>
-                        </g>
-                    </g>
-                </svg></div>
-        </div>
-        <!-- /today's revenue -->
-
-    </div>
-</div>
+    {{-- /row --}}
 
 @endsection
+
+@push('footer-script')
+    {{-- <script src="<?php echo url(''); ?>style/jquery/jquery.easypiechart.min.js"></script> --}}
+
+    <script>
+        $(function() {
+            $('.chart').easyPieChart({
+                easing: 'easeOutElastic',
+                delay: 3000,
+                barColor: '#26B99A',
+                trackColor: '#fff',
+                scaleColor: false,
+                lineWidth: 20,
+                trackWidth: 16,
+                lineCap: 'butt',
+                onStep: function(from, to, percent) {
+                    $(this.el).find('.percent').text(Math.round(percent));
+                }
+            });
+        });
+    </script>
+@endpush

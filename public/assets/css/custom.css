@@ -15,6 +15,12 @@
     color: #00204e;
 }
 
+.sweetDanger {
+    border: none;
+    background: #ed0303;
+    color: #fff;
+}
+
 .swal-button {
     background-color: #00204e;
 }

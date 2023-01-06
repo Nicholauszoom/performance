@@ -19,15 +19,15 @@ class FlexPerformanceModel extends Model
 	       'due_date' =>date('Y-m-d h:i:s'),
 	       'ip_address' =>session('ip_address')
 	    );
+
         DB::table('audit_logs')->insert($logData);
 	}
 
 	function audit_logs()
 	{
-		$query = "SELECT  d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated,   CAST(al.due_date as time) as timed, p.name as position,  d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_logs al, employee e, position p, department d  WHERE al.empID = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.due_date DESC";
+		$query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_trails al, employee e, position p, department d  WHERE al.emp_id = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.created_at DESC";
 
         return DB::select(DB::raw($query));
-
 	}
 
 	function audit_purge_logs()
@@ -120,7 +120,7 @@ class FlexPerformanceModel extends Model
 
 	function addCompanyBranch($data)
 	{
-		
+
         DB::table('branch')->insert($data);
 
         $query = " id ORDER BY id DESC LIMIT 1";
@@ -128,17 +128,17 @@ class FlexPerformanceModel extends Model
         ->select(DB::raw($query))
         ->first();
 
-		
+
 
     	return $row->id;
 	}
 
 	function addCostCenter($data)
 	{
-		
+
 		DB::table('cost_center')->insert($data);
 		$query = "id  ORDER BY id DESC LIMIT 1";
-	
+
 		$row = DB::table('cost_center')
 		->select(DB::raw($query))
 		->first();
@@ -3017,7 +3017,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		$query = "SELECT group_name FROM emp_role WHERE id ='".$refID."'";
 		$row = DB::select(DB::raw($query));
-		
+
 		if (count($row) > 0){
 			return $row[0]->group_name;
 		}else{
@@ -3092,7 +3092,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
         return true;
     }
 
-	
+
 
 
 
@@ -3247,7 +3247,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 		->where('group_name', $isGroup)
 		->delete();
 
-	
+
 		return true;
 	}
 

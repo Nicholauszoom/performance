@@ -444,6 +444,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
         Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
         Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
+        Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');
 
         Route::any('/userArray','userArray')->name('flex.userArray');
         Route::any('/userAgent','userAgent')->name('flex.userAgent');
