@@ -26,30 +26,46 @@ class ImportPosition implements ToCollection,WithHeadingRow
 
         foreach ($collection as $row) 
         {  
-           $data = DB::table('department')
-           ->where('name',$row['department'])
-           ->select('id')
-           ->first();
-            if($data == null)
-            dd($row['department']);
+          //  $data = DB::table('department')
+          //  ->where('name',$row['department'])
+          //  ->select('id')
+          //  ->first();
+          //   if($data == null)
+          //   dd($row['department']);
 
-          $data = [
-            'name'=>$row['position'],
-            'dept_id'=>$data->id,
-            'code'=>234,
-            'organization_level'=>1,
-          ];
+          // $data = [
+          //   'name'=>$row['position'],
+          //   'dept_id'=>$data->id,
+          //   'code'=>234,
+          //   'organization_level'=>1,
+          // ];
 
-          $data2 = DB::table('position')
-           ->where('name',$row['position'])
-           ->select('id')
-           ->first();
-          if($data2 == null)
-          DB::table('position')
-          ->insert($data);
+          // $data2 = DB::table('position')
+          //  ->where('name',$row['position'])
+          //  ->select('id')
+          //  ->first();
+          // if($data2 == null)
+          // DB::table('position')
+          // ->insert($data);
         
 
-          
+            $dept = DB::table('department')
+           ->where('name',$row['dept'])
+           ->select('id')
+           ->first();
+           $dept_id = $dept->id;
+          $data2 = [
+            'dept_id'=>$dept_id,
+            'name'=>$row['job'],
+            
+          ];
+          $test = DB::table('position')->where('name',$row['job'])->select('*')->first();
+        
+          if(empty($test))
+          DB::table('position')->insert($data2);
+          else
+          DB::table('position')->where('name',$row['job'])->update($data2);
+        
        
         
         }
