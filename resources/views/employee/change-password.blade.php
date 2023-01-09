@@ -9,7 +9,7 @@
                 <div class="d-flex justify-content-between mb-3">
                     <h4 class="text-main">Update Password</h4>
 
-                    <a href="<?php echo  url('') .'/flex/userprofile'.session('emp_id'); ?>" class="btn btn-main btn-xs">Back</a>
+                    <a href="<?php echo  url('') .'/flex/userprofile/'.session('emp_id'); ?>" class="btn btn-main btn-xs">Back</a>
                 </div>
 
                 @if (session()->has('status'))

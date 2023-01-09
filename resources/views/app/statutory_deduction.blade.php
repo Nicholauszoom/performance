@@ -172,7 +172,7 @@
                     <td> {{ 100 * ($row->rate) .'%' }} </td>
                     @if ( $pendingPayroll == 0 )
                     <td class="options-width">
-                        <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo url('')."/flex/paye_info".$row->id; ?>">
+                        <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo url('')."/flex/paye_info/".$row->id; ?>">
                             <button type="button" class="btn btn-main btn-xs" ><i class='ph-note-pencil'></i></button>
                         </a>
                     </td>

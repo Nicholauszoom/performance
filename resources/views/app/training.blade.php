@@ -142,7 +142,7 @@
 
                             <td class="options-width">
 
-                              <a href="<?php echo  url(''); ?>/flex/budget_info".base64_encode($row->id); ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                              <a href="<?php echo  url(''); ?>/flex/budget_info/".base64_encode($row->id); ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                              <?php if($row->status==0 || $row->status==2){ 
 
@@ -335,7 +335,7 @@
                                       foreach ($skill_gap as $row) { ?>
                                       <tr id="domain<?php echo $row->courseID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->department."<br><b>Position: </b>".$row->position; ?></td>
                                         <td><?php echo $row->course_name; ?></td>
                                         <td>
@@ -389,7 +389,7 @@
                                       foreach ($trainees_accepted as $row) { ?>
                                       <tr id="domain<?php echo $row->id;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->department."<br><b>Position: </b>".$row->position; ?></td>
                                         <td><?php echo $row->course_name; ?></td>
                                         <td><?php if($row->status == 0){ ?>

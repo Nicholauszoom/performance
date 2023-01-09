@@ -599,7 +599,7 @@
                         });
                         setTimeout(function() { // wait for 5 secs(2)
                             window.location.href =
-                                "<?php echo url('flex/userprofile'); ?>" + data
+                                "<?php echo url('flex/userprofile/'); ?>" + data
                                 .empID; // then reload the page.(3)
                         }, 2000);
                         $('#addEmployee').trigger("reset");

@@ -73,7 +73,7 @@
                     <!-- <table id="datatable" class="table table-striped table-bordered"> -->
                      
             <div class="col-lg-6">
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask/<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
                             
 
                       <div class="form-group">
@@ -104,7 +104,7 @@
                       </div>
 
                     </form>
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left"> 
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask/<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left"> 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Description 
                         </label>
@@ -124,7 +124,7 @@
 
                     </form>
 
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/performance/edittask/<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group"><br><span class="badge bg-green"><b><?php echo " ".$row->NAME; ?></font></b></span>
                         <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Assigned To</label>
@@ -181,7 +181,7 @@
                           <td class="options-width">
                            <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php //echo $row->id;?>">Please wait...</a>
-                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user/".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                         </tr>
                         <tr>
                           <th scope="row">2</th>
@@ -189,7 +189,7 @@
                           <td class="options-width">
                            <a href="javascript:void(0)" onclick="deleteDomain(<?php //echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php //echo $row->id;?>">Please wait...</a>
-                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php //echo  url('')."/flex/main_controller/fetch_single_user/".$row->id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                         </tr>
                       </tbody>
                     </table>

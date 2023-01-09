@@ -59,7 +59,7 @@
                     <td class="options-width">
                     <a title="Update" class="icon-2 info-tooltip"><button type="button" id="modal" data-toggle="modal" data-target="#updateModal<?php echo $row->id; ?>" class="btn btn-info btn-xs"> <i class="fa fa-edit"></i></button></a>
 
-                        <a href="<?php echo base_url()."index.php/cipay/company_branch_info".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                        <a href="<?php echo base_url()."index.php/cipay/company_branch_info/".base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                         <a href="javascript:void(0)" onclick="closeBranch(<?php echo $row->id; ?>)" title="Delete Deduction" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button> </a>
 
 

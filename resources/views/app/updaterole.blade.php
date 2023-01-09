@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="card-body">
                                             <form align="center" enctype="multipart/form-data" method="post"
-                                                action="<?php echo url(''); ?>/flex/updaterole<?php echo $roleID; ?>" 
+                                                action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>" 
                                                 data-parsley-validate class="form-horizontal form-label-left"
                                                 autocomplete="off">
 

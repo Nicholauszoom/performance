@@ -138,7 +138,7 @@
                                 <span class="label label-success">SOLVED</span></div>'; ?></td>
                             
                             <td class="options-width">
-                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details".$row->id; ?>">
+                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/".$row->id; ?>">
                                   <button  class="btn btn-info btn-xs">INFO</button></a>
                                
                             </td> 
@@ -211,7 +211,7 @@
                                 <span class="label label-success">SOLVED</span></div>'; } ?></td>
                             
                             <td class="options-width">
-                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details".$row->id; ?>">
+                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/".$row->id; ?>">
                                   <button  class="btn btn-info btn-xs">INFO</button></a>&nbsp;&nbsp;
                                 
                               <?php if( $row->status==0 ){ ?>

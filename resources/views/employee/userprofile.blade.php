@@ -74,8 +74,15 @@
                     Change Password
                 </a>
 
+<<<<<<< HEAD:resources/views/employee/userprofile.blade.php
                 @if (session('mng_emp'))
-                <a href="{{ url('/flex/updateEmployee/?id=').$empID.'|'.$departmentID; }}" class="btn btn-main">
+                <a href="{{ url('/flex/updateEmployee/').$empID.'|'.$departmentID; }}" class="btn btn-main">
+=======
+
+            {{-- @if (session('mng_emp'))
+            <li class="nav-item d-flex justify-content-center align-items-center my-3">
+                <a href="{{ url('/flex/updateEmployee/').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
+>>>>>>> parent of cf0f9e6 (id issue resolved):resources/views/app/userprofile.blade.php
                     <i class="ph-note-pencil me-2"></i>
                     Request Profile Update
                 </a>
@@ -296,7 +303,7 @@
                                                 <i class="ph-trash"></i>
                                             </button>
                                         </form>
-                                        {{-- <a href="<?php echo url('')."flex/deletekin".$row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
+                                        {{-- <a href="<?php echo url('')."flex/deletekin/".$row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
                                         </a> --}}
                                     </td>
                                   </tr>
@@ -713,7 +720,7 @@
                     enctype="multipart/form-data"
                     method="post"
                     action="{{ route('flex.addkin', $empID) }}"
-                    {{-- action="<?php echo  url(''); ?>/flex/addkin<?php echo $empID; ?>" --}}
+                    {{-- action="<?php echo  url(''); ?>/flex/addkin/<?php echo $empID; ?>" --}}
                     data-parsley-validate
                 >
                 @csrf

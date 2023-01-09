@@ -44,7 +44,7 @@
             <td>
               <a
                 title="More Details"
-                href="<?php echo  url('') .'/flex/userprofile'.$row->emp_id; ?>"
+                href="<?php echo  url('') .'/flex/userprofile/'.$row->emp_id; ?>"
               >{{ $row->NAME }}</a>
             </td>
             <td > {{ $row->gender }}</td>
@@ -105,7 +105,7 @@
         <tr id="activeRecord<?php echo $row->logID; ?>">
           <td width="1px"><?php echo $row->SNo; ?></td>
           <td>
-            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile'.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
+            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/'.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
           </td>
           <td ><?php echo $row->gender; ?></td>
           <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
@@ -182,7 +182,7 @@
         <tr id="activeRecord<?php echo $row->logID; ?>">
           <td width="1px"><?php echo $row->SNo; ?></td>
           <td>
-            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile'.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
+            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/'.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
           </td>
           <td ><?php echo $row->gender; ?></td>
           <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>

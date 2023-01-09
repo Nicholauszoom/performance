@@ -62,7 +62,7 @@
                                         <?php if(session('mng_org')){ ?>
                                         <td class="options-width">
                                             <a
-                                                href="<?php echo url(''); ?>/flex/organization_level_info".base64_encode($row->id);
+                                                href="<?php echo url(''); ?>/flex/organization_level_info/".base64_encode($row->id);
                                                 ?>" title="Info and Details" class="icon-2 info-tooltip"><button
                                                     type="button" class="btn btn-info btn-xs"><i
                                                         class="fa fa-info-circle"></i></button> </a>
@@ -132,7 +132,7 @@
                                     {{-- <td><a href="{{ route('flex.organization_level_info',base64_encode($row->id))}}" class="btn btn-perfrom">View</a>
                                     </td>  --}}
                                     {{-- href="{{route('temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}" --}}
-                                    {{-- <td><a href="/flex/organization_level_info.base64_encode($row->id)" class="btn btn-perfrom">View</a>
+                                    {{-- <td><a href="/flex/organization_level_info/.base64_encode($row->id)" class="btn btn-perfrom">View</a>
                                     </td> --}}
                                     {{-- <td><span class="badge bg-success bg-opacity-10 text-success">Active</span></td> --}}
                                     <td class="text-center">

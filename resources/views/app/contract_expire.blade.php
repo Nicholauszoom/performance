@@ -57,7 +57,7 @@
                           foreach ($contract_expire as $row) { ?>
                           <tr>
                             <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->emp_id; ?>"><font color="blue"><?php echo $row->NAME; ?></font></a></td>
+                            <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/".$row->emp_id; ?>"><font color="blue"><?php echo $row->NAME; ?></font></a></td>
                             <td><?php echo $row->DEPARTMENT; ?></td>
                             <td><?php echo $row->POSITION; ?></td>
                             <td><?php echo $row->DATE_HIRED;?></td>
@@ -69,9 +69,9 @@
 
                             <td class="options-width">
                            <?php if(session('managedept')!=0){ ?>
-                           <a href="<?php echo  url(''); ?>/flex/deleteemployee".$row->emp_id; ?>"   title="Terminate Contract" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-times"></i></font></a>&nbsp;&nbsp; <?php } ?>
+                           <a href="<?php echo  url(''); ?>/flex/deleteemployee/".$row->emp_id; ?>"   title="Terminate Contract" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-times"></i></font></a>&nbsp;&nbsp; <?php } ?>
 
-                            <a class="tooltip-demo" data-placement="top" title="Edit Contract"  href="<?php echo  url(''); ?>/flex/editemployee".$row->emp_id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit Contract"  href="<?php echo  url(''); ?>/flex/editemployee/".$row->emp_id; ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                             </tr>
                           <?php }  ?>
                       </tbody>

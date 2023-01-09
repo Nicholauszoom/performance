@@ -47,7 +47,7 @@
               <?php if( session('mng_roles_grp')){ ?>
                 <td class="options-width">
                   <?php if($row->type>0){ ?>
-                    <a  href="<?php echo  url('').'/flex/groups'.base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip">
+                    <a  href="<?php echo  url('').'/flex/groups/'.base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip">
                       <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                     </a>
 
@@ -103,7 +103,7 @@
 
                 @if ( session('mng_roles_grp') )
                 <td class="options-width">
-                  <a  href="<?php echo  url('') .'/flex/role_info'.base64_encode($row->id); ?>"  title="Info and Details" class="icon-2 info-tooltip">
+                  <a  href="<?php echo  url('') .'/flex/role_info/'.base64_encode($row->id); ?>"  title="Info and Details" class="icon-2 info-tooltip">
                     <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                   </a>
 

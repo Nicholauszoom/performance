@@ -53,9 +53,9 @@
               <td><?php echo 100*($row->rate)."%"; ?></td>
               <?php if($pendingPayroll==0){ ?>
               <td class="options-width">
-             <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='fa fa-trash'></i></button></a>&nbsp;&nbsp; -->
+             <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye/".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='fa fa-trash'></i></button></a>&nbsp;&nbsp; -->
 
-             <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo  url(''); ?>/flex/paye_info".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
+             <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo  url(''); ?>/flex/paye_info/".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
 
               </td>
               <?php } ?>
@@ -126,9 +126,9 @@
                             <td><?php echo 100*($row->rate)."%"; ?></td>
                             <?php if($pendingPayroll==0){ ?>
                             <td class="options-width">
-                           <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='ph-trash'></i></button></a>&nbsp;&nbsp; -->
+                           <!-- <a class="tooltip-demo" data-toggle="tooltip" href="<?php echo  url(''); ?>/flex/deletepaye/".$row->id; ?>" title="Delete" class="icon-2 info-tooltip" ><button type="button" class="btn btn-danger btn-xs" ><i class='ph-trash'></i></button></a>&nbsp;&nbsp; -->
 
-                           <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo  url(''); ?>/flex/paye_info".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
+                           <a class="tooltip-demo" data-toggle="tooltip" data-placement="top" title="Edit"  href="<?php echo  url(''); ?>/flex/paye_info/".$row->id; ?>"><button type="button" class="btn btn-info btn-xs" ><i class='fa fa-edit'></i></button></a>
 
                             </td>
                             <?php } ?>

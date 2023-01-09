@@ -100,7 +100,7 @@
                                 <a href="javascript:void(0)" onclick="cancelLoan(<?php echo $row->id;?>)">
                                 <button  class="btn btn-warning btn-xs">CANCEL</button></a>  <?php }  ?>
                                 
-                                <a href="<?php echo  url(''); ?>/flex/updateloan{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateloan/{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
                             
                             </td>
 
@@ -197,7 +197,7 @@
                             <!--Line Manager and HR -->
                             <td>
                                 
-                                <a href="<?php echo  url(''); ?>/flex/updateloan{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
+                                <a href="<?php echo  url(''); ?>/flex/updateloan/{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
                             
                             
                             <?php if(session('mng_emp') && $row->status==0){ ?>
@@ -219,7 +219,7 @@
 
                             <td>
                                 <?php echo "<b>HR: </b>".$row->reason_hr."<br><b>Finance: </b>".$row->reason_finance; ?>
-                              <a href="<?php echo  url(''); ?>/flex/loan_application_info{{ $row->id }}">
+                              <a href="<?php echo  url(''); ?>/flex/loan_application_info/{{ $row->id }}">
                               <br>
                               <button type="submit" name="go" class="btn btn-main btn-xs">Add Remark</button></a> <?php //} ?>
                             </td>

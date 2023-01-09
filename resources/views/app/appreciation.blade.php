@@ -114,7 +114,7 @@
                               <p><strong>Position: </strong><?php echo $position; ?> </p>
                               <p><strong>Department: </strong><?php echo $department; ?> </p>
                   <?php if (session('regemp') !='') { ?>
-                              <a href="<?php echo  url(''); ?>/flex/userprofile".$id; ?>"><button type="button" class="btn btn-main btn-xs">
+                              <a href="<?php echo  url(''); ?>/flex/userprofile/".$id; ?>"><button type="button" class="btn btn-main btn-xs">
                                 <i class="fa fa-user"> </i> View Profile
                               </button></a> <?php } ?>
                             </div>
