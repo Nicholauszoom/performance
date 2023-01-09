@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Notification;
 
 class GeneralController extends Controller
 {
+    protected $flexperformance_model;
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
@@ -111,7 +112,7 @@ class GeneralController extends Controller
                         $this->flexperformance_model->insert_user_password($data);
                         $response_array['status'] = 'OK';
                         echo json_encode($response_array);
-                        $this->logout();
+                        // $this->logout();
 
                     } else {
                         $response_array['status'] = 'ERR';
@@ -143,7 +144,7 @@ class GeneralController extends Controller
     public function userprofile(Request $request)
     {
         $id = $request->input('id');
-        //dd($id);
+
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
 
@@ -168,7 +169,7 @@ class GeneralController extends Controller
 
         $data['parent'] = "Employee Profile";
 
-        return view('app.userprofile', $data);
+        return view('employee.userprofile', $data);
     }
 
     public function contract_expire(Request $request)
@@ -2443,6 +2444,7 @@ class GeneralController extends Controller
 
     public function updateEmployee(Request $request)
     {
+
         $pattern = $request->input('id');
         $values = explode('|', $pattern);
         $empID = $values[0];
@@ -2458,12 +2460,17 @@ class GeneralController extends Controller
         $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['pension'] = $this->flexperformance_model->pension_fund();
+
         $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
+
         $data['positionTransfer'] = $this->flexperformance_model->pendingPositionTranferCheck($empID);
         $data['departmentTransfer'] = $this->flexperformance_model->pendingDepartmentTranferCheck($empID);
+
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
+
         $data['bankdrop'] = $this->flexperformance_model->bank();
-        return view('app.updateEmployee', $data);
+
+        return view('employee.updateEmployee', $data);
 
     }
 
@@ -3638,7 +3645,7 @@ class GeneralController extends Controller
             return view('auth.password-change');
 
         } else {
-            
+
             $data['parent'] = 'Dashboard';
 
             return view('dashboard', $data);

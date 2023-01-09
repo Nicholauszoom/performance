@@ -632,7 +632,7 @@
                 processData: false,
                 success: function(data) {
                     $('#file').val('');
-                    load_data();
+                    //load_data();
                     alert(' Employees Succefully Imported');
                 }
             })

@@ -122,7 +122,7 @@
                     <td>{{ $row->SNo }}</td>
                     <td>{{ $row->name }}</td>
                     <td>{{ 100*($row->rate_employee) .'%' }}</td>
-                    <td>{{ 100*($row->rate_employee) .'%' }}</td>
+                    <td>{{ 100*($row->rate_employer) .'%' }}</td>
 
                     @if ($pendingPayroll == 0)
                     <td class="options-width">

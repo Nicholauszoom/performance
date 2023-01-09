@@ -30,22 +30,22 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         foreach ($collection as $row) 
         {  
             //check status of employee
-            if($row['status'] == 'InActive'){
-                $state = 4;
-                $todate = date('Y-m-d');
-                $datalog = array(
-                    'state' => 4,
-                    'current_state' => 4,
-                    'empID' => $row['empno'],
-                    'author' => session('emp_id'),
-                );
+            // if($row['status'] == 'InActive'){
+            //     $state = 4;
+            //     $todate = date('Y-m-d');
+            //     $datalog = array(
+            //         'state' => 4,
+            //         'current_state' => 4,
+            //         'empID' => $row['empno'],
+            //         'author' => session('emp_id'),
+            //     );
         //        echo json_encode($datalog);
         
-                $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
-            }
+            //     $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
+            // }
             
-            else
-            $state=1;
+            // else
+            // $state=1;
 
             //check position
             //  if($row['position']!= NULL){
@@ -76,14 +76,24 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             //  }else{
             //     dd($row['department']);
             //  }
+
+            $branch  =  DB::table('branch')
+              ->where('name',$row['branch'])
+              ->select('id')->first();
+              if($branch == null)
+              dd($row['branch']);
          $data = [
             // 'department'=>!empty($data)?$data->id:100,
             // 'emp_id'=>$row['empno'],
             // 'emp_code'=>$row['codeno'],
             // 'company'=>$row['company'],
-             'state'=>$state,
-            // 'emp_level'=>4,
-            //'leave_days_entitled'=>$row['leavedaysentitle'],
+            // 'state'=>$state,
+             'emp_level'=>$row['grade'],
+             'branch'=>$row['branch'],
+               'job_title'=>$row['job'],
+              'leave_days_entitled'=>$row['leave'],
+              'accrual_rate'=>$row['accrual'],
+              'branch'=>$branch->id,
             // 'bank'=>1,
             // 'bank_branch'=>1,
             // 'pension_fund'=>1,
@@ -91,17 +101,25 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'fname'=>$row['fname'],
             // 'mname'=>$row['pname'],
             // 'lname'=>$row['lname'],
-            // 'birthdate'=>$row['dobirth'],
-            // 'gender'=>$row['gender'],
-            // 'email'=>$row['email'],
-            // 'hire_date'=>$row['hiredate'],
+             'birthdate'=>$row['birth'],
+               'gender'=>$row['gender']=='F'?'Female':'Male',
+               'email'=>$row['email'],
+              'hire_date'=>$row['join'],
+              'contract_end'=>$row['contract_end'],
+              'contracted_month'=>$row['contracted_month'],
+              'contract_type'=>$row['contract_type'] == 'Permanent'? 3:2,
+              'heslb_balance'=>$row['heslb_balance'],
+              'form_4_index'=>$row['form_4_index'],
+              'national_id'=>$row['nida'],
             // 'salary'=>$row['basicpay'],
             // 'currency'=>$row['currency'],
             // 'username'=>$row['empno'],
             // 'password'=>"$2y$10$"."cuAOvfpGSYPLmwONROf9J.WpmZf0.sIq/si7gkSZZSjr7KmV5SrXG",
 
           ];
-         $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+
+          //DB::table('employee_clean')->where('payroll_no',$row['payroll'])->update($data);
+           $recordID = ImportsEmployee::where('payroll_no',$row['payroll'])->update($data);
          //$recordID = ImportsEmployee::create($data);
         //}
           

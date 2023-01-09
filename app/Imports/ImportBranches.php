@@ -30,10 +30,10 @@ class ImportBranches implements ToCollection,WithHeadingRow
              
 
           $data = [
-            'code'=>$row['code'],
-            'name'=>$row['name'],
-            'location_code'=>$row['location_code'],
-            'location_id'=>$row['location_id'],
+            //'code'=>$row['code'],
+            'name'=>$row['branch'],
+            //'location_code'=>$row['location_code'],
+            //'location_id'=>$row['location_id'],
         
           ];
           DB::table('branch')
