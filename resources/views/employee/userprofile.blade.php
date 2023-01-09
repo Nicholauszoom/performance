@@ -58,7 +58,7 @@
         <div class="card border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="https://ui-avatars.com/api/?name={{ urlencode($name) }}&background=00204e&color=fff" width="150" height="150" alt="">
+                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>
@@ -68,23 +68,19 @@
           <ul class="nav nav-sidebar mt-3">
             <li class="nav-item-divider"></li>
 
-            <li class="nav-item d-flex justify-content-center align-items-center my-3">
+            <li class="nav-item d-flex justify-content-around align-items-center my-3">
                 <a href="{{ route('password.employee') }}" class="btn btn-main">
                     <i class="ph-note-pencil me-2"></i>
                     Change Password
                 </a>
-            </li>
 
-
-            {{-- @if (session('mng_emp'))
-            <li class="nav-item d-flex justify-content-center align-items-center my-3">
-                <a href="{{ url('/flex/updateEmployee/?id=').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
+                @if (session('mng_emp'))
+                <a href="{{ url('/flex/updateEmployee/?id=').$empID.'|'.$departmentID; }}" class="btn btn-main">
                     <i class="ph-note-pencil me-2"></i>
                     Request Profile Update
                 </a>
+                @endif
             </li>
-            @endif --}}
-
           </ul>
         </div>
 
