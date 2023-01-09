@@ -521,9 +521,6 @@ with open("test.csv", "wt") as fp:
             data[key]['membership_no']=0
         if(data[key]['membership_no'] == 'Null'):
             data[key]['membership_no']=0
-        if(data[key]['membership_no'] == ''):
-            data[key]['membership_no']=0
-        
 
         writer.writerow([
         i,      #id
@@ -532,23 +529,24 @@ with open("test.csv", "wt") as fp:
         data[key]['shift_allowance'],      #allowances
         data[key]['employee_contribution'],      #pension_employee
         data[key]['employer_contribution'],      #pension_employer
-        0,      #medical_employee
-        0,      #medical_employer
-        0,      #taxdue
-        0,      #meals
-        0,      #department
-        0,      #position
-        0,      #branch
-        0,      #pension_fund
+        data[key]['shift_allowance'],      #medical_employee
+        data[key]['shift_allowance'],      #medical_employer
+        data[key]['shift_allowance'],      #taxdue
+        data[key]['shift_allowance'],      #meals
+        data[key]['shift_allowance'],      #department
+        data[key]['shift_allowance'],      #position
+        data[key]['shift_allowance'],      #branch
+        data[key]['shift_allowance'],      #pension_fund
         data[key]['membership_no'],      #membership_no
-        0,      #sdl
-        0,      #wcf
+        data[key]['shift_allowance'],      #sdl
+        data[key]['shift_allowance'],      #wcf
         data[key]['take_home'],      #less_takehome
         data[key]['date'],      #due_date
         data[key]['date'],      #payroll_date
-        0,      #bank
-        0,      #bank_branch
-        0,      #account_no
+        data[key]['shift_allowance'],      #bank
+        data[key]['shift_allowance'],      #bank_branch
+        data[key]['shift_allowance'],      #account_no
+        data[key]['date'],
         data[key]['date']]    #created_at
        
         )

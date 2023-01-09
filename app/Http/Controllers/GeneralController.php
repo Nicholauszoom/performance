@@ -4240,7 +4240,6 @@ class GeneralController extends Controller
 
     public function paye_info(Request $request)
     {
-        
         $id = $request->input('id');
 
         $data['paye'] = $this->flexperformance_model->getpayebyid($id);
