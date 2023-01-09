@@ -420,6 +420,7 @@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <form id="updateBank_Bankbranch">
+
                         <div id="feedBackBank_Bankbranch"></div>
 
                         <?php if($pendingPayroll>0){ ?>
@@ -720,8 +721,8 @@
             var bankID = $(this).val();
             if (bankID) {
                 $.ajax({
-                    type: 'POST',
-                    url: '<?php echo  url(''); ?>/flex/bankBranchFetcher/',
+                    type: 'GET',
+                    url: '{{ url('/flex/bankBranchFetcher/') }}',
                     data: 'bank=' + bankID,
                     success: function(html) {
                         $('#bank_branch').html(html);
@@ -822,6 +823,7 @@
         $.ajax({
                 url: "<?php echo  url(''); ?>/flex/updateContractStart",
                 type: "post",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
@@ -848,6 +850,7 @@
         $.ajax({
                 url: "<?php echo  url(''); ?>/flex/updateContractEnd",
                 type: "post",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
