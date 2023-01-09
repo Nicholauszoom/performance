@@ -749,7 +749,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollInputJournalExport','payrollInputJournalExport')->name('reports.payrollInputJournalExport');
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
-        Route::any('/volunteerAllowanceMWPExport','volunteerAllowanceMWPExport')->name('reports.volunteerAllowanceMWPExport');
+        Route::any('/temporaryAllowanceMWPExport','temporaryAllowanceMWPExport')->name('reports.temporaryAllowanceMWPExport');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
         Route::any('/employeeCostExport','employeeCostExport')->name('reports.employeeCostExport');

@@ -1206,7 +1206,7 @@ DB::insert(DB::raw($query));
         return DB::select(DB::raw($query));
     }
 
-    public function volunteerPayrollTotals($table, $payrollMonth){
+    public function temporaryPayrollTotals($table, $payrollMonth){
         $query = "SELECT SUM(pl.less_takehome) as takehome_less, SUM(pl.salary) as salary, SUM(pl.pension_employee) as pension_employee, SUM(pl.pension_employer) as pension_employer,  SUM(pl.medical_employer) as medical_employer, SUM(pl.medical_employee) as medical_employee, SUM(pl.allowances) as allowances, SUM(pl.taxdue) as taxdue, SUM(pl.meals) as meals, SUM(pl.sdl) as sdl, SUM(pl.wcf) as wcf
         FROM ".$table." as pl, employee e where e.emp_id = pl.empID and e.contract_type = 2 and payroll_date = '".$payrollMonth."'";
         return DB::select(DB::raw($query));

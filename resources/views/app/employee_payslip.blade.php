@@ -78,7 +78,7 @@
                                         <span class="checkmark"></span>
                                     </label>
 
-                                    <label class="containercheckbox">Volunteer
+                                    <label class="containercheckbox">temporary
                                         <input type="radio" name="type" value="2">
                                         <span class="checkmark"></span>
                                     </label>

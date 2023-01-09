@@ -67,8 +67,8 @@ INSERT INTO `account_code` (`id`, `name`, `code`, `status`) VALUES
 (11, 'Employer’s Tax Contributions', '3025', 1),
 (12, 'Employer’s Pension Contributions', '3050', 1),
 (13, 'Employee Relocation Cost', '3275', 1),
-(14, 'Volunteer Allowances', '3520', 1),
-(15, 'Volunteer/Staff Control Account ', '1717', 1),
+(14, 'temporary Allowances', '3520', 1),
+(15, 'temporary/Staff Control Account ', '1717', 1),
 (16, 'Salary Accrual', '1710', 1),
 (17, 'TZS Bank Account for salary payments', 'CBTZ001', 1);
 
@@ -1816,7 +1816,7 @@ CREATE TABLE `contract` (
 --
 
 INSERT INTO `contract` (`id`, `name`, `duration`, `reminder`, `state`) VALUES
-(2, 'Volunteer', 0.5, 2, 1),
+(2, 'temporary', 0.5, 2, 1),
 (3, 'Permanent', 60, 6, 1),
 (4, 'Internship', 1, 2, 0),
 (5, 'Temporary', 1, 3, 1);
@@ -10825,7 +10825,7 @@ INSERT INTO `grants` (`id`, `code`, `name`, `description`, `funder`, `amount`) V
 (1, 'VSO', 'Unrestricted Funds', 'VSO Office Unrestricted Funds', '', NULL),
 (7, 'DFI024', 'DFI024', 'DfID - ICS2 Transition', '', NULL),
 (8, 'DFI025', 'DFI025', 'DfID  - Knowledge Exchange', '', NULL),
-(9, 'DFI032', 'DFI032', 'DfID - Volunteering for Development', '', NULL),
+(9, 'DFI032', 'DFI032', 'DfID - temporarying for Development', '', NULL),
 (10, 'RAN005', 'RAN005', 'Randstad Global Partnership 2016-19', '', NULL),
 (11, 'PES004', 'PES004', 'Pestalozzi PCF for P677  - Part 2', '', NULL),
 (12, 'NLD001', 'NLD001', 'VSO Netherlands (SAS005) - SP040', '', NULL),
@@ -10906,7 +10906,7 @@ CREATE TABLE `groups` (
 INSERT INTO `groups` (`id`, `type`, `name`, `grouped_by`, `created_by`, `created_on`) VALUES
 (1, 0, 'All Employees', 1, 'TZ1114433', '2019-07-01 11:08:52'),
 (2, 2, 'Line Managers', 1, 'TZ1114433', '2019-07-01 11:08:52'),
-(14, 1, 'Volunteers H/A', 1, 'TZ1114433', '2020-06-19 09:33:50'),
+(14, 1, 'temporarys H/A', 1, 'TZ1114433', '2020-06-19 09:33:50'),
 (15, 2, 'HR Group', 1, 'TZ1113936', '2020-06-22 01:47:01'),
 (16, 2, 'Finance Group', 1, 'TZ1113936', '2020-06-22 01:47:25'),
 (17, 2, 'Directors Group', 1, 'TZ1113936', '2020-06-22 01:47:35'),
@@ -11526,7 +11526,7 @@ INSERT INTO `organization_level` (`id`, `name`, `minSalary`, `maxSalary`) VALUES
 (5, 'Regional / Global Senior Managers', '89952970.00', '151527680.00'),
 (6, 'Country Directors / Heads of Function (globally)', '119495544.00', '218320944.00'),
 (7, 'Executive Board / Operations Directors', '197725000.00', '315000000.00'),
-(8, 'Volunteers', '100.00', '315000000.00'),
+(8, 'temporarys', '100.00', '315000000.00'),
 (10, 'IT and opeartion', '1000000.00', '100000000.00');
 
 -- --------------------------------------------------------

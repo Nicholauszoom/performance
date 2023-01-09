@@ -541,7 +541,7 @@ foreach($info as $key){
 }
 
 $pdf->SetXY(8, 24);
-$employer = "<p><b>SDL of VSO Employees as of:  ".date('Y-m-d', strtotime($month))."</b></p>";
+$employer = "<p><b>SDL of African Banking Corporation Employees as of:  ".date('Y-m-d', strtotime($month))."</b></p>";
 $pdf->writeHTMLCell(0, 12, '', '', $employer, 0, 1, 0, true, '', true);
 
 // TIN NUMBER

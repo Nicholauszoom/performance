@@ -30,22 +30,22 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         foreach ($collection as $row) 
         {  
             //check status of employee
-            if($row['status'] == 'InActive'){
-                $state = 4;
-                $todate = date('Y-m-d');
-                $datalog = array(
-                    'state' => 4,
-                    'current_state' => 4,
-                    'empID' => $row['empno'],
-                    'author' => session('emp_id'),
-                );
-        //        echo json_encode($datalog);
+        //     if($row['status'] == 'InActive'){
+        //         $state = 4;
+        //         $todate = date('Y-m-d');
+        //         $datalog = array(
+        //             'state' => 4,
+        //             'current_state' => 4,
+        //             'empID' => $row['empno'],
+        //             'author' => session('emp_id'),
+        //         );
+        // //        echo json_encode($datalog);
         
-                $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
-            }
+        //         $flexperformance_model->deactivateEmployee($row['empno'], $datalog, '', $todate);
+        //     }
             
-            else
-            $state=1;
+        //     else
+        //     $state=1;
 
             //check position
             //  if($row['position']!= NULL){
@@ -76,12 +76,43 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             //  }else{
             //     dd($row['department']);
             //  }
+
+      $values = explode(',', $row['name']);
+        $values2 = explode(' ', $values[0]);
+        $fname = $values2[0];
+        $mname = count($values2) == 2? $values2[1]:'';
+        $lname = $values[1];
+		
+        $department = DB::table('department')->where('name',$row['dept'])->select('*')->first();
+
+        $position = DB::table('position')->where('name',$row['job'])->select('*')->first();
+
+
          $data = [
+        'payroll_no'=>$row['payroll'],
+        
+	    'name'=>$row['name'],
+         'fname'=>$fname,
+         'mname'=>$mname,
+         'lname'=>$lname,
+	 	  'emp_level'=>$row['grade'], 	 	
+	 	  'job_title'=>$row['job'], 		
+	 	  'cost_center'=>$row['center'], 
+          'position'=>$position->id, 		
+	 	  'department'=>$department->id, 	
+     	  'salary'=>$row['salary'], 	
+	 	  'pf_membership_no'=>$row['pension'], 
+	 	  'account_no'=>$row['account_no'], 
+	 	  'tin'=>$row['tin'], 
+           'state'=>1, 	
+	 	//   'form_iV_index'=>$row['form_4_index'], 	
+	 	//   'heslb'=>$row['heslb'], 
             // 'department'=>!empty($data)?$data->id:100,
             // 'emp_id'=>$row['empno'],
             // 'emp_code'=>$row['codeno'],
             // 'company'=>$row['company'],
-             'state'=>$state,
+            // 'state'=>$state,
+            //'pf_membership_no'=>$row['nssf'],
             // 'emp_level'=>4,
             //'leave_days_entitled'=>$row['leavedaysentitle'],
             // 'bank'=>1,
@@ -101,7 +132,20 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'password'=>"$2y$10$"."cuAOvfpGSYPLmwONROf9J.WpmZf0.sIq/si7gkSZZSjr7KmV5SrXG",
 
           ];
-         $recordID = ImportsEmployee::where('emp_id',$row['empno'])->update($data);
+
+        //   $data2 = [
+        //     'state'=>1,
+        //   ];
+          
+
+          //$record = DB::table('employee_clean')->insert($data);
+          $emp = DB::table('employee')->where('payroll_no',$row['payroll'])->select('id')->first();
+         if(!empty($emp))
+         $recordID = ImportsEmployee::where('payroll_no',$row['payroll'])->update($data);
+         else{
+         $data['emp_id'] = $row['payroll'];
+         $recordID = ImportsEmployee::insert($data);
+        }
          //$recordID = ImportsEmployee::create($data);
         //}
           
