@@ -56,10 +56,12 @@ class FlexPerformanceModel extends Model
 
 	function getAttributeName($attribute, $table, $referenceName, $referenceValue)
 	{
-		$query = $attribute." AS attributeValue   WHERE ".$referenceName." = '".$referenceValue."' ";
+		// $query = $attribute." AS attributeValue   WHERE ".$referenceName." = '".$referenceValue."' ";
 		$row =  DB::table($table)
-        ->select(DB::raw($query))
-        ->first();
+            ->select($attribute.' AS attributeValue')
+            ->where($referenceName, $referenceValue)
+            ->limit(1)
+            ->first();
 
 		return $row->attributeValue;
 	}
@@ -626,7 +628,7 @@ function retire_list()
 		return true;
 	}
 
-	function employeeTransfer($data)
+	public function employeeTransfer($data)
 	{
 		DB::table('transfer')->insert($data);
 
@@ -680,49 +682,32 @@ function retire_list()
 	}
 
 
-	function pendingSalaryTranferCheck($empID){
+	public function pendingSalaryTranferCheck($empID){
 
-		// $query = "count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
+        $row = DB::table('transfer')->where( 'empID', $empID)->where('status' , 0)->where('parameterID' , 1)->count();
 
-		$query = "SELECT count(id) as result FROM result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 1 ";
-
-        $row = DB::select(DB::raw($query));
-
-		$query = "count(id) as result";
-
-		// $row = DB::table('result')
-		// ->select(DB::raw($query))
-        // ->where('empID', '=', $empID)
-        // ->where('parameterID','=','1')
-        // ->where('status', '0')
-        // ->first();
-
-        dd($row);
-    	// return $row->result;
+    	return $row;
 	}
-	function pendingPositionTranferCheck($empID){
 
-		$query = "count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 2 ";
-		$row = DB::table('transfer')
-		->select(DB::raw($query))
-		->first();
-    	return $row->result;
+    public function pendingPositionTranferCheck($empID){
+
+        $row = DB::table('transfer')->where( 'empID', $empID)->where('status' , 0)->where('parameterID' , 2)->count();
+
+    	return $row;
 	}
-	function pendingDepartmentTranferCheck($empID){
 
-		$query = " count(id) as result WHERE empID = '".$empID."' AND status = 0 AND parameterID = 3 ";
-		$row = DB::table('transfer')
-		->select(DB::raw($query))
-		->first();
-    	return $row->result;
+	public function pendingDepartmentTranferCheck($empID){
+
+        $row = DB::table('transfer')->where( 'empID', $empID)->where('status' , 0)->where('parameterID' , 3)->count();
+
+        return $row;
 	}
-	function pendingBranchTranferCheck($empID){
 
-		$query = "count(id) as result  WHERE empID = '".$empID."' AND status = 0 AND parameterID = 4 ";
-		$row = DB::table('result')
-		->select(DB::raw($query))
-		->first();
-    	return $row->result;
+    public function pendingBranchTranferCheck($empID){
+
+        $row = DB::table('transfer')->where( 'empID', $empID)->where('status' , 0)->where('parameterID' , 4)->count();
+
+        return $row;
 	}
 
 	function getTransferInfo($transferID)
@@ -2530,8 +2515,7 @@ function allLevels()
 
 	function updateEmployee($data, $empID)
 	{
-		DB::table('employee')->where('emp_id', $empID)
-		->update($data);
+		DB::table('employee')->where('emp_id', $empID)->update($data);
 		return true;
 	}
 

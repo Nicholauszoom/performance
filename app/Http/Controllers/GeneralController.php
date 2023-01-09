@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use App\Helpers\SysHelpers;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Notification;
 
 class GeneralController extends Controller
 {
+    protected $flexperformance_model;
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
@@ -111,7 +113,7 @@ class GeneralController extends Controller
                         $this->flexperformance_model->insert_user_password($data);
                         $response_array['status'] = 'OK';
                         echo json_encode($response_array);
-                        $this->logout();
+                        // $this->logout();
 
                     } else {
                         $response_array['status'] = 'ERR';
@@ -143,7 +145,7 @@ class GeneralController extends Controller
     public function userprofile(Request $request)
     {
         $id = $request->input('id');
-        //dd($id);
+
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
 
@@ -168,7 +170,7 @@ class GeneralController extends Controller
 
         $data['parent'] = "Employee Profile";
 
-        return view('app.userprofile', $data);
+        return view('employee.userprofile', $data);
     }
 
     public function contract_expire(Request $request)
@@ -2443,6 +2445,7 @@ class GeneralController extends Controller
 
     public function updateEmployee(Request $request)
     {
+
         $pattern = $request->input('id');
         $values = explode('|', $pattern);
         $empID = $values[0];
@@ -2458,28 +2461,37 @@ class GeneralController extends Controller
         $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['pension'] = $this->flexperformance_model->pension_fund();
+
         $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
+
         $data['positionTransfer'] = $this->flexperformance_model->pendingPositionTranferCheck($empID);
         $data['departmentTransfer'] = $this->flexperformance_model->pendingDepartmentTranferCheck($empID);
+
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
+
         $data['bankdrop'] = $this->flexperformance_model->bank();
-        return view('app.updateEmployee', $data);
+
+        // dd($data);
+
+        return view('employee.updateEmployee', $data);
 
     }
 
     public function updateFirstName(Request $request)
     {
         $empID = $request->input('empID');
-        if ($request->method() == "POST" && $empID != '') {
-            $updates = array(
-                'fname' => $request->input('fname'),
-                'last_updated' => date('Y-m-d'),
-            );
-            $result = $this->flexperformance_model->updateEmployee($updates, $empID);
-            if ($result == true) {
-                echo "<p class='alert alert-success text-center'>First Name Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 
+        $updates = array(
+            'fname' => $request->input('fname'),
+            'last_updated' => date('Y-m-d'),
+        );
+
+        $result = $this->flexperformance_model->updateEmployee($updates, $empID);
+
+        if ($result == true) {
+            echo "<p class='alert alert-success text-center'>First Name Updated Successifully!</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>Update Failed</p>";
         }
     }
 
@@ -2523,7 +2535,9 @@ class GeneralController extends Controller
                 'mname' => $request->input('mname'),
                 'last_updated' => date('Y-m-d'),
             );
+
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
+
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Middle Name Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
@@ -2581,18 +2595,19 @@ class GeneralController extends Controller
 
     public function updateExpatriate(Request $request)
     {
+        // dd('ok');
         $empID = $request->input('empID');
-        if ($request->method() == "POST" && $empID != '') {
-            $updates = array(
-                'is_expatriate' => $request->input('expatriate'),
-                'last_updated' => date('Y-m-d'),
-            );
-            $result = $this->flexperformance_model->updateEmployee($updates, $empID);
+
+        $updates = array(
+            'is_expatriate' => $request->input('expatriate'),
+            'last_updated' => date('Y-m-d'),
+        );
+
+        $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'> Updated Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
 
-        }
     }
 
     public function updateEmployeePensionFund(Request $request)
@@ -2694,33 +2709,36 @@ class GeneralController extends Controller
 
     public function updateDeptPos(Request $request)
     {
-        $empID = $request->input('empID');
-        if ($request->method() == "POST" && $empID != '') {
+        // dd($request->all());
+        $empID = $request->empID;
 
-            $data = array(
-                'empID' => $empID,
-                'parameter' => 'Department',
-                'parameterID' => 3,
-                'recommended_by' => session('emp_id'),
-                'date_recommended' => date('Y-m-d'),
-                'date_approved' => date('Y-m-d'),
-                'old' => $request->input('oldDepartment'),
-                'new' => $request->input('department'),
-                'old_position' => $request->input('oldPosition'),
-                'new_position' => $request->input('position'),
-            );
+        $data = array(
+            "empID" => $request->empID,
+            "parameter" => "Department",
+            "parameterID" => 3,
+            "recommended_by" => session("emp_id"),
+            "date_recommended" => date("Y-m-d"),
+            "date_approved" => date("Y-m-d"),
+            "old" => $request->input("oldDepartment"),
+            "new" => $request->input("department"),
+            "old_position" => $request->input("oldPosition"),
+            "new_position" => $request->input("position"),
+        );
+
             $result = $this->flexperformance_model->employeeTransfer($data);
+
             $oldp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('oldPosition'));
             $newp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('position'));
             $oldd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('oldDepartment'));
             $newd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('department'));
+
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Requested Department Change For Employee with ID = " . $empID . " From " . $oldd . " To " . $newd . " and Position From " . $oldp . " To " . $newp . "");
+                SysHelpers::AuditLog(2, "Requested Department Change For Employee with ID = " . $empID . " From " . $oldd . " To " . $newd . " and Position From " . $oldp . " To " . $newp . "", $request);
                 echo "<p class='alert alert-success text-center'>Request For Department and Position Transfer Has Been Sent Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>FAILED, Request For Department and Position Transfe Has Failed. Please Try Again</p>";
             }
 
-        }
+
     }
 
     public function approveDeptPosTransfer($id)
@@ -3091,40 +3109,34 @@ class GeneralController extends Controller
         }
     }
 
+    private function storeImage($request)
+    {
+        $newImageName = $request->userfile->hashName();
+        $request->userfile->move(public_path('storage/profile'), $newImageName);
+
+        return $newImageName;
+    }
+
     public function updateEmployeePhoto(Request $request)
     {
+
         $empID = $request->input('empID');
-        // $old_photo = $this->flexperformance_model->getOldPhoto($empID);
-        // $photo_path = './uploads/userprofile/'.$old_photo;
-        // if($old_photo!='user.png'){
-        //   unlink($photo_path);
-        // }
 
         if ($request->method() == "POST" && $empID != '') {
             $namefile = "user_" . $empID;
-            $config['upload_path'] = './uploads/userprofile/';
-            $config['file_name'] = $namefile;
-            $config['allowed_types'] = 'jpeg|img|jpg|png';
-            $config['overwrite'] = true;
 
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload("userfile")) {
-                $data = $this->upload->data();
-                chmod($data["full_path"], 0777);
-                $updates = array(
-                    'photo' => $data["file_name"],
-                    'last_updated' => date('Y-m-d'),
-                );
+            $updates = array(
+                'photo' => $this->storeImage($request),
+                'last_updated' => date('Y-m-d'),
+            );
 
-                $result = $this->flexperformance_model->updateEmployee($updates, $empID);
-                if ($result == true) {
+            $result = $this->flexperformance_model->updateEmployee($updates, $empID);
 
-                    echo "<p class='alert alert-success text-center'>Employee Picture Updated Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Failed to Update, Try again</p>";}
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Employee Picture Updated Successifully!</p>";
             } else {
-                echo "<p class='alert alert-danger text-center'>" . $this->upload->display_errors() . "<br>FAILED! User Picture Not Uploaded!</p>";
+                echo "<p class='alert alert-danger text-center'>Failed to Update, Try again</p>";
             }
-
         }
     }
 
@@ -3638,7 +3650,7 @@ class GeneralController extends Controller
             return view('auth.password-change');
 
         } else {
-            
+
             $data['parent'] = 'Dashboard';
 
             return view('dashboard', $data);
