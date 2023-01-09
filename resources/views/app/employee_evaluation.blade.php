@@ -52,7 +52,7 @@
                                 </li>
 
                                 <li class=""><a
-                                        href="<?php echo  url('')."flex/project/printPerformance/?id=".$empID; ?>" target="_blank">Print
+                                        href="<?php echo  url('')."flex/project/printPerformance".$empID; ?>" target="_blank">Print
                                         Performance</a>
                                 </li>
 
@@ -107,7 +107,7 @@
                                                             <?php //if (session('vw_proj') || session('mng_proj')) { ?>
                                                             <td class="options-width">
                                                                 <a
-                                                                    href="<?php echo  url('')."flex/project/addEvaluationResults/?id=".$empID."|".$row->id; ?>">
+                                                                    href="<?php echo  url('')."flex/project/addEvaluationResults".$empID."|".$row->id; ?>">
                                                                     <button class="btn btn-info btn-xs">Add
                                                                         Results</button>
                                                                 </a>

@@ -460,9 +460,9 @@
                                               </ul>
                                           </td>
                                             <td class="options-width">
-                                                <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                                <a href="<?php echo  url('')."flex/performance/output_info".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                                 <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
-                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
+                                                <a href="<?php echo  url('')."flex/performance/assigntask".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
                                             </td>
                                         </tr> 
                                           <?php } //} ?>

@@ -371,7 +371,7 @@
                               </ul>
                             </td>
                             <td class="options-width">
-                                <a href="<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                <a href="<?php echo  url('')."flex/performance/outcome_info".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                 <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                 <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id; ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a> -->
                                 

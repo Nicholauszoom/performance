@@ -78,7 +78,7 @@
 
             {{-- @if (session('mng_emp'))
             <li class="nav-item d-flex justify-content-center align-items-center my-3">
-                <a href="{{ url('/flex/updateEmployee/?id=').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
+                <a href="{{ url('/flex/updateEmployee').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
                     <i class="ph-note-pencil me-2"></i>
                     Request Profile Update
                 </a>
@@ -300,7 +300,7 @@
                                                 <i class="ph-trash"></i>
                                             </button>
                                         </form>
-                                        {{-- <a href="<?php echo url('')."flex/deletekin/?id=".$row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
+                                        {{-- <a href="<?php echo url('')."flex/deletekin".$row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
                                         </a> --}}
                                     </td>
                                   </tr>
@@ -717,7 +717,7 @@
                     enctype="multipart/form-data"
                     method="post"
                     action="{{ route('flex.addkin', $empID) }}"
-                    {{-- action="<?php echo  url(''); ?>/flex/addkin/?id=<?php echo $empID; ?>" --}}
+                    {{-- action="<?php echo  url(''); ?>/flex/addkin<?php echo $empID; ?>" --}}
                     data-parsley-validate
                 >
                 @csrf

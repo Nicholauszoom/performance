@@ -187,7 +187,7 @@ $('#saveActivityResult').submit(function(e) {
             });
             setTimeout(function() { // wait for 2 secs(2)
                 alert('Result Saved successfully!! ...');
-                //window.location.href = "<?php echo url('flex/project/evaluateEmployee/?id=');?>"+data.empID+"|"+data.department; // then reload the page.(3)
+                //window.location.href = "<?php echo url('flex/project/evaluateEmployee');?>"+data.empID+"|"+data.department; // then reload the page.(3)
                location.reload(); // then reload the page.(3)
             }, 1000);
             // $('#addProject')[0].reset();

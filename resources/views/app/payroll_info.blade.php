@@ -205,9 +205,9 @@ $remained = null;
                             echo number_format($amount,2); ?></td>
                             <td>
                             <?php if($payrollState == 0){ ?>
-                              <a href="<?php echo  url('')."flex/payroll/temp_payroll_review/?id=".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>
+                              <a href="<?php echo  url('')."flex/payroll/temp_payroll_review".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>
                               <?php } else { ?>
-                              <a href="<?php echo  url('')."flex/payroll/payroll_review/?id=".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>                              
+                              <a href="<?php echo  url('')."flex/payroll/payroll_review".base64_encode($row->empID)."&pdate=".base64_encode($payrollMonth); ?>"   title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button> </a>                              
                               <?php } ?>
                             </td>
                          </tr>

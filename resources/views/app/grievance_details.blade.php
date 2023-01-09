@@ -117,7 +117,7 @@
                   <div class="card-body">
                       <p>Additional Details</p>
 
-                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url('').'flex/grievance_details/?id='.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url('').'flex/grievance_details'.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
                      
                       <div class="form-group">
