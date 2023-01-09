@@ -24,8 +24,46 @@
         }
     @endphp
 
-    <div class="mb-3">
-        <h5 class="text-muted">Allowance Info</h5>
+    <div class="card">
+        <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/financial_group')}}" class="nav-link" aria-selected="false" role="tab"
+                    tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Packages
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/allowance_overtime') }}" class="nav-link" aria-selected="false" role="tab"
+                    tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Overtime
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/allowance') }}" class="nav-link  active show" aria-selected="false" role="tab"
+                    tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Allowance
+                </a>
+            </li>
+
+
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
+                    tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Statutory Deductions
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ url('/flex/non_statutory_deductions') }}" class="nav-link " aria-selected="false" role="tab"
+                    tabindex="-1">
+                    <i class="ph-list me-2"></i>
+                    Non Statutory Deductions
+                </a>
+            </li>
+        </ul>
     </div>
 
     <div class="row">
@@ -257,9 +295,9 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="text-muted">Groups(s)</h5>
+                    <h5 class="text-muted">Employee(s)</h5>
                 </div>
-                <form autocomplete="off" id = "removeGroup" method="post"  >
+                <form autocomplete="off" id = "removeIndividual" method="post"  >
                     <input type="text" hidden="hidden" name="allowanceID" value="<?php echo $allowanceID; ?>">
                     <table class="table" >
                         <thead>
@@ -297,7 +335,7 @@
     </div>
 
 
-    {{-- @include('app/includes/update_allowances') --}}
+
 @endsection
 
 @push('footer-script')

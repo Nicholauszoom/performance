@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\AuditTrail;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,16 +23,18 @@ class SysHelpers
      * @param string $ip
      * @return void
      */
-    public static function AuditLog( $action, Request $request)
+    public static function AuditLog( $risk, $action, Request $request)
     {
+        $employee = Auth::user()->fname. ' ' .Auth::user()->mname. ' ' .Auth::user()->lname;
 
         AuditTrail::create([
-            'empID' => Auth::user()->emp_id,
-            'platform' => 'Windows 10',
-            'description' => $action,
+            'emp_id' => Auth::user()->emp_id,
+            'emp_name' => $employee,
+            'action_performed' => $action,
             'ip_address' =>  $request->ip(),
-            'agent' => 'Chrome',
-            'due_date' => date('Y-m-d H:i:s'),
+            'user_agent' => $request->userAgent(),
+            'risk' => $risk,
         ]);
     }
+
 }

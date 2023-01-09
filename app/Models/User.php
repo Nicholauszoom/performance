@@ -57,25 +57,4 @@ class User extends Authenticatable
     ];
 
 
-
-
-//        public function basic_details()
-//     {
-//         return $this->hasOne('App\Models\UserDetails\BasicDetails','user_id');
-//     }
-
-//     public function bank_details()
-//     {
-//         return $this->hasOne('App\Models\UserDetails\BankDetails','user_id');
-//     }
-
-//     public function designation(){
-
-//         return $this->belongsTo('App\Models\Designation','designation_id');
-//       }
-//   public function department(){
-
-//         return $this->belongsTo('App\Models\Departments','department_id');
-//       }
-//     use HasPermissionsTrait; //Import The Trait
 }

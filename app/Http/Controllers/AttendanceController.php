@@ -225,6 +225,23 @@ class AttendanceController extends Controller
           echo "<p class='alert alert-primary text-center'>Leave Recommended Successifully</p>";
           }
    } 
+   public function recommendLeaveByHod($id)  
+   { 
+       
+       if($id!=''){
+           
+     $leaveID = $id;
+     $data = array( 
+         
+              'approved_date_hod' =>date('Y-m-d'),
+              'approved_by_hod' =>session('emp_id'),
+              'status' =>6,
+              'notification' => 5
+         );   
+       $this->attendance_model->update_leave($data, $leaveID);
+       echo "<p class='alert alert-primary text-center'>Leave Recommended Successifully</p>";
+       }
+} 
       
     public function holdLeave()  
       { 

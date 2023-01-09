@@ -4,17 +4,23 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use App\Models\AccessControll\Departments;
-use App\Models\AttendanceModel;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ImprestModel;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\ReportModel;
-use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Notifications\RegisteredUser;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\AccessControll\Departments;
+use App\Models\AuditTrail;
+use App\Models\Payroll\FlexPerformanceModel;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class GeneralController extends Controller
 {
@@ -140,6 +146,7 @@ class GeneralController extends Controller
         //dd($id);
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
+
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -158,6 +165,9 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+
+        $data['parent'] = "Employee Profile";
+
         return view('app.userprofile', $data);
     }
 
@@ -2080,6 +2090,8 @@ class GeneralController extends Controller
         echo "<p class='alert alert-success text-center'>Overtime Recommended Successifully</p>";
     }
 
+
+
     public function approved_financial_payments(Request $request)
     {
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
@@ -2089,6 +2101,7 @@ class GeneralController extends Controller
         $data['pending_arrears'] = $this->payroll_model->pending_arrears_payment();
         $data['monthly_arrears'] = $this->payroll_model->all_arrears_payroll_month();
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+
 
         $data['bonus'] = $this->payroll_model->selectBonus();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -2415,7 +2428,7 @@ class GeneralController extends Controller
         $data['title'] = "Employee";
         $data['parent'] = "Employee";
         $data['child'] = "Active Employee";
-        return view('app.employee', $data);
+        return view('employee.employee', $data);
 
     }
 
@@ -3280,7 +3293,7 @@ class GeneralController extends Controller
 
     public function loan_advanced_payments(Request $request)
     {
-        $loanID = base64_decode($this->input->get('key'));
+        $loanID = base64_decode($request->key);
 
         $data['loan_info'] = $this->flexperformance_model->getloan($loanID);
         $data['title'] = "Advanced Loan Payments";
@@ -3337,12 +3350,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function recommendLoan(Request $request)
+    public function recommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_finance' => date('Y-m-d'),
@@ -3355,12 +3368,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function hrrecommendLoan()
+    public function hrrecommendLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
 
                 'approved_date_hr' => date('Y-m-d'),
@@ -3373,12 +3386,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function holdLoan(Request $request)
+    public function holdLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 3,
                 'notification' => 1,
@@ -3388,12 +3401,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function approveLoan(Request $request)
+    public function approveLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $todate = date('Y-m-d');
 
             $result = $this->flexperformance_model->approve_loan($loanID, session('emp_id'), $todate);
@@ -3406,10 +3419,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function pauseLoan(Request $request)
+    public function pauseLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 2,
             );
@@ -3423,10 +3436,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function resumeLoan(Request $request)
+    public function resumeLoan($id)
     {
-        if ($this->uri->segment(3) != '') {
-            $loanID = $this->uri->segment(3);
+        if ($id != '') {
+            $loanID = $id;
             $data = array(
                 'state' => 1,
             );
@@ -3440,12 +3453,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function rejectLoan(Request $request)
+    public function rejectLoan($id)
     {
 
-        if ($this->uri->segment(3) != '') {
+        if ($id != '') {
 
-            $loanID = $this->uri->segment(3);
+            $loanID = $id;
             $data = array(
                 'status' => 5,
                 'notification' => 1,
@@ -3553,23 +3566,24 @@ class GeneralController extends Controller
 
     public function viewrecords(Request $request)
     {
-
         $data['viewrecords'] = $this->flexperformance_model->viewrecords();
         return view('app.viewrecords', $data);
-
     }
+
+
 
     public function home(Request $request)
     {
 
-        // dd(session()->all());
 
         $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
-        // dd($strategyStatistics);
+
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($payrollMonth . "-1 month"))));
+
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         foreach ($strategyStatistics as $key) {
@@ -3611,9 +3625,9 @@ class GeneralController extends Controller
         $data['s_gross_p'] = $this->reports_model->s_grossMonthly($previous_payroll_month);
         $data['v_gross_p'] = $this->reports_model->v_grossMonthly($previous_payroll_month);
         $data['s_net_c'] = $this->reports_model->staff_sum_take_home($payrollMonth);
-        $data['v_net_c'] = $this->reports_model->volunteer_sum_take_home($payrollMonth);
+        $data['v_net_c'] = $this->reports_model->temporary_sum_take_home($payrollMonth);
         $data['s_net_p'] = $this->reports_model->staff_sum_take_home($previous_payroll_month);
-        $data['v_net_p'] = $this->reports_model->volunteer_sum_take_home($previous_payroll_month);
+        $data['v_net_p'] = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
         $data['v_staff'] = $this->reports_model->v_payrollEmployee($payrollMonth, '');
         $data['s_staff'] = $this->reports_model->s_payrollEmployee($payrollMonth, '');
         $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
@@ -3621,11 +3635,13 @@ class GeneralController extends Controller
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
         if (session('password_set') == "1") {
-            $this->login_info();
+            return view('auth.password-change');
+
         } else {
+            
             $data['parent'] = 'Dashboard';
-            $data['child'] = 'Work';
-            return view('app.home', $data);
+
+            return view('dashboard', $data);
         }
 
     }
@@ -3872,7 +3888,7 @@ class GeneralController extends Controller
 
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
 
-        SysHelpers::AuditLog("Exit Cancelled of an Employee with ID =" . $empID, $request);
+        SysHelpers::AuditLog(1,"Exit Cancelled of an Employee with ID =" . $empID, $request);
 
         $response_array['status'] = "OK";
         $response_array['title'] = "SUCCESS";
@@ -3914,6 +3930,8 @@ class GeneralController extends Controller
             'given_by' => session('emp_id'),
             'given_to' => $empID,
         );
+
+
         $datagroup = array(
             'empID' => $empID,
             'group_name' => 1,
@@ -3990,8 +4008,12 @@ class GeneralController extends Controller
         if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
             $data['employee1'] = $this->flexperformance_model->inactive_employee1();
             $data['employee2'] = $this->flexperformance_model->inactive_employee2();
+            $data['employee3'] = $this->flexperformance_model->inactive_employee3();
 
             $data['title'] = "Employee";
+            $data['parent'] = "Inactive employee";
+
+            // dd($data['employee2']);
             return view('app.inactive_employee', $data);
         } else {
             echo 'Unauthorized Access';
@@ -4070,7 +4092,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_deduction($data);
             if ($result == true) {
-                //$this->flexperformance_model->audit_log("Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "");
+                SysHelpers::AuditLog(1,"Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
 
@@ -4756,6 +4778,8 @@ class GeneralController extends Controller
         }
     }
 
+
+
     public function remove_group_from_allowance(Request $request)
     {
 
@@ -5205,7 +5229,7 @@ class GeneralController extends Controller
     public function role(Request $request)
     {
         if (session('mng_roles_grp')) {
-            if (isset($_POST['addrole'])) {
+            if ( $request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
                     'created_by' => session('emp_id'),
@@ -5213,14 +5237,14 @@ class GeneralController extends Controller
 
                 $result = $this->flexperformance_model->addrole($data);
                 if ($result == true) {
-                    $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+                   // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
                     session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
                     return redirect('/flex/role');
                 } else {
                     echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
                 }
 
-            } elseif (isset($_POST['addgroup'])) {
+            } elseif ( $request->type == "addgroup") {
 
                 $data = array(
                     'name' => $request->input('name'),
@@ -5231,7 +5255,7 @@ class GeneralController extends Controller
                 $this->flexperformance_model->addgroup($data);
 
                 session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
-                $this->department();
+                //$this->department();
                 return redirect('/flex/role');
             } else {
                 // $id =session('emp_id');
@@ -5602,9 +5626,9 @@ class GeneralController extends Controller
 
     }
 
-    public function deleteRole(Request $request)
+    public function deleteRole($id)
     {
-        $roleID = $this->uri->segment(3);
+        $roleID = $id;
         $result = $this->flexperformance_model->deleteRole($roleID);
         if ($result == true) {
             $response_array['status'] = "OK";
@@ -5738,7 +5762,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Added Permissions to a Role  permission tag as " . implode("", $arr) . " ");
+                SysHelpers::AuditLog(1,"Added Permissions to a Role  permission tag as " . implode("", $arr) . " ",$request);
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
@@ -5756,7 +5780,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                $this->flexperformance_model->audit_log("Updated Role Name to   " . $request->input('name') . " ");
+                SysHelpers::AuditLog(1,"Updated Role Name to   " . $request->input('name') . " ",$request);
                 session('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
                 return redirect('/flex/role');
             } else {
@@ -6020,8 +6044,6 @@ class GeneralController extends Controller
     public function registerEmployee(Request $request)
     {
 
-        // dd($request->banck_branch);
-
         if ($request->method() == "POST") {
 
             // DATE MANIPULATION
@@ -6040,15 +6062,19 @@ class GeneralController extends Controller
             if (($required / 365) > 16) {
 
                 $countryCode = $request->input("nationality");
-                $randomPassword = $this->password_generator(8);
+
+                // $randomPassword = $this->password_generator(8);
+
+                $password = "@2023". $request->fname;
+
                 $employee = array(
                     'fname' => $request->input("fname"),
                     'mname' => $request->input("mname"),
 
                     'emp_code' => $request->input("emp_code"),
                     'emp_level' => $request->input("emp_level"),
-                    //'lname' =>$request->input("lname"),
-                    'lname' => $randomPassword,
+                    'lname' =>$request->input("lname"),
+                    // 'lname' => $randomPassword,
                     'salary' => $request->input("salary"),
                     'gender' => $request->input("gender"),
                     'email' => $request->input("email"),
@@ -6062,7 +6088,7 @@ class GeneralController extends Controller
                     'mobile' => $request->input('mobile'),
                     'account_no' => $request->input("accno"),
                     'bank' => $request->input("bank"),
-                    'bank_branch' => $request->input("banck_branch"),
+                    'bank_branch' => $request->input("bank_branch"),
                     'pension_fund' => $request->input("pension_fund"),
                     'pf_membership_no' => $request->input("pf_membership_no"),
                     'home' => $request->input("haddress"),
@@ -6076,16 +6102,24 @@ class GeneralController extends Controller
                     'contract_renewal_date' => date('Y-m-d'),
                     'emp_id' => $request->input("emp_id"),
                     'username' => $request->input("emp_id"),
-                    'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                    // 'password' => password_hash($randomPassword, PASSWORD_BCRYPT),
+                    'password' => Hash::make($password),
                     'contract_end' => date('Y-m-d', strtotime($contract_end)),
                     'state' => 5,
                     'national_id' => $request->input("nationalid"),
                     'tin' => $request->input("tin"),
 
                 );
+
+                $newEmp = array(
+                    'emp_id' => $request->emp_id,
+                    'account' => 1,
+                );
+
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
 
-                $recordID = $this->flexperformance_model->employeeAdd($employee);
+                $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
+
 
                 if ($recordID > 0) {
 
@@ -6096,9 +6130,11 @@ class GeneralController extends Controller
                         'grant_code' => 'VSO',
                         'percent' => 100.00,
                     );
+
                     $this->project_model->allocateActivity($data);
 
                     // $empID = sprintf("%03d", $countryCode).sprintf("%04d", $recordID);
+
                     $empID = $request->input("emp_id");
 
                     $property = array(
@@ -6114,9 +6150,23 @@ class GeneralController extends Controller
                     );
 
                     $result = $this->flexperformance_model->updateEmployeeID($recordID, $empID, $property, $datagroup);
+
                     if ($result == true) {
 
+                        $email_data = array(
+                            'email'=>$request->email,
+                            'fname' => $request->fname,
+                            'lname' => $request->lname,
+                            'username' => $request->emp_id,
+                            'password'=> $password
+                        );
+
+                        // $user=User::first();
+                        // $user->notify(new RegisteredUser($email_data));
+                        //Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
+                        // });
                         $senderInfo = $this->payroll_model->senderInfo();
+
                         //         /* EMAIL*/
                         //     foreach ($senderInfo as $keyInfo) {
                         //       $host = $keyInfo->host;
@@ -6147,7 +6197,7 @@ class GeneralController extends Controller
                         //     // Email subject
                         //     $mail->Subject = "VSO User Credentials";
 
-                        //     // Set email format to HTML
+                        //9     // Set email format to HTML
                         //     $mail->isHTML(true);
 
                         //     // Email body content
@@ -6168,6 +6218,7 @@ class GeneralController extends Controller
                         //       }
 
                         /*add in transfer with status = 5 (registered, waiting for approval)*/
+
                         $data_transfer = array(
                             'empID' => $request->input("emp_id"),
                             'parameter' => 'New Employee',
@@ -6184,25 +6235,24 @@ class GeneralController extends Controller
                             'date_recommended' => date('Y-m-d'),
                             'date_approved' => '',
                         );
-                        $this->flexperformance_model->employeeTransfer($data_transfer);
-                        /*end add employee in transfer*/
 
-                       // $this->flexperformance_model->audit_log("Registered New Employee ");
+                        $this->flexperformance_model->employeeTransfer($data_transfer);
+
                         $response_array['empID'] = $empID;
                         $response_array['status'] = "OK";
-                        $response_array['title'] = "SUCCESS";
+                        $response_array['title'] = "Registered Successfully";
                         $response_array['message'] = "<div class='alert alert-success alert-dismissible fade in' role='alert'>
-                      <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
-                    </div>";
+                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>x</span> </button>Employee Added Successifully
+                        </div>";
                         header('Content-type: application/json');
-                        $response_array['credentials'] = "username ni " . $request->input("emp_id") . "password:" . $randomPassword;
+                        $response_array['credentials'] = "username ni " . $request->input("emp_id") . "password:" . $password;
                         echo json_encode($response_array);
                     } else {
                         $response_array['status'] = "ERR";
                         $response_array['title'] = "FAILED";
                         $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>FAILED: Employee Not Added Please try again
-                    </div>';
+                        </div>';
                         header('Content-type: application/json');
                         echo json_encode($response_array);
                     }
@@ -6211,10 +6261,9 @@ class GeneralController extends Controller
                     $response_array['title'] = "FAILED";
                     $response_array['message'] = '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span> </button>Registration Failed, Employee`s Age is Less Than 16
-                  </div>';
+                    </div>';
                     header('Content-type: application/json');
                     echo json_encode($response_array);
-
                 }
 
             }
@@ -6556,13 +6605,52 @@ class GeneralController extends Controller
     public function audit_logs(Request $request)
     {
         if (session('mng_audit')) {
+
+            // getting all audit trail logs
             $data['logs'] = $this->flexperformance_model->audit_logs();
+
+            // selecting audit trail for someone who deleted all tha audit logs
             $data['purge_logs'] = $this->flexperformance_model->audit_purge_logs();
-            $data['title'] = "Audit Trail";
-            return view('app.audit_logs', $data);
+
+            $data['parent'] = "Settings";
+            $data['child'] = "Audit Log";
+
+            return view('audit-trail.audit_logs', $data);
+
         } else {
-            echo "Unauthorized Access";
+
+            abort(403, 'Unauthorized action.');
         }
+    }
+
+    public function auditLogsDestry(Request $request)
+    {
+        $logData = array(
+            'empID' => session('emp_id'),
+            'description' => "Cleared Audit logs",
+            'agent' => $request->userAgent(),
+            'ip_address' => $request->ip(),
+            'due_date' => date('Y_m_d_H_i_s'),
+        );
+
+        $result = DB::transaction(function() use($logData)
+        {
+            DB::table('audit_trails')->delete();
+
+            $this->flexperformance_model->insertAuditPurgeLog($logData);
+
+            return 1;
+        });
+
+        if($result == 1){
+            return redirect()->route('flex.audit_logs');
+        }else{
+            abort(400, 'Bad Request');
+        }
+
+
+
+    //    retrun redirectback();
     }
 
     public function export_audit_logs(Request $request)
@@ -6976,9 +7064,9 @@ class GeneralController extends Controller
     public function netTotalSummation($payroll_date)
     {
         //FROM DATABASE
-        $volunteer_mwp_total = $this->reports_model->volunteerAllowanceMWPExport($payroll_date);
+        $temporary_mwp_total = $this->reports_model->temporaryAllowanceMWPExport($payroll_date);
         $staff_bank_totals = $this->reports_model->staffPayrollBankExport($payroll_date);
-        $volunteer_bank_totals = $this->reports_model->volunteerPayrollBankExport($payroll_date);
+        $temporary_bank_totals = $this->reports_model->temporaryPayrollBankExport($payroll_date);
 
         /*amount bank staff*/
         $amount_staff_bank = 0;
@@ -6986,19 +7074,19 @@ class GeneralController extends Controller
             $amount_staff_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
-        /*amount bank volunteer*/
-        $amount_volunteer_bank = 0;
-        foreach ($volunteer_bank_totals as $row) {
-            $amount_volunteer_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+        /*amount bank temporary*/
+        $amount_temporary_bank = 0;
+        foreach ($temporary_bank_totals as $row) {
+            $amount_temporary_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
-        foreach ($volunteer_mwp_total as $row) {
+        foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
-        $total = $amount_mwp + $amount_staff_bank + $amount_volunteer_bank;
+        $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
 
         return $total;
 

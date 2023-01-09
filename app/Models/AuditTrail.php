@@ -9,14 +9,14 @@ class AuditTrail extends Model
 {
     use HasFactory;
 
-    protected $table = 'audit_logs';
+    protected $table = 'audit_trails';
 
     protected $fillable = [
-        'empID',
-        'platform',
-        'description',
+        'emp_id',
+        'emp_name',
+        'action_performed',
         'ip_address',
-        'agent',
-        'due_date',
+        'user_agent',
+        'risk',
     ];
 }

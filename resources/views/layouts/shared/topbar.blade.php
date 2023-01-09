@@ -270,7 +270,8 @@
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
-                        <img src="{{ asset('assets/images/demo/users/face11.jpg') }}" class="w-32px h-32px rounded-pill" alt="">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->fname .' '.Auth::user()->lname) }}&background=035ad5&color=fff" class="w-32px h-32px rounded-pill" alt="">
+
                         <span class="status-indicator bg-success"></span>
                     </div>
                     <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->fname .' '.Auth::user()->lname }}</span>
@@ -300,19 +301,13 @@
                         Account settings
                     </a> --}}
 
-
-
-                    <form action="{{ route('logout') }}" method="POST" >
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
 
-                        <a
-                        href="{{ route('logout') }}"
-                        class="dropdown-item"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                    >
-                        <i class="ph-sign-out me-2"></i>
-                        Logout
-                    </a>
+                        <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); this.closest('form').submit();">
+                            <i class="ph-sign-out me-2"></i>
+                            Logout
+                        </a>
                     </form>
                 </div>
             </li>

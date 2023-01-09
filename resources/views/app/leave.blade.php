@@ -266,10 +266,13 @@
                   <span class="label label-default">REQUESTED</span></div><?php }
                   elseif($row->status==1){?>
                   <div class="col-md-12">
-                  <span class="label label-info">RECOMMENDED</span></div><?php }
+                  <span class="label label-info">RECOMMENDED BY LINE MANAGER</span></div><?php }
+                  elseif($row->status==6){  ?>
+                  <div class="col-md-12">
+                  <span class="label label-success">RECOMMENDED BY HOD</span></div><?php }
                   elseif($row->status==2){  ?>
                   <div class="col-md-12">
-                  <span class="label label-success">APPROVED</span></div><?php }
+                  <span class="label label-success">APPROVED BY HR</span></div><?php }
                   elseif($row->status==3){?>
                   <div class="col-md-12">
                   <span class="label label-warning">HELD</span></div><?php }
@@ -295,6 +298,9 @@
                   <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
               <?php }  if($row->status==1) { ?>
 
+                <a href="javascript:void(0)" onclick="recommendLeaveByHod(<?php echo $row->id;?>)" title="Recommend By HOD">
+                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
+                  
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
                   <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
 
@@ -311,16 +317,12 @@
 
               <?php if(session('mng_emp')){
 
-              if($row->status==1 ){ ?>
+              ?>
 
-              <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
+              
+              <?php if($row->status==6) { ?>
+                <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-
-              <?php }  if($row->status==2) { ?>
-<!--
-              <a href="javascript:void(0)" onclick="rejectLeave(<?php echo $row->id;?>)">
-                  <button  class="btn btn-danger btn-xs">DISAPPROVE</button></a> -->
-
               <?php } if($row->status==5) {  ?>
               <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>

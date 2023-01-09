@@ -86,7 +86,7 @@ $pdf->SetFont('times', '', 12, '', true);
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage('L','A4');
 
-
+$info = $data['info'];
 // EMPLOYER INFO
 foreach($info as $key){
 		$name = $key->cname;

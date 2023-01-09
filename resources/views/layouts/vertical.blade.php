@@ -4,6 +4,8 @@
 <head>
     @include('layouts.shared.title-meta', ['title' => $title])
     @include('layouts.shared.head-css')
+    <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
 </head>
 
 <body>

@@ -1,32 +1,34 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AccessControll\RoleController;
-use App\Http\Controllers\Recruitment\RegisterController;
-use App\Http\Controllers\Recruitment\LoginController;
-use App\Http\Controllers\AccessControll\PermissionController;
-use App\Http\Controllers\AccessControll\SystemController;
-use App\Http\Controllers\AccessControll\UsersController;
-use App\Http\Controllers\AccessControll\DesignationController;
-use App\Http\Controllers\AccessControll\DepartmentController;
-use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Recruitment\JobController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Payroll\PayrollController;
-use App\Http\Controllers\ImprestController;
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\GeneralController;
-use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\ImprestController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\setting\BranchController;
-use App\Http\Controllers\setting\PositionController;
-use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Controllers\Payroll\ReportController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\CostCenterController;
+use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\Payroll\ReportController;
+use App\Http\Controllers\setting\BranchController;
+use App\Http\Controllers\Payroll\PayrollController;
+use App\Http\Controllers\Recruitment\JobController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\setting\PositionController;
+use App\Http\Controllers\Recruitment\LoginController;
+use App\Http\Controllers\AccessControll\RoleController;
+use App\Http\Controllers\AccessControll\UsersController;
+use App\Http\Controllers\Recruitment\RegisterController;
+use App\Http\Controllers\AccessControll\SystemController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\AccessControll\DepartmentController;
+use App\Http\Controllers\AccessControll\PermissionController;
+use App\Http\Controllers\AccessControll\DesignationController;
+use App\Http\Controllers\WorkforceManagement\EmployeeController;
+use App\Http\Controllers\Import\ImportEmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -34,6 +36,10 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
 
+
+    //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
+    Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
+    Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
     // Dashboard
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
@@ -81,8 +87,9 @@ Route::middleware('auth')->group(function () {
     //     Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
     //     Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
     //     Route::any('send_payslips',[PayrollController::class,'send_payslips'])->name('send_payslips');
-    //     Route::any('recommendpayroll',[PayrollController::class,'recommendpayroll'])->name('recommendpayroll');
-    //     Route::any('cancelpayroll',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
+    //     Route::any('recommendpayrollByHr',[PayrollController::class,'recommendpayrollByHr'])->name('recommendpayrollByHr');
+    //     Route::any('recommendpayrollByFinance',[PayrollController::class,'recommendpayrollByFinance'])->name('recommendpayrollByFinance');
+    //     Route::any('cancelpayroll/{type}',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
     //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
     //     Route::any('less_payments_print',[PayrollController::class,'less_payments_print'])->name('less_payments_print');
     //     Route::any('grossReconciliation',[PayrollController::class,'grossReconciliation'])->name('grossReconciliation');
@@ -118,6 +125,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
+        Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
+
         Route::any('/holdLeave' ,'holdLeave')->name('attendance.holdLeave');
         Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
         Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
@@ -157,7 +166,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/login_info','login_info')->name('flex.login_info');
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
-        Route::any('/logout','logout')->name('flex.logout');
+        // Route::any('/logout','logout')->name('flex.logout');
         Route::any('/userprofile','userprofile')->name('flex.userprofile');
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
@@ -305,13 +314,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/loan_advanced_payments','loan_advanced_payments')->name('flex.loan_advanced_payments');
         Route::any('/adv_loan_pay','adv_loan_pay')->name('flex.adv_loan_pay');
         Route::any('/cancelLoan','cancelLoan')->name('flex.cancelLoan');
-        Route::any('/recommendLoan','recommendLoan')->name('flex.recommendLoan');
-        Route::any('/hrrecommendLoan','hrrecommendLoan')->name('flex.hrrecommendLoan');
-        Route::any('/holdLoan','holdLoan')->name('flex.holdLoan');
-        Route::any('/approveLoan','approveLoan')->name('flex.approveLoan');
-        Route::any('/pauseLoan','pauseLoan')->name('flex.pauseLoan');
-        Route::any('/resumeLoan','resumeLoan')->name('flex.resumeLoan');
-        Route::any('/rejectLoan','rejectLoan')->name('flex.rejectLoan');
+        Route::any('/recommendLoan/{id}','recommendLoan')->name('flex.recommendLoan');
+        Route::any('/hrrecommendLoan/{id}','hrrecommendLoan')->name('flex.hrrecommendLoan');
+        Route::any('/holdLoan/{id}','holdLoan')->name('flex.holdLoan');
+        Route::any('/approveLoan/{id}','approveLoan')->name('flex.approveLoan');
+        Route::any('/pauseLoan/{id}','pauseLoan')->name('flex.pauseLoan');
+        Route::any('/resumeLoan/{id}','resumeLoan')->name('flex.resumeLoan');
+        Route::any('/rejectLoan/{id}','rejectLoan')->name('flex.rejectLoan');
         Route::any('/loan_application_info','loan_application_info')->name('flex.loan_application_info');
         Route::any('/updateloan','updateloan')->name('flex.updateloan');
         Route::any('/updateloan_info','updateloan_info')->name('flex.updateloan_info');
@@ -408,7 +417,7 @@ Route::middleware('auth')->group(function () {
 
 
         Route::any('/updategroup','updategroup')->name('flex.updategroup');
-        Route::any('/deleteRole','deleteRole')->name('flex.deleteRole');
+        Route::any('/deleteRole/{id}','deleteRole')->name('flex.deleteRole');
         Route::any('/deleteGroup','deleteGroup')->name('flex.deleteGroup');
         Route::any('/permission','permission')->name('flex.permission');
         Route::any('/assignrole2','assignrole2')->name('flex.assignrole2');
@@ -435,6 +444,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
         Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
         Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
+        Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');
 
         Route::any('/userArray','userArray')->name('flex.userArray');
         Route::any('/userAgent','userAgent')->name('flex.userAgent');
@@ -465,9 +475,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/imprest_info/{id}','imprest_info')->name('imprest.imprest_info');
         Route::any('/add_imprest_requirement','add_imprest_requirement')->name('imprest.add_imprest_requirement');
         Route::any('/uploadRequirementEvidence','uploadRequirementEvidence')->name('imprest.uploadRequirementEvidence');
-        Route::any('/deleteImprest','deleteImprest')->name('imprest.deleteImprest');
+        Route::any('/deleteImprest/{id}','deleteImprest')->name('imprest.deleteImprest');
         Route::any('/deleteRequirement','deleteRequirement')->name('imprest.deleteRequirement');
-        Route::any('/approveRequirement','approveRequirement')->name('imprest.approveRequirement');
+        Route::any('/approveRequirement/{id}','approveRequirement')->name('imprest.approveRequirement');
         Route::any('/confirmRequirementRetirement','confirmRequirementRetirement')->name('imprest.confirmRequirementRetirement');
         Route::any('/unconfirmRequirementRetirement','unconfirmRequirementRetirement')->name('imprest.unconfirmRequirementRetirement');
         Route::any('/disapproveRequirement','disapproveRequirement')->name('imprest.disapproveRequirement');
@@ -494,47 +504,49 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
 
-        Route::any('/initPayroll','initPayroll')->name('pyaroll.initPayroll');
-        Route::any('/financial_reports','financial_reports')->name('pyaroll.financial_reports');
-        Route::any('/employee_payslip','employee_payslip')->name('pyaroll.employee_payslip');
-        Route::any('/payroll','payroll')->name('pyaroll.payroll');
-        Route::any('/temp_payroll_info','temp_payroll_info')->name('pyaroll.temp_payroll_info');
-        Route::any('/payroll_info','payroll_info')->name('pyaroll.payroll_info');
-        Route::any('/temp_less_payments','temp_less_payments')->name('pyaroll.temp_less_payments');
-        Route::any('/ADVtemp_less_payments','ADVtemp_less_payments')->name('pyaroll.ADVtemp_less_payments');
-        Route::any('/less_payments','less_payments')->name('pyaroll.less_payments');
-        Route::any('/less_payments_print','less_payments_print')->name('pyaroll.less_payments_print');
-        Route::any('/concatArrays','concatArrays')->name('pyaroll.concatArrays');
-        Route::any('/grossReconciliation','grossReconciliation')->name('pyaroll.grossReconciliation');
-        Route::any('/netReconciliation','netReconciliation')->name('pyaroll.netReconciliation');
-        Route::any('/sendReviewEmail','sendReviewEmail')->name('pyaroll.sendReviewEmail');
-        Route::any('/sendMail','sendMail')->name('pyaroll.sendMail');
-        Route::any('/comission_bonus','comission_bonus')->name('pyaroll.comission_bonus');
-        Route::any('/partial_payment','partial_payment')->name('pyaroll.partial_payment');
-        Route::any('/salary_calculator','salary_calculator')->name('pyaroll.salary_calculator');
-        Route::any('/calculateSalary','calculateSalary')->name('pyaroll.calculateSalary');
-        Route::any('/recommendpayroll','recommendpayroll')->name('pyaroll.recommendpayroll');
-        Route::any('/runpayroll/{pdate}','runpayroll')->name('pyaroll.runpayroll');
-        Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('pyaroll.partial_payment_manipulation');
-        Route::any('/generate_checklist','generate_checklist')->name('pyaroll.generate_checklist');
-        Route::any('/arrearsPayment','arrearsPayment')->name('pyaroll.arrearsPayment');
-        Route::any('/temp_submitLessPayments','temp_submitLessPayments')->name('pyaroll.temp_submitLessPayments');
-        Route::any('/submitLessPayments','submitLessPayments')->name('pyaroll.submitLessPayments');
-        Route::any('/arrearsPayment_schedule','arrearsPayment_schedule')->name('pyaroll.arrearsPayment_schedule');
-        Route::any('/monthlyArrearsPayment_schedule','monthlyArrearsPayment_schedule')->name('pyaroll.monthlyArrearsPayment_schedule');
-        Route::any('/cancelArrearsPayment','cancelArrearsPayment')->name('pyaroll.cancelArrearsPayment');
-        Route::any('/confirmArrearsPayment','confirmArrearsPayment')->name('pyaroll.confirmArrearsPayment');
-        Route::any('/recommendArrearsPayment','recommendArrearsPayment')->name('pyaroll.recommendArrearsPayment');
-        Route::any('/cancelpayroll','cancelpayroll')->name('pyaroll.cancelpayroll');
-        Route::any('/temp_payroll_review','temp_payroll_review')->name('pyaroll.temp_payroll_review');
-        Route::any('/payroll_review','payroll_review')->name('pyaroll.payroll_review');
-        Route::any('/send_payslips','send_payslips')->name('pyaroll.send_payslips');
-        Route::any('/payslip_attachments','payslip_attachments')->name('pyaroll.payslip_attachments');
-        Route::any('/mailConfiguration','mailConfiguration')->name('pyaroll.mailConfiguration');
-        Route::any('/saveMail','saveMail')->name('pyaroll.saveMail');
-        Route::any('/employeeFilter','employeeFilter')->name('pyaroll.employeeFilter');
-        Route::any('/password_generator','password_generator')->name('pyaroll.password_generator');
-        Route::any('/TestMail','TestMail')->name('pyaroll.TestMail');
+        Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
+        Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
+        Route::any('/employee_payslip','employee_payslip')->name('payroll.employee_payslip');
+        Route::any('/payroll','payroll')->name('payroll.payroll');
+        Route::any('/temp_payroll_info','temp_payroll_info')->name('payroll.temp_payroll_info');
+        Route::any('/payroll_info','payroll_info')->name('payroll.payroll_info');
+        Route::any('/temp_less_payments','temp_less_payments')->name('payroll.temp_less_payments');
+        Route::any('/ADVtemp_less_payments','ADVtemp_less_payments')->name('payroll.ADVtemp_less_payments');
+        Route::any('/less_payments','less_payments')->name('payroll.less_payments');
+        Route::any('/less_payments_print','less_payments_print')->name('payroll.less_payments_print');
+        Route::any('/concatArrays','concatArrays')->name('payroll.concatArrays');
+        Route::any('/grossReconciliation','grossReconciliation')->name('payroll.grossReconciliation');
+        Route::any('/netReconciliation','netReconciliation')->name('payroll.netReconciliation');
+        Route::any('/sendReviewEmail','sendReviewEmail')->name('payroll.sendReviewEmail');
+        Route::any('/sendMail','sendMail')->name('payroll.sendMail');
+        Route::any('/comission_bonus','comission_bonus')->name('payroll.comission_bonus');
+        Route::any('/partial_payment','partial_payment')->name('payroll.partial_payment');
+        Route::any('/getComment/{date}','getComment')->name('payroll.getComment');
+        Route::any('/salary_calculator','salary_calculator')->name('payroll.salary_calculator');
+        Route::any('/calculateSalary','calculateSalary')->name('payroll.calculateSalary');
+        Route::any('/recommendpayrollByHr/{pdate}/{message}','recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
+        Route::any('/recommendpayrollByFinance/{pdate}/{message}','recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
+        Route::any('/runpayroll/{pdate}','runpayroll')->name('payroll.runpayroll');
+        Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
+        Route::any('/generate_checklist','generate_checklist')->name('payroll.generate_checklist');
+        Route::any('/arrearsPayment','arrearsPayment')->name('payroll.arrearsPayment');
+        Route::any('/temp_submitLessPayments','temp_submitLessPayments')->name('payroll.temp_submitLessPayments');
+        Route::any('/submitLessPayments','submitLessPayments')->name('payroll.submitLessPayments');
+        Route::any('/arrearsPayment_schedule','arrearsPayment_schedule')->name('payroll.arrearsPayment_schedule');
+        Route::any('/monthlyArrearsPayment_schedule','monthlyArrearsPayment_schedule')->name('payroll.monthlyArrearsPayment_schedule');
+        Route::any('/cancelArrearsPayment','cancelArrearsPayment')->name('payroll.cancelArrearsPayment');
+        Route::any('/confirmArrearsPayment','confirmArrearsPayment')->name('payroll.confirmArrearsPayment');
+        Route::any('/recommendArrearsPayment','recommendArrearsPayment')->name('payroll.recommendArrearsPayment');
+        Route::any('/cancelpayroll/{type}','cancelpayroll')->name('payroll.cancelpayroll');
+        Route::any('/temp_payroll_review','temp_payroll_review')->name('payroll.temp_payroll_review');
+        Route::any('/payroll_review','payroll_review')->name('payroll.payroll_review');
+        Route::any('/send_payslips','send_payslips')->name('payroll.send_payslips');
+        Route::any('/payslip_attachments','payslip_attachments')->name('payroll.payslip_attachments');
+        Route::any('/mailConfiguration','mailConfiguration')->name('payroll.mailConfiguration');
+        Route::any('/saveMail','saveMail')->name('payroll.saveMail');
+        Route::any('/employeeFilter','employeeFilter')->name('payroll.employeeFilter');
+        Route::any('/password_generator','password_generator')->name('payroll.password_generator');
+        Route::any('/TestMail','TestMail')->name('payroll.TestMail');
 
     });
 
@@ -737,7 +749,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollInputJournalExport','payrollInputJournalExport')->name('reports.payrollInputJournalExport');
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
-        Route::any('/volunteerAllowanceMWPExport','volunteerAllowanceMWPExport')->name('reports.volunteerAllowanceMWPExport');
+        Route::any('/temporaryAllowanceMWPExport','temporaryAllowanceMWPExport')->name('reports.temporaryAllowanceMWPExport');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
         Route::any('/employeeCostExport','employeeCostExport')->name('reports.employeeCostExport');
@@ -788,29 +800,5 @@ Route::middleware('auth')->group(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
+// Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';

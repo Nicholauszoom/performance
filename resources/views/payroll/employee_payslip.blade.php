@@ -94,7 +94,7 @@
 
                             <label class="form-check form-check-inline">
                                 <input type="radio" class="form-check-input" value="2" name="type">
-                                <span class="form-check-label">Volunteer</span>
+                                <span class="form-check-label">temporary</span>
                             </label>
                         </div>
                     </div>

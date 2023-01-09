@@ -58,26 +58,34 @@
         <div class="card border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="../../../assets/images/demo/users/face11.jpg" width="150" height="150" alt="">
+                  <img class="img-fluid rounded-circle" src="https://ui-avatars.com/api/?name={{ urlencode($name) }}&background=00204e&color=fff" width="150" height="150" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>
               <span class="text-muted mb-3">{{ $position }}</span>
           </div>
 
-          {{-- <ul class="nav nav-sidebar mt-3">
-              @if (session('mng_emp'))
-              <li class="nav-item-divider"></li>
+          <ul class="nav nav-sidebar mt-3">
+            <li class="nav-item-divider"></li>
 
-              <li class="nav-item d-flex justify-content-center align-items-center my-3">
-                  <a href="{{ url('/flex/updateEmployee/?id=').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
-                      <i class="ph-note-pencil me-2"></i>
-                      Request Profile Update
-                  </a>
-              </li>
-              @endif
+            <li class="nav-item d-flex justify-content-center align-items-center my-3">
+                <a href="{{ route('password.employee') }}" class="btn btn-main">
+                    <i class="ph-note-pencil me-2"></i>
+                    Change Password
+                </a>
+            </li>
 
-          </ul> --}}
+
+            {{-- @if (session('mng_emp'))
+            <li class="nav-item d-flex justify-content-center align-items-center my-3">
+                <a href="{{ url('/flex/updateEmployee/?id=').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
+                    <i class="ph-note-pencil me-2"></i>
+                    Request Profile Update
+                </a>
+            </li>
+            @endif --}}
+
+          </ul>
         </div>
 
         <div class="card border-0 shadow-none">
@@ -456,7 +464,7 @@
                                     <td><?php echo $row->serial_no; ?></td>
                                     <td><?php echo $row->PROVIDER; ?></td>
                                     <td><?php echo $row->dated_on; ?></td>
-                                    <?php if($this->session->userdata('mng_emp'))  { ?>
+                                    <?php if(session('mng_emp'))  { ?>
                                     <td class="options-width">
                                      <a href="javascript:void(0)" onclick="deleteDomain(<?php echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="fa fa-trash-o"></i></font></a>&nbsp;&nbsp;
                                     </td><?php }  ?>

@@ -164,7 +164,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         return DB::select(DB::raw($query));
     }
 
-    function volunteer_pay_checklist($date){
+    function temporary_pay_checklist($date){
 
         $query = "SELECT @s:=@s+1 AS SNo, pl.empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS name,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID), 0) AS allowances,
@@ -178,7 +178,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
     }
 
     function payrollAuthorization($payrollMonth){
-        $query = "SELECT CONCAT(e.fname,' ', e.mname,' ', e.lname) AS initName, CONCAT(er.fname,' ', er.mname,' ', er.lname) AS recomName, CONCAT(ea.fname,' ', ea.mname,' ', ea.lname) AS confName, pm.appr_date, pm.init_date, pm.recom_date FROM employee e, employee ea, employee er, payroll_months pm WHERE pm.init_author = e.emp_id AND pm.appr_author = ea.emp_id AND pm.recom_author = er.emp_id and pm.payroll_date = '".$payrollMonth."'";
+        $query = "SELECT CONCAT(e.fname,' ', e.mname,' ', e.lname) AS initName, CONCAT(er.fname,' ', er.mname,' ', er.lname) AS recomName, CONCAT(er.fname,' ', er.mname,' ', er.lname) AS financeRecomName, CONCAT(ea.fname,' ', ea.mname,' ', ea.lname) AS confName, pm.appr_date, pm.init_date, pm.recom_date,pm.recom_date2 FROM employee e, employee ea, employee er, payroll_months pm WHERE pm.init_author = e.emp_id AND pm.appr_author = ea.emp_id AND pm.recom_author = er.emp_id AND pm.recom_author2 = er.emp_id and pm.payroll_date = '".$payrollMonth."'";
         return DB::select(DB::raw($query));
     }
 
@@ -252,7 +252,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         return DB::select(DB::raw($query));
     }
 
-    function volunteer_sum_take_home($date){
+    function temporary_sum_take_home($date){
 
         $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS name,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = '".$date."' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = '".$date."' GROUP BY al.empID), 0) AS allowances,
@@ -266,7 +266,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         return DB::select(DB::raw($query));
     }
 
-    function volunteer_sum_take_home_temp($date){
+    function temporary_sum_take_home_temp($date){
 
         $query = "SELECT SUM(salary + allowances-pension-loans-deductions-meals-taxdue) as takehome, SUM(less_takehome) as takehome_less FROM (SELECT  pl.empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS name,
 	IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = '".$date."' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = '".$date."' GROUP BY al.empID), 0) AS allowances,
@@ -292,7 +292,8 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
     FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '".$date."'";
-
+       
+       
         return DB::select(DB::raw($query));
     }
 
@@ -411,6 +412,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     function s_heslb($payrolldate){
         $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE l.empID = e.emp_id and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 AND ll.payment_date = '".$payrolldate."'";
+        //dd(DB::select(DB::raw($query)));
         return DB::select(DB::raw($query));
 
     }
@@ -441,7 +443,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return DB::select(DB::raw($query));
     }
 
-    function volunteerTotalheslb($payrolldate){
+    function temporaryTotalheslb($payrolldate){
         $query = "SELECT if(SUM(ll.paid) IS NULL, 0, SUM(ll.paid)) as total_paid, IF(SUM(ll.remained) IS NULL, 0, SUM(ll.remained)) as total_remained  FROM loan l, loan_logs ll, employee e  WHERE ll.loanID = l.id AND l.type = 3 and e.emp_id = l.empID and e.contract_type = 2 AND  ll.payment_date = '".$payrolldate."'";
         return DB::select(DB::raw($query));
     }
@@ -453,8 +455,9 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     }
 
     function s_pension($date, $pensionFund){
-        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
- FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND pl.pension_fund = '".$pensionFund."' AND pl.payroll_date LIKE '%".$date."%'";
+        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no ,e.fname,e.mname,e.lname, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,e.emp_id, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
+ FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00 AND pl.pension_fund = '".$pensionFund."' AND pl.payroll_date LIKE '%".$date."%'";
+    
         return DB::select(DB::raw($query));
 
     }
@@ -697,7 +700,7 @@ IF((( SELECT sum(days)  FROM `leaves` where nature=6 AND e.emp_id=leaves.empID G
 
     function payslipcheck($datecheck, $empID){
         $query = " SELECT id  FROM payroll_logs WHERE payroll_date LIKE '%".$datecheck."%' AND empID = '".$empID."' ";
-
+          
         return count(DB::select(DB::raw($query)));
     }
 
@@ -715,6 +718,7 @@ IF((( SELECT sum(days)  FROM `leaves` where nature=6 AND e.emp_id=leaves.empID G
     function s_payrollLogEmpID($datecheck){
         $query = "SELECT empID FROM payroll_logs pl, employee e where e.emp_id = pl.empID
 and e.contract_type != 2 and payroll_date LIKE '%".$datecheck."%' ";
+      
         return DB::select(DB::raw($query));
     }
 
@@ -725,15 +729,10 @@ and e.contract_type = 2 and payroll_date LIKE '%".$datecheck."%' ";
     }
 
     function payslip_info_backup($empID, $payroll_month_end, $payroll_month, $year_back ){
-        $query = "SELECT pl.empID as empID,
+        $query = "SELECT pl.empID as empID,CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,
+       p.name as position,d.name as department, e.hire_date,pl.*,
 
-CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,
- p.name as position,
-  d.name as department, e.hire_date,
-
- pl.*,
-
-(SELECT SUM(plg.pension_employee) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '".$empID."' and plg.payroll_date BETWEEN e.hire_date and '".$payroll_month_end."' ) as pension_employee_todate,
+  (SELECT SUM(plg.pension_employee) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '".$empID."' and plg.payroll_date BETWEEN e.hire_date and '".$payroll_month_end."' ) as pension_employee_todate,
 
  (SELECT SUM(plg.pension_employer) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '".$empID."' and plg.payroll_date BETWEEN e.hire_date and '".$payroll_month_end."' ) as pension_employer_todate,
 
@@ -755,7 +754,9 @@ CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,
 
 
 FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.empID and e.position = p.id and d.id = e.department and pl.payroll_date LIKE '%".$payroll_month."%' and pl.empID = '".$empID."'";
-        return DB::select(DB::raw($query));
+    
+
+return DB::select(DB::raw($query));
 
     }
 
@@ -778,7 +779,8 @@ FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.
     (SELECT SUM(plg.pension_employer) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '".$empID."' and plg.payroll_date BETWEEN e.hire_date and '".$payroll_month_end."' ) as pension_employer_todate,
     pl.*
     FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br  WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%".$payroll_month."%' and pl.empID = '".$empID."'";
-        return DB::select(DB::raw($query));
+     
+    return DB::select(DB::raw($query));
 
     }
 
@@ -1057,7 +1059,7 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
         return DB::select(DB::raw($query));
     }
 
-    function volunteerPayrollInputJournalExport($payroll_date)	{
+    function temporaryPayrollInputJournalExport($payroll_date)	{
         $query = "SELECT eav.*,  pl.*, p.name as positionName, e.fname, e.mname,e.lname,CONCAT(trim(e.fname),' ', trim(e.mname),' ', trim(e.lname)) AS empName,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
@@ -1092,7 +1094,7 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
 
 
 
-    public function volunteerPayrollBankExport($payroll_date){
+    public function temporaryPayrollBankExport($payroll_date){
         $query = "SELECT e.*, pl.*, e.account_no,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS empName, b.name as bankName,b.bank_code as bankCode, bb.branch_code as bankLoalClearingCode, 'DAR' as debitAccountCityCode, 'TZ' as debitAccountCountryCode, 'TZS' as paymentCurrency,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
@@ -1103,7 +1105,7 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
         return DB::select(DB::raw($query));
     }
 
-    public function volunteerPayrollBankExport_temp($payroll_date){
+    public function temporaryPayrollBankExport_temp($payroll_date){
         $query = "SELECT e.*, pl.*, e.account_no,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS empName, b.name as bankName,b.bank_code as bankCode, bb.branch_code as bankLoalClearingCode, 'DAR' as debitAccountCityCode, 'TZ' as debitAccountCountryCode, 'TZS' as paymentCurrency,
 	IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
@@ -1116,7 +1118,7 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
 
 
 
-    public function volunteerAllowanceMWPExport($payroll_date){
+    public function temporaryAllowanceMWPExport($payroll_date){
         $query = "SELECT e.*, pl.*, br.name as branch_name, (SELECT service_name FROM mobile_service_provider WHERE number_prefix =  SUBSTRING(e.mobile, 1, 3)) as service_name, e.account_no,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS empName,
     IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
@@ -1126,7 +1128,7 @@ FROM employee e, emp_package_view epv  WHERE e.emp_id = epv.empID and e.state=1'
         return DB::select(DB::raw($query));
     }
 
-    public function volunteerAllowanceMWPExport_temp($payroll_date){
+    public function temporaryAllowanceMWPExport_temp($payroll_date){
         $query = "SELECT e.*, pl.*, br.name as branch_name, (SELECT service_name FROM mobile_service_provider WHERE number_prefix =  SUBSTRING(e.mobile, 1, 3)) as service_name, e.account_no,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS empName,
     IF((SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM temp_allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
@@ -1433,7 +1435,7 @@ and pl.payroll_date = '".$payroll_date."' and ll.payment_date = '".$payroll_date
         return DB::select(DB::raw($query));
     }
 
-    function volunteerPayrollInputJournalExportTime($payroll_date)	{
+    function temporaryPayrollInputJournalExportTime($payroll_date)	{
         $query = "SELECT pl.*, p.name as positionName, e.fname, e.mname,e.lname,CONCAT(trim(e.fname),' ', trim(e.mname),' ', trim(e.lname)) AS empName,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id and e.contract_type = 2 AND al.payment_date = pl.payroll_date GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,

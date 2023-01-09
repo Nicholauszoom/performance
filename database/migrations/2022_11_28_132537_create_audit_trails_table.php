@@ -15,13 +15,12 @@ return new class extends Migration
     {
         Schema::create('audit_trails', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('user_id');
-            $table->string('user_name');
-            $table->string('user_email');
+            $table->bigInteger('emp_id');
+            $table->string('emp_name');
             $table->string('action_performed');
             $table->string('ip_address', 45);
             $table->string('user_agent');
-            $table->integer('risk')->nullable();
+            $table->integer('risk')->nullable()->comment("1-High, 2-Medium, 3-Low");
             $table->timestamps();
         });
     }

@@ -52,7 +52,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
+    Route::get('change-password', [PasswordController::class, 'firstPassword'])->name('password.first');
+
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    Route::get('update-password', [PasswordController::class, 'passwordEmployee'])->name('password.employee');
+
+    Route::put('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');

@@ -151,7 +151,7 @@
                 </thead>
                 <tbody>
                     <?php foreach ($transfers as $row) {
-                        if($row->status<5 || $row->status > 5 ) continue; ?>
+                        if($row->status<5 || $row->status > 5) continue; ?>
                             <tr>
                                 <td width="1px"><?php echo $row->SNo; ?></td>
                                 <td><?php  echo $row->empName; ?></td>
