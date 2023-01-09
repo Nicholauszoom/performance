@@ -72,7 +72,7 @@ class ReportController extends Controller
         if (1) {
             $payroll_date = $request->input('payrolldate');
             $isReady = $this->reports_model->payCheklistStatus($payroll_date);
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             if ($isReady == true) {
                 $data['info'] = $this->reports_model->company_info();
                 $toDate = date('Y-m-d');
@@ -82,8 +82,8 @@ class ReportController extends Controller
                     $data['employee_list'] = $this->reports_model->staff_pay_checklist($payroll_date);
                     $data['take_home'] = $this->reports_model->staff_sum_take_home($payroll_date);
                 } else {
-                    $data['employee_list'] = $this->reports_model->volunteer_pay_checklist($payroll_date);
-                    $data['take_home'] = $this->reports_model->volunteer_sum_take_home($payroll_date);
+                    $data['employee_list'] = $this->reports_model->temporary_pay_checklist($payroll_date);
+                    $data['take_home'] = $this->reports_model->temporary_sum_take_home($payroll_date);
                 }
                 return view('app.reports/pay_checklist', $data);
 
@@ -131,7 +131,7 @@ class ReportController extends Controller
 
         if (1) {
             $payrolldate = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
                 $data['total'] = $this->reports_model->s_totalp9($payrolldate);
@@ -165,7 +165,7 @@ class ReportController extends Controller
         $period = $request->input('period');
         //dd($period);
         $year = $request->input('payrolldate');
-        $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+        $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
         $period1start = $year . "-01-01";
         $period1end = $year . "-06-30";
@@ -223,7 +223,7 @@ class ReportController extends Controller
     function heslb(Request $request)
     {
         $payrolldate = $request->input('payrolldate');
-        $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+        $reportType = $request->input('type'); //Staff = 1, temporary = 2
         if ($reportType == 1) {
             $data['heslb'] = $this->reports_model->s_heslb($payrolldate);
             $data['total'] = $this->reports_model->s_totalheslb($payrolldate);
@@ -249,7 +249,7 @@ class ReportController extends Controller
 
         $payrollMonth = $request->input('payrolldate');
         $pensionFund = $request->input('fund');
-        $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+        $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
         $datewell = explode("-", $payrollMonth);
         $mm = $datewell[1];
@@ -287,7 +287,7 @@ class ReportController extends Controller
         if (1) {
             $calendar = $request->input('payrolldate');
             $datewell = explode("-", $calendar);
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
             $mm = $datewell[1];
             $dd = $datewell[2];
@@ -565,7 +565,7 @@ class ReportController extends Controller
             // DATE MANIPULATION
             $start = $request->input("payrolldate");
             $date_separate = explode("-", $start);
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
             $mm = $date_separate[1];
             $yyyy = $date_separate[0];
@@ -818,7 +818,7 @@ class ReportController extends Controller
 
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
             //start
             $todayDate = date('d/m/Y');
@@ -826,7 +826,7 @@ class ReportController extends Controller
             if ($reportType == 1) {
                 $filename = "staffPayrollInputJournalExport" . date('Y_m_d_H_i_s') . ".xls";
             } else {
-                $filename = "volunteerPayrollInputJournalExport" . date('Y_m_d_H_i_s') . ".xls";
+                $filename = "temporaryPayrollInputJournalExport" . date('Y_m_d_H_i_s') . ".xls";
             }
             $object->setActiveSheetIndex(0);
 
@@ -959,10 +959,10 @@ class ReportController extends Controller
                 $total_heslb = $this->reports_model->staffTotalheslb($payroll_date);
                 $net_total = $this->netTotalSummation($payroll_date)[1];
             } else {
-                $records = $this->reports_model->volunteerPayrollInputJournalExport($payroll_date);
-                $take_home = $this->reports_model->volunteer_sum_take_home($payroll_date);
-                $payroll_totals = $this->payroll_model->volunteerPayrollTotals("payroll_logs", $payroll_date);
-                $total_heslb = $this->reports_model->volunteerTotalheslb($payroll_date);
+                $records = $this->reports_model->temporaryPayrollInputJournalExport($payroll_date);
+                $take_home = $this->reports_model->temporary_sum_take_home($payroll_date);
+                $payroll_totals = $this->payroll_model->temporaryPayrollTotals("payroll_logs", $payroll_date);
+                $total_heslb = $this->reports_model->temporaryTotalheslb($payroll_date);
                 $net_total_1 = $this->netTotalSummation($payroll_date)[0];
                 $net_total_2 = $this->netTotalSummation($payroll_date)[2];
                 $net_total = $net_total_1 + $net_total_2;
@@ -1181,7 +1181,7 @@ class ReportController extends Controller
         dd($request->all());
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
             //start
             $todayDate = date('d/m/Y');
@@ -1189,7 +1189,7 @@ class ReportController extends Controller
             if ($reportType == 1) {
                 $filename = "staffPayrollInputJournalExportTime" . date('Y_m_d_H_i_s') . ".xls";
             } else {
-                $filename = "volunteerPayrollInputJournalExportTime" . date('Y_m_d_H_i_s') . ".xls";
+                $filename = "temporaryPayrollInputJournalExportTime" . date('Y_m_d_H_i_s') . ".xls";
             }
             $object->setActiveSheetIndex(0);
 
@@ -1322,10 +1322,10 @@ class ReportController extends Controller
                 $total_heslb = $this->reports_model->staffTotalheslb($payroll_date);
                 $net_total = $this->netTotalSummation($payroll_date)[1];
             } else {
-                $records = $this->reports_model->volunteerPayrollInputJournalExportTime($payroll_date);
-                $take_home = $this->reports_model->volunteer_sum_take_home($payroll_date);
-                $payroll_totals = $this->payroll_model->volunteerPayrollTotals("payroll_logs", $payroll_date);
-                $total_heslb = $this->reports_model->volunteerTotalheslb($payroll_date);
+                $records = $this->reports_model->temporaryPayrollInputJournalExportTime($payroll_date);
+                $take_home = $this->reports_model->temporary_sum_take_home($payroll_date);
+                $payroll_totals = $this->payroll_model->temporaryPayrollTotals("payroll_logs", $payroll_date);
+                $total_heslb = $this->reports_model->temporaryTotalheslb($payroll_date);
                 $net_total_1 = $this->netTotalSummation($payroll_date)[0];
                 $net_total_2 = $this->netTotalSummation($payroll_date)[2];
                 $net_total = $net_total_1 + $net_total_2;
@@ -1600,14 +1600,14 @@ class ReportController extends Controller
         //dd($request->all());
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
                 $filename = "staffPayrollBankExport" . date('Y_m_d_H_i_s') . ".xls";
             } else {
                 $suffix = "Allowance";
-                $filename = "volunteerPayrollBankExport" . date('Y_m_d_H_i_s') . ".xls";
+                $filename = "temporaryPayrollBankExport" . date('Y_m_d_H_i_s') . ".xls";
             }
 
             //start
@@ -1648,7 +1648,7 @@ class ReportController extends Controller
             if ($reportType == 1) {
                 $payroll_totals = $this->reports_model->staffPayrollBankExport($payroll_date);
             } else {
-                $payroll_totals = $this->reports_model->volunteerPayrollBankExport($payroll_date);
+                $payroll_totals = $this->reports_model->temporaryPayrollBankExport($payroll_date);
             }
 
             $data_row = 3;
@@ -1707,7 +1707,7 @@ class ReportController extends Controller
         }
     }
 
-    public function volunteerAllowanceMWPExport(Request $request)
+    public function temporaryAllowanceMWPExport(Request $request)
     {
         // dd($request->all());
 
@@ -1717,7 +1717,7 @@ class ReportController extends Controller
             $todayDate = date('d/m/Y');
             $object = new Spreadsheet();
 
-            $filename = "Volunteer_Allowance_MWP" . date('Y_m_d_H_i_s') . ".xls";
+            $filename = "temporary_Allowance_MWP" . date('Y_m_d_H_i_s') . ".xls";
             $object->setActiveSheetIndex(0);
 
             $table_columns = array(
@@ -1750,7 +1750,7 @@ class ReportController extends Controller
             }
 
             //FROM DATABASE
-            $payroll_totals = $this->reports_model->volunteerAllowanceMWPExport($payroll_date);
+            $payroll_totals = $this->reports_model->temporaryAllowanceMWPExport($payroll_date);
             $data_row = 3;
             $serialNo = 1;
 
@@ -2070,14 +2070,14 @@ EOD;
         dd($request->all());
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
                 $filename = "staffEmployeeCostExport" . date('Y_m_d_H_i_s') . ".xls";
             } else {
                 $suffix = "Allowance";
-                $filename = "volunteerEmployeeCostExport" . date('Y_m_d_H_i_s') . ".xls";
+                $filename = "temporaryEmployeeCostExport" . date('Y_m_d_H_i_s') . ".xls";
             }
 
             //start
@@ -2337,7 +2337,7 @@ EOD;
 
         if (1 && $request->input('status') != '') {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             $status = $request->input('status'); //active = 1, exited = 4
             $suffix = "";
 
@@ -2346,7 +2346,7 @@ EOD;
                 $filename = "staffEmployeeBioDataExport" . date('Y_m_d_H_i_s') . ".xls";
             } else {
                 $suffix = "Allowance";
-                $filename = "volunteerEmployeeBioDataExport" . date('Y_m_d_H_i_s') . ".xls";
+                $filename = "temporaryEmployeeBioDataExport" . date('Y_m_d_H_i_s') . ".xls";
             }
 
             //start
@@ -2463,7 +2463,7 @@ EOD;
 
         if (1) {
             $current_payroll_month = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
@@ -2502,7 +2502,7 @@ EOD;
         dd($request->all());
 
         if (1) {
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             $current_payroll_month = $request->input('payrolldate');
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -2512,8 +2512,8 @@ EOD;
                 $total_current_net = $this->reports_model->staff_sum_take_home($current_payroll_month);
             } else {
                 $payroll_employees = $this->reports_model->v_payrollEmployee($current_payroll_month, $previous_payroll_month);
-                $total_previous_net = $this->reports_model->volunteer_sum_take_home($previous_payroll_month);
-                $total_current_net = $this->reports_model->volunteer_sum_take_home($current_payroll_month);
+                $total_previous_net = $this->reports_model->temporary_sum_take_home($previous_payroll_month);
+                $total_current_net = $this->reports_model->temporary_sum_take_home($current_payroll_month);
             }
 
             foreach ($payroll_employees as $employee) {
@@ -2541,7 +2541,7 @@ EOD;
 
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, Volunteer = 2
+            $reportType = $request->input('type'); //Staff = 1, temporary = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -2606,9 +2606,9 @@ EOD;
     public function netTotalSummation($payroll_date)
     {
         //FROM DATABASE
-        $volunteer_mwp_total = $this->reports_model->volunteerAllowanceMWPExport($payroll_date);
+        $temporary_mwp_total = $this->reports_model->temporaryAllowanceMWPExport($payroll_date);
         $staff_bank_totals = $this->reports_model->staffPayrollBankExport($payroll_date);
-        $volunteer_bank_totals = $this->reports_model->volunteerPayrollBankExport($payroll_date);
+        $temporary_bank_totals = $this->reports_model->temporaryPayrollBankExport($payroll_date);
 
         /*amount bank staff*/
         $amount_staff_bank = 0;
@@ -2616,21 +2616,21 @@ EOD;
             $amount_staff_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
-        /*amount bank volunteer*/
-        $amount_volunteer_bank = 0;
-        foreach ($volunteer_bank_totals as $row) {
-            $amount_volunteer_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+        /*amount bank temporary*/
+        $amount_temporary_bank = 0;
+        foreach ($temporary_bank_totals as $row) {
+            $amount_temporary_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
-        foreach ($volunteer_mwp_total as $row) {
+        foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
-        $total = $amount_mwp + $amount_staff_bank + $amount_volunteer_bank;
+        $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
 
-        return [$amount_mwp, $amount_staff_bank, $amount_volunteer_bank];
+        return [$amount_mwp, $amount_staff_bank, $amount_temporary_bank];
 
     }
 

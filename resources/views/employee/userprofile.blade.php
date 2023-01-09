@@ -58,7 +58,7 @@
         <div class="card border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="https://ui-avatars.com/api/?name={{ urlencode($name) }}&background=00204e&color=fff" width="150" height="150" alt="">
+                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>
@@ -296,7 +296,7 @@
                                                 <i class="ph-trash"></i>
                                             </button>
                                         </form>
-                                        {{-- <a href="<?php echo url('')."flex/deletekin/?id=".$row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
+                                        {{-- <a href="<?php echo url('')."flex/deletekin".$row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
                                         </a> --}}
                                     </td>
                                   </tr>
@@ -713,7 +713,7 @@
                     enctype="multipart/form-data"
                     method="post"
                     action="{{ route('flex.addkin', $empID) }}"
-                    {{-- action="<?php echo  url(''); ?>/flex/addkin/?id=<?php echo $empID; ?>" --}}
+                    {{-- action="<?php echo  url(''); ?>/flex/addkin<?php echo $empID; ?>" --}}
                     data-parsley-validate
                 >
                 @csrf

@@ -48,7 +48,7 @@
         <tr>
             <td width="1px">{{ $row->SNo }}</td>
 
-            <td><a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/?id='.$row->emp_id; ?>"> {{ $row->NAME }} </a></td>
+            <td><a title="More Details"  href="<?php echo  url('') .'/flex/userprofile'.$row->emp_id; ?>"> {{ $row->NAME }} </a></td>
             <td>{{ $row->gender }}</td>
             <td>
                 <b>Department: </b> {{ $row->DEPARTMENT }} <br>
@@ -60,7 +60,7 @@
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
             <td class="options-width">
-                <a  href="<?php echo  url('') .'/flex/userprofile/?id=' .$row->emp_id; ?>"  title="Info and Details">
+                <a  href="<?php echo  url('') .'/flex/userprofile' .$row->emp_id; ?>"  title="Info and Details">
                     <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                 </a>
 
@@ -69,11 +69,11 @@
                         <button type="button" class="btn btn-danger btn-xs"><i class="ph-prohibit"></i></button>
                     </a>
 {{--
-                    <a href="<?php echo  url('') .'/flex/updateEmployee/?id='.$row->emp_id."|".$row->department; ?>" title="Update">
+                    <a href="<?php echo  url('') .'/flex/updateEmployee'.$row->emp_id."|".$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
                     </a>
 
-                    <a href="<?php echo  url('').'flex/project/evaluateEmployee/?id='.$row->emp_id.'|'.$row->department; ?>" title="Update">
+                    <a href="<?php echo  url('').'flex/project/evaluateEmployee'.$row->emp_id.'|'.$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button>
                     </a> --}}
                 @endif

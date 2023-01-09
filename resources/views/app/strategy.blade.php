@@ -221,7 +221,7 @@
                                                 </ul>
                                             </td>
                                             <td class="options-width">
-                                            <a href="<?php echo  url('')."flex/performance/strategy_info/?id=".base64_encode($row->id); ?>"   title="Strategy Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                            <a href="<?php echo  url('')."flex/performance/strategy_info".base64_encode($row->id); ?>"   title="Strategy Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                             
                                             <?php if($strategyID == $row->id) { ?>
                                             <a title="Current Selected Strategy Can Not Be Deleted, Change Selection and Try to Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i>  NOT ALLOWED</button> </a>
@@ -351,7 +351,7 @@
                                               </ul>
                                           </td>
                                           <td class="options-width">
-                                              <a href="<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                              <a href="<?php echo  url('')."flex/performance/outcome_info".base64_encode($rowOutcome->strategy_ref."|".$rowOutcome->id); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                               <a href="javascript:void(0)" onclick="deleteOutcome(<?php echo $rowOutcome->id;?>)"   title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
                                               <!-- <a href = "<?php echo  url('')."flex/performance/output/".$rowOutcome->id."/".$rowOutcome->strategy_ref; ?>"><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a> -->
                                               
@@ -485,9 +485,9 @@
                                                                 </ul>
                                                             </td>
                                                             <td class="options-width">
-                                                                <a href="<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                                                <a href="<?php echo  url('')."flex/performance/output_info".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"   title="Output Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
                                                                 <a href="javascript:void(0)" onclick="deleteOutput(<?php echo $rowOutput->id;?>)"    title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash-o"></i></button> </a>
-                                                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>" ><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
+                                                                <a href="<?php echo  url('')."flex/performance/assigntask".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>" ><button type="button" class="btn btn-main btn-xs"><i class="fa fa-plus"></i></button></a>
                                                             </td>
                                                         </tr> 
                                                     <?php  }  ?>
@@ -508,7 +508,7 @@
                               <div class="card-head">
                                 <h2>Tasks
             
-                                <a href="<?php echo  url('')."flex/performance/assigntask/?id=".base64_encode($currentStrategy."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-main">CREATE AD-HOC TASK</button></a>
+                                <a href="<?php echo  url('')."flex/performance/assigntask".base64_encode($currentStrategy."|".$adhoc."|".$adhoc); ?>" ><button type="button"  class="btn btn-main">CREATE AD-HOC TASK</button></a>
             
                                 <a href ="<?php echo  url(''); ?>/flex/performance/task_report" target = "blank"><button type="button" name="print" value ="print" class="btn btn-info">EXPORT</button></a>
                                 </h2>
@@ -641,14 +641,14 @@
                                             </ul>
                                         </td>
                                         <td class="options-width">
-                                            <a href="<?php echo  url('')."flex/performance/task_info/?id=".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                                            <a href="<?php echo  url('')."flex/performance/task_info".base64_encode($row->id."|".$row->output_ref); ?>"   title="Outcome Info and Details" class="icon-2 info-tooltip"><button  class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
             
                                       <!-- Line Manager WHO  ASSIGNED The Task -->
                                       <?php 
                                         if($row->status==1){ ?>
                                         <button type="submit" name="notdone" class="btn btn-warning btn-xs">Disapprove</button>
             
-                                        <a href="<?php echo  url('')."/flex/performance/task_approval/?id=".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
+                                        <a href="<?php echo  url('')."/flex/performance/task_approval".$row->id; ?>"><button type="button" name="go" class="btn btn-success btn-xs">Approve</button></a>
             
             
                                         <?php } if($row->status==0){ ?>
@@ -662,7 +662,7 @@
                                             <!--ACTIONS-->
                                             </td>
             
-                                        <td><a href="<?php echo  url('')."flex/performance/comment/?id=".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>
+                                        <td><a href="<?php echo  url('')."flex/performance/comment".$row->id; ?>"><button type="submit" name="go" class="btn btn-main btn-xs">Progress<br>and<br>Comments</button></a>
             
             
                                         

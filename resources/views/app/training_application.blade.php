@@ -76,7 +76,7 @@
 
                             <td class="options-width">
 
-                              <a href="<?php echo  url(''); ?>/flex/budget_info/?id=".base64_encode($row->id); ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
+                              <a href="<?php echo  url(''); ?>/flex/budget_info".base64_encode($row->id); ?>" title="Employee Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i></button> </a>
 
                              <?php if($row->status==0){ ?> 
 
@@ -170,7 +170,7 @@
                                       foreach ($applications_hr as $row) { ?>
                                       <tr id="domain<?php echo $row->SKID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->SKILLS_NAME; ?></td>
                                         <td><?php if($row->mandatory == 1){ ?>
@@ -242,7 +242,7 @@
                                       foreach ($applications as $row) { ?>
                                       <tr id="domain<?php echo $row->SKID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->SKILLS_NAME; ?></td>
                                         <td><?php if($row->mandatory == 1){ ?>
@@ -318,7 +318,7 @@
                                       foreach ($skill_gap as $row) { ?>
                                       <tr id="domain<?php echo $row->SKID;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->emp_id; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->SKILLS_NAME; ?></td>
                                         <td><?php if($row->mandatory == 1){ ?>
@@ -392,7 +392,7 @@
                                       foreach ($trainees_accepted as $row) { ?>
                                       <tr id="domain<?php echo $row->id;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->COURSE; ?></td>
                                         <td><?php if($row->state == 0){ ?>
@@ -452,7 +452,7 @@
                                       foreach ($trainees_graduated as $row) { ?>
                                       <tr id="domain<?php echo $row->id;?>">
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile/?id=".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
+                                        <td><a title="More Details"  href="<?php echo  url(''); ?>/flex/userprofile".$row->empID; ?>"><?php echo $row->trainee; ?></a></td>
                                         <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
                                         <td><?php echo $row->COURSE; ?></td>
                                         <td><?php if($row->state == 0){ ?>

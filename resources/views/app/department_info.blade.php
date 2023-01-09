@@ -40,11 +40,11 @@
                         
                         } ?>
                         <div class="col-lg-12">
-                            <!--<form id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/editdepartment/?id=<?php echo $id; ?>"  data-parsley-validate class="form-horizontal form-label-left">-->
+                            <!--<form id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/editdepartment<?php echo $id; ?>"  data-parsley-validate class="form-horizontal form-label-left">-->
 
                             <form autocomplete="off" id="upload_form" align="center" enctype="multipart/form-data"
                                 method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/?id=<?php echo $id; ?>">
+                                action="<?php echo  url(''); ?>/flex/editdepartment<?php echo $id; ?>">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Department
@@ -65,7 +65,7 @@
 
 
                             <form id="upload_form" align="center" enctype="multipart/form-data" method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/?id=<?php echo $id; ?>">
+                                action="<?php echo  url(''); ?>/flex/editdepartment<?php echo $id; ?>">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Cost Center
@@ -92,7 +92,7 @@
 
 
                             <form id="upload_form" align="center" enctype="multipart/form-data" method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/?id=<?php echo $id; ?>">
+                                action="<?php echo  url(''); ?>/flex/editdepartment<?php echo $id; ?>">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Head of
@@ -121,7 +121,7 @@
                             <?php  if($id!=3){ ?>
                             <!-- If The Department is Not Top Department Allow Updating -->
                             <form id="upload_form" align="center" enctype="multipart/form-data" method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/?id=<?php echo $id; ?>">
+                                action="<?php echo  url(''); ?>/flex/editdepartment<?php echo $id; ?>">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reports To

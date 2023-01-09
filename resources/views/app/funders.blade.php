@@ -100,7 +100,7 @@
                                                         <td width="1px"><?php echo date('Y-m-d', strtotime($row->createdOn)); ?></td>
                                                         <?php if (session('vw_proj') || session('mng_proj')) { ?>
                                                             <td width="1px">
-                                                                <a href="<?php echo url('flex/performance/funderInfo/?id=') . base64_encode($row->id); ?>">
+                                                                <a href="<?php echo url('flex/performance/funderInfo') . base64_encode($row->id); ?>">
                                                                     <button class="btn btn-info btn-xs">Info</button>
                                                                 </a>
                                                                 <a href="javascript:void(0)"

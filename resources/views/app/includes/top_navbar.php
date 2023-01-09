@@ -108,7 +108,7 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="<?php echo  url(''); ?>/flex/userprofile/?id=".session('emp_id'); ?>"> Profile</a></li>
+                    <li><a href="<?php echo  url(''); ?>/flex/userprofile".session('emp_id'); ?>"> Profile</a></li>
                     <li>
                       <a href="<?php echo  url(''); ?>/flex/login_info"; ?>">
                         <span>Account Setting</span>

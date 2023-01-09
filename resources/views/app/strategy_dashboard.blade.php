@@ -223,7 +223,7 @@
                 {
                     "outcome": "<?php echo $row->strategy_ref.'.'.$row->id; ?>",
                     "percent": <?php echo 100*number_format($percent, 2); ?>,
-                    "url": "<?php echo  url('')."flex/performance/outcome_info/?id=".base64_encode($row->strategy_ref."|".$row->id); ?>"
+                    "url": "<?php echo  url('')."flex/performance/outcome_info".base64_encode($row->strategy_ref."|".$row->id); ?>"
                 }, 
                 <?php } ?>
             ];           
@@ -301,7 +301,7 @@
                     {
                         "output": "<?php echo $rowOutput->strategy_ref.'.'.$rowOutput->outcome_ref.'.'.$rowOutput->id; ?>",
                         "percentoutput": <?php echo 100*number_format($percentOut, 2); ?>,
-                        "url": "<?php echo  url('')."flex/performance/output_info/?id=".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"
+                        "url": "<?php echo  url('')."flex/performance/output_info".base64_encode($rowOutput->strategy_ref."|".$rowOutput->outcome_ref."|".$rowOutput->id); ?>"
                     }, 
                     <?php } ?>
                 ];

@@ -23,14 +23,14 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Volunteer Allowance MWP</h5>
+                <h5 class="text-muted">temporary Allowance MWP</h5>
             </div>
 
             <form
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.volunteerAllowanceMWPExport') }}"
+                action="{{ route('reports.temporaryAllowanceMWPExport') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf
@@ -87,7 +87,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -271,7 +271,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -317,7 +317,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -363,7 +363,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -409,7 +409,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>
@@ -455,7 +455,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Volunteer</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>

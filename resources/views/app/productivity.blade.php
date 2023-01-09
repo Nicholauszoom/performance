@@ -128,7 +128,7 @@
                           <tr id="domain<?php echo $row->name;?>">
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td width="1px"><?php echo $row->empID; ?></td>
-                            <td><a title="More Details"  href="<?php echo  url('')."flex/performance/userprofile/?id=".$row->empID; ?>"><?php echo $row->name; ?></a></td>
+                            <td><a title="More Details"  href="<?php echo  url('')."flex/performance/userprofile".$row->empID; ?>"><?php echo $row->name; ?></a></td>
                             <td>Department:  <b> <?php echo $row->department."</b><br>Position: <b> ".$row->position;?></b></td>
                             <td><?php echo $row->number_of_tasks; ?></td>
 

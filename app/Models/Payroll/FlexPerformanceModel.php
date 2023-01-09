@@ -56,10 +56,12 @@ class FlexPerformanceModel extends Model
 
 	function getAttributeName($attribute, $table, $referenceName, $referenceValue)
 	{
-		$query = $attribute." AS attributeValue   WHERE ".$referenceName." = '".$referenceValue."' ";
+		// $query = $attribute." AS attributeValue   WHERE ".$referenceName." = '".$referenceValue."' ";
 		$row =  DB::table($table)
-        ->select(DB::raw($query))
-        ->first();
+            ->select($attribute.' AS attributeValue')
+            ->where($referenceName, $referenceValue)
+            ->limit(1)
+            ->first();
 
 		return $row->attributeValue;
 	}
@@ -626,7 +628,7 @@ function retire_list()
 		return true;
 	}
 
-	function employeeTransfer($data)
+	public function employeeTransfer($data)
 	{
 		DB::table('transfer')->insert($data);
 
@@ -2513,8 +2515,7 @@ function allLevels()
 
 	function updateEmployee($data, $empID)
 	{
-		DB::table('employee')->where('emp_id', $empID)
-		->update($data);
+		DB::table('employee')->where('emp_id', $empID)->update($data);
 		return true;
 	}
 
@@ -2838,6 +2839,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
 		$row = DB::select(DB::raw($query));
+		
 
     	return $row[0]->headcounts;
 

@@ -94,11 +94,11 @@
               <?php if($pendingPayroll==0 && session('mng_roles_grp')){ ?>
               <td class="options-width">
               <?php if($row->type>0){ ?>
-                @if($row->grouped_by == 1) 
-              <a  href="<?php echo  url(''); ?>/flex/financial_groups_details/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
-               @else 
-               <a  href="<?php echo  url(''); ?>/flex/financial_groups_byRole_details/?id=<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
-               @endif
+                {{-- @if($row->grouped_by == 1)  --}}
+              <a  href="<?php echo  url(''); ?>/flex/financial_groups_details<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i>By Emp</button> </a>
+               {{-- @else  --}}
+               <a  href="<?php echo  url(''); ?>/flex/financial_groups_byRole_details<?php echo base64_encode($row->id); ?>" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i>By Role</button> </a>
+               {{-- @endif --}}
              <a href="javascript:void(0)" onclick="deleteFinanceGroup(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
              <?php } ?>
               </td>

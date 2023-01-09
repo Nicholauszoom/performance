@@ -28,20 +28,37 @@ class ImportDepartment implements ToCollection,WithHeadingRow
         {  
              
 
-          $data = [
-            'dept_no'=>$row['deptno'],
-            'company'=>$row['company'],
-            'code'=>$row['code'],
-            'name'=>$row['name'],
-            'type'=>1,
-            'hod'=>$row['head'],
-            'reports_to'=>$row['reportto'],
-            'state'=>1,
-            'department_pattern'=>'ewqacr',
-            'parent_pattern'=>'ewqacr',
+          // $data = [
+          //   'dept_no'=>$row['deptno'],
+          //   'company'=>$row['company'],
+          //   'code'=>$row['code'],
+          //   'name'=>$row['name'],
+          //   'type'=>1,
+          //   'hod'=>$row['head'],
+          //   'reports_to'=>$row['reportto'],
+          //   'state'=>1,
+          //   'department_pattern'=>'ewqacr',
+          //   'parent_pattern'=>'ewqacr',
+          // ];
+
+          $data2 = [
+            //'dept_no'=>$row['deptno'],
+            'name'=>$row['dept'],
+            // 'code'=>$row['code'],
+            // 'name'=>$row['name'],
+            // 'type'=>1,
+            // 'hod'=>$row['head'],
+            // 'reports_to'=>$row['reportto'],
+            // 'state'=>1,
+            // 'department_pattern'=>'ewqacr',
+            // 'parent_pattern'=>'ewqacr',
           ];
-          DB::table('department')
-          ->insert($data);
+          $test = DB::table('department')->where('name',$row['dept'])->select('*')->first();
+        
+          if(empty($test))
+          DB::table('department')->insert($data2);
+          else
+          DB::table('department')->where('name',$row['dept'])->update($data2);
         
 
           

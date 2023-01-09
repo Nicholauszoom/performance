@@ -1,4 +1,5 @@
 
+
 @extends('layouts.vertical', ['title' => 'Update Employee'])
 
 @push('head-script')
@@ -14,51 +15,51 @@
 
 @section('content')
 
-<!-- page content -->
-<?php
-                foreach ($employee as $row) {
 
-                  $name = $row->fname." ".$row->mname." ".$row->lname;
-                  $fname = $row->fname;
-                  $mname = $row->mname;
-                  $lname = $row->lname;
-                  $pension_fund_id= $row->pension_fund;
-                  $department = $row->deptname;
-                  $branch = $row->branch_name;
-                  $branchCode = $row->branch;
-                  $emp_code = $row->emp_code;
-                  $emp_level = $row->emp_level;
-                  $empID = $row->emp_id;
-                  $old_empID = $row->old_emp_id;
-                  $gender = $row->gender;
-                  $merital_status = $row->merital_status;
-                  $birthdate = $row->birthdate;
-                  $hire_date = $row->hire_date;
-                  $contract_end = $row->contract_end;
-                  $departmentID = $row->department;
-                  $position = $row->pName;
-                  $bankName = $row->bankName;
-                  $bankBranch = $row->bankBranch;
-                  $positionID = $row->position;
-                  $ctype = $row->contract_type;
-                  $emp_shift = $row->shift;
-                  $line_managerID = $row->line_manager;
-                  $linemanager = $row->LINEMANAGER;
-                  $pf_membership_no = $row->pf_membership_no;
-                  $account_no = $row->account_no;
-                  $mobile = $row->mobile;
-                  $salary = $row->salary;
-                  $nationality = $row->nationality;
-                  $email = $row->email;
-                  $photo = $row->photo;
-                  $postal_address = $row->postal_address;
-                  $postal_city = $row->postal_city;
-                  $physical_address = $row->physical_address;
-                  $home_address = $row->home;
-                  $expatriate = $row->is_expatriate;
-                  $national_id = $row->national_id;
-                  $tin = $row->tin;
- }  ?>
+<?php
+    foreach ($employee as $row) {
+        $name = $row->fname." ".$row->mname." ".$row->lname;
+        $fname = $row->fname;
+        $mname = $row->mname;
+        $lname = $row->lname;
+        $pension_fund_id= $row->pension_fund;
+        $department = $row->deptname;
+        $branch = $row->branch_name;
+        $branchCode = $row->branch;
+        $emp_code = $row->emp_code;
+        $emp_level = $row->emp_level;
+        $empID = $row->emp_id;
+        $old_empID = $row->old_emp_id;
+        $gender = $row->gender;
+        $merital_status = $row->merital_status;
+        $birthdate = $row->birthdate;
+        $hire_date = $row->hire_date;
+        $contract_end = $row->contract_end;
+        $departmentID = $row->department;
+        $position = $row->pName;
+        $bankName = $row->bankName;
+        $bankBranch = $row->bankBranch;
+        $positionID = $row->position;
+        $ctype = $row->contract_type;
+        $emp_shift = $row->shift;
+        $line_managerID = $row->line_manager;
+        $linemanager = $row->LINEMANAGER;
+        $pf_membership_no = $row->pf_membership_no;
+        $account_no = $row->account_no;
+        $mobile = $row->mobile;
+        $salary = $row->salary;
+        $nationality = $row->nationality;
+        $email = $row->email;
+        $photo = $row->photo;
+        $postal_address = $row->postal_address;
+        $postal_city = $row->postal_city;
+        $physical_address = $row->physical_address;
+        $home_address = $row->home;
+        $expatriate = $row->is_expatriate;
+        $national_id = $row->national_id;
+        $tin = $row->tin;
+    }
+ ?>
 
 
 <div class="card">
@@ -231,12 +232,12 @@
                         <label for="stream" class="form-label">Profile </label>
                         <div>
                             <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="gender" value="1" id="dm1" {{ ($expatriate  == 1) ? 'checked' : null }}>
+                                <input type="radio" name="expatriate" value="1" id="dm1" {{ ($expatriate  == 1) ? 'checked' : null }}>
                                 <label class="ms-2" for="dm1">Expatriate</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="gender" value="0" id="dm2" {{ ($expatriate  == 0) ? 'checked' : null }}>
+                                <input type="radio" name="expatriate" value="0" id="dm2" {{ ($expatriate  == 0) ? 'checked' : null }}>
                                 <label class="ms-2" for="dm2">Normal Employee</label>
                             </div>
 
@@ -292,7 +293,9 @@
                         </p>
                         <?php } ?>
 
-                        <label for="stream" class="form-label">Department <span class="badge bg-green"><?php echo $department;?> Good</span></label>
+                        <label for="stream" class="form-label">Department</label>
+
+                        <span class="badge bg-info">{{ $department }}</span>
 
                         <select required id='department' name="department" class="select3_single form-control select">
                             <option> Select Department </option>
@@ -305,7 +308,8 @@
                         <input hidden name="oldPosition" value="<?php echo $positionID; ?>">
                         <input hidden name="oldDepartment" value="<?php echo $departmentID; ?>">
 
-                        <label for="stream" class="form-label mt-2">Position <span class="badge bg-green"><?php echo $position;?></span></label>
+                        <label for="stream" class="form-label mt-2">Position</label>
+                        <span class="badge bg-info"><?php echo $position;?></span>
 
                         <select required id="pos" name="position" class="select1_single form-control select" tabindex="-1"></select>
 
@@ -425,7 +429,8 @@
                         </p>
                         <?php } ?>
 
-                        <label for="stream" class="form-label">Bank <span class="badge bg-green"><?php echo $bankName;?></span> </label>
+                        <label for="stream" class="form-label">Bank </label>
+                        <span class="badge bg-info"><?php echo $bankName;?></span>
 
                         <input hidden name="empID" value="<?php echo $empID; ?>">
 
@@ -436,7 +441,8 @@
                             <?php } ?>
                         </select>
 
-                        <label for="stream" class="form-label mt-2">Branch <span class="badge bg-green"><?php echo $bankBranch;?></span></label>
+                        <label for="stream" class="form-label mt-2">Branch </label>
+                        <span class="badge bg-info"><?php echo $bankBranch;?></span>
 
                         <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1"></select>
 
@@ -592,25 +598,17 @@
                     <form id="updatePensionFund">
                         <div id="feedBackPension"></div>
 
-                        <div class="col-sm-9">
-                            <div class="form-group">
-                                <label for="stream" class="form-label">Pension Fund</label>
-                                <div class="input-group">
-                                    <input hidden name="empID" value="<?php echo $empID; ?>">
-                                    <select required name="pension_fund" class="select2_single form-control"
-                                        tabindex="-1">
-                                        <option></option>
-                                        <?php foreach ($pension as $row){ ?>
-                                        <option <?php if($pension_fund_id == $row->id){ ?> selected=""
-                                            <?php } ?> value="<?php echo $row->id; ?>">
-                                            <?php echo $row->name; ?></option> <?php } ?>
-                                    </select>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-main">UPDATE</button>
-                                    </span>
-                                </div>
-                            </div>
+                        <label for="stream" class="form-label">Pension Fund</label>
+                        <div class="input-group">
+                            <select required name="pension_fund" class="select2_single form-control select" data-width="1%">
+                                <option>Select </option>
+                                <?php foreach ($pension as $row){ ?>
+                                <option <?php if($pension_fund_id == $row->id){ ?> selected=""<?php } ?> value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+                                <?php } ?>
+                            </select>
+                            <button class="btn btn-main">UPDATE</button>
                         </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
                     </form>
                 </div>
             </div>
@@ -618,20 +616,16 @@
             <div class="col-lg-4">
                 <div class="mb-3">
                     <form id="updatePensionFundNo">
-                        <div class="col-sm-9">
-                            <div id="feedBackPensionFundNo"></div>
-                            <div class="form-group">
-                                <label for="stream" class="form-label">Pension Fund No</label>
-                                <div class="input-group">
-                                    <input hidden name="empID" value="<?php echo $empID; ?>">
-                                    <input type="text" required="" name="pension_no"
-                                        value="<?php echo $pf_membership_no; ?>" class="form-control">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-main">UPDATE</button>
-                                    </span>
-                                </div>
-                            </div>
+                        <div id="feedBackPensionFundNo"></div>
+
+                        <label for="stream" class="form-label">Pension Fund No</label>
+
+                        <div class="input-group">
+                            <input type="text" required="" name="pension_no" value="<?php echo $pf_membership_no; ?>" class="form-control">
+                            <button class="btn btn-main">UPDATE</button>
                         </div>
+
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
                     </form>
                 </div>
             </div>
@@ -681,6 +675,45 @@
 @endsection
 
 @push('footer-script')
+
+<script>
+    $(document).ready(function() {
+
+      $('#department').on('change',function(){
+          var stateID = $(this).val();
+          if(stateID){
+              $.ajax({
+                    type: 'GET',
+                        url: '{{ url('/flex/positionFetcher') }}',
+                //   headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                  data:'dept_id='+stateID,
+                  success:function(html){
+                      // $('#pos').html(html);
+                      let jq_json_obj = $.parseJSON(html);
+                      let jq_obj = eval (jq_json_obj);
+
+                      //populate position
+                      $("#pos option").remove();
+                      $('#pos').append($('<option>', {
+                          value: '',
+                          text: 'Select Position',
+                          selected: true,
+                          disabled: true
+                      }));
+                      $.each(jq_obj.position, function (detail, name) {
+                          $('#pos').append($('<option>', {value: name.id, text: name.name}));
+                      });
+                  }
+              });
+          }else{
+              // $('#pos').html('<option value="">Select state first</option>');
+          }
+      });
+    });
+</script>
+
+@include('employee.includes.update')
+
 <script>
     $(document).ready(function() {
 
@@ -688,8 +721,8 @@
             var bankID = $(this).val();
             if (bankID) {
                 $.ajax({
-                    type: 'POST',
-                    url: '<?php echo  url(''); ?>/flex/bankBranchFetcher/',
+                    type: 'GET',
+                    url: '{{ url('/flex/bankBranchFetcher/') }}',
                     data: 'bank=' + bankID,
                     success: function(html) {
                         $('#bank_branch').html(html);
@@ -790,6 +823,7 @@
         $.ajax({
                 url: "<?php echo  url(''); ?>/flex/updateContractStart",
                 type: "post",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
@@ -816,6 +850,7 @@
         $.ajax({
                 url: "<?php echo  url(''); ?>/flex/updateContractEnd",
                 type: "post",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                 data: new FormData(this),
                 processData: false,
                 contentType: false,

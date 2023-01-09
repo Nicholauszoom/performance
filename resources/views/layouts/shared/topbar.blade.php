@@ -270,7 +270,7 @@
             <li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
                 <a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
                     <div class="status-indicator-container">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->fname .' '.Auth::user()->lname) }}&background=035ad5&color=fff" class="w-32px h-32px rounded-pill" alt="">
+                        <img src="{{ (Auth::user()->photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->fname .' '.Auth::user()->lname).'&background=00207e&color=fff' : asset('storage/profile/' . Auth::user()->photo) }}" class="w-32px h-32px rounded-pill" alt="">
 
                         <span class="status-indicator bg-success"></span>
                     </div>
@@ -278,7 +278,7 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a href="<?php echo  url('') .'/flex/userprofile/?id='.session('emp_id'); ?>" class="dropdown-item">
+                    <a href="<?php echo  url('') .'/flex/userprofile'.session('emp_id'); ?>" class="dropdown-item">
                         <i class="ph-user-circle me-2"></i>
                         My profile
                     </a>

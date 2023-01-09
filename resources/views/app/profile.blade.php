@@ -72,7 +72,7 @@
                         </li>
                       </ul>
 
-                      <a href="<?php echo  url(''); ?>/flex/editemployee/?id=".session('emp_id'); ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
+                      <a href="<?php echo  url(''); ?>/flex/editemployee".session('emp_id'); ?>" class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a>
                       <br />
 
                       <!-- start skills -->
@@ -319,7 +319,7 @@
                                     <td><?php echo $row->postal_address; ?></td>
 
                                     <td class="options-width">
-                                   <a href="<?php echo  url(''); ?>/flex/deletekin/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="<?php echo  url(''); ?>/flex/deletekin".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                                    </td>
                                     </tr>
                                   <?php }  ?>
@@ -408,7 +408,7 @@
                           <div class="clearfix"></div>
                         </div>
                         <div class="card-body">
-                            <form action="<?php echo  url(''); ?>/flex/assignrole/?id=<?php echo session('emp_id'); ?>" method="post">
+                            <form action="<?php echo  url(''); ?>/flex/assignrole<?php echo session('emp_id'); ?>" method="post">
                     <table class="table">
                       <thead>
                         <tr>
@@ -492,7 +492,7 @@
                                     <td><?php echo $row->dated_on; ?></td>
 
                                     <td class="options-width">
-                                   <a href="<?php echo  url(''); ?>/flex/deleteproperty/?id=".$row->id."&employee=".$empID; ?>"    title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
+                                   <a href="<?php echo  url(''); ?>/flex/deleteproperty".$row->id."&employee=".$empID; ?>"    title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                                    <a href="javascript:void(0)" onclick="deleteDomain(<?php echo $row->id;?>)"  title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
                            <a href="javascript:void(0)" class="hide" id="hide<?php echo $row->id;?>">Please wait...</a>
                                    </td>
@@ -582,7 +582,7 @@
                           </div>
                           <div class="modal-body">
                           <!-- Modal Form -->
-                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addkin/?id=<?php echo session('emp_id'); ?>"  data-parsley-validate class="form-horizontal form-label-left">
+                          <form id="demo-form2" enctype="multipart/form-data"  method="post" action="<?php echo  url(''); ?>/flex/addkin<?php echo session('emp_id'); ?>"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">First Name 
                         </label>

@@ -31,22 +31,20 @@
         <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
-              <div class="title_left">
-                <h3>Advanced Loan Payment</h3>
-              </div>
+             
             </div>
             <div class="clearfix"></div>
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                  <div class="card-head">
+                  <div class="card-head py-2 px-3">
                     <h2>Advanced Payments</h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="card-body">
                   <div id="feedback"></div>
 
-                  @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                  @if(Session::has('note'))      {{ session('note') }}  @endif  
 
                     <form id="updateLoan" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
@@ -64,10 +62,10 @@
                         <input type="hidden" required=""  value="<?php echo $remained; ?>" name="remained" >
                           
                       <!-- <div class="ln_solid"></div> -->
-                      <div class="form-group">
+                      <div class="form-group py-3">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button type="submit" class="btn btn-main">Cancel</button>
-                          <button class="btn btn-success">Update</button>
+                         
+                          <button class="btn btn-main">Update</button>
                         </div>
                       </div>
 
@@ -91,6 +89,7 @@
   
     $.ajax({
  url: "<?php echo  url(''); ?>/flex/adv_loan_pay",
+ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
  type: 'POST',
  data: $(this).serialize(), // it will serialize the form data
         dataType: 'json'

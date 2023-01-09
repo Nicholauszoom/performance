@@ -29,6 +29,8 @@ class ImportEmployeeController extends Controller
 
        // $data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
 
+          //$data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
+
          $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
         
         // $response_array['title'] = "SUCCESS";

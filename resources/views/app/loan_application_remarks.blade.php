@@ -41,7 +41,7 @@
                   
                      
             <div class="col-lg-6">
-                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/loan_application_info/?id=<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="upload_form" align="center" enctype="multipart/form-data" method="post"  action="<?php echo  url(''); ?>/flex/loan_application_info<?php echo $id;?>"   data-parsley-validate class="form-horizontal form-label-left">
                       
                       
                       <div class="form-group">

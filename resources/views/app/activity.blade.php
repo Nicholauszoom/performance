@@ -85,9 +85,9 @@
 <!-- $this->encrypt->encode($this->input->get("id")) -->
 
                             <td class="options-width">
-                           <a href="<?php echo  url(''); ?>/flex/desletedepartment/?id=".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
+                           <a href="<?php echo  url(''); ?>/flex/desletedepartment".$row->id; ?>"   title="Delete" class="icon-2 info-tooltip"><font color="red"> <i class="ph-trash-o"></i></font></a>&nbsp;&nbsp;
 
-                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php echo  url('')."flex/deepartment_info/?id=".base64_encode($row->id); ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
+                            <a class="tooltip-demo" data-placement="top" title="Edit"  href="<?php echo  url('')."flex/deepartment_info".base64_encode($row->id); ?>"><font color="#5cb85c"> <i class="fa fa-edit"></i></font></a></td>
                             </tr>
                           <?php } //} ?>
                       </tbody>

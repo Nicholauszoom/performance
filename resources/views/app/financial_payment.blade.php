@@ -16,6 +16,7 @@
 @section('content')
     @php
         $imprest_model = new App\Models\Payroll\ImprestModel();
+         $state = 0;
     @endphp
 
     @foreach ($payrollList as $row)
