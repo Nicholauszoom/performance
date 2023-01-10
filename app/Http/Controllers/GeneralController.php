@@ -3271,7 +3271,7 @@ class GeneralController extends Controller
                 'amount' => $request->input("amount"),
                 'deduction_amount' => $deduction,
                 'approved_hr' => session('emp_id'),
-                'status' => 0,
+                'status' => 1,
                 'notification' => 3,
                 'approved_date_hr' => date('Y-m-d'),
                 'type' => $type,
