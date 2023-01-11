@@ -54,9 +54,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/flex_performance'),
+    // 'url' => env('APP_URL', 'http://localhost/flex_performance'),
 
-    'asset_url' => env('ASSET_URL','http://localhost/flex_performance/public'),
+    // 'asset_url' => env('ASSET_URL','http://localhost/flex_performance/public'),
 
     /*
     |--------------------------------------------------------------------------

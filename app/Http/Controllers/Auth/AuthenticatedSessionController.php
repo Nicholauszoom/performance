@@ -17,6 +17,8 @@ use App\Models\Payroll\FlexPerformanceModel;
 class AuthenticatedSessionController extends Controller
 {
 
+    protected $flexperformance_model;
+
     public function __construct(FlexPerformanceModel $flexperformance_model){
         $this->flexperformance_model = $flexperformance_model;
     }
@@ -42,10 +44,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->authenticate();
 
-        
-
-       
-
         if($this->password_set(Auth::user()->emp_id) == 1){
 
             return redirect('/change-password');
@@ -58,7 +56,7 @@ class AuthenticatedSessionController extends Controller
             if (session('pass_age') >= 90) {
 
                 return redirect('/change-password')->with('status', 'You password has expired');
-                
+
             }else{
                 $employeeName = Auth::user()->fname.' '.Auth::user()->mname;
 

@@ -51,6 +51,8 @@ class PasswordController extends Controller
         $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
 
         if($result == 1){
+            $request->session()->flush();
+            
             return redirect('/');
         }else{
             return back()->with('status', 'password not updated');
