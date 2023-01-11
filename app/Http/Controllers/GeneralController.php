@@ -3271,7 +3271,7 @@ class GeneralController extends Controller
                 'amount' => $request->input("amount"),
                 'deduction_amount' => $deduction,
                 'approved_hr' => session('emp_id'),
-                'status' => 0,
+                'status' => 1,
                 'notification' => 3,
                 'approved_date_hr' => date('Y-m-d'),
                 'type' => $type,
@@ -3419,6 +3419,26 @@ class GeneralController extends Controller
         if ($id != '') {
 
             $loanID = $id;
+
+            $hrdata = array(
+                'approved_date_hr' => date('Y-m-d'),
+                'approved_hr' => session('emp_id'),
+                // 'status' => 6,
+                'notification' => 3,
+            );
+
+            $this->flexperformance_model->update_loan($hrdata, $loanID);
+
+            $data = array(
+                'approved_date_finance' => date('Y-m-d'),
+                'approved_finance' => session('emp_id'),
+                // 'status' => 1,
+                // 'notification' => 3,
+            );
+
+            $this->flexperformance_model->update_loan($data, $loanID);
+
+
             $todate = date('Y-m-d');
 
             $result = $this->flexperformance_model->approve_loan($loanID, session('emp_id'), $todate);

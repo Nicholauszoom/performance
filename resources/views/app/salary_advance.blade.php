@@ -200,15 +200,15 @@
                                 <a href="<?php echo  url(''); ?>/flex/updateloan/{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
                             
                             
-                            <?php if(session('mng_emp') && $row->status==0){ ?>
-                            <a href="javascript:void(0)" onclick="hrrecommendLoan(<?php echo $row->id;?>)" title="Recommend">
-                            <button  class="btn btn-main"><i class="ph-check"></i></button></a>
+                            <?php //if(session('mng_emp') && $row->status==0){ ?>
+                            {{-- <a href="javascript:void(0)" onclick="hrrecommendLoan(<?php echo $row->id;?>)" title="Recommend"> --}}
+                            {{-- <button  class="btn btn-main"><i class="ph-check"></i></button></a> --}}
 
-                            <?php }else if($row->status==6 && session('recom_paym')) {  ?>
-                           <a href="javascript:void(0)" onclick="recommendLoan(<?php echo $row->id;?>)" title="Recommend">
-                           <button  class="btn btn-main"><i class="ph-check"></i></button></a>
+                            <?php //}else if($row->status==6 && session('recom_paym')) {  ?>
+                           {{-- <a href="javascript:void(0)" onclick="recommendLoan(<?php echo $row->id;?>)" title="Recommend"> --}}
+                           {{-- <button  class="btn btn-main"><i class="ph-check"></i></button></a> --}}
 
-                            <?php  }  ?>
+                            <?php  //}  ?>
                             
                             <?php if(session('appr_paym') && $row->status==1 && $pendingPayroll==0){ ?>
                       
