@@ -42,15 +42,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->authenticate();
 
-        $this->setPermissions(Auth::user()->emp_id);
+        
 
-        $request->session()->regenerate();
+       
 
-        if(session('password_set') == 1){
+        if($this->password_set(Auth::user()->emp_id) == 1){
 
             return redirect('/change-password');
 
         }else{
+            $this->setPermissions(Auth::user()->emp_id);
+
+            $request->session()->regenerate();
 
             if (session('pass_age') >= 90) {
 
@@ -65,6 +68,21 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
+    }
+
+    public function password_set($empID)
+    {
+        $query = DB::table('employee')
+                ->select('password_set')
+                ->where('emp_id', $empID)
+                ->limit(1)
+                ->first();
+
+        if($query){
+            return $query->password_set;
+        }else{
+            return 'UNKNOWN';
+        }
     }
 
     /**

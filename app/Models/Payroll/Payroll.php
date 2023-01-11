@@ -234,7 +234,7 @@ class Payroll extends Model
         ->orWhere('state',3)
         ->update($query);
         
-        $row = DB::table('payroll_months')->where('state',2)->orWhere('state',3)->select('payroll_date')->first();
+        $row = DB::table('payroll_months')->where('state',2)->orWhere('state',3)->orWhere('state',1)->select('payroll_date')->first();
         $query = ["message" => $message,"payroll_date"=>$row->payroll_date,"emp_id" =>$author,"type"=>1,"date" =>$date];
 
         DB::table('payroll_comments')
@@ -859,7 +859,7 @@ DB::insert(DB::raw($query));
 
 	    IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
 
-	    IF ((SELECT SUM(a.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(a.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.mode=1 AND a.state= 1 GROUP BY ea.empID)),0) + IF ((SELECT SUM(e.salary*a.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.mode=2 AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(e.salary*a.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.mode=2 AND a.state= 1 GROUP BY ea.empID), 0)))  )
+	    IF ((SELECT SUM(a.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.pentionable = 'YES' AND  a.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(a.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.mode=1 AND a.pentionable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0) + IF ((SELECT SUM(e.salary*a.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND  ea.empID =  e.emp_id AND a.mode=2 AND a.pentionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(e.salary*a.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.mode=2 AND a.state= 1 AND a.pentionable = 'YES' GROUP BY ea.empID), 0)))  )
 	       /* End pension*/
 
 	    ) +

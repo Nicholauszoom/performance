@@ -275,8 +275,8 @@ class ReportController extends Controller
         $payroll_month = $data['payroll_month'];
         $pension_fund = $data['pension_fund'];
 
-//include(app_path() . '/reports/pension.php');
-        return view('reports/pension', $data);
+      include(app_path() . '/reports/pension.php');
+        //return view('reports/pension', $data);
 
     }
 

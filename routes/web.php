@@ -350,7 +350,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/remove_group_deduction','remove_group_deduction')->name('flex.remove_group_deduction');
         Route::any('/addpaye','addpaye')->name('flex.addpaye');
         Route::any('/deletepaye','deletepaye')->name('flex.deletepaye');
-        Route::any('/paye_info','paye_info')->name('flex.paye_info');
+        Route::any('/paye_info/{id}','paye_info')->name('flex.paye_info');
         Route::any('/updatepaye','updatepaye')->name('flex.updatepaye');
         Route::any('/updateOvertimeAllowance','updateOvertimeAllowance')->name('flex.updateOvertimeAllowance');
         Route::any('/updateCommonDeductions','updateCommonDeductions')->name('flex.updateCommonDeductions');
@@ -401,8 +401,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
         Route::any('/financial_group','financial_group')->name('flex.financial_group');
-        Route::any('/financial_groups_details','financial_groups_details')->name('flex.financial_groups_details');
-        Route::any('/financial_groups_byRole_details','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
+        Route::any('/financial_groups_details/{id}','financial_groups_details')->name('flex.financial_groups_details');
+        Route::any('/financial_groups_byRole_details/{id}','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
 
 
         Route::any('/groups','groups')->name('flex.groups');

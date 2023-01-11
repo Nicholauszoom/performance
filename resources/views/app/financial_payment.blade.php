@@ -1514,6 +1514,7 @@
                                     text: 'Payroll recommended successfully!',
                                     type: 'success'
                                 }).show();
+                                location.reload();
                             } else {
                                 $('#delete').modal('hide');
                                 new Noty({

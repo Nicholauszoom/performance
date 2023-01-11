@@ -4238,9 +4238,9 @@ class GeneralController extends Controller
 
     }
 
-    public function paye_info(Request $request)
+    public function paye_info($id)
     {
-        $id = $request->input('id');
+        //$id = $request->input('id');
 
         $data['paye'] = $this->flexperformance_model->getpayebyid($id);
         $data['title'] = "PAYE";
@@ -5283,10 +5283,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function financial_groups_byRole_details(Request $request)
+    public function financial_groups_byRole_details($id)
     {
         if (session('mng_roles_grp')) {
-            $id = base64_decode($request->id);
+            $id = base64_decode($id);
 
             $data['members'] = $this->flexperformance_model->roles_byid($id);
             $data['nonmembers'] = $this->flexperformance_model->nonmembers_roles_byid($id);
@@ -5299,10 +5299,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function financial_groups_details(Request $request)
+    public function financial_groups_details($id)
     {
         if (session('mng_roles_grp')) {
-            $id = base64_decode($request->id);
+            $id = base64_decode($id);
 
             $data['members'] = $this->flexperformance_model->members_byid($id);
             $data['nonmembers'] = $this->flexperformance_model->nonmembers_byid($id);

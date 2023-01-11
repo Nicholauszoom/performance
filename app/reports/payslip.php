@@ -225,8 +225,8 @@ $allowance = '
 foreach($allowances as $row){
     $allowance  .='
     <tr>
-        <td width="500" align "left"><b>'.$row->description.'</b></td>
-        <td width="100" align "right">'.number_format($row->amount, 2).'</td>
+        <td width="500" align="left"><b>'.$row->description.'</b></td>
+        <td width="100" align="right">'.number_format($row->amount, 2).'</td>
     </tr>'; }
 
 $allowance  .='</table>';
@@ -238,7 +238,7 @@ $pdf->writeHTMLCell(0, 12, '', $pdf->GetY()-4, $allowance, 0, 1, 0, true, '', tr
 $pdf->SetXY(15, $pdf->GetY()+3);
 $pay1 = "<p><br><br>TOTAL EARNINGS(GROSS)</p>";
 
-$gross = '<table width="100" align "right"><tr width="100"  align="right"><th>'.number_format($sum_allowances+$salary,2).'</th></tr></table>';
+$gross = '<table width="100" align="right"><tr width="100"  align="right"><th>'.number_format($sum_allowances+$salary,2).'</th></tr></table>';
 
 $pdf->Rect(148, $pdf->GetY(), 46, 0, '', $style4);
 $pdf->writeHTMLCell(0, 12, 155, $pdf->GetY()+0.5, $gross, 0, 1, 0, true, '', true);
@@ -300,7 +300,7 @@ foreach($loans as $row){
 
     $deduction  .='
     <tr>
-        <td width="500" align="right"><b>'.$row->description.'</b></td>
+        <td width="500" align="left"><b>'.$row->description.'</b></td>
         <td width="100" align="right">'.number_format($paid, 2).'</td>
     </tr>';
     $sum_loans = ($sum_loans+$paid);

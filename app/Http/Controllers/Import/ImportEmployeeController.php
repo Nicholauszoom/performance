@@ -9,6 +9,7 @@ use App\Imports\ImportBranches;
 use App\Imports\ImportDepartment;
 use App\Imports\ImportEmployee;
 use App\Imports\ImportPosition;
+use App\Imports\ImportHeslb;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -30,8 +31,10 @@ class ImportEmployeeController extends Controller
        // $data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
 
           //$data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
+          
+          $data = Excel::import(new ImportHeslb, $request->file('file')->store('files'));
 
-         $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
+        // $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
         
         // $response_array['title'] = "SUCCESS";
         // header('Content-type: application/json');

@@ -2177,7 +2177,9 @@ function run_payroll($payroll_date, $payroll_month){
 	function all_confirmedloan()
 	{
 		$query="SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id ORDER BY l.state DESC ";
+		//$query="SELECT @s:=@s+1 SNo, l.empID, l.* FROM loan l ";
 
+		//dd(DB::select(DB::raw($query)));
 		return DB::select(DB::raw($query));
 	}
 

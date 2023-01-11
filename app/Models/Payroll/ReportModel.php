@@ -534,7 +534,7 @@ SUM(ll.taxdue) as TAXDUE FROM payroll_logs ll, employee e WHERE e.emp_id = ll.em
     }
 
     function s_wcf($date){
-        $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, e.tin as tin, e.national_id as national_id, pl.salary as salary, pl.allowances
+        $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, e.tin as tin, e.national_id as national_id,pl.wcf as wcf, pl.salary as salary, pl.allowances
 FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND pl.payroll_date LIKE '%".$date."%'";
         return DB::select(DB::raw($query));
     }

@@ -29,6 +29,7 @@
 									<th><b>National ID</b></th>	
 									<th><b>Employee Basic Salary</b></th>
 									<th><b>Employee Gross Salary</b></th>
+									<th><b>WCF Contribution </b></th>
 									</tr>
 							</thead>
 							<tbody>
@@ -49,6 +50,7 @@
 									 <td align="left">{{$national_id}}</td>
 									<td align="right">{{number_format($salary,2)}}</td>
 									<td align="right">{{number_format($gross,2)}}</td>
+									<td align="right">{{number_format($row->wcf,2)}}</td>
 									</tr>
 									<?php } ?>
 								
