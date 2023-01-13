@@ -73,7 +73,7 @@
                                     <th>Name</th>
                                     <th>Amount</th>
                                     <th>Taxable</th>
-                                    <th>Pentionable</th>
+                                    <th>pensionable</th>
                                     <!-- <th>Apply To</th> -->
                                     @if ($pendingPayroll == 0)
                                         <th>Option</th>
@@ -98,7 +98,7 @@
                                     </td>
 
                                     <td><?php echo $row->taxable; ?></td>
-                                    <td><?php echo $row->pentionable; ?></td>
+                                    <td><?php echo $row->pensionable; ?></td>
 
 
                                     <?php if($pendingPayroll == 0){ ?>
@@ -167,8 +167,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Is Pentionable?</label>
-                                    <select class="form-control select_type select" name="pentionable" id="policy">
+                                    <label class="form-label">Is pensionable?</label>
+                                    <select class="form-control select_type select" name="pensionable" id="policy">
                                         <option selected disabled> Select </option>
                                         <option value="YES">YES</option>
                                         <option value="NO">NO</option>

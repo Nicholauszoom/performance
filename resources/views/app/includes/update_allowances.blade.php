@@ -91,7 +91,7 @@ function recommendBonus(id)
             }
 
            });
-           
+
         }
     }
 
@@ -104,7 +104,7 @@ function deleteBonus(id)
         $.ajax({
             url:"<?php echo url('flex/deleteBonus');?>/"+id,
             success:function(data)
-            {  
+            {
                 var data = JSON.parse(data);
               if(data.status == 'OK'){
               alert("Bonus Deleted Successifully");
@@ -186,10 +186,10 @@ function deleteBonus(id)
         });
     });
 
-    $('#updatePentionable').submit(function(e){
+    $('#updatepensionable').submit(function(e){
         e.preventDefault();
              $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/updateAllowancePentionable",
+                 url:"<?php echo  url(''); ?>/flex/updateAllowancepensionable",
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                  type:"post",
                  data:new FormData(this),

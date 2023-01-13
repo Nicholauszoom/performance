@@ -167,7 +167,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
-        Route::any('/userprofile','userprofile')->name('flex.userprofile');
+        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');
@@ -385,7 +385,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/activateAllowance','activateAllowance')->name('flex.activateAllowance');
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
         Route::any('/updateAllowanceTaxable','updateAllowanceTaxable')->name('flex.updateAllowanceTaxable');
-        Route::any('/updateAllowancePentionable','updateAllowancePentionable')->name('flex.updateAllowancePentionable');
+        Route::any('/updateAllowancepensionable','updateAllowancepensionable')->name('flex.updateAllowancepensionable');
         Route::any('/updateOvertimeName','updateOvertimeName')->name('flex.updateOvertimeName');
         Route::any('/updateOvertimeRateDay','updateOvertimeRateDay')->name('flex.updateOvertimeRateDay');
         Route::any('/updateOvertimeRateNight','updateOvertimeRateNight')->name('flex.updateOvertimeRateNight');
