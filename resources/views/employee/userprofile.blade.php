@@ -74,15 +74,9 @@
                     Change Password
                 </a>
 
-<<<<<<< HEAD:resources/views/employee/userprofile.blade.php
                 @if (session('mng_emp'))
-                <a href="{{ url('/flex/updateEmployee/').$empID.'|'.$departmentID; }}" class="btn btn-main">
-=======
-
-            {{-- @if (session('mng_emp'))
-            <li class="nav-item d-flex justify-content-center align-items-center my-3">
-                <a href="{{ url('/flex/updateEmployee/').$empID.'|'.$departmentID; }}" class="btn btn-main" data-bs-toggle="tab">
->>>>>>> parent of cf0f9e6 (id issue resolved):resources/views/app/userprofile.blade.php
+                {{-- <a href="{{ url('/flex/updateEmployee/').$empID.'|'.$departmentID; }}" class="btn btn-main"> --}}
+                <a href="{{ route('flex.updateEmployee', ['id'=> base64_encode($empID), 'departmentID'=>$departmentID]) }}" class="btn btn-main">
                     <i class="ph-note-pencil me-2"></i>
                     Request Profile Update
                 </a>

@@ -26,6 +26,12 @@ use Illuminate\Support\Facades\Notification;
 class GeneralController extends Controller
 {
     protected $flexperformance_model;
+    protected $imprest_model;
+    protected $reports_model;
+    protected $attendance_model;
+    protected $project_model;
+    protected $performanceModel;
+    protected $payroll_model;
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
@@ -142,9 +148,9 @@ class GeneralController extends Controller
         return redirect('/flex/Base_controller/');
     }
 
-    public function userprofile(Request $request)
+    public function userprofile(Request $request, $id)
     {
-        $id = $request->input('id');
+        $id = base64_decode($id);
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
@@ -252,9 +258,9 @@ class GeneralController extends Controller
         }
     }
 
-    public function deletecontract(Request $request)
+    public function deletecontract(Request $request, $id)
     {
-        $id = $this->uri->segment(3);
+        // $id = $this->uri->segment(3);
         $updates = array(
             'state' => 0,
         );
@@ -453,10 +459,10 @@ class GeneralController extends Controller
         }
     }
 
-    public function deleteCountry(Request $request)
+    public function deleteCountry(Request $request, $code)
     {
-        if ($this->uri->segment(3) != '') {
-            $code = $this->uri->segment(3);
+        // if ($this->uri->segment(3) != '') {
+            // $code = $this->uri->segment(3);
             $checkEmployee = $this->flexperformance_model->checkEmployeeNationality($code);
             if ($checkEmployee > 0) {
                 echo "<p class='alert alert-warning text-center'>WARNING, Country Can Not Be Deleted, Some Employee Have Nationality From This Country.</p>";
@@ -467,7 +473,7 @@ class GeneralController extends Controller
                 } else {echo "<p class='alert alert-danger text-center'>FAILED, Country Not Deleted. Please Try Again</p>";
                 }
             }
-        }
+        // }
 
     }
 
@@ -672,8 +678,8 @@ class GeneralController extends Controller
 
     public function updateBank(Request $request)
     {
-        $id = base64_decode($this->input->get("id"));
-        $category = $this->input->get("category");
+        $id = base64_decode($request->input("id"));
+        $category = $$request->input("category");
 
         if ($category == 1) { //Update Bank
             $data['bank_info'] = $this->flexperformance_model->getbank($id);
@@ -2443,13 +2449,9 @@ class GeneralController extends Controller
 
     ################## UPDATE EMPLOYEE INFO #############################
 
-    public function updateEmployee(Request $request)
+    public function updateEmployee(Request $request, $id, $departmentID)
     {
-
-        $pattern = $request->input('id');
-        $values = explode('|', $pattern);
-        $empID = $values[0];
-        $departmentID = $values[1];
+        $empID = base64_decode($id);
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
         $data['title'] = "Employee";

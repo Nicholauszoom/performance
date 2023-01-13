@@ -167,7 +167,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
-        Route::any('/userprofile','userprofile')->name('flex.userprofile');
+        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');
@@ -269,7 +269,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
         Route::any('/employee','employee')->name('flex.employee');
         Route::any('/payroll','payroll')->name('flex.payroll');
-        Route::any('/updateEmployee','updateEmployee')->name('flex.updateEmployee');
+        Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
         Route::any('/updateCode','updateCode')->name('flex.updateCode');
         Route::any('/updateLevel','updateLevel')->name('flex.updateLevel');
