@@ -381,8 +381,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/remove_individual_from_allowance','remove_individual_from_allowance')->name('flex.remove_individual_from_allowance');
         Route::any('/remove_group_from_allowance','remove_group_from_allowance')->name('flex.remove_group_from_allowance');
 
-        Route::any('/deleteAllowance','deleteAllowance')->name('flex.deleteAllowance');
-        Route::any('/activateAllowance','activateAllowance')->name('flex.activateAllowance');
+        Route::any('/deleteAllowance/{id}','deleteAllowance')->name('flex.deleteAllowance');
+        Route::any('/activateAllowance/{id}','activateAllowance')->name('flex.activateAllowance');
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
         Route::any('/updateAllowanceTaxable','updateAllowanceTaxable')->name('flex.updateAllowanceTaxable');
         Route::any('/updateAllowancepensionable','updateAllowancepensionable')->name('flex.updateAllowancepensionable');

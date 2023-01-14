@@ -4872,9 +4872,9 @@ class GeneralController extends Controller
         return view('app.overtime_category_info', $data);
     }
 
-    public function deleteAllowance(Request $request)
+    public function deleteAllowance($id,Request $request)
     {
-        $ID = $this->uri->segment(3);
+        $ID = $id;
         if ($ID != '') {
             $updates = array(
                 'state' => 0,
@@ -4895,9 +4895,9 @@ class GeneralController extends Controller
         }
     }
 
-    public function activateAllowance(Request $request)
+    public function activateAllowance($id,Request $request)
     {
-        $ID = $this->uri->segment(3);
+        $ID = $id;
         if ($ID != '') {
             $updates = array(
                 'state' => 1,

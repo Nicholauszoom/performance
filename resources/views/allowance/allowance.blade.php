@@ -199,6 +199,7 @@
 
             </div>
     </div>
+    @include('app.includes.update_allowances')
 @endsection
 
 @push('footer-script')

@@ -199,7 +199,7 @@
                     @endisset
 
 
-                    {{-- @if ($mode == 1)
+                    @if ($mode == 1)
                     <form autocomplete="off"  id="updateAmount" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
@@ -218,7 +218,7 @@
 
                             <label class="form-label">Percent</label>
                             <div class="input-group">
-                                <input type="number" name="percent" min="0" max="99" step ="0.1" value="<?php echo 100*$percent; ?>" class="form-control">
+                                <input type="number" name="percent" min="0" max="100" step ="0.1" value="<?php echo 100*$percent; ?>" class="form-control">
                                 <button  class="btn btn-main">Update Amount</button>
                             </div>
                         </div>
@@ -244,7 +244,7 @@
 
                             <button  name="updatename" class="btn btn-main mt-3">Update</button>
                         </div>
-                    </form> --}}
+                    </form>
                 </div>
 
                 <div class="card-body">

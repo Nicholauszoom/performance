@@ -283,10 +283,25 @@ class Payroll extends Model
         return $row->count();
     }
 
+
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID)
     {
 
-        DB::transaction(function () use ($dateToday, $payroll_date, $payroll_month, $empID) {
+
+        $days = intval(date('t', strtotime($payroll_date)));
+
+        $payroll_date=date($payroll_date);
+
+       /// dd($payroll_date);
+
+    //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
+    //   DD(DB::select(DB::raw($query)));
+
+
+        DB::transaction(function () use ($dateToday, $payroll_date, $payroll_month, $empID,$days) {
+
+            $query = "UPDATE allowances SET state = IF(month('".$payroll_date."') = 12,1,0) WHERE type = 1";
+            DB::insert(DB::raw($query));
 
             //Insert into Pending Payroll Table
             $query = "INSERT INTO payroll_months (payroll_date, state, init_author, appr_author, init_date, appr_date,sdl, wcf) VALUES
@@ -297,9 +312,23 @@ class Payroll extends Model
 
 	    SELECT ea.empID AS empID, a.name AS description,
 
+
+
+
 	    IF( (a.mode = 1), 'Fixed Amount', CONCAT(100*a.percent,'% ( Basic Salary )') ) AS policy,
 
-	    IF((e.unpaid_leave = 0),0, IF( (a.mode = 1), ea.amount, (a.percent*e.salary) )) AS amount,
+	    IF((e.unpaid_leave = 0)
+        ,0,IF((a.mode = 1),
+                  ea.amount,
+                  IF(a.type = 1,IF(DATEDIFF('".$payroll_date."',e.hire_date) < 365,(DATEDIFF('".$payroll_date."',e.hire_date)/365)*e.salary,a.percent*e.salary),(a.percent* IF(
+                               (month(e.hire_date) = month('".$payroll_date."')) AND (year(e.hire_date) = year('".$payroll_date."'))
+
+                     ,((".$days."- day(e.hire_date)+1)*e.salary/30),e.salary)
+
+              ))
+              )
+
+          ) AS amount,
 
 	     '" . $payroll_date . "' AS payment_date
 
@@ -690,7 +719,8 @@ IF((e.unpaid_leave = 0),0,(
 
 	    IF( (a.mode = 1), 'Fixed Amount', CONCAT(100*a.percent,'% ( Basic Salary )') ) AS policy,
 
-	    IF((e.unpaid_leave = 0),0,IF( (a.mode = 1), ea.amount, (a.percent*e.salary) )) AS amount,
+	    IF((e.unpaid_leave = 0),0,IF( (a.mode = 1), ea.amount, (a.percent*IF(((month(e.hire_date) = month(".$payroll_date.")) AND ((year(e.hire_date) = year(".$payroll_date.")),
+        (((".$days."-day(e.hire_date))+1)*e.salary)/".$days.",e.salary),) )) )) AS amount,
 
 	     '" . $payroll_date . "' AS payment_date
 

@@ -425,12 +425,13 @@ function deleteAllowance(id)
             url:"<?php echo url('flex/deleteAllowance');?>/"+id,
             success:function(data)
             {
+                var data  = JSON.parse(data);
               if(data.status == 'OK'){
-              alert("Allowance Deleted Successifully!");
+              alert("Allowance Deactivated Successifully!");
               $("#allowanceList").load(" #allowanceList");
               // $('#record'+id).hide();
               } else{
-              alert("Allowance Not Deleted, Some Error Occured In Deleting");
+              alert("Allowance Not Deactivated, Some Error Occured In Deleting");
               }
            $('#deleteFeedback').fadeOut('fast', function(){
           $('#deleteFeedback').fadeIn('fast').html(data.message);
@@ -450,6 +451,7 @@ function deleteAllowance(id)
             url:"<?php echo url('flex/activateAllowance');?>/"+id,
             success:function(data)
             {
+                var data  = JSON.parse(data);
               if(data.status == 'OK'){
               alert("Allowance Activated Successifully!");
               $("#allowanceList").load(" #allowanceList");
