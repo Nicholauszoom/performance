@@ -117,11 +117,20 @@
                                 </select>
 
                             </div>
+                            @if ($mode == 1)
                             <label class="form-label">Amount</label>
                             <div class="input-group">
                                 <input required type="number" name="amount" step ="1" min="1" max="10000000"  class="form-control">
 
                             </div>
+                            @else
+                            <label class="form-label">Percent</label>
+                            <div class="input-group">
+                                <input required type="number" name="percent" step ="0.1" min="0" max="100"  class="form-control">
+
+                            </div>
+                            @endif
+                            <input type="hidden" name="mode" value="{{ $mode }}">
                             <label class="form-label">Currency </label>
                             <div class="input-group">
                                 <select required name="currency" class="select_group form-control select" data-width="1%">
@@ -140,6 +149,44 @@
                         <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID?>">
                     </form>
                 </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="text-muted">Group(s)</h5>
+                </div>
+                <form autocomplete="off" id = "removeGroup" method="post"  >
+                    <input type="text" hidden="hidden" name="allowanceID" value="<?php echo $allowanceID; ?>">
+                    <table class="table  table-bordered" >
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>
+                                    <a title="Remove Selected" class="me-5">
+                                        <button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">
+                                            <i class="ph-trash"></i>
+                                        </button>
+                                    </a>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php foreach ($groupin as $row) { ?>
+                            <tr>
+                                <td><?php echo $row->NAME; ?></td>
+                                <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
+                                <td>
+                                    <label class="containercheckbox">
+                                        <input type="checkbox" name="option[]" value="<?php echo $row->id; ?>">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </td>
+                            </tr>
+                            <?php } //} ?>
+                        </tbody>
+                    </table>
+                </form>
             </div>
         </div>
 
@@ -262,11 +309,20 @@
                                 </select>
 
                             </div>
+                            @if ($mode == 1)
                             <label class="form-label">Amount</label>
                             <div class="input-group">
                                 <input required type="number" name="amount" step ="1" min="1" max="10000000"  class="form-control">
 
                             </div>
+                            @else
+                            <label class="form-label">Percent</label>
+                            <div class="input-group">
+                                <input required type="number" name="percent" step ="0.1" min="0" max="100"  class="form-control">
+
+                            </div>
+                            @endif
+                            <input type="hidden" name="mode" value="{{ $mode }}">
                             <label class="form-label">Currency </label>
                             <div class="input-group">
                                 <select required name="currency" class="select_group form-control select" data-width="1%">
@@ -291,49 +347,12 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="text-muted">Groups(s)</h5>
-                </div>
-                <form autocomplete="off" id = "removeGroup" method="post"  >
-                    <input type="text" hidden="hidden" name="allowanceID" value="<?php echo $allowanceID; ?>">
-                    <table class="table  table-bordered" >
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Amount</th>
-                                <th>
-                                    <a title="Remove Selected" class="me-5">
-                                        <button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">
-                                            <i class="ph-trash"></i>
-                                        </button>
-                                    </a>
-                                </th>
-                            </tr>
-                        </thead>
+        {{-- <div class="col-md-6">
 
-                        <tbody>
-                            <?php foreach ($groupin as $row) { ?>
-                            <tr>
-                                <td><?php echo $row->NAME; ?></td>
-                                <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
-                                <td>
-                                    <label class="containercheckbox">
-                                        <input type="checkbox" name="option[]" value="<?php echo $row->id; ?>">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </td>
-                            </tr>
-                            <?php } //} ?>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-        </div>
+        </div> --}}
 
 
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="text-muted">Employee(s)</h5>
@@ -345,7 +364,9 @@
                             <tr>
                                 <th>S/N</th>
                                 <th>Name</th>
+                                <th>Mode</th>
                                 <th>Amount</th>
+                                <th>Percent</th>
                                 <th>
                                     <a title="Remove Selected">
                                         <button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">
@@ -359,9 +380,12 @@
                         <tbody>
                             <?php foreach ($employeein as $row) { ?>
                             <tr>
+                                
                                 <td><?php echo $row->SNo; ?></td>
                                 <td><?php echo $row->NAME; ?></td>
-                                <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
+                                <td>{{ $row->mode == 1?'Fixed Amount':'Percent' }}</td>
+                                <td>{{ $row->amount != null?$row->amount/$row->rate.' '.$row->currency:'-' }}</td>
+                                <td>{{ $row->percent != null?($row->percent*100)."%" :'-' }}</td>
                                 <td>
                                     <label class="containercheckbox">
                                     <input type="checkbox" name="option[]" value="<?php echo $row->empID; ?>">

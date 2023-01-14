@@ -4749,10 +4749,14 @@ class GeneralController extends Controller
         $method = $request->method();
         if ($method == "POST") {
            $rate = $this->flexperformance_model->get_rate($request->currency);
+
+
             $data = array(
                 'empID' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
                 'amount'=>$request->input('amount')*$rate,
+                'mode'=>$request->input('mode'),
+                'percent'=>$request->input('percent')/100,
                 'currency'=>$request->currency,
                 'rate'=>$rate,
             );
@@ -4780,6 +4784,8 @@ class GeneralController extends Controller
                     'allowance' => $request->input('allowance'),
                     'group_name' => $request->input('group'),
                     'amount'=>$request->input('amount')*$rate,
+                    'mode'=>$request->input('mode'),
+                    'percent'=>$request->input('percent')/100,
                     'currency'=>$request->currency,
                     'rate'=>$rate,
                 );
