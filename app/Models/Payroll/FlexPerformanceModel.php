@@ -494,7 +494,7 @@ class FlexPerformanceModel extends Model
     function approveOvertime($id, $signatory, $time_approved) {
 	     DB::transaction(function() use($id,$signatory, $time_approved)
        {
-		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/240)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
+		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/195)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/195)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
          DB::insert(DB::raw($query));
 	    $query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
 		DB::insert(DB::raw($query));
@@ -1467,16 +1467,28 @@ function meals_deduction()
 		return DB::select(DB::raw($query));
 	}
 
+    function get_currencies(){
+        $data = DB::table('currencies')->select('*')->get();
+
+        return $data;
+    }
+
+    function get_rate($currency){
+        $row = DB::table('currencies')->where('currency',$currency)->select('rate')->first();
+
+        return $row->rate;
+    }
+
 	function get_allowance_group_in( $allowance)
 	{
-		$query = "SELECT DISTINCT  g.name as NAME, g.id as id FROM groups g, emp_allowances ea  WHERE g.id = ea.group_name and ea.allowance = ".$allowance."";
+		$query = "SELECT DISTINCT  g.name as NAME, g.id as id,ea.* FROM groups g, emp_allowances ea  WHERE g.id = ea.group_name and ea.allowance = ".$allowance."";
 
 		return DB::select(DB::raw($query));
 	}
 
 	function get_individual_employee($allowance)
 	{
-		$query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_allowances ea, (SELECT @s:=0) as s WHERE e.emp_id = ea.empID and ea.group_name = 0 and ea.allowance = ".$allowance."  ";
+		$query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME,ea.* FROM employee e, emp_allowances ea, (SELECT @s:=0) as s WHERE e.emp_id = ea.empID and ea.group_name = 0 and ea.allowance = ".$allowance."  ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2841,7 +2853,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
 		$row = DB::select(DB::raw($query));
-		
+
 
     	return $row[0]->headcounts;
 

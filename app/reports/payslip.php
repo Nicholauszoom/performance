@@ -86,9 +86,10 @@ $pdf->SetFont('times', '', 10, '', true);
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage('P','A4');
 
-
+$rate = 1;
 
 foreach( $slipinfo as $row){
+$rate = $row->rate;
     $id = $row->empID;
     $old_id = $row->oldID;
     if($row->oldID==0) $employeeID = $row->empID; else $employeeID = $row->oldID;
@@ -97,7 +98,7 @@ foreach( $slipinfo as $row){
     $position = $row->position_name;
     $department = $row->department_name;
     $branch = $row->branch_name;
-    $salary = $row->salary;
+    $salary = $row->salary/$row->rate;
     $pension_fund = $row->pension_fund_name;
     $pension_fund_abbrv = $row->pension_fund_abbrv;
     $membership_no = $row->membership_no;
@@ -105,9 +106,9 @@ foreach( $slipinfo as $row){
     $account_no = $row->account_no;
     $hiredate = $row->hire_date;
     $payroll_month = $row->payroll_date;
-    $pension_employee = $row->pension_employee;
-    $meals = $row->meals;
-    $taxdue = $row->taxdue;
+    $pension_employee = $row->pension_employee/$row->rate;
+    $meals = $row->meals/$row->rate;
+    $taxdue = $row->taxdue/$row->rate;
 
 }
 
@@ -116,12 +117,12 @@ foreach ($companyinfo as $row) {
 }
 
 foreach ($total_pensions as $row) {
-    $uptodate_pension_employee = $row->total_pension_employee;
-    $uptodate_pension_employer = $row->total_pension_employer;
+    $uptodate_pension_employee = $row->total_pension_employee/$row->rate;
+    $uptodate_pension_employer = $row->total_pension_employer/$row->rate;
 }
 
-$sum_allowances = $total_allowances;
-$sum_deductions = $total_deductions;
+$sum_allowances = $total_allowances/$rate;
+$sum_deductions = $total_deductions/$rate;
 $sum_loans = 0;
 
 // DATE MANIPULATION
@@ -226,7 +227,7 @@ foreach($allowances as $row){
     $allowance  .='
     <tr>
         <td width="500" align="left"><b>'.$row->description.'</b></td>
-        <td width="100" align="right">'.number_format($row->amount, 2).'</td>
+        <td width="100" align="right">'.number_format($row->amount/$rate, 2).'</td>
     </tr>'; }
 
 $allowance  .='</table>';
@@ -238,7 +239,7 @@ $pdf->writeHTMLCell(0, 12, '', $pdf->GetY()-4, $allowance, 0, 1, 0, true, '', tr
 $pdf->SetXY(15, $pdf->GetY()+3);
 $pay1 = "<p><br><br>TOTAL EARNINGS(GROSS)</p>";
 
-$gross = '<table width="100" align="right"><tr width="100"  align="right"><th>'.number_format($sum_allowances+$salary,2).'</th></tr></table>';
+$gross = '<table width="100" align="right"><tr width="100"  align="right"><th>'.number_format(($sum_allowances+$salary),2).'</th></tr></table>';
 
 $pdf->Rect(148, $pdf->GetY(), 46, 0, '', $style4);
 $pdf->writeHTMLCell(0, 12, 155, $pdf->GetY()+0.5, $gross, 0, 1, 0, true, '', true);
@@ -278,7 +279,7 @@ foreach($deductions as $row){
     $deduction  .='
     <tr>
         <td width="500" align="left"><b>'.$row->description.'</b></td>
-        <td width="100" align="right">'.number_format($row->paid, 2).'</td>
+        <td width="100" align="right">'.number_format($row->paid/$rate, 2).'</td>
     </tr>'; }
 
 foreach($loans as $row){
@@ -296,12 +297,12 @@ foreach($loans as $row){
         $paid = $salary_advance_loan_remained;
     }
 
-    
+
 
     $deduction  .='
     <tr>
         <td width="500" align="left"><b>'.$row->description.'</b></td>
-        <td width="100" align="right">'.number_format($paid, 2).'</td>
+        <td width="100" align="right">'.number_format($paid/$rate, 2).'</td>
     </tr>';
     $sum_loans = ($sum_loans+$paid);
 
@@ -439,7 +440,7 @@ if(!empty($loans)){
         $outstandings  .='
       <tr>
           <td width="500" align="left"><b>'.$row->description.'</b></td>
-          <td width="100" align="right">'.number_format($row->remained, 2).'</td>
+          <td width="100" align="right">'.number_format($row->remained/$rate, 2).'</td>
       </tr>';
     }
 
@@ -529,4 +530,4 @@ $pdf->Output('payslip-'.date('d/m/Y').'.pdf', 'I');
 //============================================================+
 // END OF FILE
 //============================================================+
- 
+
