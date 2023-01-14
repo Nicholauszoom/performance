@@ -269,7 +269,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
         Route::any('/employee','employee')->name('flex.employee');
         Route::any('/payroll','payroll')->name('flex.payroll');
-        Route::any('/updateEmployee','updateEmployee')->name('flex.updateEmployee');
+        Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
         Route::any('/updateCode','updateCode')->name('flex.updateCode');
         Route::any('/updateLevel','updateLevel')->name('flex.updateLevel');

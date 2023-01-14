@@ -48,7 +48,7 @@
         <tr>
             <td width="1px">{{ $row->SNo }}</td>
 
-            <td><a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/'.$row->emp_id; ?>"> {{ $row->NAME }} </a></td>
+            <td><a title="More Details"  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"> {{ $row->NAME }} </a></td>
             <td>{{ $row->gender }}</td>
             <td>
                 <b>Department: </b> {{ $row->DEPARTMENT }} <br>
@@ -60,7 +60,7 @@
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
             <td class="options-width">
-                <a  href="<?php echo  url('') .'/flex/userprofile/' .$row->emp_id; ?>"  title="Info and Details">
+                <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
                     <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                 </a>
 
