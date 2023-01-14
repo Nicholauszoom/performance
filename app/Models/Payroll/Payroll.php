@@ -793,19 +793,31 @@ IF((e.unpaid_leave = 0),0,(
         DB::transaction(function () use ($payroll_date, $payroll_month, $empID, $todate, $days) {
 
             //INSERT ALLOWANCES
-            $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
+            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
 
-	    SELECT ea.empID AS empID, a.name AS description,
+            SELECT ea.empID AS empID, a.name AS description,
 
-	    IF( (a.mode = 1), 'Fixed Amount', CONCAT(100*a.percent,'% ( Basic Salary )') ) AS policy,
 
-	    IF((e.unpaid_leave = 0),0,IF( (a.mode = 1), ea.amount, (a.percent*IF(((month(e.hire_date) = month(" . $payroll_date . ")) AND ((year(e.hire_date) = year(" . $payroll_date . ")),
-        (((" . $days . "-day(e.hire_date))+1)*e.salary)/" . $days . ",e.salary),) )) )) AS amount,
 
-	     '" . $payroll_date . "' AS payment_date
 
-	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
-            DB::insert(DB::raw($query));
+            IF( (a.mode = 1), 'Fixed Amount', CONCAT(100*a.percent,'% ( Basic Salary )') ) AS policy,
+
+            IF((e.unpaid_leave = 0)
+            ,0,IF((a.mode = 1),
+                      ea.amount,
+                      IF(a.type = 1,IF(DATEDIFF('" . $payroll_date . "',e.hire_date) < 365,(DATEDIFF('" . $payroll_date . "',e.hire_date)/365)*e.salary,a.percent*e.salary),(a.percent*
+                      IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                      ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)
+
+                  ))
+                  )
+
+              ) AS amount,
+
+             '" . $payroll_date . "' AS payment_date
+
+            FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
+                        DB::insert(DB::raw($query));
             //INSERT BONUS LOGS
             $query = " INSERT INTO bonus_logs(empID, amount, name, init_author, appr_author, payment_date) SELECT b.empID, b.amount, b.name, b.init_author, b.appr_author, '" . $payroll_date . "'  FROM bonus b WHERE b.state = 1";
             DB::insert(DB::raw($query));
