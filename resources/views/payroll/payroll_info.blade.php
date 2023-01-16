@@ -74,11 +74,11 @@
             </a>
             @endif
 
-            {{-- @if($payrollState != 1) --}}
+            @if($payrollState != 1)
             <a class="btn btn-main btn-sm ms-3" href="{{ route('flex.payrollLogs') }}" target="blank">
-                <i class="ph-download-simple me-2"></i> Payroll Info
+                Payroll Input Changes Approval Report
             </a>
-            {{-- @endif --}}
+            @endif
         </div>
 
     </div>
