@@ -4565,6 +4565,7 @@ class GeneralController extends Controller
             $data['child'] = "Allowances";
 
             return view('allowance.allowance', $data);
+            
         } else {
             echo "Unauthorized Access";
         }
