@@ -980,6 +980,9 @@ IF(((paid) >= amount), paid, deduction_amount) as  paid,
 
 	    IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=9 )*(e.salary))) as medical_employer,
 
+        /* PAYEE CALCULATION STARTS HERE  */
+
+         /* SELECTING EXCESSS  */
 
 	    IF((e.unpaid_leave = 0),0,(
 	    ( SELECT excess_added FROM paye WHERE maximum >
@@ -1040,6 +1043,12 @@ IF(((paid) >= amount), paid, deduction_amount) as  paid,
 
 	    +
 
+         /*  END OF EXCESS  */
+
+        /* PAYEE CALCULATION STARTS HERE  */
+
+         /* SELECTING RATE  */
+
 	    ( (SELECT rate FROM paye WHERE maximum > (/*Taxable Amount*/ (
 	    ( e.salary -
 
@@ -1080,7 +1089,15 @@ IF(((paid) >= amount), paid, deduction_amount) as  paid,
 	    IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.mode=1 AND a.state= 1 GROUP BY ea.empID)),0) + IF ((SELECT SUM(e.salary*a.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.mode=2 AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(e.salary*a.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.mode=2 AND a.state= 1 GROUP BY ea.empID), 0)
 
 	    /*End all Allowances and Bonuses*/
-	     )/*End Taxable Amount*/)) * ((/*Taxable Amount*/ (
+	     )/*End Taxable Amount*/)) 
+         
+        /*  END OF RATE  */
+
+        /* TAXABLE AMOUNT CALCULATION STARTS HERE  */
+
+         /* SELECTING TAXABLE AMOUNT  */
+         
+         * ((/*Taxable Amount*/ (
 	    ( e.salary -
 
 	     /*pension*/
