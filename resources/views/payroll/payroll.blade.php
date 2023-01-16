@@ -7,7 +7,7 @@
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/form_layouts.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
-    <!-- bootstrap-daterangepicker -->
+
     <script src="{{ asset('assets/date-picker/moment.min.js') }}"></script>
     <script src="{{ asset('assets/date-picker/daterangepicker.js') }}"></script>
 @endpush
@@ -48,16 +48,8 @@
                                                 </label>
 
                                                 <div class="col-md-9">
-                                                    <input
-                                                    type="text"
-                                                    required
-                                                    placeholder="Payroll Month"
-                                                    name="payrolldate"
-                                                    class="form-control col-md-7 has-feedback-left"
-                                                    id="payrollDate"
-                                                    aria-describedby="inputSuccess2Status"
-                                                >
-                                                <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                                                    <input type="text" required placeholder="Payroll Month" name="payrolldate" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
+                                                    <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
                                                 </div>
                                             </div>
 
@@ -215,6 +207,7 @@
         $('#initPayroll').submit(function(e) {
             e.preventDefault();
             $('#initPayroll').hide();
+
             $.ajax({
                 url: "{{route('payroll.initPayroll')}}",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -234,7 +227,12 @@
                 }, 1000)
             })
             .fail(function() {
-                alert('Payroll Failed!! ...');
+                // alert('Payroll Failed!! ...');
+                // Basic initialization
+                new Noty({
+                    text: 'Payroll Failed!! ...',
+                    type: 'error'
+                }).show();
             });
         });
     </script>
@@ -285,7 +283,7 @@
     </script>
 
     <script>
-       
+
     </script>
 
 

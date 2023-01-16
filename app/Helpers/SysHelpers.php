@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\AuditTrail;
 use App\Models\Employee;
+use App\Models\FinancialLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,6 +35,27 @@ class SysHelpers
             'ip_address' =>  $request->ip(),
             'user_agent' => $request->userAgent(),
             'risk' => $risk,
+        ]);
+    }
+
+    /**
+     * Undocumented function
+     *
+     *
+     * [ emmp_id, auth_edit, Field name[action performed], from, to, input screen]
+     *
+     * @param Request $request
+     * @return void
+     */
+    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen)
+    {
+        FinancialLogs::create([
+            'payrollno' => $empID,
+            'changed_by' => Auth::user()->emp_id,
+            'field_name' => $fieldName,
+            'action_from' => $from,
+            'action_to' => $to,
+            'input_screen' => $inputScreen
         ]);
     }
 

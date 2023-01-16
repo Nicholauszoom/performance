@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
 use App\Models\AuditTrail;
+use App\Models\FinancialLogs;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
@@ -5255,8 +5256,9 @@ class GeneralController extends Controller
                 $this->flexperformance_model->addgroup($data);
 
                 session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
-                //$this->department();
+
                 return redirect('/flex/financial_group');
+
             } else {
                 // $id =session('emp_id');
                 $data['role'] = $this->flexperformance_model->allrole();
@@ -5264,12 +5266,16 @@ class GeneralController extends Controller
                 $data['rolesgroups'] = $this->flexperformance_model->rolesgroups();
                 $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
                 $data['title'] = "Financial Groups";
+                $data['parent'] = "Settings";
+                $data['child'] = "Financial Settings";
                 return view('app.financial_group', $data);
             }
+
         } else {
             echo "Unauthorized Access";
         }
     }
+
     public function role(Request $request)
     {
         if (session('mng_roles_grp')) {
@@ -5341,11 +5347,15 @@ class GeneralController extends Controller
             $data['headcounts'] = $this->flexperformance_model->memberscount($id);
             $data['groupInfo'] = $this->flexperformance_model->group_byid($id);
             $data['title'] = "Groups";
+            $data['parent'] = "Financial Setting";
+            $data['child'] = "Groups";
+
             return view('app.groups', $data);
         } else {
             echo "Unauthorized Access";
         }
     }
+
     public function groups(Request $request)
     {
         if (session('mng_roles_grp')) {
@@ -5402,14 +5412,20 @@ class GeneralController extends Controller
     }
     public function removeEmployeeFromGroup(Request $request)
     {
+
         $method = $request->method();
 
         if ($method == "POST") {
 
             $arr = $request->input('option');
+
             $groupID = $request->input('groupID');
+
+            $groupName = $request->input('groupName');
+
             if (sizeof($arr) < 1) {
                 echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
+
             } else {
 
                 foreach ($arr as $composite) {
@@ -5417,11 +5433,15 @@ class GeneralController extends Controller
                     $refID = $values[0];
                     $empID = $values[1];
 
+                    SysHelpers::FinancialLogs($empID, 'Removed From Financial group', $groupName, '-', 'Payroll Input');
+
                     $result = $this->flexperformance_model->removeEmployeeFromGroup($refID, $empID, $groupID);
                 }
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
+                }
             }
         }
     }
@@ -5543,6 +5563,7 @@ class GeneralController extends Controller
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
             $group_deductions = $this->flexperformance_model->get_group_deductions($groupID);
+
             if (sizeof($arr) < 1) {
                 echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
             } else {
@@ -5557,6 +5578,8 @@ class GeneralController extends Controller
                                 'allowance' => $allowance,
                                 'group_name' => $groupID,
                             );
+
+                            SysHelpers::FinancialLogs($empID, 'Financial status', 'Group Name', 0, 'Terminated');
 
                             $this->flexperformance_model->assign_allowance($data);
                         }
@@ -6665,6 +6688,16 @@ class GeneralController extends Controller
 
             abort(403, 'Unauthorized action.');
         }
+    }
+
+    public function payrollReportLogs()
+    {
+        $data['logs'] = $this->flexperformance_model->financialLogs();
+
+        $data['title'] = 'Payroll Input Changes Approval Report';
+        $data['parent'] = 'Payroll Log Report';
+
+        return view('audit-trail.financial_logs', $data);
     }
 
     public function auditLogsDestry(Request $request)
