@@ -203,7 +203,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
         pl.less_takehome,
         pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
         IF((SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '".$date."' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM temp_loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '".$date."' GROUP BY l.empID),0) AS loans,
-    
+
         IF((SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM temp_deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
         b.name as bank, bb.name as branch, bb.swiftcode, pl.account_no
         FROM employee e, temp_payroll_logs pl,  bank_branch bb, bank b  WHERE pl.empID = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '".$date."') as parent_query";
@@ -292,8 +292,8 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
     FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '".$date."'";
-       
-       
+
+
         return DB::select(DB::raw($query));
     }
 
@@ -453,11 +453,16 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return DB::select(DB::raw($query));
 
     }
+   //start
+   
+
+        //end
 
     function s_pension($date, $pensionFund){
         $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no ,e.fname,e.mname,e.lname, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,e.emp_id, pl.salary as salary, pl.allowances,pl.pension_employee, pl.pension_employer
  FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00 AND pl.pension_fund = '".$pensionFund."' AND pl.payroll_date LIKE '%".$date."%'";
-    
+
+
         return DB::select(DB::raw($query));
 
     }
@@ -700,7 +705,7 @@ IF((( SELECT sum(days)  FROM `leaves` where nature=6 AND e.emp_id=leaves.empID G
 
     function payslipcheck($datecheck, $empID){
         $query = " SELECT id  FROM payroll_logs WHERE payroll_date LIKE '%".$datecheck."%' AND empID = '".$empID."' ";
-          
+
         return count(DB::select(DB::raw($query)));
     }
 
@@ -718,7 +723,7 @@ IF((( SELECT sum(days)  FROM `leaves` where nature=6 AND e.emp_id=leaves.empID G
     function s_payrollLogEmpID($datecheck){
         $query = "SELECT empID FROM payroll_logs pl, employee e where e.emp_id = pl.empID
 and e.contract_type != 2 and payroll_date LIKE '%".$datecheck."%' ";
-      
+
         return DB::select(DB::raw($query));
     }
 
@@ -754,7 +759,7 @@ and e.contract_type = 2 and payroll_date LIKE '%".$datecheck."%' ";
 
 
 FROM payroll_logs pl, employee e, department d, position p  WHERE e.emp_id = pl.empID and e.position = p.id and d.id = e.department and pl.payroll_date LIKE '%".$payroll_month."%' and pl.empID = '".$empID."'";
-    
+
 
 return DB::select(DB::raw($query));
 
@@ -767,6 +772,7 @@ return DB::select(DB::raw($query));
         $query = "SELECT
     pl.empID as empID,
     e.old_emp_id as oldID,
+    e.rate as rate,
     CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,
     d.name as department_name,
     p.name as position_name,
@@ -779,8 +785,9 @@ return DB::select(DB::raw($query));
     (SELECT SUM(plg.pension_employer) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '".$empID."' and plg.payroll_date BETWEEN e.hire_date and '".$payroll_month_end."' ) as pension_employer_todate,
     pl.*
     FROM payroll_logs pl, employee e, department d, position p, bank bn, pension_fund pf, branch br  WHERE e.emp_id = pl.empID AND pl.branch = br.id AND pl.bank = bn.id AND pl.pension_fund = pf.id AND e.position = p.id AND d.id = e.department AND pl.payroll_date LIKE '%".$payroll_month."%' and pl.empID = '".$empID."'";
-     
+
     return DB::select(DB::raw($query));
+
 
     }
 
@@ -862,7 +869,7 @@ return DB::select(DB::raw($query));
 
 
     function total_pensions($empID, $payroll_date){
-        $query = "SELECT SUM(pl.pension_employee) as total_pension_employee, SUM(pl.pension_employer) as total_pension_employer  FROM payroll_logs pl, employee e WHERE pl.empID = e.emp_id AND pl.empID =  '".$empID."' AND pl.payroll_date <= '".$payroll_date."' GROUP BY pl.empID";
+        $query = "SELECT SUM(pl.pension_employee) as total_pension_employee, SUM(pl.pension_employer) as total_pension_employer,e.rate as rate  FROM payroll_logs pl, employee e WHERE pl.empID = e.emp_id AND pl.empID =  '".$empID."' AND pl.payroll_date <= '".$payroll_date."' GROUP BY pl.empID";
         return DB::select(DB::raw($query));
 
     }
@@ -934,7 +941,7 @@ return DB::select(DB::raw($query));
 
 
     $row = DB::select(DB::raw($query));
-    
+
 
         if($row){
             return $row[0]->remained;
@@ -956,7 +963,7 @@ return DB::select(DB::raw($query));
 
 
     $row = DB::select(DB::raw($query));
-    
+
 
         if($row){
             return $row[0]->remained;
@@ -1283,10 +1290,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function grossMonthly_temp($payroll_date){
         $query = "SELECT SUM(pl.salary+pl.allowances) as total_gross FROM temp_payroll_logs pl, employee e
             WHERE e.emp_id = pl.empID and pl.payroll_date = '".$payroll_date."' group by pl.payroll_date";
-      
+
       $data = DB::select(DB::raw($query));
 
-    
+
        if ($data){
             return $data[0]->total_gross;
         }else{

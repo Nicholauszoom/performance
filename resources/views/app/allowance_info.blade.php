@@ -11,7 +11,7 @@
     foreach ($allowance as $key) {
         $name = $key->name;
         $allowanceID = $key->id;
-        // $pentionable = $key->pentionable;
+        // $pensionable = $key->pensionable;
         // $taxable = $key->taxable;
         $amount = $key->amount;
         $percent = $key->percent;
@@ -248,7 +248,7 @@
                             <form action="{{ route('flex.updateMinSalary') }}" method="POST" class="form-horizontal">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="first-name" for="stream">Is Pentionable?</label>
+                                    <label for="first-name" for="stream">Is pensionable?</label>
                                     <div class="d-md-flex">
                                         <div class="col-sm-8">
 

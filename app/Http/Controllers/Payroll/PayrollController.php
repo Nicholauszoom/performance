@@ -326,11 +326,18 @@ class PayrollController extends Controller
 
     public function less_payments_print(Request $request)
     {
+
         $payrollMonth = base64_decode($request->input('pdate'));
         $data['employee_list'] = $this->reports_model->temp_pay_checklist($payrollMonth);
         $data['authorization'] = $this->reports_model->payrollAuthorization($payrollMonth);
         //$data['employee_list'] =  $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
         $data['info'] = $this->reports_model->company_info();
+
+
+       $employee_list = $this->reports_model->temp_pay_checklist($payrollMonth);
+       $authorization = $this->reports_model->payrollAuthorization($payrollMonth);
+        //$data['employee_list'] =  $this->payroll_model->employeeTempPayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs", "temp_arrears");
+       $info = $this->reports_model->company_info();
         if ($data['employee_list']) {
 
             $toDate = date('Y-m-d');
@@ -348,6 +355,23 @@ class PayrollController extends Controller
             $data['payroll_month'] = $payrollMonth;
 
             $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
+
+
+
+           $confirmed = 1;
+           $payroll_date = $payrollMonth;
+           $title = "Payroll Info";
+           $take_home = $this->reports_model->sum_take_home($payrollMonth);
+           $payroll_totals = $this->payroll_model->payrollTotals("temp_payroll_logs", $payrollMonth);
+           $total_allowances = $this->payroll_model->total_allowances("temp_allowance_logs", $payrollMonth);
+           $total_bonuses = $this->payroll_model->total_bonuses($payrollMonth);
+           $total_loans = $this->payroll_model->total_loans("temp_loan_logs", $payrollMonth);
+           $total_deductions = $this->payroll_model->total_deductions("temp_deduction_logs", $payrollMonth);
+           $total_overtimes = $this->payroll_model->total_overtimes($payrollMonth);
+           $payroll_date = $payrollMonth;
+           $payroll_month = $payrollMonth;
+
+           $account_nototal_heslb = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
         } else {
             $data['authorization'] = $this->reports_model->payrollAuthorization($payrollMonth);
             $toDate = date('Y-m-d');
@@ -366,9 +390,30 @@ class PayrollController extends Controller
             $data['payroll_date'] = $payrollMonth;
             $data['payroll_month'] = $payrollMonth;
             $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
+
+
+            $authorization = $this->reports_model->payrollAuthorization($payrollMonth);
+            $toDate = date('Y-m-d');
+            $employee_list = $this->reports_model->pay_checklist($payrollMonth);
+            //$employee_list =  $this->payroll_model->employeeTempPayrollList1($payrollMonth, "allowance_logs", "deduction_logs", "loan_logs", "payroll_logs", "temp_arrears");
+            $confirmed = 1;
+            $payroll_date = $payrollMonth;
+            $title = "Payroll Info";
+            $take_home = $this->reports_model->sum_take_home($payrollMonth);
+            $payroll_totals = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
+            $total_allowances = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
+            $total_bonuses = $this->payroll_model->total_bonuses($payrollMonth);
+            $total_loans = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
+            $total_deductions = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
+            $total_overtimes = $this->payroll_model->total_overtimes($payrollMonth);
+            $payroll_date = $payrollMonth;
+            $payroll_month = $payrollMonth;
+            $total_heslb = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
         }
 
-         return view('app.reports/payroll_info_view', $data);
+
+        include app_path() . '/reports/payroll_info_view.php';
+        
 
     }
 

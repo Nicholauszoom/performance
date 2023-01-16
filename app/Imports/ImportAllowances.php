@@ -23,26 +23,26 @@ class ImportAllowances implements ToCollection,WithHeadingRow
     */
     public function collection(Collection $collection)
     {
-  
-        
-        foreach ($collection as $row) 
-        {  
-             
+
+
+        foreach ($collection as $row)
+        {
+
 
           $data = [
             'code'=>0,
             'name'=>$row['desc'],
             'amount'=>0,
             'taxable'=>'YES',
-            'pentionable'=>'NO',
+            'pensionable'=>'NO',
           ];
           DB::table('allowances')
           ->insert($data);
-        
 
-          
-       
-        
+
+
+
+
         }
     }
 }

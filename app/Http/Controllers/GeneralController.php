@@ -4651,7 +4651,7 @@ class GeneralController extends Controller
         //     'amount' => $amount,
         //     'mode' => $request->policy,
         //     'taxable' => $request->taxable,
-        //     'pentionable' => $request->pentionable ,
+        //     'pensionable' => $request->pensionable ,
         //     'state' => 1,
         //     'percent' => $percent,
         // );
@@ -4750,10 +4750,13 @@ class GeneralController extends Controller
 
         $method = $request->method();
         if ($method == "POST") {
-
+           $rate = $this->flexperformance_model->get_rate($request->currency);
             $data = array(
                 'empID' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
+                'amount'=>$request->input('amount')*$rate,
+                'currency'=>$request->currency,
+                'rate'=>$rate,
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
@@ -4768,6 +4771,7 @@ class GeneralController extends Controller
     public function assign_allowance_group(Request $request)
     {
         $method = $request->method();
+        $rate = $this->flexperformance_model->get_rate($request->currency);
 
         if ($method == "POST") {
 
@@ -4777,6 +4781,9 @@ class GeneralController extends Controller
                     'empID' => $row->empID,
                     'allowance' => $request->input('allowance'),
                     'group_name' => $request->input('group'),
+                    'amount'=>$request->input('amount')*$rate,
+                    'currency'=>$request->currency,
+                    'rate'=>$rate,
                 );
                 $result = $this->flexperformance_model->assign_allowance($data);
 
@@ -4846,6 +4853,7 @@ class GeneralController extends Controller
         $id = base64_decode($id);
 
         $data['title'] = 'Package';
+        $data['currencies'] = $this->flexperformance_model->get_currencies();
         $data['allowance'] = $this->flexperformance_model->getallowancebyid($id);
         $data['group'] = $this->flexperformance_model->customgroup($id);
         $data['employeein'] = $this->flexperformance_model->get_individual_employee($id);
@@ -4868,9 +4876,9 @@ class GeneralController extends Controller
         return view('app.overtime_category_info', $data);
     }
 
-    public function deleteAllowance(Request $request)
+    public function deleteAllowance($id,Request $request)
     {
-        $ID = $this->uri->segment(3);
+        $ID = $id;
         if ($ID != '') {
             $updates = array(
                 'state' => 0,
@@ -4891,9 +4899,9 @@ class GeneralController extends Controller
         }
     }
 
-    public function activateAllowance(Request $request)
+    public function activateAllowance($id,Request $request)
     {
-        $ID = $this->uri->segment(3);
+        $ID = $id;
         if ($ID != '') {
             $updates = array(
                 'state' => 1,
@@ -4944,12 +4952,12 @@ class GeneralController extends Controller
         }
     }
 
-    public function updateAllowancePentionable(Request $request)
+    public function updateAllowancepensionable(Request $request)
     {
         $ID = $request->input('allowanceID');
         if ($request->method() == "POST" && $ID != '') {
             $updates = array(
-                'pentionable' => $request->input('pentionable'),
+                'pensionable' => $request->input('pensionable'),
             );
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {

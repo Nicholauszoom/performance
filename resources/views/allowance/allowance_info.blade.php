@@ -15,7 +15,7 @@
         foreach ($allowance as $key) {
             $name = $key->name;
             $allowanceID = $key->id;
-            $pentionable = $key->pentionable;
+            $pensionable = $key->pensionable;
             $taxable = $key->taxable;
             $amount = $key->amount;
             $percent = $key->percent;
@@ -95,30 +95,11 @@
                     </tr>
                 </table>
 
-                <hr>
- 
-                <div class="card-body">
-                    <h4 class="text-muted">Add Members</h4>
 
-                    <form autocomplete="off" id="assignIndividual" enctype="multipart/form-data"   method="post"  data-parsley-validate class="form-horizontal form-label-left">
-                        <div class="mb-2">
-                            <label class="form-label">Employee :</label>
-                            <div class="input-group">
-                                <select required name="empID" class="select4_single form-control select" data-width="1%">
-                                    <option selected disabled> select Employee</option>
-                                    <?php foreach ($employee as $row) { ?>
-                                    <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
-                                    <?php } ?>
-                                </select>
-                                <button type="submit" class="btn btn-main px-3">ADD</button>
-                            </div>
-                        </div>
 
-                        <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID?>">
-                    </form>
-                </div>
 
-                <hr class="my-3">
+
+                <hr class="my-5">
 
                 <div class="card-body">
                     <h4 class="text-muted">Add Members ( Group )</h4>
@@ -128,12 +109,30 @@
                         <div class="mb-2">
                             <label class="form-label">Employee :</label>
                             <div class="input-group">
-                                <select required="" name="group" class="select_group form-control select" data-width="1%">
+                                <select required name="group" class="select_group form-control select" data-width="1%">
                                     <option selected disabled>Select Group</option>
                                     <?php foreach ($group as $row) { ?>
                                     <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
                                     <?php } ?>
                                 </select>
+
+                            </div>
+                            <label class="form-label">Amount</label>
+                            <div class="input-group">
+                                <input required type="number" name="amount" step ="1" min="1" max="10000000"  class="form-control">
+
+                            </div>
+                            <label class="form-label">Currency </label>
+                            <div class="input-group">
+                                <select required name="currency" class="select_group form-control select" data-width="1%">
+                                    <option selected disabled>Select Currency</option>
+                                    <?php foreach ($currencies as $row) { ?>
+                                        <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
+                                        <?php } ?>
+                                </select>
+
+                            </div>
+                            <div class="input-group py-2">
                                 <button type="submit" class="btn btn-main px-3">ADD</button>
                             </div>
                         </div>
@@ -181,19 +180,19 @@
                     </form>
                     @endisset
 
-                    @isset($pentionable)
-                    <form autocomplete="off" id="updatePentionable" class="form-horizontal form-label-left">
+                    @isset($pensionable)
+                    <form autocomplete="off" id="updatepensionable" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <label  for="first-name" for="stream" >Is Pentionable?</label>
+                            <label  for="first-name" for="stream" >Is pensionable?</label>
                             <div class="input-group">
-                                <select name="pentionable" class="select_type form-control" required tabindex="-1" id="policy">
+                                <select name="pensionable" class="select_type form-control" required tabindex="-1" id="policy">
                                     <option> Select</option>
-                                    <option value="YES" <?php if($pentionable == 'YES') echo "selected";   ?>>YES</option>
-                                    <option value="NO" <?php if($pentionable == 'NO') echo "selected";   ?>>NO</option>
+                                    <option value="YES" <?php if($pensionable == 'YES') echo "selected";   ?>>YES</option>
+                                    <option value="NO" <?php if($pensionable == 'NO') echo "selected";   ?>>NO</option>
                                 </select>
-                                <button  class="btn btn-main">Update pentionable</button>
+                                <button  class="btn btn-main">Update pensionable</button>
                             </div>
                         </div>
                     </form>
@@ -219,7 +218,7 @@
 
                             <label class="form-label">Percent</label>
                             <div class="input-group">
-                                <input type="number" name="percent" min="0" max="99" step ="0.1" value="<?php echo 100*$percent; ?>" class="form-control">
+                                <input type="number" name="percent" min="0" max="100" step ="0.1" value="<?php echo 100*$percent; ?>" class="form-control">
                                 <button  class="btn btn-main">Update Amount</button>
                             </div>
                         </div>
@@ -247,6 +246,46 @@
                         </div>
                     </form>
                 </div>
+
+                <div class="card-body">
+                    <h4 class="text-muted">Add Members</h4>
+
+                    <form autocomplete="off" id="assignIndividual" enctype="multipart/form-data"   method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                        <div class="mb-2">
+                            <label class="form-label">Employee :</label>
+                            <div class="input-group">
+                                <select required name="empID" class="select4_single form-control select" data-width="1%">
+                                    <option selected disabled> select Employee</option>
+                                    <?php foreach ($employee as $row) { ?>
+                                    <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
+                                    <?php } ?>
+                                </select>
+
+                            </div>
+                            <label class="form-label">Amount</label>
+                            <div class="input-group">
+                                <input required type="number" name="amount" step ="1" min="1" max="10000000"  class="form-control">
+
+                            </div>
+                            <label class="form-label">Currency </label>
+                            <div class="input-group">
+                                <select required name="currency" class="select_group form-control select" data-width="1%">
+                                    <option selected disabled>Select Currency</option>
+                                    <?php foreach ($currencies as $row) { ?>
+                                        <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
+                                        <?php } ?>
+
+                                </select>
+
+                            </div>
+                            <div class="input-group py-2">
+                                <button type="submit" class="btn btn-main px-3">ADD</button>
+                            </div>
+                        </div>
+
+                        <input type="text" hidden="hidden" name="allowance" value="<?php echo $allowanceID?>">
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -263,6 +302,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Amount</th>
                                 <th>
                                     <a title="Remove Selected" class="me-5">
                                         <button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">
@@ -277,6 +317,7 @@
                             <?php foreach ($groupin as $row) { ?>
                             <tr>
                                 <td><?php echo $row->NAME; ?></td>
+                                <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
                                 <td>
                                     <label class="containercheckbox">
                                         <input type="checkbox" name="option[]" value="<?php echo $row->id; ?>">
@@ -304,6 +345,7 @@
                             <tr>
                                 <th>S/N</th>
                                 <th>Name</th>
+                                <th>Amount</th>
                                 <th>
                                     <a title="Remove Selected">
                                         <button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">
@@ -319,6 +361,7 @@
                             <tr>
                                 <td><?php echo $row->SNo; ?></td>
                                 <td><?php echo $row->NAME; ?></td>
+                                <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
                                 <td>
                                     <label class="containercheckbox">
                                     <input type="checkbox" name="option[]" value="<?php echo $row->empID; ?>">
