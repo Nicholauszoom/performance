@@ -2472,6 +2472,8 @@ class GeneralController extends Controller
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
 
         $data['bankdrop'] = $this->flexperformance_model->bank();
+        $data['parent'] = 'Employee';
+        $data['child'] = 'Update employee';
 
         // dd($data);
 
