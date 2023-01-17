@@ -483,7 +483,7 @@ class Payroll extends Model
 
 
         /*PAYE AMOUNT CALCULATIONS STARTS HERE*/
-        /*SELECTING EXCESS*/ 
+        /*SELECTING EXCESS*/  
         IF((e.unpaid_leave = 0),0,(
 	    ( SELECT excess_added FROM paye WHERE maximum >
 	    (/*Taxable Amount*/ (
@@ -1549,7 +1549,13 @@ class Payroll extends Model
          /*END OF EXCESS SELECTION */ 
 	    +
         /*RATE AMOUNT CALCULATIONS STARTS HERE*/
+
+
+        
+        
+        
         /*SELECTING RATE*/ 
+
 
 	    ( (SELECT rate FROM paye WHERE maximum > (/*Taxable Amount*/ (
 	    ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
@@ -1669,21 +1675,38 @@ class Payroll extends Model
          
          /*END OF RATE CALCUALTION */ 
 
+
+
+
+
+         
+
          *
          
+
+
+
+
+
          /*TAXABLE AMOUNT  CALCULATIONS STARTS HERE*/
          /*SELECTING TAXABLE*/ 
  
+
+
+
+
          
          ((/*Taxable Amount*/ (
 	    ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary) -
 
-	     /*pension*/
+	     /*PENSION CALCULATION */
+
+
 	     IF(  (pf.deduction_from = 1), (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                 /*IF BASIC  */      
             ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*pf.amount_employee),
-                  
+            /*END BASIC  */  
             /* IF GROSS */
                   (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)
@@ -1717,18 +1740,26 @@ class Payroll extends Model
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)))  )
 
 	    ) 
+
+        /*END GROSS PENSION CALCULATION  */  
+
+
+
         /* END OF PENSION CALCULATION */
 
         +
 
-	    /*all Allowances and Bonuses*/
+        /* ADD BONUSES TO TAXABLE */
 	    IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
 
+        /* ADD OVERTIMES TO TAXABLE */
 	    IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
 
+        /* ADD FIXED ALLOWANCES TO TAXABLE */
 	    IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
         +
-        /* start add leave allowance to tax */
+
+        /* ADD LEAVE ALLOWANCE TO TAXABLE */
         IF(
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
         IF(
@@ -1739,7 +1770,7 @@ class Payroll extends Model
         0
         )
 
-        /*end leave allowance to tax */
+        /* ADD PERCENT ALLOWANCE TO TAXABLE */
         +
          IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES'  AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
