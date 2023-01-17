@@ -4128,10 +4128,17 @@ class GeneralController extends Controller
             );
 
             $result = $this->flexperformance_model->assign_deduction($data);
+
+            $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deduction'))->limit(1)->first();
+
+            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
+
             if ($result == true) {
                 SysHelpers::AuditLog(1,"Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+            }
 
         }
     }
@@ -4142,19 +4149,27 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
 
             $members = $this->flexperformance_model->get_deduction_members($request->input('deduction'), $request->input('group'));
+
             foreach ($members as $row) {
                 $data = array(
                     'empID' => $row->empID,
                     'deduction' => $request->input('deduction'),
                     'group_name' => $request->input('group'),
                 );
+
                 $result = $this->flexperformance_model->assign_deduction($data);
+
+                $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deduction'))->limit(1)->first();
+
+                SysHelpers::FinancialLogs($row->empID, 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
 
             }
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+            }
 
         }
     }
@@ -4165,20 +4180,34 @@ class GeneralController extends Controller
         if ($request->method() == "POST" && !empty($request->input('option'))) {
 
             $arr = $request->input('option');
+
             $arrayString = implode(",", $arr);
+
             $deductionID = $request->input('deductionID');
+
             if (sizeof($arr) < 1) {
+
                 echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>";
+
             } else {
 
                 foreach ($arr as $employee) {
+
                     $empID = $employee;
+
                     $result = $this->flexperformance_model->remove_individual_deduction($empID, $deductionID);
+
+                    $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
+
+                    SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
+
                 if ($result == true) {
                     // $this->flexperformance_model->audit_log("Removed From Deduction an Employees of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
+                }
             }
         } else {
             echo "<p class='alert alert-warning text-center'>No Item Selected</p>";
@@ -4191,16 +4220,25 @@ class GeneralController extends Controller
         if ($request->method() == "POST") {
 
             $arr = $request->input('option');
+
             $arrayString = implode(",", $arr);
             $deductionID = $request->input('deductionID');
+
             if (sizeof($arr) < 1) {
                 echo "<p class='alert alert-warning text-center'>No Group Selected! Please Select Atlest One Employee</p>";
             } else {
 
+
                 foreach ($arr as $group) {
                     $groupID = $group;
+
                     $result = $this->flexperformance_model->remove_group_deduction($groupID, $deductionID);
+
+                    $deductionName = DB::table('deduction')->select('name')->where('id', $deductionID)->limit(1)->first();
+
+                    // SysHelpers::FinancialLogs($groupID, 'Removed Group from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
+
                 if ($result == true) {
                     // $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-warning text-center'>Group Removed Successifully</p>";
@@ -4565,7 +4603,7 @@ class GeneralController extends Controller
             $data['child'] = "Allowances";
 
             return view('allowance.allowance', $data);
-            
+
         } else {
             echo "Unauthorized Access";
         }
@@ -4749,10 +4787,12 @@ class GeneralController extends Controller
 
     public function assign_allowance_individual(Request $request)
     {
-
         $method = $request->method();
+
         if ($method == "POST") {
-           $rate = $this->flexperformance_model->get_rate($request->currency);
+
+            $rate = $this->flexperformance_model->get_rate($request->currency);
+
             $data = array(
                 'empID' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
@@ -4762,10 +4802,17 @@ class GeneralController extends Controller
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
+
+            $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
+
+            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
+
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+            }
 
         }
     }
@@ -4773,11 +4820,13 @@ class GeneralController extends Controller
     public function assign_allowance_group(Request $request)
     {
         $method = $request->method();
+
         $rate = $this->flexperformance_model->get_rate($request->currency);
 
         if ($method == "POST") {
 
             $members = $this->flexperformance_model->get_allowance_members($request->input('allowance'), $request->input('group'));
+
             foreach ($members as $row) {
                 $data = array(
                     'empID' => $row->empID,
@@ -4787,9 +4836,15 @@ class GeneralController extends Controller
                     'currency'=>$request->currency,
                     'rate'=>$rate,
                 );
+
                 $result = $this->flexperformance_model->assign_allowance($data);
 
+                $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
+
+                SysHelpers::FinancialLogs($row->empID, 'Assigned allowance', '-', $allowanceName->name,  'Payroll Input');
+
             }
+
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
@@ -4807,6 +4862,7 @@ class GeneralController extends Controller
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
+
             if (sizeof($arr) < 1) {
                 echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>";
             } else {
@@ -4814,11 +4870,17 @@ class GeneralController extends Controller
                 foreach ($arr as $employee) {
                     $empID = $employee;
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
+
+                    $allowanceName = DB::table('allowances')->select('name')->where('id', $allowanceID)->limit(1)->first();
+
+                    SysHelpers::FinancialLogs($empID, 'Removed from allowance', $allowanceName->name, '-', 'Payroll Input');
                 }
                 if ($result == true) {
                     //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+                }
             }
         }
     }
@@ -4841,6 +4903,10 @@ class GeneralController extends Controller
                 foreach ($arr as $group) {
                     $groupID = $group;
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
+
+                    $allowanceName = DB::table('allowances')->select('name')->where('id', $allowanceID)->limit(1)->first();
+
+                    SysHelpers::FinancialLogs($groupID, 'Removed from allowance', $allowanceName->name, '-', 'Payroll Input');
                 }
                 if ($result == true) {
                     // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
@@ -4864,6 +4930,7 @@ class GeneralController extends Controller
         $data['employee'] = $this->flexperformance_model->employee_allowance($id);
         $data['allowanceID'] = $id;
         $data['title'] = "Allowances";
+        $data['parent'] = "Allowance";
 
         // dd($data['allowance']);
 
@@ -5352,6 +5419,7 @@ class GeneralController extends Controller
             $data['child'] = "Groups";
 
             return view('app.groups', $data);
+
         } else {
             echo "Unauthorized Access";
         }
@@ -5580,9 +5648,15 @@ class GeneralController extends Controller
                                 'group_name' => $groupID,
                             );
 
-                            SysHelpers::FinancialLogs($empID, 'Financial status', 'Group Name', 0, 'Terminated');
+                            $allowanceName = DB::table('allowances')->select('name')->where('id', $allowance)->limit(1)->first();
 
                             $this->flexperformance_model->assign_allowance($data);
+
+                            if(empty($allowanceName)){
+                                SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', 'Allowance Not Found', 'Payroll Input');
+                            }else {
+                                SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
+                            }
                         }
                     }
                     if (!empty($group_roles)) {
@@ -5606,7 +5680,15 @@ class GeneralController extends Controller
                                 'group_name' => $groupID,
                             );
 
+                            $deductionName = DB::table('deduction')->select('name')->where('id', $deduction)->limit(1)->first();
+
                             $this->flexperformance_model->assign_deduction($data);
+
+                            if(empty($deductionName)){
+                                SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', 'Deduction Not Found', 'Payroll Input');
+                            }else {
+                                SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', $deductionName->name, 'Payroll Input');
+                            }
                         }
                     }
 

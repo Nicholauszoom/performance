@@ -81,7 +81,6 @@
                                 </tr>
                             </thead>
 
-
                             <tbody>
                                 <?php foreach ($allowance as $row) { ?>
                                 <tr <?php if($row->state ==0){ ?> bgcolor="#FADBD8" <?php  } ?>
