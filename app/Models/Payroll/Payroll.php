@@ -1783,6 +1783,10 @@ class Payroll extends Model
 	     )/*End Taxable Amount*/)
          
          
+
+         /* SELECT MINIMUM AMOUNT */
+
+
          - (SELECT minimum FROM paye WHERE maximum > (/*Taxable Amount*/ (
 	    ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary) -
@@ -1899,7 +1903,7 @@ class Payroll extends Model
 	    /*End all Allowances and Bonuses*/
 	     )/*End Taxable Amount*/))) )
 
-
+         /* END OF  MINIMUM AMOUNT SELECTION */
 
 	    )) AS taxdue,
 
