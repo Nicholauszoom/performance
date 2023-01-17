@@ -244,6 +244,49 @@ class ReportController extends Controller
 
     }
 
+    function get_payroll_temp_summary($date){
+
+        $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
+
+        $payrollMonth = $date;
+        $pensionFund = 2;
+        $reportType = 1; //Staff = 1, temporary = 2
+
+        $datewell = explode("-", $payrollMonth);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $date = $yyyy . "-" . $mm;
+
+        if ($reportType == 1) {
+            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
+        } else {
+            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
+        }
+
+        $data['info'] = $this->reports_model->company_info();
+        $data['payroll_month'] = $payrollMonth;
+        $data['pension_fund'] = $pensionFund;
+
+        $pension = $data['pension'];
+        $total = $data['total'];
+        $info = $data['info'];
+        $payroll_month = $data['payroll_month'];
+        $pension_fund = $data['pension_fund'];
+        $payroll_month = $date;
+        $info = $this->reports_model->company_info();
+
+
+
+    $summary = $data['summary'];
+
+    return view('reports.temp_payroll',$data);
+
+   // include(app_path() . '/reports/temp_payroll.php');
+    }
+
     function pension(Request $request)
     {
 
@@ -782,7 +825,7 @@ class ReportController extends Controller
     function attendance(Request $request)
     {
 
-        dd($request->all());
+      //  dd($request->all());
 
         if ($request->input('print')) {
 
@@ -814,7 +857,7 @@ class ReportController extends Controller
 
     public function payrollInputJournalExport(Request $request)
     {
-        dd($request->all());
+       // dd($request->all());
 
         if (1) {
             $payroll_date = $request->input('payrolldate');

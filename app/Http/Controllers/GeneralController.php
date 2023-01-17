@@ -4730,14 +4730,15 @@ class GeneralController extends Controller
 
     public function addDeduction(Request $request)
     {
-
+        //dd($request->all());
         $name = $request->input('name');
         $code = $request->input('code');
         $amount = $request->input('amount');
-        $percent = $request->input('percent');
+        $percent = $request->input('rate')/100;
         $apply_to = $request->input('apply_to');
-        $mode = $request->input('mode');
-        $state = $request->input('state');
+        $mode = $request->input('policy');
+        //$state = $request->input('state');
+        $state = 1;
 
         $data = array(
 
@@ -4797,6 +4798,8 @@ class GeneralController extends Controller
                 'empID' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
                 'amount'=>$request->input('amount')*$rate,
+                'mode'=>$request->input('mode'),
+                'percent'=>$request->input('percent')/100,
                 'currency'=>$request->currency,
                 'rate'=>$rate,
             );
@@ -4833,6 +4836,8 @@ class GeneralController extends Controller
                     'allowance' => $request->input('allowance'),
                     'group_name' => $request->input('group'),
                     'amount'=>$request->input('amount')*$rate,
+                    'mode'=>$request->input('mode'),
+                    'percent'=>$request->input('percent')/100,
                     'currency'=>$request->currency,
                     'rate'=>$rate,
                 );

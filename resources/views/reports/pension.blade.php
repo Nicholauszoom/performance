@@ -27,8 +27,8 @@
 									<th>MIDDLE NAME</th>
 									<th>SURNAME</th>
                                     <th>WAGE</th>
-                                   
-									
+
+
 								</tr>
 							</thead>
 							<tbody>
@@ -39,7 +39,7 @@
                                     if($salary != 0){
                                     $name = $row->name;
                                     $member_no = $row->pf_membership_no;
-                                    
+
                                     //if($salary == 0)dd($row->emp_id);
                                     $rate1= ($row->pension_employee/$salary);
                                     $rate2= ($row->pension_employer/$salary);
@@ -56,8 +56,8 @@
 									<td>{{ $row->mname }}</td>
                                     <td>{{ $row->lname }}</td>
 									<td>{{ $total_contribution }}</td>
-                                    
-									
+
+
 								</tr>
                                 <?php }}} ?>
                             </tbody>

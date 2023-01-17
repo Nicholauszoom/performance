@@ -2311,8 +2311,9 @@ function comment($data){
 	}
 
 function position(){
-	$query = "SELECT @s:=@s+1 as SNo, (SELECT pp.name from position pp WHERE p.parent_code = pp.position_code) as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 1";
-	return DB::select(DB::raw($query));
+	//$query = "SELECT @s:=@s+1 as SNo, (SELECT pp.name from position pp WHERE p.parent_code = pp.position_code) as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 1";
+	$query = "SELECT @s:=@s+1 as SNo, 'none' as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 1";
+    return DB::select(DB::raw($query));
 	}
 function inactive_position(){
 	$query = "SELECT @s:=@s+1 as SNo, (SELECT pp.name from position pp WHERE p.parent_code = pp.position_code) as parent, d.name as department, p.* FROM position p, department d, (SELECT @s:=0) as s WHERE d.id = p.dept_id AND p.state = 0";
@@ -2867,7 +2868,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	function nonmembers_roles_byid($id)
 	{
 
-		$query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id,  (SELECT @s:=0) as s  where  p.id NOT IN (SELECT roleID from role_groups  where group_name=".$id.")";
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo,p.id as ID, p.name as POSITION,d.name as DEPARTMENT   FROM position p INNER JOIN department d ON p.dept_id = d.id ,  (SELECT @s:=0) as s WHERE p.state = 1 AND   p.id NOT IN (SELECT roleID from role_groups  where group_name=".$id.")";
 
 		//dd(DB::select(DB::raw($query)));
 		return DB::select(DB::raw($query));
