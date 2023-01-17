@@ -729,6 +729,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
+        Route::any('/get_payroll_temp_summary/{date}','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
+
         Route::any('/pay_checklist','pay_checklist')->name('reports.pay_checklist');
         Route::any('/all_arrears','all_arrears')->name('reports.all_arrears');
         Route::any('/employee_arrears','employee_arrears')->name('reports.employee_arrears');

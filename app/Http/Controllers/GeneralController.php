@@ -4688,14 +4688,15 @@ class GeneralController extends Controller
 
     public function addDeduction(Request $request)
     {
-
+        //dd($request->all());
         $name = $request->input('name');
         $code = $request->input('code');
         $amount = $request->input('amount');
-        $percent = $request->input('percent');
+        $percent = $request->input('rate')/100;
         $apply_to = $request->input('apply_to');
-        $mode = $request->input('mode');
-        $state = $request->input('state');
+        $mode = $request->input('policy');
+        //$state = $request->input('state');
+        $state = 1;
 
         $data = array(
 

@@ -100,6 +100,7 @@ foreach ($emp_id as $em){
             $department = $row->department_name;
             $branch = $row->branch_name;
             $salary = $row->salary;
+            
             $pension_fund = $row->pension_fund_name;
             $pension_fund_abbrv = $row->pension_fund_abbrv;
             $membership_no = $row->membership_no;

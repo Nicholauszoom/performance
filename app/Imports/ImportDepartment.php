@@ -24,9 +24,10 @@ class ImportDepartment implements ToCollection,WithHeadingRow
     public function collection(Collection $collection)
     {
 
-        foreach ($collection as $row) 
-        {  
-             
+        foreach ($collection as $row)
+        {
+
+            $i =1;
 
           // $data = [
           //   'dept_no'=>$row['deptno'],
@@ -42,8 +43,9 @@ class ImportDepartment implements ToCollection,WithHeadingRow
           // ];
 
           $data2 = [
-            //'dept_no'=>$row['deptno'],
+            'dept_no'=>$i,
             'name'=>$row['dept'],
+            'company'=>1,
             // 'code'=>$row['code'],
             // 'name'=>$row['name'],
             // 'type'=>1,
@@ -54,16 +56,16 @@ class ImportDepartment implements ToCollection,WithHeadingRow
             // 'parent_pattern'=>'ewqacr',
           ];
           $test = DB::table('department')->where('name',$row['dept'])->select('*')->first();
-        
+
           if(empty($test))
           DB::table('department')->insert($data2);
           else
           DB::table('department')->where('name',$row['dept'])->update($data2);
-        
 
-          
-       
-        
+$i++;
+
+
+
         }
     }
 }

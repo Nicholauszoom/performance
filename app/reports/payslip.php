@@ -99,6 +99,7 @@ $rate = $row->rate;
     $department = $row->department_name;
     $branch = $row->branch_name;
     $salary = $row->salary/$row->rate;
+    $net_basic = $row->net_basic/$row->rate;
     $pension_fund = $row->pension_fund_name;
     $pension_fund_abbrv = $row->pension_fund_abbrv;
     $membership_no = $row->membership_no;
@@ -216,12 +217,20 @@ $pdf->Rect(16, $pdf->GetY()+2, 175, 0, '', $style4);  //Dotted LIne
 
 //START EARNINGS AND PAYMENTS
 $pdf->SetXY(15, $pdf->GetY());
+$out = "<p><br>NET BASIC CALCULLATIONS:";
+$basic_pay = '
+<table width = "100%">
+    <tr>
+        <td width="500" align="left"><b>Basic Pay</b></td>
+        <td width="100" align="right">'.number_format($salary, 2).'</td>
+    </tr></table>';
+
 $out = "<p><br>PAYMENTS/EARNINGS:";
 $allowance = '
 <table width = "100%">
     <tr>
-        <td width="500" align="left"><b>Basic Salary</b></td>
-        <td width="100" align="right">'.number_format($salary, 2).'</td>
+        <td width="500" align="left"><b>Net Basic </b></td>
+        <td width="100" align="right">'.number_format($net_basic, 2).'</td>
     </tr>';
 foreach($allowances as $row){
     $allowance  .='
@@ -233,6 +242,9 @@ foreach($allowances as $row){
 $allowance  .='</table>';
 
 $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $out, 0, 1, 0, true, '', true);
+
+// for basic pay
+$pdf->writeHTMLCell(0, 12, '', $pdf->GetY()-4, $basic_pay, 0, 1, 0, true, '', true);
 
 $pdf->writeHTMLCell(0, 12, '', $pdf->GetY()-4, $allowance, 0, 1, 0, true, '', true);
 
@@ -390,7 +402,7 @@ $takehome  .='
 
 if ($paid_salary > 0){
     $takehome .= '<tr>
-                    <td width="500" align="left"><b>Paid Amount</b></td>
+                    <td width="500" align="left"><b>Take Home</b></td>
                     <td width="100" align="right">'.number_format($paid_salary, 2).'</td>
                 </tr>';
 }
@@ -427,7 +439,9 @@ $takehome  .='</table>';
 $pdf->writeHTMLCell(0, 12, '', $pdf->GetY()+2, $takehome, 0, 1, 0, true, '', true);
 
 $pdf->Rect(16.5, $pdf->GetY()-5, 177.5, 0, '', $style4);
+
 // END TAKE HOME
+
 
 //OUTSTANDING LOANS
 
