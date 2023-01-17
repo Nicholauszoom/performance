@@ -100,6 +100,7 @@ $rate = $row->rate;
     $branch = $row->branch_name;
     $salary = $row->salary/$row->rate;
     $taxable_amount = $row->taxable_amount/$row->rate;
+    $excess_added = $row->excess_added/$row->rate;
     $net_basic = $row->net_basic/$row->rate;
     $pension_fund = $row->pension_fund_name;
     $pension_fund_abbrv = $row->pension_fund_abbrv;
@@ -275,9 +276,14 @@ $deduction = '
     </tr>
 
     <tr>
-        <td width="500" align="left"><b>PAYE AMOUNT</b></td>
-        <td width="100" align="right">'.number_format($$taxable_amount, 2).'</td>
+        <td width="500" align="left"><b>TAXABLE AMOUNT</b></td>
+        <td width="100" align="right">'.number_format($taxable_amount, 2).'</td>
     </tr>
+    <tr>
+    <td width="500" align="left"><b>EXCESS ADDED AMOUNT</b></td>
+    <td width="100" align="right">'.number_format($excess_added, 2).'</td>
+</tr>
+
     <tr>
         <td width="500" align="left"><b>PAYE AMOUNT</b></td>
         <td width="100" align="right">'.number_format($taxdue, 2).'</td>
