@@ -467,24 +467,24 @@ class Payroll extends Model
             0
             )
 
-/*end leave allowance to pension */
-+
-        IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID), 0)))),'0'  )) AS pension_employer,
+        /*end leave allowance to pension */
+        +
+                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 And a.pensionable = 'YES' AND a.state= 1 GROUP BY ea.empID), 0)))),'0'  )) AS pension_employer,
 
-        /*End of Pension employer*/
+                /*End of Pension employer*/
 
-        IF((e.unpaid_leave = 0),0,((SELECT rate_employee from deduction where id=9 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)))) as medical_employee,
+                IF((e.unpaid_leave = 0),0,((SELECT rate_employee from deduction where id=9 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)))) as medical_employee,
 
-        IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=9 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)))) as medical_employer,
+                IF((e.unpaid_leave = 0),0,((SELECT rate_employer from deduction where id=9 )*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                ,((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)))) as medical_employer,
 
 
-/*PAYE AMOUNT CALCULATIONS STARTS HERE*/
-/*SELECTING EXCESS*/ 
-IF((e.unpaid_leave = 0),0,(
+        /*PAYE AMOUNT CALCULATIONS STARTS HERE*/
+        /*SELECTING EXCESS*/ 
+        IF((e.unpaid_leave = 0),0,(
 	    ( SELECT excess_added FROM paye WHERE maximum >
 	    (/*Taxable Amount*/ (
 	    ( IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
