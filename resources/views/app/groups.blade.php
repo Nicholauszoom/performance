@@ -10,197 +10,181 @@
 
 @section('content')
 
-<?php 
-  foreach ($groupInfo as $row) {
-     $groupName = $row->name;
-     $groupID = $row->id;
-  }
-
+<?php
+    foreach ($groupInfo as $row) {
+        $groupName = $row->name;
+        $groupID = $row->id;
+    }
 ?>
 
-
-        <!-- page content -->
-        <div class="right_col" role="main">
-          <div class="">
-            <div class="clearfix"></div>
-
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                  <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
+<div class="right_col" role="main">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/financial_group')}}" class="nav-link active show"
-                            aria-selected="false" role="tab" tabindex="-1">
+                        <a href="{{ url('/flex/financial_group')}}" class="nav-link active show" aria-selected="false" role="tab" tabindex="-1">
                             <i class="ph-list me-2"></i>
                             Packages
                         </a>
                     </li>
+
                     <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link" aria-selected="false" role="tab"
-                            tabindex="-1">
+                        <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
                             <i class="ph-list me-2"></i>
                             Overtime
                         </a>
                     </li>
+
                     <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/allowance')}}" class="nav-link" 
-                            aria-selected="false" role="tab" tabindex="-1">
+                        <a href="{{ url('/flex/allowance')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
                             <i class="ph-list me-2"></i>
                             Allowance
                         </a>
                     </li>
-                
-                  
+
                     <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
-                            aria-selected="false" role="tab" tabindex="-1">
+                        <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
                             <i class="ph-list me-2"></i>
                             Statutory Deductions
                         </a>
                     </li>
+
                     <li class="nav-item" role="presentation">
-                      <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link "
-                          aria-selected="false" role="tab" tabindex="-1">
-                          <i class="ph-list me-2"></i>
-                          Non Statutory Deductions
-                      </a>
-                  </li>
-                 
+                        <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
+                            <i class="ph-list me-2"></i>
+                            Non Statutory Deductions
+                        </a>
+                    </li>
                 </ul>
-                  <div class="card-head py-3">
-                    <h2><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h2>
-                          
+
+                <div class="card-header py-3">
+                    <h5><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h5>
+
                     <div class="col-md-6 col-sm-12 col-xs-12">
-                    <form id="updateGroup" enctype="multipart/form-data" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left" >
-                      <div class="form-group">
-                        <div class="col-sm-9">
-                          <div class="input-group">
-                            <input type="text" name="group_name" value="<?php echo $groupName; ?>" class="form-control">
-                              <input type="hidden" name="group_id" value="<?php echo $groupID;?>">
-                              <span class="input-group-btn">
-                                <button type="submit" class="btn btn-main">UPDATE</button>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      </form>
-                      </div>
-
-                    <div class="clearfix"></div>
-                  </div>
-
-                  <div class="card-body">
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  
-                   <div id="feedBackRemove"></div>
-                    <form id="removeFromGroup"  method="post">
-                      @csrf
-                    <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
-                    
-                        <!-- </div> -->
-                    <table  id="datatable" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>S/N</th>
-                          <th>Name</th>
-                          <th>Department</th>
-                          <th>Option</th>
-                        </tr>
-                      </thead>
-
-
-                      <tbody>
-                        <?php
-                        // if ($department->num_rows() > 0){
-                          foreach ($members as $row) { ?>
-                          <tr>
-                            <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->NAME; ?></td>
-                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            
-                            <td class="options-width">
-                           <label class="containercheckbox">
-                           <input type="checkbox" name="option[]" value="<?php echo $row->EGID."|".$row->ID; ?>">
-                            <span class="checkmark"></span>
-                          </label></td>
-                            </tr>
-                          <?php } //} ?>
-                      </tbody>
-                    </table>
-                    <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button  class="btn btn-warning">Remove Selected</button>
-                        </div>
-                    </div>   
-                    </form>
-                  </div>
-                  
+                        <form id="updateGroup" enctype="multipart/form-data" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left" >
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" name="group_name" value="<?php echo $groupName; ?>" class="form-control">
+                                        <input type="hidden" name="group_id" value="<?php echo $groupID;?>">
+                                        <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-main">UPDATE</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-              </div>
 
-              <!-- Groups -->
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                  <div class="card-head">
+                <div class="card-body">
+                    @if(Session::has('note'))      {{ session('note') }}  @endif
+                    <div id="feedBackRemove"></div>
+                    <form id="removeFromGroup"  method="POST">
+                        @csrf
+                        <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
+                        <input type="text" name="groupName" value="<?php echo $groupName; ?>" class="form-control">
+
+
+                        <table  id="datatable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php
+                                // if ($department->num_rows() > 0){
+                                foreach ($members as $row) { ?>
+                                <tr>
+                                    <td width="1px"><?php echo $row->SNo; ?></td>
+                                    <td><?php echo $row->NAME; ?></td>
+                                    <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+
+                                    <td class="options-width">
+                                    <label class="containercheckbox">
+                                    <input type="checkbox" name="option[]" value="<?php echo $row->EGID."|".$row->ID; ?>">
+                                    <span class="checkmark"></span>
+                                    </label></td>
+                                </tr>
+                                <?php } //} ?>
+                            </tbody>
+                        </table>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button  class="btn btn-warning">Remove Selected</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-header">
                     <h2>All Employees </h2><br>
                     <small><b>Mark Employees to add them in this Group</b></small>
 
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="card-body">
-                   <?php echo session("notegroup");  ?>
-                   <div id="feedBackAdd"></div>
-                    <form id="addToGroup" method="post">
-                    @csrf
-                    <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
-                    <table  id="datatable-keytable" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>S/N</th>
-                          <th>Name</th>
-                          <th>Department</th>
-                          <th>Mark</th>
-                        </tr>
-                      </thead>
-
-
-                      <tbody>
-                        <?php
-                        // if ($department->num_rows() > 0){
-                          foreach ($nonmembers as $row) { ?>
-                          <tr>
-                            <td width="1px"><?php echo $row->SNo; ?></td>
-                            <td><?php echo $row->NAME; ?></td>
-                            <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            
-                            <td class="options-width">
-                           <label class="containercheckbox">
-                           <input type="checkbox" name="option[]" value="<?php echo $row->ID; ?>">
-                            <span class="checkmark"></span>
-                          </label>
-
-                           </td>
-                           </td>
-                            </tr>
-                          <?php } //} ?>
-                      </tbody>
-                    </table>
-                    <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button  class="btn btn-success">Add Selected</button>
-                        </div>
-                    </div>   
-                        </form>
-                  </div>
-                </div>
-              </div>
-              <!-- Groups -->
+              <div class="clearfix"></div>
             </div>
+            <div class="card-body">
+             <?php echo session("notegroup");  ?>
+             <div id="feedBackAdd"></div>
+              <form id="addToGroup" method="post">
+              @csrf
+              <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
+              <table  id="datatable-keytable" class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>S/N</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Mark</th>
+                  </tr>
+                </thead>
 
+
+                <tbody>
+                  <?php
+                  // if ($department->num_rows() > 0){
+                    foreach ($nonmembers as $row) { ?>
+                    <tr>
+                      <td width="1px"><?php echo $row->SNo; ?></td>
+                      <td><?php echo $row->NAME; ?></td>
+                      <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+
+                      <td class="options-width">
+                     <label class="containercheckbox">
+                     <input type="checkbox" name="option[]" value="<?php echo $row->ID; ?>">
+                      <span class="checkmark"></span>
+                    </label>
+
+                     </td>
+                     </td>
+                      </tr>
+                    <?php } //} ?>
+                </tbody>
+              </table>
+              <div class="form-group">
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <button  class="btn btn-success">Add Selected</button>
+                  </div>
+              </div>
+                  </form>
+            </div>
           </div>
         </div>
+        <!-- Groups -->
+    </div>
+</div>
 
-
-        <!-- /page content -->   
 
 
 
@@ -251,7 +235,7 @@
 <script type="text/javascript">
     $('#removeFromGroup').submit(function(e){
         if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Group?") == true ) {
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/removeEmployeeFromGroup",
                  type:"post",
@@ -265,23 +249,23 @@
          $('#feedBackRemove').fadeOut('fast', function(){
               $('#feedBackRemove').fadeIn('fast').html(data);
             });
-    
+
      setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 2000); 
+      }, 2000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    } 
-    }); 
+    }
+    });
 </script>
 
 
 <script type="text/javascript">
     $('#addToGroup').submit(function(e){
         if (confirm("Are You Sure You Want To Add The selected Employee(s) Into  This Group?") == true ) {
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/addEmployeeToGroup",
                  type:"post",
@@ -295,15 +279,15 @@
          $('#feedBackAdd').fadeOut('fast', function(){
               $('#feedBackAdd').fadeIn('fast').html(data);
             });
-    
+
      setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 2000); 
+      }, 2000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    } 
+    }
     });
 
     $('#updateGroup').on('submit',function (e) {

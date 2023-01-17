@@ -404,6 +404,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/financial_groups_details/{id}','financial_groups_details')->name('flex.financial_groups_details');
         Route::any('/financial_groups_byRole_details/{id}','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
 
+        Route::any('/payroll_report_Logs', 'payrollReportLogs')->name('flex.payrollLogs');
 
         Route::any('/groups','groups')->name('flex.groups');
         Route::any('/removeEmployeeFromGroup','removeEmployeeFromGroup')->name('flex.removeEmployeeFromGroup');

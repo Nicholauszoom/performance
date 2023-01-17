@@ -76,6 +76,10 @@
             @if($payrollState != 1)
             <a href="{{route('reports.get_payroll_temp_summary',$payrollMonth)}}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+
+            @if($payrollState != 1)
+            <a class="btn btn-main btn-sm ms-3" href="{{ route('flex.payrollLogs') }}" target="blank">
+                Payroll Input Changes Approval Report
             </a>
             @endif
         </div>

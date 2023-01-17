@@ -23,12 +23,19 @@ class FlexPerformanceModel extends Model
         DB::table('audit_logs')->insert($logData);
 	}
 
-	function audit_logs()
+	public function audit_logs()
 	{
 		$query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_trails al, employee e, position p, department d  WHERE al.emp_id = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.created_at DESC";
 
         return DB::select(DB::raw($query));
 	}
+
+    public function financialLogs()
+    {
+        $query = "SELECT fn.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id ORDER BY fn.created_at DESC";
+
+        return DB::select(DB::raw($query));
+    }
 
 	function audit_purge_logs()
 	{
@@ -2958,8 +2965,8 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function removeEmployeeByROleFromGroup($empID, $groupID)
 	{
-	     DB::transaction(function() use($empID, $groupID)
-       {
+	    DB::transaction(function() use($empID, $groupID)
+        {
 
 	    $query = "DELETE FROM employee_group  WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
         DB::insert(DB::raw($query));
@@ -2975,22 +2982,24 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 
 
-	function removeEmployeeFromGroup($refID, $empID, $groupID)
+	public function removeEmployeeFromGroup($refID, $empID, $groupID)
 	{
-	     DB::transaction(function() use($refID, $empID, $groupID)
-       {
-	    $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
-        DB::insert(DB::raw($query));
-	    $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    DB::insert(DB::raw($query));
-		$query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
-	    DB::insert(DB::raw($query));
-		$query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
-		DB::insert(DB::raw($query));
+
+	    DB::transaction(function() use($refID, $empID, $groupID)
+        {
+	        $query = "DELETE FROM employee_group WHERE id ='".$refID."'";
+            DB::insert(DB::raw($query));
+	        $query = "DELETE FROM emp_allowances WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
+	        DB::insert(DB::raw($query));
+		    $query = "DELETE FROM emp_deductions WHERE  group_name ='".$groupID."' AND empID = '".$empID."' ";
+	        DB::insert(DB::raw($query));
+		    $query = "DELETE FROM emp_role WHERE  group_name ='".$groupID."' AND userID = '".$empID."' ";
+		    DB::insert(DB::raw($query));
 	    });
 
 		return true;
 	}
+
 	function delete_role_group($roleID,$GroupID){
 		DB::table('role_groups')
 		->where('roleID',$roleID)
@@ -3140,7 +3149,6 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	{
 		DB::table('groups')->insert($data);
 		return true;
-
 	}
 
 

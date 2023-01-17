@@ -13,7 +13,11 @@ use App\Helpers\SysHelpers;
 class PayrollController extends Controller
 {
 
-    public function __construct($payroll_model=null,$flexperformance_model = null,$reports_model=null)
+    protected $payroll_model;
+    protected $reports_model;
+    protected $flexperformance_model;
+
+    public function __construct($payroll_model=null, $flexperformance_model = null, $reports_model=null)
     {
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
@@ -26,6 +30,7 @@ class PayrollController extends Controller
         if ($request->post()) {
 
             $pendingPayroll = $this->payroll_model->pendingPayrollCheck();
+
             if ($pendingPayroll > 0) {
                 echo "<p class='alert alert-warning text-center'>FAILED! There is Pending Payroll which Needs To be Confirmed Before Another Payroll is Run</p>";
             } else {
@@ -413,7 +418,7 @@ class PayrollController extends Controller
 
 
         include app_path() . '/reports/payroll_info_view.php';
-        
+
 
     }
 
@@ -600,7 +605,7 @@ class PayrollController extends Controller
     public function getComment($date){
 
         $data = $this->flexperformance_model->get_comment($date);
-        
+
         return json_encode($data);
     }
 
@@ -778,11 +783,11 @@ class PayrollController extends Controller
     }
 
     function recommendpayrollByFinance($pdate,$message)
-    {   
-        
+    {
+
         $payrollMonth = $pdate;
         $state = 1;
-     
+
         if ($payrollMonth != "") {
             $empID = session('emp_id');
             $todate = date('Y-m-d');
@@ -812,11 +817,11 @@ class PayrollController extends Controller
 
     }
     function recommendpayrollByHr($pdate,$message)
-    {   
-        
+    {
+
         $payrollMonth = $pdate;
         $state = 3;
-       
+
         if ($payrollMonth != "") {
             $empID = session('emp_id');
             $todate = date('Y-m-d');
