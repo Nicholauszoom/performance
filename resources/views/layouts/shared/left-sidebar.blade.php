@@ -117,7 +117,8 @@
                         <i class="ph-bank"></i>
                         <span>Loan Management</span>
                     </a>
-                    <ul class="nav-group-sub collapse {{ ( request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') ) ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ ( request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') || request()->routeIs('bank-loans') ) ? 'show' : null }}">
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('bank-loans') ? 'active' : null  }}" href="{{ route('bank-loans') }}">Bank Loans</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.salary_advance') ? 'active' : null  }}" href="{{ route('flex.salary_advance') }}">Loan Seting</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.confirmed_loans') ? 'active' : null  }}" href="{{ route('flex.confirmed_loans') }}">Approved Loans</a></li>
                     </ul>

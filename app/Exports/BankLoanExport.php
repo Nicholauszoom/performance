@@ -12,7 +12,7 @@ class BankLoanExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return BankLoan::select("id", "employee_id", "product","amount")->get();
+        return BankLoan::select("employee_id", "product","amount","created_at")->get();
     }
 
         /**
@@ -22,6 +22,6 @@ class BankLoanExport implements FromCollection, WithHeadings
      */
     public function headings(): array
     {
-        return [ "employee_id", "product","amount"];
+        return [ "employee_id", "product","amount","created_at"];
     }
 }

@@ -26,16 +26,18 @@
                                             <form action="{{ route('loans.import') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
-                                                    <div class="col-md-9 mb-1">
+                                                    <div class="col-md-7 mb-1">
                                                         <input type="file" name="file" class="form-control" required>
                                                     </div>
-                                                    <div class="col-md-3">
+                                                    <div class="col-md-5">
                                                         <button class="btn btn-sm btn-block btn-main">
-                                                            <i class="fas fa-file-excel"></i>
+                                                            <i class="ph-file-csv"></i> 
                                                             Import Loans 
                                                         </button>
-                                                    </div>
-                                                    <div class="col-md-3">
+                                                        
+                                                    
+                                                        <a class="btn btn-info btn-sm btn-lock " href="{{ route('loans.export') }}"><i class="ph-file-csv"></i> EXPORT Loans</a>
+
                                                     </div>
                                                 </div>
                                                 
@@ -44,8 +46,7 @@
                                       
                                 </div>
                                 <div class="col-md-4">
-                                <a class="btn btn-success btn-sm float-end" href="{{ route('loans.export') }}">Export Loans</a>
-
+                               
                                 </div>
                             </div>
                           
@@ -62,30 +63,33 @@
                             @endif
                         </div>
 
-                        <table  id="datatable" class="table table-striped table-bordered datatable-basic">
-                            <thead>
-                                    <th>ID</th>
-                                    <th>Employee Id</th>
-                                    <th>Product</th>
-                                    <th>Amount</th>
-                                    <th>Date</th>
-                           
-                            </thead>
-
-
-                            <tbody>
-                                @foreach($loans as $loan)
-                                <tr>
-                                    <td>{{ $loan->id }}</td>
-                                    <td>{{ $loan->employee_id }}</td>
-                                    <th>{{ $loan->product }}</th>
-                                    <th>{{ $loan->amount }}</th>
-                                    <td>{{ $loan->created_at->toDayDateTimeString() }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-
+                        <div class="col-md-12">
+                            <table id="datatable" class="table table-striped table-bordered datatable-basic">
+                                <thead>
+                                        <th>ID</th>
+                                        <th>Employee Id</th>
+                                        <th>Product</th>
+                                        <th>Amount</th>
+                                        <th>Issued Date</th>
+                               
+                                </thead>
+    
+    
+                                <tbody>
+                                    @foreach($loans as $loan)
+                                    <tr>
+                                        <td>{{ $loan->id }}</td>
+                                        <td>{{ $loan->employee_id }}</td>
+                                        <td>{{ $loan->product }}</td>
+                                        <td>{{ $loan->amount }}</td>
+                                        <td>{{ $loan->created_at->toDayDateTimeString()}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+    
+                        </div>
+                     
                     </div>
                 </div>
 

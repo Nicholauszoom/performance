@@ -778,7 +778,7 @@ Route::middleware('auth')->group(function () {
 
 //bank loans routes
 Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
-    Route::get('/all-loans', 'index');
+    Route::get('/all-loans', 'index')->name('bank-loans');;
     Route::get('/loans-export', 'export')->name('loans.export');
     Route::post('/loans-import', 'import')->name('loans.import');
 });
