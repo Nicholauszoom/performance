@@ -14,6 +14,7 @@ use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\setting\BranchController;
+use App\Http\Controllers\Import\BankLoanController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -23,12 +24,12 @@ use App\Http\Controllers\AccessControll\RoleController;
 use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\Recruitment\RegisterController;
 use App\Http\Controllers\AccessControll\SystemController;
+use App\Http\Controllers\Import\ImportEmployeeController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Controllers\Import\ImportEmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -773,6 +774,13 @@ Route::middleware('auth')->group(function () {
     });
 
 
+});
+
+//bank loans routes
+Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
+    Route::get('/all-loans', 'index');
+    Route::get('/loans-export', 'export')->name('loans.export');
+    Route::post('/loans-import', 'import')->name('loans.import');
 });
 
 
