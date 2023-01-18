@@ -98,7 +98,9 @@ $rate = $row->rate;
     $position = $row->position_name;
     $department = $row->department_name;
     $branch = $row->branch_name;
+    $basic_salary = $row->basic_salary/$row->rate;
     $salary = $row->salary/$row->rate;
+    $pension2 = $row->pension2;
     $taxable_amount = $row->taxable_amount/$row->rate;
     $excess_added = $row->excess_added/$row->rate;
     $net_basic = $row->net_basic/$row->rate;
@@ -106,6 +108,7 @@ $rate = $row->rate;
     $pension_fund_abbrv = $row->pension_fund_abbrv;
     $membership_no = $row->membership_no;
     $bank = $row->bank_name;
+    $gross_salary = $row->gross;
     $account_no = $row->account_no;
     $hiredate = $row->hire_date;
     $payroll_month = $row->payroll_date;
@@ -224,7 +227,7 @@ $basic_pay = '
 <table width = "100%">
     <tr>
         <td width="500" align="left"><b>Basic Pay</b></td>
-        <td width="100" align="right">'.number_format($salary, 2).'</td>
+        <td width="100" align="right">'.number_format($basic_salary, 2).'</td>
     </tr></table>';
 
 $out = "<p><br>PAYMENTS/EARNINGS:";
@@ -279,6 +282,15 @@ $deduction = '
         <td width="500" align="left"><b>TAXABLE AMOUNT</b></td>
         <td width="100" align="right">'.number_format($taxable_amount, 2).'</td>
     </tr>
+    <tr>
+    <td width="500" align="left"><b>Gross AMOUNT</b></td>
+    <td width="100" align="right">'.number_format($gross_salary, 2).'</td>
+</tr>
+
+    <tr>
+    <td width="500" align="left"><b>Pensionable AMOUNT</b></td>
+    <td width="100" align="right">'.number_format($pension2, 2).'</td>
+</tr>
     <tr>
     <td width="500" align="left"><b>EXCESS ADDED AMOUNT</b></td>
     <td width="100" align="right">'.number_format($excess_added, 2).'</td>

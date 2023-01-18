@@ -4565,7 +4565,7 @@ class GeneralController extends Controller
             $data['child'] = "Allowances";
 
             return view('allowance.allowance', $data);
-            
+
         } else {
             echo "Unauthorized Access";
         }
@@ -4622,6 +4622,7 @@ class GeneralController extends Controller
     {
         if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['allowance'] = $this->flexperformance_model->allowance();
+            $data['currencies'] = $this->flexperformance_model->get_currencies();
             $data['overtimes'] = $this->flexperformance_model->overtime_allowances();
             $data['deduction'] = $this->flexperformance_model->deductions();
             $data['pension'] = $this->flexperformance_model->pension_fund();
@@ -4701,18 +4702,22 @@ class GeneralController extends Controller
         $mode = $request->input('policy');
         //$state = $request->input('state');
         $state = 1;
-
+        $rate = $this->flexperformance_model->get_rate($request->currency);
         $data = array(
 
             'name' => $name,
             'code' => $code,
-            'amount' => $amount,
+            'amount' => $amount*$rate,
             'percent' => $percent,
             'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
+            'currency'=>$request->currency,
+            'rate'=>$rate,
 
         );
+
+
         DB::table('deductions')->insert($data);
         echo "Record inserted successfully.<br/>";
         return redirect('flex/non_statutory_deductions');
@@ -4841,13 +4846,16 @@ class GeneralController extends Controller
 
             $arr = $request->input('option');
             $allowanceID = $request->input('allowanceID');
+
             if (sizeof($arr) < 1) {
                 echo "<p class='alert alert-warning text-center'>No Group Selected! Please Select Atlest One Employee</p>";
             } else {
 
                 foreach ($arr as $group) {
                     $groupID = $group;
+
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
+
                 }
                 if ($result == true) {
                     // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");

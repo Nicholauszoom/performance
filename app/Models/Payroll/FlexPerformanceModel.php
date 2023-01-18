@@ -1488,7 +1488,7 @@ function meals_deduction()
 
 	function get_allowance_group_in( $allowance)
 	{
-		$query = "SELECT DISTINCT  g.name as NAME, g.id as id,ea.* FROM groups g, emp_allowances ea  WHERE g.id = ea.group_name and ea.allowance = ".$allowance."";
+		$query = "SELECT DISTINCT  g.name as NAME, g.id as id FROM groups g, emp_allowances ea  WHERE g.id = ea.group_name and ea.group_name != 0 and ea.allowance = ".$allowance."";
 
 		return DB::select(DB::raw($query));
 	}

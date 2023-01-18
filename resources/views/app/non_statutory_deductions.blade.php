@@ -28,14 +28,14 @@
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ url('/flex/allowance')}}" class="nav-link" 
+                <a href="{{ url('/flex/allowance')}}" class="nav-link"
                     aria-selected="false" role="tab" tabindex="-1">
                     <i class="ph-list me-2"></i>
                     Allowance
                 </a>
             </li>
-        
-          
+
+
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
                     aria-selected="false" role="tab" tabindex="-1">
@@ -50,7 +50,7 @@
                   Non Statutory Deductions
               </a>
           </li>
-         
+
         </ul>
 
           <div class="clearfix"></div>
@@ -84,18 +84,18 @@
 
                     <tbody>
                       <?php
-                        foreach ($deduction as $row) { 
+                        foreach ($deduction as $row) {
                           //if($row->id==0) continue; // Skip the default group
-                          ?> 
+                          ?>
                         <tr id="domain<?php echo $row->id;?>">
                           <td width="1px"><?php echo $row->SNo; ?></td>
                           <td><?php echo $row->name; ?></td>
                           <td> <?php if($row->mode==1){ ?>
                               <span class="label label-success">Fixed Amount</span><br>
-                              <?php echo $row->amount; } else { ?>
+                              <?php echo $row->amount/$row->rate; } else { ?>
                               <span class="label label-success">Salary dependent</span><br>
                               <?php echo 100*($row->percent)."%"; } ?>
-                              
+
                           </td>
                           <td class="options-width">
                                       <?php  $par = $row->id."|2"; ?>
@@ -114,17 +114,17 @@
               <div class="card">
                 <div class="card-head px-2 py-2">
                   <h2>Add Deduction</h2>
-                  
+
                   <div class="clearfix"></div>
                 </div>
                 <div class="card-body">
                   <div id="resultSubmissionDeduction"></div>
                   <form id="addDeduction" method="post" autocomplete="off" class="form-horizontal form-label-left">
                   <div class="form-group">
-                      <label  for="first-name">Deduction Name 
+                      <label  for="first-name">Deduction Name
                       </label>
                       <div >
-                        <textarea required="" type="text" name="name" class="form-control col-md-7 col-xs-12"></textarea> 
+                        <textarea required="" type="text" name="name" class="form-control col-md-7 col-xs-12"></textarea>
                         <span class="text-danger"><?php //echo form_error("fname");?></span>
                       </div>
                     </div>
@@ -146,17 +146,29 @@
                       <div >
                         <input required="" id ="deduction_percentf" type="number" name="rate" min="0" max="99" step="0.1" placeholder="Percent (Less Than 100)" class="form-control col-md-7 col-xs-12">
                       </div>
-                    </div> 
+                    </div>
                      <div id ="amount" class="form-group">
                       <label  for="first-name">Amount
                       </label>
                       <div >
-                        <input required="" id ="deduction_amountf" type="number" step="1" placeholder="Fixed Amount" name="amount" class="form-control col-md-7 col-xs-12">
+
+                        <input required="" id ="deduction_amountf" type="number" step="any" placeholder="Fixed Amount" name="amount" class="form-control col-md-7 col-xs-12">
                         <span class="text-danger"><?php //echo form_error("fname");?></span>
                       </div>
-                    </div> 
+                      <label class="form-label">Currency </label>
+                      <div class="input-group">
+                          <select required name="currency" class="select_group form-control select" data-width="1%">
+                              <option selected disabled>Select Currency</option>
+                              <?php foreach ($currencies as $row) { ?>
+                                  <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
+                                  <?php } ?>
+
+                          </select>
+
+                      </div>
+                    </div>
                     <div class="ln_solid"></div>
-                    <div class="form-group">
+                    <div class="form-group py-3">
                       <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                         <button type="reset" class="btn btn-warning">Cancel</button>
                         <button  class="btn btn-main">Submit</button>
@@ -166,7 +178,7 @@
                   </form>
                 </div>
               </div>
-            </div>              
+            </div>
           </div>
         </div>
       </div>
@@ -185,9 +197,9 @@
 <script>
 
     jQuery(document).ready(function($){
-      
+
         $('#policy').change(function () {
-            
+
         $("#policy option:selected").each(function () {
             var value = $(this).val();
             if(value == "1") {
@@ -195,52 +207,52 @@
                 // $('#percent').hide();
                 $("#percentf").attr("disabled", "disabled");
                 $("#amountf").removeAttr("disabled");
-               
+
             } else if(value == "2") {
                 // $('#percent').show();
                 // $('#amount').hide();
                 $("#amountf").attr("disabled", "disabled");
                 $("#percentf").removeAttr("disabled");
-               
+
             }
-    
+
         });
-      }); 
-    
-    
+      });
+
+
     });
     </script>
     <script>
-    
+
     jQuery(document).ready(function($){
-      
+
         $('#deduction_policy').change(function () {
-            
+
         $("#deduction_policy option:selected").each(function () {
             var value = $(this).val();
             if(value == "1") {
                 $("#deduction_percentf").attr("disabled", "disabled");
                 $("#deduction_amountf").removeAttr("disabled");
-               
+
             } else if(value == "2") {
                 $("#deduction_amountf").attr("disabled", "disabled");
                 $("#deduction_percentf").removeAttr("disabled");
-               
+
             }else if(value == "3") {
                 $("#deduction_amountf").attr("disabled", "disabled");
                 $("#deduction_percentf").removeAttr("disabled");
-               
+
             }
-    
+
         });
-      }); 
-    
-    
+      });
+
+
     });
     </script>
     <script>
         $('#addAllowance').submit(function(e){
-            e.preventDefault(); 
+            e.preventDefault();
                  $.ajax({
                      url:"{{ route('flex.addAllowance') }}",
                      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -255,18 +267,18 @@
              $('#resultSubmission').fadeOut('fast', function(){
                   $('#resultSubmission').fadeIn('fast').html(data);
                 });
-        
+
           $('#addAllowance')[0].reset();
             })
             .fail(function(){
-         alert('FAILED, Check Your Network Connection and Try Again! ...'); 
+         alert('FAILED, Check Your Network Connection and Try Again! ...');
             });
-        }); 
+        });
     </script>
-    
+
     <script>
         $('#addOvertime').submit(function(e){
-            e.preventDefault(); 
+            e.preventDefault();
                  $.ajax({
                      url:"{{ route('flex.addOvertimeCategory') }}",
                      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -281,17 +293,17 @@
               $('#resultOvertimeSubmission').fadeOut('fast', function(){
                   $('#resultOvertimeSubmission').fadeIn('fast').html(data);
                 });
-        
+
               $('#addOvertime')[0].reset();
             })
             .fail(function(){
-         alert('FAILED, Check Your Network Connection and Try Again! ...'); 
+         alert('FAILED, Check Your Network Connection and Try Again! ...');
             });
-        }); 
+        });
     </script>
     <script>
         $('#addDeduction').submit(function(e){
-            e.preventDefault(); 
+            e.preventDefault();
                  $.ajax({
                      url:"{{ route('flex.addDeduction') }}",
                      headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -306,12 +318,12 @@
              $('#resultSubmissionDeduction').fadeOut('fast', function(){
                   $('#resultSubmissionDeduction').fadeIn('fast').html(data);
                 });
-        
+
           $('#addDeduction')[0].reset();
             })
             .fail(function(){
-         alert('FAILED, Check Your Network Connection and Try Again! ...'); 
+         alert('FAILED, Check Your Network Connection and Try Again! ...');
             });
-        }); 
+        });
     </script>
 @endpush

@@ -160,7 +160,10 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                {{-- <th>Amount</th>
+                                <th>Mode</th>
                                 <th>Amount</th>
+                                <th>Percent</th> --}}
                                 <th>
                                     <a title="Remove Selected" class="me-5">
                                         <button type="submit"  name="removeSelected"  class="btn  btn-danger btn-xs">
@@ -175,7 +178,10 @@
                             <?php foreach ($groupin as $row) { ?>
                             <tr>
                                 <td><?php echo $row->NAME; ?></td>
-                                <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
+                                {{-- <td><?php echo $row->amount/$row->rate.' '.$row->currency; ?></td>
+                                <td>{{ $row->mode == 1?'Fixed Amount':'Percent' }}</td>
+                                <td>{{ $row->amount != null?$row->amount/$row->rate.' '.$row->currency:'-' }}</td>
+                                <td>{{ $row->percent != null?($row->percent*100)."%" :'-' }}</td> --}}
                                 <td>
                                     <label class="containercheckbox">
                                         <input type="checkbox" name="option[]" value="<?php echo $row->id; ?>">
@@ -253,7 +259,7 @@
 
                             <label class="form-label">Amount</label>
                             <div class="input-group">
-                                <input required="" type="number" name="amount" step ="1" min="1" max="10000000" value="<?php echo $amount; ?>" class="form-control">
+                                <input required="" type="number" name="amount" step ="any" min="1" max="10000000" value="<?php echo $amount; ?>" class="form-control">
                                 <button  class="btn btn-main">Update Amount</button>
                             </div>
                         </div>
@@ -312,7 +318,7 @@
                             @if ($mode == 1)
                             <label class="form-label">Amount</label>
                             <div class="input-group">
-                                <input required type="number" name="amount" step ="1" min="1" max="10000000"  class="form-control">
+                                <input required type="number" name="amount" step ="any" min="1" max="10000000"  class="form-control">
 
                             </div>
                             @else
@@ -380,7 +386,7 @@
                         <tbody>
                             <?php foreach ($employeein as $row) { ?>
                             <tr>
-                                
+
                                 <td><?php echo $row->SNo; ?></td>
                                 <td><?php echo $row->NAME; ?></td>
                                 <td>{{ $row->mode == 1?'Fixed Amount':'Percent' }}</td>

@@ -741,7 +741,7 @@ and e.contract_type = 2 and payroll_date LIKE '%".$datecheck."%' ";
     }
 
     function payslip_info_backup($empID, $payroll_month_end, $payroll_month, $year_back ){
-        $query = "SELECT pl.empID as empID,CONCAT(e.fname,' ', e.mname,' ', e.lname) as name,
+        $query = "SELECT pl.empID as empID,CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, e.salary as basic_salary,
        p.name as position,d.name as department, e.hire_date,pl.*,
 
   (SELECT SUM(plg.pension_employee) FROM  payroll_logs plg WHERE plg.empID = e.emp_id and e.emp_id = '".$empID."' and plg.payroll_date BETWEEN e.hire_date and '".$payroll_month_end."' ) as pension_employee_todate,
@@ -778,6 +778,7 @@ return DB::select(DB::raw($query));
     function payslip_info($empID, $payroll_month_end, $payroll_month){
         $query = "SELECT
     pl.empID as empID,
+    e.salary as basic_salary,
     pl.salary as net_basic,
     e.old_emp_id as oldID,
     e.rate as rate,
