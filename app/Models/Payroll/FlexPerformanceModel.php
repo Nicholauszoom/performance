@@ -1514,6 +1514,19 @@ function meals_deduction()
     	return $row->members;
 	}
 
+    public function check_termination_payroll_date($date){
+
+        $row = DB::table('payroll_logs')->where('payroll_date', 'like', '%' . $date . '%')->select('id');
+        
+
+        if($row->count() > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
 
 
 	public function assign_allowance($data)

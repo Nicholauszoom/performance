@@ -387,55 +387,55 @@
                                                         <br><br>
 
 
-                                                        <?php// if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) { ?>
+                                                        <?php if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) { ?>
 
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="hrapproveOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-main btn-xs"><i
-                                                                    class="fa fa-check"></i></button>
+                                                                    class="ph-check"></i></button>
                                                         </a>
 
                                                         <a href="javascript:void(0)" title="Cancel"
                                                             class="icon-2 info-tooltip"
                                                             onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-danger btn-xs"><i
-                                                                    class="fa fa-times-circle"></i></button>
+                                                                    class="ph-x"></i></button>
                                                         </a>
 
 
-                                                        <?php// }
-                                                              //  if ($row->status == 3 && session('recom_paym')) { ?>
+                                                        <?php }
+                                                                if ($row->status == 3 && session('recom_paym')) { ?>
                                                         <a href="javascript:void(0)" title="Recommend"
                                                             class="icon-2 info-tooltip"
                                                             onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-main btn-xs"><i
-                                                                    class="fa fa-check"></i></button>
+                                                                    class="ph-check"></i></button>
                                                         </a>
 
                                                         <a href="javascript:void(0)" title="Cancel"
                                                             class="icon-2 info-tooltip"
                                                             onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-danger btn-xs"><i
-                                                                    class="fa fa-times-circle"></i></button>
+                                                                    class="ph-x"></i></button>
                                                         </a>
 
-                                                        <?php// }
-                                                               // if ($row->status == 4 && session('appr_paym')) { ?>
+                                                        <?php }
+                                                                if ($row->status == 4 && session('appr_paym')) { ?>
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="approveOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-success btn-xs"><i
-                                                                    class="fa fa-check"></i></button>
+                                                                    class="ph-check"></i></button>
                                                         </a>
 
                                                         <a href="javascript:void(0)" title="Cancel"
                                                             class="icon-2 info-tooltip"
                                                             onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-danger btn-xs"><i
-                                                                    class="fa fa-times-circle"></i></button>
+                                                                    class="ph-x"></i></button>
                                                         </a>
-                                                        <?php// } ?>
+                                                        <?php } ?>
 
 
                                                     </td>

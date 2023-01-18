@@ -7376,7 +7376,7 @@ public function addTermination()
     $data['employees'] = $this->flexperformance_model->Employee();
     $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
-  
+
     // }
     $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
     $data['parent'] = 'Workforce';
@@ -7422,7 +7422,7 @@ public function saveTermination(Request $request)
         $termination->salaryEnrollment=$request->salaryEnrollment;
         $termination->normalDays=$request->normalDays;
         $termination->publicDays=$request->publicDays;
-        $termination->noticePay=$request->noticePay;        
+        $termination->noticePay=$request->noticePay;
         $termination->leavePay=$request->leavePay;
         $termination->livingCost=$request->livingCost;
         $termination->houseAllowance=$request->houseAllowance;
@@ -7439,7 +7439,27 @@ public function saveTermination(Request $request)
         $termination->otherDeductions=$request->otherDeductions;
         $termination->otherPayments=$request->otherPayments;
         $termination->save();
-        $msg="Employee Termination Benefits have been saved successfully";
+        // $msg="Employee Termination Benefits have been saved successfully";
+        //dd($request->terminationDate);
+        // $calendar = $request->terminationDate;
+        // $datewell = explode("-", $calendar);
+        // $mm = $datewell[1];
+        // $dd = $datewell[0];
+        // $yyyy = $datewell[2];
+        // $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+        // $payroll_month = $yyyy . "-" . $mm;
+        // $empID = auth()->user()->emp_id;
+        // $today = date('Y-m-d');
+
+        // dd($payroll_month);
+
+//         //check whether if after payroll or before payroll
+//         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
+//         if($check_termination_date == true){
+// dd('yes');
+//         }else{
+// dd('no');
+//         }
         return redirect('flex/termination')->with('status', $msg);
 
 }

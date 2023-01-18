@@ -278,23 +278,9 @@ $deduction = '
         <td width="100" align="right">'.number_format($pension_employee, 2).'</td>
     </tr>
 
-    <tr>
-        <td width="500" align="left"><b>TAXABLE AMOUNT</b></td>
-        <td width="100" align="right">'.number_format($taxable_amount, 2).'</td>
-    </tr>
-    <tr>
-    <td width="500" align="left"><b>Gross AMOUNT</b></td>
-    <td width="100" align="right">'.number_format($gross_salary, 2).'</td>
-</tr>
+  
 
-    <tr>
-    <td width="500" align="left"><b>Pensionable AMOUNT</b></td>
-    <td width="100" align="right">'.number_format($pension2, 2).'</td>
-</tr>
-    <tr>
-    <td width="500" align="left"><b>EXCESS ADDED AMOUNT</b></td>
-    <td width="100" align="right">'.number_format($excess_added, 2).'</td>
-</tr>
+
 
     <tr>
         <td width="500" align="left"><b>PAYE AMOUNT</b></td>

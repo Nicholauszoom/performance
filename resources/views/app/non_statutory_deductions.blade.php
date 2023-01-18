@@ -92,7 +92,7 @@
                           <td><?php echo $row->name; ?></td>
                           <td> <?php if($row->mode==1){ ?>
                               <span class="label label-success">Fixed Amount</span><br>
-                              <?php echo $row->amount/$row->rate; } else { ?>
+                              <?php echo $row->amount/$row->rate."".$row->currency; } else { ?>
                               <span class="label label-success">Salary dependent</span><br>
                               <?php echo 100*($row->percent)."%"; } ?>
 
