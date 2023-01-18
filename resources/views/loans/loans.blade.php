@@ -21,33 +21,33 @@
                                 <h5 class="h5 text-muted">All Bank Loans</h5>
                             </div>
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                    
                                             <form action="{{ route('loans.import') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
-                                                    <div class="col-md-7 mb-1">
+                                                    <div class="col-md-6 mb-1">
                                                         <input type="file" name="file" class="form-control" required>
                                                     </div>
-                                                    <div class="col-md-5">
-                                                        <button class="btn btn-sm btn-block btn-main">
+                                                    <div class="col-md-6">
+                                                        <button class="btn btn-sm btn-main">
                                                             <i class="ph-file-csv"></i> 
-                                                            Import Loans 
+                                                            IMPORT Loans 
                                                         </button>
                                                         
                                                     
-                                                        <a class="btn btn-info btn-sm btn-lock " href="{{ route('loans.export') }}"><i class="ph-file-csv"></i> EXPORT Loans</a>
+                                                        <a class="btn btn-info btn-sm " href="{{ route('loans.export') }}"><i class="ph-file-csv"></i> EXPORT Loans</a>
 
                                                     </div>
                                                 </div>
                                                 
                                                 
                                             </form>
-                                      
+                                            <div class="col-md-4">
+                                                <a href="{{ route('loans.template') }}" class=""> <span class="badge bg-main"> Get Excel Template</span></a>
+                                                 </div>
                                 </div>
-                                <div class="col-md-4">
                                
-                                </div>
                             </div>
                           
 
@@ -66,11 +66,12 @@
                         <div class="col-md-12">
                             <table id="datatable" class="table table-striped table-bordered datatable-basic">
                                 <thead>
-                                        <th>ID</th>
+                                        <th>LoanID</th>
                                         <th>Employee Id</th>
                                         <th>Product</th>
                                         <th>Amount</th>
                                         <th>Issued Date</th>
+                                        <th>Options</th>
                                
                                 </thead>
     
@@ -83,6 +84,13 @@
                                         <td>{{ $loan->product }}</td>
                                         <td>{{ $loan->amount }}</td>
                                         <td>{{ $loan->created_at->toDayDateTimeString()}}</td>
+                                        <td>
+                                            <a  href=""  title="Edit Loan">
+                                                <button type="button" class="btn btn-danger btn-xs" disabled><i class="ph-trash"></i></button>
+                                            </a>
+                            
+                                     
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -101,6 +109,111 @@
 @endsection
 
 @push('footer-script')
+
+<script type="text/javascript">
+
+
+        /*
+                    check if form submitted is for creating or updating
+                */
+                $("#save-loan-btn").click(function(event ){
+                    event.preventDefault();
+                    if($("#update_id").val() == null || $("#update_id").val() == "")
+                    {
+                        storeLoan();
+                    } else {
+                        updateLoan();
+                    }
+                })
+             
+                /*
+                    show modal for creating a record and 
+                    empty the values of form and remove existing alerts
+                */
+                function createLoan()
+                {
+                    $("#alert-div").html("");
+                    $("#error-div").html("");   
+                    $("#update_id").val("");
+                    $("#employee_d").val("");
+                    $("#product").val("");
+                    $("#created_at").val("");
+                    $("#form-modal").modal('show'); 
+                }
+             
+    
+                /*
+                    submit the form and will be stored to the database
+                */
+                function storeLoan()
+                {   
+                    $("#save-loan-btn").prop('disabled', true);
+                    let url = $('meta[name=app-url]').attr("content") + "/admin/announcements";
+                    let data = {
+                        employee_id: $("employee_id").val(),
+                        product: $("#product").val(),
+                        amount: $("#amount").val(),
+                        created_at: $("#created_at").val(),
+                    };
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: url,
+                        type: "POST",
+                        data: data,
+                        success: function(response) {
+                            $("#save-announcement-btn").prop('disabled', false);
+                            let successHtml = '<div class="alert alert-success" role="alert">Announcement Was Created Successfully</div>';
+                            $("#alert-div").html(successHtml);
+                            $("#tite").val("");
+                            $("#body").val("");
+                            $("image").val("");
+                            showAllAnnouncements();
+                            $("#form-modal").modal('hide');
+                        },
+                        error: function(response) {
+                            $("#save-announcement-btn").prop('disabled', false);
+             
+                            /*
+                show validation error
+                            */
+                            if (typeof response.responseJSON.errors !== 'undefined') 
+                            {
+                let errors = response.responseJSON.errors;
+                let descriptionValidation = "";
+                if (typeof errors.description !== 'undefined') 
+                                {
+                                    descriptionValidation = '<li>' + errors.description[0] + '</li>';
+                                }
+                let titleValidation = "";
+                if (typeof errors.title !== 'undefined') 
+                                {
+                                    titleValidation = '<li>' + errors.title[0] + '</li>';
+                                }
+                let bodyValidation = "";
+                if (typeof errors.body !== 'undefined') 
+                                {
+                                    bodyValidation = '<li>' + errors.body[0] + '</li>';
+                                }
+                          let fileValidation = "";
+                if (typeof errors.image !== 'undefined') 
+                                {
+                                    fileValidation = '<li>' + errors.image[0] + '</li>';
+                                }
+                 
+                let errorHtml = '<div class="alert alert-danger" role="alert">' +
+                    '<b>Validation Error!</b>' +
+                    '<ul>' + titleValidation + bodyValidation + attachmentValidation + '</ul>' +
+                '</div>';
+                $("#error-div").html(errorHtml);        
+            }
+                        }
+                    });
+                }
+             
+    
+    </script>
     <script>
         jQuery(document).ready(function($) {
 

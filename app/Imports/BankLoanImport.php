@@ -8,11 +8,20 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class BankLoanImport implements ToCollection, WithHeadingRow
+class BankLoanImport implements ToCollection, WithHeadingRow, WithValidation
 {
+
+    use Importable;
+    public function startRow(): int
+    {
+        return 4;
+    }
+ 
     /**
     * @param Collection $collection
     *
@@ -55,15 +64,30 @@ class BankLoanImport implements ToCollection, WithHeadingRow
 
 
         }
+
+     
+        public function rules(): array
+        {
+            return [
+                'created_at' => 'required',
+                'product' => 'required',
+            ];
+        }
+
+        public function customValidationMessages()
+    {
+        return [
+            'created_at.*' => 'Please check the template',
+            'product.*' => 'Please check the template',
+        ];
     }
-        // return new BankLoan([
-        //         'employee_id' => $row['employee_id'], 
-        //         'product'=> $row['product'],
-        //         'amount' => $row['amount'], 
-                
-        //         'added_by' =>1, 
-                
-          
-        // ]);
-    // }
-// }
+
+    public function customValidationAttributes()
+    {
+        return [
+            'created_at' => 'Issued Date',
+            'product' => 'Product',
+        ];
+    }
+    }
+       

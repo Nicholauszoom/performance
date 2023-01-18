@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use App\Models\User;
+use App\Models\Employee;
+use App\Models\AuditTrail;
 use App\Helpers\SysHelpers;
+use App\Models\Termination;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Notifications\RegisteredUser;
+use App\Models\FinancialLogs;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
@@ -16,12 +19,11 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\RegisteredUser;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\AccessControll\Departments;
-use App\Models\AuditTrail;
-use App\Models\FinancialLogs;
 use App\Models\Payroll\FlexPerformanceModel;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
 class GeneralController extends Controller
@@ -7253,5 +7255,107 @@ class GeneralController extends Controller
             echo "<p class='alert alert-danger text-center'>FAILED: Failed To Cancel Registration, Please Try Again</p>";
         }
     }
+
+
+// start of terminations functions
+
+
+public function termination()
+{
+
+    $data['title'] = "Overtime";
+    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+    $data['employees'] = $this->flexperformance_model->Employee();
+    $terminations= Termination::all();
+    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+
+    $i=1;
+    // }
+    $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'Termination';
+
+    return view('workforce-management.termination', $data,compact('terminations','i'));
+
+}
+
+public function addTermination()
+{
+
+    $data['title'] = "Overtime";
+    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+    $data['employees'] = $this->flexperformance_model->Employee();
+    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+
+  
+    // }
+    $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'AddTermination';
+
+    return view('workforce-management.add-termination', $data);
+
+}
+
+public function saveTermination(Request $request)
+{
+
+    request()->validate(
+        [
+        'employeeID' => 'required',
+        'terminationDate' => 'required',
+        'reason' => 'required',
+        'salaryEnrollment' => 'required',
+        'normalDays' => 'required',
+        'publicDays' => 'required',
+        'noticePay' => 'required',
+        'leavePay' => 'required',
+        'livingCost' => 'required',
+        'houseAllowance' => 'required',
+        'utilityAllowance' => 'required',
+        'tellerAllowance' => 'required',
+        'serevancePay' => 'required',
+        'leaveStand' => 'required',
+        'arrears' => 'required',
+        'exgracia' => 'required',
+        'bonus' => 'required',
+        'longServing' => 'required',
+        'salaryAdvance' => 'required',
+        'otherDeductions' => 'nullable',
+        'otherPayments' => 'nullable',
+         ]
+        );
+
+        $termination = new Termination();
+        $termination->employeeID=$request->employeeID;
+        $termination->terminationDate=$request->terminationDate;
+        $termination->reason=$request->reason;
+        $termination->salaryEnrollment=$request->salaryEnrollment;
+        $termination->normalDays=$request->normalDays;
+        $termination->publicDays=$request->publicDays;
+        $termination->noticePay=$request->noticePay;        
+        $termination->leavePay=$request->leavePay;
+        $termination->livingCost=$request->livingCost;
+        $termination->houseAllowance=$request->houseAllowance;
+        $termination->utilityAllowance=$request->utilityAllowance;
+        $termination->leaveAllowance=$request->leaveAllowance;
+        $termination->tellerAllowance=$request->tellerAllowance;
+        $termination->serevancePay=$request->serevancePay;
+        $termination->leaveStand=$request->leaveStand;
+        $termination->arrears=$request->arrears;
+        $termination->exgracia=$request->exgracia;
+        $termination->bonus=$request->bonus;
+        $termination->longServing=$request->longServing;
+        $termination->salaryAdvance=$request->salaryAdvance;
+        $termination->otherDeductions=$request->otherDeductions;
+        $termination->otherPayments=$request->otherPayments;
+        $termination->save();
+        $msg="Employee Termination Benefits have been saved successfully";
+        return redirect('flex/termination')->with('status', $msg);
+
+}
+
+// end of terminations functions
+
 
 }

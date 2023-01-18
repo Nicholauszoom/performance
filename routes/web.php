@@ -246,6 +246,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/activatePosition','activatePosition')->name('flex.activatePosition');
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
         Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
+
         Route::any('/overtime','overtime')->name('flex.overtime');
         Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
         Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
@@ -262,6 +263,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
         Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
         Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
+
+        // start of termination routes
+        Route::any('/termination','termination')->name('flex.termination');
+        Route::any('/add-termination','addTermination')->name('flex.addTermination');
+        Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
+        Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
+        // end of termination routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
@@ -781,6 +789,7 @@ Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(f
     Route::get('/all-loans', 'index')->name('bank-loans');;
     Route::get('/loans-export', 'export')->name('loans.export');
     Route::post('/loans-import', 'import')->name('loans.import');
+    Route::get('/loans-template', 'template')->name('loans.template');
 });
 
 
