@@ -19,12 +19,14 @@
                         <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
                     </div>
                     <div class="col-md-9">
+                        <h4 class="text-end text-secondary font-weight-bolder" style="font-weight:bolder;">Terminal Benefit</h4>
                         <h4>AFRICAN BANKING CORPORATION</h4>
                         <h4>P.O. BOX 31</h4>
                         <h4>DAR ES SALAAM</h4>
+                        
                     </div>
                     <div class="col-md-6">
-
+                        
                     </div>
                     <div class="col-md-6">
                         <div class="row">
@@ -197,6 +199,39 @@
         </div>
         </div>
         
+
+        <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+            <div class="col-md-3">
+                <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
+            </div>
+            <div class="col-md-9">
+                <h4 class="text-end text-secondary font-weight-bolder" style="font-weight:bolder;">Terminal Benefit</h4>
+                <h4>AFRICAN BANKING CORPORATION</h4>
+                <h4>P.O. BOX 31</h4>
+                <h4>DAR ES SALAAM</h4>
+                
+            </div>
+            <div class="col-md-6">
+                
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Employment Date</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ $termination->employee->created_at}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Termination Date</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{{ $termination->terminationDate}}</p>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
                 
             </div>
         </div>
