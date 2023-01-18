@@ -196,12 +196,12 @@
                     </ul>
                 </li>
 
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a href="{{ route('flex.payrollLogs') }}" class="nav-link {{ request()->routeIs('flex.payrollLogs') ? 'active' : null }}">
                         <i class="ph-clipboard-text"></i>
                         <span>Payroll Logs</span>
                     </a>
-                </li> --}}
+                </li>
 
 
 

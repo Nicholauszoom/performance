@@ -76,6 +76,7 @@
                             </div>
                         </form>
                     </div>
+
                 </div>
 
                 <div class="card-body">
@@ -116,7 +117,7 @@
                             </tbody>
                         </table>
 
-                        <div class="form-group">
+                        <div class="form-group mt-3">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                                 <button  class="btn btn-warning">Remove Selected</button>
                             </div>
@@ -129,59 +130,61 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>All Employees </h2><br>
-                    <small><b>Mark Employees to add them in this Group</b></small>
+                    <h5 class="text-main">All Employees </h5>
+                    <p><b>Mark Employees to add them in this Group</b></p>
+                </div>
 
-              <div class="clearfix"></div>
+                <div class="card-body">
+                    <?php echo session("notegroup");  ?>
+                    <div id="feedBackAdd"></div>
+
+                    <form id="addToGroup" method="post">
+                    @csrf
+                        <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
+                        <input type="text" name="groupName" value="<?php echo $groupName; ?>" class="form-control">
+
+                        <table  id="datatable-keytable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Mark</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                <?php
+                                // if ($department->num_rows() > 0){
+                                foreach ($nonmembers as $row) { ?>
+                                <tr>
+                                    <td width="1px"><?php echo $row->SNo; ?></td>
+                                    <td><?php echo $row->NAME; ?></td>
+                                    <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
+
+                                    <td class="options-width">
+                                    <label class="containercheckbox">
+                                    <input type="checkbox" name="option[]" value="<?php echo $row->ID; ?>">
+                                    <span class="checkmark"></span>
+                                    </label>
+
+                                    </td>
+                                    </td>
+                                </tr>
+                                <?php } //} ?>
+                            </tbody>
+                        </table>
+
+                        <div class="form-group mt-3">
+                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                <button  class="btn btn-success">Add Selected</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-body">
-             <?php echo session("notegroup");  ?>
-             <div id="feedBackAdd"></div>
-              <form id="addToGroup" method="post">
-              @csrf
-              <input type="text" name="groupID" hidden="" value="<?php echo $groupID; ?>">
-              <table  id="datatable-keytable" class="table table-striped table-bordered">
-                <thead>
-                  <tr>
-                    <th>S/N</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Mark</th>
-                  </tr>
-                </thead>
-
-
-                <tbody>
-                  <?php
-                  // if ($department->num_rows() > 0){
-                    foreach ($nonmembers as $row) { ?>
-                    <tr>
-                      <td width="1px"><?php echo $row->SNo; ?></td>
-                      <td><?php echo $row->NAME; ?></td>
-                      <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-
-                      <td class="options-width">
-                     <label class="containercheckbox">
-                     <input type="checkbox" name="option[]" value="<?php echo $row->ID; ?>">
-                      <span class="checkmark"></span>
-                    </label>
-
-                     </td>
-                     </td>
-                      </tr>
-                    <?php } //} ?>
-                </tbody>
-              </table>
-              <div class="form-group">
-                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <button  class="btn btn-success">Add Selected</button>
-                  </div>
-              </div>
-                  </form>
-            </div>
-          </div>
         </div>
-        <!-- Groups -->
     </div>
 </div>
 
@@ -264,30 +267,35 @@
 
 <script type="text/javascript">
     $('#addToGroup').submit(function(e){
-        if (confirm("Are You Sure You Want To Add The selected Employee(s) Into  This Group?") == true ) {
-        e.preventDefault();
-             $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/addEmployeeToGroup",
-                 type:"post",
-                 data:new FormData(this),
-                 processData:false,
-                 contentType:false,
-                 cache:false,
-                 async:false
-             })
-        .done(function(data){
-         $('#feedBackAdd').fadeOut('fast', function(){
-              $('#feedBackAdd').fadeIn('fast').html(data);
-            });
 
-     setTimeout(function(){// wait for 5 secs(2)
-           location.reload(); // then reload the page.(3)
-      }, 2000);
-        })
-        .fail(function(){
-     alert('Update Failed!! ...');
-        });
-    }
+        if (confirm("Are You Sure You Want To Add The selected Employee(s) Into  This Group?") == true ) {
+            e.preventDefault();
+            $.ajax({
+                url:"<?php echo  url(''); ?>/flex/addEmployeeToGroup",
+                type:"post",
+                data:new FormData(this),
+                processData:false,
+                contentType:false,
+                cache:false,
+                async:false
+            })
+            .done(function(data){
+                $('#feedBackAdd').fadeOut('fast', function(){
+                    $('#feedBackAdd').fadeIn('fast').html(data);
+                });
+
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 2000);
+            })
+            .fail(function(){
+                new Noty({
+                    text: 'Update Failed!! ....',
+                    type: 'error'
+                }).show();
+            });
+        }
+
     });
 
     $('#updateGroup').on('submit',function (e) {

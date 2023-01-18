@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Employee Add'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>

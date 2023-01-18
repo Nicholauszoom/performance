@@ -1310,42 +1310,40 @@ function getMeaslById($deductionID)
 
 	function updateMeals($updates, $deductionID)
 	{
-		DB::table('meals_deduction')->where('id', $deductionID)
-		->update($updates);
+		DB::table('meals_deduction')->where('id', $deductionID)->update($updates);
 		return true;
 
 	}
 
-	function get_deduction_group_in( $deduction)
+	public function get_deduction_group_in($deduction)
 	{
 		$query = "SELECT DISTINCT  g.name as NAME, g.id as id FROM groups g, emp_deductions ed  WHERE g.id = ed.group_name and ed.deduction = ".$deduction."";
-
 		return DB::select(DB::raw($query));
 	}
 
-	function assign_deduction($data)
+	public function assign_deduction($data)
 	{
 		DB::table('emp_deductions')->insert($data);
 		return true;
-
 	}
 
 
-   public function remove_individual_deduction($empID, $deductionID)
+    public function remove_individual_deduction($empID, $deductionID)
     {
         DB::table('emp_deductions')->where('empID', $empID)
-        ->where('group_name', 0)
-        ->where('deduction', $deductionID)
-        ->delete();
+            ->where('group_name', 0)
+            ->where('deduction', $deductionID)
+            ->delete();
         return true;
     }
 
 
-   public function remove_group_deduction($groupID, $deductionID)
+    public function remove_group_deduction($groupID, $deductionID)
     {
 		DB::table('emp_deductions')->where('group_name', $groupID)
-        ->where('deduction', $deductionID)
-        ->delete();
+            ->where('deduction', $deductionID)
+            ->delete();
+
         return true;
     }
 
@@ -1518,11 +1516,10 @@ function meals_deduction()
 
 
 
-	function assign_allowance($data)
+	public function assign_allowance($data)
 	{
 		DB::table('emp_allowances')->insert($data);
 		return true;
-
 	}
 
 	function employee_allowance($allowance) {
@@ -2940,7 +2937,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 		return DB::select(DB::raw($query));
 	}
 
-	function get_group_deductions($groupID)
+	public function get_group_deductions($groupID)
 	{
 		$query = "SELECT DISTINCT deduction FROM emp_deductions WHERE group_name=".$groupID."";
 
