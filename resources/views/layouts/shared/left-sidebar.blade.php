@@ -38,13 +38,13 @@
                 </li>  --}}
 
 
-                <li class="nav-item nav-item-submenu {{ (request()->routeIs('flex.employee') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ) ? 'nav-item-expand nav-item-open' : null  }}">
+                <li class="nav-item nav-item-submenu {{ (request()->routeIs('flex.employee') ||request()->routeIs('flex.addTermination')|| request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime')||request()->routeIs('flex.termination') || request()->routeIs('.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ) ? 'nav-item-expand nav-item-open' : null  }}">
                     <a href="#" class="nav-link">
                         <i class="ph-users-three"></i>
                         <span>Workforce Management</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{  (request()->routeIs('flex.employee') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ) ? 'show' : null  }}">
+                    <ul class="nav-group-sub collapse {{  (request()->routeIs('flex.employee') || request()->routeIs('flex.inactive_employee') ||request()->routeIs('flex.termination') ||request()->routeIs('flex.addTermination') || request()->routeIs('.termination')|| request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ) ? 'show' : null  }}">
                         @if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp'))
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('flex.employee') ? 'active' : null  }}" href="{{ route('flex.employee') }}">
@@ -55,6 +55,9 @@
                         @if (session('mng_emp') || session('appr_emp'))
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('flex.inactive_employee') ? 'active' : null  }}" href="{{ route('flex.inactive_employee') }}">Suspended Employees</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link {{ request()->routeIs('flex.termination') || request()->routeIs('flex.addTermination') ? 'active' : null  }}" href="{{ route('flex.termination') }}">Employee Termination</a>
                             </li>
                         @endif
 
@@ -68,6 +71,7 @@
 
                         @if (session('mng_emp'))
                             <li class="nav-item {{ request()->routeIs('flex.transfers') ? 'active' : null  }}"><a class="nav-link" href="{{ route('flex.transfers') }}">Employee Approval</a></li>
+                         
                         @endif
                     </ul>
                 </li>
@@ -117,7 +121,8 @@
                         <i class="ph-bank"></i>
                         <span>Loan Management</span>
                     </a>
-                    <ul class="nav-group-sub collapse {{ ( request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') ) ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ ( request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') || request()->routeIs('bank-loans') ) ? 'show' : null }}">
+                        <li class="nav-item"><a class="nav-link {{ request()->routeIs('bank-loans') ? 'active' : null  }}" href="{{ route('bank-loans') }}">Bank Loans</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.salary_advance') ? 'active' : null  }}" href="{{ route('flex.salary_advance') }}">Loan Seting</a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.confirmed_loans') ? 'active' : null  }}" href="{{ route('flex.confirmed_loans') }}">Approved Loans</a></li>
                     </ul>

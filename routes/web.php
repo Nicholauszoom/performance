@@ -14,6 +14,7 @@ use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\setting\BranchController;
+use App\Http\Controllers\Import\BankLoanController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -23,12 +24,12 @@ use App\Http\Controllers\AccessControll\RoleController;
 use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\Recruitment\RegisterController;
 use App\Http\Controllers\AccessControll\SystemController;
+use App\Http\Controllers\Import\ImportEmployeeController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Controllers\Import\ImportEmployeeController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -245,6 +246,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/activatePosition','activatePosition')->name('flex.activatePosition');
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
         Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
+
         Route::any('/overtime','overtime')->name('flex.overtime');
         Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
         Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
@@ -261,6 +263,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
         Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
         Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
+
+        // start of termination routes
+        Route::any('/termination','termination')->name('flex.termination');
+        Route::any('/add-termination','addTermination')->name('flex.addTermination');
+        Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
+        Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
+        // end of termination routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
@@ -775,6 +784,14 @@ Route::middleware('auth')->group(function () {
     });
 
 
+});
+
+//bank loans routes
+Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
+    Route::get('/all-loans', 'index')->name('bank-loans');;
+    Route::get('/loans-export', 'export')->name('loans.export');
+    Route::post('/loans-import', 'import')->name('loans.import');
+    Route::get('/loans-template', 'template')->name('loans.template');
 });
 
 
