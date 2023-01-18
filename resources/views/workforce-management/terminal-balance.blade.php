@@ -162,7 +162,7 @@
                         </h5>
                     </div>
                     <div class="col-md-6 text-end">
-                        <h5>7,849,071.37</h5>
+                        <h5>{{ $total_deductions}}</h5>
                     </div>
                 </div>
               
@@ -186,7 +186,7 @@
            
         </div>
         <div class="col-md-6 text-end">
-            <h6>{{ $termination->salaryEnrollment}}</h6>
+            <h6>{{ $total_gross}}</h6>
             <h6>{{ $termination->normalDays}}</h6>
             <h6>{{ $termination->publicDays}}</h6>
             <h6>{{ $termination->noticePay}}</h6>
