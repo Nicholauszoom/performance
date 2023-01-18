@@ -76,7 +76,7 @@
                     )}}
              </td>
              <td>
-                <a  href=""  title="Edit Loan">
+                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Edit Loan">
                     <button type="button" class="btn btn-info btn-xs" ><i class="ph-printer"></i></button>
                 </a>
              </td>
