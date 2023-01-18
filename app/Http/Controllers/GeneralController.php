@@ -7184,21 +7184,21 @@ class GeneralController extends Controller
         $amount_staff_bank = 0;
         foreach ($staff_bank_totals as $row) {
             $amount_staff_bank += $row->salary +
-             $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*amount bank temporary*/
         $amount_temporary_bank = 0;
         foreach ($temporary_bank_totals as $row) {
             $amount_temporary_bank += $row->salary +
-             $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
         foreach ($temporary_mwp_total as $row) {
             $amount_mwp += $row->salary +
-             $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
@@ -7391,7 +7391,7 @@ class GeneralController extends Controller
 
 
 
-        $msg="Employee Termination Benefits have been saved successfully";
+        $msg = "Employee Termination Benefits have been saved successfully";
         //dd($request->terminationDate);
         // $calendar = $request->terminationDate;
         // $datewell = explode("-", $calendar);
@@ -7413,7 +7413,6 @@ class GeneralController extends Controller
         // dd('no');
         //         }
         return redirect('flex/termination')->with('status', $msg);
-
     }
 
 
@@ -7426,23 +7425,74 @@ class GeneralController extends Controller
         $days_this_month = intval(date('t', strtotime($termination->terminationDate)));
         $working_days_this_month = intval(date('d', strtotime($termination->terminationDate)));
         $working_days_this_year = intval(date('z', strtotime($termination->terminationDate)));
-        $month=intval(date('F', strtotime($termination->terminationDate)));
+        $month = intval(date('F', strtotime($termination->terminationDate)));
 
         $payroll_date = date($termination->terminationDate);
-
 
         $employee = DB::table('employee')->where('id', '=', $termination->employeeID)->first();
 
         $payroll_run = "0";
 
+        $salary = ($employee->salary * $working_days_this_month) / 30;
+
+        $leave_allowance = $employee->salary * $working_days_this_year / 365; //consider employees employed this month 
+
+        $salary25 = ($employee->salary) / 25;
+
+        $salary30 = ($employee->salary) / 25;
+
+        $submitted_allowances = $termination->salaryEnrollment +
+            $termination->normalDays +
+            $termination->publicDays +
+            $termination->noticePay +
+            $termination->leavePay * $salary25 +
+            $termination->livingCost +
+            $termination->houseAllowance +
+            $termination->utilityAllowance +
+            $termination->leaveAllowance +
+            $termination->tellerAllowance +
+            $termination->serevancePay +
+            $termination->leaveStand +
+            $termination->arrears +
+            $termination->exgracia +
+            $termination->bonus +
+            $termination->longServing +
+            $termination->otherPayments;
+
+        $submitted_pensionables = $termination->salaryEnrollment +
+            $termination->normalDays +
+            $termination->publicDays +
+            $termination->noticePay +
+            $termination->leavePay * $salary25 +
+            $termination->livingCost +
+            $termination->houseAllowance +
+            $termination->utilityAllowance +
+            $termination->leaveAllowance +
+            $termination->tellerAllowance +
+            $termination->serevancePay +
+            $termination->leaveStand +
+            $termination->arrears +
+            $termination->exgracia +
+            $termination->bonus +
+            $termination->salaryAdvance +
+            $termination->otherPayments;
+
+        $submitted_deductions = $termination->salaryAdvance + $termination->otherDeductions;
+
+        $total_payroll_allowance = 0;
+
+        $payroll_pension = 0;
+
+        $net_pay = 0;
+        $take_home = 0;
+        $total_gross = 0;
+        $taxable = 0;
+
+        // $taxable = $salary - $pension + $leave_allowance + $total_allowance;
+
+        $wcf_sdl = 0;
 
         if (!$payroll_run) {
-
-            $salary = ($employee->salary * $working_days_this_month) / 30;
-
-            
-            $leave_allowance = $employee->salary * $working_days_this_year / 365;
-
 
             $allowance_query = " /*all Allowances and Bonuses*/SELECT 
                 IF((e.unpaid_leave = 0),0,(
@@ -7457,10 +7507,7 @@ class GeneralController extends Controller
                         ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
                         ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID), 0)  ) )  as  total_allowance FROM employee as e where emp_id =" . $employee->emp_id;
 
-            $total_allowance = DB::select(DB::raw($allowance_query))[0]->total_allowance;
-
-            // dd($total_allowance);
-
+            $total_payroll_allowance = DB::select(DB::raw($allowance_query))[0]->total_allowance;
 
             $pension = "SELECT IF(  (pf.deduction_from = 1),
 
@@ -7481,9 +7528,6 @@ class GeneralController extends Controller
                 IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1  GROUP BY ea.empID)>=0,
                 ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
 
-
-
-
                 /*end leave allowance to tax */
                 +
                 IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
@@ -7493,144 +7537,54 @@ class GeneralController extends Controller
                     
                     ) ) as pension FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1  AND emp_id = " . $employee->emp_id;
 
-            $pension = DB::select(DB::raw($pension))[0]->pension;
-
-            // dd($pension);
+            $payroll_pension = DB::select(DB::raw($pension))[0]->pension;
 
 
-           $total_allowances= $termination->salaryEnrollment +
-            $termination->normalDays +
-            $termination->publicDays +
-            $termination->noticePay +
-            $termination->leavePay +
-            $termination->livingCost +
-            $termination->houseAllowance +
-            $termination->utilityAllowance +
-            $termination->leaveAllowance +
-            $termination->tellerAllowance +
-            $termination->serevancePay +
-            $termination->leaveStand +
-            $termination->arrears +
-            $termination->exgracia +
-            $termination->bonus +
-            $termination->longServing +
-            $termination->otherPayments;
-
-            
-
-            $pensionable_submition = $termination->salaryEnrollment +
-            $termination->normalDays +
-            $termination->publicDays +
-            $termination->noticePay +
-            $termination->leavePay +
-            $termination->livingCost +
-            $termination->houseAllowance +
-            $termination->utilityAllowance +
-            $termination->leaveAllowance +
-            $termination->tellerAllowance +
-            $termination->serevancePay +
-            $termination->leaveStand +
-            $termination->arrears +
-            $termination->exgracia +
-            $termination->bonus +
-            $termination->salaryAdvance +
-            $termination->otherPayments;
-
-            $deductions_submitted= $termination->salaryAdvance + $termination->otherDeductions;
-
-
-            $taxable = $salary - $pension + $leave_allowance + $total_allowance;
-
-            $wcf_sdl = 0;
-
-            $paye = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<', $taxable)->first();
-
-            $paye =$paye->excess_added + $paye->rate * $taxable -$paye->minimum;
-
-            
-            $total_deductions=$deductions_submitted;
-            $net_pay =0;
-            $take_home=0;
-            $total_gross=0;
-            
-        }
+        } 
+        else
         
-        
-        
-        else {  //There is no payroll this month
+        {  //There is no payroll this month
 
-            
-           $total_gross= $termination->salaryEnrollment +
-           $termination->normalDays +
-           $termination->publicDays +
-           $termination->noticePay +
-           $termination->leavePay +
-           $termination->livingCost +
-           $termination->houseAllowance +
-           $termination->utilityAllowance +
-           $termination->leaveAllowance +
-           $termination->tellerAllowance +
-           $termination->serevancePay +
-           $termination->leaveStand +
-           $termination->arrears +
-           $termination->exgracia +
-           $termination->bonus +
-           $termination->longServing +
-           $termination->otherPayments;
-
-           
-           $pensionable_submition = $termination->salaryEnrollment +
-           $termination->normalDays +
-           $termination->publicDays +
-           $termination->noticePay +
-           $termination->leavePay +
-           $termination->livingCost +
-           $termination->houseAllowance +
-           $termination->utilityAllowance +
-           $termination->leaveAllowance +
-           $termination->tellerAllowance +
-           $termination->serevancePay +
-           $termination->leaveStand +
-           $termination->arrears +
-           $termination->exgracia +
-           $termination->bonus +
-           $termination->longServing +
-           $termination->salaryAdvance +
-           $termination->otherDeductions +
-           $termination->otherPayments;
-
-           $deductions_submitted= $termination->salaryAdvance + $termination->otherDeductions;
-
-
-            if ($month==12) { //If december add leave
+            if ($month == 12) { //If december add leave
 
                 $leave_allowance = $employee->salary * $working_days_this_year / 365;
-
-
-            }
-
-            else{
+            } else {
 
                 $leave_allowance = 0;
             }
+        }
 
-            $taxable = $total_gross -  $pensionable_submition - $deductions_submitted;
+        $deductions_submitted = $termination->salaryAdvance + $termination->otherDeductions;
 
-            $wcf_sdl = 0;
+        $total_deductions = $submitted_deductions;
+        $net_pay = $total_gross - $total_deductions;
 
-            $paye = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<', $taxable)->first();
+        $total_gross = $salary + $submitted_allowances + $total_payroll_allowance;
 
-            $paye = $paye->excess_added + $paye->rate * $taxable -$paye->minimum;
+        $pensionable =  $payroll_pension + $submitted_pensionables;
 
-            $total_deductions=$deductions_submitted;
-            $net_pay =0;
-            $take_home=0;
+        $taxable = $net_pay -  $pensionable * 0.1;  //Pension rate need to be inserted here 
 
-           
+
+        if($taxable >0 ){
+
+        $paye = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<', $taxable)->first();
+
+        $paye = $paye->excess_added + $paye->rate * $taxable - $paye->minimum;
+
+        }
+
+        else
+        {
+
+            $paye=0; 
         }
 
 
-        return view('workforce-management.terminal-balance', compact('termination','paye','total_deductions','total_gross','net_pay','take_home'));
+        $take_home = $taxable -  $paye;
+
+
+        return view('workforce-management.terminal-balance', compact('termination', 'paye', 'total_deductions', 'total_gross', 'net_pay', 'take_home'));
     }
 
 
