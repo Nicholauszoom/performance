@@ -7464,6 +7464,15 @@ public function saveTermination(Request $request)
 
 }
 
+
+
+public function viewTermination($id)
+{
+    $termination=Termination::where('id',$id)->first();
+    return view('workforce-management.terminal-balance',compact('termination'));
+}
+
+
 // end of terminations functions
 
 
