@@ -7263,7 +7263,7 @@ class GeneralController extends Controller
 public function termination()
 {
 
-    $data['title'] = "Overtime";
+    $data['title'] = "Termination";
     $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
     $data['employees'] = $this->flexperformance_model->Employee();
     $terminations= Termination::all();
@@ -7282,7 +7282,7 @@ public function termination()
 public function addTermination()
 {
 
-    $data['title'] = "Overtime";
+    $data['title'] = "Terminate Employee";
     $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
     $data['employees'] = $this->flexperformance_model->Employee();
     $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
@@ -7366,5 +7366,27 @@ public function viewTermination($id)
 
 // end of terminations functions
 
+
+// start of promotion/increment
+public function promotion()
+{
+
+    $data['title'] = "Promtion|Increment";
+    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+    $data['employees'] = $this->flexperformance_model->Employee();
+    $terminations= Termination::all();
+    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+
+    $i=1;
+    // }
+    $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'Promotion|Increment';
+
+    return view('workforce-management.promotion-increment', $data,compact('terminations','i'));
+
+}
+
+// start of promotion/increment
 
 }

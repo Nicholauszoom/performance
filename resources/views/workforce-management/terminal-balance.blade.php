@@ -12,34 +12,35 @@
 
     <main>
         <div class="row my-4">
-            <div class="col-md-10 mx-auto">
 
+            <div class="col-md-9 mx-auto">
+                <h4 class="text-end text-secondary font-weight-bolder" style="font-weight:bolder;">Terminal Benefit</h4>
                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-3">
                         <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
                     </div>
-                    <div class="col-md-9">
-                        <h4 class="text-end text-secondary font-weight-bolder" style="font-weight:bolder;">Terminal Benefit</h4>
+                    <div class="col-md-9 col-9">
+                       
                         <h4>AFRICAN BANKING CORPORATION</h4>
                         <h4>P.O. BOX 31</h4>
                         <h4>DAR ES SALAAM</h4>
                         
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-6">
                         
                     </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <div class="col-md-6">
+                    <div class="col-md-6 col-6">
+                        <div class="row text-end">
+                            <div class="col-md-6 col-6">
                                 <p>Employment Date</p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-6">
                                 <p>{{ $termination->employee->created_at}}</p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-6">
                                 <p>Termination Date</p>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-6">
                                 <p>{{ $termination->terminationDate}}</p>
                             </div>
                         </div>
@@ -49,13 +50,13 @@
 
 
                 <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important; ">
-                    <div class="col-md-6">
+                    <div class="col-md-6 col-6">
                         <h6>Payroll Number</h6>
                         <h6>First Name: </h6>
                         <h6>Last name:</h6>
                         <h6>Department:</h6>
                     </div>
-                    <div class="col-md-6 text-end">
+                    <div class="col-md-6 text-end col-6">
                         <h6 >{{ $termination->employee->payroll_no }}</h6>
                         <h6>{{ $termination->employee->fname }}</h6>
                         <h6>{{ $termination->employee->lname }}</h6>
@@ -64,9 +65,9 @@
                 </div>
 
             <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important;">
-                    <h4 class="text-center" style="background-color:  rgb(64, 190, 199) !important; "> PAYMENTS</h4>
+                    <h4 class="text-center p-1" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; "> PAYMENTS</h4>
 
-                <div class="col-md-6">
+                <div class="col-md-6 col-6">
                     <h6>Salary Enrollment</h6>
                     <h6>Overtime Normal Days</h6>
                     <h6>Overtime Public</h6>
@@ -85,32 +86,32 @@
                     <h6>Long Serving</h6>
                     <h6>Other Non Taxable Payments </h6>
                 </div>
-                <div class="col-md-6 text-end">
-                    <h6>{{ $termination->salaryEnrollment}}</h6>
-                    <h6>{{ $termination->normalDays}}</h6>
-                    <h6>{{ $termination->publicDays}}</h6>
-                    <h6>{{ $termination->noticePay}}</h6>
-                    <h6>{{ $termination->leavePay}}</h6>
-                    <h6>{{ $termination->houseAllowance}}</h6>
-                    <h6>{{ $termination->livingCost}}</h6>
-                    <h6>{{ $termination->utilityAllowance}}</h6>
-                    <h6>{{ $termination->leavePay}}</h6>
-                    <h6>{{ $termination->serevanceCost}}</h6>
-                    <h6>{{ $termination->leaveStand}}</h6>
-                    <h6>{{ $termination->tellerAllowance}}</h6>
-                    <h6>{{ $termination->utilityAllowance}}</h6>
-                    <h6>{{ $termination->leavePay}}</h6>
-                    <h6>{{ $termination->serevanceCost}}</h6>
-                    <h6>{{ $termination->leaveStand}}</h6>
-                    <h6>{{ $termination->tellerAllowance}}</h6>
-                    <h6>{{ $termination->serevanceCost}}</h6>
-                    <h6>{{ $termination->leaveStand}}</h6>
-                    <h6>{{ $termination->tellerAllowance}}</h6>
+                <div class="col-md-6 col-6 text-end">
+                    <h6>{{ number_format($termination->salaryEnrollment,2)}}</h6>
+                    <h6>{{ number_format($termination->normalDays,2)}}</h6>
+                    <h6>{{ number_format($termination->publicDays,2)}}</h6>
+                    <h6>{{ number_format($termination->noticePay,2)}}</h6>
+                    <h6>{{ number_format($termination->leavePay,2)}}</h6>
+                    <h6>{{ number_format($termination->houseAllowance,2)}}</h6>
+                    <h6>{{ number_format($termination->livingCost,2)}}</h6>
+                    <h6>{{ number_format($termination->utilityAllowance,2)}}</h6>
+                    <h6>{{ number_format($termination->leavePay)}}</h6>
+                    <h6>{{ number_format($termination->serevanceCost,2)}}</h6>
+                    <h6>{{ number_format($termination->leaveStand,2)}}</h6>
+                    <h6>{{ number_format($termination->tellerAllowance,2)}}</h6>
+                    <h6>{{ number_format($termination->utilityAllowance,2)}}</h6>
+                    <h6>{{ number_format($termination->leavePay,2)}}</h6>
+                    <h6>{{ number_format($termination->serevanceCost,2)}}</h6>
+                    <h6>{{ number_format($termination->leaveStand,2)}}</h6>
+                    <h6>{{ number_format($termination->exgracia,2)}}</h6>
+                    <h6>{{ number_format($termination->bonus,2)}}</h6>
+                    <h6>{{ number_format($termination->longServing,2)}}</h6>
+                    <h6>{{ number_format($termination->otherPayments,2)}}</h6>
                 </div>
                 </div>
 
                 <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important;">
-                    <h4 class="text-center" style="background-color:  rgb(64, 190, 199) !important; "> TAXATION</h4>
+                    <h4 class="text-center p-1" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; "> TAXATION</h4>
 
                 <div class="col-md-6">
                     <h6>Salary Enrollment</h6>
@@ -120,11 +121,11 @@
                     
                 </div>
                 <div class="col-md-6 text-end">
-                    <h6>{{ $termination->salaryEnrollment}}</h6>
-                    <h6>{{ $termination->normalDays}}</h6>
-                    <h6>{{ $termination->publicDays}}</h6>
-                    <h6>{{ $termination->noticePay}}</h6>
-                    <h6>{{ $termination->leavePay}}</h6>
+                    <h6>{{ number_format($termination->salaryEnrollment,2)}}</h6>
+                    <h6>{{ number_format($termination->normalDays,2)}}</h6>
+                    <h6>{{ number_format($termination->publicDays,2)}}</h6>
+                    <h6>{{ number_format($termination->noticePay,2)}}</h6>
+                    <h6>{{ number_format($termination->leavePay,2)}}</h6>
               
                 </div>
 
@@ -136,7 +137,7 @@
         
 
             <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important;">
-                <h4 class="text-center" style="background-color:  rgb(64, 190, 199) !important; "> DEDUCTION</h4>
+                <h4 class="text-center p-1" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; "> DEDUCTION</h4>
 
             <div class="col-md-6">
                 <h6>P.A.Y.E</h6>
@@ -146,12 +147,12 @@
                 <h6>Any Other Deductions</h6>
             </div>
             <div class="col-md-6 text-end">
-                <h6>{{ $termination->salaryEnrollment}}</h6>
-                <h6>{{ $termination->normalDays}}</h6>
-                <h6>{{ $termination->publicDays}}</h6>
-                <h6>{{ $termination->noticePay}}</h6>
-                <h6>{{ $termination->leavePay}}</h6>
-                <h6>{{ $termination->leavePay}}</h6>
+                <h6>{{ number_format($termination->salaryEnrollment,2)}}</h6>
+                <h6>{{ number_format($termination->normalDays,2)}}</h6>
+                <h6>{{ number_format($termination->publicDays,2)}}</h6>
+                <h6>{{ number_format($termination->noticePay,2)}}</h6>
+                <h6>{{ number_format($termination->leavePay,2)}}</h6>
+                <h6>{{ number_format($termination->leavePay,2)}}</h6>
             </div>
 
             <div class="px-1" style="border-bottom: 4px solid rgb(20, 22, 27) !important; border-top: 4px solid rgb(20, 22, 27) !important;"> 
@@ -215,7 +216,7 @@
                 
             </div>
             <div class="col-md-6">
-                <div class="row">
+                <div class="row text-end">
                     <div class="col-md-6">
                         <p>Employment Date</p>
                     </div>

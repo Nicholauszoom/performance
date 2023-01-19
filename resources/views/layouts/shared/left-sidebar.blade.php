@@ -59,6 +59,9 @@
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.termination') || request()->routeIs('flex.addTermination') ? 'active' : null  }}" href="{{ route('flex.termination') }}">Employee Termination</a>
                             </li>
+                            <li class="nav-item ">
+                                <a class="nav-link {{ request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion') ? 'active' : null  }}" href="{{ route('flex.promotion') }}">Promotions/Increments</a>
+                            </li>
                         @endif
 
                         <li class="nav-item">
