@@ -7414,7 +7414,7 @@ public function saveTermination(Request $request)
         'otherPayments' => 'nullable',
          ]
         );
-
+ 
         $termination = new Termination();
         $termination->employeeID=$request->employeeID;
         $termination->terminationDate=$request->terminationDate;
