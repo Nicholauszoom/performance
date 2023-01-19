@@ -270,6 +270,17 @@ Route::middleware('auth')->group(function () {
         Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
         Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
         // end of termination routes
+
+
+        // start of promotion/increment routes
+        Route::any('/','promotion')->name('flex.promotion');
+        Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
+        Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
+        Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
+        Route::any('/add-increment','addIncrement')->name('flex.addIncrement');
+        Route::post('/save-increment','saveIncrement')->name('flex.saveIncrement');
+        Route::get('/view-increment/{id}','viewIncrement')->name('flex.viewIncrement');
+        // end of promotion/increment routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
