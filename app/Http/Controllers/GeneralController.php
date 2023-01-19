@@ -45,50 +45,49 @@ class GeneralController extends Controller
         $this->project_model = new ProjectModel();
         $this->performanceModel = new PerformanceModel();
         $this->payroll_model = new Payroll;
-
     }
 
-//    public function index()
-//       {
-//       $list = $this->flexperformance_model->contract_expire_list();
-//       foreach($list as $key){
+    //    public function index()
+    //       {
+    //       $list = $this->flexperformance_model->contract_expire_list();
+    //       foreach($list as $key){
 
-//       $this->flexperformance_model->terminate_contract($key->IDs);
-//       }
-//     $data['title']="Login";
-//     return view('app.login', $data);
-//    }
+    //       $this->flexperformance_model->terminate_contract($key->IDs);
+    //       }
+    //     $data['title']="Login";
+    //     return view('app.login', $data);
+    //    }
 
-//   public function password_check($str)
-//   {
-//      if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
-//        return TRUE;
-//      }
-//      $this->form_validation->set_message('password_check', 'The Password Should Contain 8 Characters Length with Mix of Letters and Numbers');
-//      return FALSE;
-//   }
+    //   public function password_check($str)
+    //   {
+    //      if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
+    //        return TRUE;
+    //      }
+    //      $this->form_validation->set_message('password_check', 'The Password Should Contain 8 Characters Length with Mix of Letters and Numbers');
+    //      return FALSE;
+    //   }
 
-//   public function login_info() {
+    //   public function login_info() {
 
-//     $empID = session('emp_id');
-//     $data['info'] = $this->flexperformance_model->login_info($empID);
-//     $data['title'] = "Login Credentials";
-//     return view('app.update_login_info', $data);
-//   }
+    //     $empID = session('emp_id');
+    //     $data['info'] = $this->flexperformance_model->login_info($empID);
+    //     $data['title'] = "Login Credentials";
+    //     return view('app.update_login_info', $data);
+    //   }
 
-//   function checkPassword($password){
-//     $uppercase = preg_match('@[A-Z]@', $password);
-//     $lowercase = preg_match('@[a-z]@', $password);
-//     $number    = preg_match('@[0-9]@', $password);
-//     $specialChars = preg_match('@[^\w]@', $password);
-//     $res = false;
-//     if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-//       $res = false;
-//       }else{
-//         $res = true;
-//     }
-//     return $res;
-// }
+    //   function checkPassword($password){
+    //     $uppercase = preg_match('@[A-Z]@', $password);
+    //     $lowercase = preg_match('@[a-z]@', $password);
+    //     $number    = preg_match('@[0-9]@', $password);
+    //     $specialChars = preg_match('@[^\w]@', $password);
+    //     $res = false;
+    //     if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
+    //       $res = false;
+    //       }else{
+    //         $res = true;
+    //     }
+    //     return $res;
+    // }
 
     public function update_login_info(Request $request)
     {
@@ -128,7 +127,6 @@ class GeneralController extends Controller
                         $response_array['status'] = 'ERR';
                         echo json_encode($response_array);
                     }
-
                 } else {
                     $response_array['status'] = 'ERR_P';
                     echo json_encode($response_array);
@@ -137,12 +135,10 @@ class GeneralController extends Controller
                 $response_array['status'] = 'ERR';
                 echo json_encode($response_array);
             }
-
         } else {
             $response_array['status'] = 'ERR';
             echo json_encode($response_array);
         }
-
     }
 
     public function logout(Request $request)
@@ -235,7 +231,6 @@ class GeneralController extends Controller
             $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Incorrect Values</p>";
             header('Content-type: application/json');
             echo json_encode($response_array);
-
         }
     }
 
@@ -274,7 +269,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function bank(Request $request)
@@ -303,7 +297,7 @@ class GeneralController extends Controller
         $data['parent'] = "Organisation";
         $data['child'] = "Departments";
 
-        return view('app.department',$data);
+        return view('app.department', $data);
     }
 
     public function organization_level(Request $request)
@@ -328,7 +322,6 @@ class GeneralController extends Controller
         $data['department'] = $this->flexperformance_model->alldepartment();
         $data['title'] = "Department";
         return view('app.department', $data);
-
     }
 
     public function updateOrganizationLevelName(Request $request)
@@ -343,8 +336,9 @@ class GeneralController extends Controller
             if ($result == true) {
                 return back()->with('success', 'Organization Level Updated Successifully!');
                 // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
     public function updateMinSalary(Request $request)
@@ -359,8 +353,9 @@ class GeneralController extends Controller
             if ($result == true) {
                 return back()->with('success', 'Organization Level Updated Successifully!');
                 // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
     public function updateMaxSalary(Request $request)
@@ -375,8 +370,9 @@ class GeneralController extends Controller
             if ($result == true) {
                 return back()->with('success', 'Organization Level Updated Successifully!');
                 // echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -457,7 +453,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->addEmployeeNationality($data);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Country Added Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED, Country Not Added. Please Try Again</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED, Country Not Added. Please Try Again</p>";
             }
         }
     }
@@ -465,17 +462,18 @@ class GeneralController extends Controller
     public function deleteCountry(Request $request, $code)
     {
         // if ($this->uri->segment(3) != '') {
-            // $code = $this->uri->segment(3);
-            $checkEmployee = $this->flexperformance_model->checkEmployeeNationality($code);
-            if ($checkEmployee > 0) {
-                echo "<p class='alert alert-warning text-center'>WARNING, Country Can Not Be Deleted, Some Employee Have Nationality From This Country.</p>";
+        // $code = $this->uri->segment(3);
+        $checkEmployee = $this->flexperformance_model->checkEmployeeNationality($code);
+        if ($checkEmployee > 0) {
+            echo "<p class='alert alert-warning text-center'>WARNING, Country Can Not Be Deleted, Some Employee Have Nationality From This Country.</p>";
+        } else {
+            $result = $this->flexperformance_model->deleteCountry($code);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Country Deleted Successifully!</p>";
             } else {
-                $result = $this->flexperformance_model->deleteCountry($code);
-                if ($result == true) {
-                    echo "<p class='alert alert-success text-center'>Country Deleted Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>FAILED, Country Not Deleted. Please Try Again</p>";
-                }
+                echo "<p class='alert alert-danger text-center'>FAILED, Country Not Deleted. Please Try Again</p>";
             }
+        }
         // }
 
     }
@@ -501,9 +499,11 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->updateCompanyBranch($updates, $branchID);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>FAILED, Branch Not Added. Please Try Again</p>";
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED, Branch Not Added. Please Try Again</p>";
                 }
-            } else {echo "<p class='alert alert-danger text-center'>Branch Code: FAILED, Branch Not Added. Please Try Again</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Branch Code: FAILED, Branch Not Added. Please Try Again</p>";
             }
         }
     }
@@ -528,9 +528,11 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->updateCompanyBranch($updates, $branchID);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Cost Center Added Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>FAILED, Branch Not Added. Please Try Again</p>";
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED, Branch Not Added. Please Try Again</p>";
                 }
-            } else {echo "<p class='alert alert-danger text-center'>Branch Code: FAILED, Branch Not Added. Please Try Again</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Branch Code: FAILED, Branch Not Added. Please Try Again</p>";
             }
         }
     }
@@ -580,26 +582,26 @@ class GeneralController extends Controller
         }
     }
 
-//   public function addBank(Request $request) {
-//      if(isset($_POST['add'])) {
-//         $data = array(
-//              'name' => $request->input('name'),
-//              'abbr' => $request->input('abbrv'),
-//              'bank_code' => $request->input('bank_code')
-//         );
-//         if(session('mng_bank_info')){
-//           $result = $this->flexperformance_model->addBank($data);
-//           if($result){
-//               session('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
-//               return  redirect('/flex/bank');
-//           } else {  return  redirect('/flex/bank'); }
-//         }else{
-//           echo "Unauthorized Access";
-//         }
-//     }
-//   }
+    //   public function addBank(Request $request) {
+    //      if(isset($_POST['add'])) {
+    //         $data = array(
+    //              'name' => $request->input('name'),
+    //              'abbr' => $request->input('abbrv'),
+    //              'bank_code' => $request->input('bank_code')
+    //         );
+    //         if(session('mng_bank_info')){
+    //           $result = $this->flexperformance_model->addBank($data);
+    //           if($result){
+    //               session('note', "<p class='alert alert-success text-center'>Bank Successifully</p>");
+    //               return  redirect('/flex/bank');
+    //           } else {  return  redirect('/flex/bank'); }
+    //         }else{
+    //           echo "Unauthorized Access";
+    //         }
+    //     }
+    //   }
 
-//addBank
+    //addBank
 
     public function addBank(Request $request)
     {
@@ -618,37 +620,37 @@ class GeneralController extends Controller
         echo "Record inserted successfully.<br/>";
         return redirect('flex/bank');
     }
-// end add bank
+    // end add bank
 
-// add branch
-// public function addBankBranch(Request $request){
+    // add branch
+    // public function addBankBranch(Request $request){
 
-//   dd($request->name);
+    //   dd($request->name);
 
-//     $name = $request->input('name');
-//     $bank = $request->input('bank');
-//     $street = $request->input('street');
-//     $region = $request->input('region');
-//     $country = $request->input('country');
-//     $branch_code = $request->input('branch_code');
-//     $swiftcode = $request->input('swiftcode');
+    //     $name = $request->input('name');
+    //     $bank = $request->input('bank');
+    //     $street = $request->input('street');
+    //     $region = $request->input('region');
+    //     $country = $request->input('country');
+    //     $branch_code = $request->input('branch_code');
+    //     $swiftcode = $request->input('swiftcode');
 
-//   $data=array(
-//    'name'=>$name,
-//    'bank'=>$bank,
-//    'street'=>$street,
-//    'region'=>$region,
-//    'country'=>$country,
-//    'branch_code'=>$branch_code,
-//    'swiftcode'=>$swiftcode
+    //   $data=array(
+    //    'name'=>$name,
+    //    'bank'=>$bank,
+    //    'street'=>$street,
+    //    'region'=>$region,
+    //    'country'=>$country,
+    //    'branch_code'=>$branch_code,
+    //    'swiftcode'=>$swiftcode
 
-// );
-//   DB::table('bank_branch')->insert($data);
-//   echo "Record inserted successfully.<br/>";
-//   return redirect('flex/bank');
+    // );
+    //   DB::table('bank_branch')->insert($data);
+    //   echo "Record inserted successfully.<br/>";
+    //   return redirect('flex/bank');
 
-//   }
-//   end add branch
+    //   }
+    //   end add branch
 
     public function addBankBranch(Request $request)
     {
@@ -676,7 +678,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBank(Request $request)
@@ -694,7 +695,6 @@ class GeneralController extends Controller
             $data['category'] = 2;
             $data['title'] = "Bank Info";
             return view('app.update_bank', $data);
-
         }
     }
 
@@ -723,7 +723,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBankName(Request $request)
@@ -746,7 +745,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateAbbrev(Request $request)
@@ -769,7 +767,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBankCode(Request $request)
@@ -792,7 +789,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBranchName(Request $request)
@@ -815,7 +811,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBranchCode(Request $request)
@@ -838,7 +833,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBranchSwiftcode(Request $request)
@@ -861,7 +855,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
     public function updateBranchStreet(Request $request)
     {
@@ -883,7 +876,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function updateBranchRegion(Request $request)
@@ -928,7 +920,6 @@ class GeneralController extends Controller
                 echo json_encode($response_array);
             }
         }
-
     }
 
     public function deleteDepartment($id)
@@ -948,7 +939,6 @@ class GeneralController extends Controller
         }
         header('Content-type: application/json');
         echo json_encode($response_array);
-
     }
 
     public function activateDepartment($id)
@@ -968,7 +958,6 @@ class GeneralController extends Controller
         }
         header('Content-type: application/json');
         echo json_encode($response_array);
-
     }
 
     public function position_info($id)
@@ -1030,7 +1019,6 @@ class GeneralController extends Controller
                 } else {
                     session('note', "<p class='alert alert-danger text-center'>Budget Request Has FAILED, Please Try again</p>");
                     return redirect('/flex/training_application');
-
                 }
             }
         }
@@ -1046,7 +1034,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Update, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Update, Please Try Again!</p>";
             }
         }
     }
@@ -1061,7 +1050,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Update, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Update, Please Try Again!</p>";
             }
         }
     }
@@ -1089,7 +1079,8 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->updateBudget($data, $budgetID);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
-                } else {echo "<p class='alert alert-danger text-center'>FAILED to Update, Please Try Again!</p>";
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED to Update, Please Try Again!</p>";
                 }
             }
         }
@@ -1107,7 +1098,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Budget Approved Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Approve, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Approve, Please Try Again!</p>";
             }
         }
     }
@@ -1124,7 +1116,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateBudget($data, $budgetID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Budget Disapproved Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Please Try Again!</p>";
             }
         }
     }
@@ -1136,7 +1129,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->deleteBudget($budgetID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Budget Deleted Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Delete, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Delete, Please Try Again!</p>";
             }
         }
     }
@@ -1153,10 +1147,8 @@ class GeneralController extends Controller
 
         if (session('appr_training') != 0 && session('conf_training') != 0 && session('line') != 0) {
             $data['other_applications'] = $this->flexperformance_model->all_training_applications($empID);
-
         } elseif (session('appr_training') != 0 && session('conf_training') != 0) {
             $data['other_applications'] = $this->flexperformance_model->appr_conf_training_applications();
-
         } elseif (session('appr_training') != 0 && session('line') != 0) {
             $data['other_applications'] = $this->flexperformance_model->appr_line_training_applications($empID);
         } elseif (session('conf_training') != 0 && session('line') != 0) {
@@ -1208,7 +1200,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function requestTraining2(Request $request)
@@ -1251,7 +1242,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Request Recommended Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Recommend, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Recommend, Please Try Again!</p>";
             }
         }
     }
@@ -1268,7 +1260,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
             if ($result == true) {
                 echo "<p class='alert alert-warning text-center'>Request Suspended Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Suspend, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Suspend, Please Try Again!</p>";
             }
         }
     }
@@ -1285,7 +1278,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
             if ($result == true) {
                 echo "<p class='alert alert-warning text-center'>Request Suspended Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Suspend, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Suspend, Please Try Again!</p>";
             }
         }
     }
@@ -1302,7 +1296,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateTrainingRequest($data, $requestID);
             if ($result == true) {
                 echo "<p class='alert alert-warning text-center'>Request Suspended Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Disapproved, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Disapproved, Please Try Again!</p>";
             }
         }
     }
@@ -1319,7 +1314,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->confirmTrainingRequest($data, $requestID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Request Confirmed Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";
             }
         }
     }
@@ -1336,7 +1332,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->unconfirmTrainingRequest($data, $requestID);
             if ($result == true) {
                 echo "<p class='alert alert-warning text-center'>Request Unfonfirmed Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED, Please Try Again!</p>";
             }
         }
     }
@@ -1348,7 +1345,8 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->deleteTrainingRequest($requestID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Request Deleted Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED, Please Try Again!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED, Please Try Again!</p>";
             }
         }
     }
@@ -1369,15 +1367,12 @@ class GeneralController extends Controller
                 $this->flexperformance_model->updateTrainingApplications($dataUpdates, $applicationID);
 
                 $check = '';
-
             }
             session('note_approved', "<p class='alert alert-success text-center'>Training Applications Recommended Successifully</p>");
             $this->training_application();
-
         } else {
             session('note_approved', "<p class='alert alert-warning text-center'>Sorry No item Selected</p>");
             $this->training_application();
-
         }
 
         if (isset($_POST['reject']) && !empty($request->input('option'))) {
@@ -1393,15 +1388,12 @@ class GeneralController extends Controller
                 $this->flexperformance_model->updateTrainingApplications($dataUpdates, $applicationID);
 
                 $check = '';
-
             }
             session('note_approved', "<p class='alert alert-warning text-center'>Training Applications Rejected</p>");
             $this->training_application();
-
         } else {
             session('note_approved', "<p class='alert alert-warning text-center'>Sorry No item Selected</p>");
             $this->training_application();
-
         }
     }
 
@@ -1478,7 +1470,9 @@ class GeneralController extends Controller
                 $this->flexperformance_model->assignskills($data_skills);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Graduation Confirmed Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Confirmation Failed</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Confirmation Failed</p>";
+                }
             } else {
                 echo "<p class='alert alert-danger text-center'>Failed! Attachment Not Uploaded!</p>";
             }
@@ -1516,7 +1510,9 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->assignskills($data_skills);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Certification Confirmed Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Confirmation Failed</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Confirmation Failed</p>";
+                }
             } else {
                 echo "<p class='alert alert-danger text-center'>Failed! Attachment Not Uploaded!</p>";
             }
@@ -1540,7 +1536,6 @@ class GeneralController extends Controller
         session('note', "<p class='alert alert-success text-center'>Accountability Added Successifully</p>");
         $reload = '/flex/position_info/?id=' . $positionID;
         return redirect($reload);
-
     }
 
     public function addskills(Request $request)
@@ -1558,7 +1553,6 @@ class GeneralController extends Controller
                     'description' => $request->input('description'),
                     'created_by' => session('emp_id'),
                 );
-
             } else {
                 $data = array(
                     'name' => $request->input('name'),
@@ -1576,7 +1570,6 @@ class GeneralController extends Controller
             session('note', "<p class='alert alert-success text-center'>Skills Added Successifully</p>");
             $reload = '/flex/position_info/?id=' . $id;
             return redirect($reload);
-
         }
     }
 
@@ -1701,7 +1694,6 @@ class GeneralController extends Controller
         $data['inactive_position'] = $this->flexperformance_model->inactive_position();
         $data['title'] = "Position";
         return view('app.position', $data);
-
     }
     public function addPosition(Request $request)
     {
@@ -1742,7 +1734,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function addOrganizationLevel(Request $request)
@@ -1767,7 +1758,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function deletePosition(Request $request)
@@ -1787,7 +1777,6 @@ class GeneralController extends Controller
         }
         header('Content-type: application/json');
         echo json_encode($response_array);
-
     }
 
     public function activatePosition(Request $request)
@@ -1807,7 +1796,6 @@ class GeneralController extends Controller
         }
         header('Content-type: application/json');
         echo json_encode($response_array);
-
     }
 
     public function updateskills(Request $request)
@@ -1825,7 +1813,6 @@ class GeneralController extends Controller
                     'type' => $request->input('type'),
                     'description' => $request->input('description'),
                 );
-
             } else {
 
                 $data = array(
@@ -1884,7 +1871,6 @@ class GeneralController extends Controller
         if ($maxRange > 24) {
 
             echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
-
         } else {
 
             $end_night_shift = "6:00";
@@ -1895,7 +1881,6 @@ class GeneralController extends Controller
                 if (strtotime($start_time) >= strtotime($finish_time)) {
 
                     echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
-
                 } else {
 
                     if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
@@ -1922,7 +1907,6 @@ class GeneralController extends Controller
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
                         }
-
                     } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
 
                         $type = 0; // echo "DAY OVERTIME";
@@ -1947,11 +1931,9 @@ class GeneralController extends Controller
                         } else {
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
                         }
-
                     } else {
                         echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
                     }
-
                 }
             } else if ($start_date > $finish_date) {
                 echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
@@ -1974,7 +1956,9 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
                         echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                    } else {echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";}
+                    } else {
+                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                    }
                 } else {
                     $type = 0; // echo "DAY OVERTIME";
                     $data = array(
@@ -1992,15 +1976,15 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
                         echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                    } else {echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";}
+                    } else {
+                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                    }
                 }
-
             }
         }
-
     }
 
-/*IMPREST FUNCTIONS MOVED TO IMPREST CONTROLLER*/
+    /*IMPREST FUNCTIONS MOVED TO IMPREST CONTROLLER*/
 
     public function overtime()
     {
@@ -2021,7 +2005,6 @@ class GeneralController extends Controller
         $data['child'] = 'Overtime';
 
         return view('overtime.overtime', $data);
-
     }
 
     public function overtime_info(Request $request)
@@ -2066,14 +2049,12 @@ class GeneralController extends Controller
             session('note', "<p class='alert alert-success text-center'>Your Overtime was Updated Successifully</p>");
 
             return redirect('/flex/overtime');
-
         }
 
         $data['title'] = "Overtime";
         $data['mode'] = 2; // Mode 1 for Comment Purpose and Mode 2 for Update Purpose
         $data['overtime'] = $this->flexperformance_model->fetch_my_overtime($initialOvertimeID);
         return view('app.overtime_info', $data);
-
     }
 
     public function confirmOvertime($id)
@@ -2087,7 +2068,6 @@ class GeneralController extends Controller
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
         echo "<p class='alert alert-success text-center'>Overtime Confirmed Successifully</p>";
-
     }
 
     public function recommendOvertime($id)
@@ -2183,7 +2163,6 @@ class GeneralController extends Controller
         );
         $this->flexperformance_model->update_overtime($data, $overtimeID);
         echo "<p class='alert alert-warning text-center'>Overtime Held</p>";
-
     }
 
     public function approveOvertime($id)
@@ -2202,7 +2181,9 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";}
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+        }
         // }else{
         //   echo "<p class='alert alert-danger text-center'>Overtime is not yet Approved</p>";
         // }
@@ -2228,11 +2209,9 @@ class GeneralController extends Controller
             } else {
                 echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
             }
-
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         }
-
     }
 
     public function hrapproveOvertime($id)
@@ -2250,7 +2229,9 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->hrapproveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";}
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+        }
         // }else{
         //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         // }
@@ -2272,7 +2253,9 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->fin_approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
-        } else {echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";}
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+        }
         // }else{
         //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         // }
@@ -2289,7 +2272,6 @@ class GeneralController extends Controller
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
         }
-
     }
 
     public function cancelOvertime($id)
@@ -2312,7 +2294,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 1);
             if ($result == true) {
                 echo "<p class='alert alert-warning text-center'>Overtime Payment Confirmed Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";
+            }
         }
     }
 
@@ -2325,7 +2309,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 0);
             if ($result == true) {
                 echo "<p class='alert alert-warning text-center'>Overtime Payment Unconfirmed Successifully</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED to Unconfirm, Please Try Again!</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Unconfirm, Please Try Again!</p>";
+            }
         }
     }
 
@@ -2353,7 +2339,6 @@ class GeneralController extends Controller
         session('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
 
         return redirect(route('flex.overtime'));
-
     }
 
     /* public function deleteposition(Request $request)
@@ -2422,7 +2407,6 @@ class GeneralController extends Controller
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
         }
-
     }
 
     public function employee(Request $request)
@@ -2440,14 +2424,12 @@ class GeneralController extends Controller
         $data['parent'] = "Employee";
         $data['child'] = "Active Employee";
         return view('employee.employee', $data);
-
     }
 
     public function payroll(Request $request)
     {
         $data['title'] = "Payrolls And Associated";
         return view('app.payroll', $data);
-
     }
 
     ################## UPDATE EMPLOYEE INFO #############################
@@ -2481,7 +2463,6 @@ class GeneralController extends Controller
         // dd($data);
 
         return view('employee.updateEmployee', $data);
-
     }
 
     public function updateFirstName(Request $request)
@@ -2513,8 +2494,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Code Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2529,8 +2511,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Level Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2547,8 +2530,9 @@ class GeneralController extends Controller
 
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Middle Name Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2563,8 +2547,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Last Name Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2579,8 +2564,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Gender Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2595,8 +2581,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Birth date Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2611,10 +2598,11 @@ class GeneralController extends Controller
         );
 
         $result = $this->flexperformance_model->updateEmployee($updates, $empID);
-            if ($result == true) {
-                echo "<p class='alert alert-success text-center'> Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+        if ($result == true) {
+            echo "<p class='alert alert-success text-center'> Updated Successifully!</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+        }
     }
 
     public function updateEmployeePensionFund(Request $request)
@@ -2628,8 +2616,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Pension Fund Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2654,9 +2643,9 @@ class GeneralController extends Controller
             if ($result == true) {
                 $this->flexperformance_model->audit_log("Requested Position Change For Employee with ID = " . $empID . " From " . $old . " To " . $new . "");
                 echo "<p class='alert alert-success text-center'>Request For Position Transfer Has Been Sent Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED, Request For Position Transfe Has Failed. Please Try Again</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED, Request For Position Transfe Has Failed. Please Try Again</p>";
             }
-
         }
     }
 
@@ -2693,8 +2682,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Branch Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2709,8 +2699,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Nationality Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2732,20 +2723,19 @@ class GeneralController extends Controller
             "new_position" => $request->input("position"),
         );
 
-            $result = $this->flexperformance_model->employeeTransfer($data);
+        $result = $this->flexperformance_model->employeeTransfer($data);
 
-            $oldp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('oldPosition'));
-            $newp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('position'));
-            $oldd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('oldDepartment'));
-            $newd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('department'));
+        $oldp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('oldPosition'));
+        $newp = $this->flexperformance_model->getAttributeName("name", "position", "id", $request->input('position'));
+        $oldd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('oldDepartment'));
+        $newd = $this->flexperformance_model->getAttributeName("name", "department", "id", $request->input('department'));
 
-            if ($result == true) {
-                SysHelpers::AuditLog(2, "Requested Department Change For Employee with ID = " . $empID . " From " . $oldd . " To " . $newd . " and Position From " . $oldp . " To " . $newp . "", $request);
-                echo "<p class='alert alert-success text-center'>Request For Department and Position Transfer Has Been Sent Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED, Request For Department and Position Transfe Has Failed. Please Try Again</p>";
-            }
-
-
+        if ($result == true) {
+            SysHelpers::AuditLog(2, "Requested Department Change For Employee with ID = " . $empID . " From " . $oldd . " To " . $newd . " and Position From " . $oldp . " To " . $newp . "", $request);
+            echo "<p class='alert alert-success text-center'>Request For Department and Position Transfer Has Been Sent Successifully!</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED, Request For Department and Position Transfe Has Failed. Please Try Again</p>";
+        }
     }
 
     public function approveDeptPosTransfer($id)
@@ -2771,7 +2761,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->confirmTransfer($empUpdates, $transferUpdates, $empID, $transferID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Transfer Completed Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";
+            }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";
         }
@@ -2798,7 +2790,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->confirmTransfer($empUpdates, $transferUpdates, $empID, $transferID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Transfer Completed Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";
+            }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";
         }
@@ -2825,7 +2819,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->confirmTransfer($empUpdates, $transferUpdates, $empID, $transferID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Transfer Completed Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";
+            }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Transfer has Failed, Please Try Again</p>";
         }
@@ -2839,7 +2835,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->cancelTransfer($transferID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Transfer Cancelled Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED: Failed To Cancel The Transfer, Please Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED: Failed To Cancel The Transfer, Please Try Again</p>";
+            }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Transfer Operation has Failed, Please Try Again</p>";
         }
@@ -2866,9 +2864,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->employeeTransfer($data);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Request For Salary Updation Has Been Sent Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>FAILED, Request For Salary Updation Has Failed. Please Try Again</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED, Request For Salary Updation Has Failed. Please Try Again</p>";
             }
-
         }
     }
 
@@ -2883,8 +2881,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Email Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2901,8 +2900,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Posta Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2917,8 +2917,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Postal City Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2933,8 +2934,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Physical Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2949,8 +2951,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Mobile Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2964,8 +2967,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Physical Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2979,8 +2983,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>National ID Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -2994,8 +2999,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Tin Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3010,8 +3016,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Physical Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3030,10 +3037,10 @@ class GeneralController extends Controller
 
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Bank and Bank Branch Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
-
     }
 
     public function updateLineManager(Request $request)
@@ -3047,8 +3054,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Line Manager Status Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3063,8 +3071,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Contract Status Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3079,8 +3088,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Merital Status Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3095,8 +3105,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Physical Address Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3111,8 +3122,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateEmployee($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -3157,10 +3169,9 @@ class GeneralController extends Controller
         } else {
             echo 'Unauthorized Access';
         }
-
     }
 
-// ###################LEAVE######################################
+    // ###################LEAVE######################################
 
     public function salary_advance(Request $request)
     {
@@ -3200,22 +3211,18 @@ class GeneralController extends Controller
         if (session('recom_loan') != '' && session('appr_loan') != '') {
             $data['otherloan'] = $this->flexperformance_model->hr_fin_salary_advance_current();
             $this->flexperformance_model->update_salary_advance_notification_hr_fin(session('emp_id'));
-
         } elseif (session('recom_loan') != '') {
             $data['otherloan'] = $this->flexperformance_model->hr_salary_advance_current();
             $this->flexperformance_model->update_salary_advance_notification_hr();
-
         } elseif (session('appr_loan') != '') {
             $data['otherloan'] = $this->flexperformance_model->fin_salary_advance_current();
             $this->flexperformance_model->update_salary_advance_notification_fin();
-
         }
 
         $data['employee'] = $this->flexperformance_model->customemployee();
         $data['title'] = "Loans and Salaries";
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         return view('app.salary_advance', $data);
-
     }
 
     public function apply_salary_advance(Request $request)
@@ -3253,7 +3260,7 @@ class GeneralController extends Controller
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
             }
         }
-//      else echo "string";
+        //      else echo "string";
 
     }
 
@@ -3294,7 +3301,6 @@ class GeneralController extends Controller
                 echo "<p class='alert alert-warning text-center'>Request FAILED, Please Try Again</p>";
             }
         }
-
     }
 
     public function confirmed_loans(Request $request)
@@ -3307,7 +3313,6 @@ class GeneralController extends Controller
         }
         $data['title'] = "Loan";
         return view('app.loan', $data);
-
     }
 
     public function loan_advanced_payments(Request $request)
@@ -3317,7 +3322,6 @@ class GeneralController extends Controller
         $data['loan_info'] = $this->flexperformance_model->getloan($loanID);
         $data['title'] = "Advanced Loan Payments";
         return view('app.loan_adv_payment', $data);
-
     }
 
     public function adv_loan_pay(Request $request)
@@ -3351,7 +3355,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     ################## START LOAN OPERATIONS ###########################
@@ -3454,7 +3457,6 @@ class GeneralController extends Controller
             } else {
                 echo "<p class='alert alert-warning text-center'>Loan NOT Approved, Please Try Again</p>";
             }
-
         }
     }
 
@@ -3532,7 +3534,6 @@ class GeneralController extends Controller
             $reload = '/flex/loan_application';
             return redirect($reload);
         }
-
     }
 
     public function updateloan(Request $request)
@@ -3543,7 +3544,6 @@ class GeneralController extends Controller
         $data['loan'] = $this->flexperformance_model->getloanbyid($loanID);
         $data['title'] = "Loan";
         return view('app.updateloan', $data);
-
     }
 
     public function updateloan_info(Request $request)
@@ -3594,7 +3594,6 @@ class GeneralController extends Controller
         } else {
             echo 'Unauthorized Access';
         }
-
     }
 
     public function not_logged_in()
@@ -3675,14 +3674,12 @@ class GeneralController extends Controller
 
         if (session('password_set') == "1") {
             return view('auth.password-change');
-
         } else {
 
             $data['parent'] = 'Dashboard';
 
             return view('dashboard', $data);
         }
-
     }
 
     public function subdropFetcher()
@@ -3695,13 +3692,10 @@ class GeneralController extends Controller
             foreach ($querypos as $row) {
                 echo "<option value='" . $row->id . "'>" . $row->name . "</option>";
             }
-
         } else {
 
             echo '<option value="">Position not available</option>';
-
         }
-
     }
 
     public function positionFetcher(Request $request)
@@ -3720,13 +3714,10 @@ class GeneralController extends Controller
             //   $data['director'] = $querydirector;
 
             echo json_encode($data);
-
         } else {
 
             echo '<option value="">Position not available</option>';
-
         }
-
     }
 
     public function bankBranchFetcher(Request $request)
@@ -3737,12 +3728,10 @@ class GeneralController extends Controller
 
             foreach ($queryBranch as $rows) {
                 echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
-
             }
         } else {
             echo '<option value="">Branch Not Available</option>';
         }
-
     }
 
     public function addkin(Request $request, $id)
@@ -3769,7 +3758,6 @@ class GeneralController extends Controller
         $reload = '/flex/userprofile/?id=' . $id;
 
         return redirect($reload);
-
     }
 
     public function deletekin($empID, $id)
@@ -3784,7 +3772,6 @@ class GeneralController extends Controller
         $reload = '/flex/userprofile/?id=' . $empID;
 
         return redirect($reload);
-
     }
 
     public function addproperty(Request $request)
@@ -3793,8 +3780,9 @@ class GeneralController extends Controller
         if ($request->input("type") != 'Others') {
             // $id = $request->input('id');
             $type = $request->input("type");
-
-        } else { $type = $request->input("type2");}
+        } else {
+            $type = $request->input("type2");
+        }
 
         $data = array(
             'prop_type' => $type,
@@ -3854,7 +3842,6 @@ class GeneralController extends Controller
         $response_array['status'] = "OK";
         header('Content-type: application/json');
         echo json_encode($response_array);
-
     }
 
     public function employeeDeactivationRequest(Request $request)
@@ -3875,7 +3862,7 @@ class GeneralController extends Controller
             'empID' => $request->input("empID"),
             'author' => session('emp_id'),
         );
-//          echo json_encode($data);
+        //          echo json_encode($data);
 
         $this->flexperformance_model->employee_exit($data);
         $this->flexperformance_model->employeestatelog($datalog);
@@ -3884,7 +3871,6 @@ class GeneralController extends Controller
 
         $reload = '/flex/userprofile/?id=' . $request->input("empID");
         return redirect($reload);
-
     }
 
     public function employeeActivationRequest($id, Request $request)
@@ -3927,7 +3913,7 @@ class GeneralController extends Controller
 
         $this->flexperformance_model->audit_log("Exit Cancelled of an Employee with ID =" . $empID . "");
 
-        SysHelpers::AuditLog(1,"Exit Cancelled of an Employee with ID =" . $empID, $request);
+        SysHelpers::AuditLog(1, "Exit Cancelled of an Employee with ID =" . $empID, $request);
 
         $response_array['status'] = "OK";
         $response_array['title'] = "SUCCESS";
@@ -4008,7 +3994,8 @@ class GeneralController extends Controller
         $todate = date('Y-m-d');
 
         $final_state = array(
-            'current_state' => 1);
+            'current_state' => 1
+        );
 
         $datalog = array(
             'state' => 4,
@@ -4016,7 +4003,7 @@ class GeneralController extends Controller
             'empID' => $empID,
             'author' => session('emp_id'),
         );
-//        echo json_encode($datalog);
+        //        echo json_encode($datalog);
 
         $this->flexperformance_model->deactivateEmployee($empID, $datalog, $logID, $todate);
         $this->flexperformance_model->employeestatelog($datalog);
@@ -4026,20 +4013,20 @@ class GeneralController extends Controller
         $response_array['message'] = "<p class='alert alert-success text-center'>Employee Has Deactivated Successifully</p>";
         header('Content-type: application/json');
         echo json_encode($response_array);
-//        $result = $this->flexperformance_model->deactivateEmployee($empID, $datalog, $logID, $todate);
-//        if($result ==true){
-//            $this->flexperformance_model->audit_log("Deactivated Employee of ID =".$empID."");
-//            $response_array['status'] = "OK";
-//            $response_array['title'] = "SUCCESS";
-//            $response_array['message'] = "<p class='alert alert-success text-center'>Employee Has Deactivated Successifully</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        } else {
-//            $response_array['status'] = "ERR";
-//            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Deactivate Employee</p>";
-//            header('Content-type: application/json');
-//            echo json_encode($response_array);
-//        }
+        //        $result = $this->flexperformance_model->deactivateEmployee($empID, $datalog, $logID, $todate);
+        //        if($result ==true){
+        //            $this->flexperformance_model->audit_log("Deactivated Employee of ID =".$empID."");
+        //            $response_array['status'] = "OK";
+        //            $response_array['title'] = "SUCCESS";
+        //            $response_array['message'] = "<p class='alert alert-success text-center'>Employee Has Deactivated Successifully</p>";
+        //            header('Content-type: application/json');
+        //            echo json_encode($response_array);
+        //        } else {
+        //            $response_array['status'] = "ERR";
+        //            $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED:Failed to Deactivate Employee</p>";
+        //            header('Content-type: application/json');
+        //            echo json_encode($response_array);
+        //        }
     }
 
     public function inactive_employee(Request $request)
@@ -4057,10 +4044,9 @@ class GeneralController extends Controller
         } else {
             echo 'Unauthorized Access';
         }
-
     }
 
-#####################DEDUCTIONS############################################
+    #####################DEDUCTIONS############################################
 
     public function delete_deduction(Request $request)
     {
@@ -4076,7 +4062,6 @@ class GeneralController extends Controller
         if ($this->flexperformance_model->updatededuction($data, $id)) {
             return redirect('/flex/deduction');
         }
-
     }
 
     public function deduction_info($pattern)
@@ -4136,12 +4121,11 @@ class GeneralController extends Controller
             SysHelpers::FinancialLogs($request->input('empID'), 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
 
             if ($result == true) {
-                SysHelpers::AuditLog(1,"Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
+                SysHelpers::AuditLog(1, "Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
             } else {
                 echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
             }
-
         }
     }
 
@@ -4164,7 +4148,6 @@ class GeneralController extends Controller
                 $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deduction'))->limit(1)->first();
 
                 SysHelpers::FinancialLogs($row->empID, 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
-
             }
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
@@ -4172,7 +4155,6 @@ class GeneralController extends Controller
             } else {
                 echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
             }
-
         }
     }
 
@@ -4190,7 +4172,6 @@ class GeneralController extends Controller
             if (sizeof($arr) < 1) {
 
                 echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select Atlest One Employee</p>";
-
             } else {
 
                 foreach ($arr as $employee) {
@@ -4244,14 +4225,16 @@ class GeneralController extends Controller
                 if ($result == true) {
                     // $this->flexperformance_model->audit_log("Removed From Deduction Groups of IDs =" . $arrayString . "");
                     echo "<p class='alert alert-warning text-center'>Group Removed Successifully</p>";
-                } else {echo "<p class='alert alert-danger text-center'Group NOT Removed, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'Group NOT Removed, Try Again</p>";
+                }
             }
         }
     }
 
-#####################DEDUCTIONS############################################
+    #####################DEDUCTIONS############################################
 
-#####################PAYE############################################
+    #####################PAYE############################################
 
     public function addpaye(Request $request)
     {
@@ -4286,10 +4269,8 @@ class GeneralController extends Controller
                 $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Incorrect Values</p>";
                 header('Content-type: application/json');
                 echo json_encode($response_array);
-
             }
         }
-
     }
 
     public function deletepaye(Request $request)
@@ -4300,7 +4281,6 @@ class GeneralController extends Controller
         // die;
         session('note', "<p class='alert alert-warning text-center'>Record Deleted Successifully</p>");
         return redirect('/flex/paye');
-
     }
 
     public function paye_info($id)
@@ -4347,10 +4327,8 @@ class GeneralController extends Controller
                 $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Incorrect Values</p>";
                 header('Content-type: application/json');
                 echo json_encode($response_array);
-
             }
         }
-
     }
     public function updateOvertimeAllowance(Request $request)
     {
@@ -4364,10 +4342,10 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateCommonDeductions($updates, $allowanceID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
-
-            } else {echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";
+            }
         }
-
     }
 
     public function updateCommonDeductions(Request $request)
@@ -4376,7 +4354,7 @@ class GeneralController extends Controller
 
 
 
-        if ( isset($request->deductionID)) {
+        if (isset($request->deductionID)) {
             $deductionID = $request->input('deductionID');
             $updates = array(
                 'name' => $request->input('name'),
@@ -4387,10 +4365,10 @@ class GeneralController extends Controller
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Updated Deductions with ID = " . $deductionID . "");
                 echo "<p class='alert alert-success text-center'>Updated Successifully</p>";
-
-            } else {echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";}
+            } else {
+                echo "<p class='alert alert-danger text-center'>Updation Failed, Please Try Again</p>";
+            }
         }
-
     }
 
     public function common_deductions_info($id)
@@ -4403,7 +4381,6 @@ class GeneralController extends Controller
         $data['parent'] = "Statutory Deduction";
         $data['child'] = "Update";
         return view('app.updatededuction', $data);
-
     }
 
     public function updatePensionName(Request $request)
@@ -4416,8 +4393,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updatePension($updates, $fundID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4432,8 +4410,9 @@ class GeneralController extends Controller
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employee Value of " . $request->input('employee_amount') . " ");
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4448,8 +4427,9 @@ class GeneralController extends Controller
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Updated Pension with ID =" . $fundID . " To Employer Value of " . $request->input('employee_amount') . " ");
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4463,8 +4443,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updatePension($updates, $fundID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4478,8 +4459,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4493,8 +4475,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4508,8 +4491,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4523,8 +4507,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateDeductions($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4540,8 +4525,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4555,8 +4541,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4570,8 +4557,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -4585,12 +4573,13 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateMeals($updates, $deductionID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
-#####################PAYE############################################
+    #####################PAYE############################################
 
     ##################################ALLOWANCE##########################
 
@@ -4605,11 +4594,9 @@ class GeneralController extends Controller
             $data['child'] = "Allowances";
 
             return view('allowance.allowance', $data);
-
         } else {
             echo "Unauthorized Access";
         }
-
     }
 
     public function allowance_overtime(Request $request)
@@ -4625,11 +4612,9 @@ class GeneralController extends Controller
             $data['title'] = "Overtime";
 
             return view('overtime.allowance_overtime', $data);
-
         } else {
             echo "Unauthorized Access";
         }
-
     }
 
     public function statutory_deductions(Request $request)
@@ -4651,11 +4636,9 @@ class GeneralController extends Controller
             $data['child'] = "Statutory Deductions";
 
             return view('app.statutory_deduction', $data);
-
         } else {
             echo "Unauthorized Access";
         }
-
     }
 
     public function non_statutory_deductions(Request $request)
@@ -4670,11 +4653,9 @@ class GeneralController extends Controller
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['title'] = "Non-Statutory Deductions";
             return view('app.non_statutory_deductions', $data);
-
         } else {
             echo "Unauthorized Access";
         }
-
     }
 
     public function addAllowance(Request $request)
@@ -4709,7 +4690,6 @@ class GeneralController extends Controller
         //     echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
         // }
         return back()->with('success', 'Saved');
-
     }
 
     public function addOvertimeCategory(Request $request)
@@ -4723,7 +4703,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addOvertimeCategory($data);
             if ($result == true) {
-               // $this->flexperformance_model->audit_log("Created New Overtime ");
+                // $this->flexperformance_model->audit_log("Created New Overtime ");
                 echo "<p class='alert alert-success text-center'>Overtime Registered Successifully</p>";
             } else {
                 echo "<p class='alert alert-warning text-center'>Overtime Registration FAILED, Please Try Again</p>";
@@ -4737,7 +4717,7 @@ class GeneralController extends Controller
         $name = $request->input('name');
         $code = $request->input('code');
         $amount = $request->input('amount');
-        $percent = $request->input('rate')/100;
+        $percent = $request->input('rate') / 100;
         $apply_to = $request->input('apply_to');
         $mode = $request->input('policy');
         //$state = $request->input('state');
@@ -4747,13 +4727,13 @@ class GeneralController extends Controller
 
             'name' => $name,
             'code' => $code,
-            'amount' => $amount*$rate,
+            'amount' => $amount * $rate,
             'percent' => $percent,
             'apply_to' => $apply_to,
             'mode' => $mode,
             'state' => $state,
-            'currency'=>$request->currency,
-            'rate'=>$rate,
+            'currency' => $request->currency,
+            'rate' => $rate,
 
         );
 
@@ -4762,36 +4742,36 @@ class GeneralController extends Controller
         echo "Record inserted successfully.<br/>";
         return redirect('flex/non_statutory_deductions');
     }
-//     public function addDeduction(Request $request)   {
+    //     public function addDeduction(Request $request)   {
 
-//       if ($request->method() == "POST") {
-//         $policy = $request->input('policy');
-//         if($policy==1){
-//           $amount = $request->input('amount');
-//           $percent = 0;
-//         } else{
-//           $amount = 0;
-//           $percent = 0.01*($request->input('rate'));
-//         }
-//         $data = array(
-//             'name' =>trim($request->input('name')),
-//             'amount' =>$amount,
-//             'mode' =>$request->input('policy'),
-//             'state' =>1,
-//             'apply_to' =>2,
-//             'percent' =>$percent
-//             );
+    //       if ($request->method() == "POST") {
+    //         $policy = $request->input('policy');
+    //         if($policy==1){
+    //           $amount = $request->input('amount');
+    //           $percent = 0;
+    //         } else{
+    //           $amount = 0;
+    //           $percent = 0.01*($request->input('rate'));
+    //         }
+    //         $data = array(
+    //             'name' =>trim($request->input('name')),
+    //             'amount' =>$amount,
+    //             'mode' =>$request->input('policy'),
+    //             'state' =>1,
+    //             'apply_to' =>2,
+    //             'percent' =>$percent
+    //             );
 
-//           $result = $this->flexperformance_model->addDeduction($data);
-//           if($result==true){
-//              $this->flexperformance_model->audit_log("Created New Deduction ");
-//               echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
-//           } else {
-//                echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
-//           }
-//       }
+    //           $result = $this->flexperformance_model->addDeduction($data);
+    //           if($result==true){
+    //              $this->flexperformance_model->audit_log("Created New Deduction ");
+    //               echo "<p class='alert alert-success text-center'>Deduction Registered Successifully</p>";
+    //           } else {
+    //                echo "<p class='alert alert-warning text-center'>Deduction Registration FAILED, Please Try Again</p>";
+    //           }
+    //       }
 
-//    }
+    //    }
 
     public function assign_allowance_individual(Request $request)
     {
@@ -4804,11 +4784,11 @@ class GeneralController extends Controller
             $data = array(
                 'empID' => $request->input('empID'),
                 'allowance' => $request->input('allowance'),
-                'amount'=>$request->input('amount')*$rate,
-                'mode'=>$request->input('mode'),
-                'percent'=>$request->input('percent')/100,
-                'currency'=>$request->currency,
-                'rate'=>$rate,
+                'amount' => $request->input('amount') * $rate,
+                'mode' => $request->input('mode'),
+                'percent' => $request->input('percent') / 100,
+                'currency' => $request->currency,
+                'rate' => $rate,
             );
 
             $result = $this->flexperformance_model->assign_allowance($data);
@@ -4823,7 +4803,6 @@ class GeneralController extends Controller
             } else {
                 echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
             }
-
         }
     }
 
@@ -4842,11 +4821,11 @@ class GeneralController extends Controller
                     'empID' => $row->empID,
                     'allowance' => $request->input('allowance'),
                     'group_name' => $request->input('group'),
-                    'amount'=>$request->input('amount')*$rate,
-                    'mode'=>$request->input('mode'),
-                    'percent'=>$request->input('percent')/100,
-                    'currency'=>$request->currency,
-                    'rate'=>$rate,
+                    'amount' => $request->input('amount') * $rate,
+                    'mode' => $request->input('mode'),
+                    'percent' => $request->input('percent') / 100,
+                    'currency' => $request->currency,
+                    'rate' => $rate,
                 );
 
                 $result = $this->flexperformance_model->assign_allowance($data);
@@ -4854,14 +4833,14 @@ class GeneralController extends Controller
                 $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
                 SysHelpers::FinancialLogs($row->empID, 'Assigned allowance', '-', $allowanceName->name,  'Payroll Input');
-
             }
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Group with Id = " . $request->input('group') . " ");
                 echo "<p class='alert alert-success text-center'>Added Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+            }
         }
     }
 
@@ -4915,12 +4894,13 @@ class GeneralController extends Controller
                 foreach ($arr as $group) {
                     $groupID = $group;
                     $result = $this->flexperformance_model->remove_group_from_allowance($groupID, $allowanceID);
-
                 }
                 if ($result == true) {
                     // $this->flexperformance_model->audit_log("Removed Group of ID = " . implode(',', $arr) . " From Alowance with Id = " . $allowanceID . " ");
                     echo "<p class='alert alert-warning text-center'>Group Removed </p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+                }
             }
         }
     }
@@ -4954,7 +4934,7 @@ class GeneralController extends Controller
         return view('app.overtime_category_info', $data);
     }
 
-    public function deleteAllowance($id,Request $request)
+    public function deleteAllowance($id, Request $request)
     {
         $ID = $id;
         if ($ID != '') {
@@ -4970,14 +4950,14 @@ class GeneralController extends Controller
             } else {
 
                 $json_array['status'] = "ERR";
-                $json_array['message'] = "<p class='alert alert-danger text-center'>Deletion Failed</p>";}
+                $json_array['message'] = "<p class='alert alert-danger text-center'>Deletion Failed</p>";
+            }
             header("Content-type: application/json");
             echo json_encode($json_array);
-
         }
     }
 
-    public function activateAllowance($id,Request $request)
+    public function activateAllowance($id, Request $request)
     {
         $ID = $id;
         if ($ID != '') {
@@ -4993,10 +4973,10 @@ class GeneralController extends Controller
             } else {
 
                 $json_array['status'] = "ERR";
-                $json_array['message'] = "<p class='alert alert-danger text-center'>Activation Failed</p>";}
+                $json_array['message'] = "<p class='alert alert-danger text-center'>Activation Failed</p>";
+            }
             header("Content-type: application/json");
             echo json_encode($json_array);
-
         }
     }
 
@@ -5010,8 +4990,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -5025,8 +5006,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -5040,8 +5022,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -5055,8 +5038,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
     public function updateOvertimeRateDay(Request $request)
@@ -5069,8 +5053,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
     public function updateOvertimeRateNight(Request $request)
@@ -5083,8 +5068,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateOvertimeCategory($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -5098,8 +5084,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Updation Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Updation Failed</p>";
+            }
         }
     }
 
@@ -5113,8 +5100,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Updation Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Updation Failed</p>";
+            }
         }
     }
 
@@ -5128,8 +5116,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Updation Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Updation Failed</p>";
+            }
         }
     }
 
@@ -5143,15 +5132,15 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Updation Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Updation Failed</p>";
+            }
         }
     }
 
     //###########BONUS################# updateAllowanceName
     public function addToBonusByEmpGroup(Request $request)
     {
-
     }
 
     public function addToBonus(Request $request)
@@ -5175,8 +5164,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->addToBonus($data);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Added To Bonus Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";
+            }
         }
         if ($methode == "POST" && $empID != '' && $amount != '' && $days != '' && $percent == '') {
             $data = array(
@@ -5191,8 +5181,9 @@ class GeneralController extends Controller
             if ($result == true) {
 
                 echo "<p class='alert alert-success text-center'>Added To Bonus Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";
+            }
         }
         if ($methode == "POST" && $empID != '' && $amount != '' && $days == '' && $percent == '') {
             $data = array(
@@ -5206,8 +5197,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->addToBonus($data);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Added To Bonus Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";
+            }
         }
     }
     public function addBonusTag(Request $request)
@@ -5221,8 +5213,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->addBonusTag($data);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Added To Bonus Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Not Added, Some Erors Occured, Retry</p>";
+            }
         }
     }
 
@@ -5245,7 +5238,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function confirmBonus($id)
@@ -5268,7 +5260,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function recommendBonus($id)
@@ -5291,7 +5282,6 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
 
     public function deleteBonus($id)
@@ -5310,11 +5300,10 @@ class GeneralController extends Controller
             header('Content-type: application/json');
             echo json_encode($response_array);
         }
-
     }
     ###################################END ALLOWANCE#######################
 
-#####################PRIVELEGES######################################
+    #####################PRIVELEGES######################################
 
     public function financial_group(Request $request)
     {
@@ -5335,7 +5324,6 @@ class GeneralController extends Controller
                 session('notegroup', "<p class='alert alert-success text-center'>Group Added Successifully</p>");
 
                 return redirect('/flex/financial_group');
-
             } else {
                 // $id =session('emp_id');
                 $data['role'] = $this->flexperformance_model->allrole();
@@ -5347,7 +5335,6 @@ class GeneralController extends Controller
                 $data['child'] = "Financial Settings";
                 return view('app.financial_group', $data);
             }
-
         } else {
             echo "Unauthorized Access";
         }
@@ -5356,7 +5343,7 @@ class GeneralController extends Controller
     public function role(Request $request)
     {
         if (session('mng_roles_grp')) {
-            if ( $request->type == "addrole") {
+            if ($request->type == "addrole") {
                 $data = array(
                     'name' => $request->input('name'),
                     'created_by' => session('emp_id'),
@@ -5364,14 +5351,13 @@ class GeneralController extends Controller
 
                 $result = $this->flexperformance_model->addrole($data);
                 if ($result == true) {
-                   // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
+                    // $this->flexperformance_model->audit_log("Created New Role with empty permission set");
                     session('note', "<p class='alert alert-success text-center'>Role Added Successifully</p>");
                     return redirect('/flex/role');
                 } else {
                     echo "<p class='alert alert-danger text-center'>Department Registration has FAILED, Contact Your Admin</p>";
                 }
-
-            } elseif ( $request->type == "addgroup") {
+            } elseif ($request->type == "addgroup") {
 
                 $data = array(
                     'name' => $request->input('name'),
@@ -5428,7 +5414,6 @@ class GeneralController extends Controller
             $data['child'] = "Groups";
 
             return view('app.groups', $data);
-
         } else {
             echo "Unauthorized Access";
         }
@@ -5476,7 +5461,6 @@ class GeneralController extends Controller
                             $empID = $ids->empID;
 
                             $result = $this->flexperformance_model->removeEmployeeByROleFromGroup($empID, $groupID);
-
                         }
                     }
 
@@ -5484,7 +5468,9 @@ class GeneralController extends Controller
                 }
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
+                }
             }
         }
     }
@@ -5503,7 +5489,6 @@ class GeneralController extends Controller
 
             if (sizeof($arr) < 1) {
                 echo "<p class='alert alert-warning text-center'>No Employee Selected! Please Select At Least One Employee</p>";
-
             } else {
 
                 foreach ($arr as $composite) {
@@ -5551,7 +5536,9 @@ class GeneralController extends Controller
                 }
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Removed Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
+                }
             }
         }
     }
@@ -5619,12 +5606,13 @@ class GeneralController extends Controller
                     }
 
                     $result = $this->flexperformance_model->addRoleToGroup($roleID, $groupID);
-
                 }
 
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Employee Added Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+                }
             }
         }
     }
@@ -5661,9 +5649,9 @@ class GeneralController extends Controller
 
                             $this->flexperformance_model->assign_allowance($data);
 
-                            if(empty($allowanceName)){
+                            if (empty($allowanceName)) {
                                 SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', 'Allowance Not Found', 'Payroll Input');
-                            }else {
+                            } else {
                                 SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
                             }
                         }
@@ -5693,9 +5681,9 @@ class GeneralController extends Controller
 
                             $this->flexperformance_model->assign_deduction($data);
 
-                            if(empty($deductionName)){
+                            if (empty($deductionName)) {
                                 SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', 'Deduction Not Found', 'Payroll Input');
-                            }else {
+                            } else {
                                 SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', $deductionName->name, 'Payroll Input');
                             }
                         }
@@ -5705,7 +5693,9 @@ class GeneralController extends Controller
                 }
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Employee Added Successifully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>Not Added, Try Again</p>";
+                }
             }
         }
     }
@@ -5738,7 +5728,6 @@ class GeneralController extends Controller
                     );
 
                     $this->flexperformance_model->assign_allowance($data);
-
                 }
 
                 foreach ($rolesingroup as $roles) {
@@ -5751,14 +5740,11 @@ class GeneralController extends Controller
                     );
 
                     $this->flexperformance_model->assignrole($data);
-
                 }
                 $this->flexperformance_model->add_to_group($datagroup);
-
             }
             session('note', "<p class='alert alert-success text-center'>Employee(s) Added Successifully!</p>");
             return redirect('/flex/groups/?id=' . base64_encode($groupID));
-
         } elseif (isset($_POST['removeselected'])) {
 
             $arr = $request->input('option');
@@ -5776,13 +5762,10 @@ class GeneralController extends Controller
                 $this->flexperformance_model->remove_from_group($db_id);
                 $this->flexperformance_model->remove_from_grouprole($EMPID, $groupID);
                 $this->flexperformance_model->remove_from_grouppackage($EMPID, $groupID);
-
             }
             session('note', "<p class='alert alert-danger text-center'>Employees Removed Successifully!</p>");
             return redirect('/flex/groups/?id=' . base64_encode($groupID));
-
         }
-
     }
 
     public function deleteRole($id)
@@ -5825,7 +5808,6 @@ class GeneralController extends Controller
         $data['permission'] = $this->flexperformance_model->permission();
         $data['title'] = "Roles and Activities";
         return view('app.permission', $data);
-
     }
 
     public function assignrole2(Request $request)
@@ -5844,7 +5826,6 @@ class GeneralController extends Controller
             session('note', "<p class='alert alert-success text-center'>Role Assigned Successifully</p>");
             $reload = '/flex/role_info/?id=' . $roleref;
             return redirect($reload);
-
         }
         if (isset($_POST['addgroup'])) {
             $groupID = $request->input("groupID");
@@ -5858,14 +5839,12 @@ class GeneralController extends Controller
                     'group_name' => $groupID,
                 );
                 $this->flexperformance_model->assignrole($data);
-
             }
 
             session('note', "<p class='alert alert-success text-center'>Role Assigned Successifully</p>");
             $reload = '/flex/role_info/?id=' . base64_encode($roleID);
             return redirect($reload);
         }
-
     }
 
     public function role_info(Request $request)
@@ -5921,14 +5900,13 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                SysHelpers::AuditLog(1,"Added Permissions to a Role  permission tag as " . implode("", $arr) . " ",$request);
+                SysHelpers::AuditLog(1, "Added Permissions to a Role  permission tag as " . implode("", $arr) . " ", $request);
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Permissions NOT Assigned, Please try Again!</p>");
                 return redirect('/flex/role/');
             }
-
         }
         if (isset($_POST['updatename'])) {
             $idpost = $request->input('id');
@@ -5939,7 +5917,7 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->updaterole($data, $idpost);
             if ($result == true) {
-                SysHelpers::AuditLog(1,"Updated Role Name to   " . $request->input('name') . " ",$request);
+                SysHelpers::AuditLog(1, "Updated Role Name to   " . $request->input('name') . " ", $request);
                 session('note', "<p class='alert alert-success text-center'>Role Updated Successifully!</p>");
                 return redirect('/flex/role');
             } else {
@@ -5959,7 +5937,6 @@ class GeneralController extends Controller
         if (sizeof($arr) <= 0) {
             session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
             return redirect('/flex/userprofile/?id=' . $userID);
-
         } else {
             for ($i = 0; $i < sizeof($arr); $i++) {
                 $rolevalue = $arr[$i];
@@ -5978,10 +5955,8 @@ class GeneralController extends Controller
             } else {
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
                 return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
-
             }
         }
-
     }
 
     public function revokerole(Request $request)
@@ -5995,7 +5970,6 @@ class GeneralController extends Controller
 
             session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
             return redirect('/flex/userprofile/?id=' . $userID);
-
         } else {
             for ($i = 0; $i < sizeof($arr); $i++) {
                 $rolename = $arr[$i];
@@ -6008,16 +5982,14 @@ class GeneralController extends Controller
                 // $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
                 session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
                 return redirect('/flex/userprofile/?id=' . $userID);
-
             } else {
 
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
                 return redirect('/flex/userprofile/?id=' . $userID);
             }
-
         }
     }
-######################PRIVELEGES######################################
+    ######################PRIVELEGES######################################
 
     public function appreciation(Request $request)
     {
@@ -6043,7 +6015,6 @@ class GeneralController extends Controller
             $this->flexperformance_model->add_apprec($data);
             session('note', "<p class='alert alert-success text-center'>Employee of the month Updated Successifully</p>");
             return redirect('/flex/appreciation');
-
         }
     }
 
@@ -6058,9 +6029,9 @@ class GeneralController extends Controller
         return view('app.employee_payslip', $data);
     }
 
-######################LEAVE NOTIFICATION######################################
+    ######################LEAVE NOTIFICATION######################################
 
-######################NOTIFICATION BADGES ######################################
+    ######################NOTIFICATION BADGES ######################################
 
     public function contract_expiration(Request $request)
     {
@@ -6072,7 +6043,6 @@ class GeneralController extends Controller
             $permanent = $key->PERMANENT;
             $intern = $key->INTERN;
         }
-
     }
 
     ################### ADD EMPLOYEE    ################################
@@ -6090,11 +6060,12 @@ class GeneralController extends Controller
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span>
         </button>Company Name Updated Successifully
       </div>';
-            } else {echo '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+            } else {
+                echo '<div class="alert alert-danger alert-dismissible fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span>
         </buttonUpdation Failed
-      </div>';}
-
+      </div>';
+            }
         }
     }
 
@@ -6118,7 +6089,6 @@ class GeneralController extends Controller
         } else {
             echo 'Unauthorized Access';
         }
-
     }
 
     public function getPositionSalaryRange(Request $request)
@@ -6138,16 +6108,14 @@ class GeneralController extends Controller
         }
         if ($result) {
             $response_array['salary'] = "<div><input required='required'  class='form-control @error('salary') is-invalid @enderror' type='number' min='" . $minSalary . "' step='0.01' max='" . $maxSalary . "'  name='salary'><div class='form-text text-muted'>Minimum salary is " . $minSalary . " and Maximam salary is " . $maxSalary . "</div></div>";
-
         } else {
             $response_array['salary'] = "<input required='required'  class='form-control col-md-7 col-xs-12' type='text' readonly value = 'Salary was Set to 10000'><input hidden required='required' type='number' readonly value = '10000' name='salary'>";
         }
         header('Content-type: application/json');
         echo json_encode($response_array);
-
     }
 
-//upload Employee
+    //upload Employee
 
     public function import(Request $request)
     {
@@ -6178,7 +6146,6 @@ class GeneralController extends Controller
                 }
             }
             $this->flexperformance_model->uploadEmployees($data);
-
         }
     }
 
@@ -6224,7 +6191,7 @@ class GeneralController extends Controller
 
                 // $randomPassword = $this->password_generator(8);
 
-                $password = "@2023". $request->fname;
+                $password = "@2023" . $request->fname;
 
                 $employee = array(
                     'fname' => $request->input("fname"),
@@ -6232,7 +6199,7 @@ class GeneralController extends Controller
 
                     'emp_code' => $request->input("emp_code"),
                     'emp_level' => $request->input("emp_level"),
-                    'lname' =>$request->input("lname"),
+                    'lname' => $request->input("lname"),
                     // 'lname' => $randomPassword,
                     'salary' => $request->input("salary"),
                     'gender' => $request->input("gender"),
@@ -6313,11 +6280,11 @@ class GeneralController extends Controller
                     if ($result == true) {
 
                         $email_data = array(
-                            'email'=>$request->email,
+                            'email' => $request->email,
                             'fname' => $request->fname,
                             'lname' => $request->lname,
                             'username' => $request->emp_id,
-                            'password'=> $password
+                            'password' => $password
                         );
 
                         // $user=User::first();
@@ -6424,7 +6391,6 @@ class GeneralController extends Controller
                     header('Content-type: application/json');
                     echo json_encode($response_array);
                 }
-
             }
         }
     }
@@ -6533,9 +6499,7 @@ class GeneralController extends Controller
                 session('note', "<p class='alert alert-warning text-center'>The filetype you are attempting to upload is not allowed!.</p>");
                 return redirect('/flex/employer');
             }
-
         }
-
     }
 
     ################## GRIEVANCES AND DISCPLINARY#############################
@@ -6573,7 +6537,8 @@ class GeneralController extends Controller
                         'anonymous' => 1,
                         'attachment' => $path . $data["file_name"],
                         'forwarded' => 1,
-                    );} else {
+                    );
+                } else {
 
                     $data = array(
                         'title' => $request->input("title"),
@@ -6581,7 +6546,6 @@ class GeneralController extends Controller
                         'empID' => session('emp_id'),
                         'attachment' => $path . $data["file_name"],
                     );
-
                 }
 
                 $this->flexperformance_model->add_grievance($data);
@@ -6599,7 +6563,6 @@ class GeneralController extends Controller
                         'anonymous' => 1,
                         'forwarded' => 1,
                     );
-
                 } else {
 
                     $data = array(
@@ -6608,17 +6571,13 @@ class GeneralController extends Controller
                         'empID' => session('emp_id'),
                         'attachment' => "N/A",
                     );
-
                 }
 
                 $this->flexperformance_model->add_grievance($data);
                 session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
                 return redirect('/flex/grievances');
-
             }
-
         }
-
     }
 
     public function grievance_details(Request $request)
@@ -6665,13 +6624,11 @@ class GeneralController extends Controller
                     'forwarded_by' => session('emp_id'),
                     'forwarded' => 1,
                 );
-
             }
 
             $this->flexperformance_model->forward_grievance($data, $id);
             session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
             return redirect('/flex/grievances');
-
         }
 
         //   SOLVE
@@ -6705,7 +6662,6 @@ class GeneralController extends Controller
                 $this->flexperformance_model->forward_grievance($updates, $id);
                 session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
                 return redirect('/flex/grievances');
-
             } else {
 
                 $data = array(
@@ -6714,15 +6670,12 @@ class GeneralController extends Controller
                     'forwarded' => 1,
                     'status' => 1,
                 );
-
             }
 
             $this->flexperformance_model->forward_grievance($data, $id);
             session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
             return redirect('/flex/grievances');
-
         }
-
     }
     public function resolve_grievance(Request $request)
     {
@@ -6775,7 +6728,6 @@ class GeneralController extends Controller
             $data['child'] = "Audit Log";
 
             return view('audit-trail.audit_logs', $data);
-
         } else {
 
             abort(403, 'Unauthorized action.');
@@ -6802,8 +6754,7 @@ class GeneralController extends Controller
             'due_date' => date('Y_m_d_H_i_s'),
         );
 
-        $result = DB::transaction(function() use($logData)
-        {
+        $result = DB::transaction(function () use ($logData) {
             DB::table('audit_trails')->delete();
 
             $this->flexperformance_model->insertAuditPurgeLog($logData);
@@ -6811,15 +6762,15 @@ class GeneralController extends Controller
             return 1;
         });
 
-        if($result == 1){
+        if ($result == 1) {
             return redirect()->route('flex.audit_logs');
-        }else{
+        } else {
             abort(400, 'Bad Request');
         }
 
 
 
-    //    retrun redirectback();
+        //    retrun redirectback();
     }
 
     public function export_audit_logs(Request $request)
@@ -6874,18 +6825,17 @@ class GeneralController extends Controller
                 'empID' => session('emp_id'),
                 'description' => "Cleared Audit logs",
                 'agent' => session('agent'),
-//        'platform' =>$this->agent->platform(),
+                //        'platform' =>$this->agent->platform(),
                 'ip_address' => $this->input->ip_address(),
                 'due_date' => date('Y_m_d_H_i_s'),
             );
         }
 
         $this->flexperformance_model->insertAuditPurgeLog($logData);
-
     }
-############################ END GRIEVANCES AND DISCPLINARY#############################
+    ############################ END GRIEVANCES AND DISCPLINARY#############################
 
-#################################### TEST FUNCTIONS #######################################
+    #################################### TEST FUNCTIONS #######################################
 
     public function userArray(Request $request)
     {
@@ -6962,7 +6912,6 @@ class GeneralController extends Controller
 
         echo $this->agent->platform() . "<br>"; // Platform info (Windows, Linux, Mac, etc.)
         echo $this->input->ip_address();
-
     }
 
     public function sendMailuser()
@@ -6974,16 +6923,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-        $config = array(
-            'protocol' => 'TLS',
-            'smtp_host' => 'smtp.gmail.com',
-            'smtp_port' => 587,
-            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-            'mailtype' => 'html',
-            'charset' => 'iso-8859-1',
-            'wordwrap' => true,
-        );
+            $config = array(
+                'protocol' => 'TLS',
+                'smtp_host' => 'smtp.gmail.com',
+                'smtp_port' => 587,
+                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+                'mailtype' => 'html',
+                'charset' => 'iso-8859-1',
+                'wordwrap' => true,
+            );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -6999,7 +6948,6 @@ class GeneralController extends Controller
         } else {
             show_error($this->email->print_debugger());
         }
-
     }
 
     public function patterntest(Request $request)
@@ -7011,7 +6959,6 @@ class GeneralController extends Controller
 
             echo $this->flexperformance_model->get_allowance_name($allowances[0]) . " The Rate is " . $allowances[3] . "<br>";
         }
-
     }
 
     public function sendMailuserFinal()
@@ -7023,16 +6970,16 @@ class GeneralController extends Controller
         }*/
         //exit($host.$port);
         $d =
-        $config = array(
-            'protocol' => 'TLS',
-            'smtp_host' => 'smtp.gmail.com',
-            'smtp_port' => 587,
-            'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
-            'smtp_pass' => 'Mirajissa1@1994', // change it to yours
-            'mailtype' => 'text',
-            'charset' => 'iso-8859-1',
-            'wordwrap' => true,
-        );
+            $config = array(
+                'protocol' => 'TLS',
+                'smtp_host' => 'smtp.gmail.com',
+                'smtp_port' => 587,
+                'smtp_user' => 'mirajissa1@gmail.com', // change it to yours
+                'smtp_pass' => 'Mirajissa1@1994', // change it to yours
+                'mailtype' => 'text',
+                'charset' => 'iso-8859-1',
+                'wordwrap' => true,
+            );
 
         $message = "This is my email";
         $this->load->library('email', $config);
@@ -7048,7 +6995,6 @@ class GeneralController extends Controller
         } else {
             show_error($this->email->print_debugger());
         }
-
     }
 
     public function send_email(Request $request)
@@ -7083,7 +7029,7 @@ class GeneralController extends Controller
         echo "EMAIL SENT SUCCESSIFULLY";
     }
 
-//using PHPMiler
+    //using PHPMiler
 
     public function send(Request $request)
     {
@@ -7157,7 +7103,6 @@ class GeneralController extends Controller
         $data['month_list'] = $this->payroll_model->payroll_month_list();
         $data['title'] = "Employee Report";
         return view('app.employee_report', $data);
-
     }
 
     public function partial(Request $request)
@@ -7209,7 +7154,6 @@ class GeneralController extends Controller
             $response_array['status'] = "ERR";
             echo json_encode($response_array);
         }
-
     }
 
     public function updateGroupEdit(Request $request)
@@ -7226,7 +7170,6 @@ class GeneralController extends Controller
                 $response_array['status'] = "ERR";
                 echo json_encode($response_array);
             }
-
         }
     }
 
@@ -7240,25 +7183,27 @@ class GeneralController extends Controller
         /*amount bank staff*/
         $amount_staff_bank = 0;
         foreach ($staff_bank_totals as $row) {
-            $amount_staff_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $amount_staff_bank += $row->salary +
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*amount bank temporary*/
         $amount_temporary_bank = 0;
         foreach ($temporary_bank_totals as $row) {
-            $amount_temporary_bank += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $amount_temporary_bank += $row->salary +
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         /*mwp total*/
         $amount_mwp = 0;
         foreach ($temporary_mwp_total as $row) {
-            $amount_mwp += $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+            $amount_mwp += $row->salary +
+                $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
         }
 
         $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
 
         return $total;
-
     }
 
     public function updateContractStart(Request $request)
@@ -7273,8 +7218,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateContractStart($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Contract Start Date Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -7290,8 +7236,9 @@ class GeneralController extends Controller
             $result = $this->flexperformance_model->updateContractEnd($updates, $empID);
             if ($result == true) {
                 echo "<p class='alert alert-success text-center'>Contract End Date Successifully!</p>";
-            } else {echo "<p class='alert alert-danger text-center'>Update Failed</p>";}
-
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
         }
     }
 
@@ -7314,7 +7261,9 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->approveRegistration($emp_id, $transferID, $approver, $date);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Registration Successfully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
+                }
             }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Failed To Approve Registration, Please Try Again</p>";
@@ -7338,7 +7287,9 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->disapproveRegistration($emp_id, $transferID);
                 if ($result == true) {
                     echo "<p class='alert alert-success text-center'>Registration Cancelled Successfully!</p>";
-                } else {echo "<p class='alert alert-danger text-center'>FAILED: Failed To Cancel Registration, Please Try Again</p>";}
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED: Failed To Cancel Registration, Please Try Again</p>";
+                }
             }
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED: Failed To Cancel Registration, Please Try Again</p>";
@@ -7346,100 +7297,101 @@ class GeneralController extends Controller
     }
 
 
-// start of terminations functions
+    // start of terminations functions
 
 
-public function termination()
-{
+    public function termination()
+    {
 
-    $data['title'] = "Overtime";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
-    $data['employees'] = $this->flexperformance_model->Employee();
-    $terminations= Termination::all();
-    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['title'] = "Overtime";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['employees'] = $this->flexperformance_model->Employee();
+        $terminations = Termination::all();
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
-    $i=1;
-    // }
-    $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-    $data['parent'] = 'Workforce';
-    $data['child'] = 'Termination';
+        $i = 1;
+        // }
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'Termination';
 
-    return view('workforce-management.termination', $data,compact('terminations','i'));
+        return view('workforce-management.termination', $data, compact('terminations', 'i'));
+    }
 
-}
+    public function addTermination()
+    {
 
-public function addTermination()
-{
-
-    $data['title'] = "Overtime";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
-    $data['employees'] = $this->flexperformance_model->Employee();
-    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['title'] = "Overtime";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['employees'] = $this->flexperformance_model->Employee();
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
 
-    // }
-    $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-    $data['parent'] = 'Workforce';
-    $data['child'] = 'AddTermination';
+        // }
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'AddTermination';
 
-    return view('workforce-management.add-termination', $data);
+        return view('workforce-management.add-termination', $data);
+    }
 
-}
+    public function saveTermination(Request $request)
+    {
 
-public function saveTermination(Request $request)
-{
-
-    request()->validate(
-        [
-        'employeeID' => 'required',
-        'terminationDate' => 'required',
-        'reason' => 'required',
-        'salaryEnrollment' => 'required',
-        'normalDays' => 'required',
-        'publicDays' => 'required',
-        'noticePay' => 'required',
-        'leavePay' => 'required',
-        'livingCost' => 'required',
-        'houseAllowance' => 'required',
-        'utilityAllowance' => 'required',
-        'tellerAllowance' => 'required',
-        'serevancePay' => 'required',
-        'leaveStand' => 'required',
-        'arrears' => 'required',
-        'exgracia' => 'required',
-        'bonus' => 'required',
-        'longServing' => 'required',
-        'salaryAdvance' => 'required',
-        'otherDeductions' => 'nullable',
-        'otherPayments' => 'nullable',
-         ]
+        request()->validate(
+            [
+                'employeeID' => 'required',
+                'terminationDate' => 'required',
+                'reason' => 'required',
+                'salaryEnrollment' => 'required',
+                'normalDays' => 'required',
+                'publicDays' => 'required',
+                'noticePay' => 'required',
+                'leavePay' => 'required',
+                'livingCost' => 'required',
+                'houseAllowance' => 'required',
+                'utilityAllowance' => 'required',
+                'tellerAllowance' => 'required',
+                'serevancePay' => 'required',
+                'leaveStand' => 'required',
+                'arrears' => 'required',
+                'exgracia' => 'required',
+                'bonus' => 'required',
+                'longServing' => 'required',
+                'salaryAdvance' => 'required',
+                'otherDeductions' => 'nullable',
+                'otherPayments' => 'nullable',
+            ]
         );
  
         $termination = new Termination();
-        $termination->employeeID=$request->employeeID;
-        $termination->terminationDate=$request->terminationDate;
-        $termination->reason=$request->reason;
-        $termination->salaryEnrollment=$request->salaryEnrollment;
-        $termination->normalDays=$request->normalDays;
-        $termination->publicDays=$request->publicDays;
-        $termination->noticePay=$request->noticePay;
-        $termination->leavePay=$request->leavePay;
-        $termination->livingCost=$request->livingCost;
-        $termination->houseAllowance=$request->houseAllowance;
-        $termination->utilityAllowance=$request->utilityAllowance;
-        $termination->leaveAllowance=$request->leaveAllowance;
-        $termination->tellerAllowance=$request->tellerAllowance;
-        $termination->serevancePay=$request->serevancePay;
-        $termination->leaveStand=$request->leaveStand;
-        $termination->arrears=$request->arrears;
-        $termination->exgracia=$request->exgracia;
-        $termination->bonus=$request->bonus;
-        $termination->longServing=$request->longServing;
-        $termination->salaryAdvance=$request->salaryAdvance;
-        $termination->otherDeductions=$request->otherDeductions;
-        $termination->otherPayments=$request->otherPayments;
+        $termination->employeeID = $request->employeeID;
+        $termination->terminationDate = $request->terminationDate;
+        $termination->reason = $request->reason;
+        $termination->salaryEnrollment = $request->salaryEnrollment;
+        $termination->normalDays = $request->normalDays;
+        $termination->publicDays = $request->publicDays;
+        $termination->noticePay = $request->noticePay;
+        $termination->leavePay = $request->leavePay;
+        $termination->livingCost = $request->livingCost;
+        $termination->houseAllowance = $request->houseAllowance;
+        $termination->utilityAllowance = $request->utilityAllowance;
+        $termination->leaveAllowance = $request->leaveAllowance;
+        $termination->tellerAllowance = $request->tellerAllowance;
+        $termination->serevancePay = $request->serevancePay;
+        $termination->leaveStand = $request->leaveStand;
+        $termination->arrears = $request->arrears;
+        $termination->exgracia = $request->exgracia;
+        $termination->bonus = $request->bonus;
+        $termination->longServing = $request->longServing;
+        $termination->salaryAdvance = $request->salaryAdvance;
+        $termination->otherDeductions = $request->otherDeductions;
+        $termination->otherPayments = $request->otherPayments;
         $termination->save();
-        // $msg="Employee Termination Benefits have been saved successfully";
+
+
+
+        $msg = "Employee Termination Benefits have been saved successfully";
         //dd($request->terminationDate);
         // $calendar = $request->terminationDate;
         // $datewell = explode("-", $calendar);
@@ -7453,27 +7405,191 @@ public function saveTermination(Request $request)
 
         // dd($payroll_month);
 
-//         //check whether if after payroll or before payroll
-//         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
-//         if($check_termination_date == true){
-// dd('yes');
-//         }else{
-// dd('no');
-//         }
+        //         //check whether if after payroll or before payroll
+        //         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
+        //         if($check_termination_date == true){
+        // dd('yes');
+        //         }else{
+        // dd('no');
+        //         }
         return redirect('flex/termination')->with('status', $msg);
-
-}
-
+    }
 
 
-public function viewTermination($id)
-{
-    $termination=Termination::where('id',$id)->first();
-    return view('workforce-management.terminal-balance',compact('termination'));
-}
+
+    public function viewTermination($id)
+    {
+        $termination = Termination::where('id', $id)->first();
 
 
-// end of terminations functions
+        $days_this_month = intval(date('t', strtotime($termination->terminationDate)));
+        $working_days_this_month = intval(date('d', strtotime($termination->terminationDate)));
+        $working_days_this_year = intval(date('z', strtotime($termination->terminationDate)));
+        $month = intval(date('F', strtotime($termination->terminationDate)));
+
+        $payroll_date = date($termination->terminationDate);
+
+        $employee = DB::table('employee')->where('id', '=', $termination->employeeID)->first();
+
+        $payroll_run = "0";
+
+        $salary = ($employee->salary * $working_days_this_month) / 30;
+
+        $leave_allowance = $employee->salary * $working_days_this_year / 365; //consider employees employed this month 
+
+        $salary25 = ($employee->salary) / 25;
+
+        $salary30 = ($employee->salary) / 25;
+
+        $submitted_allowances = $termination->salaryEnrollment +
+            $termination->normalDays +
+            $termination->publicDays +
+            $termination->noticePay +
+            $termination->leavePay * $salary25 +
+            $termination->livingCost +
+            $termination->houseAllowance +
+            $termination->utilityAllowance +
+            $termination->leaveAllowance +
+            $termination->tellerAllowance +
+            $termination->serevancePay +
+            $termination->leaveStand +
+            $termination->arrears +
+            $termination->exgracia +
+            $termination->bonus +
+            $termination->longServing +
+            $termination->otherPayments;
+
+        $submitted_pensionables = $termination->salaryEnrollment +
+            $termination->normalDays +
+            $termination->publicDays +
+            $termination->noticePay +
+            $termination->leavePay * $salary25 +
+            $termination->livingCost +
+            $termination->houseAllowance +
+            $termination->utilityAllowance +
+            $termination->leaveAllowance +
+            $termination->tellerAllowance +
+            $termination->serevancePay +
+            $termination->leaveStand +
+            $termination->arrears +
+            $termination->exgracia +
+            $termination->bonus +
+            $termination->salaryAdvance +
+            $termination->otherPayments;
+
+        $submitted_deductions = $termination->salaryAdvance + $termination->otherDeductions;
+
+        $total_payroll_allowance = 0;
+
+        $payroll_pension = 0;
+
+        $net_pay = 0;
+        $take_home = 0;
+        $total_gross = 0;
+        $taxable = 0;
+
+        // $taxable = $salary - $pension + $leave_allowance + $total_allowance;
+
+        $wcf_sdl = 0;
+
+        if (!$payroll_run) {
+
+            $allowance_query = " /*all Allowances and Bonuses*/SELECT 
+                IF((e.unpaid_leave = 0),0,(
+                IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
+        
+                IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
+        
+                IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
+                
+                +
+                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                        ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                        ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID), 0)  ) )  as  total_allowance FROM employee as e where emp_id =" . $employee->emp_id;
+
+            $total_payroll_allowance = DB::select(DB::raw($allowance_query))[0]->total_allowance;
+
+            $pension = "SELECT IF(  (pf.deduction_from = 1),
+
+                (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                /*IF BASIC  */
+                ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*pf.amount_employee),
+
+                /* IF GROSS */
+                    (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                    ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)
+
+                + IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0)
+                +
+
+                IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0)
+                +
+
+                IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1  GROUP BY ea.empID)>=0,
+                ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
+
+                /*end leave allowance to tax */
+                +
+                IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                    ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+                    ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
+                    )
+                    
+                    ) ) as pension FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1  AND emp_id = " . $employee->emp_id;
+
+            $payroll_pension = DB::select(DB::raw($pension))[0]->pension;
+
+
+        } 
+        else
+        
+        {  //There is no payroll this month
+
+            if ($month == 12) { //If december add leave
+
+                $leave_allowance = $employee->salary * $working_days_this_year / 365;
+            } else {
+
+                $leave_allowance = 0;
+            }
+        }
+
+        $deductions_submitted = $termination->salaryAdvance + $termination->otherDeductions;
+
+        $total_deductions = $submitted_deductions;
+        $net_pay = $total_gross - $total_deductions;
+
+        $total_gross = $salary + $submitted_allowances + $total_payroll_allowance;
+
+        $pensionable =  $payroll_pension + $submitted_pensionables;
+
+        $taxable = $net_pay -  $pensionable * 0.1;  //Pension rate need to be inserted here 
+
+
+        if($taxable >0 ){
+
+        $paye = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<', $taxable)->first();
+
+        $paye = $paye->excess_added + $paye->rate * $taxable - $paye->minimum;
+
+        }
+
+        
+        else
+        {
+
+            $paye=0; 
+        }
+
+
+        $take_home = $taxable -  $paye;
+
+
+        return view('workforce-management.terminal-balance', compact('termination', 'paye', 'total_deductions', 'total_gross', 'net_pay', 'take_home'));
+    }
+
+
+    // end of terminations functions
 
 
 }
