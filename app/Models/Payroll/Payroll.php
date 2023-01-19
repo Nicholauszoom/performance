@@ -198,7 +198,7 @@ IF((e.unpaid_leave = 0)
 ,0,IF((ea.mode = 1),
           ea.amount,
           IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,ea.percent*e.salary),
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
 
           (ea.percent*
           IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
@@ -354,7 +354,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -385,7 +385,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -425,7 +425,7 @@ e.salary),
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND  a.pensionable= 'YES')  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -451,7 +451,7 @@ e.salary),
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -482,7 +482,7 @@ e.salary),
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.pensionable= 'YES')  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -508,7 +508,7 @@ e.salary),
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -551,7 +551,7 @@ e.salary),
          /*add Leave allowance */
          /*if */
          IF((SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-         (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,(SELECT ea.percent FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)*e.salary), IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+         ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,(SELECT ea.percent FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)*e.salary), IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
          ,
          /*else */
          ((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 AND a.state= 1 GROUP BY ea.empID)>0,
@@ -584,7 +584,7 @@ e.salary),
                       (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.pensionable= 'YES')  = 1,
          IF(
             DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-            (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+            ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
            (
             IF(
@@ -631,7 +631,7 @@ IF(
              (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1  AND a.pensionable= 'YES')  = 1,
 IF(
    DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-   (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+   ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
   (
    IF(
@@ -689,7 +689,7 @@ IF((e.unpaid_leave = 0),0,(
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -717,7 +717,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -752,7 +752,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -780,7 +780,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -818,7 +818,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -844,7 +844,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -875,7 +875,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -901,7 +901,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -951,7 +951,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -982,7 +982,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -1019,7 +1019,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND  a.pensionable= 'YES')  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -1045,7 +1045,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -1076,7 +1076,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.pensionable= 'YES')  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -1102,7 +1102,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -1167,7 +1167,7 @@ e.salary),
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
  (
   IF(
@@ -1205,7 +1205,7 @@ IF(
             (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
   DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-  (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+  ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
  (
   IF(
@@ -1259,7 +1259,7 @@ IF((e.unpaid_leave = 0)
 ,0,IF((ea.mode = 1),
           ea.amount,
           IF(a.type = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,ea.percent*e.salary),
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,ea.percent*e.salary),
 
           (ea.percent*
           IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "')),
@@ -1466,7 +1466,7 @@ IF(
    (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
 IF(
 DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-(DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 e.salary),
 
 0
@@ -1523,7 +1523,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -1554,7 +1554,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -1594,7 +1594,7 @@ as gross,
                     (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND  a.pensionable= 'YES')  = 1,
         IF(
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
 
         0
@@ -1620,7 +1620,7 @@ as gross,
                     (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
         IF(
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
 
         0
@@ -1651,7 +1651,7 @@ as gross,
                     (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.pensionable= 'YES')  = 1,
         IF(
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
 
         0
@@ -1677,7 +1677,7 @@ as gross,
                     (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
         IF(
           DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-          (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+          ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
         e.salary),
 
         0
@@ -1720,7 +1720,7 @@ as gross,
              /*add Leave allowance */
              /*if */
              IF((SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,IF(DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-             (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,(SELECT ea.percent FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)*e.salary), IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
+             ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,(SELECT ea.percent FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)*e.salary), IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
              ,
              /*else */
              ((" . $days . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.type = 0 AND a.state= 1 GROUP BY ea.empID)>0,
@@ -1753,7 +1753,7 @@ as gross,
                           (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.pensionable= 'YES')  = 1,
              IF(
                 DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-                (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+                ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
                (
                 IF(
@@ -1800,7 +1800,7 @@ as gross,
                  (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1  AND a.pensionable= 'YES')  = 1,
     IF(
        DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-       (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+       ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
       (
        IF(
@@ -1858,7 +1858,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.pensionable='YES' AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -1886,7 +1886,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -1921,7 +1921,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.pensionable='YES' AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -1949,7 +1949,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -1987,7 +1987,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.pensionable = 'YES' AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2013,7 +2013,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2044,7 +2044,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.pensionable='YES' AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2070,7 +2070,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2120,7 +2120,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.pensionable='YES' AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2153,7 +2153,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2190,7 +2190,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.pensionable='YES' AND a.state= 1 AND  a.pensionable= 'YES')  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2216,7 +2216,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2247,7 +2247,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.pensionable= 'YES')  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2273,7 +2273,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
     e.salary),
 
     0
@@ -2338,7 +2338,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
      (
       IF(
@@ -2376,7 +2376,7 @@ as gross,
                 (SELECT a.type FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1)  = 1,
     IF(
       DATEDIFF('" . $last_date . "',e.hire_date) < 365,
-      (DATEDIFF('" . $last_date . "',e.hire_date)/365)*e.salary,
+      ((DATEDIFF('" . $last_date . "',e.hire_date)+1)/365)*e.salary,
 
      (
       IF(
