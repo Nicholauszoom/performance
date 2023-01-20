@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use App\Models\EMPL;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\Position;
+use App\Models\Promotion;
 use App\Models\AuditTrail;
 use App\Helpers\SysHelpers;
 use App\Models\Termination;
@@ -18,6 +21,7 @@ use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
@@ -7306,7 +7310,7 @@ class GeneralController extends Controller
     $data['title'] = "Termination";
     $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
     $data['employees'] = $this->flexperformance_model->Employee();
-    $terminations= Termination::all();
+    $terminations= Termination::orderBy('created_at','desc')->get();
     $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
         $i = 1;
@@ -7716,21 +7720,149 @@ public function promotion()
 {
 
     $data['title'] = "Promtion|Increment";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
     $data['employees'] = $this->flexperformance_model->Employee();
-    $terminations= Termination::all();
-    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
-
+    $promotions= Promotion::orderBy('created_at','desc')->get();
     $i=1;
-    // }
-    $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
     $data['parent'] = 'Workforce';
     $data['child'] = 'Promotion|Increment';
 
-    return view('workforce-management.promotion-increment', $data,compact('terminations','i'));
+    return view('workforce-management.promotion-increment', $data,compact('promotions','i'));
 
 }
 
+
+public function addPromotion()
+{
+
+    $data['title'] = "Promote Employee";
+    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+    $data['employees'] = $this->flexperformance_model->employee();
+    $data['pdrop'] = Position::all();
+    $data['contract'] = $this->flexperformance_model->contractdrop();
+    $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+    $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+  
+    
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'Promote Employee';
+
+
+    
+
+    return view('workforce-management.add-promotion', $data);
+
+}
+
+public function savePromotion(Request $request)
+{
+
+    request()->validate(
+        [
+        'emp_ID' => 'required',
+        'newPosition' => 'required',
+        'newLevel' => 'required',
+        'newSalary' => 'required',
+         ]
+        );
+
+        
+        $id=$request->emp_ID;
+        $empl =Employee::where('id',$id)->first();
+
+        // saving old employee data
+        $old = new Promotion();
+        $old->employeeID=$id;
+        $old->oldSalary=$empl->salary;
+        $old->newSalary=$request->newSalary;
+        $old->oldPosition=$empl->position;  
+        $old->newPosition=$request->newPosition; 
+        $old->oldLevel=$empl->emp_level;
+        $old->newLevel=$request->newLevel;  
+        $old->created_by=Auth::user()->id;
+        $old->action="promoted";  
+        $old->save();
+        // saving new employee data
+        $promotion =Employee::where('id',$id)->first();
+        $promotion->position=$request->newPosition;
+        $promotion->salary=$request->newSalary;
+        $promotion->emp_level=$request->newLevel;
+        $promotion->update();
+
+        
+        $msg="Employee Promotion has been saved successfully";
+        return redirect('flex/promotion')->with('msg', $msg);
+
+}
+
+public function addIncrement()
+{
+
+    $data['title'] = "Increment Salary";
+    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+    $data['employees'] = $this->flexperformance_model->employee();
+    $data['pdrop'] = $this->flexperformance_model->positiondropdown();
+    $data['contract'] = $this->flexperformance_model->contractdrop();
+    $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+    $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+  
+    
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'Increment Salary';
+
+
+    
+
+    return view('workforce-management.add-increment', $data);
+
+}
+
+
+public function saveIncrement(Request $request)
+{
+
+    request()->validate(
+        [
+        'emp_ID' => 'required',
+        'newSalary' => 'required',
+        // 'oldSalary' => 'required',
+         ]
+        );
+
+        
+        $id=$request->emp_ID;
+
+        $empl =Employee::where('id',$id)->first();
+
+        // saving old employee data
+        $old = new Promotion();
+        $old->employeeID=$id;
+        $old->oldSalary=$empl->salary;
+        $old->newSalary=$request->newSalary;
+        $old->oldPosition=$empl->position;  
+        $old->newPosition=$empl->position;; 
+        $old->oldLevel=$empl->emp_level;
+        $old->newLevel=$empl->emp_level;  
+        $old->created_by=Auth::user()->id;
+        $old->action="incremented";  
+        $old->save();
+
+
+        // saving new employee data
+        $increment =Employee::where('id',$id)->first();
+        $increment->salary=$request->newSalary;
+        $increment->update();
+        $msg="Employee Salary has been Incremented successfully";
+        return redirect('flex/promotion')->with('msg', $msg);
+
+}
+
+// fetching employee department's positions
+
+public function getDetails($id = 0)
+{
+    $data =EMPL::where('id',$id)->with('position')->first();
+    return response()->json($data);
+}
 // start of promotion/increment
 
 }
