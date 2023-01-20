@@ -274,7 +274,7 @@
 
                         <span class="status-indicator bg-success"></span>
                     </div>
-                    <span class="d-none d-lg-inline-block mx-lg-2">{{ Auth::user()->fname .' '.Auth::user()->lname }}</span>
+                    <span class="d-none d-lg-inline-block mx-lg-2"></span>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
