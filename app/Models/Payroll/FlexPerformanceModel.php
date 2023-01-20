@@ -120,6 +120,14 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+	
+	function get_employee_details($empID)
+	{
+		$query = "SELECT @s:=@s+1 as SNo, c.* FROM cost_center c, (SELECT @s:=0) as s ";
+
+		return DB::select(DB::raw($query));
+	}
+
 	function costCenter()
 	{
 		$query = "SELECT @s:=@s+1 as SNo, c.* FROM cost_center c, (SELECT @s:=0) as s ";

@@ -273,14 +273,18 @@ Route::middleware('auth')->group(function () {
 
 
         // start of promotion/increment routes
-        Route::any('/','promotion')->name('flex.promotion');
+        Route::any('/promotion','promotion')->name('flex.promotion');
         Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
         Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
         Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
         Route::any('/add-increment','addIncrement')->name('flex.addIncrement');
         Route::post('/save-increment','saveIncrement')->name('flex.saveIncrement');
         Route::get('/view-increment/{id}','viewIncrement')->name('flex.viewIncrement');
+        Route::any('/depPositionFetcher','depPositionFetcher')->name('depPositionFetcher');
+
+        Route::get('get/details/{id}', 'getDetails')->name('getDetails');
         // end of promotion/increment routes
+        
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
