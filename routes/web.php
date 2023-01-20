@@ -266,6 +266,8 @@ Route::middleware('auth')->group(function () {
 
         // start of termination routes
         Route::any('/termination','termination')->name('flex.termination');
+        Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
+
         Route::any('/add-termination','addTermination')->name('flex.addTermination');
         Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
         Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');

@@ -1514,10 +1514,72 @@ function meals_deduction()
     	return $row->members;
 	}
 
+    public function get_overtime($normalDays,$publicDays,$employeeID){
+        $row = DB::table('employee')->where('emp_id',$employeeID)->select('salary')->first();
+        $normal_days = ($row->salary/195)*1.5*$normalDays;
+        $public_overtime = ($row->salary/195)*2.0*$publicDays;
+
+        $total = $normal_days + $public_overtime;
+
+        return $total;
+    }
+    public function get_pensionable_amount($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$emp_id){
+
+       $pesionable_amount =  $this->get_pensionable_allowance($emp_id);
+       $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount + $pesionable_amount;
+
+       return $total_amount;
+
+    }
+    public function get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$emp_id){
+
+        $pesionable_amount =  $this->get_pensionable_allowance($emp_id);
+        $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount + $pesionable_amount;
+
+        $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =".$emp_id." ";
+        $row = DB::select(DB::raw($query));
+        $rate = $row[0]->amount_employee;
+
+        return $total_amount*$rate;
+
+     }
+
+     public function get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$emp_id){
+
+        $pesionable_amount =  $this->get_pensionable_allowance($emp_id);
+        $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount + $pesionable_amount;
+
+        $query = "SELECT pf.amount_employer FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =".$emp_id." ";
+        $row = DB::select(DB::raw($query));
+        $rate = $row[0]->amount_employer;
+
+        return $total_amount*$rate;
+
+     }
+
+
+    public function get_pensionable_allowance($emp_id){
+
+        $query = "SELECT IF(ea.mode =1,SUM(ea.amount),SUM(ea.percent*ea.amount)) as total_allowance  FROM employee e,emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND type=0 AND e.emp_id =".$emp_id." AND a.pensionable='Yes'  AND a.state= 1 GROUP BY ea.empID";
+
+        $row = DB::select(DB::raw($query));
+
+        return !empty($row)? $row[0]->total_allowance:0;
+        }
+
+    public function get_all_allowance($emp_id){
+
+    $query = "SELECT IF(ea.mode =1,SUM(ea.amount),SUM(ea.percent*ea.amount)) as total_allowance  FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND type=0 AND e.emp_id =".$emp_id."  AND a.state= 1 GROUP BY ea.empID";
+
+    $row = DB::select(DB::raw($query));
+
+    return $row[0]->total_allowance;
+    }
+
     public function check_termination_payroll_date($date){
 
         $row = DB::table('payroll_logs')->where('payroll_date', 'like', '%' . $date . '%')->select('id');
-        
+
 
         if($row->count() > 0){
             return true;
@@ -1525,6 +1587,59 @@ function meals_deduction()
             return false;
         }
 
+    }
+    function get_leave_balance($empID,$today)
+	{
+		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
+		$row = DB::select(DB::raw($query));
+		$spent = $row[0]->days_spent;
+		$accrued = $row[0]->days_accrued;
+
+		$accrual= 7*$accrued/90;
+		$maximum_days = $accrual - $spent;
+		return $maximum_days;
+	}
+
+    public function get_employee_salary($empID,$termination_date,$termination_day){
+        $days = intval(date('t', strtotime($termination_date)));
+
+        $query = "
+        SELECT
+        IF((month(e.hire_date) = month('" . $termination_date . "')) AND (year(e.hire_date) = year('" . $termination_date . "'))
+        ,
+          ((" . $termination_day . " - day(e.hire_date)+1)*e.salary/30)
+
+          ,e.salary) as salary
+          from employee e where e.emp_id = " . $empID . "";
+
+
+            $salary = DB::select(DB::raw($query))[0]->salary;
+
+            return $salary;
+    }
+
+    public function get_leave_allowance($empID,$termination_date,$jananuary_date){
+
+
+$query = "
+SELECT
+IF(
+  DATEDIFF('" . $termination_date . "',e.hire_date) < 365,
+(
+  ((DATEDIFF('" . $termination_date . "',e.hire_date)+1)/365)*e.salary
+)
+  ,
+
+ (
+    ((DATEDIFF('" . $termination_date . "','" . $jananuary_date . "')+1)/365)*e.salary
+ )
+
+  ) as leave_allowance
+  from employee e where e.emp_id = " . $empID . "";
+
+    $leave_allowance = DB::select(DB::raw($query))[0]->leave_allowance;
+
+    return $leave_allowance;
     }
 
 
