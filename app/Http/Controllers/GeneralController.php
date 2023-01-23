@@ -158,6 +158,7 @@ class GeneralController extends Controller
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
 
+       // dd($data['employee'] );
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -176,6 +177,8 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+
+        $data['photo'] = "";
 
         $data['parent'] = "Employee Profile";
 
@@ -4050,11 +4053,56 @@ class GeneralController extends Controller
         }
     }
 
+    ###########################UNPAID LESVE #################################
+
+     public function unpaid_leave(){
+
+        $data['employee'] = $this->flexperformance_model->unpaid_leave_employee();
+        return view("unpaidleave.index",$data);
+     }
+
+     public function add_unpaid_leave(){
+
+        $data['employees'] = $this->flexperformance_model->Employee();
+        return view("unpaidleave.add-unpaid-leave",$data);
+     }
+
+     public function end_unpaid_leave($id){
+        $result = $this->flexperformance_model->end_upaid_leave($id);
+        if($result){
+        session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Ended Successifully</p>");
+
+        }else{
+            session('note', "<p class='alert alert-warning text-center'>End Unpaid Leae Failed </p>");
+
+        }
+
+        return redirect(route('flex.unpaid_leave'));
+
+
+     }
+     public function save_unpaid_leave(Request $request){
+        request()->validate(
+            [
+            'empID' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'reason' => 'required',
+             ]
+            );
+
+            $data = ['empID'=>$request->empID,'start_date'=>$request->start_date,'end_date'=>$request->end_date,'reason'=>$request->reason];
+           $result = $this->flexperformance_model->save_unpaid_leave($data);
+
+           session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Added Successifully</p>");
+
+        return redirect(route('flex.unpaid_leave'));
+     }
     #####################DEDUCTIONS############################################
 
-    public function delete_deduction(Request $request)
+    public function delete_deduction($id,Request $request)
     {
-        $id = $request->input('id');
+
         // $is_active = 0;
 
         $data = array(
@@ -4067,6 +4115,31 @@ class GeneralController extends Controller
             return redirect('/flex/deduction');
         }
     }
+
+      public function delete_non_statutory_deduction($id,Request $request)
+    {
+
+        // $is_active = 0;
+
+        $data = array(
+            'state' => 0,
+        );
+
+        $result = $this->flexperformance_model->updatededuction_non_statutory_deduction($data, $id);
+        if ($result == true) {
+            $json_array['status'] = "OK";
+            $json_array['message'] = "<p class='alert alert-success text-center'>Deduction Deactivated!</p>";
+
+            echo "";
+        } else {
+
+            $json_array['status'] = "ERR";
+            $json_array['message'] = "<p class='alert alert-danger text-center'>Deactivation Failed</p>";
+        }
+        header("Content-type: application/json");
+        echo json_encode($json_array);
+    }
+
 
     public function deduction_info($pattern)
     {
@@ -7741,13 +7814,13 @@ public function addPromotion()
     $data['contract'] = $this->flexperformance_model->contractdrop();
     $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
     $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
-  
-    
+
+
     $data['parent'] = 'Workforce';
     $data['child'] = 'Promote Employee';
 
 
-    
+
 
     return view('workforce-management.add-promotion', $data);
 
@@ -7765,7 +7838,7 @@ public function savePromotion(Request $request)
          ]
         );
 
-        
+
         $id=$request->emp_ID;
         $empl =Employee::where('id',$id)->first();
 
@@ -7774,12 +7847,12 @@ public function savePromotion(Request $request)
         $old->employeeID=$id;
         $old->oldSalary=$empl->salary;
         $old->newSalary=$request->newSalary;
-        $old->oldPosition=$empl->position;  
-        $old->newPosition=$request->newPosition; 
+        $old->oldPosition=$empl->position;
+        $old->newPosition=$request->newPosition;
         $old->oldLevel=$empl->emp_level;
-        $old->newLevel=$request->newLevel;  
+        $old->newLevel=$request->newLevel;
         $old->created_by=Auth::user()->id;
-        $old->action="promoted";  
+        $old->action="promoted";
         $old->save();
         // saving new employee data
         $promotion =Employee::where('id',$id)->first();
@@ -7788,7 +7861,7 @@ public function savePromotion(Request $request)
         $promotion->emp_level=$request->newLevel;
         $promotion->update();
 
-        
+
         $msg="Employee Promotion has been saved successfully";
         return redirect('flex/promotion')->with('msg', $msg);
 
@@ -7804,13 +7877,13 @@ public function addIncrement()
     $data['contract'] = $this->flexperformance_model->contractdrop();
     $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
     $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
-  
-    
+
+
     $data['parent'] = 'Workforce';
     $data['child'] = 'Increment Salary';
 
 
-    
+
 
     return view('workforce-management.add-increment', $data);
 
@@ -7828,7 +7901,7 @@ public function saveIncrement(Request $request)
          ]
         );
 
-        
+
         $id=$request->emp_ID;
 
         $empl =Employee::where('id',$id)->first();
@@ -7838,12 +7911,12 @@ public function saveIncrement(Request $request)
         $old->employeeID=$id;
         $old->oldSalary=$empl->salary;
         $old->newSalary=$request->newSalary;
-        $old->oldPosition=$empl->position;  
-        $old->newPosition=$empl->position;; 
+        $old->oldPosition=$empl->position;
+        $old->newPosition=$empl->position;;
         $old->oldLevel=$empl->emp_level;
-        $old->newLevel=$empl->emp_level;  
+        $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
-        $old->action="incremented";  
+        $old->action="incremented";
         $old->save();
 
 

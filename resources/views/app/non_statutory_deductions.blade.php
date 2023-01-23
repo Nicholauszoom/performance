@@ -194,6 +194,65 @@
 
 
 @push('footer-script')
+<script type="text/javascript">
+
+    function deletededuction(id)
+        {
+            if (confirm("Are You Sure You Want To Delete This Deduction") == true) {
+            var id = id;
+            $.ajax({
+                url:"<?php echo url('flex/delete_non_statutory_deduction');?>/"+id,
+                success:function(data)
+                {
+                    var data  = JSON.parse(data);
+                  if(data.status == 'OK'){
+                  alert("Deduction Deleted Successifully!");
+                  $("#allowanceList").load(" #allowanceList");
+                  // $('#record'+id).hide();
+                  } else{
+                  alert("Allowance Not Deleted, Some Error Occured In Deleting");
+                  }
+            //    $('#deleteFeedback').fadeOut('fast', function(){
+            //   $('#deleteFeedback').fadeIn('fast').html(data.message);
+            // });
+
+            setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+              }, 1000);;
+
+
+                }
+
+                });
+            }
+        }
+        function activateAllowance(id)
+        {
+            if (confirm("Are You Sure You Want To Activate This Allowance") == true) {
+            var id = id;
+            $.ajax({
+                url:"<?php echo url('flex/activateAllowance');?>/"+id,
+                success:function(data)
+                {
+                    var data  = JSON.parse(data);
+                  if(data.status == 'OK'){
+                  alert("Allowance Activated Successifully!");
+                  $("#allowanceList").load(" #allowanceList");
+                  // $('#record'+id).hide();
+                  } else{
+                  alert("Allowance Not Activated, Try Again");
+                  }
+               $('#deleteFeedback').fadeOut('fast', function(){
+              $('#deleteFeedback').fadeIn('fast').html(data.message);
+            });
+
+
+                }
+
+                });
+            }
+        }
+    </script>
 <script>
 
     jQuery(document).ready(function($){
@@ -264,11 +323,14 @@
                      async:false
                  })
             .done(function(data){
-             $('#resultSubmission').fadeOut('fast', function(){
-                  $('#resultSubmission').fadeIn('fast').html(data);
-                });
+            //  $('#resultSubmission').fadeOut('fast', function(){
+            //       $('#resultSubmission').fadeIn('fast').html(data);
+            //     });
 
-          $('#addAllowance')[0].reset();
+          //$('#addAllowance')[0].reset();
+          setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+              }, 1000);
             })
             .fail(function(){
          alert('FAILED, Check Your Network Connection and Try Again! ...');
@@ -315,11 +377,16 @@
                      async:false
                  })
             .done(function(data){
-             $('#resultSubmissionDeduction').fadeOut('fast', function(){
-                  $('#resultSubmissionDeduction').fadeIn('fast').html(data);
-                });
+            //  $('#resultSubmissionDeduction').fadeOut('fast', function(){
+            //       $('#resultSubmissionDeduction').fadeIn('fast').html(data);
+            //     });
 
-          $('#addDeduction')[0].reset();
+                setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+              }, 1000);
+            })
+
+         // $('#addDeduction')[0].reset();
             })
             .fail(function(){
          alert('FAILED, Check Your Network Connection and Try Again! ...');

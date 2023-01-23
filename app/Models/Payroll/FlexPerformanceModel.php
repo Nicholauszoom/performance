@@ -120,7 +120,7 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
-	
+
 	function get_employee_details($empID)
 	{
 		$query = "SELECT @s:=@s+1 as SNo, c.* FROM cost_center c, (SELECT @s:=0) as s ";
@@ -509,7 +509,7 @@ class FlexPerformanceModel extends Model
     function approveOvertime($id, $signatory, $time_approved) {
 	     DB::transaction(function() use($id,$signatory, $time_approved)
        {
-		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/195)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/195)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
+		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
          DB::insert(DB::raw($query));
 	    $query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
 		DB::insert(DB::raw($query));
@@ -1163,7 +1163,7 @@ function retire_list()
 
 	function userprofile($empID)
 	{
-		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.id AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.code AND e.emp_id ='".$empID."'";
+		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.id AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='".$empID."'";
 		return DB::select(DB::raw($query));
 	}
 
@@ -1252,6 +1252,45 @@ function retire_list()
 	{
 		DB::table('deduction')->where('id', $id)
 		->update($data);
+		return true;
+	}
+
+    public function unpaid_leave_employee(){
+
+        $query = "SELECT e.emp_id,ul.start_date,ul.end_date,CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
+
+        return DB::select(DB::raw($query));
+    }
+    public function end_upaid_leave($id){
+        DB::transaction(function() use($id)
+        {
+         DB::table('employee')->where('emp_id',$id)->update(['unpaid_leave'=>1]);
+
+         DB::table('unpaid_leave')->where('empID',$id)->update(['state'=>1]);
+
+        });
+
+        return true;
+
+    }
+
+    public function save_unpaid_leave($data){
+        $data['state'] = 0;
+        DB::transaction(function() use($data)
+        {
+         DB::table('employee')->where('emp_id',$data['empID'])->update(['unpaid_leave'=>0]);
+
+         DB::table('unpaid_leave')->insert($data);
+
+        });
+
+        return true;
+
+    }
+    function updatededuction_non_statutory_deduction($data, $id)
+	{
+		DB::table('deductions')->where('id', $id)
+		->delete();
 		return true;
 	}
 
@@ -1524,8 +1563,8 @@ function meals_deduction()
 
     public function get_overtime($normalDays,$publicDays,$employeeID){
         $row = DB::table('employee')->where('emp_id',$employeeID)->select('salary')->first();
-        $normal_days = ($row->salary/195)*1.5*$normalDays;
-        $public_overtime = ($row->salary/195)*2.0*$publicDays;
+        $normal_days = ($row->salary/176)*1.5*$normalDays;
+        $public_overtime = ($row->salary/176)*2.0*$publicDays;
 
         $total = $normal_days + $public_overtime;
 

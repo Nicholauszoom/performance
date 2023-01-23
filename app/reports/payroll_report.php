@@ -15,7 +15,7 @@
 //               www.tecnick.com
 //               info@tecnick.com
 //============================================================+
- 
+
 /**
  * Creates an example PDF TEST document using TCPDF
  * @package com.tecnick.tcpdf
@@ -23,21 +23,21 @@
  * @author Nicola Asuni
  * @since 2008-03-04
  */
- 
+
 // Include the main TCPDF library (search for installation path).
 // require_once('tcpdf_include.php');
- 
+
 // create new PDF document
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
- 
+
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Miraji Issa');
 $pdf->SetTitle('Payroll Report');
 $pdf->SetSubject('TCPDF Tutorial');
 $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
- 
+
 // set default header data
 
 // $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
@@ -47,42 +47,42 @@ $pdf->setFooterData(array(0,64,0), array(0,64,128));
 // remove default header/footer
 $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(true);
- 
+
 // set header and footer fonts
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
- 
+
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
- 
+
 // set margins
 $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
- 
+
 // set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
- 
+
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
- 
+
 // set some language-dependent strings (optional)
 if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
                require_once(dirname(__FILE__).'/lang/eng.php');
                $pdf->setLanguageArray($l);
 }
- 
+
 // ---------------------------------------------------------
- 
+
 // set default font subsetting mode
 $pdf->setFontSubsetting(true);
- 
+
 // Set font
 // dejavusans is a UTF-8 Unicode font, if you only need to
 // print standard ASCII chars, you can use core fonts like
 // helvetica or times to reduce file size.
 $pdf->SetFont('times', '', 12, '', true);
- 
+
 // Add a page
 // This method has several options, check the source code documentation for more information.
 $pdf->AddPage('L','A4');
@@ -93,8 +93,8 @@ foreach ($info as $row) {
       $logo = $row->logo;
       $companyname = $row->cname;
 }
- 
 
+$wcf = 0;
 foreach ($payroll_totals as $row) {
   $salary = $row->salary;
   $pension_employee = $row->pension_employee;
@@ -143,11 +143,11 @@ foreach ($take_home as $row) {
 
 if ($net>=$net_less) {
   $amount_takehome = $net;
-  // if($arrears>0) $hint = "(Including Arrears Payments)"; else 
-  $hint=""; 
+  // if($arrears>0) $hint = "(Including Arrears Payments)"; else
+  $hint="";
 
 }else{
- $amount_takehome = $net_less; 
+ $amount_takehome = $net_less;
  $hint = "(Less)";
 }
 
@@ -270,7 +270,7 @@ if ($medical_employee>0) {
 
  $summary .='<tr align="left">
         <td align "left"><b>WCF:</b></td>
-        <td align "left">'.number_format(($allowances+$salary)*0.01,2).'</td>
+        <td align "left">'.number_format($wcf,2).'</td>
         <td align "left"><b>SDL:</b></td>
         <td align "left">'.number_format($sdl,2).'</td>
         <td align "left"><b>HESLB:</b></td>
@@ -279,21 +279,21 @@ if ($medical_employee>0) {
 
 $summary.='</table>';
 
- $view_net_sum=0; 
+ $view_net_sum=0;
 
   foreach($employee_list as $row){
      $sno = $row->SNo;
      $less_takehome = $row->less_takehome;
     if($less_takehome==0){
-        $amount = $row->salary + $row->allowances-$row->pension-$row->loans-$row->deductions-$row->meals-$row->taxdue; 
+        $amount = $row->salary + $row->allowances-$row->pension-$row->loans-$row->deductions-$row->meals-$row->taxdue;
     } else {
         $amount = $less_takehome;
     }
-    
+
     $view_net_sum += $amount;
     if  ($sno % 2 == 0) { $background = "#d3d3d3;"; } else { $background = "#FFFFFF;"; }
- } 
- 
+ }
+
 
 
 $pdf->writeHTMLCell(0, 12, '',$pdf->GetY()-3, $summary, 0, 1, 0, true, '', true);
@@ -317,8 +317,8 @@ $pdf->Rect(16, $pdf->GetY()-5, 275, 0, '', $style4);
 $pdf->SetXY(15, $pdf->GetY()+2);
 $employees = "
 <p><b>EMPLOYEE LIST(Head Counts ".count($employee_list)."):</b></p>";
-$pdf->writeHTMLCell(0, 12, '', '', $employees , 0, 1, 0, true, '', true); 
- 
+$pdf->writeHTMLCell(0, 12, '', '', $employees , 0, 1, 0, true, '', true);
+
 $html = '
 <table border="1px">
 <thead>
@@ -358,13 +358,13 @@ $html = '
             <td width="125"  align="center">&nbsp;'.$account_no.'</td>
     </tr>
     </tbody>';
-    
+
 }
 
   $html .="</table>";
-  
+
  //HTML2
- 
+
 $signatory = '
 <table width="100%" >
 <thead>
@@ -380,7 +380,7 @@ $signatory = '
             <td width="320"><br><br>Signature..................</td>
             <td width="295"><br><br>Date.......................</td>
     </tr>';
-      
+
   $signatory .='<tbody>
       <tr nobr="true">
             <td width="332" align="left"><br><br><br><br>Signatory 2........................</td>
@@ -392,17 +392,17 @@ $signatory = '
   $signatory .="</table>";
 
 
- 
+
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', $pdf->GetY()-5, $html, 0, 1, 0, true, '', true);
 $pdf->writeHTMLCell(0, 0, '', $pdf->GetY()+10, $signatory, 0, 1, 0, true, '', true);
 // ---------------------------------------------------------
- 
+
 // Close and output PDF document
 // This method has several options, check the source code documentation for more information.
 $pdf->Output('payroll_report-'.date('d/m/Y').'.pdf', 'I');
- 
+
 //============================================================+
 // END OF FILE
 //============================================================+
- 
+

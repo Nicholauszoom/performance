@@ -77,9 +77,18 @@
             <a href="{{route('reports.get_payroll_temp_summary',$payrollMonth)}}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
             @endif
+            @if($payrollState == 1)
+            <a class="px-4" href="{{route('reports.get_payroll_temp_summary1',$payrollMonth)}}" target="blank">
+                <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+            @endif
             @if($payrollState != 1)
             <a class="btn btn-main btn-sm ms-3" href="{{ route('flex.payrollLogs') }}" target="blank">
-                Payroll Input Changes Approval Report
+                Input Changes Approval
+            </a>
+            @endif
+            @if($payrollState == 1)
+            <a class="px-4" href="{{route('reports.payroll_report1',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
+                <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Pay Checklist</button>
             </a>
             @endif
         </div>
@@ -99,9 +108,7 @@
                             <li>Total Allowances:</li>
                             <li>Pension(Employer):</li>
                             <li>Pension (Employee):</li>
-                            @if ($meals)
-                            <li>Meals:</li>
-                            @endif
+
                             <li>Taxdue (PAYE):</li>
                             <li>WCF:</li>
                             <li>SDL:</li>
@@ -112,9 +119,7 @@
                             <li><span class="fw-semibold">{{ number_format($allowances,2) }}</span></li>
                             <li>{{ number_format($pension_employer,2) }}</li>
                             <li>{{ number_format($pension_employee,2) }}</li>
-                            @if ($meals)
-                            <li>{{ number_format($meals,2) }}</li>
-                            @endif
+                            
                             <li>{{ number_format($taxdue,2) }}</li>
                             <li><span class="fw-semibold">{{ number_format($wcf,2) }}</span></li>
                             <li><span class="fw-semibold">{{ number_format($sdl,2) }}</span></li>

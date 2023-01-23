@@ -286,7 +286,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('get/details/{id}', 'getDetails')->name('getDetails');
         // end of promotion/increment routes
-        
+
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
@@ -369,6 +369,16 @@ Route::middleware('auth')->group(function () {
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
+        Route::any('/delete_non_statutory_deduction/{id}','delete_non_statutory_deduction')->name('flex.delete_non_statutory_deduction');
+
+        Route::any('/unpaid_leave','unpaid_leave')->name('flex.unpaid_leave');
+        Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
+        Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
+        Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
+
+
+
+
         Route::any('/deduction_info/{pattern}','deduction_info')->name('flex.deduction_info');
         Route::any('/assign_deduction_individual','assign_deduction_individual')->name('flex.assign_deduction_individual');
         Route::any('/assign_deduction_group','assign_deduction_group')->name('flex.assign_deduction_group');
@@ -756,7 +766,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
+        Route::any('/payroll_report1','payroll_report1')->name('reports.payroll_report1');
         Route::any('/get_payroll_temp_summary/{date}','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
+        Route::any('/get_payroll_temp_summary1/{date}','get_payroll_temp_summary1')->name('reports.get_payroll_temp_summary1');
 
         Route::any('/pay_checklist','pay_checklist')->name('reports.pay_checklist');
         Route::any('/all_arrears','all_arrears')->name('reports.all_arrears');

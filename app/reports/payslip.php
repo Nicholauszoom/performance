@@ -278,7 +278,7 @@ $deduction = '
         <td width="100" align="right">'.number_format($pension_employee, 2).'</td>
     </tr>
 
-  
+
 
 
 
@@ -307,17 +307,17 @@ foreach($deductions as $row){
 foreach($loans as $row){
 
     $paid = $row->paid;
-    if ($row->remained == 0){
-        $get_remainder = $row->paid / $row->policy;
-        $array = explode('.',$get_remainder);
-        if(isset($array[1])){
-            $num = '0'.'.'.$array[1];
-        }else{
-            $num = '0';
-        }
-//        $paid = $num*$row->policy;
-        $paid = $salary_advance_loan_remained;
-    }
+//     if ($row->remained == 0){
+//         $get_remainder = $row->paid / $row->policy;
+//         $array = explode('.',$get_remainder);
+//         if(isset($array[1])){
+//             $num = '0'.'.'.$array[1];
+//         }else{
+//             $num = '0';
+//         }
+// //        $paid = $num*$row->policy;
+//         $paid = $salary_advance_loan_remained;
+//     }
 
 
 

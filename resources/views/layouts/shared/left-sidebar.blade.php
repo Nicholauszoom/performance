@@ -44,7 +44,7 @@
                         <span>Workforce Management</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{  (request()->routeIs('flex.employee') ||request()->routeIs('flex.promotion')||request()->routeIs('flex.addPromotion')||request()->routeIs('flex.addIncrement') || request()->routeIs('flex.inactive_employee') ||request()->routeIs('flex.termination') ||request()->routeIs('flex.promotion') ||request()->routeIs('flex.addTermination') || request()->routeIs('.termination')|| request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ) ? 'show' : null  }}">
+                    <ul class="nav-group-sub collapse {{  (request()->routeIs('flex.employee') ||request()->routeIs('flex.promotion')||request()->routeIs('flex.addPromotion')||request()->routeIs('flex.addIncrement') || request()->routeIs('flex.inactive_employee') ||request()->routeIs('flex.termination') ||request()->routeIs('flex.promotion') ||request()->routeIs('flex.addTermination') || request()->routeIs('flex.termination')|| request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') ||  request()->routeIs('flex.add_unpaid_leave') ||  request()->routeIs('flex.unpaid_leave')|| request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ) ? 'show' : null  }}">
                         @if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp'))
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('flex.employee') ? 'active' : null  }}" href="{{ route('flex.employee') }}">
@@ -60,7 +60,10 @@
                                 <a class="nav-link {{ request()->routeIs('flex.termination') || request()->routeIs('flex.addTermination') ? 'active' : null  }}" href="{{ route('flex.termination') }}">Employee Termination</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link {{ request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion')|| request()->routeIs('flex.addIncrement') ? 'active' : null  }}" href="{{ route('flex.promotion') }}">Promotions/Increments</a>
+                                <a class="nav-link {{ request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion')|| request()->routeIs('flex.promotion') ? 'active' : null  }}" href="{{ route('flex.promotion') }}">Promotions/Increments</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link {{ request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') ||  request()->routeIs('flex.add_unpaid_leave')|| request()->routeIs('flex.unpaid_leave') ? 'active' : null  }}" href="{{ route('flex.unpaid_leave') }}">Unpaid Leaves</a>
                             </li>
                         @endif
 
@@ -74,7 +77,7 @@
 
                         @if (session('mng_emp'))
                             <li class="nav-item {{ request()->routeIs('flex.transfers') ? 'active' : null  }}"><a class="nav-link" href="{{ route('flex.transfers') }}">Employee Approval</a></li>
-                         
+
                         @endif
                     </ul>
                 </li>

@@ -66,6 +66,46 @@ class ReportController extends Controller
         }
     }
 
+    function payroll_report1(Request $request)
+    {
+        if ($request->pdate) {
+            $payrollMonth = base64_decode($request->pdate);
+
+            $data['info'] = $this->reports_model->company_info();
+            $data['authorization'] = $this->reports_model->payrollAuthorization($payrollMonth);
+            $toDate = date('Y-m-d');
+            $data['employee_list'] = $this->reports_model->pay_checklist($payrollMonth);
+            $data['take_home'] = $this->reports_model->sum_take_home($payrollMonth);
+            $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);
+            $data['total_allowances'] = $this->payroll_model->total_allowances("allowance_logs", $payrollMonth);
+            $data['total_bonuses'] = $this->payroll_model->total_bonuses($payrollMonth);
+            $data['total_loans'] = $this->payroll_model->total_loans("loan_logs", $payrollMonth);
+            $data['total_deductions'] = $this->payroll_model->total_deductions("deduction_logs", $payrollMonth);
+            $data['total_overtimes'] = $this->payroll_model->total_overtimes($payrollMonth);
+            $data['payroll_date'] = $payrollMonth;
+            $data['payroll_month'] = $payrollMonth;
+            $data['total_heslb'] = $this->payroll_model->total_heslb("loan_logs", $payrollMonth);
+
+            $info = $data['info'];
+            $authorization = $data['authorization'];
+
+            $employee_list = $data['employee_list'];
+            $take_home = $data['take_home'];
+            $payroll_totals = $data['payroll_totals'];
+            $total_allowances = $data['total_allowances'];
+            $total_bonuses = $data['total_bonuses'];
+            $total_loans = $data['total_loans'];
+            $total_deductions = $data['total_deductions'];
+            $total_overtimes = $data['total_overtimes'];
+            $payroll_date = $data['payroll_date'];
+            $payroll_month = $data['payroll_month'];
+            $total_heslb = $data['total_heslb'];
+            include app_path() . '/reports/payroll_report1.php';
+            //return view('app.reports.payroll_report',$data);
+
+        }
+    }
+
     function pay_checklist(Request $request)
     {
         dd($request->all());
@@ -283,6 +323,48 @@ class ReportController extends Controller
     $summary = $data['summary'];
 
     return view('reports.temp_payroll',$data);
+
+   // include(app_path() . '/reports/temp_payroll.php');
+    }
+    function get_payroll_temp_summary1($date){
+
+        $data['summary'] = $this->reports_model->get_payroll_temp_summary1($date);
+
+        $payrollMonth = $date;
+        $pensionFund = 2;
+        $reportType = 1; //Staff = 1, temporary = 2
+
+        $datewell = explode("-", $payrollMonth);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $date = $yyyy . "-" . $mm;
+
+        if ($reportType == 1) {
+            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
+        } else {
+            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
+        }
+
+        $data['info'] = $this->reports_model->company_info();
+        $data['payroll_month'] = $payrollMonth;
+        $data['pension_fund'] = $pensionFund;
+
+        $pension = $data['pension'];
+        $total = $data['total'];
+        $info = $data['info'];
+        $payroll_month = $data['payroll_month'];
+        $pension_fund = $data['pension_fund'];
+        $payroll_month = $date;
+        $info = $this->reports_model->company_info();
+
+
+
+    $summary = $data['summary'];
+
+    return view('reports.temp_payroll1',$data);
 
    // include(app_path() . '/reports/temp_payroll.php');
     }

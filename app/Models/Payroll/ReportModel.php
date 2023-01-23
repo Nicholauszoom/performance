@@ -125,7 +125,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 
     function pay_checklist($date){
 
-        $query = "SELECT @s:=@s+1 AS SNo, pl.empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS name,
+        $query = "SELECT @s:=@s+1 AS SNo, pl.empID,e.rate,e.currency,  CONCAT(e.fname,' ', e.mname,' ', e.lname) AS name,
 	IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID)>0, (SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.payment_date = '".$date."' GROUP BY al.empID), 0) AS allowances,
 	pl.salary, pl.less_takehome, pl.meals, pl.pension_employee AS pension, pl.taxdue,
 	IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '".$date."' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '".$date."' GROUP BY l.empID),0) AS loans,
@@ -416,6 +416,13 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
       return DB::select(DB::raw($query));
 
     }
+
+    function get_payroll_temp_summary1($date){
+        $query = "SELECT tl.*, e.* from payroll_logs tl,employee e where e.emp_id = tl.empID and tl.payroll_date='".$date."'";
+
+        return DB::select(DB::raw($query));
+
+      }
 
     function s_heslb($payrolldate){
         $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE l.empID = e.emp_id and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 AND ll.payment_date = '".$payrolldate."'";
