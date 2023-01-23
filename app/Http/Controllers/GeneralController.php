@@ -20,12 +20,15 @@ use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
+use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
 use Illuminate\Support\Facades\Redirect;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
@@ -7355,7 +7358,7 @@ public function saveTermination(Request $request)
         $termination->otherPayments=$request->otherPayments;
         $termination->save();
         $msg="Employee Termination Benefits have been saved successfully";
-        return redirect('flex/termination')->with('status', $msg);
+        return redirect('flex/attendance/flex/termination')->with('status', $msg);
 
 }
 
@@ -7446,7 +7449,7 @@ public function savePromotion(Request $request)
 
         
         $msg="Employee Promotion has been saved successfully";
-        return redirect('flex/promotion')->with('msg', $msg);
+        return redirect('flex/attendance/flex/promotion')->with('msg', $msg);
 
 }
 
@@ -7508,7 +7511,7 @@ public function saveIncrement(Request $request)
         $increment->salary=$request->newSalary;
         $increment->update();
         $msg="Employee Salary has been Incremented successfully";
-        return redirect('flex/promotion')->with('msg', $msg);
+        return redirect('flex/attendance/flex/promotion')->with('msg', $msg);
 
 }
 
