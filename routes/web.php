@@ -597,6 +597,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/password_generator','password_generator')->name('payroll.password_generator');
         Route::any('/TestMail','TestMail')->name('payroll.TestMail');
 
+        // for pay slip template
+        Route::any('/salary_slip','getSlip')->name('payroll.salary_slip');
     });
 
 

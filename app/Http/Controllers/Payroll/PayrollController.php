@@ -135,6 +135,16 @@ class PayrollController extends Controller
 
     }
 
+    
+    // start of salary slip template
+   
+    public function getSlip()
+    {
+        return view('payroll.payslip');
+    }
+
+    // end of salary slip template
+
     public function financial_reports()
     {
         //
@@ -2214,6 +2224,8 @@ class PayrollController extends Controller
 
         //echo $mail->send(); // Send email
     }
+
+
 
 
 }
