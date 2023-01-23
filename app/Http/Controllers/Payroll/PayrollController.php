@@ -148,7 +148,7 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        //if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+        //if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
@@ -669,7 +669,7 @@ class PayrollController extends Controller
 
     public function comission_bonus()
     {
-       // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
+       // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $data['bonus'] = $this->payroll_model->selectBonus();
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['incentives'] = $this->payroll_model->employee_bonuses();
@@ -794,9 +794,9 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->recommendPayroll($empID, $todate,$state,$message);
                 if ($result == true) {
                     $logData = array(
-                        'empID' => session('emp_id'),
+                        'empID' => $this->session->userdata('emp_id'),
                         'description' => "Recommendation of payroll of date " . $todate,
-                        'agent' => session('agent'),
+                        'agent' => $this->session->userdata('agent'),
                         'platform' => $this->agent->platform(),
                         'ip_address' => $this->input->ip_address()
                     );
@@ -880,9 +880,9 @@ class PayrollController extends Controller
                     if ($result) {
 
                         $logData = array(
-                            'empID' => session('emp_id'),
+                            'empID' => $this->session->userdata('emp_id'),
                             'description' => "Approved payment of payroll of date " . $payroll_date,
-                            'agent' => session('agent'),
+                            'agent' => $this->session->userdata('agent'),
                             'platform' => $this->agent->platform(),
                             'ip_address' => $this->input->ip_address()
                         );

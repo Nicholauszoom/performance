@@ -144,7 +144,14 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
+        Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
+        Route::any('p9', [ReportController::class, 'p9'])->name('reports.p9');
+        Route::any('p10', [ReportController::class, 'p10'])->name('reports.p10');
+        Route::any('pension', [ReportController::class, 'pension'])->name('reports.pension');
+        Route::any('wcf', [ReportController::class, 'wcf'])->name('reports.wcf');
+        Route::any('heslb', [ReportController::class, 'heslb'])->name('reports.heslb');
+        Route::any('all_arrears', [ReportController::class, 'all_arrears'])->name('reports.all_arrears');
+        Route::get('payroll_report', [ReportController::class, 'payroll_report'])->name('reports.payroll_report');
 
     Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
     Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
