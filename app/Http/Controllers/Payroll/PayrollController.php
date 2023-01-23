@@ -148,7 +148,7 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
-        //if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
+        // if ($this->session->userdata('mng_paym') || $this->session->userdata('recom_paym') || $this->session->userdata('appr_paym')) {
             $title = 'Employee Payslip'; $parent = 'Payroll'; $child = 'Payslip';
             $data['payrollList'] = $this->payroll_model->payrollMonthList();
             $data['month_list'] = $this->payroll_model->payroll_month_list();
@@ -156,9 +156,9 @@ class PayrollController extends Controller
 
             return view('payroll.employee_payslip',compact('data','title','parent','child'));
 
-       } else {
-           echo 'Unauthorised Access';
-       }
+    //    } else {
+    //        echo 'Unauthorised Access';
+    //    }
     }
 
     public function payroll()
@@ -680,9 +680,9 @@ class PayrollController extends Controller
 
 
             return view('app.comission_bonus',$data);
-        } else {
-            echo "Unauthorized Access";
-        }
+        // } else {
+        //     echo "Unauthorized Access";
+        // }
     }
 
     public function partial_payment()

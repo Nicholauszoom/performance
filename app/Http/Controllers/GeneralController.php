@@ -7358,7 +7358,7 @@ public function saveTermination(Request $request)
         $termination->otherPayments=$request->otherPayments;
         $termination->save();
         $msg="Employee Termination Benefits have been saved successfully";
-        return redirect('flex/attendance/flex/termination')->with('status', $msg);
+        return redirect('flex/termination')->with('status', $msg);
 
 }
 
@@ -7449,7 +7449,7 @@ public function savePromotion(Request $request)
 
         
         $msg="Employee Promotion has been saved successfully";
-        return redirect('flex/attendance/flex/promotion')->with('msg', $msg);
+        return redirect('flex/promotion')->with('msg', $msg);
 
 }
 

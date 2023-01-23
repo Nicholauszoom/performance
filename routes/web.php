@@ -142,7 +142,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendance.updateLeaveDateRange');
         Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendance.current_leave_progress');
 
-
+    });
 
 Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
 
@@ -821,7 +821,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
     });
 
 
-});
+
 
 //bank loans routes
 Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
