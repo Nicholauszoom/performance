@@ -467,21 +467,21 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Project</h5>
+                <h5 class="text-muted">Payroll Details</h5>
             </div>
 
             <form
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.projectTime') }}"
+                action="{{ route('reports.payrolldetails') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf
 
                 <div class="card-body">
                     <div class="row">
-                        <label class="col-form-label col-md-2">Project</label>
+
                         <div class="col-md-10">
                             <div class="input-group">
                                 <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
@@ -495,7 +495,7 @@
                         </div>
                     </div>
 
-
+{{--
                     <div class="row mt-3">
                         <label class="col-form-label col-md-2">Select Date</label>
                         <div class="col-md-10">
@@ -504,7 +504,7 @@
                                 <input type="text" class="form-control daterange-predefined" name="duration" placeholder="Select dates">
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="mt-2">
                         <label class="form-label">Report Type:</label>
@@ -512,12 +512,12 @@
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Time</label>
+                                <label class="ms-2" for="p9">Staff</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Expense</label>
+                                <label class="ms-2" for="p9a">temporary</label>
                             </div>
                         </div>
                     </div>

@@ -799,7 +799,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/grossReconciliation','grossReconciliation')->name('reports.grossReconciliation');
         Route::any('/netReconciliation','netReconciliation')->name('reports.netReconciliation');
         Route::any('/loanReports','loanReports')->name('reports.loanReports');
-        Route::any('/projectTime','projectTime')->name('reports.projectTime');
+        Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
         Route::any('/funder','funder')->name('reports.funder');
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 

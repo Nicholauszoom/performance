@@ -417,6 +417,24 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     }
 
+    function get_payroll_summary($date){
+        $query = "SELECT
+        pl.*,
+        CONCAT(e.fname,' ',e.mname,'',e.lname) as NAME,
+        e.emp_id,
+        al.allowanceID as allowance_id,
+        al.amount as allowance_amount,
+        IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
+
+        IF((SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.empID = e.emp_id AND ll.payment_date = '".$date."' GROUP BY ll.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.empID = e.emp_id AND ll.payment_date = '".$date."' GROUP BY ll.empID),0) AS loans
+
+
+        from payroll_logs pl,employee e,allowance_logs al where e.emp_id = pl.empID and e.emp_id=al.empID and pl.payroll_date='".$date."'";
+
+        return DB::select(DB::raw($query));
+
+      }
+
     function get_payroll_temp_summary1($date){
         $query = "SELECT tl.*, e.* from payroll_logs tl,employee e where e.emp_id = tl.empID and tl.payroll_date='".$date."'";
 

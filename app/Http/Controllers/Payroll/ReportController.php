@@ -2683,32 +2683,52 @@ EOD;
         }
     }
 
-    public function projectTime(Request $request)
-    {
-        dd($request->input('project'));
-        if (1) {
-            $project = $request->input('project');
-            $project_code = explode('~', $project)[0];
-            $duration = explode('-', $request->input('duration'));
-            $reportType = $request->input('type'); //time = 1, expense = 2
+    function payrolldetails(Request $request){
 
-            $data['info'] = $this->reports_model->company_info();
-            $data['project_info'] = $this->project_model->projectInfoCode($project_code);
-            $data['project'] = explode('~', $project)[1];
-            $data['duration'] = $request->input('duration');
+        $date = $request->payrolldate;
+        $data['summary'] = $this->reports_model->get_payroll_summary($date);
 
-            if ($reportType == 1) {
-                $data['project_time'] = $this->reports_model->projectTime($project_code
-                    , date('Y-m-d', strtotime($duration[0])), date('Y-m-d', strtotime($duration[1])));
-                return view('app.reports/project_time', $data);
-            } else {
-                $data['project_time'] = $this->reports_model->projectCost($project_code
-                    , date('Y-m-d', strtotime($duration[0])), date('Y-m-d', strtotime($duration[1])));
-                return view('app.reports/project_cost', $data);
-            }
+        $payrollMonth = $date;
+        $pensionFund = 2;
+        $reportType = 1; //Staff = 1, temporary = 2
 
+        $datewell = explode("-", $payrollMonth);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $date = $yyyy . "-" . $mm;
+
+        if ($reportType == 1) {
+            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
+        } else {
+            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
         }
+
+        $data['info'] = $this->reports_model->company_info();
+        $data['payroll_month'] = $payrollMonth;
+        $data['payroll_date'] = $request->payrolldate;
+        $data['pension_fund'] = $pensionFund;
+
+        $pension = $data['pension'];
+        $total = $data['total'];
+        $info = $data['info'];
+        $payroll_month = $data['payroll_month'];
+        $pension_fund = $data['pension_fund'];
+        $payroll_month = $date;
+        $info = $this->reports_model->company_info();
+
+
+
+    $summary = $data['summary'];
+
+    return view('reports.payroll_details',$data);
+
+   // include(app_path() . '/reports/temp_payroll.php');
     }
+
+
 
     public function funder(Request $request)
     {
