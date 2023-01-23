@@ -75,6 +75,11 @@
                         <button class="btn btn-main px-3 mt-4" type="submit">
                             <i class="ph-printer me-2"></i> Print
                         </button>
+
+                        <a href="{{ url('/flex/payroll/salary_slip') }}" class="btn btn-main px-3 mt-4">
+                            <i class="ph-printer me-2"></i>
+                             Template
+                        </a>
                     </div>
                 </div>
             </div>
