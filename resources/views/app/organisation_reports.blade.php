@@ -23,14 +23,14 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">temporary Allowance MWP</h5>
+                <h5 class="text-muted">Payroll Reconciliation Summary</h5>
             </div>
 
             <form
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.temporaryAllowanceMWPExport') }}"
+                action="{{ route('reports.payrollReconciliationSummary') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf

@@ -1225,6 +1225,48 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return DB::select(DB::raw($query));
     }
 
+    public function s_count($date){
+
+        $row = DB::table('payroll_logs')->where('payroll_date',$date)->select('id')->count();
+
+        return $row;
+    }
+
+    public function s_overtime($date){
+
+        $row = DB::table('allowance_logs')->where('payment_date',$date)->where('allowanceID',23)->sum('amount');
+
+        return $row;
+
+    }
+    public function total_basic($date){
+        $query = "SELECT SUM(pl.salary) as total_amount from payroll_logs pl where  pl.payroll_date = '".$date."'";
+        $row  = DB::select(DB::raw($query));
+
+        return $row[0]->total_amount;
+    }
+
+
+    public function total_allowance($current_payroll_month,$previous_payroll_month){
+
+    $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,
+     (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)) as current_amount,
+     (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)) as previous_amount,
+
+     (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)-
+
+     IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)
+
+
+     ) as difference
+      from allowance_logs al GROUP BY al.description ";
+        $row = DB::select(DB::raw($query));
+
+
+        return $row;
+
+    }
+
     public function prevPayrollMonth($date){
         $query = "payroll_date";
         $condition = "%".$date."%";

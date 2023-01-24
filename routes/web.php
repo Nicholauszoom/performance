@@ -790,16 +790,19 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollInputJournalExport','payrollInputJournalExport')->name('reports.payrollInputJournalExport');
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
-        Route::any('/temporaryAllowanceMWPExport','temporaryAllowanceMWPExport')->name('reports.temporaryAllowanceMWPExport');
+        Route::any('/payrollReconciliationSummary','payrollReconciliationSummary')->name('reports.payrollReconciliationSummary');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
+        Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
+
+
         Route::any('/employeeCostExport','employeeCostExport')->name('reports.employeeCostExport');
         Route::any('/employeeCostExport_temp','employeeCostExport_temp')->name('reports.employeeCostExport_temp');
         Route::any('/employeeBioDataExport','employeeBioDataExport')->name('reports.employeeBioDataExport');
         Route::any('/grossReconciliation','grossReconciliation')->name('reports.grossReconciliation');
         Route::any('/netReconciliation','netReconciliation')->name('reports.netReconciliation');
         Route::any('/loanReports','loanReports')->name('reports.loanReports');
-        Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
+        Route::any('/projectTime','projectTime')->name('reports.projectTime');
         Route::any('/funder','funder')->name('reports.funder');
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 
