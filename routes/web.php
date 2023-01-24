@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+});
     Route::resources([
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
@@ -143,6 +143,30 @@ Route::middleware('auth')->group(function () {
         Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendance.current_leave_progress');
 
     });
+
+Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
+
+    Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
+    Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
+    Route::any('/leave' ,'leave')->name('attendandance.leave');
+    Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
+    Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
+    Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave');
+    Route::any('/holdLeave' ,'holdLeave')->name('attendandance.holdLeave');
+    Route::any('/approveLeave' ,'approveLeave')->name('attendandance.approveLeave');
+    Route::any('/rejectLeave' ,'rejectLeave')->name('attendandance.rejectLeave');
+    Route::any('/leavereport' ,'leavereport')->name('attendandance.leavereport');
+    Route::any('/customleavereport' ,'customleavereport')->name('attendandance.customleavereport');
+    Route::any('/leave_remarks' ,'leave_remarks')->name('attendandance.leave_remarks');
+    Route::any('/leave_application_info' ,'leave_application_info')->name('attendandance.leave_application_info');
+    Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendandance.updateLeaveReason');
+    Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendandance.updateLeaveAddress');
+    Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendandance.updateLeaveMobile');
+    Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType');
+    Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange');
+    Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress');
+
+});
 
 
     Route::prefix('')->controller(BaseController::class)->group(function (){
@@ -585,6 +609,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/password_generator','password_generator')->name('payroll.password_generator');
         Route::any('/TestMail','TestMail')->name('payroll.TestMail');
 
+        // for pay slip template
+        Route::any('/salary_slip','getSlip')->name('payroll.salary_slip');
     });
 
 
@@ -816,7 +842,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-});
+
 
 //bank loans routes
 Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
