@@ -166,21 +166,32 @@ class AttendanceModel extends Model
 
 	function getLeaveBalance($empID, $hireDate, $today)
 	{
+
+		// duration
+
 		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
 		$row = DB::select(DB::raw($query));
 
-        $date = DB::table('employee')->where('emp_id',$empID)->select('hire_date')->first();
-        $d1 = new DateTime($hireDate);
-        $todayDate = date('Y-m-d');
-       $d2 = new DateTime($todayDate);
-       $interval = $d1->diff($d2);
-       $diffInMonths  = $interval->m;
-       dd($diffInMonths);
-		$spent = $row[0]->days_spent;
-		$accrued = $row[0]->days_accrued;
+		$days_this_month = intval(date('t', strtotime(date(''))));
 
-		$accrual= 7*$accrued/90;
-		$maximum_days = $accrual - $spent;
+        $employee = DB::table('employee')->where('emp_id',$empID)->first();
+        $d1 = new DateTime(date($hireDate));
+
+		$d2 =new DateTime("now");
+		$diff = $d1->diff($d2);
+
+		$years=$diff->y;
+		$months=$diff->m;
+		$days=$diff->d;
+
+		$leave_days = $years*12*$employee->accrual_rate + $months*$employee->accrual_rate + $days*$employee->accrual_rate/$days_this_month;
+
+		$spent = $row[0]->days_spent;
+
+		// dd($leave_days);
+
+		$maximum_days = $leave_days - $spent;
+
 		return $maximum_days;
 	}
 	function myleave_current($empID)

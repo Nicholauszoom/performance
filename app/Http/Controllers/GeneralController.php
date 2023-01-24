@@ -3600,6 +3600,7 @@ class GeneralController extends Controller
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
             $data['title'] = "Organisation Reports";
+            $data['employee'] = Employee::where('state','=',1)->get();
             return view('app.organisation_reports', $data);
         } else {
             echo 'Unauthorized Access';

@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
+use App\Models\AttendanceModel;
 
 // use PDF;
 // use App\Helpers\SysHelpers;
@@ -24,6 +27,7 @@ class ReportController extends Controller
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
         $this->project_model = new ProjectModel();
+        $this->attendance_model = new AttendanceModel();
     }
 
     function payroll_report(Request $request)
@@ -126,11 +130,9 @@ class ReportController extends Controller
                     $data['take_home'] = $this->reports_model->temporary_sum_take_home($payroll_date);
                 }
                 return view('app.reports/pay_checklist', $data);
-
             } else {
                 session('note', "<p class='alert alert-warning text-center'>Sorry the Pay Checklist for the Selected Payroll Month is Not Ready</font></p>");
                 return redirect('/flex/cipay/financial_reports/');
-
             }
         }
     }
@@ -257,7 +259,6 @@ class ReportController extends Controller
         } else {
             exit('NO PAYROLL');
         }
-
     }
 
     function heslb(Request $request)
@@ -281,10 +282,10 @@ class ReportController extends Controller
         //include(app_path() . '/reports/heslb.php');
 
         return view('reports/heslb', $data);
-
     }
 
-    function get_payroll_temp_summary($date){
+    function get_payroll_temp_summary($date)
+    {
 
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
 
@@ -320,13 +321,14 @@ class ReportController extends Controller
 
 
 
-    $summary = $data['summary'];
+        $summary = $data['summary'];
 
-    return view('reports.temp_payroll',$data);
+        return view('reports.temp_payroll', $data);
 
-   // include(app_path() . '/reports/temp_payroll.php');
+        // include(app_path() . '/reports/temp_payroll.php');
     }
-    function get_payroll_temp_summary1($date){
+    function get_payroll_temp_summary1($date)
+    {
 
         $data['summary'] = $this->reports_model->get_payroll_temp_summary1($date);
 
@@ -362,11 +364,11 @@ class ReportController extends Controller
 
 
 
-    $summary = $data['summary'];
+        $summary = $data['summary'];
 
-    return view('reports.temp_payroll1',$data);
+        return view('reports.temp_payroll1', $data);
 
-   // include(app_path() . '/reports/temp_payroll.php');
+        // include(app_path() . '/reports/temp_payroll.php');
     }
 
     function pension(Request $request)
@@ -400,7 +402,7 @@ class ReportController extends Controller
         $payroll_month = $data['payroll_month'];
         $pension_fund = $data['pension_fund'];
 
-      include(app_path() . '/reports/pension.php');
+        include(app_path() . '/reports/pension.php');
         //return view('reports/pension', $data);
 
     }
@@ -438,33 +440,32 @@ class ReportController extends Controller
             //include(app_path() . '/reports/wcf.php');
             return view('reports/wcf', $data);
         }
-
     }
 
-// function employment_cost_old(Request $request)  {
-//     //if (1) {
+    // function employment_cost_old(Request $request)  {
+    //     //if (1) {
 
-//         //DATE MANIPULATION
-//         $calendar =$request->input('payrolldate');
-//         $datewell = explode("-",$calendar);
-//         $mm = $datewell[1];
-//         $dd = $datewell[2];
-//         $yyyy = $datewell[0];
-//         $date = $yyyy."-".$mm;
-//         $payrollDate = '2019-09-28'; // $yyyy."-".$mm."-".$dd;
+    //         //DATE MANIPULATION
+    //         $calendar =$request->input('payrolldate');
+    //         $datewell = explode("-",$calendar);
+    //         $mm = $datewell[1];
+    //         $dd = $datewell[2];
+    //         $yyyy = $datewell[0];
+    //         $date = $yyyy."-".$mm;
+    //         $payrollDate = '2019-09-28'; // $yyyy."-".$mm."-".$dd;
 
-//         $check = $this->reports_model->employmentCostCheck($date);
+    //         $check = $this->reports_model->employmentCostCheck($date);
 
-//         if($check>0){
-//             $data['cost']= $this->reports_model->employmentCost($date);
-//             $data['total_cost']= $this->reports_model->totalEmploymentCost($date);
-//             $data['info']= $this->reports_model->company_info();
-//             $data['payrollMonth'] = $payrollDate;
-//              return view('app.reports/employment_cost_old', $data);
-//         } else exit("No Payroll Available in This Month and Year");
-//     //}
+    //         if($check>0){
+    //             $data['cost']= $this->reports_model->employmentCost($date);
+    //             $data['total_cost']= $this->reports_model->totalEmploymentCost($date);
+    //             $data['info']= $this->reports_model->company_info();
+    //             $data['payrollMonth'] = $payrollDate;
+    //              return view('app.reports/employment_cost_old', $data);
+    //         } else exit("No Payroll Available in This Month and Year");
+    //     //}
 
-// }
+    // }
 
     function employment_cost(Request $request)
     {
@@ -544,7 +545,6 @@ class ReportController extends Controller
 
             //  return view('app.reports/loan_report', $data);
         }
-
     }
 
     public function customleavereport(Request $request)
@@ -594,7 +594,6 @@ class ReportController extends Controller
             $title = $data['title'];
 
             include app_path() . '/reports/customleave_report.php';
-
         }
 
         $data['showbox'] = 0;
@@ -607,7 +606,6 @@ class ReportController extends Controller
         $title = $data['title'];
 
         include app_path() . '/reports/customleave_report.php';
-
     }
 
     public function payslip(Request $request)
@@ -638,7 +636,6 @@ class ReportController extends Controller
                 if ($profile == 0) {
                     session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/payroll/employee_payslip/');
-
                 } else {
                     session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/userprofile/?id=' . $empID);
@@ -684,7 +681,6 @@ class ReportController extends Controller
 
                 //include(app_path() . '/reports/customleave_report.php');
                 include app_path() . '/reports/payslip.php';
-
             }
         } else {
             // DATE MANIPULATION
@@ -791,7 +787,6 @@ class ReportController extends Controller
             if ($profile == 0) {
                 session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                 return redirect('/flex/cipay/employee_payslip/');
-
             } else {
                 session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                 return redirect('/flex/cipay/userprofile/?id=' . $empID);
@@ -839,7 +834,6 @@ class ReportController extends Controller
             //  return view('app.reports/payslip', $data);
 
         }
-
     }
 
     function backup_payslip(Request $request)
@@ -878,11 +872,8 @@ class ReportController extends Controller
                 $companyinfo = $data['companyinfo'];
 
                 include app_path() . '/reports/payslip_test.php';
-
             }
-
         }
-
     }
 
     function kpi(Request $request)
@@ -907,7 +898,7 @@ class ReportController extends Controller
     function attendance(Request $request)
     {
 
-      //  dd($request->all());
+        //  dd($request->all());
 
         if ($request->input('print')) {
 
@@ -931,7 +922,6 @@ class ReportController extends Controller
             include app_path() . '/reports/attendance_report.php';
             //  return view('app.reports/attendance_report', $data);
         }
-
     }
 
     ##############################################################################
@@ -939,7 +929,7 @@ class ReportController extends Controller
 
     public function payrollInputJournalExport(Request $request)
     {
-       // dd($request->all());
+        // dd($request->all());
 
         if (1) {
             $payroll_date = $request->input('payrolldate');
@@ -961,7 +951,8 @@ class ReportController extends Controller
                     'color' => array('rgb' => 'FFFFFF'),
                     //'size'  => 15,
                     //'name'  => 'Verdana'
-                ));
+                )
+            );
 
             // $object->getActiveSheet()->getCell('A1')->setValue('Some text');
 
@@ -993,7 +984,7 @@ class ReportController extends Controller
 
             foreach ($cells as $value) {
                 $object->getActiveSheet()->getStyle("$value")->getFont()->setBold(true);
-//                $object->getActiveSheet()->getStyle("$value")->applyFromArray($styleArray);
+                //                $object->getActiveSheet()->getStyle("$value")->applyFromArray($styleArray);
 
                 $object->getActiveSheet()->getStyle("$value")->applyFromArray(
                     array(
@@ -1043,7 +1034,7 @@ class ReportController extends Controller
             );
 
             //Set Cell Background Color AND Font Color
-//            $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray($styleArray);
+            //            $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray($styleArray);
             $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray(
                 array(
                     'fill' => array(
@@ -1061,7 +1052,7 @@ class ReportController extends Controller
                 )
             );
 
-//            $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray($styleArray);
+            //            $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray($styleArray);
             $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray(
                 array(
                     'fill' => array(
@@ -1091,7 +1082,6 @@ class ReportController extends Controller
                 $net_total_1 = $this->netTotalSummation($payroll_date)[0];
                 $net_total_2 = $this->netTotalSummation($payroll_date)[2];
                 $net_total = $net_total_1 + $net_total_2;
-
             }
 
             $data_row = 10;
@@ -1113,7 +1103,7 @@ class ReportController extends Controller
             foreach ($take_home as $row) {
                 $net = $row->takehome;
                 $net_less = $row->takehome_less;
-//              $arrears= $row->arrears_payment;
+                //              $arrears= $row->arrears_payment;
             }
 
             $paidheslb = 0;
@@ -1218,7 +1208,6 @@ class ReportController extends Controller
                     $object->getActiveSheet()->getCell("T$i")->setValue("TZA");
 
                     $summaryRowssum = $summaryRowssum - $net_total;
-
                 }
                 if ($countSummaryRows == 6) {
                     // $object->getActiveSheet()->getStyle("F$i:H$i")->applyFromArray(
@@ -1236,7 +1225,6 @@ class ReportController extends Controller
                     // }
                     $object->getActiveSheet()->getCell("F$i")->setValue("Check Balance");
                     $object->getActiveSheet()->getCell("G$i")->setValue(number_format($sum, 2));
-
                 }
                 $countSummaryRows++;
             }
@@ -1324,7 +1312,8 @@ class ReportController extends Controller
                     'color' => array('rgb' => 'FFFFFF'),
                     //'size'  => 15,
                     //'name'  => 'Verdana'
-                ));
+                )
+            );
 
             // $object->getActiveSheet()->getCell('A1')->setValue('Some text');
 
@@ -1356,7 +1345,7 @@ class ReportController extends Controller
 
             foreach ($cells as $value) {
                 $object->getActiveSheet()->getStyle("$value")->getFont()->setBold(true);
-//                $object->getActiveSheet()->getStyle("$value")->applyFromArray($styleArray);
+                //                $object->getActiveSheet()->getStyle("$value")->applyFromArray($styleArray);
 
                 $object->getActiveSheet()->getStyle("$value")->applyFromArray(
                     array(
@@ -1406,7 +1395,7 @@ class ReportController extends Controller
             );
 
             //Set Cell Background Color AND Font Color
-//            $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray($styleArray);
+            //            $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray($styleArray);
             $object->getActiveSheet()->getStyle("B9:H9")->applyFromArray(
                 array(
                     'fill' => array(
@@ -1424,7 +1413,7 @@ class ReportController extends Controller
                 )
             );
 
-//            $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray($styleArray);
+            //            $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray($styleArray);
             $object->getActiveSheet()->getStyle("O9:U9")->applyFromArray(
                 array(
                     'fill' => array(
@@ -1454,7 +1443,6 @@ class ReportController extends Controller
                 $net_total_1 = $this->netTotalSummation($payroll_date)[0];
                 $net_total_2 = $this->netTotalSummation($payroll_date)[2];
                 $net_total = $net_total_1 + $net_total_2;
-
             }
 
             $data_row = 10;
@@ -1476,7 +1464,7 @@ class ReportController extends Controller
             foreach ($take_home as $row) {
                 $net = $row->takehome;
                 $net_less = $row->takehome_less;
-//              $arrears= $row->arrears_payment;
+                //              $arrears= $row->arrears_payment;
             }
 
             $paidheslb = 0;
@@ -1517,7 +1505,6 @@ class ReportController extends Controller
                                             $total_hour += 1;
                                             $total_min = 0;
                                         }
-
                                     }
 
                                     if (($p_a_t->project == $p_a->project) && ($row->empID == $p_a->emp_id)) {
@@ -1527,9 +1514,7 @@ class ReportController extends Controller
                                         if ($total_min_p >= 60) {
                                             $total_hour_p += $total_min_p;
                                         }
-
                                     }
-
                                 } catch (Exception $e) {
                                     echo 'error';
                                 }
@@ -1587,14 +1572,11 @@ class ReportController extends Controller
                         }
                         $total = $total + (($row->allowances + $row->salary) * $percent);
                         $data_row++;
-
                     }
-
                 }
-
             }
 
-//            Seven Rows at the Bottom For Summation and Summary
+            //            Seven Rows at the Bottom For Summation and Summary
             $summaryRowssum = 0;
             $countSummaryRows = 0;
             for ($i = $data_row; $i <= $data_row + 6; $i++) {
@@ -1639,7 +1621,6 @@ class ReportController extends Controller
                     $object->getActiveSheet()->getCell("T$i")->setValue("TZA");
 
                     $summaryRowssum = $summaryRowssum - $net_total;
-
                 }
                 if ($countSummaryRows == 6) {
                     // $object->getActiveSheet()->getStyle("F$i:H$i")->applyFromArray(
@@ -1657,7 +1638,6 @@ class ReportController extends Controller
                     // }
                     $object->getActiveSheet()->getCell("F$i")->setValue("Check Balance");
                     $object->getActiveSheet()->getCell("G$i")->setValue(number_format($sum, 2));
-
                 }
                 $countSummaryRows++;
             }
@@ -1919,7 +1899,7 @@ class ReportController extends Controller
             ob_end_clean();
             ob_start();
             $writer->save('php://output'); // download file
-//            end
+            //            end
         } else {
             exit("Invalid Resource Access");
         }
@@ -1941,59 +1921,59 @@ class ReportController extends Controller
 
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-// set document information
+        // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Cits');
         $pdf->SetTitle('P9-' . date('d/m/Y'));
         $pdf->SetSubject('PAYE');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
-// set default header data
+        // set default header data
 
-// $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
-//  PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
+        // $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
+        //  PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
         $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
 
-// remove default header/footer
+        // remove default header/footer
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(true);
 
-// set header and footer fonts
+        // set header and footer fonts
         $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-// set default monospaced font
+        // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-// set margins
+        // set margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-// set auto page breaks
+        // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
-// set image scale factor
+        // set image scale factor
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-// set some language-dependent strings (optional)
+        // set some language-dependent strings (optional)
         if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
             require_once dirname(__FILE__) . '/lang/eng.php';
             $pdf->setLanguageArray($l);
         }
 
-// ---------------------------------------------------------
+        // ---------------------------------------------------------
 
-// set default font subsetting mode
+        // set default font subsetting mode
         $pdf->setFontSubsetting(true);
 
-// Set font
-// dejavusans is a UTF-8 Unicode font, if you only need to
-// print standard ASCII chars, you can use core fonts like
-// helvetica or times to reduce file size.
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
         $pdf->SetFont('times', '', 12, '', true);
 
-// TIN NUMBER
+        // TIN NUMBER
 
         foreach ($info as $key) {
             $name = $key->cname;
@@ -2009,13 +1989,12 @@ class ReportController extends Controller
             $block_no = $key->block_no;
             $branch = $key->branch;
             $street = $key->street;
-
         }
 
-// This method has several options, check the source code documentation for more information.
-// $pdf->AddPage();
+        // This method has several options, check the source code documentation for more information.
+        // $pdf->AddPage();
         $pdf->AddPage('L', 'A4');
-// $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
+        // $pdf->Cell(0, 0, 'A4 LANDSCAPE', 1, 1, 'C');
 
         $pdf->SetXY(0, 18);
         $header1 = <<<"EOD"
@@ -2023,7 +2002,7 @@ class ReportController extends Controller
 EOD;
         $pdf->writeHTMLCell(0, 12, '', '', $header1, 0, 1, 0, true, '', true);
 
-// EMPLOYER
+        // EMPLOYER
         foreach ($info as $key) {
             $name = $key->cname;
             $tin = $key->tin;
@@ -2039,7 +2018,6 @@ EOD;
             $branch = $key->branch;
             $street = $key->street;
             $heslbcode = $key->heslb_code_no;
-
         }
         $payrollmonth = date('F, Y', strtotime($payrolldate));
 
@@ -2061,7 +2039,7 @@ EOD;
         $pdf->writeHTMLCell(0, 12, '', '', $header2, 0, 1, 0, true, '', true);
 
         $pdf->SetFont('times', '', 12, '', true);
-// Set some content to print
+        // Set some content to print
         $pdf->SetXY(38, 30);
 
         $html = '<table align="center" border="1px">';
@@ -2079,7 +2057,7 @@ EOD;
         <th >OUTSNDING BALANCE</th>
     </tr>';
 
-// MYSQL DATA
+        // MYSQL DATA
 
         foreach ($heslb as $key) {
             $index = $key->form_four_index_no;
@@ -2122,20 +2100,20 @@ EOD;
       Receipted By.......................................</td>
       </tr>
       </table>';
-// MYSQL DATA
+        // MYSQL DATA
 
-// Print text using writeHTMLCell()
+        // Print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
-// ---------------------------------------------------------
+        // ---------------------------------------------------------
 
-// Close and output PDF document
-// This method has several options, check the source code documentation for more information.
-// $pdf->Output('heslb-'.date('d/m/Y').'.pdf', 'I');
+        // Close and output PDF document
+        // This method has several options, check the source code documentation for more information.
+        // $pdf->Output('heslb-'.date('d/m/Y').'.pdf', 'I');
         $pdfString = $pdf->Output('quotation.pdf', 'S');
 
-// SEND EMAIL
-// SMTP configuration
+        // SEND EMAIL
+        // SMTP configuration
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -2174,11 +2152,11 @@ EOD;
             echo 'Message has been sent SUCCESSIFULLY';
         }
 
-// SEND EMAIL
+        // SEND EMAIL
 
-//============================================================+
-// END OF FILE
-//============================================================+
+        //============================================================+
+        // END OF FILE
+        //============================================================+
     }
 
     function employeeReport(Request $request)
@@ -2215,7 +2193,7 @@ EOD;
                 "Taxable Amount", "Tax Payable(PAYE)", "Employee Medical", "Deductions (HESLB, Advance)",
                 "Net Salary", "Employer Pension", "Employer Medical", "SDL", "WCF", "Total Pension", "Total Medical",
                 "Total Employment Cost",
-//                "Salary After Tax","Provident Fund Contr (Employee)","HESLB","Loan Deduction","Total Take Home Salary"
+                //                "Salary After Tax","Provident Fund Contr (Employee)","HESLB","Loan Deduction","Total Take Home Salary"
             );
 
             $column = 0;
@@ -2345,7 +2323,7 @@ EOD;
                 "Taxable Amount", "Tax Payable(PAYE)", "Employee Medical", "Deductions (HESLB, Advance)",
                 "Net Salary", "Employer Pension", "Employer Medical", "SDL", "WCF", "Total Pension", "Total Medical",
                 "Total Employment Cost",
-//                "Salary After Tax","Provident Fund Contr (Employee)","HESLB","Loan Deduction","Total Take Home Salary"
+                //                "Salary After Tax","Provident Fund Contr (Employee)","HESLB","Loan Deduction","Total Take Home Salary"
             );
 
             $column = 0;
@@ -2482,7 +2460,8 @@ EOD;
             $table_columns = array(
                 "Employee Name", "Employee ID", "Date of Birth", "Gender", "Grade", "Date Joined", "Date End of Service",
                 "Department ", "Position", "Branch", "Contract Type", "Basic Salary", "Pension Fund Name",
-                "Pension Fund #", "Bank Account Name", "Bank Account #", "Employee Mobile #", "Available leave days");
+                "Pension Fund #", "Bank Account Name", "Bank Account #", "Employee Mobile #", "Available leave days"
+            );
 
             $column = 0;
             foreach ($table_columns as $field) {
@@ -2610,16 +2589,13 @@ EOD;
                     $data['current_payroll'][$employee->empID] = $this->reports_model->v_employeeGross($current_payroll_month, $employee->empID);
                     $data['previous_payroll'][$employee->empID] = $this->reports_model->v_employeeGross($previous_payroll_month, $employee->empID);
                 }
-
             }
 
             $data['emp_ids'] = $payroll_employees;
             $data['total_previous_gross'] = $total_previous_gross;
             $data['total_current_gross'] = $total_current_gross;
             return view('app.gross_recon', $data);
-
         }
-
     }
 
     public function netReconciliation(Request $request)
@@ -2655,9 +2631,7 @@ EOD;
             $data['total_previous_net'] = $total_previous_net;
             $data['total_current_net'] = $total_current_net;
             return view('app.net_recon', $data);
-
         }
-
     }
 
     public function loanReports(Request $request)
@@ -2679,11 +2653,11 @@ EOD;
             $data['payroll_date'] = $payroll_date;
 
             return view('app.reports/loan_report_new', $data);
-
         }
     }
 
-    function payrolldetails(Request $request){
+    function payrolldetails(Request $request)
+    {
 
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
@@ -2721,31 +2695,70 @@ EOD;
 
 
 
-    $summary = $data['summary'];
+        $summary = $data['summary'];
 
-    return view('reports.payroll_details',$data);
+        return view('reports.payroll_details', $data);
 
-   // include(app_path() . '/reports/temp_payroll.php');
+        // include(app_path() . '/reports/temp_payroll.php');
     }
 
 
 
     public function funder(Request $request)
     {
-        if (1) {
-            $project = $request->input('project');
-            $project_code = explode('~', $project)[0];
-            $duration = explode('-', $request->input('duration'));
+        // dd("hello");
 
-            $data['info'] = $this->reports_model->company_info();
-            $data['project_info'] = $this->project_model->projectInfoCode($project_code);
-            $data['project'] = explode('~', $project)[1];
-            $data['duration'] = $request->input('duration');
-            $data['funder_funds'] = $this->reports_model->funderFunds(date('Y-m-d', strtotime($duration[0]))
-                , date('Y-m-d', strtotime($duration[1])));
-            return view('app.reports/funder_project', $data);
+        if ($request->leave_employee == Null || $request->leave_employee == "All") {
+            // $employee= Employee::all();
 
+            $employees = Employee::where('state','=',1)->get();
+
+            foreach ($employees  as $employee) {
+
+                // dd($employee);
+
+            $days_this_month = intval(date('t', strtotime(date(''))));
+
+
+            $accrual_days = $days*$employee->accrual_rate/$days_this_month;
+
+
+            $d1 = new DateTime(date($employee->hire_date));
+
+            $d2 =new DateTime("now");
+            $diff = $d1->diff($d2);
+
+            $years=$diff->y;
+            $months=$diff->m;
+            $days=$diff->d;
+
+            $accrual_days= $days*$employee->accrual_rate/$days_this_month;
+
+                $employee->maximum_days = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, date('Y-m-d'));
+                $employee->accrual_days = $accrual_days;
+            }
+
+
+
+
+
+            // dd("all here");
+        } else {
+
+            $employees = Employee::where('emp_id', $request->empID)->where('state','=',1)->get();
+
+
+            foreach ( $employees as $employee) {
+
+            
+
+                $employee->maximum_days = $employee->maximum_days = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, date('Y-m-d'));
+            }
         }
+
+        // dd($employees);
+
+        return view('reports.leave_balance', ['employees' => $employees]);
     }
 
     public function netTotalSummation($payroll_date)
@@ -2776,7 +2789,5 @@ EOD;
         $total = $amount_mwp + $amount_staff_bank + $amount_temporary_bank;
 
         return [$amount_mwp, $amount_staff_bank, $amount_temporary_bank];
-
     }
-
 }

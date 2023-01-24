@@ -16,7 +16,7 @@ use App\Models\AttendanceModel;
 use App\Models\ProjectModel;
 use App\Models\PerformanceModel;
 use App\Helpers\SysHelpers;
-
+use Illuminate\Support\Facades\DB;
 class PerformanceController extends Controller
 {
 
