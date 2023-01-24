@@ -426,7 +426,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         al.amount as allowance_amount,
         IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
 
-        IF((SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.empID = e.emp_id AND ll.payment_date = '".$date."' GROUP BY ll.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.empID = e.emp_id AND ll.payment_date = '".$date."' GROUP BY ll.empID),0) AS loans
+        (SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.loanID = e.id AND ll.payment_date = '".$date."' GROUP BY ll.loanID) AS loans
 
 
         from payroll_logs pl,employee e,allowance_logs al where e.emp_id = pl.empID and e.emp_id=al.empID and pl.payroll_date='".$date."'";

@@ -7553,7 +7553,7 @@ class GeneralController extends Controller
                     $termination->pension_employee = $pension_employee;
                     $termination->net_pay = $net_pay;
                     $termination->take_home = $take_home;
-                    $termination->total_deduction = $total_deductions;
+                    $termination->total_deductions = $total_deductions;
                     $termination->save();
                 // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
                 }else{
@@ -7757,7 +7757,11 @@ class GeneralController extends Controller
         //check whether if after payroll or before payroll
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
         if($check_termination_date == true){
-           dd('yes');
+          // dd('yes');
+            //get leave allowance
+        $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID,$termination_date,$january_date);
+        //get salary
+        $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID,$termination_date,$dd);
         }else{
 
         //get leave allowance
@@ -7771,8 +7775,12 @@ class GeneralController extends Controller
 
 
 
-        }
 
+        }
+        $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
+
+
+        $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = $employee_salary;
 
@@ -7783,6 +7791,8 @@ class GeneralController extends Controller
 
 
     }
+
+
 
 
     // end of terminations functions
