@@ -5,32 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Terminal Benefits</title>
+    <title>Payroll Details </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}">
 
-
-
-        <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-        <link href="{{ asset('assets/date-picker/daterangepicker.css') }}" rel="stylesheet">
-
-
-        <script src="{{ asset('assets/js/configurator.js') }}"></script>
-        <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-
-
-        <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('assets/js/components/notifications/noty.min.js') }}"></script>
-        <script src="{{ asset('assets/js/components/notifications/sweet_alert.min.js') }}"></script>
-
-
-
-        <script src="{{ asset('assets/js/app.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/extra_noty.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/extra_sweetalert.js') }}"></script>
 
 
 
@@ -41,22 +19,34 @@
     <main>
         <div class="row my-4">
 
-            <div class="col-md-9 mx-auto">
+            <div class="col-md-11 mx-auto">
+
 
                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-5 col-5">
-                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="30%">
-                        <br>
-                        <p>AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
+                    <div class="col-md-7 col-7">
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here"
+                                    width="100%">
+
+                            </div>
+                            <div class="col-md-9 col-9">
+                                {{-- <br> --}}
+                                <p>AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
+                                <button onclick="window.print()">Print this page</button>
+
+                            </div>
+                        </div>
 
                     </div>
-                    <div class="col-md-7 col-7">
+                    <div class="col-md-5 col-5">
 
                         <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll Detail_By Number
                         </h5><br>
-                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Date: {{ $payroll_date }}
-                        </h5>
-                        <button onclick="window.print()">Print this page</button>
+                        <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;"> Date:
+                            {{ $payroll_date }}
+                        </p>
+
                     </div>
 
 
@@ -64,14 +54,13 @@
                 </div>
 
 
-                <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important; ">
-                    <div class="col-md-12 col-12">
-                        <table class="table datatable-button-html5-columns" style="font-size:9px;">
+                <div class="row mb-5" style=" ">
+                    <div class="col-md-12 col-12 mb-5">
+                        <table class="table  mb-5" style="font-size:9px;">
                             <thead>
                                 <tr>
                                     <th><b>S/No</b></th>
                                     <th><b>Pay No</b></th>
-
                                     <th><b>Name</b></th>
                                     <th><b>Monthly Basic Salary</b></th>
                                     <th><b>Overtime</b></th>
@@ -123,7 +112,7 @@
 
                                 ?>
 
-                                <tr>
+                                <tr >
                                     <td class=""><b>{{ $i }}</b></td>
                                     <td class=""><b>{{ $row->emp_id }}</b></td>
 
@@ -136,12 +125,10 @@
                                     <td class="text-end"><b>{{ $row->allowances }}</b></td>
                                     <td class="text-end"><b>0</b></td>
                                     <td class="text-end"><b>0</b></td>
-                                    {{-- <td class="text-end"><b>{{ $row->allowance_id =="House Rent"? $row->allowance_amount:0 }}</b></td> --}}
-
                                     <td class="text-end"><b>{{ $row->house_rent }}</b></td>
 
                                     <td class="text-end"><b>0<b></td>
-                                    {{-- <td class="text-end"><b>{{ $row->allowance_id !="Overtime" && $row->allowance_id !="House Rent"? $row->allowance_amount:0 }}</b></td> --}}
+
                                     <td class="text-end"><b>{{ $row->other_payments }}</b></td>
 
                                     <td class="text-end"><b>{{ $row->salary + $row->allowances }}</b></td>
@@ -159,8 +146,9 @@
                                 </tr>
 
                                 <?php } ?>
-                                <tr style="font-size: 10px">
-                                    <td class="" colspan="3"><b>
+                                <tr style="font-size: 10px !important;">
+                                    <td></td>
+                                    <td class=""><b>
                                             <center>TOTAL</center><b></td>
                                     <td class="text-end"><b>{{ $total_salary }}</b></td>
                                     <td class="text-end"><b>{{ $total_overtime }}</b></td>
@@ -182,64 +170,66 @@
                                     <td class="text-end"><b>{{ $total_pension }}</b></td>
                                     <td class="text-end"><b>{{ $total_deduction }}</b></td>
                                     <td class="text-end"><b>{{ $total_netpay }}</b></td>
+                                    <td></td>
                                 </tr>
 
                                 <?php } ?>
                             </tbody>
+
                         </table>
                     </div>
-
+                </div>
+            </div>
                 </div>
                 <br>
-                <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
-                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+    </main>
+    <br>
+                <div class="row mt-5 px-4 " style="margin-top:100px;border-top: 10px solid rgb(23, 57, 137) !important;border-bottom: 10px solid rgb(242, 183, 75) !important; ">
 
 
                         {{-- <h5>FINANCE DEPARTMENT</h5> --}}
-                        <div class="col-md-12 p-2" style="border:solid 1px gray ;border-bottom:none;">
-                            <p><small><b>Prepared By</b></small></p>
+                        <div class="col-md-12 mt-2  p-2" style="border:solid 1px gray ;border-bottom:none;">
+                            <p class="text-start"><small><b>Prepared By</b></small></p>
 
-                            <div class="row">
-                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
+                            <div class="row p-1">
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Name:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Date_________________________</div>
                             </div>
                             <br>
                             <p><small><b>Checked and Approved By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Name:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Date_________________________</div>
                             </div>
 
                             <p><small><b>Checked and Approved By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Name:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Date_________________________</div>
                             </div>
 
                             <p><small><b>Approved By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
-                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Name:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-4 col-sm-4 col-lg-4 mb-3">Date_________________________</div>
                             </div>
                         </div>
 
 
                 </div>
 
-            </div>
-        </div>
-    </main>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

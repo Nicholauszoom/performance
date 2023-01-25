@@ -119,7 +119,7 @@
 
                 </div>
 
-                < <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+            <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
                     <div class="col-md-3">
                         <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
                     </div>
