@@ -90,74 +90,74 @@
                                     <div class="row">
                                         <div class="col-md-3 form-group">
                                             <label for="">Salary Enrollments</label>
-                                            <input type="text" name="salaryEnrollment"  class="form-control" id="salaryEnrollment">
+                                            <input type="text" value="0" name="salaryEnrollment"  class="form-control" id="salaryEnrollment">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Overtime Normal Days</label>
-                                            <input type="text" name="normalDays" class="form-control"  id="">
+                                            <input type="text" value="0" name="normalDays" class="form-control"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Overtime Public</label>
-                                            <input type="text" name="publicDays" class="form-control"  id="">
+                                            <input type="text" value="0" name="publicDays" class="form-control"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Notice Payment</label>
-                                            <input type="text"  class="form-control"  name="noticePay" id="">
+                                            <input type="text"  class="form-control"  value="0" name="noticePay" id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Outstanding Leave Pay</label>
-                                            <input type="text" class="form-control"  name="leavePay" id="leavePay">
+                                            <input type="text" class="form-control"  value="0" name="leavePay" id="leavePay">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">House Allowance</label>
-                                            <input type="text" class="form-control" name="houseAllowance"  id="">
+                                            <input type="text" class="form-control" value="0" name="houseAllowance"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Cost of Living</label>
-                                            <input type="text" class="form-control" name="livingCost"  id="">
+                                            <input type="text" class="form-control" value="0" name="livingCost"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Utility Allowance</label>
-                                            <input type="text" class="form-control" name="utilityAllowance"  id="">
+                                            <input type="text" class="form-control" value="0" name="utilityAllowance"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Leave Allowance</label>
-                                            <input type="text" class="form-control" name="leaveAllowance"  id="leaveAllowance">
+                                            <input type="text" class="form-control" value="0" name="leaveAllowance"  id="leaveAllowance">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Serevance Pay</label>
-                                            <input type="text" class="form-control" name="serevancePay"  id="">
+                                            <input type="text" class="form-control" value="0" name="serevancePay"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Leave & O/stand</label>
-                                            <input type="text" class="form-control" name="leaveStand"  id="leaveStand">
+                                            <input type="text" class="form-control" value="0" name="leaveStand"  id="leaveStand">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Teller Allowance</label>
-                                            <input type="text" class="form-control" name="tellerAllowance"  id="">
+                                            <input type="text" class="form-control" value="0" name="tellerAllowance"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Arrears</label>
-                                            <input type="text" class="form-control" name="arrears"  id="">
+                                            <input type="text" class="form-control" value="0" name="arrears"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Discr Exgracia</label>
-                                            <input type="text" class="form-control" name="exgracia"  id="">
+                                            <input type="text" class="form-control" value="0" name="exgracia"  id="">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Bonus</label>
-                                            <input type="text" class="form-control" name="bonus" id="" >
+                                            <input type="text" class="form-control" value="0" name="bonus" id="" >
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Long Serving</label>
-                                            <input type="text" class="form-control" name="longServing" id="" >
+                                            <input type="text" class="form-control" value="0" name="longServing" id="" >
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Other Non Taxable Payments </label>
-                                            <input type="text" class="form-control" name="otherPayments" id="">
+                                            <input type="text" class="form-control" value="0" name="otherPayments" id="">
                                         </div>
                                     </div>
-                                    <input type="hidden" class="form-control" name="employee_actual_salary" id="employee_actual_salary">
+                                    <input type="hidden" class="form-control" value="0" name="employee_actual_salary" id="employee_actual_salary">
 
 
                                     <p class="text-secondary font-weight-bolder">
@@ -169,11 +169,16 @@
 
                                         <div class="col-md-6 form-group">
                                             <label for="">Salary Advances</label>
-                                            <input type="text" name="salaryAdvance" class="form-control"  id="">
+                                            <input type="text" value="0" name="salaryAdvance" class="form-control"  id="">
+                                        </div>
+
+                                        <div class="col-md-6 form-group">
+                                            <label for="">Outstanding Loan Balance</label>
+                                            <input type="text" class="form-control" value="0" name="loan_balance"  id="">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label for="">Any Other Deductions</label>
-                                            <input type="text" class="form-control" name="otherDeductions"  id="">
+                                            <input type="text" class="form-control" value="0" name="otherDeductions"  id="">
                                         </div>
                                     </div>
                             </div>

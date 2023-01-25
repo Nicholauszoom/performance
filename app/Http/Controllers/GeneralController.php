@@ -7418,31 +7418,31 @@ class GeneralController extends Controller
     public function saveTermination(Request $request)
     {
 
-        request()->validate(
-            [
-                'employeeID' => 'required',
-                'terminationDate' => 'required',
-                'reason' => 'required',
-                'salaryEnrollment' => 'required',
-                'normalDays' => 'required',
-                'publicDays' => 'required',
-                'noticePay' => 'required',
-                'leavePay' => 'required',
-                'livingCost' => 'required',
-                'houseAllowance' => 'required',
-                'utilityAllowance' => 'required',
-                'tellerAllowance' => 'required',
-                'serevancePay' => 'required',
-                'leaveStand' => 'required',
-                'arrears' => 'required',
-                'exgracia' => 'required',
-                'bonus' => 'required',
-                'longServing' => 'required',
-                'salaryAdvance' => 'required',
-                'otherDeductions' => 'nullable',
-                'otherPayments' => 'nullable',
-            ]
-        );
+        // request()->validate(
+        //     [
+        //         'employeeID' => 'required',
+        //         'terminationDate' => 'required',
+        //         'reason' => 'required',
+        //         'salaryEnrollment' => 'required',
+        //         'normalDays' => 'required',
+        //         'publicDays' => 'required',
+        //         'noticePay' => 'required',
+        //         'leavePay' => 'required',
+        //         'livingCost' => 'required',
+        //         'houseAllowance' => 'required',
+        //         'utilityAllowance' => 'required',
+        //         'tellerAllowance' => 'required',
+        //         'serevancePay' => 'required',
+        //         'leaveStand' => 'required',
+        //         'arrears' => 'required',
+        //         'exgracia' => 'required',
+        //         'bonus' => 'required',
+        //         'longServing' => 'required',
+        //         'salaryAdvance' => 'required',
+        //         'otherDeductions' => 'nullable',
+        //         'otherPayments' => 'nullable',
+        //     ]
+        // );
         $employeeID = $request->employeeID;
         $terminationDate = $request->terminationDate;
         $reason = $request->reason;
@@ -7465,6 +7465,11 @@ class GeneralController extends Controller
         $salaryAdvance = $request->salaryAdvance;
         $otherDeductions = $request->otherDeductions;
         $otherPayments = $request->otherPayments;
+        $employee_actual_salary = $request->employee_actual_salary;
+        $loan_balance = $request->loan_balance;
+
+
+
 
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
@@ -7489,7 +7494,7 @@ class GeneralController extends Controller
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
-        $termination->save();
+
 
 
 
@@ -7505,9 +7510,13 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
+
+        $normal_days_overtime_amount = ($employee_actual_salary/176)*1.5*$normalDays;
+        $public_overtime_amount = ($employee_actual_salary/176)*2.0*$publicDays;
+
         $total_gross = $salaryEnrollment +
-            $normalDays +
-            $publicDays +
+            $normal_days_overtime_amount +
+            $public_overtime_amount +
             $noticePay +
             $leavePay +
             $livingCost +
@@ -7516,7 +7525,6 @@ class GeneralController extends Controller
             $leaveAllowance +
             $tellerAllowance +
             $serevancePay +
-            $leaveStand +
             $arrears +
             $exgracia +
             $bonus +
@@ -7524,15 +7532,21 @@ class GeneralController extends Controller
             $otherPayments;
 
 
+
+            //overtime calculation
+
+
+
                 //check whether if is after payroll or before payroll
                 $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
                 //get employee basic salary
-                $overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+                //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+                $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
 
                 if($check_termination_date == false){
                     $net_pay = 0;
                     $take_home = 0;
-                    $total_gross = 0;
+                   // $total_gross = 0;
                     $taxable = 0;
 
 
@@ -7540,19 +7554,27 @@ class GeneralController extends Controller
 
                 $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$employeeID);
 
-                $total_deductions = $salaryAdvance + $otherDeductions ;
+                $total_deductions = $salaryAdvance + $otherDeductions;
 
                 $net_pay = $total_gross - $total_deductions;
 
                 $taxable = ($net_pay - $pension_employee);
-                $taxable = $taxable < 0 ? $taxable*-1:$taxable;
+                //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
 
-                $paye = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<', $taxable)->first();
+                $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
 
-                $paye = $paye->excess_added + $paye->rate * $taxable - $paye->minimum;
 
+
+                $paye = $paye1->excess_added + $paye1->rate * ($taxable- $paye1->minimum);
                     $take_home = $taxable -  $paye;
 
+                    $termination->total_gross = $total_gross;
+
+                    $termination->loan_balance = $loan_balance;
+
+                    $termination->taxable = $taxable;
+                    $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
+                    $termination->public_overtime_amount = $public_overtime_amount;
                     $termination->paye = $paye;
                     $termination->pension_employee = $pension_employee;
                     $termination->net_pay = $net_pay;
@@ -7573,171 +7595,11 @@ class GeneralController extends Controller
     {
         $termination = Termination::where('id', $id)->first();
 
+        $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
-        // $days_this_month = intval(date('t', strtotime($termination->terminationDate)));
-        // $working_days_this_month = intval(date('d', strtotime($termination->terminationDate)));
-        // $working_days_this_year = intval(date('z', strtotime($termination->terminationDate)));
-        // $month = intval(date('F', strtotime($termination->terminationDate)));
+  ;
 
-        // $payroll_date = date($termination->terminationDate);
-
-        // $employee = DB::table('employee')->where('id', '=', $termination->employeeID)->first();
-
-        // $payroll_run = "0";
-
-        // $salary = ($employee->salary * $working_days_this_month) / 30;
-
-        // $leave_allowance = $employee->salary * $working_days_this_year / 365; //consider employees employed this month
-
-        // $salary25 = ($employee->salary) / 25;
-
-        // $salary30 = ($employee->salary) / 25;
-
-        // $submitted_allowances = $termination->salaryEnrollment +
-        //     $termination->normalDays +
-        //     $termination->publicDays +
-        //     $termination->noticePay +
-        //     $termination->leavePay * $salary25 +
-        //     $termination->livingCost +
-        //     $termination->houseAllowance +
-        //     $termination->utilityAllowance +
-        //     $termination->leaveAllowance +
-        //     $termination->tellerAllowance +
-        //     $termination->serevancePay +
-        //     $termination->leaveStand +
-        //     $termination->arrears +
-        //     $termination->exgracia +
-        //     $termination->bonus +
-        //     $termination->longServing +
-        //     $termination->otherPayments;
-
-        // $submitted_pensionables = $termination->salaryEnrollment +
-        //     $termination->normalDays +
-        //     $termination->publicDays +
-        //     $termination->noticePay +
-        //     $termination->leavePay * $salary25 +
-        //     $termination->livingCost +
-        //     $termination->houseAllowance +
-        //     $termination->utilityAllowance +
-        //     $termination->leaveAllowance +
-        //     $termination->tellerAllowance +
-        //     $termination->serevancePay +
-        //     $termination->leaveStand +
-        //     $termination->arrears +
-        //     $termination->exgracia +
-        //     $termination->bonus +
-        //     $termination->salaryAdvance +
-        //     $termination->otherPayments;
-
-        // $submitted_deductions = $termination->salaryAdvance + $termination->otherDeductions;
-
-        // $total_payroll_allowance = 0;
-
-        // $payroll_pension = 0;
-
-        // $net_pay = 0;
-        // $take_home = 0;
-        // $total_gross = 0;
-        // $taxable = 0;
-
-        // // $taxable = $salary - $pension + $leave_allowance + $total_allowance;
-
-        // $wcf_sdl = 0;
-
-        // if (!$payroll_run) {
-
-        //     $allowance_query = " /*all Allowances and Bonuses*/SELECT
-        //         IF((e.unpaid_leave = 0),0,(
-        //         IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0) +
-
-        //         IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0) +
-
-        //         IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)>=0, ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=1 AND a.taxable = 'YES' AND a.state= 1 GROUP BY ea.empID)),0)
-
-        //         +
-        //         IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        //                 ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        //                 ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND a.taxable = 'YES' AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type = 0 GROUP BY ea.empID), 0)  ) )  as  total_allowance FROM employee as e where emp_id =" . $employee->emp_id;
-
-        //     $total_payroll_allowance = DB::select(DB::raw($allowance_query))[0]->total_allowance;
-
-        //     $pension = "SELECT IF(  (pf.deduction_from = 1),
-
-        //         (IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        //         /*IF BASIC  */
-        //         ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*pf.amount_employee),
-
-        //         /* IF GROSS */
-        //             (pf.amount_employee*(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        //             ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)
-
-        //         + IF ((SELECT SUM(b.amount) FROM bonus b WHERE  b.state =  1 AND b.empID =  e.emp_id GROUP BY b.empID)>=0, (SELECT SUM(b.amount) FROM bonus b WHERE  b.state = 1 AND b.empID =  e.emp_id GROUP BY b.empID), 0)
-        //         +
-
-        //         IF ((SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID)>=0, (SELECT SUM(o.amount) FROM overtimes o WHERE  o.empID =  e.emp_id GROUP BY o.empID), 0)
-        //         +
-
-        //         IF ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1  GROUP BY ea.empID)>=0,
-        //         ((SELECT SUM(ea.amount) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=1 AND a.state= 1 GROUP BY ea.empID)),0)
-
-        //         /*end leave allowance to tax */
-        //         +
-        //         IF ((SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        //             ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID)>0, (SELECT SUM(IF((month(e.hire_date) = month('" . $payroll_date . "')) AND (year(e.hire_date) = year('" . $payroll_date . "'))
-        //             ,((" . $working_days_this_month . "- day(e.hire_date)+1)*e.salary/30),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND a.taxable = 'YES' AND a.pensionable = 'YES' AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
-        //             )
-
-        //             ) ) as pension FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1  AND emp_id = " . $employee->emp_id;
-
-        //     $payroll_pension = DB::select(DB::raw($pension))[0]->pension;
-
-
-        // }
-        // else
-
-        // {  //There is no payroll this month
-
-        //     if ($month == 12) { //If december add leave
-
-        //         $leave_allowance = $employee->salary * $working_days_this_year / 365;
-        //     } else {
-
-        //         $leave_allowance = 0;
-        //     }
-        // }
-
-        // $deductions_submitted = $termination->salaryAdvance + $termination->otherDeductions;
-
-        // $total_deductions = $submitted_deductions;
-        // $net_pay = $total_gross - $total_deductions;
-
-        // $total_gross = $salary + $submitted_allowances + $total_payroll_allowance;
-
-        // $pensionable =  $payroll_pension + $submitted_pensionables;
-
-        // $taxable = $net_pay -  $pensionable * 0.1;  //Pension rate need to be inserted here
-
-
-        // if($taxable >0 ){
-
-        // $paye = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<', $taxable)->first();
-
-        // $paye = $paye->excess_added + $paye->rate * $taxable - $paye->minimum;
-
-        // }
-
-
-        // else
-        // {
-
-        //     $paye=0;
-        // }
-
-
-        // $take_home = $taxable -  $paye;
-
-
-        return view('workforce-management.terminal-balance', compact('termination'));
+        return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
     public function get_employee_available_info(Request $request){
