@@ -311,6 +311,12 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::get('get/details/{id}', 'getDetails')->name('getDetails');
         // end of promotion/increment routes
 
+
+
+        // start of reconcilliation summary route
+        Route::any('/reconciliation-summary','reconcilliationSummary')->name('reports.recoSummary');
+        // start of reconcilliation summary route
+
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
@@ -725,6 +731,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/deleteSegment','deleteSegment')->name('performance.deleteSegment');
         Route::any('/deleteCategory','deleteCategory')->name('performance.deleteCategory');
         Route::any('/deleteException','deleteException')->name('performance.deleteException');
+
+
 
     });
 

@@ -7951,4 +7951,15 @@ public function getDetails($id = 0)
 }
 // start of promotion/increment
 
+
+// start of reconcilliation summary
+public function reconcilliationSummary()
+{
+
+    return view('reports.temp_reconciliation');
+
+}
+
+// end of reconcilliation summary
+
 }
