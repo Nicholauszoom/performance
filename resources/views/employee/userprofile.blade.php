@@ -689,7 +689,102 @@
         </div>
       </div>
       @endif
+      <div class="row">
+        <div class="col-md-">
+            <div class="card">
+                <div class="card-header">
+                    <h6>
+                        <i class="ph ph-book"></i>
+                        Academic Qualifications
+                    </h6>
+                </div>
 
+                <div class="card-body">
+                <div class="col-md-12 m-2">
+                    <div class="">
+                        <div class="row">
+                            <div class="col-md-4">Institute</div>
+                            <div class="col-md-8 text-end">Dummy University</div>
+
+                            <div class="col-md-4">Level</div>
+                            <div class="col-md-8 text-end"> Bachelor</div>
+
+                            <div class="col-md-4">Course</div>
+                            <div class="col-md-8 text-end">Dummy Course</div>
+
+                            <div class="col-md-4">Start Year</div>
+                            <div class="col-md-8 text-end">2016</div>
+
+                            <div class="col-md-4">Finish Year</div>
+                            <div class="col-md-8 text-end">2022</div>
+
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+
+                <div class="card-footer">
+                    <p class="text-main">Add Qualification</p>
+                    <hr>
+                       {{--displaying all the errors  --}}
+                       @if ($errors->any())
+                       <div class="alert alert-danger">
+                           @foreach ($errors->all() as $error)
+                               <div>{{$error}}</div>
+                           @endforeach
+                       </div>
+                       @endif
+                    <form action="{{ route('flex.addQualification') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="employeeID" id="employeeID" value="{{ $empID }}">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <label for="">Institute</label>
+                                <input type="text" name="institute" id="institute" required placeholder="Enter Institute Name" class="form-control" >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="">Level</label>
+                                <select name="level" id="level" required class="custom-select form-control">
+                                    <option value="Primary">Primary Level</option>
+                                    <option value="Primary">Ordinary Level</option>
+                                    <option value="Primary">Advanced Level</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label for="">Course</label>
+                                <input type="text" name="course" id="course" required placeholder="Enter Course Name" class="form-control" >
+                            </div>
+
+                                <div class="col-md-4 mb-2">
+                                    <label for="">Start Year</label>
+                                    <input type="year" name="start_year" id="start_year" required placeholder="Start Year" class="form-control" >
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label for="">Finish Year</label>
+                                    <input type="year" name="finish_year"  id="finish_year" required placeholder="Finish Year" class="form-control" >
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="">Certificate</label>
+                                    <input type="file" name="image" id="image" required class="form-control" >
+                                </div>
+                                <hr>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4 tex-end">
+                                 <button type="submit" id="save-qualifin-btn" class="btn btn-main btn-block"> Add Qualification</button>
+                                </div>
+
+                        </div>
+                    </form>
+                </div>
+
+                <hr>
+
+                </div>
+            </div>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -825,7 +920,7 @@
                     <div class="modal-footer">
                         <input hidden="hidden"  name="employee" value="<?php echo $empID; ?>">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <input type="submit"  value="Add" name="add" class="btn btn-main"/>
+                        <input type="submit"  value="Add"  name="add" class="btn btn-main"/>
                     </div>
 
                 </form>
@@ -839,6 +934,111 @@
 
 @push('footer-script')
 
+<script type="text/javascript">
+
+       /*
+                check if form submitted is for creating or updating
+            */
+            $("#save-qualification-btn").click(function(event ){
+                event.preventDefault();
+                if($("#update_id").val() == null || $("#update_id").val() == "")
+                {
+                    storQualification();
+                } else {
+                    updateQualification();
+                }
+            })
+         
+            /*
+                show modal for creating a record and
+                empty the values of form and remove existing alerts
+            */
+            function createQualification()
+            {
+                $("#alert-div").html("");
+                $("#error-div").html("");
+                $("#update_id").val("");
+                $("#employeeID").val("");
+                $("#institute").val("");
+                $("#course").val("");
+                $("#level").val("");
+                $("#start_year").val("");
+                $("#end_year").val("");
+                $("#qualification-modal").modal('show');
+            }
+         
+            /*
+                submit the form and will be stored to the database
+            */
+            function storeQualification()
+            {
+                $("#save-qualification-btn").prop('disabled', true);
+                let url = $('meta[name=app-url]').attr("content") + "/flex/qualifications";
+                let data = {
+                    employeeID: $("#employeeID").val(),
+                    level: $("#level").val(),
+                    institute: $("#institute").val(),
+                    course: $("#course").val(),
+                    start_year: $("#start_year").val(),
+                    institute: $("#end_year").val(),
+
+                };
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function(response) {
+                        $("#save-community-btn").prop('disabled', false);
+                        let successHtml = '<div class="alert alert-success " role="alert"> Community Was Added Successfully !</div>';
+                        $("#alert-div").html(successHtml);
+                        $("#name").val("");
+                        $("#abbreviation").val("");
+                        $("#location").val("");
+                        showAllCommunities();
+                        $("#form-modal").modal('hide');
+                    },
+                    error: function(response) {
+                        $("#save-community-btn").prop('disabled', false);
+         
+                        /*
+            show validation error
+                        */
+                        if (typeof response.responseJSON.errors !== 'undefined')
+                        {
+            let errors = response.responseJSON.errors;
+            let abbreviationValidation = "";
+            if (typeof errors.abbreviation !== 'undefined')
+                            {
+                                abbreviationValidation = '<li>' + errors.abbreviation[0] + '</li>';
+                            }
+            let locationValidation = "";
+            if (typeof errors.location !== 'undefined')
+                            {
+                                locationValidation = '<li>' + errors.location[0] + '</li>';
+                            }
+            let nameValidation = "";
+            if (typeof errors.name !== 'undefined')
+                            {
+                                nameValidation = '<li>' + errors.name[0] + '</li>';
+                            }
+             
+            let errorHtml = '<div class="alert alert-danger" role="alert">' +
+                '<b>Validation Error!</b>' +
+                '<ul>' + nameValidation + abbreviationValidation +locationValidation + '</ul>' +
+            '</div>';
+            $("#error-div").html(errorHtml);
+        }
+                    }
+                });
+            }
+         
+         
+             
+
+    </script>
 <script>
 
   function notify(message, from, align, type) {

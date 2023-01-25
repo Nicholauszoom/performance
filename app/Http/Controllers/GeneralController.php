@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
+use App\Models\EducationQualification;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -7961,5 +7962,50 @@ public function reconcilliationSummary()
 }
 
 // end of reconcilliation summary
+
+
+//start of education qualifications
+
+public function addQualification(Request $request)
+{
+
+    request()->validate(
+        [
+        // 'employeeID' => 'required',
+        'level' => 'required',
+        'course' => 'required',
+        'institute' => 'required',
+        'start_year' => 'required',
+        'finish_year' => 'required',
+         ]
+        );
+
+
+        $id=$request->employeeID;
+
+        $qualification = new EducationQualification();
+        $qualification->employeeID=$id;
+        $qualification->institute=$request->institute;
+        $qualification->level=$request->level;
+        $qualification->course=$request->course;
+        $qualification->start_year=$request->start_year;
+        $qualification->end_year=$request->finish_year;
+
+        if($request->hasfile('image')){
+            $file=$request->file('image');
+            $filename=time().'.'.$file->getClientOriginalExtension();
+            $file->move('uploads/certificates/', $filename);
+            $qualification->certificate=$filename;
+        }
+        $qualification->save();
+
+
+        $msg="Education Qualification has been added successfully";
+        return redirect('flex/userprofile/'.base64_encode($id))->with('msg', $msg);
+
+}
+
+// end of education qualifications
+
 
 }
