@@ -8,6 +8,31 @@
     <title>Terminal Benefits</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}">
+
+
+
+        <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+        <link href="{{ asset('assets/date-picker/daterangepicker.css') }}" rel="stylesheet">
+
+
+        <script src="{{ asset('assets/js/configurator.js') }}"></script>
+        <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+
+
+        <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/js/components/notifications/noty.min.js') }}"></script>
+        <script src="{{ asset('assets/js/components/notifications/sweet_alert.min.js') }}"></script>
+
+
+
+        <script src="{{ asset('assets/js/app.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/extra_noty.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/extra_sweetalert.js') }}"></script>
+
+
 
 </head>
 
@@ -31,7 +56,7 @@
                         </h5><br>
                         <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Date: {{ $payroll_date }}
                         </h5>
-
+                        <button onclick="window.print()">Print this page</button>
                     </div>
 
 
@@ -102,7 +127,8 @@
                                     <td class=""><b>{{ $i }}</b></td>
                                     <td class=""><b>{{ $row->emp_id }}</b></td>
 
-                                    <td class=""><b>{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}</b></td>
+                                    <td class=""><b>{{ $row->fname }} {{ $row->mname }}
+                                            {{ $row->lname }}</b></td>
                                     <td class="text-end"><b>{{ $row->salary }}</b></td>
                                     {{-- <td class="text-end"><b>{{ $row->allowance_id =="Overtime"? $row->allowance_amount:0 }}</b></td> --}}
                                     <td class="text-end"><b>{{ $row->overtime }}</b></td>
@@ -120,12 +146,13 @@
 
                                     <td class="text-end"><b>{{ $row->salary + $row->allowances }}</b></td>
                                     <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>{{ ($row->salary + $row->allowances)-$row->pension_employer }}</b></td>
+                                    <td class="text-end">
+                                        <b>{{ $row->salary + $row->allowances - $row->pension_employer }}</b></td>
                                     <td class="text-end"><b>{{ $row->taxdue }}</b></td>
                                     <td class="text-end"><b>{{ $row->sdl }}</b></td>
                                     <td class="text-end"><b>{{ $row->wcf }}</b></td>
-                                    <td class="text-end"><b>{{ $row->pension_employer  }}</b></td>
-                                    <td class="text-end"><b>{{ ($row->salary + $row->allowances)-$amount }}</b></td>
+                                    <td class="text-end"><b>{{ $row->pension_employer }}</b></td>
+                                    <td class="text-end"><b>{{ $row->salary + $row->allowances - $amount }}</b></td>
                                     <td class="text-end"><b>{{ $amount }}</b></td>
 
 
@@ -133,7 +160,8 @@
 
                                 <?php } ?>
                                 <tr style="font-size: 10px">
-                                    <td class="" colspan="3"><b><center>TOTAL</center><b></td>
+                                    <td class="" colspan="3"><b>
+                                            <center>TOTAL</center><b></td>
                                     <td class="text-end"><b>{{ $total_salary }}</b></td>
                                     <td class="text-end"><b>{{ $total_overtime }}</b></td>
                                     <td class="text-end"><b>{{ $total_allowance }}</b></td>
@@ -154,61 +182,62 @@
                                     <td class="text-end"><b>{{ $total_pension }}</b></td>
                                     <td class="text-end"><b>{{ $total_deduction }}</b></td>
                                     <td class="text-end"><b>{{ $total_netpay }}</b></td>
-                                        </tr>
+                                </tr>
 
-                            <?php } ?>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
 
                 </div>
+                <br>
+                <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
+                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
 
-                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-12">
-                        <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
+
                         {{-- <h5>FINANCE DEPARTMENT</h5> --}}
                         <div class="col-md-12 p-2" style="border:solid 1px gray ;border-bottom:none;">
                             <p><small><b>Prepared By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
                             </div>
                             <br>
                             <p><small><b>Checked and Approved By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
                             </div>
 
                             <p><small><b>Checked and Approved By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
                             </div>
 
                             <p><small><b>Approved By</b></small></p>
 
                             <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Name:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Position:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Signature:__________________________</div>
+                                <div class="col-md-3 col-sm-3 col-lg-3">Date_________________________</div>
                             </div>
                         </div>
-                    </div>
+
+
+                </div>
 
             </div>
-
-        </div>
         </div>
     </main>
 

@@ -39,7 +39,7 @@
                                 <p>Employment Date</p>
                             </div>
                             <div class="col-md-6 col-6">
-                                <p>{{ $termination->employee->created_at }}</p>
+                                <p>{{ $termination->employee->hire_date }}</p>
                             </div>
                             <div class="col-md-6 col-6">
                                 <p>Termination Date</p>
@@ -62,9 +62,9 @@
                     </div>
                     <div class="col-md-6 text-end col-6">
                         <h6>{{ $termination->employee->payroll_no }}</h6>
-                        <h6>{{ $termination->employee->fname }}</h6>
-                        <h6>{{ $termination->employee->lname }}</h6>
-                        <h6>Banking Operations & IT</h6>
+                        <h6>{{ $termination->employee->fname.' '.$termination->employee->mname.' '.$termination->employee->lname }}</h6>
+
+                        <h6>{{ $employee_info[0]->deptname }}</h6>
                     </div>
                 </div>
 
@@ -131,8 +131,8 @@
                     <div class="col-md-6 text-end">
                         <h6>{{ number_format($termination->total_gross, 2) }}</h6>
                         <h6>{{ number_format($termination->pension_employee, 2) }}</h6>
-                        <h6>{{ number_format($termination->pension_employee, 2) }}</h6>
-                        <h6>{{ number_format($termination->noticePay, 2) }}</h6>
+                        <h6>{{ number_format($termination->taxable, 2) }}</h6>
+                        <h6>{{ number_format($termination->paye, 2) }}</h6>
 
 
                     </div>
@@ -201,14 +201,14 @@
 
                     </div>
                     <div class="col-md-6 text-end">
-                        <h6>{{ $termination->take_home }}</h6>
-                        <h6>{{ $termination->pension_employee + $termination->paye + $termination->otherDeductions }}
+                        <h6>{{ $termination->total_gross }}</h6>
+
+                        <h6>{{ number_format($termination->pension_employee + $termination->paye + $termination->otherDeductions + $termination->loan_balance, 2) }}
                         </h6>
-                        <h6>{{ $termination->take_home - ($termination->pension_employee + $termination->paye + $termination->otherDeductions) }}
+                        <h6>{{ number_format($termination->taxable -$termination->paye , 2) }}
                         </h6>
-                        <h6>{{ $termination->noticePay }}</h6>
-                        <h6>{{ $termination->take_home - ($termination->pension_employee + $termination->paye + $termination->otherDeductions) }}
-                        </h6>
+                        <h6>{{ number_format(($termination->taxable -$termination->paye)-$termination->loan_balance , 2) }}</h6>
+                        <h6>{{ number_format(($termination->taxable -$termination->paye)-$termination->loan_balance , 2) }}</h6>
                         <hr>
                         <h6 class="mt-4" style="margin-top:40px;border-bottom: 3px solid rgb(4, 11, 28) !important;">
                         </h6>

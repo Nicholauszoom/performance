@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
- use PDF;
+
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // use PDF;
 // use App\Helpers\SysHelpers;
@@ -1868,8 +1869,12 @@ class ReportController extends Controller
         $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
 
-        //$pdf = PDF::loadView('reports.payroll_reconciliation_summary1', $data);
+       // $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
+       // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
+
+
+        //return $pdf->download('sam.pdf');
 
 
         //return $pdf->download('payroll_reconciliation_summary.pdf');
@@ -2673,6 +2678,14 @@ EOD;
 
 
     $summary = $data['summary'];
+
+    //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
+
+    //$pdf = Pdf::loadView('reports.payroll_details',$data);
+
+
+
+    //return $pdf->download('itsolutionstuff.pdf');
 
     return view('reports.payroll_details',$data);
 
