@@ -420,23 +420,52 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     function get_payroll_summary($date){
         $query = "SELECT
         pl.*,
-        CONCAT(e.fname,' ',e.mname,'',e.lname) as NAME,
+        e.fname,e.mname,e.lname,
         e.emp_id,
-        al.allowanceID as allowance_id,
-        al.amount as allowance_amount,
+        'al.description' as allowance_id,
+        0 as allowance_amount,
+        (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Overtime' AND al.payment_date = '".$date."' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'Overtime' AND al.payment_date = '".$date."' GROUP BY al.empID),0)) AS overtime,
+         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '".$date."' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description = 'House Rent' AND al.payment_date = '".$date."' GROUP BY al.empID),0)) AS house_rent,
+
+         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description != 'House Rent' AND al.description != 'Overtime' AND al.payment_date = '".$date."' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description != 'House Rent' AND al.description != 'Overtime' AND al.payment_date = '".$date."' GROUP BY al.empID),0)) AS other_payments,
+
         IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
 
         (SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.loanID = e.id AND ll.payment_date = '".$date."' GROUP BY ll.loanID) AS loans
 
 
-        from payroll_logs pl,employee e,allowance_logs al where e.emp_id = pl.empID and e.emp_id=al.empID and pl.payroll_date='".$date."'";
+        from payroll_logs pl,employee e where e.emp_id = pl.empID  and pl.payroll_date='".$date."'
+
+/*
+       UNION
+
+       SELECT
+        pl.*,
+        e.fname,e.mname,e.lname,
+        e.emp_id,
+        'none' as allowance_id,
+        '0' as allowance_amount,
+        IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
+
+        (SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.loanID = e.id AND ll.payment_date = '".$date."' GROUP BY ll.loanID) AS loans
+
+
+        from payroll_logs pl,employee e where e.emp_id = pl.empID  and pl.payroll_date='".$date."'
+
+        and pl.empID NOT IN(SELECT empID from  allowance_logs where allowance_logs.payment_date='".$date."') */
+
+
+
+
+
+        ";
 
         return DB::select(DB::raw($query));
 
       }
 
     function get_payroll_temp_summary1($date){
-        $query = "SELECT tl.*, e.* from payroll_logs tl,employee e where e.emp_id = tl.empID and tl.payroll_date='".$date."'";
+        $query = "SELECT pl.*, e.* from temp_payroll_logs pl,employee e where e.emp_id = pl.empID  and pl.payroll_date='".$date."'";
 
         return DB::select(DB::raw($query));
 

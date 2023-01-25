@@ -25,21 +25,21 @@ class FlexPerformanceModel extends Model
 
 	public function audit_logs()
 	{
-		$query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_trails al, employee e, position p, department d  WHERE al.emp_id = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.created_at DESC";
+		$query = "SELECT d.name as department, p.name as position, al.*, p.name as position, d.name as department, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as empName FROM audit_trails al, employee e, position p, department d  WHERE al.emp_id = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.created_at DESC";
 
         return DB::select(DB::raw($query));
 	}
 
-    public function financialLogs()
+    public function financialLogs($date)
     {
-        $query = "SELECT fn.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id ORDER BY fn.created_at DESC";
+        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) = '".$date."' ORDER BY fn.created_at DESC";
 
         return DB::select(DB::raw($query));
     }
 
 	function audit_purge_logs()
 	{
-		$query = "SELECT  d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated,   CAST(al.due_date as time) as timed, p.name as position,  d.name as department, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName FROM audit_purge_logs al, employee e, position p, department d  WHERE al.empID = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.due_date DESC";
+		$query = "SELECT  d.name as department, p.name as position, al.*, CAST(al.due_date as date) as dated,   CAST(al.due_date as time) as timed, p.name as position,  d.name as department, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as empName FROM audit_purge_logs al, employee e, position p, department d  WHERE al.empID = e.emp_id AND p.id = e.position AND e.department = d.id ORDER BY al.due_date DESC";
 
 		return DB::select(DB::raw($query));
 	}
@@ -74,7 +74,7 @@ class FlexPerformanceModel extends Model
 	}
 
 	function employee() {
-		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id=e.line_manager ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
+		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id=e.line_manager ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
 
 		return DB::select(DB::raw($query));
 	}
@@ -85,7 +85,7 @@ class FlexPerformanceModel extends Model
 		p.name as POSITION,
 		d.name as DEPARTMENT,
 		e.*,
-		CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME,
+		CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,
 		(SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER,
 		IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.line_manager='".$id."' and e.state=1";
 
@@ -94,21 +94,21 @@ class FlexPerformanceModel extends Model
 
 	function department($id)
 	{
-		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as HOD,  d.* FROM department d, employee e,  (SELECT @s:=0) as s  WHERE d.hod = e.emp_id and and d.state = 1 AND d.hod='".$id."'";
+		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.* FROM department d, employee e,  (SELECT @s:=0) as s  WHERE d.hod = e.emp_id and and d.state = 1 AND d.hod='".$id."'";
 
 		return DB::select(DB::raw($query));
 	}
 
 	function alldepartment()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as HOD,  d.*, pd.name as parentdept,cs.name as CostCenterName FROM department d, department pd, employee e,cost_center as cs,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 1 AND d.type = 1 AND d.cost_center_id = cs.id  AND d.hod = e.emp_id";
+		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.*, pd.name as parentdept,cs.name as CostCenterName FROM department d, department pd, employee e,cost_center as cs,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 1 AND d.type = 1 AND d.cost_center_id = cs.id  AND d.hod = e.emp_id";
 
 		return DB::select(DB::raw($query));
 	}
 
 	function inactive_department()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as HOD,  d.*, pd.name as parentdept FROM department d, department pd, employee e,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 0 AND d.hod = e.emp_id";
+		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.*, pd.name as parentdept FROM department d, department pd, employee e,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 0 AND d.hod = e.emp_id";
 
 		return DB::select(DB::raw($query));
 	}
@@ -291,7 +291,7 @@ class FlexPerformanceModel extends Model
 
 	/*function custom_attendees($date)
 	{
-		$query = "SELECT @s:=@s+1 as SNo, e.emp_id, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(att.due_in as date) as DATE_IN,  CAST(att.due_in as time) as time_in,  CAST(att.due_out as time) as time_out FROM employee e, attendance att, position p, department d, (SELECT @s:=0) as s WHERE att.empID = e.emp_id and e.department = d.id and e.position = p.id and  CAST(att.due_in as date) = '".$date."'  ";
+		$query = "SELECT @s:=@s+1 as SNo, e.emp_id, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(att.due_in as date) as DATE_IN,  CAST(att.due_in as time) as time_in,  CAST(att.due_out as time) as time_out FROM employee e, attendance att, position p, department d, (SELECT @s:=0) as s WHERE att.empID = e.emp_id and e.department = d.id and e.position = p.id and  CAST(att.due_in as date) = '".$date."'  ";
 
 		return DB::select(DB::raw($query));
 	}*/
@@ -304,7 +304,7 @@ class FlexPerformanceModel extends Model
 
 	function my_overtimes($id)
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, ROUND( (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60), 2) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id and e.department = d.id and e.position = p.id and eo.empID = '".$id."' ORDER BY eo.id DESC";
 
@@ -320,7 +320,7 @@ class FlexPerformanceModel extends Model
 
 	function all_overtimes()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment, eo.reason as reason,  eo.status as status, eo.id as eoid, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment, eo.reason as reason,  eo.status as status, eo.id as eoid, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id and e.department = d.id and e.position = p.id";
 
@@ -329,7 +329,7 @@ class FlexPerformanceModel extends Model
 
 	function overtimesLinemanager($lineID)
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id and e.department = d.id and e.position = p.id AND e.line_manager = '".$lineID."' ORDER BY eo.id DESC";
 
@@ -337,7 +337,7 @@ class FlexPerformanceModel extends Model
 	}
 
 	function allOvertimes($empID) {
-		$query = "SELECT @s:=@s+1 as SNo, eo.linemanager as manager, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.linemanager as manager, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE NOT  eo.empID = '".$empID."' and e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
 
@@ -345,7 +345,7 @@ class FlexPerformanceModel extends Model
 	}
 
 	function lineOvertimes($id){
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE   eo.linemanager = '".$id."' and e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
 
@@ -355,7 +355,7 @@ class FlexPerformanceModel extends Model
 
 	function overtimesHR()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id AND e.department = d.id AND e.position = p.id AND  eo.status IN(2,4,5) ORDER BY eo.id DESC";
 
@@ -377,7 +377,7 @@ class FlexPerformanceModel extends Model
 
 	function approvedOvertimes()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, o.status AS payment_status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, o.status AS payment_status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, overtimes o, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id AND e.department = d.id AND e.position = p.id AND eo.id = o.overtimeID AND  eo.status IN(2,4,5) ORDER BY eo.id DESC";
 		return DB::select(DB::raw($query));
@@ -418,7 +418,7 @@ class FlexPerformanceModel extends Model
 
 	function overtimes()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, o.status AS payment_status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, o.status AS payment_status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
 		FROM employee e, employee_overtime eo, overtimes o, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id AND e.department = d.id AND e.position = p.id AND eo.id = o.overtimeID AND  eo.status = 0 ORDER BY eo.id DESC";
 
@@ -591,20 +591,20 @@ class FlexPerformanceModel extends Model
 
 	function contract_expiration_list()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, e.emp_id, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION, e.hire_date as DATE_HIRED, e.contract_renewal_date LAST_RENEW_DATE, c.name as Contract_TYPE, c.duration as CONTRACT_DURATION, (DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30) as CONTRACT_AGE, ((c.duration*12)-(DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30)) as TIME_TO_EXPIRE FROM employee e, contract c, position p, department d, (SELECT @s:=0) as s WHERE e.state=1 and e.department = d.id and e.position = p.id and c.id = e.contract_type and NOT e.contract_type = 3 AND ((c.duration*12)-(DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30)) <= c.reminder";
+		$query = "SELECT @s:=@s+1 as SNo, e.emp_id, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION, e.hire_date as DATE_HIRED, e.contract_renewal_date LAST_RENEW_DATE, c.name as Contract_TYPE, c.duration as CONTRACT_DURATION, (DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30) as CONTRACT_AGE, ((c.duration*12)-(DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30)) as TIME_TO_EXPIRE FROM employee e, contract c, position p, department d, (SELECT @s:=0) as s WHERE e.state=1 and e.department = d.id and e.position = p.id and c.id = e.contract_type and NOT e.contract_type = 3 AND ((c.duration*12)-(DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)/30)) <= c.reminder";
 
 		return DB::select(DB::raw($query));
 	}
 
 function retire_list()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, parent_query.* FROM (SELECT  e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as empName, d.name as department, p.name as position, e.hire_date as date_hired, (SELECT notify_before FROM retire WHERE id = 1) as notify_before,  e.birthdate as birthdate, (SELECT retire_age FROM retire WHERE id = 1)-((DATEDIFF(CURRENT_DATE(), birthdate)/30)/12) as ages_to_retire, ((DATEDIFF(CURRENT_DATE(), birthdate)/30)/12) as age FROM employee e,department d, position p  WHERE e.state=1 AND e.department = d.id and e.position = p.id) as parent_query,(SELECT @s:=0) as s WHERE ages_to_retire <= notify_before";
+		$query = "SELECT @s:=@s+1 as SNo, parent_query.* FROM (SELECT  e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as empName, d.name as department, p.name as position, e.hire_date as date_hired, (SELECT notify_before FROM retire WHERE id = 1) as notify_before,  e.birthdate as birthdate, (SELECT retire_age FROM retire WHERE id = 1)-((DATEDIFF(CURRENT_DATE(), birthdate)/30)/12) as ages_to_retire, ((DATEDIFF(CURRENT_DATE(), birthdate)/30)/12) as age FROM employee e,department d, position p  WHERE e.state=1 AND e.department = d.id and e.position = p.id) as parent_query,(SELECT @s:=0) as s WHERE ages_to_retire <= notify_before";
 		return DB::select(DB::raw($query));
 	}
 
 	function inactive_employee1()
 	{
-		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, IF((SELECT COUNT(empID) FROM activation_deactivation WHERE state = 2 AND current_state = 0 )>0, 1, 0) as isRequested, e.last_updated as dated , CONCAT(el.fname,' ', el.mname,' ', el.lname) as LINEMANAGER FROM employee e, employee el, department d, position p, (select @s:=0) as s WHERE p.id=e.position and d.id=e.department AND el.emp_id = e.emp_id AND e.state=0 ";
+		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, IF((SELECT COUNT(empID) FROM activation_deactivation WHERE state = 2 AND current_state = 0 )>0, 1, 0) as isRequested, e.last_updated as dated , CONCAT(el.fname,' ', el.mname,' ', el.lname) as LINEMANAGER FROM employee e, employee el, department d, position p, (select @s:=0) as s WHERE p.id=e.position and d.id=e.department AND el.emp_id = e.emp_id AND e.state=0 ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -612,7 +612,7 @@ function retire_list()
 	function inactive_employee2()
 	{
 		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, ad.state as log_state, ad.current_state, ad.author as initiator,
-		e.*, ad.id as logID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 3 and ad.state = 3  ORDER BY ad.id DESC, ad.current_state ASC ";
+		e.*, ad.id as logID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 3 and ad.state = 3  ORDER BY ad.id DESC, ad.current_state ASC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -620,7 +620,7 @@ function retire_list()
 	function inactive_employee3()
 	{
 		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, ad.state as log_state, ad.current_state, ad.author as initiator,
-		e.*, ad.id as logID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 4  ORDER BY ad.id DESC, ad.current_state ASC ";
+		e.*, ad.id as logID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 4  ORDER BY ad.id DESC, ad.current_state ASC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -782,7 +782,7 @@ function retire_list()
 
 	function getdepartmentbyid($id)
 	{
-		$query = "SELECT CONCAT(e.fname,' ', e.mname,' ', e.lname) as HOD, d.* FROM department d, employee e WHERE d.hod = e.emp_id and
+		$query = "SELECT CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD, d.* FROM department d, employee e WHERE d.hod = e.emp_id and
 			d.id ='".$id."'";
 
 		return DB::select(DB::raw($query));
@@ -799,7 +799,7 @@ function retire_list()
 	function getaccountability($id)
 	{
 
-		$query = "SELECT  @s:=@s+1 as SNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as AUTHOR,  acc.* FROM accountability acc, employee e, (SELECT @s:=0) as s  WHERE acc.author = e.emp_id and acc.position_ref ='".$id."'";
+		$query = "SELECT  @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as AUTHOR,  acc.* FROM accountability acc, employee e, (SELECT @s:=0) as s  WHERE acc.author = e.emp_id and acc.position_ref ='".$id."'";
 
 		return DB::select(DB::raw($query));
 	}
@@ -869,7 +869,7 @@ function retire_list()
 	function getskills($id)
 	{
 
-		$query = "SELECT  @s:=@s+1 as SNo, CONCAT(e.fname,' ', e.mname,' ', e.lname) as AUTHOR,  s.* FROM skills s, employee e, (SELECT @s:=0) as s  WHERE s.created_by = e.emp_id and s.isActive = '1' and s.position_ref ='".$id."'";
+		$query = "SELECT  @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as AUTHOR,  s.* FROM skills s, employee e, (SELECT @s:=0) as s  WHERE s.created_by = e.emp_id and s.isActive = '1' and s.position_ref ='".$id."'";
 
 		return DB::select(DB::raw($query));
 	}
@@ -933,13 +933,13 @@ function retire_list()
 
 
 	function getBudget($budgetID) {
-		$query = "SELECT  @s:=@s+1 as SNo, tb.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as primary_personel FROM training_budget tb, employee e,(SELECT @s:=0) as s WHERE tb.id =  ".$budgetID." AND e.emp_id = tb.recommended_by";
+		$query = "SELECT  @s:=@s+1 as SNo, tb.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as primary_personel FROM training_budget tb, employee e,(SELECT @s:=0) as s WHERE tb.id =  ".$budgetID." AND e.emp_id = tb.recommended_by";
 		return DB::select(DB::raw($query));
 	}
 
 	function accepted_applications(){
 
-	    $query = "SELECT @s:=@s+1 as SNo, ct.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name,   p.name as position, d.name as department FROM confirmed_trainee ct, position p, department d, (SELECT @s:=0) as s, skills sk, employee e WHERE e.emp_id = ct.empID and sk.id = ct.skillsID and e.position = p.id and e.department = d.id";
+	    $query = "SELECT @s:=@s+1 as SNo, ct.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name,   p.name as position, d.name as department FROM confirmed_trainee ct, position p, department d, (SELECT @s:=0) as s, skills sk, employee e WHERE e.emp_id = ct.empID and sk.id = ct.skillsID and e.position = p.id and e.department = d.id";
 	    return DB::select(DB::raw($query));
 
 
@@ -1023,7 +1023,7 @@ function retire_list()
 
 	function skill_gap()
 	{
-		$query = "SELECT  @s:=@s+1 as SNo, e.emp_id,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, p.name as position, d.name as department, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory FROM  skills sk, employee e, department d, position p, (SELECT @s:=0) as s  WHERE e.position = p.id and e.department = d.id and sk.mandatory = 1 and e.position = sk.position_ref and sk.id NOT IN(SELECT es.skill_ID from emp_skills es WHERE es.empID = e.emp_id ) AND CONCAT(sk.id,'',e.emp_id) NOT IN(SELECT CONCAT(skillsID,'',empID) FROM confirmed_trainee)";
+		$query = "SELECT  @s:=@s+1 as SNo, e.emp_id,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, p.name as position, d.name as department, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory FROM  skills sk, employee e, department d, position p, (SELECT @s:=0) as s  WHERE e.position = p.id and e.department = d.id and sk.mandatory = 1 and e.position = sk.position_ref and sk.id NOT IN(SELECT es.skill_ID from emp_skills es WHERE es.empID = e.emp_id ) AND CONCAT(sk.id,'',e.emp_id) NOT IN(SELECT CONCAT(skillsID,'',empID) FROM confirmed_trainee)";
 
 		return DB::select(DB::raw($query));
 	}
@@ -1054,49 +1054,49 @@ function retire_list()
 
 	function all_training_applications($empID)
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ( e.line_manager = '".$empID."' OR ta.status IN(1,2,3,5,6))";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ( e.line_manager = '".$empID."' OR ta.status IN(1,2,3,5,6))";
 
 	    return DB::select(DB::raw($query));
 	}
 
 	function appr_conf_training_applications()
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND  ta.status IN(1,2,3,5,6) ";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND  ta.status IN(1,2,3,5,6) ";
 
 	    return DB::select(DB::raw($query));
 	}
 
 	function appr_line_training_applications($empID)
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ( e.line_manager = '".$empID."' OR ta.status IN(1,2,5)) ";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ( e.line_manager = '".$empID."' OR ta.status IN(1,2,5)) ";
 
 	    return DB::select(DB::raw($query));
 	}
 
 	function conf_line_training_applications($empID)
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ( e.line_manager = '".$empID."' OR ta.status IN(2,3,6)) ";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ( e.line_manager = '".$empID."' OR ta.status IN(2,3,6)) ";
 
 	    return DB::select(DB::raw($query));
 	}
 
 	function line_training_applications($empID)
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND e.line_manager = '".$empID."' ";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND e.line_manager = '".$empID."' ";
 
 	    return DB::select(DB::raw($query));
 	}
 
 	function appr_training_applications()
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ta.status IN(1,2,5) ";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ta.status IN(1,2,5) ";
 
 	    return DB::select(DB::raw($query));
 	}
 
 	function conf_training_applications()
 	{
-	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ta.status IN(2,3,6) ";
+	    $query = "SELECT @s:=@s+1 as SNo, ta.* ,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as trainee, sk.name as course_name, sk.amount, sk.id as courseID, sk.mandatory, sk.amount FROM  skills sk, training_application ta, employee e, (SELECT @s:=0) as s  WHERE  sk.id = ta.skillsID AND e.emp_id = ta.empID AND ta.status IN(2,3,6) ";
 
 	    return DB::select(DB::raw($query));
 	}
@@ -1177,7 +1177,7 @@ function retire_list()
 
 	function getLinemanager($id)
 	{
-		$query = "SELECT CONCAT(e.fname,' ', e.mname,' ', e.lname) as LINEMANAGER, FROM employee e, WHERE d.id=e.department and p.id=e.position and e.emp_id ='".$id."'";
+		$query = "SELECT CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as LINEMANAGER, FROM employee e, WHERE d.id=e.department and p.id=e.position and e.emp_id ='".$id."'";
 		return DB::select(DB::raw($query));
 	}
 
@@ -1192,14 +1192,14 @@ function retire_list()
 
 	function getproperty($id)
 	{
-		$query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='".$id."' and cp.isActive = 1";
+		$query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='".$id."' and cp.isActive = 1";
 		return DB::select(DB::raw($query));
 
 	}
 
 	function getpropertyexit($id)
 	{
-		$query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='".$id."'";
+		$query = "SELECT  @s:=@s+1 as SNo, cp.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as PROVIDER FROM employee e, company_property cp, (SELECT @s:=0) as s WHERE cp.given_by =e.emp_id and cp.given_to='".$id."'";
 		return DB::select(DB::raw($query));
 
 	}
@@ -1257,7 +1257,7 @@ function retire_list()
 
     public function unpaid_leave_employee(){
 
-        $query = "SELECT e.emp_id,ul.start_date,ul.end_date,CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
+        $query = "SELECT e.emp_id,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
 
         return DB::select(DB::raw($query));
     }
@@ -1404,7 +1404,7 @@ function getMeaslById($deductionID)
 	}
 
 	function employee_deduction($deduction) {
-	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_deductions WHERE deduction = ".$deduction." AND group_name = 0 ) ";
+	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_deductions WHERE deduction = ".$deduction." AND group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
 
@@ -1421,7 +1421,7 @@ function getMeaslById($deductionID)
 
 	function deduction_individual_employee($deduction)
 	{
-		$query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_deductions ed, (SELECT @s:=0) as s WHERE e.emp_id = ed.empID and ed.group_name = 0 and ed.deduction = ".$deduction."  ";
+		$query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_deductions ed, (SELECT @s:=0) as s WHERE e.emp_id = ed.empID and ed.group_name = 0 and ed.deduction = ".$deduction."  ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -1540,7 +1540,7 @@ function meals_deduction()
 
 	function get_individual_employee($allowance)
 	{
-		$query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME,ea.* FROM employee e, emp_allowances ea, (SELECT @s:=0) as s WHERE e.emp_id = ea.empID and ea.group_name = 0 and ea.allowance = ".$allowance."  ";
+		$query = "SELECT @s:=@s+1 SNo, e.emp_id as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ea.* FROM employee e, emp_allowances ea, (SELECT @s:=0) as s WHERE e.emp_id = ea.empID and ea.group_name = 0 and ea.allowance = ".$allowance."  ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -1580,8 +1580,9 @@ function meals_deduction()
     }
     public function get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$emp_id){
 
-        $pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount + $pesionable_amount;
+        //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
+        $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount;
+        // + $pesionable_amount;
 
         $query = "SELECT pf.amount_employee FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =".$emp_id." ";
         $row = DB::select(DB::raw($query));
@@ -1593,8 +1594,10 @@ function meals_deduction()
 
      public function get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$emp_id){
 
-        $pesionable_amount =  $this->get_pensionable_allowance($emp_id);
-        $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount + $pesionable_amount;
+        //$pesionable_amount =  $this->get_pensionable_allowance($emp_id);
+        $total_amount = $salaryEnrollment + $leavePay +$arrears +$overtime_amount;
+
+        //+ $pesionable_amount;
 
         $query = "SELECT pf.amount_employer FROM employee e,pension_fund pf where e.pension_fund = pf.id AND  e.emp_id =".$emp_id." ";
         $row = DB::select(DB::raw($query));
@@ -1706,12 +1709,12 @@ IF(
 	}
 
 	function employee_allowance($allowance) {
-	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_allowances where allowance = ".$allowance." AND group_name = 0 ) ";
+	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_allowances where allowance = ".$allowance." AND group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
 
 	function employeesrole($id) {
-	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e WHERE e.emp_id NOT IN (SELECT userID from emp_role where role = ".$id." and group_name = 0 ) ";
+	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.emp_id NOT IN (SELECT userID from emp_role where role = ".$id." and group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
 
@@ -2231,14 +2234,14 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function mysalary_advance($empID)
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.empID = '".$empID."' ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.empID = '".$empID."' ORDER BY la.id DESC ";
 		return DB::select(DB::raw($query));
 	}
 
 
 	function salary_advance()
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id ORDER BY la.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2262,7 +2265,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function fin_salary_advance()
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id AND la.type=lt.id AND la.status IN(1,2,5) ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id AND la.type=lt.id AND la.status IN(1,2,5) ORDER BY la.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2271,7 +2274,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function mysalary_advance_current($empID)
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.empID = '".$empID."' AND la.notification IN(1, 3) ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.empID = '".$empID."' AND la.notification IN(1, 3) ORDER BY la.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2280,7 +2283,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function hr_fin_salary_advance_current()
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.notification IN(2,3,4) ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.notification IN(2,3,4) ORDER BY la.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2289,7 +2292,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function hr_salary_advance_current()
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.notification = 2 ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.notification = 2 ORDER BY la.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2298,7 +2301,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function fin_salary_advance_current()
 	{
-		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.notification IN(3, 4) ORDER BY la.id DESC ";
+		$query="SELECT @s:=@s+1 SNo, la.empID, lt.name as TYPE, la.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan_application la, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE la.empID=e.emp_id and e.position=p.id and e.department=d.id and la.type=lt.id AND la.notification IN(3, 4) ORDER BY la.id DESC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2368,14 +2371,14 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function my_confirmedloan($empID)
 	{
-		$query="SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id AND l.empID='".$empID."' ORDER BY l.state DESC ";
+		$query="SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id AND l.empID='".$empID."' ORDER BY l.state DESC ";
 
 		return DB::select(DB::raw($query));
 	}
 
 	function all_confirmedloan()
 	{
-		$query="SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id ORDER BY l.state DESC ";
+		$query="SELECT @s:=@s+1 SNo, l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d,  (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id ORDER BY l.state DESC ";
 		//$query="SELECT @s:=@s+1 SNo, l.empID, l.* FROM loan l ";
 
 		//dd(DB::select(DB::raw($query)));
@@ -2386,7 +2389,7 @@ function run_payroll($payroll_date, $payroll_month){
 
 	function getloan($loanID)
 	{
-		$query="SELECT l.empID, l.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id AND l.id = ".$loanID." ";
+		$query="SELECT l.empID, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM loan l, employee e, position p, department d WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id AND l.id = ".$loanID." ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2399,10 +2402,10 @@ function run_payroll($payroll_date, $payroll_month){
 		return true;
 	}
  // ONPROGRESS LOAN
-	// SELECT @s:=@s+1 SNo, l.empID, lt.name as TYPE, l.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan l, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id and l.type=lt.id  and l.state = 1 and  l.last_paid_date BETWEEN '2017-12-21' AND '2018-12-21'
+	// SELECT @s:=@s+1 SNo, l.empID, lt.name as TYPE, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan l, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id and l.type=lt.id  and l.state = 1 and  l.last_paid_date BETWEEN '2017-12-21' AND '2018-12-21'
 
 	// COMPLETED LOAN
-	// SELECT @s:=@s+1 SNo, l.empID, lt.name as TYPE, l.*,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan l, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id and l.type=lt.id  and l.state = 0 and  l.last_paid_date BETWEEN '2017-12-21' AND '2018-12-21'
+	// SELECT @s:=@s+1 SNo, l.empID, lt.name as TYPE, l.*,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM loan l, employee e, position p, department d, loan_type lt, (SELECT @s:=0) as s WHERE l.empID=e.emp_id and e.position=p.id and e.department=d.id and l.type=lt.id  and l.state = 0 and  l.last_paid_date BETWEEN '2017-12-21' AND '2018-12-21'
 
 	function getloanbyid($id)
 	{
@@ -2530,7 +2533,7 @@ function allLevels()
 
 	function linemanagerdropdown()
 	{
-		$query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
+		$query = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and  r.permissions like '%p%'";
 
 		return DB::select(DB::raw($query));
 	}
@@ -2649,9 +2652,9 @@ function allLevels()
 	{
 		$query = "SELECT * FROM position where dept_id = '".$id."' and state = 1";
         $query = DB::select(DB::raw($query));
-        $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '".$id."'";
+        $query_linemanager = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and r.permissions like '%bs%' and e.department = '".$id."'";
         $query_linemanager = DB::select(DB::raw($query_linemanager));
-		// $query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
+		// $query_country_director = "SELECT DISTINCT er.userID as empID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e, emp_role er, role r WHERE er.role = r.id and er.userID = e.emp_id and (r.permissions like '%l%' || r.permissions like '%q%')";
 		// $query_country_director = DB::select(DB::raw($query_country_director));
 		// return [$query,$query_linemanager,$query_country_director];
 
@@ -3059,7 +3062,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
     function nonmembers_byid($id)
 	{
-		$query = "SELECT DISTINCT @s:=@s+1 as SNo, e.emp_id as ID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d,  (SELECT @s:=0) as s  where e.position = p.id AND e.department = d.id AND e.state =1 AND e.emp_id NOT IN (SELECT empID from employee_group where group_name=".$id.")";
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo, e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d,  (SELECT @s:=0) as s  where e.position = p.id AND e.department = d.id AND e.state =1 AND e.emp_id NOT IN (SELECT empID from employee_group where group_name=".$id.")";
 
 		return DB::select(DB::raw($query));
 	}
@@ -3083,7 +3086,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
     function members_byid($id)
 	{
 
-		$query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = ".$id."  and e.emp_id IN (SELECT empID from employee_group where group_name=".$id.")";
+		$query = "SELECT DISTINCT @s:=@s+1 as SNo, eg.id as EGID,  e.emp_id as ID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, employee_group eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.empID and e.department = d.id and eg.group_name = ".$id."  and e.emp_id IN (SELECT empID from employee_group where group_name=".$id.")";
 
 		return DB::select(DB::raw($query));
 	}
@@ -3102,7 +3105,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 	}
 
 	function role_members_byid($id){
-		$query = "SELECT @s:=@s+1 as SNo, eg.id as roleID,  e.emp_id as userID,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, emp_role eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.userID and e.department = d.id and eg.role = ".$id."";
+		$query = "SELECT @s:=@s+1 as SNo, eg.id as roleID,  e.emp_id as userID,  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, d.name as DEPARTMENT, p.name as POSITION FROM employee e, position p, department d, emp_role eg,  (SELECT @s:=0) as s  where e.position = p.id and e.emp_id = eg.userID and e.department = d.id and eg.role = ".$id."";
 		return DB::select(DB::raw($query));
 	}
 
@@ -3416,7 +3419,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function getuserrole($id)
 	{
-		$query = "SELECT @s:=@s+1 as SNo,  er.id,  CAST(er.duedate as date) as DATED, er.role, CONCAT(e.fname,' ', e.mname,' ', e.lname) as eNAME,   r.name as NAME  FROM emp_role er, employee e, role r, (SELECT @s:=0) as s WHERE er.role=r.id AND er.userID = e.emp_id  AND er.userID ='".$id."'";
+		$query = "SELECT @s:=@s+1 as SNo,  er.id,  CAST(er.duedate as date) as DATED, er.role, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as eNAME,   r.name as NAME  FROM emp_role er, employee e, role r, (SELECT @s:=0) as s WHERE er.role=r.id AND er.userID = e.emp_id  AND er.userID ='".$id."'";
 
 		return DB::select(DB::raw($query));
 	}
@@ -3464,7 +3467,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 
 	function customemployee() {
-	$query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME FROM employee e WHERE state = 1 ";
+	$query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE state = 1 ";
 	return DB::select(DB::raw($query));
 
 }
@@ -3481,7 +3484,7 @@ function employeeMails() {
 
 function appreciated_employee()
 	{
-		$query = "SELECT a.empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, e.photo, a.description, a.date_apprd FROM appreciation a, employee e, department d, position p WHERE a.empID = e.emp_id and p.id = e.position and d.id = e.department ORDER BY a.id DESC LIMIT 1";
+		$query = "SELECT a.empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, e.photo, a.description, a.date_apprd FROM appreciation a, employee e, department d, position p WHERE a.empID = e.emp_id and p.id = e.position and d.id = e.department ORDER BY a.id DESC LIMIT 1";
 
 		return DB::select(DB::raw($query));
 	}
@@ -3495,7 +3498,7 @@ function appreciated_employee()
 
 	function payslip($id, $date){
 
-		$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, (pl.basic+pl.allowance) as GOSS, pl.pension_employee as PENSION, pl.paye as PAYE, pl.medical as MEDICAL, (pl.basic+pl.allowance-pl.pension_employee) as TAXABLE, (pl.allowance+pl.basic-pl.paye-pl.pension_employee-pl.medical) as NET_PAY,
+		$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, (pl.basic+pl.allowance) as GOSS, pl.pension_employee as PENSION, pl.paye as PAYE, pl.medical as MEDICAL, (pl.basic+pl.allowance-pl.pension_employee) as TAXABLE, (pl.allowance+pl.basic-pl.paye-pl.pension_employee-pl.medical) as NET_PAY,
 
 (SELECT IF((SELECT COUNT(ll.paid) FROM loan_logs ll, loan l where ll.loan_fk =l.id and l.type=3 and l.empID = '".$id."' and payment_date = '".$date."')>0,(SELECT ll.paid FROM loan_logs ll, loan l where ll.loan_fk =l.id and l.type=3 and l.empID = '".$id."' and payment_date = '".$date."'),0)) as HESLB_DEDUCTION,
 
@@ -3625,14 +3628,14 @@ function updategrievances($data, $id)
 
 function grievance_details($id)
 	{
-		$query = "SELECT  @s:=@s+1 as SNo, g.id, g.*, CAST(g.timed as date) as DATED, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, g.description FROM grievances g, employee e, department d, position p, (SELECT @s:=0) as s WHERE g.empID = e.emp_id and p.id = e.position and d.id = e.department and g.id = '".$id."'";
+		$query = "SELECT  @s:=@s+1 as SNo, g.id, g.*, CAST(g.timed as date) as DATED, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, g.description FROM grievances g, employee e, department d, position p, (SELECT @s:=0) as s WHERE g.empID = e.emp_id and p.id = e.position and d.id = e.department and g.id = '".$id."'";
 
 		return DB::select(DB::raw($query));
 	}
 
 function all_grievances()
 	{
-		$query = "SELECT  @s:=@s+1 as SNo, g.id, g.*, CAST(g.timed as date) as DATED, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, g.description FROM grievances g, employee e, department d, position p, (SELECT @s:=0) as s WHERE g.empID = e.emp_id and p.id = e.position and d.id = e.department";
+		$query = "SELECT  @s:=@s+1 as SNo, g.id, g.*, CAST(g.timed as date) as DATED, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, p.name as POSITION, d.name as DEPARTMENT, g.description FROM grievances g, employee e, department d, position p, (SELECT @s:=0) as s WHERE g.empID = e.emp_id and p.id = e.position and d.id = e.department";
 
 		return DB::select(DB::raw($query));
 	}
@@ -3673,7 +3676,7 @@ function my_grievances($empID)
 	}
 
 	function employeeReport() {
-		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id=e.line_manager ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1 and e.state != 4";
+		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id=e.line_manager ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1 and e.state != 4";
 		return DB::select(DB::raw($query));
 	}
 

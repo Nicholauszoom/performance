@@ -91,24 +91,24 @@
                                 ?>
 
                                 <tr>
-                                    <td><b>{{ $row->emp_id }}</b></td>
+                                    <td class=""><b>{{ $row->emp_id }}</b></td>
 
-                                    <td><b>{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}</b></td>
-                                    <td><b>{{ $row->salary }}</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>{{ $row->allowances }}</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>0<b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>{{ $row->salary + $row->allowances }}</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>Taxable Gross</b></td>
-                                    <td><b>{{ $row->taxdue }}</b></td>
-                                    <td><b>{{ $row->pension_employer + $row->pension_employee }}</b></td>
-                                    <td><b>{{ $row->pension_employer + $row->pension_employee + $row->taxdue }}</b></td>
-                                    <td><b>{{ $amount_takehome }}</b></td>
+                                    <td class=""><b>{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}</b></td>
+                                    <td class="text-end"><b>{{ $row->salary }}</b></td>
+                                    <td class="text-end"><b>0</b></td>
+                                    <td class="text-end"><b>{{ $row->allowances }}</b></td>
+                                    <td class="text-end"><b>0</b></td>
+                                    <td class="text-end"><b>0</b></td>
+                                    <td class="text-end"><b>0</b></td>
+                                    <td class="text-end"><b>0<b></td>
+                                    <td class="text-end"><b>0</b></td>
+                                    <td class="text-end"><b>{{ $row->salary + $row->allowances }}</b></td>
+                                    <td class="text-end"><b>0</b></td>
+                                    <td class="text-end"><b>Taxable Gross</b></td>
+                                    <td class="text-end"><b>{{ $row->taxdue }}</b></td>
+                                    <td class="text-end"><b>{{ $row->pension_employer + $row->pension_employee }}</b></td>
+                                    <td class="text-end"><b>{{ $row->pension_employer + $row->pension_employee + $row->taxdue }}</b></td>
+                                    <td class="text-end"><b>{{ $amount_takehome }}</b></td>
 
 
                                 </tr>
@@ -119,28 +119,53 @@
 
                 </div>
 
-                < <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-3">
-                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
-                    </div>
-                    <div class="col-md-9">
-                        <h4 class="text-end text-secondary font-weight-bolder" style="font-weight:bolder;">Payroll
-                            Detail_By Number</h4>
-                        <h4>AFRICAN BANKING CORPORATION</h4>
-                        <h4>P.O. BOX 31</h4>
-                        <h4>DAR ES SALAAM</h4>
+                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+                    <div class="col-md-12">
+                        <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
+                        {{-- <h5>FINANCE DEPARTMENT</h5> --}}
+                        <div class="col-md-12 p-2" style="border:solid 1px gray ;border-bottom:none;">
+                            <p><small><b>Prepared By</b></small></p>
 
-                    </div>
-                    <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-3">Name:__________________________</div>
+                                <div class="col-md-3">Position:__________________________</div>
+                                <div class="col-md-3">Signature:__________________________</div>
+                                <div class="col-md-3">Date_________________________</div>
+                            </div>
+                            <br>
+                            <p><small><b>Checked and Approved By</b></small></p>
 
-                    </div>
-                    <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-3">Name:__________________________</div>
+                                <div class="col-md-3">Position:__________________________</div>
+                                <div class="col-md-3">Signature:__________________________</div>
+                                <div class="col-md-3">Date_________________________</div>
+                            </div>
 
-                    </div>
+                            <p><small><b>Checked and Approved By</b></small></p>
+
+                            <div class="row">
+                                <div class="col-md-3">Name:__________________________</div>
+                                <div class="col-md-3">Position:__________________________</div>
+                                <div class="col-md-3">Signature:__________________________</div>
+                                <div class="col-md-3">Date_________________________</div>
+                            </div>
+
+                            <p><small><b>Approved By</b></small></p>
+
+                            <div class="row">
+                                <div class="col-md-3">Name:__________________________</div>
+                                <div class="col-md-3">Position:__________________________</div>
+                                <div class="col-md-3">Signature:__________________________</div>
+                                <div class="col-md-3">Date_________________________</div>
+                            </div>
+                        </div>
+                        <hr>
+                    </div><br>
+
+                </div>
 
             </div>
-
-        </div>
         </div>
     </main>
 

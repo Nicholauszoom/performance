@@ -342,24 +342,13 @@ class ReportController extends Controller
         $yyyy = $datewell[0];
         $date = $yyyy . "-" . $mm;
 
-        if ($reportType == 1) {
-            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
-            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
-        } else {
-            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
-            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
-        }
+
 
         $data['info'] = $this->reports_model->company_info();
         $data['payroll_month'] = $payrollMonth;
         $data['pension_fund'] = $pensionFund;
 
-        $pension = $data['pension'];
-        $total = $data['total'];
-        $info = $data['info'];
-        $payroll_month = $data['payroll_month'];
-        $pension_fund = $data['pension_fund'];
-        $payroll_month = $date;
+
         $info = $this->reports_model->company_info();
 
 
@@ -2688,6 +2677,17 @@ EOD;
     return view('reports.payroll_details',$data);
 
    // include(app_path() . '/reports/temp_payroll.php');
+    }
+
+    public function payrollReportLogs(Request $request)
+    {
+        $data['payroll_date'] = $request->payrolldate;
+        $data['logs'] = $this->flexperformance_model->financialLogs($data['payroll_date']);
+
+                $data['title'] = 'Payroll Input Changes Approval Report';
+        $data['parent'] = 'Payroll Log Report';
+
+        return view('reports.input_approval', $data);
     }
 
 

@@ -7417,31 +7417,31 @@ class GeneralController extends Controller
     public function saveTermination(Request $request)
     {
 
-        request()->validate(
-            [
-                'employeeID' => 'required',
-                'terminationDate' => 'required',
-                'reason' => 'required',
-                'salaryEnrollment' => 'required',
-                'normalDays' => 'required',
-                'publicDays' => 'required',
-                'noticePay' => 'required',
-                'leavePay' => 'required',
-                'livingCost' => 'required',
-                'houseAllowance' => 'required',
-                'utilityAllowance' => 'required',
-                'tellerAllowance' => 'required',
-                'serevancePay' => 'required',
-                'leaveStand' => 'required',
-                'arrears' => 'required',
-                'exgracia' => 'required',
-                'bonus' => 'required',
-                'longServing' => 'required',
-                'salaryAdvance' => 'required',
-                'otherDeductions' => 'nullable',
-                'otherPayments' => 'nullable',
-            ]
-        );
+        // request()->validate(
+        //     [
+        //         'employeeID' => 'required',
+        //         'terminationDate' => 'required',
+        //         'reason' => 'required',
+        //         'salaryEnrollment' => 'required',
+        //         'normalDays' => 'required',
+        //         'publicDays' => 'required',
+        //         'noticePay' => 'required',
+        //         'leavePay' => 'required',
+        //         'livingCost' => 'required',
+        //         'houseAllowance' => 'required',
+        //         'utilityAllowance' => 'required',
+        //         'tellerAllowance' => 'required',
+        //         'serevancePay' => 'required',
+        //         'leaveStand' => 'required',
+        //         'arrears' => 'required',
+        //         'exgracia' => 'required',
+        //         'bonus' => 'required',
+        //         'longServing' => 'required',
+        //         'salaryAdvance' => 'required',
+        //         'otherDeductions' => 'nullable',
+        //         'otherPayments' => 'nullable',
+        //     ]
+        // );
         $employeeID = $request->employeeID;
         $terminationDate = $request->terminationDate;
         $reason = $request->reason;
@@ -7464,6 +7464,11 @@ class GeneralController extends Controller
         $salaryAdvance = $request->salaryAdvance;
         $otherDeductions = $request->otherDeductions;
         $otherPayments = $request->otherPayments;
+        $employee_actual_salary = $request->employee_actual_salary;
+        $loan_balance = $request->loan_balance;
+
+
+
 
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
@@ -7488,7 +7493,7 @@ class GeneralController extends Controller
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
-        $termination->save();
+
 
 
 
@@ -7504,9 +7509,13 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
+
+        $normal_days_overtime_amount = ($employee_actual_salary/176)*1.5*$normalDays;
+        $public_overtime_amount = ($employee_actual_salary/176)*2.0*$publicDays;
+
         $total_gross = $salaryEnrollment +
-            $normalDays +
-            $publicDays +
+            $normal_days_overtime_amount +
+            $public_overtime_amount +
             $noticePay +
             $leavePay +
             $livingCost +
@@ -7515,23 +7524,28 @@ class GeneralController extends Controller
             $leaveAllowance +
             $tellerAllowance +
             $serevancePay +
-            $leaveStand +
             $arrears +
             $exgracia +
             $bonus +
             $longServing +
             $otherPayments;
 
+            dd($$total_gross);
+
+            //overtime calculation
+
+
 
                 //check whether if is after payroll or before payroll
                 $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
                 //get employee basic salary
-                $overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+                //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+                $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
 
                 if($check_termination_date == false){
                     $net_pay = 0;
                     $take_home = 0;
-                    $total_gross = 0;
+                   // $total_gross = 0;
                     $taxable = 0;
 
 
@@ -7539,7 +7553,7 @@ class GeneralController extends Controller
 
                 $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$employeeID);
 
-                $total_deductions = $salaryAdvance + $otherDeductions ;
+                $total_deductions = $salaryAdvance + $otherDeductions;
 
                 $net_pay = $total_gross - $total_deductions;
 
@@ -7552,6 +7566,12 @@ class GeneralController extends Controller
 
                     $take_home = $taxable -  $paye;
 
+                    $termination->total_gross = $total_gross;
+
+                    $termination->loan_balance = $loan_balance;
+
+                    $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
+                    $termination->public_overtime_amount = $public_overtime_amount;
                     $termination->paye = $paye;
                     $termination->pension_employee = $pension_employee;
                     $termination->net_pay = $net_pay;

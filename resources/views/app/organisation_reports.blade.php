@@ -53,14 +53,14 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Bank Payment</h5>
+                <h5 class="text-muted">Payroll Input Changes Approval Report </h5>
             </div>
 
             <form
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.staffPayrollBankExport') }}"
+                action="{{ route('reports.payrollReportLogs') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf

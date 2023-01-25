@@ -796,6 +796,9 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/get_payroll_temp_summary/{date}','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
         Route::any('/get_payroll_temp_summary1/{date}','get_payroll_temp_summary1')->name('reports.get_payroll_temp_summary1');
 
+
+        Route::any('/payrollReportLogs', 'payrollReportLogs')->name('reports.payrollReportLogs');
+
         Route::any('/pay_checklist','pay_checklist')->name('reports.pay_checklist');
         Route::any('/all_arrears','all_arrears')->name('reports.all_arrears');
         Route::any('/employee_arrears','employee_arrears')->name('reports.employee_arrears');

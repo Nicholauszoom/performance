@@ -171,6 +171,11 @@
                                             <label for="">Salary Advances</label>
                                             <input type="text" name="salaryAdvance" class="form-control"  id="">
                                         </div>
+
+                                        <div class="col-md-6 form-group">
+                                            <label for="">Outstanding Loan Balance</label>
+                                            <input type="text" class="form-control" name="loan_balance"  id="">
+                                        </div>
                                         <div class="col-md-6 form-group">
                                             <label for="">Any Other Deductions</label>
                                             <input type="text" class="form-control" name="otherDeductions"  id="">
