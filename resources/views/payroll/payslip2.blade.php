@@ -11,7 +11,7 @@
 <body>
 
     <main>
-        <div class="row my-4">
+        <div class="row">
 
             <div class="col-md-9 mx-auto">
                 <h4 class="text-end font-weight-bolder" style="font-weight:bolder;">Salary Slip</h4>
@@ -176,8 +176,8 @@
                 ?>
                     <br>
                     <br>
-                    <div class="row mt-5">
-                        <div class="col-md-6 col-6">
+                    <div class="row mx-auto">
+                        <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 col-6">
                             <div class="row mb-1">
                                 <div class="col-md-4 col-4">
                                     <h6 style="font-weight:bold !important; ">Name: </h6>
@@ -220,7 +220,7 @@
                                     <h6  style="font-weight:bolder !important; ">Location:</h6>
                                 </div>
                                 <div class="col-md-7 col-7">
-                                    <input type="text" class="col-md-12 text-dark text-end" disabled value="<?php echo $branch; ?>" style="background-color: lightblue !important;font-weight:bolder !important; "  clicked>
+                                    <input type="text" class="col-md-12 text-dark" disabled value="<?php echo $branch; ?>" style="background-color: lightblue !important;font-weight:bolder !important; "  clicked>
                                 </div>
                             </div>
                             <div class="row mb-1">
@@ -228,7 +228,7 @@
                                     <h6  style="font-weight:bolder !important; ">Employment Date:</h6>
                                 </div>
                                 <div class="col-md-7 col-7">
-                                    <input type="text" class="col-md-12 text-dark text-end" disabled value="<?php echo $hiredate; ?>" style="background-color: lightblue !important;font-weight:bold !important; "  clicked>
+                                    <input type="text" class="col-md-12 text-dark" disabled value="<?php echo $hiredate; ?>" style="background-color: lightblue !important;font-weight:bold !important; "  clicked>
                                 </div>
                             </div>
                         </div>
@@ -242,21 +242,21 @@
                             Net Basic Calculations
                         </button>
                         <div class="row">
-                            <div class="col-md-6">Basic Pay</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($salary, 2) ?></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Basic Pay</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($salary, 2) ?></div>
                         </div>
                         <button class="col-md-12 col-12 mt-2 text-dark"  style="font-weight:bolder !important; " disabled>
                             Payments
                         </button>
                         <div class="row">
-                            <div class="col-md-6">Net Basic </div>
-                            <div class="col-md-6 text-end"><?php echo number_format($salary, 2) ?></div>
-                            <div class="col-md-12"><hr></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Net Basic </div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($salary, 2) ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
                             <?php foreach($allowances as $row){
                             ?>
-                                    <div class="col-md-6"><?php echo $row->description; ?></div>
-                                    <div class="col-md-6 text-end"> <?php echo number_format($row->amount/$rate, 2); ?></div>
-                                <div class="col-md-12"><hr></div>
+                                    <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6"><?php echo $row->description; ?></div>
+                                    <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"> <?php echo number_format($row->amount/$rate, 2); ?></div>
+                                {{-- <div class="col-md-12"><hr></div> --}}
                             <?php } ?>
 
                         </div>
@@ -265,64 +265,64 @@
                             Taxation
                         </button>
                         <div class="row">
-                            <div class="col-md-6">Gross pay</div>
-                            <div class="col-md-6 text-end"><?php echo number_format(($sum_allowances+$salary),2); ?></div>
-                            <div class="col-md-6">Less: Tax free Pension</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($pension_employee, 2); ?></div>
-                            <div class="col-md-6">Taxable Gross</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($sum_allowances+$salary-$pension_employee, 2) ?></div>
-                            <div class="col-md-6">PAYE</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($taxdue, 2); ?></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Gross pay</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format(($sum_allowances+$salary),2); ?></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Less: Tax free Pension</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($pension_employee, 2); ?></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Taxable Gross</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($sum_allowances+$salary-$pension_employee, 2) ?></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">PAYE</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($taxdue, 2); ?></div>
                         </div>
                         <button class="col-md-12 col-12 mt-2 text-dark"  style="font-weight:bolder !important; " disabled>
                             Deduction
                         </button>
                         <div class="row">
-                            <div class="col-md-6">Net Tax </div>
-                            <div class="col-md-6 text-end"><?php echo number_format($taxdue, 2); ?></div>
-                            <div class="col-md-12"><hr></div>
-                            <div class="col-md-6">NSSF</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($pension_employee, 2); ?></div>
-                            <div class="col-md-12"><hr></div>
-                            <div class="col-md-6">Total Deduction</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($pension_employee+$taxdue, 2); ?></div>
-                            <div class="col-md-12"><hr></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Net Tax </div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($taxdue, 2); ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">NSSF</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($pension_employee, 2); ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Total Deduction</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($pension_employee+$taxdue, 2); ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
                         </div>
                         <button class="col-md-12 col-12 mt-2 text-dark"  style="font-weight:bolder !important; " disabled>
                             Summary
                         </button>
                         <div class="row">
-                            <div class="col-md-6">Total Income</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($salary, 2) ?></div>
-                            <div class="col-md-12"><hr></div>
-                            <div class="col-md-6">Total Deduction</div>
-                            <div class="col-md-6 text-end"><?php echo number_format(($pension_employee+$taxdue+$sum_deductions+$sum_loans+$meals),2); ?></div>
-                            <div class="col-md-12"><hr></div>
-                            <div class="col-md-6">Net pay</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($amount_takehome, 2) ?></div>
-                            <div class="col-md-12"><hr></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Total Income</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($salary, 2) ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Total Deduction</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format(($pension_employee+$taxdue+$sum_deductions+$sum_loans+$meals),2); ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Net pay</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($amount_takehome, 2) ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
                         </div>
                         <button class="col-md-12 col-12 mt-2 text-dark"  style="font-weight:bolder !important; " disabled>
                             Take Home
                         </button>
                         <div class="row mx-auto" style="border-bottom: 4px solid rgb(71, 105, 116) !important; ">
-                            <div class="col-md-6">Take home</div>
-                            <div class="col-md-6 text-end"><?php echo number_format($amount_takehome, 2) ?></div>
-                            <div class="col-md-12"><hr></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Take home</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($amount_takehome, 2) ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
                         </div>
-                        <div class="row mb-5">
-                            <div class="col-md-6">NSSF/PPF Number:</div>
-                            <div class="col-md-6 text-end"><?php echo $membership_no; ?></div>
-                            <div class="col-md-6">Method of Payment: </div>
-                            <div class="col-md-6 text-end">Bank</div>
-                            <div class="col-md-6">Account No: </div>
-                            <div class="col-md-6 text-end"><?php echo $account_no; ?></div>
+                        <div class="row">
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">NSSF/PPF Number:</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo $membership_no; ?></div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Method of Payment: </div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end">Bank</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Account No: </div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo $account_no; ?></div>
                         </div>
 
 
                     </div>
 
-                    <div class="row mt-5" style="border-top: 10px solid rgb(71, 105, 116) !important; ">
+                    <div class="row" style="border-top: 10px solid rgb(71, 105, 116) !important; ">
 
                     </div>
                 </div>
