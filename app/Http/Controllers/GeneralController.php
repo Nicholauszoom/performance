@@ -294,7 +294,7 @@ class GeneralController extends Controller
         }
     }
 
-    public function department(Request $request)
+    public function department()
     {
         $id = session('emp_id');
         $data['employee'] = $this->flexperformance_model->customemployee();
@@ -307,8 +307,68 @@ class GeneralController extends Controller
         $data['parent'] = "Organisation";
         $data['child'] = "Departments";
 
+        // dd($data['department']);
+
         return view('app.department', $data);
     }
+
+
+
+
+
+
+
+
+
+
+
+    public function departmentCost(){
+        $data['projects'] = $this->flexperformance_model->costProjects();
+        $data['departments'] =  $this->flexperformance_model->costDepartments();
+        $data['parent'] = "Department";
+        $data['child'] = "Costs";
+
+        return view('department-cost.index', $data);
+    }
+
+    public function storeDepartmentCost(Request $request){
+
+        $type = $request->type;
+
+        if($type == 1){
+            $data = [
+                // 'type' => $request->type,
+                'project_id' => $request->project,
+                'from_department' => $request->from_department,
+                'to_department' => $request->to_department,
+                'amount' => $request->amount,
+                'description' => $request->description,
+            ];
+
+            DB::table('department_cost_transfer')->insert($data);
+        }else{
+            $data = [
+                'department_id' => $request->department,
+                'project_id' => $request->project,
+                'type' => $request->type,
+                'amount' => $request->amount,
+                'description' => $request->description,
+            ];
+
+            DB::table('department_cost')->insert($data);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public function organization_level(Request $request)
     {

@@ -75,6 +75,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
 
 
+    Route::get('flex/department_cost', [GeneralController::class, 'departmentCost'])->name('flex.departmentCost');
+    Route::any('flex/store_department_cost', [GeneralController::class, 'storeDepartmentCost'])->name('flex.storedepartmentcost');
+
+
+
 
     //routes for setting
     //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
