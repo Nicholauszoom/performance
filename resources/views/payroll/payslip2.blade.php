@@ -21,16 +21,17 @@
                         <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
                     </div>
                     <div class="col-md-9 col-9">
-                       
+                        <button onclick="window.print()">Print this page</button>
+
                         <h5>AFRICAN BANKING CORPORATION</h5>
                         <h5>P.O. BOX 31</h5>
                         <h5>DAR ES SALAAM</h5>
-                        
+
                     </div>
                     <?php
-                
-          
-                    
+
+
+
                     foreach( $slipinfo as $row){
                     $rate = $row->rate;
                         $id = $row->empID;
@@ -52,46 +53,46 @@
                         $pension_employee = $row->pension_employee/$row->rate;
                         $meals = $row->meals/$row->rate;
                         $taxdue = $row->taxdue/$row->rate;
-                    
+
                     }
-                    
+
                     foreach ($companyinfo as $row) {
                         $companyname = $row->cname;
                     }
-                    
+
                     foreach ($total_pensions as $row) {
                         $uptodate_pension_employee = $row->total_pension_employee/$row->rate;
                         $uptodate_pension_employer = $row->total_pension_employer/$row->rate;
                     }
-                    
+
                     $sum_allowances = $total_allowances/$rate;
                     $sum_deductions = $total_deductions/$rate;
                     $sum_loans = 0;
-                    
+
                     // DATE MANIPULATION
                     $hire=date_create($hiredate);
                     $today=date_create($payroll_month);
                     $diff=date_diff($hire, $today);
                     $accrued = 37*$diff->format("%a%")/365;
                     $totalAccrued = (number_format((float)$accrued, 2,'.','')); //3,04days
-                    
+
                     $balance = $totalAccrued - $annualLeaveSpent; //days
                     if($balance<0){
                         $balance=0;
                     }
-                    
-                   
-             
-               
-                    
-                    
-                    
-                 
-                    
-                
-                    
+
+
+
+
+
+
+
+
+
+
+
                     foreach($loans as $row){
-                    
+
                           $paid = $row->paid;
                         if ($row->remained == 0){
                             $get_remainder = $row->paid / $row->policy;
@@ -104,16 +105,16 @@
                     //        $paid = $num*$row->policy;
                  $paid = $salary_advance_loan_remained;
                         }
-                    
-                    
-                    
+
+
+
                     }
-                    
-                
-              
+
+
+
                     // START TAKE HOME
                        $amount_takehome = ($sum_allowances+$salary) - ($sum_loans+$pension_employee+$taxdue+$sum_deductions+$meals);
-                    
+
                      $paid_salary = $amount_takehome;
                     foreach ($paid_with_arrears as $paid_with_arrear){
                         if ($paid_with_arrear->with_arrears){
@@ -123,7 +124,7 @@
                             $with_arr = 0;//with held
                         }
                     }
-                    
+
                     foreach ($arrears_paid as $arrear_paid){
                         if ($arrear_paid->arrears_paid){
                               $paid_salary = $amount_takehome + $arrear_paid->arrears_paid - $with_arr;
@@ -132,7 +133,7 @@
                             $paid_arr = 0;
                         }
                     }
-                    
+
                     foreach ($paid_with_arrears_d as $paid_with_arrear_d){
                         if ($paid_with_arrear_d->arrears_paid){
                             $paid_arr_all = $paid_with_arrear_d->arrears_paid;
@@ -140,37 +141,37 @@
                              $paid_arr_all = 0;
                         }
                     }
-                    
+
                     if ($with_arr > 0){
                         foreach ($arrears_all as $arrear_all){
-                    
+
                             if ($arrear_all->arrears_all){
                              $due_arr = $arrear_all->arrears_all - $paid_arr_all;
-                    
+
                             }else{
                                  $due_arr = 0;
                             }
                         }
                     }else{
                         foreach ($arrears_all as $arrear_all){
-                    
+
                             if ($arrear_all->arrears_all){
                                  $due_arr = $arrear_all->arrears_all - $paid_arr_all;
-                    
+
                             }else{
                                  $due_arr = 0;
                             }
                         }
                     }
-                    
-              
-                 
-                    
-                 
-                    
-         
-                    
-                
+
+
+
+
+
+
+
+
+
 
                 ?>
                     <br>
@@ -257,7 +258,7 @@
                                     <div class="col-md-6 text-end"> <?php echo number_format($row->amount/$rate, 2); ?></div>
                                 <div class="col-md-12"><hr></div>
                             <?php } ?>
-                           
+
                         </div>
 
                         <button class="col-md-12 col-12 mt-2 text-dark"  style="font-weight:bolder !important; " disabled>
@@ -318,25 +319,25 @@
                             <div class="col-md-6 text-end"><?php echo $account_no; ?></div>
                         </div>
 
-           
+
                     </div>
 
                     <div class="row mt-5" style="border-top: 10px solid rgb(71, 105, 116) !important; ">
-                    
+
                     </div>
                 </div>
 
-                
-     
-                
+
+
+
             </div>
         </div>
     </main>
-    
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    
+
 </body>
 </html>
