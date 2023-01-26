@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,7 +16,7 @@
     <main>
         <div class="row my-4">
 
-            <div class="col-md-9 mx-auto">
+            <div class="col-md-10 mx-auto">
 
                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
                     <div class="col-md-5 col-5">
@@ -156,7 +156,7 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
-                            </>
+
                     </div>
 
 
