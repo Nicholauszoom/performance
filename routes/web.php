@@ -315,11 +315,21 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         // start of reconcilliation summary route
         Route::any('/reconciliation-summary','reconcilliationSummary')->name('reports.recoSummary');
-        // start of reconcilliation summary route
+        // end of reconcilliation summary route
+
+        //start of grievances and disciplinary actions routes
+        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
+
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+        Route::post('/save-complain','saveComplain')->name('flex.saveComplain');
+
+        // end of grievances and disciplinary actions routes
 
         // start of education qualification route
         Route::any('/addQualification','addQualification')->name('flex.addQualification');
         // end of education qualification route
+
+
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');

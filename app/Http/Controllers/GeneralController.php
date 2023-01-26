@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Models\FinancialLogs;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
+use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
@@ -181,6 +182,8 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+
+        $data['qualifications'] = EducationQualification::where('employeeID',$id)->get();
 
         $data['photo'] = "";
 
@@ -7868,6 +7871,59 @@ public function addQualification(Request $request)
 }
 
 // end of education qualifications
+
+// start of grievances
+
+public function grievancesComplains()
+{
+
+    $data['title'] = "Grievances|Disciplinary";
+    $data['employees'] = $this->flexperformance_model->Employee();
+    $promotions= Promotion::orderBy('created_at','desc')->get();
+    $i=1;
+    $data['parent'] = 'Workforce';
+    $data['child'] = 'Promotion|Increment';
+
+    return view('workforce-management.grievances-complains', $data,compact('promotions','i'));
+
+}
+
+
+public function addComplain()
+{
+
+    return view('workforce-management.add-complain');
+
+}
+
+
+
+
+public function saveComplain(Request $request)
+{
+
+    request()->validate(
+        [
+        'employeeID' => 'required',
+        'description' => 'required',
+         ]
+        );
+
+
+        $id=$request->employeeID;
+
+        $complain = new EmployeeComplain();
+        $complain->employeeID=$id;
+        $complain->description=$request->description;
+        $complain->save();
+
+
+        $msg="Your Complain has been Submitted successfully !";
+        return redirect('flex/grievancesCompain')->with('msg', $msg);
+
+}
+
+// end of grievances
 
 
 }
