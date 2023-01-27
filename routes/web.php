@@ -330,6 +330,15 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         // end of education qualification route
 
 
+        // start of employee personal details route
+
+        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
+        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
+        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
+        // end of employee personal details  route
+
+
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');

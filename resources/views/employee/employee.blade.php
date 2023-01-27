@@ -65,7 +65,11 @@
                 </a>
 
                 @if (session('mng_emp'))
-                    <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
+                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}"  title="Info and Details">
+                    <button type="button" class="btn btn-info btn-xs"><i class="ph-pen"></i></button>
+                </a>
+
+                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
                         <button type="button" class="btn btn-danger btn-xs"><i class="ph-prohibit"></i></button>
                     </a>
 {{--

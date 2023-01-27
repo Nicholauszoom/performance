@@ -15,10 +15,17 @@ use App\Models\Termination;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\FinancialLogs;
+use App\Models\EmployeeDetail;
+use App\Models\EmployeeParent;
+use App\Models\EmployeeSpouse;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Elibyy\TCPDF\Facades\TCPDF;
+use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
+use App\Models\EmployeeDependant;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
@@ -28,6 +35,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
 use App\Models\EducationQualification;
+
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -7600,9 +7608,18 @@ class GeneralController extends Controller
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
-  ;
 
-        return view('workforce-management.terminal-balance', compact('termination','employee_info'));
+        $pdf = Pdf::loadView('workforce-management.terminal-balance', compact('termination','employee_info'));
+       // $pdf = Pdf::loadView('reports.payroll_details',$data);
+
+
+
+        //return $pdf->download('sam.pdf');
+
+
+        return $pdf->download('test.pdf');
+
+        // return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
     public function get_employee_available_info(Request $request){
@@ -7889,7 +7906,7 @@ public function grievancesComplains()
 }
 
 
-public function addComplain()
+public function addComplain(Request $request, $id)
 {
 
     return view('workforce-management.add-complain');
@@ -7926,4 +7943,302 @@ public function saveComplain(Request $request)
 // end of grievances
 
 
+
+// start of profile
+
+// Request $request, $id
+
+public function viewProfile(Request $request,$id)
+    {
+
+        $empID = base64_decode($id);
+
+        $data['employee'] = $this->flexperformance_model->userprofile($empID);
+        $data['title'] = "Employee";
+        // $data['pdrop'] = $this->flexperformance_model->positiondropdown2($departmentID);
+        $data['contract'] = $this->flexperformance_model->contractdrop();
+        // $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+        // $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+        // $data['countrydrop'] = $this->flexperformance_model->nationality();
+        // $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
+        // $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['pension'] = $this->flexperformance_model->pension_fund();
+
+        $details=EmployeeDetail::where('employeeID',$empID)->first();
+
+        $emergency=EmergencyContact::where('employeeID',$empID)->first();
+
+        $children=EmployeeDependant::where('employeeID',$empID)->get();
+
+
+        $spouse=EmployeeSpouse::where('employeeID',$empID)->first();
+
+        $parents=EmployeeParent::where('employeeID',$empID)->get();
+
+        $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
+
+        $data['positionTransfer'] = $this->flexperformance_model->pendingPositionTranferCheck($empID);
+        $data['departmentTransfer'] = $this->flexperformance_model->pendingDepartmentTranferCheck($empID);
+
+        $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
+
+        // $data['bankdrop'] = $this->flexperformance_model->bank();
+        $data['parent'] = 'Employee';
+        $data['child'] = 'Update employee';
+
+        // dd($data);
+
+        // return view('employee.updateEmployee', $data);
+        return view('employee.employee-profile', $data,compact('details','emergency','spouse','children','parents'));
+    }
+
+
+
+// end of profile
+
+
+
+//start of update employee detail
+
+public function updateEmployeeDetails(Request $request)
+{
+
+    request()->validate(
+        [
+
+        // start of name information validation
+        'employeeID' => 'required',
+        'fname' => 'required',
+        'mname' => 'nullable',
+        'lname' => 'required',
+        'maide_name' => 'nullable',
+
+
+        // start of biographical informations
+        'bithdate' => 'nullable',
+        'country_of_birth' => 'nullable',
+        'gender' => 'required',
+        // 'martial' => 'nullable',
+        'religion' => 'nullable',
+
+        // Address Information
+        'physical_address' => 'nullable',
+        'landmark' => 'nullable',
+
+        // Start of Personal Identification details
+        'TIN' => 'required',
+        'NIDA' => 'required',
+        'passport' => 'nullable',
+        'pension' => 'required',
+        'HELSB' => 'nullable',
+
+        // Start of Emmegence Contact
+
+        'em_fname' => 'nullable',
+        'em_mname' => 'nullable',
+        'spouse_birthplace' => 'nullaspousee',
+      'em_relationship' => 'nullable',
+        'em_ocupation' => 'nullable',
+        'em_phone' => 'nullable',
+
+        // Start of Employment Details
+        'employment_date' => 'nullable',
+        'former_title' => 'nullable',
+        'current_title' => 'nullable',
+        'department' => 'nullable',
+        'line_manager' => 'nullable',
+        'hod' => 'nullable',
+        'employee_status' => 'nullable',
+
+        // start of spouse details
+        'spouse_name' => 'nullable',
+        'spouse_birthdate' => 'nullable',
+        'spouse_birthplace' => 'nullable',
+        'spouse_nationality' => 'nullable',
+        'spouse_employer' => 'nullable',
+        'spouse_job_title' => 'nullable',
+        'spouse_medical_status' => 'nullable',
+
+        // start of children details
+
+
+        // start of former works
+         ]
+        );
+
+
+        $id=$request->employeeID;
+
+        // dd($request->landmark);
+        $empl =Employee::where('emp_id',$id)->first();
+
+        if($empl){
+        // updating employee data
+        $employee =Employee::where('emp_id',$id)->first();
+        $employee->fname=$request->fname;
+        $employee->mname=$request->mname;
+        $employee->lname=$request->lname;
+        $employee->gender=$request->gender;
+        $employee->birthdate=$request->birthdate;
+        $employee->merital_status=$request->merital;
+
+
+        // dd($request->merital);
+        $employee->national_id=$request->NIDA;
+        $employee->form_4_index=$request->HELSB;
+        $employee->pension_fund=$request->pension_fund;
+        $employee->physical_address=$request->physical_address;
+        $employee->update();
+
+        // Start of Employee Details
+        $profile=EmployeeDetail::where('employeeID',$id)->first();
+
+        if ($profile) {
+
+        $profile->maide_name=$request->maide_name;
+        $profile->birthplace=$request->birthplace;
+        $profile->birthcountry=$request->birthcountry;
+        $profile->religion=$request->religion;
+        $profile->employeeID=$request->employeeID;
+        $profile->passport_number=$request->passport_number;
+        $profile->landmark=$request->landmark;
+        $profile->prefix=$request->prefix;
+        $profile->former_title=$request->former_title;
+
+         $profile->update();
+        }
+        else{
+        $profile=new EmployeeDetail();
+        $profile->prefix=$request->prefix;
+        $profile->maide_name=$request->maide_name;
+        $profile->birthplace=$request->birthplace;
+        $profile->birthcountry=$request->birthcountry;
+        $profile->religion=$request->religion;
+        $profile->employeeID=$request->employeeID;
+        $profile->passport_number=$request->passport_number;
+        $profile->former_title=$request->former_title;
+        $profile->save();
+        }
+
+        // start of emergency contacts
+        $emergency=EmergencyContact::where('employeeID',$id)->first();
+
+        if ($emergency) {
+
+        $emergency->employeeID=$request->employeeID;
+        $emergency->em_fname=$request->em_fname;
+        $emergency->em_mname=$request->em_mname;
+        $emergency->em_sname=$request->em_lname;
+        $emergency->em_relationship=$request->em_relationship;
+        $emergency->em_occupation=$request->em_occupation;
+        $emergency->em_phone=$request->em_phone;
+         $emergency->update();
+        }
+        else{
+        $emergency=new EmergencyContact();
+        $emergency->employeeID=$request->employeeID;
+        $emergency->em_fname=$request->em_fname;
+        $emergency->em_mname=$request->em_mname;
+        $emergency->em_sname=$request->em_lname;
+        $emergency->em_relationship=$request->em_relationship;
+        $emergency->em_occupation=$request->em_occupation;
+        $emergency->em_phone=$request->em_phone;
+        $emergency->save();
+        }
+
+
+
+        // start of spouse details
+        $spouse=EmployeeSpouse::where('employeeID',$id)->first();
+
+        if ($spouse) {
+
+        $spouse->employeeID=$request->employeeID;
+        $spouse->spouse_fname=$request->spouse_name;
+        $spouse->spouse_birthdate=$request->spouse_birthdate;
+        $spouse->spouse_birthplace=$request->spouse_birthplace;
+        $spouse->spouse_birthcountry=$request->spouse_birthcountry;
+        $spouse->spouse_nationality=$request->spouse_nationality;
+        $spouse->spouse_passport=$request->spouse_passport;
+        $spouse->spouse_employer=$request->spouse_employer;
+        $spouse->spouse_job_title=$request->spouse_job_title;
+        $spouse->spouse_nida=$request->spouse_nida;
+         $spouse->update();
+        }
+        else{
+            $spouse=new EmployeeSpouse();
+
+            $spouse->employeeID=$request->employeeID;
+            $spouse->spouse_fname=$request->spouse_name;
+            $spouse->spouse_birthdate=$request->spouse_birthdate;
+            $spouse->spouse_birthplace=$request->spouse_birthplace;
+            $spouse->spouse_birthcountry=$request->spouse_birthcountry;
+            $spouse->spouse_nationality=$request->spouse_nationality;
+            $spouse->spouse_passport=$request->spouse_passport;
+            $spouse->spouse_employer=$request->spouse_employer;
+            $spouse->spouse_job_title=$request->spouse_job_title;
+            $spouse->spouse_nida=$request->spouse_nida;
+
+            $spouse->save();
+            }
+
+
+            // start of depedants details
+
+        $emp_id=$request->employeeID;
+        $dep=EmployeeDependant::where('employeeID',$emp_id)->first();
+        if($request->moreFields!=''){
+            foreach ($request->moreFields as $key => $value) {
+                    EmployeeDependant::create($value);
+                }
+        }
+
+         }
+
+
+        //  start of parents details
+        if($request->moreParent!=''){
+            foreach ($request->moreParent as $key => $value) {
+                    EmployeeParent::create($value);
+                }
+        }
+
+
+
+
+
+        $msg="Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/'.base64_encode($id))->with('msg', $msg);
+
+}
+
+
+// end of update employee details
+
+
+             // delete  function
+             public function deleteChild($id)
+             {
+                 $child=EmployeeDependant::find($id);
+
+                 $empID=$child->employeeID;
+
+                     $child->delete();
+
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('status','Employee Dependant is Deleted successfully !');
+
+             }
+
+
+             public function deleteParent($id)
+             {
+                 $parent=EmployeeParent::find($id);
+
+                 $empID=$parent->employeeID;
+
+                     $parent->delete();
+
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('status','Employee Parent is Deleted successfully !');
+
+             }
 }
