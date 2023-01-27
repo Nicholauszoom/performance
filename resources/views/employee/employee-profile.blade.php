@@ -216,12 +216,14 @@
                                                        <label for="Single">Single</label>
                                                        <br>
                                                        <input type="radio" id="Married" name="merital" @foreach($employee as $item) {{$item->merital_status == "Married" ? 'checked':'' }} @endforeach value="Married">
-                                                       <label for="Married" class="pr-5">Married</label> &nbsp; <label for="">Date</label> <input type="date" id="Married" name="marriage"><br>
+                                                       <label for="Married" class="pr-5">Married</label> &nbsp;
+                                                       <br>
+                                                       <label for="">Marriage Date</label> <input type="date" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
                                                        <input type="radio" id="Separated" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Separated" ? 'checked':'' }} @endforeach value="Separated">
                                                        <label for="Separated">Separated</label><br>
                                                        <input type="radio" id="divorced" name="merital" id="Divorced" @foreach($employee as $item) {{$item->merital_status == "Divorced" ? 'checked':'' }} @endforeach value="Divorced">
-                                                       <label for="divorced" class="pr-5">Divorced</label>
-                                                       Date</label> <input type="date"  name="divorced_date">
+                                                       <label for="divorced" class="pr-5">Divorced</label> <br>
+                                                       Divorced Date</label> <input type="date"  name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
                                                        <br>
                                                        <input type="radio" id="widow" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Widow/Widower" ? 'checked':'' }} @endforeach value="Widow/Widower">
                                                        <label for="widow">Widow/Widower</label><br>
@@ -418,10 +420,10 @@
                                                     <label for="">Head Of Department</label>
                                                     <input type="text" name="hod" value="" class="form-control">
                                                 </div> --}}
-                                                <div class="form-group col-12 mb-2">
+                                                {{-- <div class="form-group col-12 mb-2">
                                                     <label for="">Employment Status</label>
                                                     <input type="text" name="employment_status" value="<?php echo $ctype; ?>"  class="form-control">
-                                                </div>
+                                                </div> --}}
 
                                             </div>
                                     </div>

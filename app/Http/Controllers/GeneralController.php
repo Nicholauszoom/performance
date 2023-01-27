@@ -8095,6 +8095,7 @@ public function updateEmployeeDetails(Request $request)
 
         if ($profile) {
 
+        $profile->marriage_date=$request->marriage_date;
         $profile->maide_name=$request->maide_name;
         $profile->birthplace=$request->birthplace;
         $profile->birthcountry=$request->birthcountry;
@@ -8104,6 +8105,7 @@ public function updateEmployeeDetails(Request $request)
         $profile->landmark=$request->landmark;
         $profile->prefix=$request->prefix;
         $profile->former_title=$request->former_title;
+        $profile->divorced_date=$request->divorced_date;
 
          $profile->update();
         }
@@ -8117,6 +8119,8 @@ public function updateEmployeeDetails(Request $request)
         $profile->employeeID=$request->employeeID;
         $profile->passport_number=$request->passport_number;
         $profile->former_title=$request->former_title;
+        $profile->divorced_date=$request->divorced_date;
+        $profile->marriage_date=$request->marriage_date;
         $profile->save();
         }
 
