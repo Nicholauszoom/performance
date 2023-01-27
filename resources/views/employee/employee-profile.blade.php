@@ -402,28 +402,51 @@
                                                     <label for="">First Job Title</label>
                                                     <input type="text" name="former_title" @if($details) value="{{ $details->former_title}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-612 mb-2">
-                                                    <label for="">Current Job Title</label>
-                                                    <input type="text" name="current_job" value="<?php echo $title; ?>" class="form-control">
-                                                </div>
                                                 <div class="form-group col-12 mb-2">
-                                                    <label for="">Department & Branch</label>
-                                                    <input type="text" value="<?php echo $department; ?>" class="form-control">
+                                                    <p></p>
+                                                    <label for="">Current Job Title: <?php echo $title; ?></label>
+                                                    <div class="">
+                                                        <select class="form-control select1_single select @error('newPosition') is-invalid @enderror" id="current_job" name="current_job">
+                                                            {{-- <option value=""> Update Job Title</option> --}}
+                                                            @foreach ($pdrop as $item)
+                                                            <option value="{{ $item->name }}">{{ $item->name }} </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-12 ">
+                                                    <label for="">Branch</label>
+
+                                                    <p>Current Branch:  <?php echo $branch; ?> </p>
+
+                                                    <select class="form-control select1_single select @error('department') is-invalid @enderror" id="docNo" name="line_manager">
+                                                        {{-- <option value=""> Update Member Branch </option> --}}
+                                                        @foreach ($bdrop as $depart)
+                                                        <option value="{{ $depart->emp_id }}">{{ $depart->name }} </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
 
                                                 <div class="form-group col-12 mb-2">
                                                     <label for="">Line Manager</label>
-                                                    <input type="text"name="department" value="<?php echo $linemanager; ?>"  class="form-control">
+                                                    <br>
+                                                    <p>Current:  <?php echo $linemanager; ?> </p>
+                                                    <label for="">Update Line Manager</label>
+                                                    <select class="form-control select @error('department') is-invalid @enderror" id="docNo" name="line_manager">
+                                                        {{-- <option value=""> Select New Line Manager </option> --}}
+                                                        @foreach ($employees as $depart)
+
+                                                        <option value="{{ $depart->emp_id }}" >{{ $depart->fname }}  {{ $depart->lname }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
 
                                                 {{-- <div class="form-group col-12 mb-2">
                                                     <label for="">Head Of Department</label>
                                                     <input type="text" name="hod" value="" class="form-control">
                                                 </div> --}}
-                                                {{-- <div class="form-group col-12 mb-2">
-                                                    <label for="">Employment Status</label>
-                                                    <input type="text" name="employment_status" value="<?php echo $ctype; ?>"  class="form-control">
-                                                </div> --}}
+
+
 
                                             </div>
                                     </div>

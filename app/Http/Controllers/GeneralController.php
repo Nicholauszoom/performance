@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Promotion;
 use App\Models\AuditTrail;
+use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
 use App\Models\Termination;
 use App\Models\ProjectModel;
@@ -34,8 +35,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
-use App\Models\EducationQualification;
 
+use App\Models\EducationQualification;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -7609,17 +7610,10 @@ class GeneralController extends Controller
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
 
-        $pdf = Pdf::loadView('workforce-management.terminal-balance', compact('termination','employee_info'));
-       // $pdf = Pdf::loadView('reports.payroll_details',$data);
+        // $pdf = Pdf::loadView('workforce-management.terminal-balance', compact('termination','employee_info'));
 
 
-
-        //return $pdf->download('sam.pdf');
-
-
-        return $pdf->download('test.pdf');
-
-        // return view('workforce-management.terminal-balance', compact('termination','employee_info'));
+        return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
     public function get_employee_available_info(Request $request){
@@ -7955,12 +7949,13 @@ public function viewProfile(Request $request,$id)
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
         $data['title'] = "Employee";
-        // $data['pdrop'] = $this->flexperformance_model->positiondropdown2($departmentID);
+        $data['pdrop'] = Position::all();
+        $data['bdrop'] = BankBranch::all();
         $data['contract'] = $this->flexperformance_model->contractdrop();
-        // $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
-        // $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
-        // $data['countrydrop'] = $this->flexperformance_model->nationality();
-        // $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
+        $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+        $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+        $data['countrydrop'] = $this->flexperformance_model->nationality();
+        $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
         // $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['pension'] = $this->flexperformance_model->pension_fund();
 
@@ -7975,17 +7970,18 @@ public function viewProfile(Request $request,$id)
 
         $parents=EmployeeParent::where('employeeID',$empID)->get();
 
+
         $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
 
         $data['positionTransfer'] = $this->flexperformance_model->pendingPositionTranferCheck($empID);
         $data['departmentTransfer'] = $this->flexperformance_model->pendingDepartmentTranferCheck($empID);
 
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
-
+        $data['employees'] = $this->flexperformance_model->Employee();
         // $data['bankdrop'] = $this->flexperformance_model->bank();
         $data['parent'] = 'Employee';
         $data['child'] = 'Update employee';
-
+        $data['employees'] = $this->flexperformance_model->Employee();
         // dd($data);
 
         // return view('employee.updateEmployee', $data);
@@ -8078,12 +8074,14 @@ public function updateEmployeeDetails(Request $request)
         $employee->fname=$request->fname;
         $employee->mname=$request->mname;
         $employee->lname=$request->lname;
+        $employee->line_manager=$request->line_manager;
+        $employee->job_title=$request->current_job;
         $employee->gender=$request->gender;
         $employee->birthdate=$request->birthdate;
         $employee->merital_status=$request->merital;
 
 
-        // dd($request->merital);
+        // dd($request->current_job);
         $employee->national_id=$request->NIDA;
         $employee->form_4_index=$request->HELSB;
         $employee->pension_fund=$request->pension_fund;
@@ -8197,15 +8195,17 @@ public function updateEmployeeDetails(Request $request)
                 }
         }
 
+                //  start of parents details
+                if($request->moreParent!=''){
+                    foreach ($request->moreParent as $key => $value) {
+                            EmployeeParent::create($value);
+                        }
+                }
+
          }
 
 
-        //  start of parents details
-        if($request->moreParent!=''){
-            foreach ($request->moreParent as $key => $value) {
-                    EmployeeParent::create($value);
-                }
-        }
+
 
 
 
