@@ -676,7 +676,7 @@ class ReportController extends Controller
                 $data['payroll_date'] = $request->input("payrolldate");
                 //include(app_path() . '/reports/customleave_report.php');
                // include app_path() . '/reports/payslip.php';
-                return view('payroll.payslip3', $data);
+                return view('payroll.payslip2', $data);
 
             }
         } else {
@@ -2671,9 +2671,9 @@ EOD;
 
    // return $pdf->download('itsolutionstuff.pdf');
 
-      //return view('reports.payrolldetails_datatable',$data);
+      return view('reports.payrolldetails_datatable',$data);
 
-          return view('reports.payroll_details',$data);
+         // return view('reports.payroll_details',$data);
 
    // include(app_path() . '/reports/temp_payroll.php');
     }
