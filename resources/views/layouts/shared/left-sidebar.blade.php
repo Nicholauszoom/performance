@@ -79,6 +79,10 @@
                             <li class="nav-item {{ request()->routeIs('flex.transfers') ? 'active' : null  }}"><a class="nav-link" href="{{ route('flex.transfers') }}">Employee Approval</a></li>
 
                         @endif
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('imprest.grievancesCompain') ? 'active' : null  }}" href="{{ route('flex.grievancesCompain') }}">Grievances and Disciplinary</a>
+                        </li>
                     </ul>
                 </li>
 

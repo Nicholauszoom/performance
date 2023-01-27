@@ -10,14 +10,23 @@ use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Promotion;
 use App\Models\AuditTrail;
+use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
 use App\Models\Termination;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\FinancialLogs;
+use App\Models\EmployeeDetail;
+use App\Models\EmployeeParent;
+use App\Models\EmployeeSpouse;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Elibyy\TCPDF\Facades\TCPDF;
+use App\Models\EmergencyContact;
+use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
+use App\Models\EmployeeDependant;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
@@ -26,6 +35,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
+
 use App\Models\EducationQualification;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -182,6 +192,8 @@ class GeneralController extends Controller
         $data['skills_have'] = $this->flexperformance_model->skills_have($id);
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
+
+        $data['qualifications'] = EducationQualification::where('employeeID',$id)->get();
 
         $data['photo'] = "";
 
@@ -7598,8 +7610,7 @@ class GeneralController extends Controller
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
-        $pdf = Pdf::loadView('reports.terminalbenefit',compact('termination','employee_info'))->setPaper('a4', 'potrait');
-        //return $pdf->download('CARGO SALES NO # ' .  $purchases->pacel_number . ".pdf");
+
 
         return $pdf->download('terminal-benefit-slip.pdf');
         //return view('reports.terminalbenefit',compact('termination'));
@@ -7874,4 +7885,5 @@ public function addQualification(Request $request)
 // end of education qualifications
 
 
-}
+             }
+

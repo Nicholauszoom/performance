@@ -702,25 +702,40 @@
                 <div class="card-body">
                 <div class="col-md-12 m-2">
                     <div class="">
+                        @forelse ($qualifications as $item )
                         <div class="row">
                             <div class="col-md-4">Institute</div>
-                            <div class="col-md-8 text-end">Dummy University</div>
-
-                            <div class="col-md-4">Level</div>
-                            <div class="col-md-8 text-end"> Bachelor</div>
+                            <div class="col-md-8 text-end">{{ $item->institute}}</div>
 
                             <div class="col-md-4">Course</div>
-                            <div class="col-md-8 text-end">Dummy Course</div>
+                            <div class="col-md-8 text-end">{{ $item->course }}</div>
 
-                            <div class="col-md-4">Start Year</div>
-                            <div class="col-md-8 text-end">2016</div>
+                            <div class="col-md-4">Level</div>
+                            <div class="col-md-8 text-end"> {{ $item->level }}</div>
 
-                            <div class="col-md-4">Finish Year</div>
-                            <div class="col-md-8 text-end">2022</div>
+                            <div class="col-md-3">Start Year</div>
+                            <div class="col-md-3 text-end">{{ $item->start_year }}</div>
+
+                            <div class="col-md-3">Finish Year</div>
+                            <div class="col-md-3 text-end">{{ $item->end_year }}</div>
+
+                            <div class="col-md-8"></div>
+                            <div class="col-md-4 text-end">
+                             <a href="" class="btn btn-sm btn-main text-end">
+                                <i class="ph ph-file-pdf"></i>
+                                View Certificate
+                             </a>
+                            </div>
 
                         </div>
+
+                        <hr>
+                        @empty
+                        <p class="text-center"> There isn't any Academic Qualification</p>
+                        @endforelse
+
                     </div>
-                    <hr>
+
 
                 </div>
 
