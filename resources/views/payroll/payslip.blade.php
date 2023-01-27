@@ -136,6 +136,7 @@
                             <div class="col-md-6">NSSF</div>
                             <div class="col-md-6 text-end">156,566.00</div>
                             <div class="col-md-12"><hr></div>
+                          
                             <div class="col-md-6">Total Deduction</div>
                             <div class="col-md-6 text-end">407,294.00</div>
                             <div class="col-md-12"><hr></div>

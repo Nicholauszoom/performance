@@ -673,7 +673,7 @@ class ReportController extends Controller
                 $paid_with_arrears = $data['paid_with_arrears'];
                 $paid_with_arrears_d = $data['paid_with_arrears_d'];
                 $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
-
+                $data['payroll_date'] = $request->input("payrolldate");
                 //include(app_path() . '/reports/customleave_report.php');
                // include app_path() . '/reports/payslip.php';
                 return view('payroll.payslip2', $data);
@@ -1869,16 +1869,19 @@ class ReportController extends Controller
         $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
 
-       // $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
+        //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
        // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
 
 
         //return $pdf->download('sam.pdf');
+       // $pdf = Pdf::loadView('reports.samplepdf')->setPaper('a4', 'potrait');
+        //return $pdf->download('CARGO SALES NO # ' .  $purchases->pacel_number . ".pdf");
 
-
-        //return $pdf->download('payroll_reconciliation_summary.pdf');
+       // return $pdf->download('payroll_reconciliation_summary.pdf');
         return view('reports.payroll_reconciliation_summary1',$data);
+
+        return view('reports.samplepdf',$data);
     }
 
     #################################END PROJECT REPORTS##############################
@@ -2681,11 +2684,11 @@ EOD;
 
     //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
 
-    //$pdf = Pdf::loadView('reports.payroll_details',$data);
+   // $pdf = Pdf::loadView('reports.terminalbenefit',$data)->setPaper('a4', 'landscape');
 
 
 
-    //return $pdf->download('itsolutionstuff.pdf');
+   // return $pdf->download('itsolutionstuff.pdf');
 
     return view('reports.payroll_details',$data);
 

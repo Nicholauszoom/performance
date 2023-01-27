@@ -33,6 +33,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GeneralController extends Controller
 {
@@ -7597,9 +7598,12 @@ class GeneralController extends Controller
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
-  ;
+        $pdf = Pdf::loadView('reports.terminalbenefit',compact('termination','employee_info'))->setPaper('a4', 'potrait');
+        //return $pdf->download('CARGO SALES NO # ' .  $purchases->pacel_number . ".pdf");
 
-        return view('workforce-management.terminal-balance', compact('termination','employee_info'));
+        return $pdf->download('terminal-benefit-slip.pdf');
+        //return view('reports.terminalbenefit',compact('termination'));
+        //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
     public function get_employee_available_info(Request $request){

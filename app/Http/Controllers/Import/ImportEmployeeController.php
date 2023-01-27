@@ -32,9 +32,9 @@ class ImportEmployeeController extends Controller
 
           //$data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
 
-          $data = Excel::import(new ImportHeslb, $request->file('file')->store('files'));
+          //$data = Excel::import(new ImportHeslb, $request->file('file')->store('files'));
 
-        // $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
+         $data = Excel::import(new ImportEmployee, $request->file('file')->store('files'));
 
         // $response_array['title'] = "SUCCESS";
         // header('Content-type: application/json');
