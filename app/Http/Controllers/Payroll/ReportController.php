@@ -676,7 +676,7 @@ class ReportController extends Controller
                 $data['payroll_date'] = $request->input("payrolldate");
                 //include(app_path() . '/reports/customleave_report.php');
                // include app_path() . '/reports/payslip.php';
-                return view('payroll.payslip2', $data);
+                return view('payroll.payslip3', $data);
 
             }
         } else {
@@ -2657,26 +2657,7 @@ EOD;
         $yyyy = $datewell[0];
         $date = $yyyy . "-" . $mm;
 
-        if ($reportType == 1) {
-            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
-            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
-        } else {
-            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
-            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
-        }
-
-        $data['info'] = $this->reports_model->company_info();
-        $data['payroll_month'] = $payrollMonth;
         $data['payroll_date'] = $request->payrolldate;
-        $data['pension_fund'] = $pensionFund;
-
-        $pension = $data['pension'];
-        $total = $data['total'];
-        $info = $data['info'];
-        $payroll_month = $data['payroll_month'];
-        $pension_fund = $data['pension_fund'];
-        $payroll_month = $date;
-        $info = $this->reports_model->company_info();
 
 
 
@@ -2690,7 +2671,9 @@ EOD;
 
    // return $pdf->download('itsolutionstuff.pdf');
 
-    return view('reports.payroll_details',$data);
+      //return view('reports.payrolldetails_datatable',$data);
+
+          return view('reports.payroll_details',$data);
 
    // include(app_path() . '/reports/temp_payroll.php');
     }

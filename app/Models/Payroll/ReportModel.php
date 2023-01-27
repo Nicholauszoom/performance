@@ -431,8 +431,9 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '".$date."' GROUP BY dl.empID),0) AS deductions,
 
-        (SELECT SUM(ll.paid) FROM loan_logs ll WHERE ll.loanID = e.id AND ll.payment_date = '".$date."' GROUP BY ll.loanID) AS loans
+        (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '".$date."' GROUP BY ll.loanID) AS loans,
 
+        (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '".$date."' GROUP BY ll.payment_date) AS total_loans
 
         from payroll_logs pl,employee e where e.emp_id = pl.empID  and pl.payroll_date='".$date."'
 

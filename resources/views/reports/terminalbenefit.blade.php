@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Larave Generate Invoice PDF - Nicesnippest.com</title>
+    <title>ABC Bank</title>
 </head>
 <style type="text/css">
     * {

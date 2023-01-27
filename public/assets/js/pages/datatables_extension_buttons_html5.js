@@ -34,12 +34,12 @@ const DatatableButtonsHtml5 = function() {
                 lengthMenu: '<span class="me-3">Show:</span> _MENU_',
                 paginate: { 'first': 'First', 'last': 'Last', 'next': document.dir == "rtl" ? '&larr;' : '&rarr;', 'previous': document.dir == "rtl" ? '&rarr;' : '&larr;' }
             }
-        }); 
+        });
 
 
         // Basic initialization
         $('.datatable-button-html5-basic').DataTable({
-            buttons: {            
+            buttons: {
                 dom: {
                     button: {
                         className: 'btn btn-light'
@@ -57,7 +57,7 @@ const DatatableButtonsHtml5 = function() {
 
         // File name
         $('.datatable-button-html5-name').DataTable({
-            buttons: {            
+            buttons: {
                 dom: {
                     button: {
                         className: 'btn btn-light'
@@ -79,10 +79,11 @@ const DatatableButtonsHtml5 = function() {
 
         // Column selectors
         $('.datatable-button-html5-columns').DataTable({
-            buttons: {            
+            buttons: {
                 buttons: [
                     {
                         extend: 'copyHtml5',
+                        footer: true,
                         className: 'btn btn-light',
                         exportOptions: {
                             columns: [ 0, ':visible' ]
@@ -90,6 +91,7 @@ const DatatableButtonsHtml5 = function() {
                     },
                     {
                         extend: 'excelHtml5',
+                        footer: true,
                         className: 'btn btn-light',
                         exportOptions: {
                             columns: ':visible'
@@ -97,13 +99,15 @@ const DatatableButtonsHtml5 = function() {
                     },
                     {
                         extend: 'pdfHtml5',
+                        footer: true,
                         className: 'btn btn-light',
                         exportOptions: {
-                            columns: [0, 1, 2, 5]
+                            columns: ':visible'
                         }
                     },
                     {
                         extend: 'colvis',
+                        footer: true,
                         text: '<i class="ph-list"></i>',
                         className: 'btn btn-primary btn-icon dropdown-toggle'
                     }
@@ -114,7 +118,7 @@ const DatatableButtonsHtml5 = function() {
 
         // Tab separated values
         $('.datatable-button-html5-tab').DataTable({
-            buttons: {            
+            buttons: {
                 buttons: [
                     {
                         extend: 'copyHtml5',
