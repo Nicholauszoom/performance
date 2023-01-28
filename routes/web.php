@@ -336,13 +336,20 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
         Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
         Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
+        Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
+        Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
+        Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
         // end of employee personal details  route
 
+        //start of grievances and disciplinary actions routes
+        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
 
-        Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
-        Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
-        Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
-        Route::any('/commentOvertime','commentOvertime')->name('flex.commentOvertime');
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+
+
+        // start of reconcilliation summary route
+
+        // ertime','commentOvertime')->name('flex.commentOvertime');
         Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
         Route::any('/employee','employee')->name('flex.employee');

@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('education_qualifications', function (Blueprint $table) {
+        Schema::create('professional_certifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employeeID');
-            $table->string('institute');
-            $table->string('level');
-            $table->string('course');
-            $table->string('start_year');
-            $table->string('end_year');
-            $table->string('study_location');
-            $table->string('final_score');
+            $table->string('cert_name');
+            $table->string('cert_start');
+            $table->string('cert_end');
+            $table->string('cert_qualification');
+            $table->string('cert_number');
+            $table->string('cert_status');
             // $table->string('certificate')->nullable();
             $table->timestamps();
         });
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('education_qualifications');
+        Schema::dropIfExists('professional_certifications');
     }
 };

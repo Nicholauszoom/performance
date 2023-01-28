@@ -97,11 +97,16 @@
                             </a>
                         </li>
 
-                        {{-- <li class="nav-item" role="presentation">
-                            <a href="#exit" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Submission Page
+                        <li class="nav-item" role="presentation">
+                            <a href="#page5" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                               Page 5
                             </a>
-                        </li> --}}
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#page6" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                               Page 6
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -212,21 +217,45 @@
                                                     <div class="form-group col-6 mb-3">
                                                         <label for="">Martial Status</label>
                                                        <br>
-                                                       <input type="radio" id="Single" name="merital" @foreach($employee as $item) {{$item->merital_status == "Single" ? 'checked':'' }} @endforeach value="Single">
-                                                       <label for="Single">Single</label>
-                                                       <br>
-                                                       <input type="radio" id="Married" name="merital" @foreach($employee as $item) {{$item->merital_status == "Married" ? 'checked':'' }} @endforeach value="Married">
-                                                       <label for="Married" class="pr-5">Married</label> &nbsp;
-                                                       <br>
-                                                       <label for="">Marriage Date</label> <input type="date" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
-                                                       <input type="radio" id="Separated" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Separated" ? 'checked':'' }} @endforeach value="Separated">
-                                                       <label for="Separated">Separated</label><br>
-                                                       <input type="radio" id="divorced" name="merital" id="Divorced" @foreach($employee as $item) {{$item->merital_status == "Divorced" ? 'checked':'' }} @endforeach value="Divorced">
-                                                       <label for="divorced" class="pr-5">Divorced</label> <br>
-                                                       Divorced Date</label> <input type="date"  name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
-                                                       <br>
-                                                       <input type="radio" id="widow" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Widow/Widower" ? 'checked':'' }} @endforeach value="Widow/Widower">
-                                                       <label for="widow">Widow/Widower</label><br>
+                                                       <div class="row">
+                                                        <div class="col-2 mb-2">
+                                                            <input type="radio" id="Single" name="merital" @foreach($employee as $item) {{$item->merital_status == "Single" ? 'checked':'' }} @endforeach value="Single">
+                                                            <label for="Single">Single</label>
+                                                        </div>
+                                                        <div class="col mb-2">
+
+                                                            <input type="radio" id="Married" name="merital" @foreach($employee as $item) {{$item->merital_status == "Married" ? 'checked':'' }} @endforeach value="Married">
+                                                            <label for="Married" class="pr-5">Married</label> &nbsp;
+                                                            <br>
+
+                                                        </div>
+                                                        {{-- <div class="col">
+                                                            <label for="">Marriage Date</label>
+                                                            {{-- <br>
+                                                            <input type="date" class="col-8" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
+
+                                                        </div> --}}
+                                                        <div class="col-3 mb-2">
+                                                            <input type="radio" id="Separated" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Separated" ? 'checked':'' }} @endforeach value="Separated">
+                                                            <label for="Separated">Separated</label>
+                                                        </div>
+                                                        <div class="col-3 mb-2">
+                                                            <input type="radio" id="divorced" name="merital" id="Divorced" @foreach($employee as $item) {{$item->merital_status == "Divorced" ? 'checked':'' }} @endforeach value="Divorced">
+                                                            <label for="divorced" class="pr-5">Divorced</label> <br>
+
+                                                        </div>
+                                                        {{-- <div class="col">
+                                                            <label>Divorced Date</label><br>
+                                                            <input type="date"  name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
+                                                           <br>
+                                                        </div> --}}
+                                                        <div class="col mb-2">
+                                                            <input type="radio" id="widow" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Widow/Widower" ? 'checked':'' }} @endforeach value="Widow/Widower">
+                                                            <label for="widow">Widow/Widower</label><br>
+                                                        </div>
+                                                       </div>
+
+
 
                                                     </div>
                                                     <div class="form-group col-12 mb-2">
@@ -407,7 +436,7 @@
                                                     <label for="">Current Job Title: <?php echo $title; ?></label>
                                                     <div class="">
                                                         <select class="form-control select1_single select @error('newPosition') is-invalid @enderror" id="current_job" name="current_job">
-                                                            <option value="<?php echo $positionID; ?>S"><?php echo $title; ?></option>
+                                                            <option value="<?php echo $title; ?>"><?php echo $title; ?></option>
                                                             @foreach ($pdrop as $item)
                                                             <option value="{{ $item->name }}">{{ $item->name }} </option>
                                                             @endforeach
@@ -537,8 +566,36 @@
                                         Children/Dependants Details:
                                       </div>
                                       <div class="card-body">
+                                        <h5>Add Dependant</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6 mb-2">
+                                                <label for="">Name (First Two)</label><br>
+                                                <input type="text" name="dep_name" placeholder="Enter Dependants First and Second Name" class="form-control" />
 
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label for="">Surname</label><br>
+                                                <input type="text" name="dep_surname" placeholder="Enter Dependants Surname" class="form-control" />
 
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label for="">Birth Certificate Number</label><br>
+                                                <input type="text" name="dep_certificate" placeholder="Enter Birth Certificate Number" class="form-control" />
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label for="">Birhdate</label><br>
+                                                <input type="date" name="dep_birthdate" placeholder="Enter Dependants Birthdate" class="form-control" />
+
+                                            </div>
+                                            <div class="col-4 mb-2">
+                                                <label for="">Gender</label><br>
+                                                <input type="radio" id="dep_male" name="dep_gender" value="M"> <label for="dep_male">Male (M)</label>
+                                                <input type="radio" id="dep_female" name="dep_gender" value="F"> <label for="dep_female">Female (F)</label>
+                                            </div>
+
+                                        </div>
+                                        <hr>
 
                                         <table class="table table-border-none" id="dynamicAddRemove">
                                             <tr>
@@ -562,21 +619,13 @@
                                                 </a>
                                             </td>
                                           </tr>
+
                                           @empty
-                                          <tr>
-                                            <td>
-                                                <input type="text" name="moreFields[0][dep_name]" placeholder="" class="form-control" />
-                                                <input type="hidden" name="moreFields[0][employeeID]" value="<?php echo $empID; ?>"  class="form-control" />
-                                            </td>
-                                            <td><input type="text" name="moreFields[0][dep_surname]" placeholder="" class="form-control" /></td>
-                                            <td><input type="text" name="moreFields[0][dep_birthdate]" placeholder="" class="form-control" /></td>
-                                            <td><input type="text" name="moreFields[0][dep_gender]" placeholder="" class="form-control" /></td>
-                                            <td><input type="text" name="moreFields[0][dep_certificate]" placeholder="" class="form-control" /></td>
-                                            <td><button type="button" name="add" id="add-btn" class="btn btn-main btn-sm">+child</button></td>
-                                            </tr>
+
                                           @endforelse
 
                                             </table>
+
                                       </div>
                                     </div>
                                   </div>
@@ -586,15 +635,48 @@
                                           Parents Details:
                                       </div>
                                       <div class="card-body">
+                                        <h5>Add Parent</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-6 mb-2">
+                                                <label for="">Names (Three Names)</label><br>
+                                                <input type="text" name="parent_names" placeholder="Enter Parents Name" class="form-control" />
 
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label for="">Relationship</label><br>
+
+                                                <select name="parent_relation" id="" class="select custom-select form-control">
+                                                    <option value="Father">Father</option>
+                                                    <option value="Mother">Mother</option>
+                                                    <option value="Guardian">Guardian</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label for="">Birthdate</label><br>
+                                                <input type="date" name="parent_birthdate" placeholder="" class="form-control" />
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label for="">Residence  (City/Region & Country)</label><br>
+                                                <input type="text" name="parent_residence" placeholder="Enter Parent's Residence" class="form-control" />
+
+                                            </div>
+                                            <div class="col-4 mb-2">
+                                                <label for="">Living Status</label><br>
+                                                <input type="radio" id="Alive" name="parent_living_status" value="Alive"> <label for="Alive">Alive</label>
+                                                <input type="radio" id="Deceased" name="parent_living_status" value="Deceased"> <label for="Deceased">Deceased</label>
+                                            </div>
+
+                                        </div>
+                                        <hr>
 
 
                                           <table class="table table-border-none" id="dynamicAddRemoveParent">
                                           <tr>
-                                          <th class="text-center">Names <br> (Three Names)</th>
+                                          <th class="text-center">Names (Three Names)</th>
                                           <th>Relationship</th>
                                           <th>Birthdate</th>
-                                          <th class="text-center">Residence <br> (City/Region & Country)</th>
+                                          <th class="text-center">Residence  (City/Region & Country)</th>
                                           <th>Living Status</th>
                                           <th>Action</th>
                                           </tr>
@@ -613,17 +695,7 @@
                                             </td>
                                           </tr>
                                           @empty
-                                          <tr>
-                                            <td>
-                                              <input type="text" name="moreParent[0][parent_names]" placeholder="" class="form-control" />
-                                              <input type="hidden" name="moreParent[0][employeeID]" value="<?php echo $empID; ?>"  class="form-control" />
-                                          </td>
-                                            <td><input type="text" name="moreParent[0][parent_relation]" placeholder="" class="form-control" /></td>
-                                            <td><input type="text" name="moreParent[0][parent_birthdate]" placeholder="" class="form-control" /></td>
-                                            <td><input type="text" name="moreParent[0][parent_residence]" placeholder="" class="form-control" /></td>
-                                            <td><input type="text" name="moreParent[0][parent_living_status]" placeholder="" class="form-control" /></td>
-                                            <td><button type="button" name="add" id="add-btn1" class="btn btn-main btn-sm">+parent</button></td>
-                                            </tr>
+
                                           @endforelse
 
 
@@ -661,14 +733,277 @@
                     </div>
                     {{-- / --}}
 
-                    {{-- Exit --}}
-                    <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
+                    {{-- Page 5 --}}
+                    <div role="tabpanel" class="tab-pane " id="page5" aria-labelledby="exit-tab">
                         <div class="card border-0 shadow-none">
 
+                            <div class="card-header">
+                                <h4 class="text-main">EDUCATIONAL BACKGROUND: </h4>
+                            </div>
+                            <div class="row p-2">
+
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <h5>Add Academic Qualification</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Name of University</label>
+                                                <input type="text" name="institute" id="institute"  placeholder="Enter University Name" class="form-control" >
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Qualification Obtained </label>
+                                                <select name="level" id="level" class="select custom-select form-control">
+                                                    <option value="Certificate">Certificate </option>
+                                                    <option value="Diploma">Diploma </option>
+                                                    <option value="Degree">Degree </option>
+                                                    <option value="Masters">Masters </option>
+                                                    <option value="PhD">PhD </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Disciplinary of Study </label>
+                                                <input type="text" name="course" id="course"  placeholder="Enter Disciplinary of Study e.g Accounting/Marketing Law/Business etc" class="form-control" >
+                                            </div>
+
+                                                <div class="col-md-3 mb-2">
+                                                    <label for="">Start Year</label>
+                                                    <input type="year" name="start_year" id="start_year"  placeholder="Start Year" class="form-control" >
+                                                </div>
+                                                <div class="col-md-3 mb-2">
+                                                    <label for="">Finish Year</label>
+                                                    <input type="year" name="finish_year"  id="finish_year"  placeholder="Finish Year" class="form-control" >
+                                                </div>
+
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="">Location of Study</label>
+                                                    <input type="text" name="study_location"  id="study_location"  placeholder="Location of Study" class="form-control" >
+                                                </div>
+
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="">Final Score & Grades</label>
+                                                    <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
+                                                </div>
+
+                                        </div>
+                                        <hr>
+
+                                        <table class="table table-border-none" id="dynamicAddRemove">
+                                            <tr>
+                                            <th class="text-center">From /To(Month & Year)</th>
+                                            <th class="text-center">University/College/School (From highest level of education)</th>
+                                            <th class="text-center">Qualification Obtained </th>
+                                            <th class="text-center">Disciplinary of Study </th>
+                                            <th class="text-center">Location </th>
+                                            <th class="text-center">Final Score & Grades</th>
+                                            <th class="text-center">Action</th>
+                                            @forelse ( $qualifications as $item )
+                                          <tr>
+
+                                            <td class="text-center">{{ $item->start_year}} - {{ $item->end_year}} </td>
+                                            <td class="text-center">{{ $item->institute }} </td>
+                                            <td class="text-center">{{ $item->level }}</td>
+                                            <td class="text-center">{{ $item->course }}</td>
+                                            <td class="text-center">{{ $item->study_location }} </td>
+                                            <td class="text-center">{{ $item->final_score }} </td>
+                                            <td class="text-center">
+                                            <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn danger">
+                                                    <i class="ph-trash"></i>
+                                                </a>
+                                            </td>
+                                          </tr>
+
+                                          @empty
+
+                                          @endforelse
+
+                                            </table>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                <div class="col-md-12">
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <h5>Add Professional Certifications/License</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Name of Certification/License</label>
+                                                <input type="text" name="cert_name" id="institute"  placeholder="Enter Name of Certification/License" class="form-control" >
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="">Qualification Obtained </label>
+                                                <input type="text" name="cert_qualification" id="cert_qualification"  placeholder="Enter Qualification Obtained " class="form-control" >
+
+                                            </div>
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Membership Number</label>
+                                                <input type="text" name="cert_number" id="cert_number" placeholder="Enter Membership Number" class="form-control" >
+                                            </div>
+
+                                                <div class="col-md-3 mb-2">
+                                                    <label for="">Start Year</label>
+                                                    <input type="year" name="cert_start" id="cert_start"  placeholder="Start Year" class="form-control" >
+                                                </div>
+                                                <div class="col-md-3 mb-2">
+                                                    <label for="">Finish Year</label>
+                                                    <input type="year" name="cert_end"  id="cert_end" placeholder="Finish Year" class="form-control" >
+                                                </div>
+
+                                                <div class="col-4 mb-2">
+                                                    <label for="">Status </label><br>
+                                                    <input type="radio" id="active" name="cert_status" value="Active"> <label for="active">Active</label>
+                                                    <input type="radio" id="inactive" name="cert_status" value="Active"> <label for="inactive">Inactive</label>
+                                                </div>
+
+                                        </div>
+                                        <hr>
+
+
+                                          <table class="table table-border-none" id="dynamicAddRemoveParent">
+                                          <tr>
+                                          <th class="text-center">From/To (Month & Year)</th>
+                                          <th class="text-center">Name of Professional Certification/License If any</th>
+                                          <th class="text-center">Qualification Obtained </th>
+                                          <th class="text-center">Membership Number</th>
+                                          <th class="text-center">Status Active/ Inactive</th>
+                                          <th class="text-center">Action</th>
+                                          </tr>
+                                          @forelse ( $certifications as $item )
+                                          <tr>
+
+                                            <td class="text-center" >{{ $item->cert_start}} - {{ $item->cert_end }}</td>
+                                            <td class="text-center" >{{ $item->cert_name }} </td>
+                                            <td class="text-center">{{ $item->cert_qualification }}</td>
+                                            <td class="text-center">{{ $item->cert_number }}</td>
+                                            <td class="text-center">{{ $item->cert_status }} </td>
+                                            <td>
+                                                 <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn danger">
+                                                    <i class="ph-trash"></i>
+                                                </a>
+                                            </td>
+                                          </tr>
+                                          @empty
+
+                                          @endforelse
+
+
+                                          </table>
+
+
+                                      </div>
+                                    </div>
+                                  </div>
+
+
+
+                            </div>
 
                         </div>
                      </div>
                     {{-- / --}}
+
+                    {{-- Page 6 --}}
+                    <div role="tabpanel" class="tab-pane " id="page6" aria-labelledby="exit-tab">
+                        <div class="card border-0 shadow-none">
+
+                            <div class="card-header">
+                                <h4 class="text-main">EMPLOYMENT HISTORY: </h4>
+                            </div>
+                            <div class="row p-2">
+
+
+                                <div class="col-md-12">
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <h5>Add Employment History</h5>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Name of Employer</label>
+                                                <input type="text" name="hist_employer" id="hist_employer"  placeholder="Enter Name of Employer" class="form-control" >
+                                            </div>
+
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Industry</label>
+                                                <input type="text" name="hist_industry" id="hist_industry"  placeholder="Enter Industry Auditing/Telecom Financial/Mining etc" class="form-control" >
+                                            </div>
+
+                                            <div class="col-md-6 mb-2">
+                                                <label for="">Position Held at the time of exit</label>
+                                                <input type="text" name="hist_position" id="hist_position"  placeholder="Enter Disciplinary of Study e.g Accounting/Marketing Law/Business etc" class="form-control" >
+                                            </div>
+
+                                                <div class="col-md-3 mb-2">
+                                                    <label for="">Start Year</label>
+                                                    <input type="year"  name="hist_start" id="hist_start"   placeholder="Start Year" class="form-control" >
+                                                </div>
+                                                <div class="col-md-3 mb-2">
+                                                    <label for="">Finish Year</label>
+                                                    <input type="year" name="hist_end"  id="hist_end"  placeholder="Finish Year" class="form-control" >
+                                                </div>
+
+                                                <div class="col-md-12 mb-2">
+                                                    <label for="">Reason for Leaving</label>
+                                                    <textarea name="hist_reason" id="" class="form-control" placeholder="Enter Reason for Leaving Here" rows="4"></textarea>
+                                                </div>
+
+                                                <div class="col-4">
+                                                    <label for="hist_status">Employment Status</label>
+                                                    <select name="hist_status" id="hist_status" class="select form-control">
+                                                        <option value="Permanent">Permanent</option>
+                                                        <option value="Fixed Term">Fixed Term</option>
+                                                        <option value="Internship">Internship</option>
+                                                    </select>
+                                                </div>
+
+                                        </div>
+                                        <hr>
+
+                                        <table class="table table-border-none" id="dynamicAddRemove">
+                                            <tr>
+                                            <th class="text-center">From /To(Month & Year)</th>
+                                            <th class="text-center">Employer</th>
+                                            <th class="text-center">Industry Auditing/Telecom Financial/Mining etc </th>
+                                            <th class="text-center">Position Held at the time of exit</th>
+                                            <th class="text-center">Employment Status</th>
+                                            <th class="text-center">Reason for Leaving</th>
+                                            <th class="text-center">Action</th>
+                                            @forelse ( $histories as $item )
+                                          <tr>
+
+                                            <td class="text-center">{{ $item->hist_start}} - {{ $item->hist_end}} </td>
+                                            <td class="text-center">{{ $item->hist_employer }} </td>
+                                            <td class="text-center">{{ $item->hist_industry }} </td>
+                                            <td class="text-center">{{ $item->hist_position }}</td>
+                                            <td class="text-center">{{ $item->hist_status }}</td>
+                                            <td class="text-center">{{ $item->hist_reason }} </td>
+                                            <td class="text-center">
+                                                <a href="{{ url('flex/delete-history/'.$item->id) }}" class="btn btn-sm btn danger">
+                                                    <i class="ph-trash"></i>
+                                                </a>
+                                            </td>
+                                          </tr>
+
+                                          @empty
+
+                                          @endforelse
+
+                                            </table>
+
+                                      </div>
+                                    </div>
+                                  </div>
+
+                            </div>
+                        </div>
+                     </div>
+                    {{-- / --}}
+
+
 
                 </div>
                 <div class="card-footer ">

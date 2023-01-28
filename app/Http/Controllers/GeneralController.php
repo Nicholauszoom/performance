@@ -27,6 +27,7 @@ use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
 use App\Models\EmployeeDependant;
+use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
@@ -34,11 +35,12 @@ use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Notifications\RegisteredUser;
 
+use App\Notifications\RegisteredUser;
 use App\Models\EducationQualification;
 use Illuminate\Support\Facades\Redirect;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
+use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
@@ -7971,6 +7973,12 @@ public function viewProfile(Request $request,$id)
 
         $parents=EmployeeParent::where('employeeID',$empID)->get();
 
+        $data['qualifications'] =EducationQualification::where('employeeID',$empID)->orderBy('end_year','desc')->get();
+
+
+        $data['certifications'] =ProfessionalCertification::where('employeeID',$empID)->orderBy('cert_end','desc')->get();
+
+        $data['histories'] =EmploymentHistory::where('employeeID',$empID)->orderBy('hist_end','desc')->get();
 
         $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
 
@@ -8189,19 +8197,150 @@ public function updateEmployeeDetails(Request $request)
             // start of depedants details
 
         $emp_id=$request->employeeID;
-        $dep=EmployeeDependant::where('employeeID',$emp_id)->first();
-        if($request->moreFields!=''){
-            foreach ($request->moreFields as $key => $value) {
-                    EmployeeDependant::create($value);
-                }
+        $cert=$request->dep_certficate;
+        $dependant=EmployeeDependant::where('employeeID',$emp_id)
+                              ->Where('dep_certificate','LIKE',$request->dep_certficate)
+                              ->where('dep_surname',$request->dep_surname)
+                                ->first();
+
+
+
+        if($dependant)
+        {
+
+            // $dependant->employeeID=$request->employeeID;
+            $dependant->dep_name=$request->dep_name;
+            $dependant->dep_surname=$request->dep_surname;
+            $dependant->dep_birthdate=$request->dep_birthdate;
+            $dependant->dep_gender=$request->dep_gender;
+            $dependant->dep_certificate=$request->dep_certificate;
+
+            $dependant->update();
+        }
+        else
+        {
+            if($request->dep_name!='' || $request->dep_certificate!='')
+            {
+                $dependant=new EmployeeDependant();
+
+                $dependant->employeeID=$request->employeeID;
+                $dependant->dep_name=$request->dep_name;
+                $dependant->dep_surname=$request->dep_surname;
+                $dependant->dep_birthdate=$request->dep_birthdate;
+                $dependant->dep_gender=$request->dep_gender;
+                $dependant->dep_certificate=$request->dep_certificate;
+
+                $dependant->save();
+            }
+
+
         }
 
+
+
+
+        // if($request->moreFields!=''){
+        //     foreach ($request->moreFields as $key => $value) {
+        //             EmployeeDependant::create($value);
+        //         }
+        // }
+
                 //  start of parents details
-                if($request->moreParent!=''){
-                    foreach ($request->moreParent as $key => $value) {
-                            EmployeeParent::create($value);
-                        }
-                }
+
+
+                $empID=$request->employeeID;
+
+
+                // dd($request->parent_living_status);
+        $parent=EmployeeParent::where('employeeID',$empID)
+                                ->Where('parent_relation','LIKE',$request->parent_relation)
+                                ->where('parent_birthdate','LIKE',$request->parent_birthdate)
+                                ->first();
+
+                if($parent)
+        {
+            $parent->employeeID=$request->employeeID;
+            $parent->parent_names=$request->parent_names;
+            $parent->parent_relation=$request->parent_relation;
+            $parent->parent_birthdate=$request->parent_birthdate;
+            $parent->parent_residence=$request->parent_residence;
+            $parent->parent_living_status=$request->parent_living_status;
+
+            $parent->update();
+        }
+        else
+        {
+            if($request->parent_names!=null && $request->parent_relation!=null)
+            {
+                $parent=new EmployeeParent();
+
+                $parent->employeeID=$request->employeeID;
+                $parent->parent_names=$request->parent_names;
+                $parent->parent_relation=$request->parent_relation;
+                $parent->parent_birthdate=$request->parent_birthdate;
+                $parent->parent_residence=$request->parent_residence;
+                $parent->parent_living_status=$request->parent_living_status;
+
+                $parent->save();
+            }
+
+
+        }
+
+        if($request->institute!=null && $request->course!=null )
+        {
+            $qualification=new EducationQualification();
+
+            $qualification->employeeID=$request->employeeID;
+            $qualification->institute=$request->institute;
+            $qualification->level=$request->level;
+            $qualification->course=$request->course;
+            $qualification->start_year=$request->start_year;
+            $qualification->end_year=$request->finish_year;
+            $qualification->final_score=$request->final_score;
+            $qualification->study_location=$request->study_location;
+
+            $qualification->save();
+        }
+
+
+
+
+        if($request->cert_qualification!=null && $request->cert_number!=null )
+        {
+            $certification=new ProfessionalCertification();
+
+            $certification->employeeID=$request->employeeID;
+            $certification->cert_start=$request->cert_start;
+            // dd($request->cert_start);
+            $certification->cert_end=$request->cert_end;
+            $certification->cert_name=$request->cert_name;
+            $certification->cert_qualification=$request->cert_qualification;
+            $certification->cert_number=$request->cert_number;
+            $certification->cert_status=$request->cert_status;
+
+
+            $certification->save();
+        }
+
+
+
+        if($request->hist_employer!=null && $request->hist_position!=null )
+        {
+            $history=new EmploymentHistory();
+
+            $history->employeeID=$request->employeeID;
+            $history->hist_start=$request->hist_start;
+            $history->hist_end=$request->hist_end;
+            $history->hist_employer=$request->hist_employer;
+            $history->hist_industry=$request->hist_industry;
+            $history->hist_position=$request->hist_position;
+            $history->hist_status=$request->hist_status;
+            $history->hist_reason=$request->hist_reason;
+
+            $history->save();
+        }
+
 
          }
 
@@ -8230,7 +8369,7 @@ public function updateEmployeeDetails(Request $request)
 
                      $child->delete();
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('status','Employee Dependant is Deleted successfully !');
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Dependant is Deleted successfully !');
 
              }
 
@@ -8243,9 +8382,45 @@ public function updateEmployeeDetails(Request $request)
 
                      $parent->delete();
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('status','Employee Parent is Deleted successfully !');
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Parent is Deleted successfully !');
+
+             }
+
+             public function deleteQualification($id)
+             {
+                 $qualification=EducationQualification::find($id);
+
+                 $empID=$qualification->employeeID;
+
+                     $qualification->delete();
+
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Education Qualification was Deleted successfully !');
+
+             }
+
+             public function deleteCertification($id)
+             {
+                 $certification=ProfessionalCertification::find($id);
+
+                 $empID=$certification->employeeID;
+
+                     $certification->delete();
+
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Professional Certification was Deleted successfully !');
 
              }
 
 
-}
+             public function deleteHistory($id)
+             {
+                 $history=EmploymentHistory::find($id);
+
+                 $empID=$history->employeeID;
+
+                     $history->delete();
+
+                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Employment History was Deleted successfully !');
+
+             }
+
+    }
