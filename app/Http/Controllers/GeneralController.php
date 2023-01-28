@@ -5457,7 +5457,8 @@ class GeneralController extends Controller
 
                 $data = array(
                     'name' => $request->input('name'),
-                    'type' => $request->input('type'),
+                    //'type' => $request->input('type'),
+                    'type' => 2,
                     'created_by' => session('emp_id'),
                 );
 
