@@ -91,24 +91,24 @@
                                 ?>
 
                                 <tr>
-                                    <td class=""><b>{{ $row->emp_id }}</b></td>
+                                    <td><b>{{ $row->emp_id }}</b></td>
 
-                                    <td class=""><b>{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}</b></td>
-                                    <td class="text-end"><b>{{ $row->salary }}</b></td>
-                                    <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>{{ $row->allowances }}</b></td>
-                                    <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>0<b></td>
-                                    <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>{{ $row->salary + $row->allowances }}</b></td>
-                                    <td class="text-end"><b>0</b></td>
-                                    <td class="text-end"><b>Taxable Gross</b></td>
-                                    <td class="text-end"><b>{{ $row->taxdue }}</b></td>
-                                    <td class="text-end"><b>{{ $row->pension_employer + $row->pension_employee }}</b></td>
-                                    <td class="text-end"><b>{{ $row->pension_employer + $row->pension_employee + $row->taxdue }}</b></td>
-                                    <td class="text-end"><b>{{ $amount_takehome }}</b></td>
+                                    <td><b>{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}</b></td>
+                                    <td><b>{{ $row->salary }}</b></td>
+                                    <td><b>0</b></td>
+                                    <td><b>{{ $row->allowances }}</b></td>
+                                    <td><b>0</b></td>
+                                    <td><b>0</b></td>
+                                    <td><b>0</b></td>
+                                    <td><b>0<b></td>
+                                    <td><b>0</b></td>
+                                    <td><b>{{ $row->salary + $row->allowances }}</b></td>
+                                    <td><b>0</b></td>
+                                    <td><b>Taxable Gross</b></td>
+                                    <td><b>{{ $row->taxdue }}</b></td>
+                                    <td><b>{{ $row->pension_employer + $row->pension_employee }}</b></td>
+                                    <td><b>{{ $row->pension_employer + $row->pension_employee + $row->taxdue }}</b></td>
+                                    <td><b>{{ $amount_takehome }}</b></td>
 
 
                                 </tr>
@@ -120,48 +120,45 @@
                 </div>
 
                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+
+
                     <div class="col-md-12">
-                        <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
-                        {{-- <h5>FINANCE DEPARTMENT</h5> --}}
-                        <div class="col-md-12 p-2" style="border:solid 1px gray ;border-bottom:none;">
-                            <p><small><b>Prepared By</b></small></p>
+                        <table class="table datatable-button-html5-columns" style="font-size:9px;">
 
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-                            <br>
-                            <p><small><b>Checked and Approved By</b></small></p>
+                            <thead>
+                                <tr>
+                                    <th>Initiated By:</th>
+                                    <th>name..........................................</th>
+                                    <th>position......................................</th>
+                                    <th>signature.....................................</th>
+                                    <th>date..........................................</th>
+                                </tr>
+                                <tr>
+                                    <th>Checked & Approved By:</th>
+                                    <th>name...........................................</th>
+                                    <th>position.......................................</th>
+                                    <th>signature......................................</th>
+                                    <th>date..........................................</th>
+                                </tr>
+                                <tr>
+                                    <th>Checked & Approved By:</th>
+                                    <th>name............................................</th>
+                                    <th>position.........................................</th>
+                                    <th>signature.......................................</th>
+                                    <th>date.............................................</th>
+                                </tr>
+                                <tr>
+                                    <th>Approved By:</th>
+                                    <th>name.............................................</th>
+                                    <th>position..........................................</th>
+                                    <th>signature.........................................</th>
+                                    <th>date................................................</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            </>
+                    </div>
 
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-
-                            <p><small><b>Checked and Approved By</b></small></p>
-
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-
-                            <p><small><b>Approved By</b></small></p>
-
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-                        </div>
-                        <hr>
-                    </div><br>
 
                 </div>
 

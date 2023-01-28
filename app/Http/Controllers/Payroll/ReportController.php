@@ -17,6 +17,8 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceModel;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 // use PDF;
 // use App\Helpers\SysHelpers;
 class ReportController extends Controller
@@ -343,24 +345,13 @@ class ReportController extends Controller
         $yyyy = $datewell[0];
         $date = $yyyy . "-" . $mm;
 
-        if ($reportType == 1) {
-            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
-            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
-        } else {
-            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
-            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
-        }
+
 
         $data['info'] = $this->reports_model->company_info();
         $data['payroll_month'] = $payrollMonth;
         $data['pension_fund'] = $pensionFund;
 
-        $pension = $data['pension'];
-        $total = $data['total'];
-        $info = $data['info'];
-        $payroll_month = $data['payroll_month'];
-        $pension_fund = $data['pension_fund'];
-        $payroll_month = $date;
+
         $info = $this->reports_model->company_info();
 
 
@@ -1815,85 +1806,52 @@ class ReportController extends Controller
         }
     }
 
-    public function temporaryAllowanceMWPExport(Request $request)
+    public function payrollReconciliationSummary(Request $request)
     {
-        // dd($request->all());
 
-        if (1) {
-            $payroll_date = $request->input('payrolldate');
-            //start
-            $todayDate = date('d/m/Y');
-            $object = new Spreadsheet();
+        $calendar = $request->payrolldate;
 
-            $filename = "temporary_Allowance_MWP" . date('Y_m_d_H_i_s') . ".xls";
-            $object->setActiveSheetIndex(0);
+        $previousDate = date('Y-m-d', strtotime($calendar. ' -1 months'));
 
-            $table_columns = array(
-                "Payment Type", "Debit Accounts", "Branch Name", "Payee or Beneficiary", "Amount", "Mobile number", "Email", "Payment Details",
 
-            );
+        $datewell = explode("-", $calendar);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
 
-            $column = 0;
-            foreach ($table_columns as $field) {
-                //$object->getActiveSheet()->getCell("H2")->setValue("");
+        $termination_date = $yyyy . "-" . $mm . "-" . $dd;
+        $j_mm = "01";
+        $j_dd = "01";
+        $january_date = $yyyy."-" . $j_mm . "-" . $j_dd;
+        $termination_month = $yyyy . "-" . $mm;
+        $empID = auth()->user()->emp_id;
+        $today = date('Y-m-d');
 
-                $object->getActiveSheet()->setCellValueByColumnAndRow($column, 2, $field);
+        $current_payroll_month = $request->input('payrolldate');
+        $reportType = $request->input('type'); //Staff = 1, temporary = 2
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-                $column++;
-            }
-            $j = 2;
-            for ($i = 'A'; $i <= 'H'; $i++) {
-                $object->getActiveSheet()->getColumnDimension("$i")->setAutoSize(true);
-                $object->getActiveSheet()->getStyle("$i$j")->getFont()->setBold(true);
-                $object->getActiveSheet()->getStyle("$i$j")->applyFromArray(
-                    array(
-                        'borders' => array(
-                            'allborders' => array(
-                                'style' => Border::BORDER_THIN,
-                                'color' => array('rgb' => '000000'),
-                            ),
-                        ),
-                    )
-                );
-            }
+       // dd($previous_payroll_month_raw);
+        $data['payroll_date'] = $request->payrolldate;
+        $data['total_previous_gross'] = !empty($previous_payroll_month)?$this->reports_model->s_grossMonthly($previous_payroll_month):0;
+        $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+        $data['count_previous_month'] = $this->reports_model->s_count($previous_payroll_month);
+        $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
+        $data['total_previous_overtime'] = $this->reports_model->s_overtime($previous_payroll_month);
+        $data['total_current_overtime'] = $this->reports_model->s_overtime($current_payroll_month);
 
-            //FROM DATABASE
-            $payroll_totals = $this->reports_model->temporaryAllowanceMWPExport($payroll_date);
-            $data_row = 3;
-            $serialNo = 1;
+        $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month,$previous_payroll_month);
 
-            foreach ($payroll_totals as $row) {
-                $amount = $row->salary + $row->allowances - $row->pension - $row->loans - $row->deductions - $row->meals - $row->taxdue;
+        $data['total_previous_basic'] = !empty($previous_payroll_month)?$this->reports_model->total_basic($previous_payroll_month):0;
+        $data['total_current_basic'] = !empty($current_payroll_month)?$this->reports_model->total_basic($current_payroll_month):0;
 
-                if ($row->mname == ' ' || $row->mname == '' || $row->mname == null) {
-                    $empName = trim($row->fname) . ' ' . trim($row->lname);
-                } else {
-                    $empName = trim($row->fname) . ' ' . trim($row->mname) . ' ' . trim($row->lname);
-                }
+        $data['total_previous_net'] = !empty($previous_payroll_month)?$this->reports_model->s_grossMonthly($previous_payroll_month):0;
+        $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
-                $object->getActiveSheet()->setCellValueByColumnAndRow(0, $data_row, "MWP");
-                $object->getActiveSheet()->setCellValueByColumnAndRow(1, $data_row, "0108006211500");
-                $object->getActiveSheet()->setCellValueByColumnAndRow(2, $data_row, strtoupper($row->branch_name));
-                $object->getActiveSheet()->setCellValueByColumnAndRow(3, $data_row, $empName);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(4, $data_row, number_format($amount, 2));
-                $object->getActiveSheet()->setCellValueByColumnAndRow(5, $data_row, $row->mobile);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(6, $data_row, $row->email);
-                $object->getActiveSheet()->setCellValueByColumnAndRow(7, $data_row, "Living Allowance");
 
-                for ($i = 'A'; $i <= 'H'; $i++) {
-                    $object->getActiveSheet()->getStyle("$i$data_row")->applyFromArray(
-                        array(
-                            'borders' => array(
-                                'allborders' => array(
-                                    'style' => Border::BORDER_THIN,
-                                    'color' => array('rgb' => '000000'),
-                                ),
-                            ),
-                        )
-                    );
-                }
-                $data_row++;
-            }
+       // $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
+       // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
             $writer = new Xls($object); // instantiate Xlsx
             header('Content-Type: application/vnd.ms-excel'); // generate excel file
@@ -1906,6 +1864,14 @@ class ReportController extends Controller
         } else {
             exit("Invalid Resource Access");
         }
+    }
+
+
+        //return $pdf->download('sam.pdf');
+
+
+        //return $pdf->download('payroll_reconciliation_summary.pdf');
+        return view('reports.payroll_reconciliation_summary1',$data);
     }
 
     #################################END PROJECT REPORTS##############################
@@ -2566,7 +2532,7 @@ EOD;
 
     public function grossReconciliation(Request $request)
     {
-        dd($request->all());
+       // dd($request->all());
 
         if (1) {
             $current_payroll_month = $request->input('payrolldate');
@@ -2699,10 +2665,30 @@ EOD;
 
 
         $summary = $data['summary'];
+    $summary = $data['summary'];
+
+    //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
+
+    //$pdf = Pdf::loadView('reports.payroll_details',$data);
+
+
+
+    //return $pdf->download('itsolutionstuff.pdf');
 
         return view('reports.payroll_details', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
+    }
+
+    public function payrollReportLogs(Request $request)
+    {
+        $data['payroll_date'] = $request->payrolldate;
+        $data['logs'] = $this->flexperformance_model->financialLogs($data['payroll_date']);
+
+                $data['title'] = 'Payroll Input Changes Approval Report';
+        $data['parent'] = 'Payroll Log Report';
+
+        return view('reports.input_approval', $data);
     }
 
 

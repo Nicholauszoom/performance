@@ -796,6 +796,9 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/get_payroll_temp_summary/{date}','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
         Route::any('/get_payroll_temp_summary1/{date}','get_payroll_temp_summary1')->name('reports.get_payroll_temp_summary1');
 
+
+        Route::any('/payrollReportLogs', 'payrollReportLogs')->name('reports.payrollReportLogs');
+
         Route::any('/pay_checklist','pay_checklist')->name('reports.pay_checklist');
         Route::any('/all_arrears','all_arrears')->name('reports.all_arrears');
         Route::any('/employee_arrears','employee_arrears')->name('reports.employee_arrears');
@@ -816,16 +819,19 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/payrollInputJournalExport','payrollInputJournalExport')->name('reports.payrollInputJournalExport');
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
-        Route::any('/temporaryAllowanceMWPExport','temporaryAllowanceMWPExport')->name('reports.temporaryAllowanceMWPExport');
+        Route::any('/payrollReconciliationSummary','payrollReconciliationSummary')->name('reports.payrollReconciliationSummary');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
+        Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
+
+
         Route::any('/employeeCostExport','employeeCostExport')->name('reports.employeeCostExport');
         Route::any('/employeeCostExport_temp','employeeCostExport_temp')->name('reports.employeeCostExport_temp');
         Route::any('/employeeBioDataExport','employeeBioDataExport')->name('reports.employeeBioDataExport');
         Route::any('/grossReconciliation','grossReconciliation')->name('reports.grossReconciliation');
         Route::any('/netReconciliation','netReconciliation')->name('reports.netReconciliation');
         Route::any('/loanReports','loanReports')->name('reports.loanReports');
-        Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
+        Route::any('/projectTime','projectTime')->name('reports.projectTime');
         Route::any('/funder','funder')->name('reports.funder');
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 
