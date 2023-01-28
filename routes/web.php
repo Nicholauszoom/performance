@@ -348,8 +348,10 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
 
         // start of reconcilliation summary route
-
-        // ertime','commentOvertime')->name('flex.commentOvertime');
+        Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
+        Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
+        Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
+        Route::any('/commentOvertime','commentOvertime')->name('flex.commentOvertime');
         Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
         Route::any('/employee','employee')->name('flex.employee');
