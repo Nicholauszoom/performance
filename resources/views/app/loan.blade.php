@@ -143,7 +143,7 @@
                                             <a href="<?php echo url(''); ?>/flex/loan_advanced_payments/?key=<?php echo base64_encode($row->id); ?>"
                                                 title="Advanced Loan Payment">
                                                 <button class="btn btn-success btn-xs">ADV PAYMENT</button></a>
-                                            <?php } 
+                                            <?php }
                                if($row->state==2){ ?>
 
                                             <a href="javascript:void(0)" onclick="resumeLoan(<?php echo $row->id; ?>)">

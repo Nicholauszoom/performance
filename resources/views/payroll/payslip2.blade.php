@@ -125,6 +125,7 @@
                             //        $paid = $num*$row->policy;
                             $paid = $salary_advance_loan_remained;
                         }
+                        $sum_loans = ($sum_loans+$paid);
                     }
 
                     // START TAKE HOME
@@ -264,6 +265,7 @@
 
                             @endforeach
                             @foreach($loans as $row)
+                            
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">{{ $row->description }}</div>
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end">{{ number_format($row->paid/$rate, 2) }}</div>
 

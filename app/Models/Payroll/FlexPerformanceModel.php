@@ -1714,6 +1714,7 @@ IF(
     }
 
 	function employeesrole($id) {
+        
 	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.emp_id NOT IN (SELECT userID from emp_role where role = ".$id." and group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
