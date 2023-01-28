@@ -115,7 +115,11 @@
                     <div role="tabpanel" class="tab-pane fade active show " id="page1" aria-labelledby="work-tab">
 
                         <div class="card shadow-none">
-                            <div class="card-header ">
+                            <div class="card-header">
+                                <h5 class="text-main">PERSONAL DETAILS: </h5>
+                            </div>
+                            <div class="card-body ">
+
                                    {{--displaying all the errors  --}}
                                 @if ($errors->any())
                                 <div class="btn disabled btn-danger ">
@@ -284,9 +288,10 @@
                     {{-- page 2 --}}
                     <div role="tabpanel" class="tab-pane " id="page2" aria-labelledby="permission-tab">
                         <div class="card border-0 shadow-none">
-                            {{-- <div class="card-header">
-                              <h6 class="text-muted">Permissons</h6>
-                            </div> --}}
+                            <div class="card-header">
+                                <h5 class="text-main">PERSONAL IDENTIFICATION: </h5>
+
+                            </div>
 
                             <div class="row p-2">
 
@@ -366,6 +371,9 @@
                     <div role="tabpanel" class="tab-pane " id="page3" aria-labelledby="asset-tab">
 
                         <div class="card border-0 shadow-none">
+                            <div class="card-header">
+                                <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
+                            </div>
                             <div class="row p-2">
 
                                 <div class="col-md-12">
@@ -494,7 +502,7 @@
                     <div role="tabpanel" class="tab-pane " id="page4" aria-labelledby="l-d-tab">
                         <div class="card border-0 shadow-none mb-3">
                             <div class="card-header">
-                                <h4 class="text-main">FAMILY DETAILS </h4>
+                                <h5 class="text-main">FAMILY DETAILS </h5>
                             </div>
                             <div class="row p-2">
 
@@ -738,7 +746,7 @@
                         <div class="card border-0 shadow-none">
 
                             <div class="card-header">
-                                <h4 class="text-main">EDUCATIONAL BACKGROUND: </h4>
+                                <h5 class="text-main">EDUCATIONAL BACKGROUND: </h5>
                             </div>
                             <div class="row p-2">
 
@@ -911,7 +919,7 @@
                         <div class="card border-0 shadow-none">
 
                             <div class="card-header">
-                                <h4 class="text-main">EMPLOYMENT HISTORY: </h4>
+                                <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
                             </div>
                             <div class="row p-2">
 
@@ -921,6 +929,14 @@
                                       <div class="card-body">
                                         <h5>Add Employment History</h5>
                                         <hr>
+                                        <p class="text-muted"><b> Previous Employer(s) Details:</b></p>
+                                        <p>
+                                           <small><i>
+                                            Kindly declare your previous employers
+                                            (up to a period of 5 years to the date of joining BancABC)
+                                        </i></small>
+
+                                        </p>
                                         <div class="row">
                                             <div class="col-md-6 mb-2">
                                                 <label for="">Name of Employer</label>
@@ -934,7 +950,7 @@
 
                                             <div class="col-md-6 mb-2">
                                                 <label for="">Position Held at the time of exit</label>
-                                                <input type="text" name="hist_position" id="hist_position"  placeholder="Enter Disciplinary of Study e.g Accounting/Marketing Law/Business etc" class="form-control" >
+                                                <input type="text" name="hist_position" id="hist_position"  placeholder="Enter Position Held at the time of exit" class="form-control" >
                                             </div>
 
                                                 <div class="col-md-3 mb-2">

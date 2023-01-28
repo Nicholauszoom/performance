@@ -689,7 +689,7 @@
         </div>
       </div>
       @endif
-      <div class="row">
+      {{-- <div class="row">
         <div class="col-md-">
             <div class="card">
                 <div class="card-header">
@@ -739,67 +739,11 @@
 
                 </div>
 
-                <div class="card-footer">
-                    <p class="text-main">Add Qualification</p>
-                    <hr>
-                       {{--displaying all the errors  --}}
-                       @if ($errors->any())
-                       <div class="alert alert-danger">
-                           @foreach ($errors->all() as $error)
-                               <div>{{$error}}</div>
-                           @endforeach
-                       </div>
-                       @endif
-                    <form action="{{ route('flex.addQualification') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="employeeID" id="employeeID" value="{{ $empID }}">
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <label for="">Institute</label>
-                                <input type="text" name="institute" id="institute" required placeholder="Enter Institute Name" class="form-control" >
-                            </div>
-                            <div class="col-md-6">
-                                <label for="">Level</label>
-                                <select name="level" id="level" required class="custom-select form-control">
-                                    <option value="Primary">Primary Level</option>
-                                    <option value="Primary">Ordinary Level</option>
-                                    <option value="Primary">Advanced Level</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label for="">Course</label>
-                                <input type="text" name="course" id="course" required placeholder="Enter Course Name" class="form-control" >
-                            </div>
-
-                                <div class="col-md-4 mb-2">
-                                    <label for="">Start Year</label>
-                                    <input type="year" name="start_year" id="start_year" required placeholder="Start Year" class="form-control" >
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label for="">Finish Year</label>
-                                    <input type="year" name="finish_year"  id="finish_year" required placeholder="Finish Year" class="form-control" >
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="">Certificate</label>
-                                    <input type="file" name="image" id="image" required class="form-control" >
-                                </div>
-                                <hr>
-                                <div class="col-md-8"></div>
-                                <div class="col-md-4 tex-end">
-                                 <button type="submit" id="save-qualifin-btn" class="btn btn-main btn-block"> Add Qualification</button>
-                                </div>
-
-                        </div>
-                    </form>
-                </div>
-
-                <hr>
 
                 </div>
             </div>
         </div>
-      </div>
+      </div> --}}
 
     </div>
   </div>
