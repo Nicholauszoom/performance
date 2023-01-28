@@ -106,7 +106,7 @@
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Outstanding Leave Pay</label>
-                                            <input type="text" class="form-control"  name="leavePay" id="">
+                                            <input type="text" class="form-control"  name="leavePay" id="leavePay">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">House Allowance</label>
@@ -130,7 +130,7 @@
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Leave & O/stand</label>
-                                            <input type="text" class="form-control" name="leaveStand"  id="">
+                                            <input type="text" class="form-control" name="leaveStand"  id="leaveStand">
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Teller Allowance</label>
@@ -157,6 +157,8 @@
                                             <input type="text" class="form-control" name="otherPayments" id="">
                                         </div>
                                     </div>
+                                    <input type="hidden" class="form-control" name="employee_actual_salary" id="employee_actual_salary">
+
 
                                     <p class="text-secondary font-weight-bolder">
                                         <hr>
@@ -221,6 +223,9 @@
 
              document.getElementById("leaveAllowance").value  =  data.leave_allowance;
              document.getElementById("salaryEnrollment").value = data.employee_salary;
+             document.getElementById("employee_actual_salary").value = data.employee_actual_salary;
+
+
 
 
 
@@ -228,6 +233,22 @@
         .fail(function(){
      alert('Update Failed!! ...');
         });
+
+    });
+</script>
+
+<script type="text/javascript">
+    $('#leaveStand').change(function(e){
+        var leaveStand  = document.getElementById("leaveStand").value;
+        var salaryEnrollment  = document.getElementById("employee_actual_salary").value;
+
+        var leave_pay = (leaveStand/25)*salaryEnrollment;
+
+        document.getElementById("leavePay").value  =  leave_pay;
+
+
+
+
 
     });
 </script>

@@ -93,17 +93,17 @@
                     <h6>{{ number_format($termination->publicDays,2)}}</h6>
                     <h6>{{ number_format($termination->noticePay,2)}}</h6>
 
-                    <h6>{{ number_format($termination->houseAllowance,2)}}</h6>
+                    <h6>{{ number_format($termination->leavePay,2)}}</h6>
                     <h6>{{ number_format($termination->livingCost,2)}}</h6>
                     <h6>{{ number_format($termination->utilityAllowance,2)}}</h6>
 
                     <h6>{{ number_format($termination->serevanceCost,2)}}</h6>
-                    <h6>{{ number_format($termination->leaveStand,2)}}</h6>
+                    <h6>{{ number_format($termination->leaveAllowance,2)}}</h6>
                     <h6>{{ number_format($termination->tellerAllowance,2)}}</h6>
-                    <h6>{{ number_format($termination->utilityAllowance,2)}}</h6>
+                    <h6>{{ number_format($termination->leaveStand,2)}}</h6>
 
                     <h6>{{ number_format($termination->serevanceCost,2)}}</h6>
-                    <h6>{{ number_format($termination->leaveStand,2)}}</h6>
+                    <h6>{{ number_format($termination->arrears,2)}}</h6>
                     <h6>{{ number_format($termination->exgracia,2)}}</h6>
                     <h6>{{ number_format($termination->bonus,2)}}</h6>
                     <h6>{{ number_format($termination->longServing,2)}}</h6>
@@ -142,17 +142,17 @@
 
             <div class="col-md-6">
                 <h6>P.A.Y.E</h6>
-                <h6>Outstanding Loan Balance</h6>
+                {{-- <h6>Outstanding Loan Balance</h6> --}}
                 <h6>Pension</h6>
                 <h6>Salary Advances</h6>
                 <h6>Any Other Deductions</h6>
             </div>
             <div class="col-md-6 text-end">
-                <h6>{{ number_format($termination->salaryEnrollment,2)}}</h6>
-                <h6>{{ number_format($termination->normalDays,2)}}</h6>
-                <h6>{{ number_format($termination->publicDays,2)}}</h6>
+                <h6>{{ number_format($termination->paye,2)}}</h6>
+                {{-- <h6>{{ number_format($termination->otherDeductions,2)}}</h6> --}}
+                <h6>{{ number_format($termination->pension_employee,2)}}</h6>
                 <h6>{{ number_format($termination->noticePay,2)}}</h6>
-                <h6>{{ number_format($termination->leavePay,2)}}</h6>
+                <h6>{{ number_format($termination->otherDeductions,2)}}</h6>
 
             </div>
 
@@ -164,7 +164,7 @@
                         </h5>
                     </div>
                     <div class="col-md-6 text-end">
-                        <h5>{{ number_format($termination->total_deductions,2)}}</h5>
+                        <h5>{{ number_format($termination->pension_employee + $termination->paye +$termination->otherDeductions,2)}}</h5>
                     </div>
                 </div>
 
@@ -180,7 +180,9 @@
             <h6>Total Deductions</h6>
             <h6>Net Pay </h6>
             <h6>Notice Payment</h6>
-            <h6>Take home after loan deduction</h6>
+            <h6>Take home</h6>
+            {{-- <h6>Take home after loan deduction</h6> --}}
+
 
             <h6 class="mt-3"  style="border-bottom: 3px  !important;">Employee Signature:</h6>
 
@@ -188,11 +190,11 @@
 
         </div>
         <div class="col-md-6 text-end">
-            <h6>{{ $termination->total_gross}}</h6>
-            <h6>{{ $termination->normalDays}}</h6>
-            <h6>{{ $termination->publicDays}}</h6>
+            <h6>{{ $termination->take_home}}</h6>
+            <h6>{{ $termination->pension_employee + $termination->paye +$termination->otherDeductions}}</h6>
+            <h6>{{ $termination->take_home - ($termination->pension_employee + $termination->paye +$termination->otherDeductions) }}</h6>
             <h6>{{ $termination->noticePay}}</h6>
-            <h6>{{ $termination->leavePay}}</h6>
+            <h6>{{ $termination->take_home - ($termination->pension_employee + $termination->paye +$termination->otherDeductions) }}</h6>
             <h6 class="mt-4" style="margin-top:40px;border-bottom: 3px solid rgb(4, 11, 28) !important;"></h6>
             <br>
             <h6 class="mt-4" style="margin-top:40px;border-bottom: 3px solid rgb(4, 11, 28) !important;"></h6>

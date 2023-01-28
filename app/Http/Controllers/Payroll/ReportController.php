@@ -183,6 +183,7 @@ class ReportController extends Controller
                 $data['total'] = $this->reports_model->v_totalp9($payrolldate);
             }
             $data['info'] = $this->reports_model->company_info();
+            $data['reportType'] = $reportType;
             $data['payroll_date'] = $payrolldate;
             // dd("here");
 
@@ -192,10 +193,10 @@ class ReportController extends Controller
             $payroll_date = $data['payroll_date'];
 
             // dd(app_path());
-
-            //include(app_path() . '/reports/p9.php');
-
-            return view('reports/p9', $data);
+           // if($request->print_type == "PDF")
+            include(app_path() . '/reports/p9.php');
+            // else
+            // return view('reports/p9', $data);
         }
     }
 
@@ -680,7 +681,9 @@ class ReportController extends Controller
                 $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
 
                 //include(app_path() . '/reports/customleave_report.php');
-                include app_path() . '/reports/payslip.php';
+               // include app_path() . '/reports/payslip.php';
+                return view('payroll.payslip2', $data);
+
             }
         } else {
             // DATE MANIPULATION

@@ -18,6 +18,7 @@
 					<div class="card">
 						<div class="card-header">
 							<h5 class="mb-0">(P.A.Y.E)</h5>
+                           <li> <a href="{{ route('reports.p9',['payroll_date'=>$payroll_date,'type'=>1,'print_type'=>'PDF']) }}">PDF</a></li>
 						</div>
 						<table class="table datatable-button-html5-columns">
 							<thead>
@@ -32,12 +33,12 @@
 							</thead>
 							<tbody>
                                 <?php
-                                foreach($paye as $key){ 
+                                foreach($paye as $key){
                                     $salary = $key->salary;
                                     $gross = $key->salary + $key->allowances;
                                     $name = $key->name;
                                     $deductions = $key->pension_employee;
-                                    $taxable = $key->salary + $key->allowances - $key->pension_employee; 
+                                    $taxable = $key->salary + $key->allowances - $key->pension_employee;
                                     $taxdue = $key->taxdue;
 
                                     ?>
@@ -55,8 +56,8 @@
                                         $salary = $key->sum_salary;
                                         $gross = $key->sum_gross;
                                         $deductions = $key->sum_deductions;
-                                        $taxable = $key->sum_taxable; 
-                                        $taxdue = $key->sum_taxdue; 
+                                        $taxable = $key->sum_taxable;
+                                        $taxdue = $key->sum_taxdue;
                                         ?>
                                        <tr>
                                           <td colspan ="2" style="background-color:#FFFF00;">TOTAL</td>

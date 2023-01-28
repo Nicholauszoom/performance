@@ -1647,6 +1647,14 @@ function meals_deduction()
 		return $maximum_days;
 	}
 
+    public function get_actual_basic_salary($empID){
+    //   $query = "SELECT e.salary from employee e where e.emp_id = " . $empID . "";
+      $row = DB::table('employee')->where('emp_id',$empID)->select('salary')->first();
+
+      return $row->salary;
+
+    }
+
     public function get_employee_salary($empID,$termination_date,$termination_day){
         $days = intval(date('t', strtotime($termination_date)));
 
