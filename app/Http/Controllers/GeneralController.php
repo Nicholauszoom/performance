@@ -5510,7 +5510,7 @@ class GeneralController extends Controller
             $data['parent'] = "Financial Setting";
             $data['child'] = "Groups";
 
-            return view('app.groups', $data);
+            return view('app.financial_groups_details', $data);
         } else {
             echo "Unauthorized Access";
         }
@@ -5531,6 +5531,8 @@ class GeneralController extends Controller
             echo "Unauthorized Access";
         }
     }
+
+
 
     //
     public function removeEmployeeByRoleFromGroup(Request $request)
@@ -5637,6 +5639,7 @@ class GeneralController extends Controller
                     echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
                 }
             }
+            
         }
     }
 

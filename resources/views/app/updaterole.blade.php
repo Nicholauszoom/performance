@@ -44,8 +44,8 @@
                             <?php
             if (isset($role)){
                       foreach ($role as $row) {
-                        $roleID=$row->id; 
-                        $permissionTag=$row->permissions;                        
+                        $roleID=$row->id;
+                        $permissionTag=$row->permissions;
                           ?>
 
 
@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="card-body">
                                             <form align="center" enctype="multipart/form-data" method="post"
-                                                action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>" 
+                                                action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>"
                                                 data-parsley-validate class="form-horizontal form-label-left"
                                                 autocomplete="off">
 
@@ -242,7 +242,7 @@
 
                                         <div class="col-xs-9">
                                             <!-- Tab panes -->
-                                            <form action="<?php echo url(''); ?>/flex/updaterole/" method="post">
+                                            <form action="{{ route('flex.updaterole') }}" method="post">
                                                 <input type="hidden" name="roleID" value="<?php echo $roleID; ?>">
                                                 @csrf
                                                 <div class="tab-content" id="myTabContent">
@@ -516,7 +516,7 @@
 
                                         <tbody>
                                             <?php
-                       
+
                                             foreach ($members as $row) { ?>
                                             <tr>
                                                 <td width="1px"><?php echo $row->SNo; ?></td>

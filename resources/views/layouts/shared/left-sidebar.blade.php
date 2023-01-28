@@ -94,9 +94,10 @@
                     </a>
 
                     <ul class="nav-group-sub collapse {{ ( request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments')  ) ? 'show' : null }}">
+                        @if (session('mng_paym'))
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null  }}" href="{{ route('payroll.payroll') }}"> Payroll </a></li>
 
-                        @if (session('mng_paym'))
+
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('payroll.employee_payslip') ? 'active' : null  }}" href="{{ route('payroll.employee_payslip') }}"> Payslip </a></li>
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('payroll.comission_bonus') ? 'active' : null  }}" href="{{ route('payroll.comission_bonus') }}">Incentives</a></li>
                           <!--  <li class="nav-item"><a class="nav-link {{ request()->routeIs('payroll.partial_payment') ? 'active' : null  }}" href="{{ route('payroll.partial_payment') }}">Partial Payment</a></li> -->
@@ -161,20 +162,20 @@
                     </ul>
                 </li>
 
-
+                @if (session('mng_stat_rpt'))
                 <li class="nav-item nav-item-submenu {{ ( request()->routeIs('flex.financial_reports') || request()->routeIs('flex.organisation_reports') ) ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-note"></i>
                         <span>Reports</span>
                     </a>
                     <ul class="nav-group-sub collapse {{ ( request()->routeIs('flex.financial_reports') || request()->routeIs('flex.organisation_reports') ) ? 'show' : null }}">
-                        @if (session('mng_stat_rpt'))
+
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.financial_reports') ? 'active' : null  }}" href="{{ route('flex.financial_reports') }}">Statutory Reports </a></li>
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.organisation_reports') ? 'active' : null  }}" href="{{ route('flex.organisation_reports') }}">Organisation Reports </a></li>
-                    @endif
+
                     </ul>
                 </li>
-
+                @endif
 
                 <li class="nav-item nav-item-submenu {{ ( request()->routeIs('flex.role') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration')) ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -188,10 +189,7 @@
                         @endif
                         <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null  }}" href="{{ route('flex.financial_group')}}">Financial Settings</a></li>
 
-                        {{-- <li class="nav-item"><a class="nav-link" href="{{ route('/flex/allowance')}}">Allowances</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('/flex/allowance_overtime')}}">Overtime</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('/flex/statutory_deductions')}}">Statutory Deductions</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('/flex/non_statutory_deductions')}}">Non-Statutory Deductions</a></li> --}}
+
 
                         @if (session('mng_bank_info'))
                             <li class="nav-item"><a class="nav-link {{ request()->routeIs('flex.bank') ? 'active' : null  }}" href="{{ route('flex.bank')}}">Banking Information</a></li>
