@@ -185,19 +185,19 @@
                                             <!-- Nav tabs -->
                                             <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#5Tab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission5Tab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         General Permission
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#4Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission4Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         Line Manager Permission
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#3Tab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission3Tab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         HR Permission
                                                     </a>
@@ -205,13 +205,13 @@
 
 
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#2Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission2Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         Finance Permission
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#1Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission1Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         Director Permission
                                                     </a>
@@ -230,7 +230,7 @@
 
                                                     @foreach ($permissions_grouped as $key => $permission)
 
-                                                    <div role="tabpanel" role="tabpanel" class="tab- <?php if($counter==1){echo "active";$counter=$counter+1;} else{echo "fade";}?> " id="{{ $key }}Tab" aria-labelledby="home-tab">
+                                                    <div role="tabpanel" role="tabpanel" class="tab-pane <?php if($counter==1){echo "active";$counter=$counter+1;} else{echo "fade";}?> " id="Permission{{ $key }}Tab" aria-labelledby="home-tab">
                                                         
 
                                                         <p class="lead"><button type="submit" name="assign" class="btn btn-main">update</button></p>
@@ -258,7 +258,7 @@
 
 
                                                                         <label class="containercheckbox">
-                                                                            <input type="checkbox" name="permissions[]" id="{{ $item['name'] }}" value="{{ $item['name'] }}" <?php if(in_array($item['name'] , $permission_arrray)){echo "checked";} ?> >
+                                                                            <input type="checkbox" name="permissions[]" id="{{ $item['name'] }}" value="{{ $item['name'] }}" <?php if($permission_arrray && in_array($item['name'] , $permission_arrray)){echo "checked";} ?> >
 
                                                                             <span class="checkmark"></span>
                                                                         </label>

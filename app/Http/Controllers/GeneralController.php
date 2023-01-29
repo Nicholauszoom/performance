@@ -45,6 +45,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Gate;
 // use Barryvdh\DomPDF\Facade\Pdf;
 
 class GeneralController extends Controller
@@ -5949,6 +5950,9 @@ class GeneralController extends Controller
 
     public function role_info(Request $request)
     {
+
+
+        // dd(Gate::allows('View Employee Summary'));
 
         $id = base64_decode($request->id);
 
