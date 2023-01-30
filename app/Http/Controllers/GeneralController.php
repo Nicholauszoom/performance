@@ -8489,11 +8489,11 @@ public function updateEmployeeDetails(Request $request)
              public function userdata(Request $request, $id)
              {
                  $id = base64_decode($id);
-                
-                
+
+
                  $extra = $request->input('extra');
                  $data['employee'] = $this->flexperformance_model->userprofile($id);
-         
+
                 // dd($data['employee'] );
                  $data['kin'] = $this->flexperformance_model->getkin($id);
                  $data['property'] = $this->flexperformance_model->getproperty($id);
@@ -8506,9 +8506,9 @@ public function updateEmployeeDetails(Request $request)
                  $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
                  $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
                  $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
-         
+
                  $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
-         
+
                  $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
                  $data['skills_have'] = $this->flexperformance_model->skills_have($id);
                  $data['month_list'] = $this->flexperformance_model->payroll_month_list();
@@ -8517,33 +8517,33 @@ public function updateEmployeeDetails(Request $request)
                  $details=EmployeeDetail::where('employeeID',$empID)->first();
 
                  $emergency=EmergencyContact::where('employeeID',$empID)->first();
-         
+
                  $children=EmployeeDependant::where('employeeID',$empID)->get();
-         
-         
+
+
                  $spouse=EmployeeSpouse::where('employeeID',$empID)->first();
-         
+
                  $parents=EmployeeParent::where('employeeID',$empID)->get();
-         
+
                  $data['qualifications'] =EducationQualification::where('employeeID',$empID)->orderBy('end_year','desc')->get();
-         
-         
+
+
                  $data['certifications'] =ProfessionalCertification::where('employeeID',$empID)->orderBy('cert_end','desc')->get();
-         
+
                  $data['histories'] =EmploymentHistory::where('employeeID',$empID)->orderBy('hist_end','desc')->get();
                  $data['profile'] =EMPL::where('emp_id',$empID)->first();
-         
-                 
+
+
                  $data['qualifications'] = EducationQualification::where('employeeID',$id)->get();
-         
+
                  $data['photo'] = "";
-         
+
                  $data['parent'] = "Employee Profile";
-         
+
                  // return view('employee.userprofile', $data);
-         
+
                  return view('employee.employee-biodata', $data,compact('details','emergency','spouse','children','parents'));
-         
+
              }
 
              // For updating profile image
@@ -8555,11 +8555,11 @@ public function updateEmployeeDetails(Request $request)
             'image' => 'required'
         ]);
            $user=$request->empID;
-        
+
            $employee=EMPL::where('emp_id',$user)->first();
            if($request->hasfile('image')){
-   
-           
+
+
                $file=$request->file('image');
                $filename=time().'.'.$file->getClientOriginalExtension();
                $file->move('uploads/userprofile/', $filename);
@@ -8567,8 +8567,10 @@ public function updateEmployeeDetails(Request $request)
            }
            // saving data
            $employee->update();
-   
-           return redirect('flex/employee')->with('status', 'Image Has been uploaded');
+
+        //    return redirect('flex/employee')->with('status', 'Image Has been uploaded');
+        return redirect('flex/employee-profile/'.base64_encode($user))->with('msg','Employee Image has been updated successfully !');
+
        }
 
 
