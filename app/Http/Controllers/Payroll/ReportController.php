@@ -2695,7 +2695,7 @@ EOD;
 
 
 
- public function funder(Request $request)
+ public function annualleave(Request $request)
         {
             // dd("hello");
     

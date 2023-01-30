@@ -529,34 +529,35 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Funder</h5>
+                <h5 class="text-muted">Annual Leave</h5>
             </div>
 
             <form
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.funder') }}"
+                action="{{ route('reports.annualleave') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf
 
+               
                 <div class="card-body">
                     <div class="row">
-                        <label class="col-form-label col-md-2">Project</label>
+                        <label class="col-form-label col-md-2">Employee</label>
                         <div class="col-md-10">
                             <div class="input-group">
-                                <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                                    <option selected disabled>Select Month</option>
-                                    <?php foreach ($month_list as $row) { ?>
-                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                <select required name="leave_employee" class="select_payroll_month form-control select" data-width="1%">
+                                    <option selected disabled>Select Employee</option>
+                                    <option value="All"> All</option>
+                                    <?php foreach ($employee as $row) { ?>
+                                    <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname.'  '.$row->lname; ?></option>
                                     <?php } ?>
                                 </select>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                             </div>
                         </div>
                     </div>
-
 
                     <div class="row mt-3">
                         <label class="col-form-label col-md-2">Select Date</label>
@@ -567,7 +568,7 @@
                             </div>
                         </div>
                     </div>
-
+                  
                 </div>
             </form>
         </div>

@@ -871,7 +871,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/netReconciliation','netReconciliation')->name('reports.netReconciliation');
         Route::any('/loanReports','loanReports')->name('reports.loanReports');
         Route::any('/projectTime','projectTime')->name('reports.projectTime');
-        Route::any('/funder','funder')->name('reports.funder');
+        // Route::any('/funder','funder')->name('reports.funder');
+        Route::any('/annualleave','annualleave')->name('reports.annualleave');
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 
 
