@@ -152,8 +152,8 @@
         <tbody>
             @if(isset($permissions))
                 @foreach($permissions as $permission)
-                    <?php $f = $permission->slug;  ?>
-                    @can($f)
+                   
+
                         <tr>
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $permission->slug }}</td>
@@ -172,7 +172,7 @@
                                 {{ Form::close() }}
                             </td>
                         </tr>
-                    @endcan
+
                 @endforeach
             @endif
         </tbody>

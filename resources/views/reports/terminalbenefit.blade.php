@@ -53,6 +53,12 @@
         width: 85%;
     }
 
+    .w-50 {
+
+    }
+
+
+
     .w-15 {
         width: 15%;
     }
@@ -237,14 +243,14 @@
 
         {{-- <div style="clear: both;"></div> --}}
     </div>
-    <div class="table-section bill-tbl w-100 mt-10">
+    <div class="table-section bill-tbl w-50 mt-10">
 
         <table class="table w-100  mt-10">
             <tbody>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
                         <h5 class="text-center p-1"
-                            style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
+                            >
                             PAYMENTS</h5>
                     </td>
                 </tr>
@@ -318,9 +324,9 @@
                     <td style="text-align: right;">{{ number_format($termination->otherPayments, 2) }}</td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
                         <h5 class="text-center p-1"
-                            style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
+                            >
                             TAXATION</h5>
                     </td>
                 </tr>
@@ -344,9 +350,9 @@
                     <td style="text-align: right;">{{ number_format($termination->paye, 2) }}</td>
                 </tr>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
                         <h5 class="text-center p-1"
-                            style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
+                         >
                             DEDUCTION</h5>
                     </td>
                 </tr>
@@ -381,9 +387,9 @@
                 </tr>
 
                 <tr>
-                    <td colspan="2">
+                    <td colspan="2" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
                         <h5 class="text-center p-1"
-                            style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
+                          >
                             SUMMARY</h5>
                     </td>
                 </tr>

@@ -132,7 +132,7 @@ class AuthenticatedSessionController extends Controller
         $accrued = $diff->format("%a%") + 1;
 
 
-        $this->getPermissions();
+
 
 
         if($data) {
@@ -171,11 +171,15 @@ class AuthenticatedSessionController extends Controller
 
         }
 
+        $this->getPermissions();
+
     }
 
     public function getPermissions()  {
         $id =session('emp_id');
         $empID =session('emp_id');
+
+        // dd( $this->getpermission($empID, '0'),$empID);
 
         // NEW ROLES AND PERMISSION;
         session(['vw_emp_sum'=> $this->getpermission($empID, '0')]);

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
+// use App\Http\Controllers\RoleController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ImprestController;
 use App\Http\Controllers\ProfileController;
@@ -173,6 +174,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         Route::any('/index' ,'index')->name('index');
         Route::any('/employee_info/{id}' ,'employee_info')->name('flex.employee_info');
+        // for biodata page
+        // Route::any('/employee_data/{id}' ,'employee_data')->name('flex.employee_data');
 
         //Route::any('/' ,'index')->name('index');
         Route::any('/netTotalSummation' ,'netTotalSummation')->name('netTotalSummation');
@@ -193,6 +196,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
         Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+        // for employee biodata
+        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+        // for employee profile picture
+          // update profile image
+        Route::any('user-image', 'updateImg')->name('flex.userimage');
+
+        
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');
@@ -563,7 +573,11 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
 
 
+
+
     });
+
+
 
 
     Route::prefix('flex/imprest')->controller(ImprestController::class)->group(function (){
@@ -894,6 +908,9 @@ Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(f
     Route::post('/loans-import', 'import')->name('loans.import');
     Route::get('/loans-template', 'template')->name('loans.template');
 });
+
+
+
 
 
 //Routes for Recruitment Module

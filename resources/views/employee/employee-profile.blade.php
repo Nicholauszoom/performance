@@ -77,46 +77,102 @@
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a href="#page1" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
-                                Page 1
+                            <a href="#profile" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
+                                Profile Picture
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <a href="#page1" class="nav-link  show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
+                                Basic Details
+                            </a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
                             <a href="#page2" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Page 2
+                               Identification
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#page3" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Page 3
+                               Employment Info
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#page4" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Page 4
+                               Family Details
                             </a>
                         </li>
 
                         <li class="nav-item" role="presentation">
                             <a href="#page5" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Page 5
+                            Education Info
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="#page6" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Page 6
+                               Employment Hist
                             </a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="tab-content" id="myTabContent">
+                         {{-- profile --}}
+                         <div role="tabpanel" class="tab-pane fade active show " id="profile" aria-labelledby="work-tab">
+
+                            <div class="card shadow-none">
+                                <div class="card-header mb-2">
+                                    <h5 class="text-main">PROFILE PICTURE: </h5>
+                                </div>
+                                @if (session('msg'))
+                                <div class="alert alert-success col-md-10 mx-auto text-center mx-auto" role="alert">
+                                {{ session('msg') }}
+                                </div>
+                                @endif
+
+                                    <div class="col-md-12 mt-1">
+                                        <div class="card border-0 shadow-none pb-4">
+                                        <div class="sidebar-section-body text-center">
+                                            <div class="card-img-actions d-inline-block my-3">
+                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
+                                            </div>
+
+                                            <h6 class="mb-0">{{ $name }}</h6>
+                                            <span class="text-muted mb-3">{{ $position }}</span>
+                                        </div>
+
+                                        <ul class="nav nav-sidebar mt-3">
+                                            <li class="nav-item-divider"></li>
+
+                                            <li class="nav-item mx-auto my-3">
+
+                                                <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+                                                    <i class="ph-image me-2"></i>
+                                                    Change Image
+                                                </button>
+
+                                                @if (session('mng_emp'))
+                                                <a href="{{ route('flex.userdata', base64_encode($empID)) }}" class="btn btn-main">
+                                                    <i class="ph-note-pencil me-2"></i>
+                                                    View Biodata
+                                                </a>
+                                                @endif
+                                            </li>
+                                        </ul>
+                                        </div>
+
+                                    </div>
+
+                            </div>
+
+                        </div>
+
                     {{-- page 1 --}}
-                    <div role="tabpanel" class="tab-pane fade active show " id="page1" aria-labelledby="work-tab">
+                    <div role="tabpanel" class="tab-pane fade show " id="page1" aria-labelledby="work-tab">
 
                         <div class="card shadow-none">
                             <div class="card-header">
-                                <h5 class="text-main">PERSONAL DETAILS: </h5>
+                                <h5 class="text-main">BASIC DETAILS: </h5>
                             </div>
                             <div class="card-body ">
 
@@ -133,11 +189,7 @@
 
                                 @endif
 
-                                @if (session('msg'))
-                                <div class="alert alert-success col-md-12 text-center mx-auto" role="alert">
-                                {{ session('msg') }}
-                                </div>
-                                @endif
+
                                 <div class="row">
 
                                     <div class="col-12">
@@ -183,6 +235,11 @@
                                                     marriage license, divorce decree or court order.
                                                     </small>
                                                     </p>
+                                                </div>
+
+
+                                                <div class="card-footer ">
+                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                                 </div>
 
                                         </div>
@@ -233,12 +290,11 @@
                                                             <br>
 
                                                         </div>
-                                                        {{-- <div class="col">
+                                                        <div class="col">
                                                             <label for="">Marriage Date</label>
-                                                            {{-- <br>
-                                                            <input type="date" class="col-8" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
+                                                            <input type="date" class="" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
 
-                                                        </div> --}}
+                                                        </div>
                                                         <div class="col-3 mb-2">
                                                             <input type="radio" id="Separated" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Separated" ? 'checked':'' }} @endforeach value="Separated">
                                                             <label for="Separated">Separated</label>
@@ -248,11 +304,11 @@
                                                             <label for="divorced" class="pr-5">Divorced</label> <br>
 
                                                         </div>
-                                                        {{-- <div class="col">
+                                                        <div class="col">
                                                             <label>Divorced Date</label><br>
                                                             <input type="date"  name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
                                                            <br>
-                                                        </div> --}}
+                                                        </div>
                                                         <div class="col mb-2">
                                                             <input type="radio" id="widow" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Widow/Widower" ? 'checked':'' }} @endforeach value="Widow/Widower">
                                                             <label for="widow">Widow/Widower</label><br>
@@ -267,6 +323,9 @@
                                                         <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
                                                     </div>
 
+                                                </div>
+                                                <div class="card-footer ">
+                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                                 </div>
                                         </div>
 
@@ -289,7 +348,7 @@
                     <div role="tabpanel" class="tab-pane " id="page2" aria-labelledby="permission-tab">
                         <div class="card border-0 shadow-none">
                             <div class="card-header">
-                                <h5 class="text-main">PERSONAL IDENTIFICATION: </h5>
+                                <h5 class="text-main">ADDRESS AND IDENTIFICATION: </h5>
 
                             </div>
 
@@ -321,7 +380,9 @@
 
 
                                             </div>
-
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                            </div>
                                     </div>
 
 
@@ -356,6 +417,9 @@
                                                     <input type="text" name="HELSB" value="<?php echo $HELSB; ?>" class="form-control">
                                                 </div>
 
+                                            </div>
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                             </div>
                                     </div>
 
@@ -418,7 +482,9 @@
 
 
                                             </div>
-
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                            </div>
                                     </div>
 
 
@@ -426,7 +492,7 @@
                                 <div class="col-md-12">
                                     <div class="card p-2">
                                         <h5>Employment Details</h5>
-                                        <form action="" method="post">
+
 
 
                                             <div class="row mb-2">
@@ -451,6 +517,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
+
                                                 {{-- <div class="form-group col-12 ">
                                                     <label for="">Branch</label>
 
@@ -485,6 +552,9 @@
 
 
 
+                                            </div>
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                             </div>
                                     </div>
 
@@ -556,6 +626,9 @@
 
 
                                             </div>
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                            </div>
                                     </div>
 
 
@@ -600,6 +673,10 @@
                                                 <label for="">Gender</label><br>
                                                 <input type="radio" id="dep_male" name="dep_gender" value="M"> <label for="dep_male">Male (M)</label>
                                                 <input type="radio" id="dep_female" name="dep_gender" value="F"> <label for="dep_female">Female (F)</label>
+                                            </div>
+
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Dependant</button>
                                             </div>
 
                                         </div>
@@ -674,7 +751,9 @@
                                                 <input type="radio" id="Alive" name="parent_living_status" value="Alive"> <label for="Alive">Alive</label>
                                                 <input type="radio" id="Deceased" name="parent_living_status" value="Deceased"> <label for="Deceased">Deceased</label>
                                             </div>
-
+                                            <div class="card-footer ">
+                                                <button type="submit" class="btn btn-main float-end"> Save Parent</button>
+                                            </div>
                                         </div>
                                         <hr>
 
@@ -794,7 +873,9 @@
                                                     <label for="">Final Score & Grades</label>
                                                     <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
                                                 </div>
-
+                                                <div class="card-footer ">
+                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                                </div>
                                         </div>
                                         <hr>
 
@@ -866,7 +947,9 @@
                                                     <input type="radio" id="active" name="cert_status" value="Active"> <label for="active">Active</label>
                                                     <input type="radio" id="inactive" name="cert_status" value="Active"> <label for="inactive">Inactive</label>
                                                 </div>
-
+                                                <div class="card-footer ">
+                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                                </div>
                                         </div>
                                         <hr>
 
@@ -975,7 +1058,9 @@
                                                         <option value="Internship">Internship</option>
                                                     </select>
                                                 </div>
-
+                                                <div class="card-footer mt-2">
+                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
+                                                </div>
                                         </div>
                                         <hr>
 
@@ -1022,9 +1107,9 @@
 
 
                 </div>
-                <div class="card-footer ">
+                {{-- <div class="card-footer ">
                     <button type="submit" class="btn btn-main float-end"> Update Employee Detail</button>
-                </div>
+                </div> --}}
                 </div>
 
 
@@ -1040,7 +1125,61 @@
 </div>
 
 {{-- end of user credentials --}}
+{{-- user profile image  modal --}}
+<div  id="avatar-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-main">
+            <button type="button" class="btn-close bg-danger text-light btn-sm" data-bs-dismiss="modal" aria-label="Close">
+                X
+            </button>
 
+        </div>
+        <div class="modal-body">
+            <div id="error-div"></div>
+            {{-- start of current image --}}
+            <div class="row">
+              <div class="text-center col-md-2 mx-auto" >
+                <img class="profile-user-img  img-circle"
+                     src="{{ asset('uploads/userprofile/' . $photo) }}"
+                     alt="User passport picture" width="100%" height="100px">
+                     <br>
+                     <small class="text-gray">
+                      Current Image
+                     </small>
+              </div>
+            </div>
+            {{--  end of current image --}}
+            {{-- start of update image form --}}
+            <form method="post" action="{{ url('flex/user-image')}}" enctype="multipart/form-data">
+                 @csrf
+                {{-- <input type="hidden" name="update_id" id="{{Auth::User()->id;}}"> --}}
+                <div class="row">
+                <div class="col-lg-12">
+                        <label for="file" class="text-secondary font-weight-light">Upload New Image</label>
+                        <input type="file" name="image" id="image" class="form-control">
+                        <input type="hidden" name="empID" value="<?php echo $empID; ?>">
+                </div>
+
+                <div class="col-md-6"></div>
+
+                <div class="col-md-6 mb-0 ">
+                      <label for="" class="text-white">.</label>
+                      <button type="submit" class="btn text-light btn-main btn-block col-lg-12" >
+                          <i class="fa fa-save"></i>
+                          {{ __('Update Image') }}
+                      </button>
+                </div>
+
+            </div>
+          </form>
+
+          {{-- end of edit profile form --}}
+        </div>
+
+      </div>
+    </div>
+  </div>
 @endsection
 
 @push('footer-script')
