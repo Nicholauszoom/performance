@@ -5640,7 +5640,7 @@ class GeneralController extends Controller
                     echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
                 }
             }
-            
+
         }
     }
 
@@ -5952,14 +5952,14 @@ class GeneralController extends Controller
     {
 
 
-        // dd(Gate::allows('View Employee Summary'));
+        // dd(Gate::allows('View Employee Summaryy'));
 
         $id = base64_decode($request->id);
 
         $permissions =DB::table('permission')->get();
         $permissions_raw = array();
 
-        
+
 
         foreach ($permissions as $row) {
             array_push($permissions_raw, array(
@@ -5987,7 +5987,7 @@ class GeneralController extends Controller
         // dd($role);
 
         $employeesnot = $this->flexperformance_model->employeesrole($id);
-        
+
         $groupsnot = $this->flexperformance_model->rolesgroupsnot();
         $members = $this->flexperformance_model->role_members_byid($id);
 
@@ -5995,8 +5995,8 @@ class GeneralController extends Controller
         return view('app.updaterole', compact('role', 'permissions', 'permissions_grouped','employeesnot','groupsnot','members'));
 
         // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
-        
-        
+
+
         // if (session('mng_roles_grp')) {
         //     $id = base64_decode($request->id);
 

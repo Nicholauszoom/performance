@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
+// use App\Http\Controllers\RoleController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ImprestController;
 use App\Http\Controllers\ProfileController;
@@ -563,7 +564,11 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
 
 
+
+
     });
+
+
 
 
     Route::prefix('flex/imprest')->controller(ImprestController::class)->group(function (){
@@ -893,6 +898,9 @@ Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(f
     Route::post('/loans-import', 'import')->name('loans.import');
     Route::get('/loans-template', 'template')->name('loans.template');
 });
+
+
+
 
 
 //Routes for Recruitment Module
