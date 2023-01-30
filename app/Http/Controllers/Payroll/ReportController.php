@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
+use App\Models\AttendanceModel;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -24,6 +27,7 @@ class ReportController extends Controller
     {
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
+        $this->attendance_model = new AttendanceModel;
         $this->flexperformance_model = new FlexPerformanceModel;
         $this->project_model = new ProjectModel();
     }
@@ -2691,23 +2695,76 @@ EOD;
 
 
 
-    public function funder(Request $request)
-    {
-        if (1) {
-            $project = $request->input('project');
-            $project_code = explode('~', $project)[0];
-            $duration = explode('-', $request->input('duration'));
+ public function funder(Request $request)
+        {
+            // dd("hello");
+    
+            if ($request->leave_employee == Null || $request->leave_employee == "All") {
+                // $employee= Employee::all();
+    
+                $employees = Employee::where('state','=',1)->get();
+    
+                foreach ($employees  as $employee) {
 
-            $data['info'] = $this->reports_model->company_info();
-            $data['project_info'] = $this->project_model->projectInfoCode($project_code);
-            $data['project'] = explode('~', $project)[1];
-            $data['duration'] = $request->input('duration');
-            $data['funder_funds'] = $this->reports_model->funderFunds(date('Y-m-d', strtotime($duration[0]))
-                , date('Y-m-d', strtotime($duration[1])));
-            return view('app.reports/funder_project', $data);
+                $d1 = new \DateTime(date($employee->hire_date));
+    
+                $d2 =new \DateTime("now");
+                $diff = $d1->diff($d2);
+    
+                $years=$diff->y;
+                $months=$diff->m;
+                $days=$diff->d;
 
+                $days_this_month = intval(date('t', strtotime(date(''))));
+                $accrual_days = $days*$employee->accrual_rate/$days_this_month;
+
+                $employee->maximum_days = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, date('Y-m-d'));
+                
+                $employee->accrual_days = $accrual_days;
+
+                $employee->opening_balance = $accrual_days;
+
+                $employee->current_balance = $accrual_days;
+                }  
+                // dd("all here");
+            } 
+            else {
+
+                $employees = Employee::where('emp_id', $request->leave_employee)->where('state','=',1)->get();
+
+                foreach ($employees  as $employee) {
+    
+                $d1 = new \DateTime(date($employee->hire_date));
+    
+                $d2 =new \DateTime("now");
+                $diff = $d1->diff($d2);
+    
+                $years=$diff->y;
+                $months=$diff->m;
+                $days=$diff->d;
+
+                $days_this_month = intval(date('t', strtotime(date(''))));
+
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id,$employee->hire_date, date('Y-m-d'));
+
+                $accrual_days = $days*$employee->accrual_rate/$days_this_month;
+
+                $employee->accrual_days = $accrual_days;
+
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id,$employee->hire_date, date('Y-m-d'));
+
+                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id,$employee->hire_date, date('Y-m-d'));
+
+
+                }
+
+                }    
+            // dd($employees);
+    
+            return view('reports.leave_balance', ['employees' => $employees]);
         }
-    }
+    
+    
 
     public function netTotalSummation($payroll_date)
     {
