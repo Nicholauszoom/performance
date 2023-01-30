@@ -8569,7 +8569,9 @@ public function updateEmployeeDetails(Request $request)
            // saving data
            $employee->update();
 
-           return redirect('flex/employee')->with('status', 'Image Has been uploaded');
+        //    return redirect('flex/employee')->with('status', 'Image Has been uploaded');
+        return redirect('flex/employee-profile/'.base64_encode($user))->with('msg','Employee Image has been updated successfully !');
+
        }
 
 

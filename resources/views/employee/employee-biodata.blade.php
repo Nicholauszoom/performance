@@ -175,7 +175,7 @@
 
                         <div class="card m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
-                               
+
 
                             </div> --}}
 
@@ -241,7 +241,7 @@
                                      <div class="col-6">
                                          <p class="text-muted"> @if($details) {{$details->birthcountry}} @endif </p>
                                      </div>
- 
+
                                      <div class="col-6">
                                          <h6 class="text-main"> Gender/Sex:</h6>
                                      </div>
@@ -273,7 +273,7 @@
                     <div role="tabpanel" class="tab-pane fade show " id="address" aria-labelledby="permission-tab">
                         <div class="card m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
-                               
+
                             </div> --}}
 
                             <div class="row">
@@ -293,7 +293,7 @@
                                     <div class="col-12">
                                         <p class="text-muted">  @if($details) {{$details->landmark}} @endif </p>
                                     </div>
-                                   
+
                                    </div>
                                 </div>
                                 {{-- end of address information --}}
@@ -320,7 +320,7 @@
                                      <div class="col-6">
                                          <p class="text-muted"> @if($details) {{$details->passport_number}} @endif</p>
                                      </div>
- 
+
                                      <div class="col-6">
                                          <h6 class="text-main"> Pension Fund Number:</h6>
                                      </div>
@@ -333,11 +333,11 @@
                                      <div class="col-6">
                                          <p class="text-muted"><?php echo $HELSB; ?></p>
                                      </div>
-                                  
+
                                      </div>
                                 </div>
                                 {{-- end of personal identification information --}}
-                                
+
                             </div>
                         </div>
                     </div>
@@ -347,7 +347,7 @@
                     <div role="tabpanel" class="tab-pane  fade show " id="asset" aria-labelledby="asset-tab">
                         <div class="card m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
-                               
+
                             </div> --}}
 
                             <div class="row">
@@ -391,7 +391,7 @@
                                     <div class="col-6">
                                         <p class="text-muted"> @if($emergency) {{ $emergency->em_phone}} @endif </p>
                                     </div>
-                                   
+
                                    </div>
                                 </div>
                                 {{-- end of emergency contacts --}}
@@ -418,7 +418,7 @@
                                      <div class="col-6">
                                          <p class="text-muted"> <?php echo $title; ?> </p>
                                      </div>
- 
+
                                      <div class="col-6">
                                          <h6 class="text-main"> Department & Branch:</h6>
                                      </div>
@@ -445,11 +445,11 @@
                                         <p class="text-muted"> <?php echo $ctype; ?> </p>
                                     </div> --}}
 
-                                  
+
                                      </div>
                                 </div>
                                 {{-- end of employment details --}}
-                                
+
                             </div>
                         </div>
 
@@ -458,10 +458,10 @@
 
                     {{-- Start of Family Informations --}}
                     <div role="tabpanel" class="tab-pane fade show" id="l-d" aria-labelledby="l-d-tab">
-           
+
                         <div class="card m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
-                               
+
                             </div> --}}
 
                             <div class="row">
@@ -524,11 +524,11 @@
                                     <div class="col-3">
                                         <p class="text-muted"> @if($spouse) {{ $spouse->spouse_job_title}} @endif </p>
                                     </div>
-                                    
-                                   
+
+
                                    </div>
-                                       
-                                
+
+
                                 </div>
                                 {{-- end of spouse details --}}
 
@@ -543,7 +543,7 @@
                                          <p class="text-muted">  Here </p>
                                      </div>
                                      <div class="col-12">
-                                        
+
                                         <hr>
 
                                         <table class="table table-border-none" id="dynamicAddRemove">
@@ -562,15 +562,15 @@
                                             <td>{{ $item->dep_birthdate }}</td>
                                             <td>{{ $item->dep_gender }}</td>
                                             <td>{{ $item->dep_certificate }} </td>
-                                            
+
                                           </tr>
-                                        
+
                                          @empty
                                           <p class="text-center text-muted">Sorry, You have not added any Dependant/Child !</p>
                                           @endforelse
                                         </table>
 
-                                            
+
                                      </div>
                                     {{-- start of Parents details --}}
                                     <h5 class="bg-light"> Parent's Details</h5>
@@ -592,7 +592,7 @@
                                             <td>{{ $item->parent_birthdate }}</td>
                                             <td>{{ $item->parent_residence }}</td>
                                             <td>{{ $item->parent_living_status }} </td>
-                                           
+
                                           </tr>
                                           @empty
                                           <p class="text-center">
@@ -607,12 +607,12 @@
 
                                     {{-- end of parents details --}}
                                      </div>
-                                
-                                
-                                
+
+
+
                                     </div>
                                 {{-- end of children details --}}
-                                
+
                             </div>
                         </div>
 
@@ -623,7 +623,7 @@
                     <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
                         <div class="card m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
-                               
+
                             </div> --}}
 
                             <div class="row">
@@ -643,7 +643,7 @@
                                             <th class="text-center">Disciplinary of Study </th>
                                             <th class="text-center">Location </th>
                                             <th class="text-center">Final Score & Grades</th>
-                                            
+
                                             </tr>
                                             @forelse ( $qualifications as $item )
                                           <tr>
@@ -654,7 +654,7 @@
                                             <td class="text-center">{{ $item->course }}</td>
                                             <td class="text-center">{{ $item->study_location }} </td>
                                             <td class="text-center">{{ $item->final_score }} </td>
-                                        
+
                                           </tr>
 
                                           @empty
@@ -662,7 +662,7 @@
                                           @endforelse
                                         </table>                                       </table>
 
-                                            
+
                                      </div>
                                     {{-- start of Proffessional Certification details --}}
                                     <h5 class="bg-light"> Professional Certification/License</h5>
@@ -675,37 +675,37 @@
                                             <th class="text-center">Qualification Obtained </th>
                                             <th class="text-center">Membership Number</th>
                                             <th class="text-center">Status Active/ Inactive</th>
-                                         
+
                                             </tr>
                                             @forelse ( $certifications as $item )
                                             <tr>
-  
+
                                               <td class="text-center" >{{ $item->cert_start}} - {{ $item->cert_end }}</td>
                                               <td class="text-center" >{{ $item->cert_name }} </td>
                                               <td class="text-center">{{ $item->cert_qualification }}</td>
                                               <td class="text-center">{{ $item->cert_number }}</td>
                                               <td class="text-center">{{ $item->cert_status }} </td>
-                                       
+
                                             </tr>
                                             @empty
-  
+
                                             @endforelse
-  
-  
+
+
                                             </table>
-  
-  
+
+
 
                                      </div>
 
                                     {{-- end of parents details --}}
                                      </div>
-                                
-                                
-                                
+
+
+
                                     </div>
                                 {{-- end of children details --}}
-                                
+
                             </div>
                         </div>
                      </div>
@@ -715,7 +715,7 @@
                     <div role="tabpanel" class="tab-pane " id="history" aria-labelledby="exit-tab">
                         <div class="card m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
-                               
+
                             </div> --}}
 
                             <div class="row">
@@ -744,7 +744,7 @@
                                             <td class="text-center">{{ $item->hist_position }}</td>
                                             <td class="text-center">{{ $item->hist_status }}</td>
                                             <td class="text-center">{{ $item->hist_reason }} </td>
-                                        
+
                                           </tr>
 
                                           @empty
@@ -754,18 +754,18 @@
                                             </table>
 
 
-                                            
+
                                      </div>
-             
+
 
                                     {{-- end of parents details --}}
                                      </div>
-                                
-                                
-                                
+
+
+
                                     </div>
                                 {{-- end of children details --}}
-                                
+
                             </div>
                         </div>
                      </div>
@@ -795,7 +795,7 @@
             <button type="button" class="btn-close bg-danger text-light btn-sm" data-bs-dismiss="modal" aria-label="Close">
                 X
             </button>
-      
+
         </div>
         <div class="modal-body">
             <div id="error-div"></div>
@@ -822,9 +822,9 @@
                         <input type="file" name="image" id="image" class="form-control">
                         <input type="hidden" name="empID" value="<?php echo $empID; ?>">
                 </div>
-             
+
                 <div class="col-md-6"></div>
-  
+
                 <div class="col-md-6 mb-0 ">
                       <label for="" class="text-white">.</label>
                       <button type="submit" class="btn text-light btn-main btn-block col-lg-12" >
@@ -832,13 +832,13 @@
                           {{ __('Update Image') }}
                       </button>
                 </div>
-             
+
             </div>
           </form>
-  
+
           {{-- end of edit profile form --}}
         </div>
-    
+
       </div>
     </div>
   </div>
@@ -919,48 +919,7 @@
         </div>
     </div>
 </div>
-{{-- This is the file for ajax method of changing the user profile image --}}
-<script>
 
-
-       /*
-                        check if form submitted is for uploading or updating
-                    */
-                    $("#save-profile-btn").click(function(event ){
-                        event.preventDefault();
-                        if($("#update_id").val() == null || $("#update_id").val() == "")
-                        {
-                            storeImage();
-                        } else {
-                            updateImage();
-                        }
-                    })
-    
-    
-              /*
-                        edit profile detail function
-                        it will get the existing value and show the edit profile form
-                    */
-           
-                    function editImage()
-                    {
-        
-            //             let url = $('meta[name=app-url]').attr("content") + "/admin/profile-image/{{Auth::User()->id; }}" ;
-                        $.ajax({
-                            url: url,
-                            type: "GET",
-                            success: function(response) {
-                                $("#avatar-modal").modal('show'); 
-                            },
-                            error: function(response) {
-                                console.log(response.responseJSON)
-                            }
-                        });
-                    }
-        
-                 
-        
-    </script>
 <div id="propertyModal" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-md">
         <div class="modal-content">

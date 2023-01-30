@@ -68,39 +68,6 @@
 <div class="">
 
 
-    <div class="col-md-12 mt-1">
-        <div class="card border-0 shadow-none pb-4">
-          <div class="sidebar-section-body text-center">
-              <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
-              </div>
-
-              <h6 class="mb-0">{{ $name }}</h6>
-              <span class="text-muted mb-3">{{ $position }}</span>
-          </div>
-
-          <ul class="nav nav-sidebar mt-3">
-            <li class="nav-item-divider"></li>
-
-            <li class="nav-item mx-auto my-3">
-
-                <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
-                    <i class="ph-image me-2"></i>
-                    Change Image
-                </button>
-
-                @if (session('mng_emp'))
-                <a href="{{ route('flex.userdata', base64_encode($empID)) }}" class="btn btn-main">
-                    <i class="ph-note-pencil me-2"></i>
-                    View Biodata
-                </a>
-                @endif
-            </li>
-          </ul>
-        </div>
-
-    </div>
-
     <form action="{{ route('flex.saveDetails') }}" method="post">
         @csrf
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
@@ -110,13 +77,19 @@
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a href="#page1" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
-                                Basic Details
+                            <a href="#profile" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
+                                Profile Picture
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <a href="#page1" class="nav-link  show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
+                                Basic Details
+                            </a>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
                             <a href="#page2" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                               Address|Identification
+                               Identification
                             </a>
                         </li>
                         <li class="nav-item" role="presentation">
@@ -144,8 +117,58 @@
                 </div>
 
                 <div class="tab-content" id="myTabContent">
+                         {{-- profile --}}
+                         <div role="tabpanel" class="tab-pane fade active show " id="profile" aria-labelledby="work-tab">
+
+                            <div class="card shadow-none">
+                                <div class="card-header mb-2">
+                                    <h5 class="text-main">PROFILE PICTURE: </h5>
+                                </div>
+                                @if (session('msg'))
+                                <div class="alert alert-success col-md-10 mx-auto text-center mx-auto" role="alert">
+                                {{ session('msg') }}
+                                </div>
+                                @endif
+
+                                    <div class="col-md-12 mt-1">
+                                        <div class="card border-0 shadow-none pb-4">
+                                        <div class="sidebar-section-body text-center">
+                                            <div class="card-img-actions d-inline-block my-3">
+                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
+                                            </div>
+
+                                            <h6 class="mb-0">{{ $name }}</h6>
+                                            <span class="text-muted mb-3">{{ $position }}</span>
+                                        </div>
+
+                                        <ul class="nav nav-sidebar mt-3">
+                                            <li class="nav-item-divider"></li>
+
+                                            <li class="nav-item mx-auto my-3">
+
+                                                <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+                                                    <i class="ph-image me-2"></i>
+                                                    Change Image
+                                                </button>
+
+                                                @if (session('mng_emp'))
+                                                <a href="{{ route('flex.userdata', base64_encode($empID)) }}" class="btn btn-main">
+                                                    <i class="ph-note-pencil me-2"></i>
+                                                    View Biodata
+                                                </a>
+                                                @endif
+                                            </li>
+                                        </ul>
+                                        </div>
+
+                                    </div>
+
+                            </div>
+
+                        </div>
+
                     {{-- page 1 --}}
-                    <div role="tabpanel" class="tab-pane fade active show " id="page1" aria-labelledby="work-tab">
+                    <div role="tabpanel" class="tab-pane fade show " id="page1" aria-labelledby="work-tab">
 
                         <div class="card shadow-none">
                             <div class="card-header">
@@ -166,11 +189,7 @@
 
                                 @endif
 
-                                @if (session('msg'))
-                                <div class="alert alert-success col-md-12 text-center mx-auto" role="alert">
-                                {{ session('msg') }}
-                                </div>
-                                @endif
+
                                 <div class="row">
 
                                     <div class="col-12">
