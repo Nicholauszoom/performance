@@ -173,6 +173,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         Route::any('/index' ,'index')->name('index');
         Route::any('/employee_info/{id}' ,'employee_info')->name('flex.employee_info');
+        // for biodata page
+        // Route::any('/employee_data/{id}' ,'employee_data')->name('flex.employee_data');
 
         //Route::any('/' ,'index')->name('index');
         Route::any('/netTotalSummation' ,'netTotalSummation')->name('netTotalSummation');
@@ -193,6 +195,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
         Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+        // for employee biodata
+        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+        // for employee profile picture
+          // update profile image
+        Route::any('user-image', 'updateImg')->name('flex.userimage');
+
+        
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');

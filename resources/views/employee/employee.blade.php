@@ -70,7 +70,7 @@
                 </a>
 
                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
-                        <button type="button" class="btn btn-danger btn-xs"><i class="ph-prohibit"></i></button>
+                 <button class="btn btn-danger disabled">  <i class="ph-prohibit"></i></button>
                     </a>
 {{--
                     <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
