@@ -8403,6 +8403,24 @@ public function updateEmployeeDetails(Request $request)
             $history->save();
         }
 
+        if($request->image!=null  )
+        {
+            $user=$request->empID;
+
+           $employee=EMPL::where('emp_id',$user)->first();
+           if($request->hasfile('image')){
+
+
+               $file=$request->file('image');
+               $filename=time().'.'.$file->getClientOriginalExtension();
+               $file->move('uploads/userprofile/', $filename);
+               $employee->photo=$filename;
+           }
+           // saving data
+           $employee->update();
+        }
+
+
 
          }
 

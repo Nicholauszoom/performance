@@ -68,7 +68,7 @@
 <div class="">
 
 
-    <form action="{{ route('flex.saveDetails') }}" method="post">
+    <form action="{{ route('flex.saveDetails') }}" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
     <div class="row">
@@ -140,16 +140,32 @@
                                             <h6 class="mb-0">{{ $name }}</h6>
                                             <span class="text-muted mb-3">{{ $position }}</span>
                                         </div>
+                                        <div class="row mx-auto">
+                                            <div class="col-md-7 mx-auto">
+                                                    <label for="file" class="text-secondary font-weight-light">Upload New Passport Image</label>
+                                                    <input type="file" name="image" id="image" class="form-control">
+                                                    <input type="hidden" name="empID" value="<?php echo $empID; ?>">
+                                            </div>
 
+
+                                            <div class="col-md-4 mb-0 mx-auto ">
+                                                  <label for="" class="text-white">.</label>
+                                                  <button type="submit" class="btn text-light btn-main btn-block col-lg-12" >
+                                                      <i class="fa fa-save"></i>
+                                                      {{ __('Update Image') }}
+                                                  </button>
+                                            </div>
+
+                                        </div>
                                         <ul class="nav nav-sidebar mt-3">
                                             <li class="nav-item-divider"></li>
 
-                                            <li class="nav-item mx-auto my-3">
+                                            <li class="nav-item mx-auto my-1">
 
-                                                <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+                                                {{-- <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
                                                     <i class="ph-image me-2"></i>
                                                     Change Image
-                                                </button>
+                                                </button> --}}
 
                                                 @if (session('mng_emp'))
                                                 <a href="{{ route('flex.userdata', base64_encode($empID)) }}" class="btn btn-main">
@@ -508,14 +524,18 @@
                                                 <div class="form-group col-12 mb-2">
                                                     <p></p>
                                                     <label for="">Current Job Title: <?php echo $title; ?></label>
-                                                    <div class="">
+                                                    <br>
+                                                    <label for="">Department : <?php echo $department; ?></label>
+                                                    <br>
+                                                    <label for="">Branch : <?php echo $branch; ?></label>
+                                                    {{-- <div class="">
                                                         <select class="form-control select1_single select @error('newPosition') is-invalid @enderror" id="current_job" name="current_job">
                                                             <option value="<?php echo $title; ?>"><?php echo $title; ?></option>
                                                             @foreach ($pdrop as $item)
                                                             <option value="{{ $item->name }}">{{ $item->name }} </option>
                                                             @endforeach
                                                         </select>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
 
                                                 {{-- <div class="form-group col-12 ">
