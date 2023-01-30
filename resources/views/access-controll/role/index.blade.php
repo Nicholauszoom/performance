@@ -1,5 +1,14 @@
-@extends('layouts.master')
+@extends('layouts.vertical', ['title' => 'Allowance Info'])
 
+@push('head-script')
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+@endpush
 
 @section('content')
     <section class="section">
@@ -34,7 +43,7 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($roles as $role)
-                                                    @if($role->added_by == auth()->user()->id)
+                                                  
                                                     <tr>
                                                         <th>{{ $loop->iteration }}</th>
                                                         <td>{{ $role->slug }}</td>
@@ -55,7 +64,7 @@
                                                             {{ Form::close() }}
                                                         </td>
                                                     </tr>
-                                                    @endif
+
                                                 @endforeach
                                             </tbody>
                                         </table>

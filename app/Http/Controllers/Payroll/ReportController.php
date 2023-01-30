@@ -2675,9 +2675,9 @@ EOD;
 
    // return $pdf->download('itsolutionstuff.pdf');
 
-      return view('reports.payrolldetails_datatable',$data);
+     // return view('reports.payrolldetails_datatable',$data);
 
-         // return view('reports.payroll_details',$data);
+          return view('reports.payroll_details',$data);
 
    // include(app_path() . '/reports/temp_payroll.php');
     }
@@ -2695,7 +2695,7 @@ EOD;
 
 
 
- public function funder(Request $request)
+ public function annualleave(Request $request)
         {
             // dd("hello");
     

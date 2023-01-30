@@ -3620,6 +3620,8 @@ class GeneralController extends Controller
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
+            $data['employee'] = Employee::where('state','=',1)->get();
+
             $data['title'] = "Organisation Reports";
             return view('app.organisation_reports', $data);
         } else {
@@ -5956,7 +5958,7 @@ class GeneralController extends Controller
     {
 
 
-        // dd(Gate::allows('View Employee Summary'));
+        // dd(Gate::allows('View Employee Summaryy'));
 
         $id = base64_decode($request->id);
 
@@ -7675,7 +7677,8 @@ class GeneralController extends Controller
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
 
-
+        $pdf = Pdf::loadView('reports.terminalbenefit', compact('termination','employee_info'));
+        $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
         return $pdf->download('terminal-benefit-slip.pdf');
         //return view('reports.terminalbenefit',compact('termination'));
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));

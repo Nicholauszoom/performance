@@ -17,6 +17,7 @@
         <div class="row my-4">
 
             <div class="col-md-9 mx-auto">
+                <button id="printbtn" onclick="window.print()">Print this page</button>
 
                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
                     <div class="col-md-5 col-5">
