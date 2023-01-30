@@ -164,18 +164,40 @@ class AttendanceModel extends Model
 		return true;
 	}
 
+
+	function getNumberOfHolidays($start, $end)
+	{
+
+		return 0;
+
+
+	}
+
+
+	function getNumberOfWorkingDays($start, $end)
+	{
+
+		return 0;
+		
+
+	}
+
 	function getLeaveBalance($empID, $hireDate, $today)
 	{
 		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
+
+
+
+		// IF()
 		$row = DB::select(DB::raw($query));
 
         $date = DB::table('employee')->where('emp_id',$empID)->select('hire_date')->first();
         $d1 = new DateTime($hireDate);
         $todayDate = date('Y-m-d');
-       $d2 = new DateTime($todayDate);
-       $interval = $d1->diff($d2);
-       $diffInMonths  = $interval->m;
-       dd($diffInMonths);
+		$d2 = new DateTime($todayDate);
+		$interval = $d1->diff($d2);
+		$diffInMonths  = $interval->m;
+		//    dd($diffInMonths);
 		$spent = $row[0]->days_spent;
 		$accrued = $row[0]->days_accrued;
 
@@ -183,6 +205,56 @@ class AttendanceModel extends Model
 		$maximum_days = $accrual - $spent;
 		return $maximum_days;
 	}
+
+
+	function getLeaveTaken($empID, $hireDate, $today)
+	{
+		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
+		$row = DB::select(DB::raw($query));
+
+        $date = DB::table('employee')->where('emp_id',$empID)->select('hire_date')->first();
+        $d1 = new DateTime($hireDate);
+        $todayDate = date('Y-m-d');
+		$d2 = new DateTime($todayDate);
+		$interval = $d1->diff($d2);
+		$diffInMonths  = $interval->m;
+		//    dd($diffInMonths);
+		$spent = $row[0]->days_spent;
+		$accrued = $row[0]->days_accrued;
+
+		$accrual= 7*$accrued/90;
+		$maximum_days = $accrual - $spent;
+		return $maximum_days;
+	}
+
+
+
+	function getOpeningLeaveBalance($empID, $hireDate, $today)
+	{
+
+		$last_month_date=date('Y-m-j', strtotime($today,"last day of previous month"));
+
+		dd($last_month_date);
+
+		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
+
+		$row = DB::select(DB::raw($query));
+
+        $date = DB::table('employee')->where('emp_id',$empID)->select('hire_date')->first();
+        $d1 = new DateTime($hireDate);
+        $todayDate = date('Y-m-d');
+		$d2 = new DateTime($todayDate);
+		$interval = $d1->diff($d2);
+		$diffInMonths  = $interval->m;
+		//    dd($diffInMonths);
+		$spent = $row[0]->days_spent;
+		$accrued = $row[0]->days_accrued;
+
+		$accrual= 7*$accrued/90;
+		$maximum_days = $accrual - $spent;
+		return $maximum_days;
+	}
+	
 	function myleave_current($empID)
 	{
 		$query="SELECT @s:=@s+1 SNo,  lt.type as type, l.* FROM leave_application l, leave_type lt,  (SELECT @s:=0) as s WHERE l.nature=lt.id and l.empID='".$empID."' AND l.notification IN(1, 3) ORDER BY l.id DESC";
