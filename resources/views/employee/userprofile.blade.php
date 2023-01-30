@@ -58,7 +58,7 @@
         <div class="card border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
+                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="10" height="150" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>
@@ -76,9 +76,9 @@
 
                 @if (session('mng_emp'))
                 {{-- <a href="{{ url('/flex/updateEmployee/').$empID.'|'.$departmentID; }}" class="btn btn-main"> --}}
-                <a href="{{ route('flex.updateEmployee', ['id'=> base64_encode($empID), 'departmentID'=>$departmentID]) }}" class="btn btn-main">
-                    <i class="ph-note-pencil me-2"></i>
-                    Request Profile Update
+                <a href="{{ route('flex.userdata', base64_encode($row->emp_id)) }}" class="btn btn-main">
+                    <i class="ph-user me-2"></i>
+                    View Biodata
                 </a>
                 @endif
             </li>
