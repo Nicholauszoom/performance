@@ -7671,6 +7671,7 @@ class GeneralController extends Controller
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
 
+        $pdf = Pdf::loadView('reports.terminalbenefit', compact('termination','employee_info'));
 
         return $pdf->download('terminal-benefit-slip.pdf');
         //return view('reports.terminalbenefit',compact('termination'));
