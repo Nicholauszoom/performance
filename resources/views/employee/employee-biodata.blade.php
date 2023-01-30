@@ -553,7 +553,6 @@
                                             <th>Birthdate</th>
                                             <th>Sex: M/F</th>
                                             <th>Birth Certificate #</th>
-                                            <th>Action</th>
                                             <tr>
                                             @forelse ( $children as $item )
                                           <tr>
@@ -563,11 +562,7 @@
                                             <td>{{ $item->dep_birthdate }}</td>
                                             <td>{{ $item->dep_gender }}</td>
                                             <td>{{ $item->dep_certificate }} </td>
-                                            <td>
-                                                <a href="{{ url('flex/delete-child/'.$item->id) }}" class="btn btn-sm btn danger">
-                                                    <i class="ph-trash"></i>
-                                                </a>
-                                            </td> 
+                                            
                                           </tr>
                                         
                                          @empty
