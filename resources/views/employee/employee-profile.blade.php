@@ -68,6 +68,39 @@
 <div class="">
 
 
+    <div class="col-md-12 mt-1">
+        <div class="card border-0 shadow-none pb-4">
+          <div class="sidebar-section-body text-center">
+              <div class="card-img-actions d-inline-block my-3">
+                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
+              </div>
+
+              <h6 class="mb-0">{{ $name }}</h6>
+              <span class="text-muted mb-3">{{ $position }}</span>
+          </div>
+
+          <ul class="nav nav-sidebar mt-3">
+            <li class="nav-item-divider"></li>
+
+            <li class="nav-item mx-auto my-3">
+
+                <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+                    <i class="ph-image me-2"></i>
+                    Change Image
+                </button>
+
+                @if (session('mng_emp'))
+                <a href="{{ route('flex.userdata', base64_encode($empID)) }}" class="btn btn-main">
+                    <i class="ph-note-pencil me-2"></i>
+                    View Biodata
+                </a>
+                @endif
+            </li>
+          </ul>
+        </div>
+
+    </div>
+
     <form action="{{ route('flex.saveDetails') }}" method="post">
         @csrf
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
@@ -1073,7 +1106,61 @@
 </div>
 
 {{-- end of user credentials --}}
+{{-- user profile image  modal --}}
+<div  id="avatar-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-main">
+            <button type="button" class="btn-close bg-danger text-light btn-sm" data-bs-dismiss="modal" aria-label="Close">
+                X
+            </button>
 
+        </div>
+        <div class="modal-body">
+            <div id="error-div"></div>
+            {{-- start of current image --}}
+            <div class="row">
+              <div class="text-center col-md-2 mx-auto" >
+                <img class="profile-user-img  img-circle"
+                     src="{{ asset('uploads/userprofile/' . $photo) }}"
+                     alt="User passport picture" width="100%" height="100px">
+                     <br>
+                     <small class="text-gray">
+                      Current Image
+                     </small>
+              </div>
+            </div>
+            {{--  end of current image --}}
+            {{-- start of update image form --}}
+            <form method="post" action="{{ url('flex/user-image')}}" enctype="multipart/form-data">
+                 @csrf
+                {{-- <input type="hidden" name="update_id" id="{{Auth::User()->id;}}"> --}}
+                <div class="row">
+                <div class="col-lg-12">
+                        <label for="file" class="text-secondary font-weight-light">Upload New Image</label>
+                        <input type="file" name="image" id="image" class="form-control">
+                        <input type="hidden" name="empID" value="<?php echo $empID; ?>">
+                </div>
+
+                <div class="col-md-6"></div>
+
+                <div class="col-md-6 mb-0 ">
+                      <label for="" class="text-white">.</label>
+                      <button type="submit" class="btn text-light btn-main btn-block col-lg-12" >
+                          <i class="fa fa-save"></i>
+                          {{ __('Update Image') }}
+                      </button>
+                </div>
+
+            </div>
+          </form>
+
+          {{-- end of edit profile form --}}
+        </div>
+
+      </div>
+    </div>
+  </div>
 @endsection
 
 @push('footer-script')
