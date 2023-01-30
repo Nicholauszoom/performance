@@ -24,10 +24,10 @@
                     <h5 class="mb-0 text-muted text-start">Grievances | Complains</h5>
                 </div>
                 <div class="col-md-5">
-
+{{--
                     <a href="{{ route('flex.addComplain') }}" class="btn btn-perfrom text-end ">
                         <i class="ph-plus me-2"></i> Add Complain
-                        </a>
+                        </a> --}}
                         <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom ">
                             <i class="ph-plus me-2"></i> Add Disciplinary Action
                         </a>
@@ -47,10 +47,15 @@
         <thead>
             <tr>
                 <th>SN</th>
-                <th>Date</th>
                 <th>Employee Name</th>
-                <th>Complain Description</th>
-                <th>FeedBack</th>
+                <th>Department</th>
+                <th>Suspension</th>
+                <th>Date of Charge</th>
+                <th>Details of charge</th>
+                <th>Date of Hearing</th>
+                <th>Detail of Hearing</th>
+                <th>Findings</th>
+                <th>Final Decission</th>
                 <th>Action</th>
             </tr>
         </thead>

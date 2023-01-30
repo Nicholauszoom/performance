@@ -269,21 +269,21 @@
 
                                                 <div class="row mb-2">
 
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Date of Birth</label>
                                                         <input type="date" name="birthdate" value="<?php echo $birthdate; ?>" class="form-control">
                                                     </div>
 
 
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Place of Birth</label>
                                                         <input type="text" name="birthplace" @if($details) value="{{ $details->birthplace}}" @endif   class="form-control">
                                                     </div>
-                                                    <div class="form-group col-612 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Country of Birth</label>
                                                         <input type="text" name="birthcountry" @if($details) value="{{ $details->birthcountry}}" @endif   class="form-control">
                                                     </div>
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Gender/ Sex</label>
                                                         <br>
                                                         <input type="radio" id="male" name="gender" @foreach($employee as $item) {{$item->gender == "Male" ? 'checked':'' }} @endforeach value="Male"   class="">
@@ -334,7 +334,7 @@
 
 
                                                     </div>
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Religion</label>
                                                         <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
                                                     </div>
@@ -385,11 +385,11 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Physical Address</label>
                                                     <textarea name="physical_address" value="<?php echo $physical_address; ?> " class="form-control" rows="3"><?php echo $physical_address; ?></textarea>
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="landmark">Landmark near your home</label>
                                                     <textarea name="landmark" id="landmark" @if($details) value="{{ $details->landmark}}" @endif class="form-control" rows="3">@if($details) {{ $details->landmark}} @endif</textarea>
                                                 </div>
@@ -411,11 +411,11 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">TIN Number</label>
                                                     <input type="text" name="TIN" value="<?php echo $tin; ?>" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">NIDA Number</label>
                                                     <input type="text" name="NIDA" value="<?php echo $national_id; ?>"  class="form-control">
                                                 </div>
@@ -423,12 +423,12 @@
                                                     <label for="">Passport Number</label>
                                                     <input type="text" name="passport_number" @if($details) value="{{ $details->passport_number}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">Pension Fund Number</label>
                                                     <input type="text" name="pension" value="<?php echo $pf_membership_no; ?>" class="form-control">
                                                 </div>
 
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">HELSB Loan Index Number</label>
                                                     <input type="text" name="HELSB" value="<?php echo $HELSB; ?>" class="form-control">
                                                 </div>
@@ -471,27 +471,27 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">First Name</label>
                                                     <input type="text" name="em_fname" @if($emergency) value="{{ $emergency->em_fname}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Middle Name</label>
                                                     <input type="text" name="em_mname" @if($emergency) value="{{ $emergency->em_mname}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Surname</label>
                                                     <input type="text" name="em_lname" @if($emergency) value="{{ $emergency->em_sname}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Relationship</label>
                                                     <input type="text" name="em_relationship" @if($emergency) value="{{ $emergency->em_relationship}}" @endif id="" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Occupation</label>
                                                     <input type="text" name="em_occupation" @if($emergency) value="{{ $emergency->em_occupation}}" @endif id="" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Cellphone Number</label>
                                                     <input type="text" name="em_phone" @if($emergency) value="{{ $emergency->em_phone}}" @endif id="" class="form-control">
                                                 </div>
@@ -513,15 +513,15 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">Date of Employment</label>
                                                     <input type="text" name="employment_date" value="<?php echo $hire_date; ?>" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">First Job Title</label>
                                                     <input type="text" name="former_title" @if($details) value="{{ $details->former_title}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <p></p>
                                                     <label for="">Current Job Title: <?php echo $title; ?></label>
                                                     <br>
@@ -1065,12 +1065,12 @@
                                                     <input type="year" name="hist_end"  id="hist_end"  placeholder="Finish Year" class="form-control" >
                                                 </div>
 
-                                                <div class="col-md-12 mb-2">
+                                                <div class="col-md-6 mb-2">
                                                     <label for="">Reason for Leaving</label>
                                                     <textarea name="hist_reason" id="" class="form-control" placeholder="Enter Reason for Leaving Here" rows="4"></textarea>
                                                 </div>
 
-                                                <div class="col-4">
+                                                <div class="col-6">
                                                     <label for="hist_status">Employment Status</label>
                                                     <select name="hist_status" id="hist_status" class="select form-control">
                                                         <option value="Permanent">Permanent</option>
