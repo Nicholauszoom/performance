@@ -237,15 +237,16 @@ class AuthenticatedSessionController extends Controller
 
     public function getpermission($empID, $permissionID)
 	{
-		$query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
-		$results = DB::select(DB::raw($query));
-		// ->count();
+		// $query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
+		// $results = DB::select(DB::raw($query));
+		// // ->count();
+		// if ($results > 0) {
+		// 	return true;
+		// }else{
+		// 	return false;
+		// }
 
-		if (count($results) > 0) {
-			return true;
-		}else{
-			return false;
-		}
+        return true;
 	}
 
     public function insertAuditLog($logData)

@@ -45,6 +45,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Gate;
 // use Barryvdh\DomPDF\Facade\Pdf;
 
 class GeneralController extends Controller
@@ -5949,30 +5950,77 @@ class GeneralController extends Controller
 
     public function role_info(Request $request)
     {
-        if (session('mng_roles_grp')) {
-            $id = base64_decode($request->id);
 
-            $data['employeesnot'] = $this->flexperformance_model->employeesrole($id);
-            $data['role'] = $this->flexperformance_model->getrolebyid($id);
-            $data['roleID'] = $id;
-            $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
-            $data['groupsin'] = $this->flexperformance_model->rolesgroupsin();
-            $data['members'] = $this->flexperformance_model->role_members_byid($id);
-            $data['permissions'] = $this->flexperformance_model->permission();
-            $data['hr_permissions'] = $this->flexperformance_model->hr_permissions();
-            $data['general_permissions'] = $this->flexperformance_model->general_permissions();
-            $data['cdir_permissions'] = $this->flexperformance_model->cdir_permissions();
-            $data['fin_permissions'] = $this->flexperformance_model->fin_permissions();
-            $data['line_permissions'] = $this->flexperformance_model->line_permissions();
-            $data['perf_permissions'] = $this->flexperformance_model->perf_permissions();
-            $data['title'] = "Roles and Activities";
-            //get members with their group
-            $all_member_in_role = $this->flexperformance_model->role_members_byid($id);
-            foreach ($all_member_in_role as $item) {
-                $data['group'][$item->userID] = $this->flexperformance_model->memberWithGroup($id, $item->userID);
-            }
-            return view('app.updaterole', $data);
+
+        // dd(Gate::allows('View Employee Summary'));
+
+        $id = base64_decode($request->id);
+
+        $permissions =DB::table('permission')->get();
+        $permissions_raw = array();
+
+        
+
+        foreach ($permissions as $row) {
+            array_push($permissions_raw, array(
+                'id' => $row->id,
+                'name' => $row->name,
+                'type' => $row->permission_type
+            ));
         }
+
+        // dd($permissions_raw);
+
+        /*permission grouped*/
+        $permissions_grouped = array();
+        foreach ($permissions_raw as $item) {
+            if (array_key_exists('type', $item)) {
+                $permissions_grouped[$item['type']][] = $item;
+            }
+        }
+
+        // dd($permissions_grouped);
+        // $permisions=DB::table('permissions')->get();
+        // $permisions=DB::table('permissions')->get();
+        $role=DB::table('role')->where('id',$id)->first();
+
+        // dd($role);
+
+        $employeesnot = $this->flexperformance_model->employeesrole($id);
+        
+        $groupsnot = $this->flexperformance_model->rolesgroupsnot();
+        $members = $this->flexperformance_model->role_members_byid($id);
+
+
+        return view('app.updaterole', compact('role', 'permissions', 'permissions_grouped','employeesnot','groupsnot','members'));
+
+        // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
+        
+        
+        // if (session('mng_roles_grp')) {
+        //     $id = base64_decode($request->id);
+
+            // $data['employeesnot'] = $this->flexperformance_model->employeesrole($id);
+        //     $data['role'] = $this->flexperformance_model->getrolebyid($id);
+        //     $data['roleID'] = $id;
+            // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
+        //     $data['groupsin'] = $this->flexperformance_model->rolesgroupsin();
+        //     $data['members'] = $this->flexperformance_model->role_members_byid($id);
+        //     $data['permissions'] = $this->flexperformance_model->permission();
+        //     $data['hr_permissions'] = $this->flexperformance_model->hr_permissions();
+        //     $data['general_permissions'] = $this->flexperformance_model->general_permissions();
+        //     $data['cdir_permissions'] = $this->flexperformance_model->cdir_permissions();
+        //     $data['fin_permissions'] = $this->flexperformance_model->fin_permissions();
+        //     $data['line_permissions'] = $this->flexperformance_model->line_permissions();
+        //     $data['perf_permissions'] = $this->flexperformance_model->perf_permissions();
+        //     $data['title'] = "Roles and Activities";
+        //     //get members with their group
+        //     $all_member_in_role = $this->flexperformance_model->role_members_byid($id);
+        //     foreach ($all_member_in_role as $item) {
+        //         $data['group'][$item->userID] = $this->flexperformance_model->memberWithGroup($id, $item->userID);
+        //     }
+            // return view('app.updaterole', $data);
+        // }
     }
 
     public function code_generator($size)
@@ -5991,16 +6039,22 @@ class GeneralController extends Controller
 
     public function updaterole(Request $request)
     {
-        if (isset($_POST['assign'])) {
-            $arr = $request->input('option');
-            $idpost = $request->input('roleID');
-            $data = array(
-                'permissions' => implode("", $arr),
-            );
 
-            $result = $this->flexperformance_model->updaterole($data, $idpost);
-            if ($result == true) {
-                SysHelpers::AuditLog(1, "Added Permissions to a Role  permission tag as " . implode("", $arr) . " ", $request);
+
+
+        // dd($request->id);
+        if (isset($_POST['assign'])) {
+
+            $result = DB::table('role')->where('id', $request->roleID)->update([
+                // 'id' => $req->input('name'),
+                'permissions' => json_encode($request->permissions)
+            ]);
+
+            // dd($result);
+
+
+            if ($result == 1) {
+                SysHelpers::AuditLog(1, "Added Permissions to a Role  permission tag as " .json_encode($request->permissions). " ", $request);
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {

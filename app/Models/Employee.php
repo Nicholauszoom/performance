@@ -57,4 +57,8 @@ class Employee extends Model
         'national_id' ,
         'tin',
     ];
+
+    public function roles(){
+        return $this->belongsTo('App\Models\Role','level');
+    }
 }

@@ -56,7 +56,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    use HasPermissionsTrait; //Import The Trait
+    public function roles(){
+        return $this->belongsTo('App\Models\Role','emp_level');
+    }
 
 
 }

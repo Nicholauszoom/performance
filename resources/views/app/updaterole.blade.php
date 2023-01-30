@@ -1,52 +1,57 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-    <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
-    <?php
-    ?>
+<?php
+?>
 
 
-    <!-- page content -->
-    <div class="right_col" role="main">
-        <div class="">
-            <div class="page-title">
-                <div class="title_left">
-                    <h3>Roles and Permission </h3>
-                </div>
-
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Roles and Permission </h3>
             </div>
 
-            <div class="clearfix"></div>
+        </div>
 
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="card-head">
-                            <h2>Role Info</h2>
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="card-head">
+                        <h2>Role Info</h2>
 
 
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="card-body">
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="card-body">
 
-                            @if (Session::has('note'))
-                                {{ session('note') }}
-                            @endif
+                        @if (Session::has('note'))
+                        {{ session('note') }}
+                        @endif
 
-                            <!-- <table id="datatable" class="table table-striped table-bordered"> -->
-                            <?php
-            if (isset($role)){
-                      foreach ($role as $row) {
-                        $roleID=$row->id;
-                        $permissionTag=$row->permissions;
-                          ?>
+                        <!-- <table id="datatable" class="table table-striped table-bordered"> -->
+                        <?php
+                        if (isset($role)) {
+
+                            $roleID = $role->id;
+                            $permissionTag = $role->permissions;
+                            $permission_arrray = json_decode($role->permissions);
+                            $counter=1;
+
+                            // dd(json_decode("hello"));
+                            // dd("Here")
+                        ?>
 
 
                             <div class="row">
@@ -57,39 +62,31 @@
                                             <div class="clearfix"></div>
                                         </div>
                                         <div class="card-body">
-                                            <form align="center" enctype="multipart/form-data" method="post"
-                                                action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>"
-                                                data-parsley-validate class="form-horizontal form-label-left"
-                                                autocomplete="off">
+                                            <form align="center" enctype="multipart/form-data" method="post" action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>" data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
 
                                                 @csrf
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                        for="last-name">Role Name
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Role Name
                                                     </label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input required="" value="<?php echo $row->name; ?>" name="name"
-                                                            class="form-control col-md-7 col-xs-12">
+                                                        <input required="" value="<?php echo $role->name; ?>" name="name" class="form-control col-md-7 col-xs-12">
                                                         <span class="text-danger"><?php // echo form_error("lname");
-                                                        ?></span>
+                                                                                    ?></span>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group" style="display: none">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12"
-                                                        for="last-name">Permission Tag
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Permission Tag
                                                     </label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input disabled="disabled" value="<?php echo $row->permissions; ?>"
-                                                            class="form-control col-md-7 col-xs-12">
+                                                        <input disabled="disabled" value="<?php echo $role->permissions; ?>" class="form-control col-md-7 col-xs-12">
                                                         <span class="text-danger"><?php // echo form_error("lname");
-                                                        ?></span>
+                                                                                    ?></span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-3">
-                                                        <button type="submit" name="updatename"
-                                                            class="btn btn-main">Update</button>
+                                                        <button type="submit" name="updatename" class="btn btn-main">Update</button>
                                                     </div>
                                                 </div>
 
@@ -113,33 +110,28 @@
                                         <div class="card-body">
 
 
-                                            <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                                action="<?php echo url(''); ?>/flex/assignrole2" data-parsley-validate
-                                                class="form-horizontal form-label-left">
+                                            <form id="demo-form2" enctype="multipart/form-data" method="post" action="<?php echo url(''); ?>/flex/assignrole2" data-parsley-validate class="form-horizontal form-label-left">
                                                 @csrf
 
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3  col-xs-6"><i
-                                                            class="fa fa-user"></i>&nbsp; Employee</label>
+                                                    <label class="control-label col-md-3  col-xs-6"><i class="fa fa-user"></i>&nbsp; Employee</label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <select required="" name="empID"
-                                                            class="select4_single form-control" tabindex="-1">
+                                                        <select required="" name="empID" class="select4_single form-control" tabindex="-1">
                                                             <option></option>
                                                             <?php
-                                                                    foreach ($employeesnot as $row) {
-                                                              # code... ?>
-                                                            <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?>
-                                                            </option> <?php } ?>
+                                                            foreach ($employeesnot as $row) {
+                                                                # code... 
+                                                            ?>
+                                                                <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?>
+                                                                </option> <?php } ?>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <input type="text" hidden="hidden" name="roleID"
-                                                    value="<?php echo $roleID; ?>">
+                                                <input type="text" hidden="hidden" name="roleID" value="<?php echo $roleID; ?>">
                                                 <div class="form-group">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-3">
-                                                        <input type="submit" value="ADD" name="assign"
-                                                            class="btn btn-main" />
+                                                        <input type="submit" value="ADD" name="assign" class="btn btn-main" />
                                                     </div>
                                                 </div>
                                             </form>
@@ -149,32 +141,27 @@
                                             <!-- <h4><b>OR</b></h4> <br> -->
 
 
-                                            <form id="demo-form2" enctype="multipart/form-data" method="post"
-                                                action="<?php echo url(''); ?>/flex/assignrole2" data-parsley-validate
-                                                class="form-horizontal form-label-left">
+                                            <form id="demo-form2" enctype="multipart/form-data" method="post" action="<?php echo url(''); ?>/flex/assignrole2" data-parsley-validate class="form-horizontal form-label-left">
                                                 @csrf
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3  col-xs-6"><i
-                                                            class="fa fa-users"></i> &nbsp;Group</label>
+                                                    <label class="control-label col-md-3  col-xs-6"><i class="fa fa-users"></i> &nbsp;Group</label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <select required="" name="groupID"
-                                                            class="select_group form-control" tabindex="-1">
+                                                        <select required="" name="groupID" class="select_group form-control" tabindex="-1">
                                                             <option></option>
                                                             <?php
-                                                        foreach ($groupsnot as $row) {
-                             # code... ?>
-                                                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?>
-                                                            </option> <?php } ?>
+                                                            foreach ($groupsnot as $row) {
+                                                                # code... 
+                                                            ?>
+                                                                <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?>
+                                                                </option> <?php } ?>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <input type="text" hidden="hidden" name="roleID"
-                                                    value="<?php echo $roleID; ?>">
+                                                <input type="text" hidden="hidden" name="roleID" value="<?php echo $roleID; ?>">
                                                 <div class="form-group">
                                                     <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-3">
-                                                        <input type="submit" value="ADD" name="addgroup"
-                                                            class="btn btn-main" />
+                                                        <input type="submit" value="ADD" name="addgroup" class="btn btn-main" />
                                                     </div>
                                                 </div>
                                             </form>
@@ -196,26 +183,21 @@
                                         <div class="col-xs-3">
                                             <!-- required for floating -->
                                             <!-- Nav tabs -->
-                                            <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3"
-                                                id="tabs-target-right" role="tablist">
+                                            <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#generalTab" class="nav-link active show"
-                                                        data-bs-toggle="tab" aria-selected="false" role="tab"
-                                                        tabindex="-1">
+                                                    <a href="#Permission5Tab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         General Permission
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#linemanagerTab" class="nav-link " data-bs-toggle="tab"
-                                                        aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission4Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         Line Manager Permission
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#hrTab" class="nav-link" data-bs-toggle="tab"
-                                                        aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission3Tab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         HR Permission
                                                     </a>
@@ -223,15 +205,13 @@
 
 
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#financeTab" class="nav-link " data-bs-toggle="tab"
-                                                        aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission2Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         Finance Permission
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
-                                                    <a href="#directorTab" class="nav-link " data-bs-toggle="tab"
-                                                        aria-selected="false" role="tab" tabindex="-1">
+                                                    <a href="#Permission1Tab" class="nav-link " data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ph-list me-2"></i>
                                                         Director Permission
                                                     </a>
@@ -248,12 +228,12 @@
                                                 <div class="tab-content" id="myTabContent">
 
 
-                                                    <div role="tabpanel" role="tabpanel" class="tab-pane active "
-                                                        id="generalTab" aria-labelledby="home-tab">
+                                                    @foreach ($permissions_grouped as $key => $permission)
 
-                                                        <p class="lead">General Permissions &nbsp;&nbsp;&nbsp;<button
-                                                                type="submit" name="assign"
-                                                                class="btn btn-main">update</button></p>
+                                                    <div role="tabpanel" role="tabpanel" class="tab-pane <?php if($counter==1){echo "active";$counter=$counter+1;} else{echo "fade";}?> " id="Permission{{ $key }}Tab" aria-labelledby="home-tab">
+                                                        
+
+                                                        <p class="lead"><button type="submit" name="assign" class="btn btn-main">update</button></p>
                                                         <table class="table table-striped table-bordered">
                                                             <thead>
                                                                 <tr>
@@ -265,223 +245,31 @@
                                                             </thead>
 
                                                             <tbody>
-                                                                <?php foreach ($general_permissions as $row) { ?>
+                                                                @foreach($permission as $item)
+
                                                                 <tr>
-                                                                    <td width="1px"><?php echo $row->SNo; ?></td>
+                                                                    <td width="1px"><?php echo $item['id']; ?></td>
                                                                     </td>
-                                                                    <td><?php echo $row->name; ?></td>
-                                                                    <td><?php echo $row->code; ?></td>
+                                                                    <td><?php echo $item['name']; ?></td>
+                                                                    <td><?php echo $item['id']; ?></td>
 
                                                                     <td class="options-width">
+
+
+
                                                                         <label class="containercheckbox">
-                                                                            <input <?php if (strpos($permissionTag, $row->code) !== false) { ?> checked=""
-                                                                                <?php } ?> type="checkbox"
-                                                                                name="option[]"
-                                                                                value="<?php echo $row->code; ?>">
+                                                                            <input type="checkbox" name="permissions[]" id="{{ $item['name'] }}" value="{{ $item['name'] }}" <?php if($permission_arrray && in_array($item['name'] , $permission_arrray)){echo "checked";} ?> >
+
                                                                             <span class="checkmark"></span>
                                                                         </label>
                                                                     </td>
                                                                 </tr>
-                                                                <?php }  ?>
+                                                                @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                    @endforeach
 
-                                                    <div role="tabpanel" role="tabpanel" class="tab-pane fade "
-                                                        id="hrTab" aria-labelledby="home-tab">
-
-                                                        <p class="lead">Human Resource Permissions
-                                                            &nbsp;&nbsp;&nbsp;<button type="submit" name="assign"
-                                                                class="btn btn-main">update</button></p>
-                                                        <table class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S/N</th>
-                                                                    <th>Name</th>
-                                                                    <th>code</th>
-                                                                    <th>Option</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <?php foreach ($hr_permissions as $row) { ?>
-                                                                <tr>
-                                                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                                                    </td>
-                                                                    <td><?php echo $row->name; ?></td>
-                                                                    <td><?php echo $row->code; ?></td>
-
-                                                                    <td class="options-width">
-                                                                        <label class="containercheckbox">
-                                                                            <input <?php if (strpos($permissionTag, $row->code) !== false) { ?> checked=""
-                                                                                <?php } ?> type="checkbox"
-                                                                                name="option[]"
-                                                                                value="<?php echo $row->code; ?>">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php }  ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-
-                                                    <div role="tabpanel" role="tabpanel" class="tab-pane fade "
-                                                        id="performanceTab" aria-labelledby="home-tab">
-
-                                                        <p class="lead">Performance Permissions&nbsp;&nbsp;&nbsp;<button
-                                                                type="submit" name="assign"
-                                                                class="btn btn-main">update</button></p>
-                                                        <table class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S/N</th>
-                                                                    <th>Name</th>
-                                                                    <th>Option</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <?php foreach ($perf_permissions as $row) { ?>
-                                                                <tr>
-                                                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                                                    </td>
-                                                                    <td><?php echo $row->name; ?></td>
-
-                                                                    <td class="options-width">
-                                                                        <label class="containercheckbox">
-                                                                            <input <?php if (strpos($permissionTag, $row->code) !== false) { ?> checked=""
-                                                                                <?php } ?> type="checkbox"
-                                                                                name="option[]"
-                                                                                value="<?php echo $row->code; ?>">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php }  ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-
-                                                    <div role="tabpanel" role="tabpanel" class="tab-pane fade "
-                                                        id="directorTab" aria-labelledby="home-tab">
-
-                                                        <p class="lead">Country Director
-                                                            Permissions&nbsp;&nbsp;&nbsp;<button type="submit"
-                                                                name="assign" class="btn btn-main">update</button></p>
-                                                        <table class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S/N</th>
-                                                                    <th>Name</th>
-                                                                    <th>Option</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <?php foreach ($cdir_permissions as $row) { ?>
-                                                                <tr>
-                                                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                                                    </td>
-                                                                    <td><?php echo $row->name; ?></td>
-
-                                                                    <td class="options-width">
-                                                                        <label class="containercheckbox">
-                                                                            <input <?php if (strpos($permissionTag, $row->code) !== false) { ?> checked=""
-                                                                                <?php } ?> type="checkbox"
-                                                                                name="option[]"
-                                                                                value="<?php echo $row->code; ?>">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php }  ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-
-                                                    <div role="tabpanel" role="tabpanel" class="tab-pane fade "
-                                                        id="linemanagerTab" aria-labelledby="home-tab">
-
-                                                        <p class="lead">Line Manager Permissions&nbsp;&nbsp;&nbsp;<button
-                                                                type="submit" name="assign"
-                                                                class="btn btn-main">update</button></p>
-                                                        <!-- <div class="clearfix"></div> -->
-                                                        <table class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S/N</th>
-                                                                    <th>Name</th>
-                                                                    <th>Option</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <?php foreach ($line_permissions as $row) { ?>
-                                                                <tr>
-                                                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                                                    </td>
-                                                                    <td><?php echo $row->name; ?></td>
-
-                                                                    <td class="options-width">
-                                                                        <label class="containercheckbox">
-                                                                            <input <?php if (strpos($permissionTag, $row->code) !== false) { ?> checked=""
-                                                                                <?php } ?> type="checkbox"
-                                                                                name="option[]"
-                                                                                value="<?php echo $row->code; ?>">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php }  ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-
-
-
-                                                    <div role="tabpanel" role="tabpanel" class="tab-pane fade "
-                                                        id="financeTab" aria-labelledby="home-tab">
-
-                                                        <p class="lead">Financial Permissions&nbsp;&nbsp;&nbsp;<button
-                                                                type="submit" name="assign"
-                                                                class="btn btn-main">update</button></p>
-                                                        <table class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S/N</th>
-                                                                    <!-- <th>Value</th> -->
-                                                                    <th>Name</th>
-                                                                    <th>Option</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                <?php foreach ($fin_permissions as $row) { ?>
-                                                                <tr>
-                                                                    <td width="1px"><?php echo $row->SNo; ?></td>
-                                                                    </td>
-                                                                    <!-- <td><?php echo $row->code; ?></td> -->
-                                                                    <td><?php echo $row->name; ?></td>
-
-                                                                    <td class="options-width">
-                                                                        <label class="containercheckbox">
-                                                                            <input <?php if (strpos($permissionTag, $row->code) !== false) { ?> checked=""
-                                                                                <?php } ?> type="checkbox"
-                                                                                name="option[]"
-                                                                                value="<?php echo $row->code; ?>">
-                                                                            <span class="checkmark"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php }  ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
 
                                                 </div>
                                             </form>
@@ -494,10 +282,9 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="card-body">
                                 @if (Session::has('note'))
-                                    {{ session('note') }}
+                                {{ session('note') }}
                                 @endif
                                 <div id="feedBackRemove"></div>
                                 <form id="removeFromRole" method="post">
@@ -518,27 +305,26 @@
                                             <?php
 
                                             foreach ($members as $row) { ?>
-                                            <tr>
-                                                <td width="1px"><?php echo $row->SNo; ?></td>
-                                                <td><?php echo $row->NAME; ?></td>
-                                                <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
-                                                <td>
-                                                    <?php
-                                                    if (sizeof($group[$row->userID]) > 0) {
-                                                        echo $group[$row->userID][0]->name;
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td class="options-width">
-                                                    <label class="containercheckbox">
-                                                        <input type="checkbox" name="option[]"
-                                                            value="<?php echo $row->roleID . '|' . $row->userID; ?>">
-                                                        <span class="checkmark"></span>
-                                                    </label>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td width="1px"><?php echo $row->SNo; ?></td>
+                                                    <td><?php echo $row->NAME; ?></td>
+                                                    <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
+                                                    <td>
+                                                        <?php
+                                                        if (sizeof($group[$row->userID]) > 0) {
+                                                            echo $group[$row->userID][0]->name;
+                                                        } else {
+                                                            echo '';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td class="options-width">
+                                                        <label class="containercheckbox">
+                                                            <input type="checkbox" name="option[]" value="<?php echo $row->roleID . '|' . $row->userID; ?>">
+                                                            <span class="checkmark"></span>
+                                                        </label>
+                                                    </td>
+                                                </tr>
                                             <?php }  ?>
                                         </tbody>
                                     </table>
@@ -552,48 +338,81 @@
 
 
                             <!-- </table> -->
-                        </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
     </div>
+</div>
 
-    <!-- /.modal -->
-
-
-    <?php } }    ?>
-
-    <!-- /page content -->
+<!-- /.modal -->
 
 
-    <script type="text/javascript">
-        $('#removeFromRole').submit(function(e) {
-            if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Role?") == true) {
-                e.preventDefault();
-                $.ajax({
-                        url: "<?php echo url(''); ?>/flex/removeEmployeeFromRole",
-                        type: "post",
-                        data: new FormData(this),
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        async: false
-                    })
-                    .done(function(data) {
-                        $('#feedBackRemove').fadeOut('fast', function() {
-                            $('#feedBackRemove').fadeIn('fast').html(data);
-                        });
+<?php }     ?>
 
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Update Failed!! ...');
+<!-- /page content -->
+
+
+<script type="text/javascript">
+    $('#removeFromRole').submit(function(e) {
+        if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Role?") == true) {
+            e.preventDefault();
+            $.ajax({
+                    url: "<?php echo url(''); ?>/flex/removeEmployeeFromRole",
+                    type: "post",
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    async: false
+                })
+                .done(function(data) {
+                    $('#feedBackRemove').fadeOut('fast', function() {
+                        $('#feedBackRemove').fadeIn('fast').html(data);
                     });
+
+                    setTimeout(function() { // wait for 5 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 2000);
+                })
+                .fail(function() {
+                    alert('Update Failed!! ...');
+                });
+        }
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        var roles = @json($role);
+
+        if (roles != null) {
+
+            // console.log("Here", roles.permissions)
+            var permissions = roles.permissions;
+            $('input[type=checkbox]').each(function() {
+                var id = $(this).val();
+                console.log(id,ValueExist(id, permissions),permissions)
+                if (ValueExist(id, permissions) == 1) {
+                    $(this).attr('checked', true);
+                }
+            });
+        }
+
+        function ValueExist(value, arr) {
+            var status = '0';
+
+            for (var i = 0; i < arr.length; i++) {
+                var name = arr[i];
+                if (name == value) {
+                    status = '1';
+                    break;
+                }
             }
-        });
-    </script>
+            return status;
+        }
+    });
+</script>
 @endsection
