@@ -1,3 +1,4 @@
+@can('view-roles')
 <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg bg-main-nav">
 
     <div class="sidebar-content">
@@ -247,4 +248,5 @@
 
     </div>
 </div>
+@endcan
 {{-- /main sidebar --}}
