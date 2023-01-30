@@ -121,7 +121,7 @@
                          <div role="tabpanel" class="tab-pane fade active show " id="profile" aria-labelledby="work-tab">
 
                             <div class="card shadow-none">
-                                <div class="card-header">
+                                <div class="card-header mb-2">
                                     <h5 class="text-main">PROFILE PICTURE: </h5>
                                 </div>
                                 @if (session('msg'))
