@@ -14,6 +14,7 @@ use App\Models\AuditTrail;
 use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
 use App\Models\Termination;
+use App\Models\Disciplinary;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\FinancialLogs;
@@ -33,9 +34,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\RegisteredUser;
@@ -7961,22 +7962,157 @@ public function grievancesComplains()
     $promotions= Promotion::orderBy('created_at','desc')->get();
     $i=1;
     $data['parent'] = 'Workforce';
-    $data['child'] = 'Promotion|Increment';
+    $data['child'] = 'Disciplinary Actions';
+    $data['actions'] =Disciplinary::orderBy('created_at','desc')->get();
 
     return view('workforce-management.grievances-complains', $data,compact('promotions','i'));
 
 }
 
 
-public function addComplain(Request $request, $id)
+public function addComplain(Request $request)
 {
 
     return view('workforce-management.add-complain');
 
 }
 
+// start of add disciplinary function
+
+public function addDisciplinary(Request $request)
+{
+    // $id=Auth::user()->emp_id;
+    $data['employees'] = EMPL::all();
+
+    return view('workforce-management.add-disciplinary',$data);
+
+}
+
+// end of add discipllinary function
 
 
+// start of save disciplinary action
+
+public function saveDisciplinary(Request $request)
+{
+    request()->validate(
+        [
+        'employeeID' => 'required',
+         ]
+        );
+
+
+        $id=$request->employeeID;
+
+        $emp=EMPL::where('emp_id',$id)->first();
+        $department=$emp->department;
+
+
+        // dd($emp);
+
+        $disciplinary = new Disciplinary();
+        $disciplinary->employeeID=$id;
+        $disciplinary->department=$department;
+        $disciplinary->suspension=$request->suspension;
+        $disciplinary->date_of_charge=$request->date_of_charge;
+        $disciplinary->detail_of_charge=$request->charge_description;
+        $disciplinary->date_of_hearing=$request->date_of_hearing;
+        $disciplinary->detail_of_hearing=$request->hearing_description;
+        $disciplinary->findings=$request->findings;
+        $disciplinary->recommended_sanctum=$request->recommended_sanctum;
+        $disciplinary->final_decission=$request->final_decission;
+
+
+
+
+
+        $disciplinary->save();
+
+
+        $msg="Disciplinary Action Has been save Successfully !";
+        return redirect('flex/grievancesCompain')->with('msg', $msg);
+
+}
+
+// end of save disciplinary action
+
+// start of view single displinary action
+public function viewDisciplinary(Request $request,$id)
+    {
+
+        $did = base64_decode($id);
+
+        $data['title'] = "Employee";
+
+        $data['actions']= Disciplinary::where('id',$did)->with('employee')->with('departments')->get();
+
+
+        return view('workforce-management.view-action',$data);
+    }
+
+
+// end of view single displinary action
+
+
+// start of edit disciplinary action
+public function editDisciplinary(Request $request,$id)
+    {
+
+        $did = base64_decode($id);
+
+        $data['title'] = "Employee";
+
+        $data['actions']= Disciplinary::where('id',$did)->with('employee')->with('departments')->get();
+
+
+        return view('workforce-management.edit-action',$data);
+    }
+// end of edit disciplinary action
+
+
+// start of update disciplinary action
+
+public function updateDisciplinary(Request $request)
+{
+    // request()->validate(
+    //     [
+    //     'employeeID' => 'required',
+    //      ]
+    //     );
+
+
+        $id=$request->id;
+
+        // $emp=EMPL::where('emp_id',$id)->first();
+        // $department=$emp->department;
+
+
+        // dd($emp);
+
+        $disciplinary =Disciplinary::where('id',$id)->first();
+        $disciplinary->suspension=$request->suspension;
+        $disciplinary->date_of_charge=$request->date_of_charge;
+        $disciplinary->detail_of_charge=$request->charge_description;
+        $disciplinary->date_of_hearing=$request->date_of_hearing;
+        $disciplinary->detail_of_hearing=$request->hearing_description;
+        $disciplinary->findings=$request->findings;
+        $disciplinary->recommended_sanctum=$request->recommended_sanctum;
+        $disciplinary->final_decission=$request->final_decission;
+        $disciplinary->update();
+        $emp=base64_encode($id);
+        $data['title'] = "Employee";
+
+        $data['actions']= Disciplinary::where('id',$id)->with('employee')->with('departments')->get();
+
+
+
+        $msg="Disciplinary Action Has been Updated Successfully !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+         return view('workforce-management.view-action',$data)->with('msg', $msg);
+
+}
+
+// end of update disciplinary action
 
 public function saveComplain(Request $request)
 {
@@ -7997,7 +8133,7 @@ public function saveComplain(Request $request)
         $complain->save();
 
 
-        $msg="Your Complain has been Submitted successfully !";
+        $msg="Your Disciplinary Action Has been save Successfully !";
         return redirect('flex/grievancesCompain')->with('msg', $msg);
 
 }
@@ -8006,7 +8142,7 @@ public function saveComplain(Request $request)
 
 
 
-// start of profile
+// start of profile (employee biodate)
 
 // Request $request, $id
 
@@ -8580,12 +8716,16 @@ public function updateEmployeeDetails(Request $request)
            $employee=EMPL::where('emp_id',$user)->first();
            if($request->hasfile('image')){
 
+                // $newImageName = $request->userfile->hashName();
+                // $request->image->move(public_path('storage/profile'), $newImageName);
 
-               $file=$request->file('image');
                $filename=time().'.'.$file->getClientOriginalExtension();
                $file->move('uploads/userprofile/', $filename);
-               $employee->photo=$filename;
+               $employee->photo= $newImageName;
            }
+
+           
+   
            // saving data
            $employee->update();
 

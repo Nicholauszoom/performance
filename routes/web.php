@@ -202,7 +202,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
-        
+
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');
@@ -329,10 +329,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         //start of grievances and disciplinary actions routes
         Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
-
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
         Route::post('/save-complain','saveComplain')->name('flex.saveComplain');
-
+        Route::any('/add-action','addDisciplinary')->name('flex.addDisciplinary');
+        Route::post('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
+        Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
+        Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
+        Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
         // end of grievances and disciplinary actions routes
 
         // start of education qualification route

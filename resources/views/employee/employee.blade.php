@@ -66,11 +66,11 @@
 
                 @if (session('mng_emp'))
                 <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-main btn-xs"><i class="ph-pen"></i></button>
+                    <button type="button" class="btn btn-info btn-xs"><i class="ph-pen"></i></button>
                 </a>
 
                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
-                 <button class="btn btn-danger disabled">  <i class="ph-prohibit"></i></button>
+                 <button class="btn btn-danger ">  <i class="ph-prohibit"></i></button>
                     </a>
 {{--
                     <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">

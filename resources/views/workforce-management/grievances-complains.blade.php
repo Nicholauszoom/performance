@@ -20,15 +20,11 @@
     <div class="card-header border-0">
         <div class="">
             <div class="row">
-                <div class="col-md-7">
-                    <h5 class="mb-0 text-muted text-start">Grievances | Complains</h5>
+                <div class="col-md-9">
+                    <h5 class="mb-0 text-muted text-start">Grievances | Disciplinary Action</h5>
                 </div>
-                <div class="col-md-5">
-{{--
-                    <a href="{{ route('flex.addComplain') }}" class="btn btn-perfrom text-end ">
-                        <i class="ph-plus me-2"></i> Add Complain
-                        </a> --}}
-                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom ">
+                <div class="col-md-3">
+                        <a href="{{ route('flex.addDisciplinary') }}" class="btn btn-perfrom ">
                             <i class="ph-plus me-2"></i> Add Disciplinary Action
                         </a>
                 </div>
@@ -51,32 +47,26 @@
                 <th>Department</th>
                 <th>Suspension</th>
                 <th>Date of Charge</th>
-                <th>Details of charge</th>
-                <th>Date of Hearing</th>
-                <th>Detail of Hearing</th>
-                <th>Findings</th>
-                <th>Final Decission</th>
                 <th>Action</th>
             </tr>
         </thead>
 
         <tbody>
-               @foreach ($promotions as $item)
+               @foreach ($actions as $item)
             <tr>
             <td>{{$i++}}</td>
-            <td>{{ $item->created_at->format('d-m-Y') }}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
-             <td>{{ $item->position->name}}</td>
-             <td>{{ number_format($item->oldSalary,2)}} </td>
+             <td>{{ $item->departments->name}}</td>
+             <td>  {{ $item->suspension}}  </td>
+             <td> {{ $item->date_of_charge}}</td>
              <td>
-                @if($item->action=="incremented")
-                    <span class="badge bg-success bg-opacity-10 text-success">{{ $item->action}}</span>
-                    <br>
-                @else
-                    <span class="badge bg-success bg-opacity-20 text-success">{{ $item->action}}</span>
-
-                @endif
-            </td>
+                <a  href="{{ route('flex.viewDisciplinary', base64_encode($item->id)) }}"  title="Info and Details">
+                    <button type="button" class="btn btn-sm btn-info btn-xs"><i class="ph-info"></i></button>
+                </a>
+                <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-info btn-sm">
+                    <i class="ph-pen"></i>
+                </a>
+             </td>
 
             </tr>
             @endforeach

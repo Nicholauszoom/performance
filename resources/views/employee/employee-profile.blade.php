@@ -134,7 +134,7 @@
                                         <div class="card border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="60px" height="60px" alt="">
+                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="60px" height="60px" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -419,7 +419,7 @@
                                                     <label for="">NIDA Number</label>
                                                     <input type="text" name="NIDA" value="<?php echo $national_id; ?>"  class="form-control">
                                                 </div>
-                                                <div class="form-group col-612 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">Passport Number</label>
                                                     <input type="text" name="passport_number" @if($details) value="{{ $details->passport_number}}" @endif class="form-control">
                                                 </div>
@@ -551,7 +551,7 @@
                                                     </select>
                                                 </div> --}}
 
-                                                {{-- <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-12 mb-2">
                                                     <label for="">Line Manager</label>
                                                     <br>
                                                     <p>Current:  <?php echo $linemanager; ?> </p>
@@ -563,7 +563,7 @@
                                                         <option value="{{ $depart->emp_id }}" >{{ $depart->fname }}  {{ $depart->lname }}</option>
                                                         @endforeach
                                                     </select>
-                                                </div> --}}
+                                                </div>
 
                                                 {{-- <div class="form-group col-12 mb-2">
                                                     <label for="">Head Of Department</label>
