@@ -99,8 +99,23 @@ class AttendanceModel extends Model
 
     function get_pertenity_leave_balance($empID,$nature,$year,$todayDate){
         //month from hire date
-        $query = "SELECT ";
+        $leave_balance = 0;
+        $query = "SELECT YEAR('".$todayDate."')*12 + MONTH('".$todayDate."') - (YEAR(e.hire_date)*12 + MONTH(e.hire_date)) as 'month_difference' from employee e where e.emp_id = '".$empID."'  ";
+        $result = DB::select(DB::raw($query));
+        $months_from_hiredate = !empty($result)?$result[0]->month_difference:0;
 
+        $query = "SELECT YEAR('".$todayDate."')*12 + MONTH('".$todayDate."') - (YEAR(l.end)*12 + MONTH(l.end)) as 'month_difference' from leaves l where l.empID = '".$empID ."'  and l.nature = '".$nature."' ORDER BY l.end DESC LIMIT 1";
+        $result = DB::select(DB::raw($query));
+
+        $month_from_last_pertenity_leave = !empty($result)?$result[0]->month_difference:0;
+        dd($month_from_last_pertenity_leave);
+
+        if($months_from_hiredate < 4){
+            $leave_balance = 7;
+        }elseif($months_from_hiredate >= 4 || $month_from_last_pertenity_leave >= 4){
+
+        }
+        dd($result[0]->month_difference);
        $row = DB::table('leaves')
         ->where('application_date','like',$year.'%')
        ->where('nature',$nature)->where('empID',$empID)->sum('days');
