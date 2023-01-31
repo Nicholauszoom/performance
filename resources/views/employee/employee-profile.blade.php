@@ -68,7 +68,7 @@
 <div class="">
 
 
-    <form action="{{ route('flex.saveDetails') }}" method="post">
+    <form action="{{ route('flex.saveDetails') }}" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
     <div class="row">
@@ -134,22 +134,38 @@
                                         <div class="card border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
+                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="60px" height="60px" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
                                             <span class="text-muted mb-3">{{ $position }}</span>
                                         </div>
+                                        <div class="row mx-auto">
+                                            <div class="col-md-7 mx-auto">
+                                                    <label for="file" class="text-secondary font-weight-light">Upload New Passport Image</label>
+                                                    <input type="file" name="image" id="image" class="form-control">
+                                                    <input type="hidden" name="empID" value="<?php echo $empID; ?>">
+                                            </div>
 
+
+                                            <div class="col-md-4 mb-0 mx-auto ">
+                                                  <label for="" class="text-white">.</label>
+                                                  <button type="submit" class="btn text-light btn-main btn-block col-lg-12" >
+                                                      <i class="fa fa-save"></i>
+                                                      {{ __('Update Image') }}
+                                                  </button>
+                                            </div>
+
+                                        </div>
                                         <ul class="nav nav-sidebar mt-3">
                                             <li class="nav-item-divider"></li>
 
-                                            <li class="nav-item mx-auto my-3">
+                                            <li class="nav-item mx-auto my-1">
 
-                                                <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
+                                                {{-- <button type="button" class="btn btn-main" data-bs-toggle="modal" data-bs-target="#avatar-modal">
                                                     <i class="ph-image me-2"></i>
                                                     Change Image
-                                                </button>
+                                                </button> --}}
 
                                                 @if (session('mng_emp'))
                                                 <a href="{{ route('flex.userdata', base64_encode($empID)) }}" class="btn btn-main">
@@ -225,7 +241,7 @@
                                                     </div>
                                                     <div class="form-group col-6">
                                                         <label for="">Maiden Name</label>
-                                                        <input type="text" name="maide_name" @if($details)if($details) value="{{ $details->maide_name }}" @endif class="form-control">
+                                                        <input type="text" name="maide_name" @if($details) value="{{ $details->maide_name }}" @endif class="form-control">
                                                     </div>
                                                     <p>
                                                     <small>
@@ -253,21 +269,21 @@
 
                                                 <div class="row mb-2">
 
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Date of Birth</label>
                                                         <input type="date" name="birthdate" value="<?php echo $birthdate; ?>" class="form-control">
                                                     </div>
 
 
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Place of Birth</label>
                                                         <input type="text" name="birthplace" @if($details) value="{{ $details->birthplace}}" @endif   class="form-control">
                                                     </div>
-                                                    <div class="form-group col-612 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Country of Birth</label>
                                                         <input type="text" name="birthcountry" @if($details) value="{{ $details->birthcountry}}" @endif   class="form-control">
                                                     </div>
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Gender/ Sex</label>
                                                         <br>
                                                         <input type="radio" id="male" name="gender" @foreach($employee as $item) {{$item->gender == "Male" ? 'checked':'' }} @endforeach value="Male"   class="">
@@ -318,7 +334,7 @@
 
 
                                                     </div>
-                                                    <div class="form-group col-12 mb-2">
+                                                    <div class="form-group col-6 mb-2">
                                                         <label for="">Religion</label>
                                                         <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
                                                     </div>
@@ -369,11 +385,11 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Physical Address</label>
                                                     <textarea name="physical_address" value="<?php echo $physical_address; ?> " class="form-control" rows="3"><?php echo $physical_address; ?></textarea>
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="landmark">Landmark near your home</label>
                                                     <textarea name="landmark" id="landmark" @if($details) value="{{ $details->landmark}}" @endif class="form-control" rows="3">@if($details) {{ $details->landmark}} @endif</textarea>
                                                 </div>
@@ -395,24 +411,24 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">TIN Number</label>
                                                     <input type="text" name="TIN" value="<?php echo $tin; ?>" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">NIDA Number</label>
                                                     <input type="text" name="NIDA" value="<?php echo $national_id; ?>"  class="form-control">
                                                 </div>
-                                                <div class="form-group col-612 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">Passport Number</label>
                                                     <input type="text" name="passport_number" @if($details) value="{{ $details->passport_number}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">Pension Fund Number</label>
                                                     <input type="text" name="pension" value="<?php echo $pf_membership_no; ?>" class="form-control">
                                                 </div>
 
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">HELSB Loan Index Number</label>
                                                     <input type="text" name="HELSB" value="<?php echo $HELSB; ?>" class="form-control">
                                                 </div>
@@ -455,27 +471,27 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">First Name</label>
                                                     <input type="text" name="em_fname" @if($emergency) value="{{ $emergency->em_fname}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Middle Name</label>
                                                     <input type="text" name="em_mname" @if($emergency) value="{{ $emergency->em_mname}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Surname</label>
                                                     <input type="text" name="em_lname" @if($emergency) value="{{ $emergency->em_sname}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Relationship</label>
                                                     <input type="text" name="em_relationship" @if($emergency) value="{{ $emergency->em_relationship}}" @endif id="" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Occupation</label>
                                                     <input type="text" name="em_occupation" @if($emergency) value="{{ $emergency->em_occupation}}" @endif id="" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12">
+                                                <div class="form-group col-6">
                                                     <label for="">Cellphone Number</label>
                                                     <input type="text" name="em_phone" @if($emergency) value="{{ $emergency->em_phone}}" @endif id="" class="form-control">
                                                 </div>
@@ -497,53 +513,39 @@
 
                                             <div class="row mb-2">
 
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">Date of Employment</label>
                                                     <input type="text" name="employment_date" value="<?php echo $hire_date; ?>" class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <label for="">First Job Title</label>
                                                     <input type="text" name="former_title" @if($details) value="{{ $details->former_title}}" @endif class="form-control">
                                                 </div>
-                                                <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-6 mb-2">
                                                     <p></p>
                                                     <label for="">Current Job Title: <?php echo $title; ?></label>
-                                                    <div class="">
-                                                        <select class="form-control select1_single select @error('newPosition') is-invalid @enderror" id="current_job" name="current_job">
-                                                            <option value="<?php echo $title; ?>"><?php echo $title; ?></option>
-                                                            @foreach ($pdrop as $item)
-                                                            <option value="{{ $item->name }}">{{ $item->name }} </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                                    <br>
+                                                    <label for="">Department : <?php echo $department; ?></label>
+                                                    <br>
+                                                    <label for="">Branch : <?php echo $branch; ?></label>
+                                                
                                                 </div>
 
-                                                {{-- <div class="form-group col-12 ">
-                                                    <label for="">Branch</label>
+             
 
-                                                    <p>Current Branch:  <?php echo $branch; ?> </p>
-
-                                                    <select class="form-control select1_single select @error('department') is-invalid @enderror" id="docNo" name="line_manager">
-                                                        <option value=""> Update Member Branch </option>
-                                                        @foreach ($bdrop as $depart)
-                                                        <option value="{{ $depart->emp_id }}">{{ $depart->name }} </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div> --}}
-
-                                                {{-- <div class="form-group col-12 mb-2">
+                                                <div class="form-group col-12 mb-2">
                                                     <label for="">Line Manager</label>
                                                     <br>
-                                                    <p>Current:  <?php echo $linemanager; ?> </p>
+                                                    <p>Current:  <?php echo $linemanager; ?>  </p>
                                                     <label for="">Update Line Manager</label>
-                                                    <select class="form-control select @error('department') is-invalid @enderror" id="docNo" name="line_manager">
-                                                        <option value=""> Select New Line Manager </option>
+                                                    <select class="form-control select @error('line_manager') is-invalid @enderror" name="line_manager">
+                                                        <option value="<?php echo $line_managerID; ?>"> Select New Line Manager </option>
                                                         @foreach ($employees as $depart)
 
                                                         <option value="{{ $depart->emp_id }}" >{{ $depart->fname }}  {{ $depart->lname }}</option>
                                                         @endforeach
                                                     </select>
-                                                </div> --}}
+                                                </div>
 
                                                 {{-- <div class="form-group col-12 mb-2">
                                                     <label for="">Head Of Department</label>
@@ -1045,12 +1047,12 @@
                                                     <input type="year" name="hist_end"  id="hist_end"  placeholder="Finish Year" class="form-control" >
                                                 </div>
 
-                                                <div class="col-md-12 mb-2">
+                                                <div class="col-md-6 mb-2">
                                                     <label for="">Reason for Leaving</label>
                                                     <textarea name="hist_reason" id="" class="form-control" placeholder="Enter Reason for Leaving Here" rows="4"></textarea>
                                                 </div>
 
-                                                <div class="col-4">
+                                                <div class="col-6">
                                                     <label for="hist_status">Employment Status</label>
                                                     <select name="hist_status" id="hist_status" class="select form-control">
                                                         <option value="Permanent">Permanent</option>

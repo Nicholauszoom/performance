@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('disciplinary_actions', function (Blueprint $table) {
+        Schema::create('holidays', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employeeID');
-            $table->mediumText('description');
-            $table->foreignId('created_by');
+            $table->string('name');
+            $table->date('date');
+            $table->boolean('recurring');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('disciplinary_actions');
+        Schema::dropIfExists('holidays');
     }
 };
