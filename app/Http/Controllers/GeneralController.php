@@ -3620,6 +3620,8 @@ class GeneralController extends Controller
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
+            $data['employee'] = Employee::where('state','=',1)->get();
+
             $data['title'] = "Organisation Reports";
             return view('app.organisation_reports', $data);
         } else {
@@ -8417,6 +8419,24 @@ public function updateEmployeeDetails(Request $request)
 
             $history->save();
         }
+
+        if($request->image!=null  )
+        {
+            $user=$request->empID;
+
+           $employee=EMPL::where('emp_id',$user)->first();
+           if($request->hasfile('image')){
+
+
+               $file=$request->file('image');
+               $filename=time().'.'.$file->getClientOriginalExtension();
+               $file->move('uploads/userprofile/', $filename);
+               $employee->photo=$filename;
+           }
+           // saving data
+           $employee->update();
+        }
+
 
 
          }

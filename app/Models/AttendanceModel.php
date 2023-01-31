@@ -232,9 +232,9 @@ class AttendanceModel extends Model
 	function getOpeningLeaveBalance($empID, $hireDate, $today)
 	{
 
-		$last_month_date=date('Y-m-j', strtotime($today,"last day of previous month"));
+		$last_month_date=date('Y-m-j', strtotime("last day of previous month"));
 
-		dd($last_month_date);
+		// dd($last_month_date);
 
 		$query="SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature=1 AND empID = '".$empID."')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature=1 and empID = '".$empID."' GROUP BY nature)) as days_spent, DATEDIFF('".$today."','".$hireDate."') as days_accrued limit 1";
 
