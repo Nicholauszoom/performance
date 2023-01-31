@@ -124,6 +124,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
+
+        Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
+
         Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
@@ -202,7 +205,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
-        
+
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');

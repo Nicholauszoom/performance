@@ -97,6 +97,29 @@ class AttendanceModel extends Model
 	}
 
 
+    function get_pertenity_leave_balance($empID,$nature,$year,$todayDate){
+        //month from hire date
+        $query = "SELECT ";
+
+       $row = DB::table('leaves')
+        ->where('application_date','like',$year.'%')
+       ->where('nature',$nature)->where('empID',$empID)->sum('days');
+
+
+       return (126 - $row);
+    }
+    function get_sick_leave_balance($empID,$nature,$year){
+        //like
+       // $condition  =  '%".$permissionID."%'";
+       $row = DB::table('leaves')
+        ->where('application_date','like',$year.'%')
+       ->where('nature',$nature)->where('empID',$empID)->sum('days');
+
+
+       return (126 - $row);
+    }
+
+
 	function leave_hr()
 	{
 		$query="SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND l.status IN(1,2,5) ";
@@ -178,7 +201,7 @@ class AttendanceModel extends Model
 	{
 
 		return 0;
-		
+
 
 	}
 
@@ -254,7 +277,7 @@ class AttendanceModel extends Model
 		$maximum_days = $accrual - $spent;
 		return $maximum_days;
 	}
-	
+
 	function myleave_current($empID)
 	{
 		$query="SELECT @s:=@s+1 SNo,  lt.type as type, l.* FROM leave_application l, leave_type lt,  (SELECT @s:=0) as s WHERE l.nature=lt.id and l.empID='".$empID."' AND l.notification IN(1, 3) ORDER BY l.id DESC";
