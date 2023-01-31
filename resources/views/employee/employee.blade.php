@@ -61,12 +61,12 @@
             </td>
             <td class="options-width">
                 <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                    <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
                 </a>
 
                 @if (session('mng_emp'))
                 <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-info btn-xs"><i class="ph-pen"></i></button>
+                    <button type="button" class="btn btn-main btn-xs"><i class="ph-pen"></i></button>
                 </a>
 
                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
