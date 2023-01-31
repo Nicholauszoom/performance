@@ -537,8 +537,7 @@
                 enctype="multipart/form-data"
                 method="post"
                 action="{{ route('reports.annualleave') }}"
-                data-parsley-validate class="form-horizontal form-label-left"
-            >
+                data-parsley-validate class="form-horizontal form-label-left">
                 @csrf
 
                
@@ -582,7 +581,7 @@
  @endsection
 
  @push('footer-script')
- <script>
+ <!-- <script>
     $(function() {
         var today = new Date();
         var dd = today.getDate();
@@ -608,24 +607,17 @@
         }
 
         $('#duration').daterangepicker({
-            drops: 'up',
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, cb);
+             singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'),10)
+  }, cb);
 
         cb(start, end);
 
-    });
+    }); -->
 
-    $(function() {
+    <!-- $(function() {
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
@@ -650,21 +642,14 @@
         }
 
         $('#duration_').daterangepicker({
-            drops: 'up',
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, cb);
+            singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'),10)
+  }, cb);
 
         cb(start, end);
 
-    });
+    }); -->
 </script>
  @endpush
