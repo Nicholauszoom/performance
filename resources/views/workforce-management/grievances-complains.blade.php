@@ -35,7 +35,7 @@
         </div>
     </div>
     @if (session('msg'))
-    <div class="alert alert-success col-md-8 mx-auto" role="alert">
+    <div class="alert alert-success col-md-10 mx-auto" role="alert">
     {{ session('msg') }}
     </div>
     @endif
@@ -66,6 +66,10 @@
                 <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-info btn-sm">
                     <i class="ph-pen"></i>
                 </a>
+                <a href="{{ route('flex.deleteDisciplinary', $item->id) }}" class="btn btn-danger btn-sm">
+                    <i class="ph-trash"></i>
+                </a>
+                
              </td>
 
             </tr>
