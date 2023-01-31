@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EMPL;
 use App\Models\User;
+use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\Promotion;
@@ -33,8 +34,8 @@ use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
-use App\Models\Payroll\ImprestModel;
 
+use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -8082,13 +8083,6 @@ public function updateDisciplinary(Request $request)
 
 
         $id=$request->id;
-
-        // $emp=EMPL::where('emp_id',$id)->first();
-        // $department=$emp->department;
-
-
-        // dd($emp);
-
         $disciplinary =Disciplinary::where('id',$id)->first();
         $disciplinary->suspension=$request->suspension;
         $disciplinary->date_of_charge=$request->date_of_charge;
@@ -8142,10 +8136,7 @@ public function saveComplain(Request $request)
 
 
 
-// start of profile (employee biodate)
-
-// Request $request, $id
-
+// start of profile (employee biodata)
 public function viewProfile(Request $request,$id)
     {
 
@@ -8197,9 +8188,6 @@ public function viewProfile(Request $request,$id)
         // return view('employee.updateEmployee', $data);
         return view('employee.employee-profile', $data,compact('details','emergency','spouse','children','parents'));
     }
-
-
-
 // end of profile
 
 
@@ -8440,15 +8428,7 @@ public function updateEmployeeDetails(Request $request)
 
 
 
-        // if($request->moreFields!=''){
-        //     foreach ($request->moreFields as $key => $value) {
-        //             EmployeeDependant::create($value);
-        //         }
-        // }
-
-                //  start of parents details
-
-
+   
                 $empID=$request->employeeID;
 
 
@@ -8548,12 +8528,13 @@ public function updateEmployeeDetails(Request $request)
 
            $employee=EMPL::where('emp_id',$user)->first();
            if($request->hasfile('image')){
+            $newImageName = $request->image->hashName();
+            $request->image->move(public_path('storage/profile'), $newImageName);
 
-
-               $file=$request->file('image');
-               $filename=time().'.'.$file->getClientOriginalExtension();
-               $file->move('uploads/userprofile/', $filename);
-               $employee->photo=$filename;
+            //    $file=$request->file('image');
+            //    $filename=time().'.'.$file->getClientOriginalExtension();
+            //    $file->move('storage/profile/', $newImageName);
+               $employee->photo=$newImageName;
            }
            // saving data
            $employee->update();
@@ -8643,6 +8624,19 @@ public function updateEmployeeDetails(Request $request)
              }
 
 
+             public function deleteAction($id)
+             {
+                 $disciplinary=Disciplinary::find($id);
+
+                 $empID=$disciplinary->id;
+
+                     $disciplinary->delete();
+
+                     return redirect('flex/view-action/'.base64_encode($empID))->with('msg','Disciplinary Action was Deleted successfully !');
+
+             }
+
+
              public function userdata(Request $request, $id)
              {
                  $id = base64_decode($id);
@@ -8703,8 +8697,7 @@ public function updateEmployeeDetails(Request $request)
 
              }
 
-             // For updating profile image
-       // update function
+        // For updating profile image
        public function updateImg(Request $request)
        {
 
@@ -8716,11 +8709,11 @@ public function updateEmployeeDetails(Request $request)
            $employee=EMPL::where('emp_id',$user)->first();
            if($request->hasfile('image')){
 
-                // $newImageName = $request->userfile->hashName();
-                // $request->image->move(public_path('storage/profile'), $newImageName);
+                $newImageName = $request->userfile->hashName();
+                $request->image->move(public_path('storage/profile'), $newImageName);
 
-               $filename=time().'.'.$file->getClientOriginalExtension();
-               $file->move('uploads/userprofile/', $filename);
+            //    $filename=time().'.'.$file->getClientOriginalExtension();
+            //    $file->move('uploads/userprofile/', $filename);
                $employee->photo= $newImageName;
            }
 
@@ -8733,6 +8726,109 @@ public function updateEmployeeDetails(Request $request)
         return redirect('flex/employee-profile/'.base64_encode($user))->with('msg','Employee Image has been updated successfully !');
 
        }
+
+
+
+    // start view all holidays function
+
+    public function holidays()
+    {
+    
+        $data['title'] = "Grievances|Disciplinary";
+        $data['holidays'] =Holiday::orderBy('date','desc')->get();
+        $promotions= Promotion::orderBy('created_at','desc')->get();
+        $i=1;
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'Disciplinary Actions';
+        $data['actions'] =Disciplinary::orderBy('created_at','desc')->get();
+    
+        return view('setting.holidays', $data,compact('i'));
+    
+    }
+    
+    // end of view all holidays functions
+
+
+
+    // saving new holiday function
+    public function addHoliday(Request $request)
+    {
+        request()->validate(
+            [
+            'name' => 'required',
+            'date' => 'required',
+             ]
+            );
+    
+    
+    
+            $holiday = new Holiday();
+            $holiday->name=$request->name;
+            $holiday->date=$request->date;
+            $holiday->recurring=$request->recurring == true ? '1':'0';;
+            $holiday->save();
+    
+    
+            $msg="Holiday has been save Successfully !";
+            return redirect('flex/holidays')->with('msg', $msg);
+    
+    }
+    // end of saving new holiday function
+
+// start of edit disciplinary action
+public function editHoliday(Request $request,$id)
+    {
+
+        $i=1;
+        $did = base64_decode($id);
+
+        $data['holidays'] = Holiday::all();
+
+        $data['holiday']= Holiday::where('id',$did)->first();
+
+
+        return view('setting.edit-holiday',$data,compact('i'));
+    }
+// end of edit disciplinary action
+
+    // start of update holiday function
+    public function updateHoliday(Request $request)
+    {
+        request()->validate(
+            [
+            'name' => 'required',
+            'date' => 'required',
+             ]
+            );
+    
+    
+            $id=$request->id;
+            $holiday = Holiday::find($id);
+            $holiday->name=$request->name;
+            $holiday->date=$request->date;
+            $holiday->recurring=$request->recurring == true ? '1':'0';;
+            $holiday->update();
+    
+    
+            $msg="Holiday has been save Successfully !";
+            return redirect('flex/holidays')->with('msg', $msg);
+    
+    }
+
+    // end of update holiday function
+
+    // start of delete holiday function
+
+    public function deleteHoliday($id)
+    {
+        $holiday=Holiday::find($id);
+
+            $holiday->delete();
+
+            return redirect('flex/holidays/')->with('msg','Holiday was Deleted successfully !');
+
+    }
+    // end of delete holiday function
 
 
     }

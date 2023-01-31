@@ -241,7 +241,7 @@
                                                     </div>
                                                     <div class="form-group col-6">
                                                         <label for="">Maiden Name</label>
-                                                        <input type="text" name="maide_name" @if($details)if($details) value="{{ $details->maide_name }}" @endif class="form-control">
+                                                        <input type="text" name="maide_name" @if($details) value="{{ $details->maide_name }}" @endif class="form-control">
                                                     </div>
                                                     <p>
                                                     <small>

@@ -342,6 +342,14 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/addQualification','addQualification')->name('flex.addQualification');
         // end of education qualification route
 
+        // start of holidays routes
+        Route::any('/holidays','holidays')->name('flex.holidays');
+        Route::any('/add-holiday','addHoliday')->name('flex.saveHoliday');
+        Route::put('/update-holiday','updateHoliday')->name('flex.updateHoliday');
+        Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
+        Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
+        // end of holidays routes
+
 
         // start of employee personal details route
 
