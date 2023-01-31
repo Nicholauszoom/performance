@@ -1714,7 +1714,7 @@ IF(
     }
 
 	function employeesrole($id) {
-        
+
 	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.emp_id NOT IN (SELECT userID from emp_role where role = ".$id." and group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
@@ -3274,6 +3274,15 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
         ->where('allowance', $allowanceID)
         ->delete();
         return true;
+    }
+
+    public function get_individual_from_allowance($empID, $allowanceID)
+    {
+        $row = DB::table('emp_allowances')->where('empID', $empID)
+        ->where('group_name', 0)
+        ->where('allowance', $allowanceID)
+        ->select('*')->first();
+        return $row;
     }
 
 

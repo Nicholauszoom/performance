@@ -4217,9 +4217,10 @@ class GeneralController extends Controller
 
             $result = $this->flexperformance_model->assign_deduction($data);
 
-            $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deduction'))->limit(1)->first();
+            $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deduction'))->first();
 
-            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
+            dd($deductionName);
+            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned '.$deductionName->name, '0', $deductionName->amount/$deductionName->rate.' '.$deductionName->currency, 'Payroll Input');
 
             if ($result == true) {
                 SysHelpers::AuditLog(1, "Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
@@ -4247,8 +4248,9 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->assign_deduction($data);
 
                 $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deduction'))->limit(1)->first();
+                SysHelpers::FinancialLogs($request->input('empID'), 'Assigned '.$deductionName->name, '0', $deductionName->amount/$deductionName->rate.' '.$deductionName->currency, 'Payroll Input');
 
-                SysHelpers::FinancialLogs($row->empID, 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
+               // SysHelpers::FinancialLogs($row->empID, 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
             }
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
@@ -4283,7 +4285,9 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from '.$deductionName->name,$deductionName->amount/$deductionName->rate.' '.$deductionName->currency,'0', 'Payroll Input');
+
+                    //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
 
                 if ($result == true) {
@@ -4319,6 +4323,8 @@ class GeneralController extends Controller
                     $result = $this->flexperformance_model->remove_group_deduction($groupID, $deductionID);
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $deductionID)->limit(1)->first();
+
+                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from '.$deductionName->name,$deductionName->amount/$deductionName->rate.' '.$deductionName->currency,'0', 'Payroll Input');
 
                     // SysHelpers::FinancialLogs($groupID, 'Removed Group from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4761,35 +4767,35 @@ class GeneralController extends Controller
 
     public function addAllowance(Request $request)
     {
-        // $policy = $request->policy;
+        $policy = $request->policy;
 
-        // if ($policy == 1) {
-        //     $amount = $request->amount;
-        //     $percent = 0;
-        // } else {
-        //     $amount = 0;
-        //     $percent = 0.01 * ($request->rate);
-        // }
+        if ($policy == 1) {
+            $amount = $request->amount;
+            $percent = 0;
+        } else {
+            $amount = 0;
+            $percent = 0.01 * ($request->rate);
+        }
 
-        // $data = array(
-        //     'name' => $request->name,
-        //     'amount' => $amount,
-        //     'mode' => $request->policy,
-        //     'taxable' => $request->taxable,
-        //     'pensionable' => $request->pensionable ,
-        //     'state' => 1,
-        //     'percent' => $percent,
-        // );
+        $data = array(
+            'name' => $request->name,
+            'amount' => $amount,
+            'mode' => $request->policy,
+            'taxable' => $request->taxable,
+            'pensionable' => $request->pensionable ,
+            'state' => 1,
+            'percent' => $percent,
+        );
 
-        // $result = $this->flexperformance_model->addAllowance($data);
+        $result = $this->flexperformance_model->addAllowance($data);
 
-        // if ($result == true) {
-        //     // $this->flexperformance_model->audit_log("Created New Allowance ");
-        //     return back()->with('success', 'Saved');
-        //     // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
-        // } else {
-        //     echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
-        // }
+        if ($result == true) {
+            // $this->flexperformance_model->audit_log("Created New Allowance ");
+            return back()->with('success', 'Saved');
+            // echo "<p class='alert alert-success text-center'>Allowance Registered Successifully</p>";
+        } else {
+            echo "<p class='alert alert-warning text-center'>Allowance Registration FAILED, Please Try Again</p>";
+        }
         return back()->with('success', 'Saved');
     }
 
@@ -4896,7 +4902,8 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
+            SysHelpers::FinancialLogs($row->empID, 'Assign '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
+
 
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned an allowance to Employee with Id = " . $request->input('empID') . " ");
@@ -4933,7 +4940,7 @@ class GeneralController extends Controller
 
                 $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-                SysHelpers::FinancialLogs($row->empID, 'Assigned allowance', '-', $allowanceName->name,  'Payroll Input');
+                SysHelpers::FinancialLogs($row->empID, 'Assign '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
             }
 
             if ($result == true) {
@@ -4961,11 +4968,17 @@ class GeneralController extends Controller
 
                 foreach ($arr as $employee) {
                     $empID = $employee;
-                    $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
 
                     $allowanceName = DB::table('allowances')->select('name')->where('id', $allowanceID)->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($empID, 'Removed from allowance', $allowanceName->name, '-', 'Payroll Input');
+                    $amount = $this->flexperformance_model->get_individual_from_allowance($empID, $allowanceID);
+
+                   // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
+
+                    SysHelpers::FinancialLogs($empID, 'Removed from'.$allowanceName->name,$amount->percent != 0? ($amount->percent*100).'%' : $amount->amount.' '.$amount->currency, '0', 'Payroll Input');
+
+                    $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
+
                 }
                 if ($result == true) {
                     //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
@@ -5791,6 +5804,7 @@ class GeneralController extends Controller
                             } else {
                                 SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', $deductionName->name, 'Payroll Input');
                             }
+
                         }
                     }
 

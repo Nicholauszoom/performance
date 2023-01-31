@@ -8,7 +8,20 @@
     <title>Terminal Benefits</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <style type="text/css">
+            @media print {
+                #printbtn {
+                    display :  none;
+                }
+            }
+            </style>
 
+<style media="print">
+    @page {
+     size: auto;
+     margin: 0;
+          }
+   </style>
 </head>
 
 <body>
@@ -19,30 +32,26 @@
             <div class="col-md-9 mx-auto">
                 <button id="printbtn" onclick="window.print()">Print this page</button>
 
-                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-5 col-5">
-                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="30%">
-                        <br>
-                        <p>AFRICAN BANKING CORPORATION <br>P.O.  BOX 31<br>DAR ES SALAAM</p>
-
+                <div class="d-flex justify-content-between" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+                    <div>
+                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" class="image-fluid">
                     </div>
-                    <div class="col-md-7 col-7">
-
-                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll Input Changes Approval Report
-                        </h5><br>
-                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Date: {{ $payroll_date }}
-                        </h5>
-
+                    <div class="text-center">
+                        <p style="font-weight:600">AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
+                        <button id="printbtn" onclick="window.print()">Print this page</button>
                     </div>
-
-
-
+                    <div>
+                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Input Changes Approval Report</h5>
+                        <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;"> Date:
+                            {{ $payroll_date }}
+                        </p>
+                    </div>
                 </div>
 
 
-                <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important; ">
-                    <div class="col-md-12 col-12">
-                        <table class="table datatable-button-html5-columns" style="font-size:17px;">
+                <div class="row mb-4">
+                    <div class="col-md-12 col-12 mb-5 px-3">
+                        <table class="table datatable-button-html5-columns" style="font-size:10px; border:1px solid #000">
                             <thead>
                                 <tr>
                                     <th>Payrollno</th>
@@ -88,52 +97,57 @@
 
                 </div>
 
-                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-12">
-                        <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
-                        {{-- <h5>FINANCE DEPARTMENT</h5> --}}
-                        <div class="col-md-12 p-2" style="border:solid 1px gray ;border-bottom:none;">
-                            <p><small><b>Prepared By</b></small></p>
 
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-                            <br>
-                            <p><small><b>Checked and Approved By</b></small></p>
-
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-
-                            <p><small><b>Checked and Approved By</b></small></p>
-
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-
-                            <p><small><b>Approved By</b></small></p>
-
-                            <div class="row">
-                                <div class="col-md-3">Name:__________________________</div>
-                                <div class="col-md-3">Position:__________________________</div>
-                                <div class="col-md-3">Signature:__________________________</div>
-                                <div class="col-md-3">Date_________________________</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
 
             </div>
+        </div>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> <br><br><br><br>
+
+        <div class="row mt-5 mx-4" style="margin-top:20px; border:none 1px gray;">
+            <div class="col-md-12 mb-3">
+                <p class="text-start"><small><b>Prepared By</b></small></p>
+
+                <div class="row mt-3">
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date_________________________</div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <p><small><b>Checked and Approved By</b></small></p>
+
+                <div class="row mt-3">
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:__________________________</div>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:__________________________</div>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:__________________________</div>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date_________________________</div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <b>Checked and Approved By</b>
+
+                <div class="row mt-3">
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date_________________________</div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <p><small><b>Approved By</b></small></p>
+
+                <div class="row mt-3">
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:__________________________</div>
+                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date_________________________</div>
+                </div>
+            </div>
+
         </div>
     </main>
 

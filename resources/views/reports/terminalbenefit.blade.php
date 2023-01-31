@@ -103,7 +103,7 @@
     }
 
     table tr td {
-        font-size: 9px;
+        font-size: 10px;
 
     }
 
@@ -200,12 +200,8 @@
                         </div>
                     </td>
 
-                    <td>
-                        <div class="box-text"> </div>
-                    </td>
-                    <td>
-                        <div class="box-text"> </div>
-                    </td>
+
+
                     <td>
                         <div class="box-text">
                             <p style="text-align: center; font-weight:700">
@@ -221,7 +217,8 @@
                     </td>
 
 
-                    <td colspan="2" class="w-50" style="">
+
+                    <td colspan="4" class="w-50" style="">
                         <div class="" style="text-align: right; padding-right:20px">
 
                             <p> <strong>Terminal Benefit</strong></p>
@@ -243,9 +240,9 @@
 
         {{-- <div style="clear: both;"></div> --}}
     </div>
-    <div class="table-section bill-tbl w-50 mt-10">
+    <div class="table-section bill-tbl w-50 mt-10" style="">
 
-        <table class="table w-100  mt-10">
+        <table class="table w-100  mt-10" style=" overflow: auto;">
             <tbody>
                 <tr>
                     <td colspan="2" style="background-color:  rgb(64, 190, 199) !important;font-weight:bolder !important; ">
