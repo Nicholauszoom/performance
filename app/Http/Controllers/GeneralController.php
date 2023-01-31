@@ -8646,7 +8646,7 @@ public function updateEmployeeDetails(Request $request)
 
                      $disciplinary->delete();
 
-                     return redirect('flex/view-action/'.base64_encode($empID))->with('msg','Disciplinary Action was Deleted successfully !');
+                     return redirect('flex/grievancesCompain/')->with('msg','Disciplinary Action was Deleted successfully !');
 
              }
 
@@ -8749,12 +8749,10 @@ public function updateEmployeeDetails(Request $request)
     {
     
         $data['title'] = "Grievances|Disciplinary";
-        $data['holidays'] =Holiday::orderBy('date','desc')->get();
-        $promotions= Promotion::orderBy('created_at','desc')->get();
+        $data['holidays'] =Holiday::orderBy('date','asc')->get();
         $i=1;
         $data['parent'] = 'Workforce';
-        $data['child'] = 'Disciplinary Actions';
-        $data['actions'] =Disciplinary::orderBy('created_at','desc')->get();
+        $data['child'] = 'Holidays';
     
         return view('setting.holidays', $data,compact('i'));
     

@@ -339,6 +339,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
         Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
         Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
+        Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
         // end of grievances and disciplinary actions routes
 
         // start of education qualification route
