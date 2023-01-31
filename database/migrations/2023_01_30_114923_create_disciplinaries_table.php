@@ -16,14 +16,15 @@ return new class extends Migration
         Schema::create('disciplinaries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employeeID');
-            $table->text('suspension');
-            $table->date('date_of_charge');
-            $table->mediumText('detail_of_charge');
-            $table->date('date_of_hearing');
-            $table->mediumText('detail_of_hearing');
-            $table->mediumText('findings');
-            $table->mediumText('recommended_sanctum');
-            $table->mediumText('final_decission');
+            $table->foreignId('department');
+            $table->text('suspension')->nullable();
+            $table->date('date_of_charge')->nullable();
+            $table->mediumText('detail_of_charge')->nullable();
+            $table->date('date_of_hearing')->nullable();
+            $table->mediumText('detail_of_hearing')->nullable();
+            $table->mediumText('findings')->nullable();
+            $table->mediumText('recommended_sanctum')->nullable();
+            $table->mediumText('final_decission')->nullable();
             $table->timestamps();
         });
     }
