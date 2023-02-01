@@ -21,21 +21,21 @@
         <div class="">
             <h5 class="mb-0 text-muted">Holidays</h5>
 
-               
+
         </div>
     <hr>
     </div>
     <div class="row mx-1">
         <div class="col-12">
             <div class="card">
-                <table class="table table-bordered datatable-basic">
+                <table class="table datatable-basic">
                     <thead>
                         <th>SN</th>
                         <th>Holiday</th>
                         <th>Date</th>
                         <th>Recurring</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
+                        <th>Actions</th>
+                        <th hidden></th>
                     </thead>
                     <tbody>
                         @forelse ($holidays as $item )
@@ -45,27 +45,27 @@
                                 <td>{{ $item->date}}</td>
                                 <td>{{ $item->recurring=='1'? 'Yes':'No' }}</td>
                                 <td>
-                                    <a href="{{ route('flex.editholiday', base64_encode($item->id)) }}" class="btn btn-sm btn-info">
+                                    <a href="{{ route('flex.editholiday', base64_encode($item->id)) }}" class="btn btn-sm btn-main">
                                         <i class="ph-pen"></i>
                                     </a>
-                            
-                                </td>
-                                <td>
                                     <a href="{{ route('flex.deleteholiday',$item->id) }}" class="btn btn-sm btn-danger">
                                         <i class="ph-trash"></i>
-                                        </a>
+                                    </a>
+                                </td>
+                                <td hidden>
+
                                 </td>
                             </tr>
                         @empty
-                            
+
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-        </div> 
-        
-        
+        </div>
+
+
         <div id="save_termination" class="col-12" tabindex="-1">
             <div class="card p-1">
                 <div class="card-header">
@@ -102,13 +102,13 @@
 
                                 <div class="col-12 col-lg-12">
                                     <div class="mb-1">
-                                        
+
                                         <label for="recurring" class="form-label">Holiday Recurring:</label>
                                         <input type="checkbox" name="recurring" id="recurring" class="check">
                                     </div>
                                 </div>
 
-                                
+
 
                         </div>
 
@@ -125,7 +125,7 @@
             </div>
         </div>
     </div>
-  
+
 
 
 </div>

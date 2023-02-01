@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Import;
 
 use App\Models\BankLoan;
+use App\Models\TempDate;
 use Illuminate\Http\Request;
 use App\Exports\BankLoanExport;
 use App\Imports\BankLoanImport;
@@ -40,6 +41,7 @@ class BankLoanController extends Controller
             'product' => 'required',
             'amount' => 'required',
             'created_at' => 'required',
+            'date'=>'required'
              ]
             );
 
@@ -49,6 +51,10 @@ class BankLoanController extends Controller
             $loan->amount=$request->amount;
             $loan->created_at=$request->created_at;
             $loan->added_by=Auth::user()->id;
+            $loan->date=$request->date;
+
+
+            dd($request->date);
             $loan->save();
 
             return response()->json(['status' => "success"]);
@@ -72,12 +78,17 @@ class BankLoanController extends Controller
 
 
     public function import(Request $request) {
+
+        $complain = new TempDate();
+        $complain->date=$request->date;
+        $complain->save();
         $this->validate($request, [
             'file' => 'required|mimes:xls,csv,xlsx,txt' // txt is needed for csv mime type validation
         ]);
         if($request->file('file')) {
         try {
-            
+
+
             Excel::import(new BankLoanImport, $request->file('file'));
             return redirect('flex/bank-loans/all-loans')->with('status', 'Loans have been uploaded successfully!');
         } catch (ValidationException $e) {

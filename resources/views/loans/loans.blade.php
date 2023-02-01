@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="card">
-       
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -22,34 +22,41 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                   
+
                                             <form action="{{ route('loans.import') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
-                                                    <div class="col-md-6 mb-1">
-                                                        <input type="file" name="file" class="form-control" required>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <button class="btn btn-sm btn-main">
-                                                            <i class="ph-file-csv"></i> 
-                                                            IMPORT Loans 
-                                                        </button>
-                                                        
-                                                    
-                                                        <a class="btn btn-info btn-sm " href="{{ route('loans.export') }}"><i class="ph-file-csv"></i> EXPORT Loans</a>
+                                                    <div class="row mb-3">
+                                                        <div class="col-3">
+                                                            <input type="date" name="date" class="form-control">
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <input type="file" name="file" required class="form-control">
+                                                        </div>
 
+                                                        <div class="col-md-4">
+                                                            <button class="btn btn-sm btn-main">
+                                                                <i class="ph-file-csv"></i>
+                                                                IMPORT Loans
+                                                            </button>
+
+
+                                                            <a class="btn btn-info btn-sm " href="{{ route('loans.export') }}"><i class="ph-file-csv"></i> EXPORT Loans</a>
+
+                                                        </div>
                                                     </div>
+
                                                 </div>
-                                                
-                                                
+
+
                                             </form>
                                             <div class="col-md-4">
                                                 <a href="{{ route('loans.template') }}" class=""> <span class="badge bg-main"> Get Excel Template</span></a>
                                                  </div>
                                 </div>
-                               
+
                             </div>
-                          
+
 
                         </div>
 
@@ -72,10 +79,10 @@
                                         <th>Amount</th>
                                         <th>Issued Date</th>
                                         <th>Options</th>
-                               
+
                                 </thead>
-    
-    
+
+
                                 <tbody>
                                     @foreach($loans as $loan)
                                     <tr>
@@ -88,16 +95,16 @@
                                             <a  href=""  title="Edit Loan">
                                                 <button type="button" class="btn btn-danger btn-xs" disabled><i class="ph-trash"></i></button>
                                             </a>
-                            
-                                     
+
+
                                         </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
-    
+
                         </div>
-                     
+
                     </div>
                 </div>
 
@@ -105,7 +112,7 @@
 
             </div>
     </div>
-  
+
 @endsection
 
 @push('footer-script')
@@ -127,26 +134,26 @@
                 })
              
                 /*
-                    show modal for creating a record and 
+                    show modal for creating a record and
                     empty the values of form and remove existing alerts
                 */
                 function createLoan()
                 {
                     $("#alert-div").html("");
-                    $("#error-div").html("");   
+                    $("#error-div").html("");
                     $("#update_id").val("");
                     $("#employee_d").val("");
                     $("#product").val("");
                     $("#created_at").val("");
-                    $("#form-modal").modal('show'); 
+                    $("#form-modal").modal('show');
                 }
              
-    
+
                 /*
                     submit the form and will be stored to the database
                 */
                 function storeLoan()
-                {   
+                {
                     $("#save-loan-btn").prop('disabled', true);
                     let url = $('meta[name=app-url]').attr("content") + "/admin/announcements";
                     let data = {
@@ -178,26 +185,26 @@
                             /*
                 show validation error
                             */
-                            if (typeof response.responseJSON.errors !== 'undefined') 
+                            if (typeof response.responseJSON.errors !== 'undefined')
                             {
                 let errors = response.responseJSON.errors;
                 let descriptionValidation = "";
-                if (typeof errors.description !== 'undefined') 
+                if (typeof errors.description !== 'undefined')
                                 {
                                     descriptionValidation = '<li>' + errors.description[0] + '</li>';
                                 }
                 let titleValidation = "";
-                if (typeof errors.title !== 'undefined') 
+                if (typeof errors.title !== 'undefined')
                                 {
                                     titleValidation = '<li>' + errors.title[0] + '</li>';
                                 }
                 let bodyValidation = "";
-                if (typeof errors.body !== 'undefined') 
+                if (typeof errors.body !== 'undefined')
                                 {
                                     bodyValidation = '<li>' + errors.body[0] + '</li>';
                                 }
                           let fileValidation = "";
-                if (typeof errors.image !== 'undefined') 
+                if (typeof errors.image !== 'undefined')
                                 {
                                     fileValidation = '<li>' + errors.image[0] + '</li>';
                                 }
@@ -206,13 +213,13 @@
                     '<b>Validation Error!</b>' +
                     '<ul>' + titleValidation + bodyValidation + attachmentValidation + '</ul>' +
                 '</div>';
-                $("#error-div").html(errorHtml);        
+                $("#error-div").html(errorHtml);
             }
                         }
                     });
                 }
              
-    
+
     </script>
     <script>
         jQuery(document).ready(function($) {
