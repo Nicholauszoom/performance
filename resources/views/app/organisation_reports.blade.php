@@ -540,7 +540,7 @@
                 data-parsley-validate class="form-horizontal form-label-left">
                 @csrf
 
-               
+
                 <div class="card-body">
                     <div class="row">
                         <label class="col-form-label col-md-2">Employee</label>
@@ -563,11 +563,11 @@
                         <div class="col-md-10">
                             <div class="input-group">
                                 <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text" class="form-control daterange-predefined" name="duration" placeholder="Select dates">
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} ">
                             </div>
                         </div>
                     </div>
-                  
+
                 </div>
             </form>
         </div>
