@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\BankLoan;
+use App\Models\TempDate;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -21,28 +22,30 @@ class BankLoanImport implements ToCollection, WithHeadingRow, WithValidation
     {
         return 4;
     }
- 
+
     /**
     * @param Collection $collection
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function collection(Collection $collection)
+    public function collection(Collection $collection )
     {
 
         foreach ($collection as $row)
         {
 
-            
+
         $date= Date::excelToDateTimeObject($row['created_at'])->format('Y-m-d');
 
+        $date_added=TempDate::first();
 
           $data = [
-            'employee_id' => $row['employee_id'], 
+            'employee_id' => $row['employee_id'],
             'product'=> $row['product'],
-            'amount' => $row['amount'], 
+            'amount' => $row['amount'],
             'created_at' => $date,
-            'added_by'=>Auth::user()->id, 
+            'added_by'=>Auth::user()->id,
+            'date'=>$date_added->date,
           ];
           $check=DB::table('bank_loans')
           ->where($data)->first();
@@ -55,17 +58,20 @@ class BankLoanImport implements ToCollection, WithHeadingRow, WithValidation
         else{
             $check=DB::table('bank_loans')
                 ->insert($data);
-                
-       
-    } 
+
+
+    }
+        }
+
+        $date_added= TempDate::first();
+
+        $date_added->delete();
+
+
+
         }
 
 
-
-
-        }
-
-     
         public function rules(): array
         {
             return [
@@ -90,4 +96,4 @@ class BankLoanImport implements ToCollection, WithHeadingRow, WithValidation
         ];
     }
     }
-       
+

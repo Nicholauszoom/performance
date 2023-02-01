@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bank_loans', function (Blueprint $table) {
+        Schema::create('temp_dates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('added_by');
-            $table->foreignId('employee_id');
-            $table->string('product');
-            $table->double('amount');
             $table->date('date');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bank_loans');
+        Schema::dropIfExists('temp_dates');
     }
 };

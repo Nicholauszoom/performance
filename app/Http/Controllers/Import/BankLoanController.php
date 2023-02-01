@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Import;
 
 use App\Models\BankLoan;
+use App\Models\TempDate;
 use Illuminate\Http\Request;
 use App\Exports\BankLoanExport;
 use App\Imports\BankLoanImport;
@@ -21,11 +22,11 @@ class BankLoanController extends Controller
     public function index()
     {
         $loans = BankLoan::orderBy('created_at','DESC')->get();
-  
+
         return view('loans.loans', compact('loans'));
     }
-       
-    
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -40,6 +41,7 @@ class BankLoanController extends Controller
             'product' => 'required',
             'amount' => 'required',
             'created_at' => 'required',
+            'date'=>'required'
              ]
             );
 
@@ -49,34 +51,44 @@ class BankLoanController extends Controller
             $loan->amount=$request->amount;
             $loan->created_at=$request->created_at;
             $loan->added_by=Auth::user()->id;
+            $loan->date=$request->date;
+
+
+            dd($request->date);
             $loan->save();
-           
+
             return response()->json(['status' => "success"]);
     }
 
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function export() 
+    public function export()
     {
         return Excel::download(new BankLoanExport, 'loans.xlsx');
     }
-       
+
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function template() 
+    public function template()
     {
         return Excel::download(new BankLoanTemplateExport, 'loans_template.xlsx');
     }
 
 
     public function import(Request $request) {
+
+        $complain = new TempDate();
+        $complain->date=$request->date;
+        $complain->save();
         $this->validate($request, [
             'file' => 'required|mimes:xls,csv,xlsx,txt' // txt is needed for csv mime type validation
         ]);
         if($request->file('file')) {
         try {
+
+
             Excel::import(new BankLoanImport, $request->file('file'));
             return redirect('flex/bank-loans/all-loans')->with('status', 'Loans have been uploaded successfully!');
         } catch (ValidationException $e) {
@@ -86,7 +98,7 @@ class BankLoanController extends Controller
                     $msg = 'The uploaded file has a problem in a row '.$failure->row(); // row that went wrong
                     $msg = $msg.'There is a problem in a column '.$failure->attribute(); // either heading key (if using heading row concern) or column index
                     $msg = $msg.'. '.$failure->errors()[0]; // Actual error messages from Laravel validator
-                    
+
                 }
                 return redirect('flex/bank-loans/all-loans')->with('status', $msg);
             }
