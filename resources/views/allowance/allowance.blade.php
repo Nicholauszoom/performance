@@ -173,6 +173,22 @@
                                         <option value="NO">NO</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Is Recursive?</label>
+                                    <select class="form-control select_type select" name="recursive" id="policy">
+                                        <option selected disabled> Select </option>
+                                        <option value="YES">YES</option>
+                                        <option value="NO">NO</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Is Benefit In kind?</label>
+                                    <select class="form-control select_type select" name="bik" id="policy">
+                                        <option selected disabled> Select </option>
+                                        <option value="YES">YES</option>
+                                        <option value="NO">NO</option>
+                                    </select>
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="allName">Percent:</label>

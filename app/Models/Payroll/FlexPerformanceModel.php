@@ -32,7 +32,7 @@ class FlexPerformanceModel extends Model
 
     public function financialLogs($date)
     {
-        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) = '".$date."' ORDER BY fn.created_at DESC";
+        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) Like '".$date."%' ORDER BY fn.created_at DESC";
 
         return DB::select(DB::raw($query));
     }
@@ -115,7 +115,7 @@ class FlexPerformanceModel extends Model
 
 	function branch()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, b.*,d.name as department_name FROM branch b,department d,  (SELECT @s:=0) as s WHERE b.department_id = d.id";
+		$query = "SELECT @s:=@s+1 as SNo, b.* FROM branch b";
 
 		return DB::select(DB::raw($query));
 	}

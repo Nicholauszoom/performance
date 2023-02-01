@@ -452,7 +452,7 @@ class GeneralController extends Controller
     {
         $id = session('emp_id');
         $data['branch'] = $this->flexperformance_model->branch();
-        $data['department'] = $this->flexperformance_model->alldepartment();
+       // $data['department'] = $this->flexperformance_model->alldepartment();
         $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
         $data['title'] = "Company Branch";
         return view('app.branch', $data);
@@ -4788,7 +4788,9 @@ class GeneralController extends Controller
             'amount' => $amount,
             'mode' => $request->policy,
             'taxable' => $request->taxable,
-            'pensionable' => $request->pensionable ,
+            'pensionable' => $request->pensionable,
+            'Isrecursive' => $request->pensionable,
+            'Isbik' => $request->pensionable,
             'state' => 1,
             'percent' => $percent,
         );
@@ -5138,6 +5140,38 @@ class GeneralController extends Controller
         if ($request->method() == "POST" && $ID != '') {
             $updates = array(
                 'pensionable' => $request->input('pensionable'),
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
+
+    public function updateRecursive(Request $request)
+    {
+        $ID = $request->input('allowanceID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'Isrecursive' => $request->input('Isrecursive'),
+            );
+            $result = $this->flexperformance_model->updateAllowance($updates, $ID);
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Updated Successifully!</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Update Failed</p>";
+            }
+        }
+    }
+
+    public function updateBik(Request $request)
+    {
+        $ID = $request->input('allowanceID');
+        if ($request->method() == "POST" && $ID != '') {
+            $updates = array(
+                'Isbik' => $request->input('Isbik'),
             );
             $result = $this->flexperformance_model->updateAllowance($updates, $ID);
             if ($result == true) {
@@ -6465,10 +6499,10 @@ class GeneralController extends Controller
                             'password' => $password
                         );
 
-                        // $user=User::first();
-                        // $user->notify(new RegisteredUser($email_data));
-                        //Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
-                        // });
+                        $user=User::first();
+                        $user->notify(new RegisteredUser($email_data));
+                        Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
+                        //});
                         $senderInfo = $this->payroll_model->senderInfo();
 
                         //         /* EMAIL*/

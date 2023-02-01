@@ -17,6 +17,10 @@
             $allowanceID = $key->id;
             $pensionable = $key->pensionable;
             $taxable = $key->taxable;
+
+            $Isbik = $key->Isbik;
+            $Isrecursive = $key->Isrecursive;
+
             $amount = $key->amount;
             $percent = $key->percent;
             $mode = $key->mode;
@@ -250,6 +254,36 @@
                         </div>
                     </form>
                     @endisset
+                    <form autocomplete="off" id="updaterecursive" class="form-horizontal form-label-left">
+                        <div class="mb-3">
+                            <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
+
+                            <label  for="first-name" for="stream" >Is recursive?</label>
+                            <div class="input-group">
+                                <select name="Isrecursive" class="select_type form-control" required tabindex="-1" id="Isrecursive">
+                                    <option> Select</option>
+                                    <option value="YES" <?php if($Isrecursive == 'YES') echo "selected";   ?>>YES</option>
+                                    <option value="NO" <?php if($Isrecursive == 'NO') echo "selected";   ?>>NO</option>
+                                </select>
+                                <button  class="btn btn-main">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form autocomplete="off" id="updatebik" class="form-horizontal form-label-left">
+                        <div class="mb-3">
+                            <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
+
+                            <label  for="first-name" for="stream" >Is Benefit In Kind?</label>
+                            <div class="input-group">
+                                <select name="Isbik" class="select_type form-control" required tabindex="-1" id="Isbik">
+                                    <option> Select</option>
+                                    <option value="YES" <?php if($Isbik == 'YES') echo "selected";   ?>>YES</option>
+                                    <option value="NO" <?php if($Isbik == 'NO') echo "selected";   ?>>NO</option>
+                                </select>
+                                <button  class="btn btn-main">Update</button>
+                            </div>
+                        </div>
+                    </form>
 
 
                     @if ($mode == 1)

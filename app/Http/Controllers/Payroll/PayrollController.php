@@ -1381,7 +1381,10 @@ class PayrollController extends Controller
         $initial_delete = $this->payroll_model->deleteArrears($cancel_date);
         if ($initial_delete) {
             $result = $this->payroll_model->cancel_payroll();
+             if($type == 'none'){
 
+                return redirect(route('payroll.payroll'));
+             }
             if ($result == true) {
                 $response_array['status'] = "OK";
                 $response_array['message'] = "<p class='alert alert-success text-center'>Payroll CANCELLED Successifully</p>";

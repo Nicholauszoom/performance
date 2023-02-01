@@ -322,11 +322,11 @@ class ReportController extends Controller
         $payroll_month = $date;
         $info = $this->reports_model->company_info();
 
-
+        $data['payroll_date'] = $date;
 
         $summary = $data['summary'];
 
-        return view('reports.temp_payroll', $data);
+        return view('reports.payroll_details', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
@@ -671,8 +671,16 @@ class ReportController extends Controller
                 $paid_with_arrears_d = $data['paid_with_arrears_d'];
                 $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
                 $data['payroll_date'] = $request->input("payrolldate");
+
+                $date = explode('-',$payroll_date);
+                $payroll_month = $date[0].'-'.$date[1];
+
+                $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
+                $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
+
                 //include(app_path() . '/reports/customleave_report.php');
                 // include app_path() . '/reports/payslip.php';
+
                 return view('payroll.payslip2', $data);
             }
         } else {
@@ -2654,8 +2662,10 @@ EOD;
 
     public function payrollReportLogs(Request $request)
     {
+        $date = explode('-',$request->payrolldate);
+        $month = $date[0].'-'.$date[1];
         $data['payroll_date'] = $request->payrolldate;
-        $data['logs'] = $this->flexperformance_model->financialLogs($data['payroll_date']);
+        $data['logs'] = $this->flexperformance_model->financialLogs($month);
 
         $data['title'] = 'Payroll Input Changes Approval Report';
         $data['parent'] = 'Payroll Log Report';

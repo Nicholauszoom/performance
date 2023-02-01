@@ -508,6 +508,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
         Route::any('/updateAllowanceTaxable','updateAllowanceTaxable')->name('flex.updateAllowanceTaxable');
         Route::any('/updateAllowancepensionable','updateAllowancepensionable')->name('flex.updateAllowancepensionable');
+
+        Route::any('/updateRecursive','updateRecursive')->name('flex.updateRecursive');
+        Route::any('/updateBik','updateBik')->name('flex.updateBik');
+
+        Route::any('/company_branch_info','company_branch_info')->name('flex.company_branch_info');
+
+
         Route::any('/updateOvertimeName','updateOvertimeName')->name('flex.updateOvertimeName');
         Route::any('/updateOvertimeRateDay','updateOvertimeRateDay')->name('flex.updateOvertimeRateDay');
         Route::any('/updateOvertimeRateNight','updateOvertimeRateNight')->name('flex.updateOvertimeRateNight');

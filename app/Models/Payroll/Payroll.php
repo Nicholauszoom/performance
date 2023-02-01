@@ -1241,6 +1241,8 @@ IF(
 	     '" . $payroll_date . "' as payroll_date
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
             DB::insert(DB::raw($query));
+
+
         });
         return true;
     }
@@ -2404,6 +2406,10 @@ as gross,
                 DB::insert(DB::raw($query));
             $query = " UPDATE payroll_months SET state = 0, appr_author = '" . $empID . "', appr_date = '" . $todate . "'  WHERE state = 1 ";
             DB::insert(DB::raw($query));
+
+            $query = "UPDATE allowances SET state = 0 WHERE type = 1 and Isrecursive = 'NO'";
+            DB::insert(DB::raw($query));
+            
             //CLEAR TEMPORARY PAYROLL LOGS
             DB::table('temp_allowance_logs')->delete();
             DB::table('temp_deduction_logs')->delete();
