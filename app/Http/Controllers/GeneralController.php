@@ -8442,7 +8442,7 @@ public function updateEmployeeDetails(Request $request)
 
 
 
-   
+
                 $empID=$request->employeeID;
 
 
@@ -8543,7 +8543,7 @@ public function updateEmployeeDetails(Request $request)
            $employee=EMPL::where('emp_id',$user)->first();
            if($request->hasfile('image')){
             $newImageName = $request->image->hashName();
-            $request->image->move(public_path('storage/profile'), $newImageName);
+            $request->image->move(public_path('storage\profile'), $newImageName);
 
             //    $file=$request->file('image');
             //    $filename=time().'.'.$file->getClientOriginalExtension();
@@ -8731,8 +8731,8 @@ public function updateEmployeeDetails(Request $request)
                $employee->photo= $newImageName;
            }
 
-           
-   
+
+
            // saving data
            $employee->update();
 
@@ -8747,17 +8747,17 @@ public function updateEmployeeDetails(Request $request)
 
     public function holidays()
     {
-    
+
         $data['title'] = "Grievances|Disciplinary";
         $data['holidays'] =Holiday::orderBy('date','asc')->get();
         $i=1;
         $data['parent'] = 'Workforce';
         $data['child'] = 'Holidays';
-    
+
         return view('setting.holidays', $data,compact('i'));
-    
+
     }
-    
+
     // end of view all holidays functions
 
 
@@ -8771,19 +8771,19 @@ public function updateEmployeeDetails(Request $request)
             'date' => 'required',
              ]
             );
-    
-    
-    
+
+
+
             $holiday = new Holiday();
             $holiday->name=$request->name;
             $holiday->date=$request->date;
             $holiday->recurring=$request->recurring == true ? '1':'0';;
             $holiday->save();
-    
-    
+
+
             $msg="Holiday has been save Successfully !";
             return redirect('flex/holidays')->with('msg', $msg);
-    
+
     }
     // end of saving new holiday function
 
@@ -8812,19 +8812,19 @@ public function editHoliday(Request $request,$id)
             'date' => 'required',
              ]
             );
-    
-    
+
+
             $id=$request->id;
             $holiday = Holiday::find($id);
             $holiday->name=$request->name;
             $holiday->date=$request->date;
             $holiday->recurring=$request->recurring == true ? '1':'0';;
             $holiday->update();
-    
-    
+
+
             $msg="Holiday has been save Successfully !";
             return redirect('flex/holidays')->with('msg', $msg);
-    
+
     }
 
     // end of update holiday function

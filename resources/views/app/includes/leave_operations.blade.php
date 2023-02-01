@@ -189,7 +189,7 @@
 </script>
 
 <script type="text/javascript">
-    $('#nature').change(function(e){
+    $('#nature1').change(function(e){
         var nature  = document.getElementById("nature").value;
         var empID  = document.getElementById("empID").value;
 
