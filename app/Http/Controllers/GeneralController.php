@@ -4120,7 +4120,9 @@ class GeneralController extends Controller
             );
 
             $data = ['empID'=>$request->empID,'start_date'=>$request->start_date,'end_date'=>$request->end_date,'reason'=>$request->reason];
-           $result = $this->flexperformance_model->save_unpaid_leave($data);
+            SysHelpers::FinancialLogs($request->empID, 'Assigned  To Unpaid Leave', $request->start_date,$request->end_date, 'Payroll Input');
+
+            $result = $this->flexperformance_model->save_unpaid_leave($data);
 
            session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Added Successifully</p>");
 
@@ -4223,7 +4225,7 @@ class GeneralController extends Controller
 
             $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deduction'))->first();
 
-            dd($deductionName);
+
             SysHelpers::FinancialLogs($request->input('empID'), 'Assigned '.$deductionName->name, '0', $deductionName->amount/$deductionName->rate.' '.$deductionName->currency, 'Payroll Input');
 
             if ($result == true) {
