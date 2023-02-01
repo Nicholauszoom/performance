@@ -28,7 +28,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Start</label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
-                        <input type="text" name="start" class="form-control col-xs-12 has-feedback-left" placeholder="Start Date" id="leave_startDate" required="" aria-describedby="inputSuccess2Status">
+                        <input type="text" name="start" class="form-control col-xs-12 " placeholder="Start Date" id="leave_startDate" required="" aria-describedby="inputSuccess2Status">
                         <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
                 <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -41,7 +41,7 @@
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div class="has-feedback">
-            <input type="text" required="" placeholder="End Date" name="end" class="form-control col-xs-12 has-feedback-left" id="leave_endDate"  aria-describedby="inputSuccess2Status">
+            <input type="text" required="" placeholder="End Date" name="end" class="form-control col-xs-12 " id="leave_endDate"  aria-describedby="inputSuccess2Status">
             <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
           </div>
             <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -300,7 +300,7 @@
 
                 <a href="javascript:void(0)" onclick="recommendLeaveByHod(<?php echo $row->id;?>)" title="Recommend By HOD">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-                  
+
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
                   <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
 
@@ -319,7 +319,7 @@
 
               ?>
 
-              
+
               <?php if($row->status==6) { ?>
                 <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
@@ -367,7 +367,7 @@
       }
       var dateToday = dd + '/' + mm + '/' + yyyy;
       $('#leave_startDate').daterangepicker({
-        drops: 'up',
+        drops: 'down',
         singleDatePicker: true,
         autoUpdateInput: false,
         startDate:dateToday,
@@ -404,7 +404,7 @@
       }
       var dateToday = dd + '/' + mm + '/' + yyyy;
       $('#leave_endDate').daterangepicker({
-        drops: 'up',
+        drops: 'down',
         singleDatePicker: true,
         autoUpdateInput: false,
         startDate:dateToday,
