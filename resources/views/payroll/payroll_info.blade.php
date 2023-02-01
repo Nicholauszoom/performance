@@ -82,7 +82,7 @@
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
             @endif
             @if($payrollState != 1)
-            <a class="btn btn-main btn-sm ms-3" href="{{ route('flex.payrollLogs') }}" target="blank">
+            <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth]) }}" target="blank">
                 Input Changes Approval
             </a>
             @endif
@@ -119,7 +119,7 @@
                             <li><span class="fw-semibold">{{ number_format($allowances,2) }}</span></li>
                             <li>{{ number_format($pension_employer,2) }}</li>
                             <li>{{ number_format($pension_employee,2) }}</li>
-                            
+
                             <li>{{ number_format($taxdue,2) }}</li>
                             <li><span class="fw-semibold">{{ number_format($wcf,2) }}</span></li>
                             <li><span class="fw-semibold">{{ number_format($sdl,2) }}</span></li>
@@ -207,6 +207,9 @@
 
                 <div class="mb-2 ms-auto d-flex justify-content-around">
                     <?php if($payrollState == 0 /*&&  session('mng_emp')*/){ ?>
+
+                        <a href="{{route('payroll.cancelpayroll','none')}}" class="m-3">
+                            <button type="button" class="btn btn-warning">Cancel Payroll </button></a>
                         <a href="javascript:void(0)" onclick="generate_checklist()" class="m-3">
                             <button type="button" class="btn btn-main">Confirm Payroll </button></a>
                     <?php }  else { ?>

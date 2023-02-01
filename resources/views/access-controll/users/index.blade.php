@@ -45,8 +45,8 @@
 
                     <tr>
                         <th>{{ $loop->iteration }}</th>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->phone }}</td>
+                        <td>{{ $user->fname }}  {{ $user->mname }}  {{ $user->lname }}</td>
+                        <td>{{ $user->mobile }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
                             @foreach($user->roles as $value2)
