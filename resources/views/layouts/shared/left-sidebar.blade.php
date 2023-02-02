@@ -257,14 +257,14 @@
                @endcan
 @can('view-setting')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.role')|| request()->routeIs('flex.holidays') || request()->routeIs('flex.permissions') || request()->routeIs('role') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.role')|| request()->routeIs('flex.email-notifications')|| request()->routeIs('flex.holidays') || request()->routeIs('flex.permissions') || request()->routeIs('role') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-gear-six"></i>
                         <span>Settings</span>
                     </a>
 
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.role') || request()->routeIs('flex.holidays') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.role') || request()->routeIs('flex.email-notifications') || request()->routeIs('flex.holidays') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'show' : null }}">
                         @if (session('mng_roles_grp'))
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.role') ? 'active' : null }}"
@@ -282,10 +282,7 @@
                                     href="{{ route('flex.bank') }}">Banking Information</a>
                             </li>
                         @endif
-                        <li class="nav-item"><a
-                            class="nav-link {{ request()->routeIs('flex.holidays') ? 'active' : null }}"
-                            href="{{ route('flex.holidays') }}">Holidays</a>
-                        </li>
+
                         <li class=" nav-item"><a
                                 class="nav-link {{ request()->routeIs('roles') ? 'active' : null }} "
                                 href="{{ url('roles') }}">
@@ -301,9 +298,23 @@
                         <li class=" nav-item "><a
                                 class="nav-link  {{ request()->routeIs('users') ? 'active' : null }}"
                                 href="{{ url('users') }}">{{ __('user') }}
-                                Management</a></li>
+                                Management</a>
+                        </li>
+                        <li class="nav-item"><a
+                            class="nav-link {{ request()->routeIs('flex.holidays') ? 'active' : null }}"
+                            href="{{ route('flex.holidays') }}">Holidays</a>
+                        </li>
 
 
+                        <li class="nav-item"><a
+                            class="nav-link {{ request()->routeIs('flex.email-notifications') ? 'active' : null }}"
+                            href="{{ route('flex.email-notifications') }}">Email Notification</a>
+                        </li>
+
+                        <li class="nav-item"><a
+                            class="nav-link {{ request()->routeIs('flex.approvals') ? 'active' : null }}"
+                            href="{{ route('flex.approvals') }}">Approvals</a>
+                        </li>
 
                         @if (session('mng_audit'))
                             <li class="nav-item"><a

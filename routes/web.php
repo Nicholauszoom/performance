@@ -368,6 +368,26 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
 
+        // end of complains
+
+        // start of email notifications settings routes
+        Route::any('/email-notifications','emailNotification')->name('flex.email-notifications');
+        Route::any('/edit-email-notification/{id}','editNotification')->name('flex.editNotification');
+        Route::put('/update-email-notification','updateNotification')->name('flex.updateNotification');
+        // end of email notifications settings routes
+
+        // start of approval settings routes
+        Route::any('/approvals','viewApprovals')->name('flex.approvals');
+        Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
+        Route::any('/edit-approval/{id}','editApproval')->name('flex.editApproval');
+        Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
+        // end of approval settings routes
+
+        // start of approval_levels settings routes
+        Route::any('/approval_levels/{id}','viewApprovalLevels')->name('flex.approval-levels');
+        Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
+        Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
+        // end of approval_levels settings routes
 
         // start of reconcilliation summary route
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
