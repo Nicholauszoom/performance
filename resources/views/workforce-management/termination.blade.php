@@ -22,7 +22,7 @@
             <h5 class="mb-0 text-muted">Terminated Employees</h5>
 
            
-            @can('terminate-permission')
+            @can('add-termination')
 
                 <a href="{{ route('flex.addTermination') }}" class="btn btn-perfrom ">
                     <i class="ph-plus me-2"></i> Add Termination

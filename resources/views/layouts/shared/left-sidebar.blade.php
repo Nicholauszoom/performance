@@ -42,7 +42,7 @@
                     </a>
                 </li>  --}}
 
-
+                @can('view-workforce')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee')||request()->routeIs('flex.grievancesCompain')  || request()->routeIs('flex.addTermination') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -70,7 +70,7 @@
                             </li>
                         @endcan
 
-                        @can('edit-employee')
+                        @can('view-termination')
 
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.termination') || request()->routeIs('flex.addTermination') ? 'active' : null }}"
@@ -111,6 +111,8 @@
                         @endcan
                     </ul>
                 </li>
+
+                @endcan
 
 @can('view-payroll-management')
                 <li
