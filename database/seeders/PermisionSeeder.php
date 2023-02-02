@@ -27,23 +27,37 @@ class PermisionSeeder extends Seeder
             ['slug' => 'add-employee','sys_module_id'=>1],
             // end of active employees seeders
 
-
+            //start of suspend employee seeders 
             ['slug' => 'activate-employee','sys_module_id'=>1],
             ['slug' => 'suspend-employee','sys_module_id'=>1],
             ['slug' => 'transfer-employee','sys_module_id'=>1],
+            //end of suspend employee seeders 
 
-            // start of employee termination seeders
+            //start of employee termination seeders
             ['slug' => 'view-termination','sys_module_id'=>1],
             ['slug' => 'add-termination','sys_module_id'=>1],
             ['slug' => 'edit-termination','sys_module_id'=>1],
             ['slug' => 'delete-termination','sys_module_id'=>1],
             ['slug' => 'print-termination','sys_module_id'=>1],
-            // end of employee termination seeders
+            //end of employee termination seeders
 
+
+            // start of promotion/increment seeders
+            ['slug' => 'view-promotions','sys_module_id'=>1],
+            ['slug' => 'add-promotion','sys_module_id'=>1],
+            ['slug' => 'add-increment','sys_module_id'=>1],
+            ['slug' => 'edit-promotion','sys_module_id'=>1],
+            ['slug' => 'edit-promotion','sys_module_id'=>1],
+            ['slug' => 'edit-increment','sys_module_id'=>1],
+            ['slug' => 'delete-promotion','sys_module_id'=>1],
+            // end of promotion/increment seeders
+
+            //start of overtime seeders 
             ['slug' => 'view-overtime','sys_module_id'=>1],
             ['slug' => 'add-overtime','sys_module_id'=>1],
             ['slug' => 'edit-overtime','sys_module_id'=>1],
             ['slug' => 'delete-overtime','sys_module_id'=>1],
+            // end of overtime seeders
 
             ['slug' => 'view-imprest','sys_module_id'=>1],
             ['slug' => 'add-imprest','sys_module_id'=>1],
