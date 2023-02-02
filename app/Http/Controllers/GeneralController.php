@@ -203,6 +203,9 @@ class GeneralController extends Controller
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
 
+        $data['employee_pension'] = $this->reports_model->employee_pension($id);
+
+         //dd($data['employee_pension']);
         $data['qualifications'] = EducationQualification::where('employeeID',$id)->get();
 
         $data['photo'] = "";
@@ -1877,6 +1880,7 @@ class GeneralController extends Controller
         $finish = $request->input('time_finish');
         $reason = $request->input('reason');
         $category = $request->input('category');
+        $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
 
@@ -1898,7 +1902,7 @@ class GeneralController extends Controller
 
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
-        $linemanager = $this->flexperformance_model->get_linemanagerID($empID);
+        //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
 
         // foreach ($line as $row) {
         //     $linemanager = $row->line_manager;
@@ -2029,6 +2033,8 @@ class GeneralController extends Controller
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        $data['employees'] = $this->flexperformance_model->Employee();
+
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
         // elseif (session('line')!=0) {
@@ -6465,6 +6471,9 @@ class GeneralController extends Controller
 
                 if ($recordID > 0) {
 
+                    SysHelpers::FinancialLogs($id, 'Add Employee','','', 'Employee Registration');
+
+
                     /*give 100 allocation*/
                     $data = array(
                         'empID' => $request->input("emp_id"),
@@ -7869,6 +7878,9 @@ public function savePromotion(Request $request)
         $old->action="promoted";
         $old->save();
         // saving new employee data
+
+        SysHelpers::FinancialLogs($id, 'Salary Increment',$empl->salary*$empl->rate,$request->newSalary*$empl->rate, 'Salary Increment');
+
         $promotion =Employee::where('id',$id)->first();
         $promotion->position=$request->newPosition;
         $promotion->salary=$request->newSalary;
@@ -7911,13 +7923,16 @@ public function saveIncrement(Request $request)
         [
         'emp_ID' => 'required',
         'newSalary' => 'required',
-        // 'oldSalary' => 'required',
+         'oldSalary' => 'required',
+         'oldRate' => 'required',
          ]
         );
 
+      $oldSalary = $request->oldSalary;
+      $oldRate = $request->oldRate;
 
         $id=$request->emp_ID;
-
+         dd($id);
         $empl =Employee::where('id',$id)->first();
 
         // saving old employee data
@@ -7933,6 +7948,7 @@ public function saveIncrement(Request $request)
         $old->action="incremented";
         $old->save();
 
+        SysHelpers::FinancialLogs($id, 'Salary Increment',$oldSalary*$oldRate,$request->newSalary*$oldRate, 'Salary Increment');
 
         // saving new employee data
         $increment =Employee::where('id',$id)->first();
@@ -7947,7 +7963,7 @@ public function saveIncrement(Request $request)
 
 public function getDetails($id = 0)
 {
-    $data =EMPL::where('id',$id)->with('position')->first();
+    $data =EMPL::where('emp_id',$id)->with('position')->first();
     return response()->json($data);
 }
 // start of promotion/increment

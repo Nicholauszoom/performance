@@ -101,15 +101,15 @@
                         @endcan
 
                         @can('view-imprest')
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('imprest.imprest') ? 'active' : null }}"
                                 href="{{ route('imprest.imprest') }}">Imprest</a>
-                        </li>
+                        </li> --}}
                         @endcan
 
                         @can('view-employee')
-                            <li class="nav-item {{ request()->routeIs('flex.transfers') ? 'active' : null }}"><a
-                                    class="nav-link" href="{{ route('flex.transfers') }}">Employee Approval</a></li>
+                            <li class="nav-item "><a
+                                    class="nav-link {{ request()->routeIs('flex.transfers') ? 'active' : null }}" href="{{ route('flex.transfers') }}">Employee Approval</a></li>
                         @endcan
                         @can('view-disciplinary')
                         <li class="nav-item">
@@ -144,9 +144,9 @@
                                     href="{{ route('payroll.employee_payslip') }}"> Payslip </a></li>
                             @endcan
                             @can('view-incentives')
-                                    <li class="nav-item"><a
+                                    {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('payroll.comission_bonus') ? 'active' : null }}"
-                                    href="{{ route('payroll.comission_bonus') }}">Incentives</a></li>
+                                    href="{{ route('payroll.comission_bonus') }}">Incentives</a></li> --}}
                             <!--  <li class="nav-item"><a class="nav-link {{ request()->routeIs('payroll.partial_payment') ? 'active' : null }}" href="{{ route('payroll.partial_payment') }}">Partial Payment</a></li> -->
                         @endcan
                         @can('view-pending-payments')
@@ -294,10 +294,10 @@
 
 
                         @if (session('mng_bank_info'))
-                            <li class="nav-item"><a
+                            {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.bank') ? 'active' : null }}"
                                     href="{{ route('flex.bank') }}">Banking Information</a>
-                            </li>
+                            </li> --}}
                         @endif
 
                         <li class=" nav-item"><a

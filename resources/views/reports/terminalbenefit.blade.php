@@ -194,7 +194,7 @@
                     <td class="w-50">
                         <div class="box-text">
                             <img class="pl-lg" style="width: 133px;height:120px;"
-                                src="https://www.bancabc.co.tz/images/banc_abc_logo.png">
+                                src="{{ asset('assets/images/logo-dif2.png') }}">
                                 <br>
 
                         </div>

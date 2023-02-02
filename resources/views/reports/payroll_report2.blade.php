@@ -45,7 +45,7 @@
 
                 <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
                     <div class="col-md-5 col-5">
-                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="30%">
+                        <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="30%">
                         <br>
                         <p>AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
 
