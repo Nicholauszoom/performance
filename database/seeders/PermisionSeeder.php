@@ -19,15 +19,26 @@ class PermisionSeeder extends Seeder
 
             #1 workforce management permissions
             ['slug' => 'view-workforce','sys_module_id'=>1],
+
+            // start of active employees seeders
             ['slug' => 'view-employee','sys_module_id'=>1],
             ['slug' => 'edit-employee','sys_module_id'=>1],
             ['slug' => 'delete-employee','sys_module_id'=>1],
             ['slug' => 'add-employee','sys_module_id'=>1],
+            // end of active employees seeders
+
 
             ['slug' => 'activate-employee','sys_module_id'=>1],
             ['slug' => 'suspend-employee','sys_module_id'=>1],
             ['slug' => 'transfer-employee','sys_module_id'=>1],
-            ['slug' => 'terminate-permission','sys_module_id'=>1],
+
+            // start of employee termination seeders
+            ['slug' => 'view-termination','sys_module_id'=>1],
+            ['slug' => 'add-termination','sys_module_id'=>1],
+            ['slug' => 'edit-termination','sys_module_id'=>1],
+            ['slug' => 'delete-termination','sys_module_id'=>1],
+            ['slug' => 'print-termination','sys_module_id'=>1],
+            // end of employee termination seeders
 
             ['slug' => 'view-overtime','sys_module_id'=>1],
             ['slug' => 'add-overtime','sys_module_id'=>1],
