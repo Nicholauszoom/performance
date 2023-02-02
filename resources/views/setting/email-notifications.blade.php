@@ -19,7 +19,7 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="">
-            <h5 class="mb-0 text-muted">Email Notifications</h5>
+            <h6 class="mb-0 text-muted">Email Notifications</h6>
 
 
         </div>
@@ -50,7 +50,7 @@
                                     <form
                                     action="{{ url('flex/update-email-notification')}}"
                                     method="POST"
-                                    class="form-horizontal"
+                                    
                                 >
                                     @csrf
                                     @method('PUT')
@@ -65,7 +65,7 @@
                                 </td>
                                 <td>
 
-                                        <button type="submit" class="btn btn-perfrom btn-sm mb-2 mt-2">Update </button>
+                                        <button type="submit" class="btn btn-perfrom btn-sm">Update </button>
 
                                 </form>
 

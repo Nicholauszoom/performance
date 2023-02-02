@@ -19,7 +19,7 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="">
-            <h5 class="mb-0 text-muted">Approvals</h5>
+            <h6 class="mb-0 text-muted">Approvals</h6>
 
             <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Add Approval</button>
         </div>
@@ -54,9 +54,9 @@
                                     <a href="{{ route('flex.approval-levels', base64_encode($item->id)) }}" class="btn btn-main btn-sm" aria-label="Edit">
                                         <i class="ph-info"></i>
                                     </a>
-                                    {{-- <a href="" class="btn btn-main btn-sm" aria-label="Edit">
-                                        <i class="ph-pen"></i>
-                                    </a> --}}
+                                    <a href="{{ route('flex.deleteApproval', $item->id) }}" class="btn btn-danger btn-sm" >
+                                        <i class="ph-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @empty

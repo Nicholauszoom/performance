@@ -19,8 +19,11 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="">
-            <h5 class="mb-0 text-muted">Approval Level</h5>
-
+            <h6 class="mb-0 text-muted">Approval Level</h6>
+            <a href="{{ url('flex/approvals') }}" class=" float-end btn-main btn mx-1">
+            <i class="ph-list"></i>
+            All Approval Roles
+            </a>
             <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Add Approval Level</button>
         </div>
 
@@ -36,29 +39,29 @@
                 <table class="table datatable-basic">
                     <thead>
                         <th>SN</th>
-                        <th class="text-center">Approval Level</th>
-                        <th class="text-center">Approval Role</th>
-                        <th class="text-center">Label Name</th>
-                        <th class="text-center">Rank</th>
-                        <th class="text-center">Status</th>
+                        <th >Approval Level</th>
+                        <th >Approval Role</th>
+                        <th >Label Name</th>
+                        <th >Rank</th>
+                        <th >Status</th>
                         <th >Actions</th>
                     </thead>
                     <tbody>
                         @forelse ($levels as $item )
                             <tr>
                                 <td>{{ $i++}}</td>
-                                <td class="text-center">{{ $item->level_name}}</td>
-                                <td class="text-center">{{ $item->roles->name}}</td>
-                                <td class="text-center">{{ $item->label_name}}</td>
-                                <td class="text-center">{{ $item->rank}}</td>
-                                <td class="text-center">{{ $item->escallation=='1'? 'Yes':'No' }}</td>
+                                <td >{{ $item->level_name}}</td>
+                                <td >{{ $item->roles->name}}</td>
+                                <td >{{ $item->label_name}}</td>
+                                <td >{{ $item->rank}}</td>
+                                <td >{{ $item->escallation=='1'? 'Yes':'No' }}</td>
 
                                 <td>
                                     <a href="" class="btn btn-main btn-sm" aria-label="Edit">
-                                        <i class="ph-info"></i>
-                                    </a>
-                                    <a href="" class="btn btn-main btn-sm" aria-label="Edit">
                                         <i class="ph-pen"></i>
+                                    </a>
+                                    <a href="{{ route('flex.deleteApprovalLevel', $item->id) }}" class="btn btn-danger btn-sm" aria-label="Edit">
+                                        <i class="ph-trash"></i>
                                     </a>
                                 </td>
                             </tr>

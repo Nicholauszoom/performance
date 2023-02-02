@@ -9020,22 +9020,62 @@ public function editNotification(Request $request,$id)
 
 
 
-                $approval = new ApprovalLevel();
-                $approval->approval_id=$request->approval_id;
-                $approval->level_name=$request->level_name;
-                $approval->label_name=$request->label_name;
-                $approval->role_id=$request->role_id;
-                $approval->rank=$request->rank;
-                $approval->status=$request->status == true ? '1':'0';
-                $approval->save();
+                $Level = new ApprovalLevel();
+                $Level->approval_id=$request->approval_id;
+                $Level->level_name=$request->level_name;
+                $Level->label_name=$request->label_name;
+                $Level->role_id=$request->role_id;
+                $Level->rank=$request->rank;
+                $Level->status=$request->status == true ? '1':'0';
+
+                // for changing approval levels
+
+                $appID=$request->approval_id;
+                $approval=Approvals::where('id',$appID)->first();
+                $approval->levels=$approval->levels+1;
+                $approval->update();
+
+
+                $Level->save();
 
 
                 $msg="Approval has been added Successfully !";
-                return redirect('flex/approvals')->with('msg', $msg);
+                return redirect('flex/approval_levels/'.base64_encode($appID))->with('msg', $msg);
 
         }
         // end of add approval level function
 
+
+
+    // start of delete approval
+    public function deleteApproval($id)
+    {
+        $approval=Approvals::where('id',$id)->first();
+            $approval->delete();
+
+            return redirect('flex/approvals')->with('msg',"Approval role was deleted successfully!");
+
+    }
+    // end of delete approval
+
+        // start of delete approval
+        public function deleteApprovalLevel($id)
+        {
+            $level=ApprovalLevel::where('id',$id)->first();
+
+                            // for changing approval level
+
+                $appID=$level->approval_id;
+                $approval=Approvals::where('id',$appID)->first();
+                $approval->levels=$approval->levels-1;
+                $approval->update();
+
+                $level->delete();
+    
+                return redirect('flex/approval_levels/'.base64_encode($appID))->with('msg',"Approval Level was deleted successfully!");
+    
+        }
+    // end of delete approval
 
 
     }
