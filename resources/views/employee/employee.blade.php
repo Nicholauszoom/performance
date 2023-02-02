@@ -40,7 +40,7 @@
           <th>Position</th>
           <th>Linemanager</th>
           <th>Contacts</th>
-          @can('view-employee')
+          @can('edit-employee')
           <th>Options</th>
           @endcan
         </tr>
@@ -63,7 +63,7 @@
                 <b>Email: </b> {{ $row->email }} <br>
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
-            @can('view-employee')
+            @can('edit-employee')
             <td class="options-width">
                 <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
                     <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>

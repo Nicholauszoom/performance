@@ -45,7 +45,7 @@
 
                                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
                                                     <label class="">Role </label>
-                                                    <select class="form-control m-b" name="role">
+                                                    <select class="select form-control m-b" name="role">
                                                         <option value="" disabled selected>Choose option</option>
                                                         @if (isset($role))
                                                             @foreach ($role as $roles)
