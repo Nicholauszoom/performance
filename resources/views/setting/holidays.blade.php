@@ -19,7 +19,7 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="">
-            <h5 class="mb-0 text-muted">Holidays</h5>
+            <h6 class="mb-0 text-muted">Holidays</h6>
 
 
         </div>
@@ -66,12 +66,12 @@
         </div>
 
 
-        <div id="save_termination" class="col-12" tabindex="-1">
-            <div class="card p-1">
+        <div id="save_termination" class="col-7 mx-auto">
+            <div class="card ">
                 <div class="card-header">
                     <h6>Add Holiday</h6>
                 </div>
-                <div class="modal-content">
+                <div class="">
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
@@ -81,20 +81,19 @@
                     <form
                         action="{{ route('flex.saveHoliday') }}"
                         method="POST"
-                        class="form-horizontal"
                     >
                         @csrf
 
                         <div class="card-body">
-                            <div class="row mb-3">
+                            <div class="row mb-1">
                                 <div class="col-6 col-lg-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label class="form-label">Holiday Name:</label>
                                         <input type="text" name="name" id="" class="form-control" placeholder="Enter Holiday Name">
                                     </div>
                                 </div>
                                 <div class="col-6 col-lg-6">
-                                    <div class="mb-3">
+                                    <div class="mb-1">
                                         <label class="form-label">Holiday Date:</label>
                                         <input type="date" name="date" id="" class="form-control" placeholder="Enter Date of Charge">
                                     </div>
@@ -107,18 +106,9 @@
                                         <input type="checkbox" name="recurring" id="recurring" class="check">
                                     </div>
                                 </div>
+                            </div>
 
-
-
-                        </div>
-
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <hr>
-
-                            <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save Holiday</button>
+                            <button type="submit" class="btn btn-perfrom mb-1 float-end">Save Holiday</button>
                         </div>
                     </form>
                 </div>

@@ -46,8 +46,8 @@
                 <th>Employee Name</th>
                 <th>Department</th>
                 <th>Suspension</th>
-                <th>Date of Charge</th>
-                <th>Action</th>
+                <th>Charge Date</th>
+                <th >Action</th>
             </tr>
         </thead>
 
@@ -61,9 +61,9 @@
              <td> {{ $item->date_of_charge}}</td>
              <td>
                 <a  href="{{ route('flex.viewDisciplinary', base64_encode($item->id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-sm btn-info btn-xs"><i class="ph-info"></i></button>
+                    <button type="button" class="btn btn-sm btn-main btn-xs"><i class="ph-info"></i></button>
                 </a>
-                <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-info btn-sm">
+                <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-main btn-sm">
                     <i class="ph-pen"></i>
                 </a>
                 <a href="{{ route('flex.deleteDisciplinary', $item->id) }}" class="btn btn-danger btn-sm">

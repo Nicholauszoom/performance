@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 //use App\Http\Controllers\Controller;
 
 use App\Models\EMPL;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Position;
+use App\Models\Approvals;
 use App\Models\Promotion;
 use Illuminate\Http\File;
 use App\Models\AuditTrail;
@@ -18,6 +20,7 @@ use App\Models\Termination;
 use App\Models\Disciplinary;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\ApprovalLevel;
 use App\Models\FinancialLogs;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
@@ -29,12 +32,13 @@ use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
+use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
+
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
-
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -8800,10 +8804,10 @@ public function updateEmployeeDetails(Request $request)
     public function holidays()
     {
 
-        $data['title'] = "Grievances|Disciplinary";
+
         $data['holidays'] =Holiday::orderBy('date','asc')->get();
         $i=1;
-        $data['parent'] = 'Workforce';
+        $data['parent'] = 'Settings';
         $data['child'] = 'Holidays';
 
         return view('setting.holidays', $data,compact('i'));
@@ -8839,21 +8843,22 @@ public function updateEmployeeDetails(Request $request)
     }
     // end of saving new holiday function
 
-// start of edit disciplinary action
-public function editHoliday(Request $request,$id)
-    {
+    // start of edit disciplinary action
+    public function editHoliday(Request $request,$id)
+        {
 
-        $i=1;
-        $did = base64_decode($id);
+            $i=1;
+            $did = base64_decode($id);
 
-        $data['holidays'] = Holiday::all();
+            $data['holidays'] = Holiday::all();
 
-        $data['holiday']= Holiday::where('id',$did)->first();
+            $data['holiday']= Holiday::where('id',$did)->first();
 
-
-        return view('setting.edit-holiday',$data,compact('i'));
-    }
-// end of edit disciplinary action
+            $data['parent'] = 'Settings';
+            $data['child'] = 'Edit Holiday';
+            return view('setting.edit-holiday',$data,compact('i'));
+        }
+    // end of edit disciplinary action
 
     // start of update holiday function
     public function updateHoliday(Request $request)
@@ -8893,6 +8898,200 @@ public function editHoliday(Request $request,$id)
 
     }
     // end of delete holiday function
+
+
+
+    // start of view email notification settings
+    public function emailNotification()
+    {
+
+        $data['title'] = "Email Notifications";
+        $data['notifications'] =EmailNotification::orderBy('id','asc')->get();
+        $i=1;
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Email Notifications';
+
+        return view('setting.email-notifications', $data,compact('i'));
+
+    }
+    // end of view email notification settings
+
+
+    // start of edit email notification settings function
+public function editNotification(Request $request,$id)
+{
+
+    $i=1;
+    $did = base64_decode($id);
+
+    $data['notifications'] = EmailNotification::all();
+
+    $data['notification']= EmailNotification::where('id',$did)->first();
+
+    $data['parent'] = 'Settings';
+    $data['child'] = 'Edit Notification';
+    return view('setting.edit-email-notification',$data,compact('i'));
+}
+    // end of edit email notification settings function
+
+
+
+    // start of update holiday function
+    public function updateNotification(Request $request)
+    {
+
+            $id=$request->id;
+            $email = EmailNotification::find($id);
+            $email->status=$request->status == true ? '1':'0';;
+            $email->update();
+
+
+            $msg="Email Permission has been Updated Successfully !";
+            return redirect('flex/email-notifications')->with('msg', $msg);
+
+    }
+
+    // end of update holiday function
+
+
+
+        // start of view all approvals settings
+        public function viewApprovals()
+        {
+
+            $data['title'] = "Approval Settings";
+            $data['approvals'] =Approvals::orderBy('id','asc')->get();
+            $i=1;
+            $data['parent'] = 'Settings';
+            $data['child'] = 'Approvals';
+
+            return view('setting.approvals', $data,compact('i'));
+
+        }
+        // end of view email notification settings
+
+
+
+        // start of add approval function
+
+        public function saveApprovals(Request $request)
+        {
+            request()->validate(
+                [
+                'process_name' => 'required',
+                'escallation' => 'nullable',
+                'escallation_time' => 'nullable',
+                 ]
+                );
+
+
+
+                $approval = new Approvals();
+                $approval->process_name=$request->process_name;
+                $approval->escallation=$request->escallation == true ? '1':'0';
+                $approval->escallation_time=$request->escallation_time;
+                $approval->save();
+
+
+                $msg="Approval has been added Successfully !";
+                return redirect('flex/approvals')->with('msg', $msg);
+
+        }
+        // end of add approval function
+
+
+    // start of view approval levels function
+    public function viewApprovalLevels(Request $request,$id)
+    {
+
+        $i=1;
+        $did = base64_decode($id);
+
+        $data['roles'] = Role::all();
+        $data['approval'] = Approvals::where('id',$did)->first();
+        $approval=Approvals::where('id',$did)->first();
+        $data['levels']= ApprovalLevel::where('approval_id',$did)->get();
+
+        $data['parent'] = 'Settings';
+
+        $data['child'] =$approval->process_name.'/Approval Levels';
+        return view('setting.view-approval',$data,compact('i'));
+    }
+    // end of view approval levels function
+
+
+
+
+        // start of add approval level function
+
+        public function saveApprovalLevel(Request $request)
+        {
+            request()->validate(
+                [
+                'label_name' => 'required',
+                'level_name' => 'required',
+                'rank' => 'required',
+                 ]
+                );
+
+
+
+                $Level = new ApprovalLevel();
+                $Level->approval_id=$request->approval_id;
+                $Level->level_name=$request->level_name;
+                $Level->label_name=$request->label_name;
+                $Level->role_id=$request->role_id;
+                $Level->rank=$request->rank;
+                $Level->status=$request->status == true ? '1':'0';
+
+                // for changing approval levels
+
+                $appID=$request->approval_id;
+                $approval=Approvals::where('id',$appID)->first();
+                $approval->levels=$approval->levels+1;
+                $approval->update();
+
+
+                $Level->save();
+
+
+                $msg="Approval has been added Successfully !";
+                return redirect('flex/approval_levels/'.base64_encode($appID))->with('msg', $msg);
+
+        }
+        // end of add approval level function
+
+
+
+    // start of delete approval
+    public function deleteApproval($id)
+    {
+        $approval=Approvals::where('id',$id)->first();
+            $approval->delete();
+
+            return redirect('flex/approvals')->with('msg',"Approval role was deleted successfully!");
+
+    }
+    // end of delete approval
+
+        // start of delete approval
+        public function deleteApprovalLevel($id)
+        {
+            $level=ApprovalLevel::where('id',$id)->first();
+
+                            // for changing approval level
+
+                $appID=$level->approval_id;
+                $approval=Approvals::where('id',$appID)->first();
+                $approval->levels=$approval->levels-1;
+                $approval->update();
+
+                $level->delete();
+    
+                return redirect('flex/approval_levels/'.base64_encode($appID))->with('msg',"Approval Level was deleted successfully!");
+    
+        }
+    // end of delete approval
 
 
     }

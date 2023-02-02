@@ -54,6 +54,8 @@
                         <td>{{ $row->dated }}</td>
                         <td>
                             @if ( $row->isRequested == 0 )
+                            @can('activate-employee')
+
                                 <a
                                     href="javascript:void(0)"
                                     title="Request Activation"
@@ -62,6 +64,7 @@
                                 >
                                     <i class="ph-check-square"></i>
                                 </a>
+                            @endcan
                             @else
                                 <span class="badge bg-primary"> <small> ACTIVATION &nbsp; <br> &nbsp;REQUESTED</small> </span>
                             @endif
