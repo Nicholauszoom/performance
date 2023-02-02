@@ -67,17 +67,21 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-overtime','sys_module_id'=>1],
             // end of overtime seeders
 
+            // start of imprest seeders
             ['slug' => 'view-imprest','sys_module_id'=>1],
             ['slug' => 'add-imprest','sys_module_id'=>1],
             ['slug' => 'edit-imprest','sys_module_id'=>1],
             ['slug' => 'delete-imprest','sys_module_id'=>1],
+            // end of imprest seeders
 
+            // start of grievances seeders
             ['slug' => 'view-grivance','sys_module_id'=>1],
             ['slug' => 'add-grivance','sys_module_id'=>1],
             ['slug' => 'edit-grivance','sys_module_id'=>1],
             ['slug' => 'delete-grivance','sys_module_id'=>1],
 
-
+            // end of grievances seeders
+            
             //payroll management
             ['slug' => 'view-payroll-management','sys_module_id'=>2],
             ['slug' => 'view-payroll','sys_module_id'=>2],
