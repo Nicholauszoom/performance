@@ -36,6 +36,8 @@
 
         </div>
             <input type="text" name="limit" hidden value="<?php echo $totalAccrued; ?>">
+            <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}">
+
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Finish
           </label>
@@ -50,9 +52,9 @@
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave</label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-          <select required  name="nature"  class="select_leave_type form-control">
+          <select required  name="nature" id="nature"  class="select_leave_type form-control">
               <option></option>
-              <?php  $sex = session('gender');
+              <?php  $sex = Auth::user()->gender;
              if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
              foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
             <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?></option> <?php  } ?>

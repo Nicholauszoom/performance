@@ -30,7 +30,7 @@
         <div class="row">
 
             <div class="col-md-12">
-                <button id="printbtn" onclick="window.print()">Print this page</button>
+
 
                 <div class="d-flex justify-content-between align-items-center px-3 mt-2 mb-3">
                     <div class="logo-wrapper">
@@ -43,7 +43,7 @@
                         <h5><center>P.O. BOX 31</center></h5>
                         <h5><center>DAR ES SALAAM</center></h5>
                     </div>
-
+                    <button id="printbtn" onclick="window.print()">Print this page</button>
                     <div>
                         <h2>Salary Slip</h2>
                         <h6>For month : {{ date('M-Y',strtotime($payroll_date)) }}</h6>
@@ -265,7 +265,7 @@
 
                             @endforeach
                             @foreach($loans as $row)
-                            
+
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">{{ $row->description }}</div>
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end">{{ number_format($row->paid/$rate, 2) }}</div>
 
@@ -290,6 +290,23 @@
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($amount_takehome, 2); ?></div>
                             {{-- <div class="col-md-12"><hr></div> --}}
                         </div>
+                         @if($total_bank_loan > 0)
+                        <button class="col-md-12 col-12 mt-2 text-dark" style="font-weight:bolder !important; "
+                            disabled>
+                            Bank Loans
+                        </button>
+                        <div class="row">
+                            @foreach($bank_loan as $row)
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">{{ $row->product }}</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end">{{ number_format($row->amount/$rate, 2) }}</div>
+
+
+                            @endforeach
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Total</div>
+                            <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($total_bank_loan, 2); ?></div>
+                            {{-- <div class="col-md-12"><hr></div> --}}
+                        </div>
+                        @endif
                         <button class="col-md-12 col-12 mt-2 text-dark" style="font-weight:bolder !important; "
                             disabled>
                             Take Home
@@ -299,6 +316,17 @@
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($amount_takehome, 2); ?></div>
                             {{-- <div class="col-md-12"><hr></div> --}}
                         </div>
+                        @if($total_bank_loan > 0)
+                        <button class="col-md-12 col-12 mt-2 text-dark" style="font-weight:bolder !important; "
+                        disabled>
+                        Take Home After Loan Deductions
+                    </button>
+                    <div class="row" style="border-bottom: 4px solid rgb(71, 105, 116) !important; ">
+                        <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">Take home</div>
+                        <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo number_format($amount_takehome - $total_bank_loan, 2); ?></div>
+                        {{-- <div class="col-md-12"><hr></div> --}}
+                    </div>
+                    @endif
                         <div class="row">
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6">NSSF Number:</div>
                             <div class="col-md-6 col-6 col-sm-6 col-lg-6 col-xs-6 text-end"><?php echo $membership_no; ?></div>
@@ -345,7 +373,7 @@
 </body>
 <script>
     window.onload= function(){
-        //window.print();
+        window.print();
     }
 </script>
 

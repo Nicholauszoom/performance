@@ -266,9 +266,9 @@
                     <ul
                         class="nav-group-sub collapse {{ request()->routeIs('flex.role') || request()->routeIs('flex.email-notifications') || request()->routeIs('flex.holidays') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'show' : null }}">
                         @if (session('mng_roles_grp'))
-                            <li class="nav-item"><a
+                            {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.role') ? 'active' : null }}"
-                                    href="{{ route('flex.role') }}">Roles and Groups</a></li>
+                                    href="{{ route('flex.role') }}">Roles and Groups</a></li> --}}
                         @endif
                         <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"

@@ -32,7 +32,7 @@ class FlexPerformanceModel extends Model
 
     public function financialLogs($date)
     {
-        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) = '".$date."' ORDER BY fn.created_at DESC";
+        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) Like '".$date."%' ORDER BY fn.created_at DESC";
 
         return DB::select(DB::raw($query));
     }
@@ -115,7 +115,7 @@ class FlexPerformanceModel extends Model
 
 	function branch()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, b.*,d.name as department_name FROM branch b,department d,  (SELECT @s:=0) as s WHERE b.department_id = d.id";
+		$query = "SELECT @s:=@s+1 as SNo, b.* FROM branch b";
 
 		return DB::select(DB::raw($query));
 	}
@@ -1714,7 +1714,7 @@ IF(
     }
 
 	function employeesrole($id) {
-        
+
 	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.emp_id NOT IN (SELECT userID from emp_role where role = ".$id." and group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
@@ -3274,6 +3274,15 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
         ->where('allowance', $allowanceID)
         ->delete();
         return true;
+    }
+
+    public function get_individual_from_allowance($empID, $allowanceID)
+    {
+        $row = DB::table('emp_allowances')->where('empID', $empID)
+        ->where('group_name', 0)
+        ->where('allowance', $allowanceID)
+        ->select('*')->first();
+        return $row;
     }
 
 
