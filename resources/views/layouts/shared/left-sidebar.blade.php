@@ -61,7 +61,7 @@
                         @endcan
 
 
-                        @can('view-employee')
+                       
 
                         @can('suspend-employee')
                             <li class="nav-item">
@@ -69,11 +69,14 @@
                                     href="{{ route('flex.inactive_employee') }}">Suspended Employees</a>
                             </li>
                         @endcan
-                        
+
+                        @can('edit-employee')
+
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.termination') || request()->routeIs('flex.addTermination') ? 'active' : null }}"
                                     href="{{ route('flex.termination') }}">Employee Termination</a>
                             </li>
+                        @endcan
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.promotion') ? 'active' : null }}"
                                     href="{{ route('flex.promotion') }}">Promotions/Increments</a>
@@ -82,7 +85,7 @@
                                 <a class="nav-link {{ request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') ? 'active' : null }}"
                                     href="{{ route('flex.unpaid_leave') }}">Unpaid Leaves</a>
                             </li>
-                        @endcan
+                        
                         @can('view-overtime')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"

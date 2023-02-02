@@ -22,10 +22,12 @@
             <h5 class="mb-0 text-muted">Terminated Employees</h5>
 
            
+            @can('terminate-permission')
 
                 <a href="{{ route('flex.addTermination') }}" class="btn btn-perfrom ">
                     <i class="ph-plus me-2"></i> Add Termination
                 </a>
+            @endcan
         </div>
     </div>
 
@@ -76,7 +78,7 @@
                     )}}
              </td>
              <td>
-                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Edit Loan">
+                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
                     <button type="button" class="btn btn-info btn-xs" ><i class="ph-printer"></i></button>
                 </a>
              </td>
