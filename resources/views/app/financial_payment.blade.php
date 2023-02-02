@@ -16,7 +16,7 @@
 @section('content')
     @php
         $imprest_model = new App\Models\Payroll\ImprestModel();
-         $state = 0;
+        $state = 0;
     @endphp
 
     @foreach ($payrollList as $row)
@@ -31,7 +31,7 @@
 
     <div class="card">
         <div class="card-header border-0">
-            <h2 class="text-muted">Pending Payments <small>Need To Be Responded On</small></h2>
+            <h2 class="text-muted">Pending Payments <small></small></h2>
         </div>
 
         <div class="card-body">
@@ -39,35 +39,35 @@
 
                 <div class="border rounded p-3 mb-3">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <a href="#incentivesTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
                                 <i class="ph-list me-2"></i>
                                 Incentives
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item" role="presentation">
-                            <a href="#overtimeTab" class="nav-link" data-bs-toggle="tab" aria-selected="false"
+                            <a href="#overtimeTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
                                 <i class="ph-list me-2"></i>
                                 Overtime
                             </a>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        {{-- <li class="nav-item" role="presentation">
                             <a href="#imprestTab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
                                 tabindex="-1">
                                 <i class="ph-list me-2"></i>
                                 Imprest
                             </a>
-                        </li>
+                        </li> --}}
                         <!--
-                                <li class="nav-item" role="presentation">
-                                    <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
-                                        tabindex="-1">
-                                        <i class="ph-list me-2"></i>
-                                        Salary Advance
-                                    </a>
-                                </li> -->
+                                    <li class="nav-item" role="presentation">
+                                        <a href="#salarytab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
+                                            tabindex="-1">
+                                            <i class="ph-list me-2"></i>
+                                            Salary Advance
+                                        </a>
+                                    </li> -->
 
                         <li class="nav-item" role="presentation">
                             <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
@@ -298,14 +298,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane " id="overtimeTab">
+                        <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card">
-                                    <div class="x_title">
+                                    <div class="tab-head py-2 px-2">
                                         <h2>Overtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
-                                    <div class="x_content">
+                                    <div class="tab-body">
                                         <?php //echo $this->session->flashdata("note");
                                         ?>
                                         <div id="resultfeedOvertime"></div>
@@ -387,7 +387,8 @@
                                                         <br><br>
 
 
-                                                        <?php //if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) { ?>
+                                                        <?php //if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) {
+                                                        ?>
 
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
@@ -405,7 +406,7 @@
 
 
                                                         <?php// }
-                                                             //   if ($row->status == 3 && session('recom_paym')) { ?>
+                                                                                                                     //   if ($row->status == 3 && session('recom_paym')) { ?> ?>
                                                         <a href="javascript:void(0)" title="Recommend"
                                                             class="icon-2 info-tooltip"
                                                             onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
@@ -421,7 +422,7 @@
                                                         </a>
 
                                                         <?php// }
-                                                             //   if ($row->status == 4 && session('appr_paym')) { ?>
+                                                                                                                     //   if ($row->status == 4 && session('appr_paym')) { ?> ?>
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="approveOvertime(<?php echo $row->eoid; ?>)">
@@ -435,7 +436,7 @@
                                                             <button class="btn btn-danger btn-xs"><i
                                                                     class="ph-x"></i></button>
                                                         </a>
-                                                        <?php// } ?>
+                                                        <?php// } ?> ?>
 
 
                                                     </td>
@@ -450,133 +451,133 @@
                             </div>
                         </div>
                         <!--
-                                <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
-                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <div class="card">
-                                            <div class="x_title">
-                                                <h2>Others` Salary Advance
-                                                    <ul class="nav navbar-right panel_toolbox">
-                                                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                                        </li>
-                                                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                                                        </li>
-                                                    </ul>
+                                    <div role="tabpanel" class="tab-pane fade" id="salarytab" aria-labelledby="profile-tab">
+                                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="x_title">
+                                                    <h2>Others` Salary Advance
+                                                        <ul class="nav navbar-right panel_toolbox">
+                                                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                                            </li>
+                                                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                                                            </li>
+                                                        </ul>
 
-                                                    <div class="clearfix"></div>
-                                            </div>
-                                            <div class="x_content">
-                                                <div id="resultfeed"></div>
-                                                <div id="resultfeedCancel"></div>
-                                                <?php //echo $this->session->flashdata("note");
-                                                ?>
-                                                <table id="datatable" class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>S/N</th>
-                                                            <th>Name</th>
-                                                            <th>Position</th>
-                                                            <th>Type</th>
-                                                            <th>Amount</th>
-                                                            <th>Application Date</th>
-                                                            <th>Status</th>
+                                                        <div class="clearfix"></div>
+                                                </div>
+                                                <div class="x_content">
+                                                    <div id="resultfeed"></div>
+                                                    <div id="resultfeedCancel"></div>
+                                                    <?php //echo $this->session->flashdata("note");
+                                                    ?>
+                                                    <table id="datatable" class="table table-striped table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>S/N</th>
+                                                                <th>Name</th>
+                                                                <th>Position</th>
+                                                                <th>Type</th>
+                                                                <th>Amount</th>
+                                                                <th>Application Date</th>
+                                                                <th>Status</th>
 
-                                                        </tr>
-                                                    </thead>
+                                                            </tr>
+                                                        </thead>
 
 
-                                                    <tbody>
-                                                        <?php
+                                                        <tbody>
+                                                            <?php
                                                     foreach ($otherloan as $row) { ?>
-                                                        <?php if ($row->status == 2 || (!$row->status == 6 && session('recom_paym'))) {
-                                                            continue;
-                                                        } ?>
-                                                        <tr id="domain<?php echo $row->id; ?>">
-                                                            <td width="1px"><?php echo $row->SNo; ?></td>
-                                                            <td><?php echo $row->NAME; ?></td>
-                                                            <td><?php echo $row->DEPARTMENT; ?><br>
-                                                                <?php echo $row->POSITION; ?>
-                                                            </td>
-                                                            <td><?php echo $row->TYPE; ?></td>
-                                                            <td><?php echo $row->amount; ?></td>
-                                                            <td><?php $datewell = explode('-', $row->application_date);
-                                                            $mm = $datewell[1];
-                                                            $dd = $datewell[2];
-                                                            $yyyy = $datewell[0];
-                                                            $clear_date = $dd . '-' . $mm . '-' . $yyyy;
-                                                            echo $clear_date; ?>
-                                                            </td>
-                                                            <td>
-                                                                <div id="status<?php echo $row->id; ?>">
-                                                                    <?php if ($row->status == 0) { ?>
-                                                                    <div class="col-md-12">
-                                                                        <span class="label label-default">SENT</span>
-                                                                    </div><?php } elseif ($row->status == 6) {
+                                                            <?php if ($row->status == 2 || (!$row->status == 6 && session('recom_paym'))) {
+                                                                continue;
+                                                            } ?>
+                                                            <tr id="domain<?php echo $row->id; ?>">
+                                                                <td width="1px"><?php echo $row->SNo; ?></td>
+                                                                <td><?php echo $row->NAME; ?></td>
+                                                                <td><?php echo $row->DEPARTMENT; ?><br>
+                                                                    <?php echo $row->POSITION; ?>
+                                                                </td>
+                                                                <td><?php echo $row->TYPE; ?></td>
+                                                                <td><?php echo $row->amount; ?></td>
+                                                                <td><?php $datewell = explode('-', $row->application_date);
+                                                                $mm = $datewell[1];
+                                                                $dd = $datewell[2];
+                                                                $yyyy = $datewell[0];
+                                                                $clear_date = $dd . '-' . $mm . '-' . $yyyy;
+                                                                echo $clear_date; ?>
+                                                                </td>
+                                                                <td>
+                                                                    <div id="status<?php echo $row->id; ?>">
+                                                                        <?php if ($row->status == 0) { ?>
+                                                                        <div class="col-md-12">
+                                                                            <span class="label label-default">SENT</span>
+                                                                        </div><?php } elseif ($row->status == 6) {
                                                                         ?>
-                                                                    <div class="col-md-12">
-                                                                        <span class="label label-info">RECOMMENDED
-                                                                            BY
-                                                                            HR</span>
-                                                                    </div><?php } elseif ($row->status == 2) { ?>
-                                                                    <div class="col-md-12">
-                                                                        <span class="label label-success">APPROVED</span>
-                                                                    </div><?php } elseif ($row->status == 1) {
+                                                                        <div class="col-md-12">
+                                                                            <span class="label label-info">RECOMMENDED
+                                                                                BY
+                                                                                HR</span>
+                                                                        </div><?php } elseif ($row->status == 2) { ?>
+                                                                        <div class="col-md-12">
+                                                                            <span class="label label-success">APPROVED</span>
+                                                                        </div><?php } elseif ($row->status == 1) {
                                                                         ?>
-                                                                    <div class="col-md-12">
-                                                                        <span class="label label-info">RECOMMENDED
-                                                                            BY
-                                                                            FINANCE</span>
+                                                                        <div class="col-md-12">
+                                                                            <span class="label label-info">RECOMMENDED
+                                                                                BY
+                                                                                FINANCE</span>
+                                                                        </div>
+                                                                        <?php } elseif ($row->status == 5) { ?><?php } ?>
                                                                     </div>
-                                                                    <?php } elseif ($row->status == 5) { ?><?php } ?>
-                                                                </div>
 
-                                                                <div style="margin: 10px;">
-                                                                    <?php if (/*session('mng_emp') &&*/ $row->status == 0) { ?>
-                                                                    <a href="javascript:void(0)"
-                                                                        onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
-                                                                        title="Recommend">
-                                                                        <button class="btn btn-main btn-xs"><i
-                                                                                class="fa fa-check"></i></button>
-                                                                    </a>
+                                                                    <div style="margin: 10px;">
+                                                                        <?php if (/*session('mng_emp') &&*/ $row->status == 0) { ?>
+                                                                        <a href="javascript:void(0)"
+                                                                            onclick="hrrecommendLoan(<?php echo $row->id; ?>)"
+                                                                            title="Recommend">
+                                                                            <button class="btn btn-main btn-xs"><i
+                                                                                    class="fa fa-check"></i></button>
+                                                                        </a>
 
-                                                                    <?php } else if ($row->status == 6 && session('recom_paym')) { ?>
-                                                                    <a href="javascript:void(0)"
-                                                                        onclick="recommendLoan(<?php echo $row->id; ?>)"
-                                                                        title="Recommend">
-                                                                        <button class="btn btn-main btn-xs"><i
-                                                                                class="fa fa-check"></i></button>
-                                                                    </a>
-                                                                    <?php } ?>
+                                                                        <?php } else if ($row->status == 6 && session('recom_paym')) { ?>
+                                                                        <a href="javascript:void(0)"
+                                                                            onclick="recommendLoan(<?php echo $row->id; ?>)"
+                                                                            title="Recommend">
+                                                                            <button class="btn btn-main btn-xs"><i
+                                                                                    class="fa fa-check"></i></button>
+                                                                        </a>
+                                                                        <?php } ?>
 
-                                                                    <?php if (/*session('appr_paym') &&*/ $row->status == 1 && $pendingPayroll == 0) { ?>
+                                                                        <?php if (/*session('appr_paym') &&*/ $row->status == 1 && $pendingPayroll == 0) { ?>
 
-                                                                    <a href="javascript:void(0)"
-                                                                        onclick="approveLoan(<?php echo $row->id; ?>)">
-                                                                        <button class="btn btn-success btn-xs"><i
-                                                                                class="fa fa-check"></i></button>
-                                                                    </a>
+                                                                        <a href="javascript:void(0)"
+                                                                            onclick="approveLoan(<?php echo $row->id; ?>)">
+                                                                            <button class="btn btn-success btn-xs"><i
+                                                                                    class="fa fa-check"></i></button>
+                                                                        </a>
 
-                                                                    <a href="javascript:void(0)" title="Cancel"
-                                                                        class="icon-2 info-tooltip"
-                                                                        onclick="cancelLoan(<?php echo $row->id; ?>)">
-                                                                        <button class="btn btn-danger btn-xs"><i
-                                                                                class="fa fa-times-circle"></i>
-                                                                        </button>
-                                                                    </a>
+                                                                        <a href="javascript:void(0)" title="Cancel"
+                                                                            class="icon-2 info-tooltip"
+                                                                            onclick="cancelLoan(<?php echo $row->id; ?>)">
+                                                                            <button class="btn btn-danger btn-xs"><i
+                                                                                    class="fa fa-times-circle"></i>
+                                                                            </button>
+                                                                        </a>
 
-                                                                    <?php } ?>
-                                                                </div>
+                                                                        <?php } ?>
+                                                                    </div>
 
-                                                            </td>
+                                                                </td>
 
 
-                                                        </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
+                                                            </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div> -->
+                                    </div> -->
                         <div role="tabpanel" class="tab-pane fade" id="imprestTab" aria-labelledby="profile-tab">
                             <div id="resultfeedImprest"></div>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -865,7 +866,7 @@
 
                                                     <td><?php echo date('d-M-Y', strtotime($row->last_paid_date)); ?>
                                                     </td>
-                                                    <?php// if (session('recom_paym') || session('appr_paym')) { ?> ?> ?>
+                                                    <?php// if (session('recom_paym') || session('appr_paym')) { ?> ?> ?> ?>
                                                     <td>
                                                         <?php if (/*session('appr_paym') &&*/ $row->status == 2) { ?>
                                                         <a href="javascript:void(0)"
@@ -908,7 +909,7 @@
                                                     <?php } ?>
 
                                                 </tr>
-                                                <?php// } ?> ?> ?>
+                                                <?php// } ?> ?> ?> ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -1041,7 +1042,7 @@
 
                         </div>
 
-                        <div role="tabpanel" class="tab-pane fade active show" id="incentivesTab"
+                        {{-- <div role="tabpanel" class="tab-pane fade active show" id="incentivesTab"
                             aria-labelledby="profile-tab">
                             <div id="resultfeedImprest"></div>
 
@@ -1128,7 +1129,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>
@@ -1390,9 +1391,9 @@
 
                             $('#delete').modal('hide');
                             new Noty({
-                                    text: 'Payroll approved successfully!',
-                                    type: 'success'
-                                }).show();
+                                text: 'Payroll approved successfully!',
+                                type: 'success'
+                            }).show();
 
 
 

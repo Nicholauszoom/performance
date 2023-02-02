@@ -45,7 +45,7 @@
               <td>{{ $row->name }}</td>
               <td></td>
               <td></td>
-              <td></td>
+              <td> </td>
 
               <td>
 

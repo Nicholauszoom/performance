@@ -327,6 +327,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 	        account_no,
 	        sdl,
 	        wcf,
+            rate,
+            currency,
 	        payroll_date
 
 	        )
@@ -1237,6 +1239,8 @@ IF(
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/31),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
 
 	    /*End all Allowances and Bonuses*/  ))) as wcf,
+        e.rate as rate,
+        e.currency AS currency,
 
 	     '" . $payroll_date . "' as payroll_date
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
@@ -1402,6 +1406,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                 account_no,
                 sdl,
                 wcf,
+                rate,
+                currency,
                 payroll_date
 
                 )
@@ -2400,6 +2406,9 @@ as gross,
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/31),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1  AND a.temporary=0 AND a.type=0 GROUP BY ea.empID), 0)
 
             /*End all Allowances and Bonuses*/  ))) as wcf,
+             e.rate as rate,
+             e.currency AS currency,
+
 
              '" . $payroll_date . "' as payroll_date
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
@@ -2409,7 +2418,7 @@ as gross,
 
             $query = "UPDATE allowances SET state = 0 WHERE type = 1 and Isrecursive = 'NO'";
             DB::insert(DB::raw($query));
-            
+
             //CLEAR TEMPORARY PAYROLL LOGS
             DB::table('temp_allowance_logs')->delete();
             DB::table('temp_deduction_logs')->delete();

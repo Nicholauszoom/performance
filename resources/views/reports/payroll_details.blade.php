@@ -34,7 +34,7 @@
             <div class="col-md-12">
                 <div class="d-flex justify-content-between" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
                     <div>
-                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" class="image-fluid">
+                        <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" class="image-fluid">
                     </div>
                     <div class="text-center">
                         <p style="font-weight:600">AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>

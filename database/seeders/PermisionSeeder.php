@@ -21,7 +21,8 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-employee','sys_module_id'=>1],
             ['slug' => 'add-employee','sys_module_id'=>1],
 
-            ['slug' => 'acticate-employee','sys_module_id'=>1],
+
+            ['slug' => 'activate-employee','sys_module_id'=>1],
             ['slug' => 'suspend-employee','sys_module_id'=>1],
             ['slug' => 'transfer-employee','sys_module_id'=>1],
             ['slug' => 'terminate-permission','sys_module_id'=>1],
