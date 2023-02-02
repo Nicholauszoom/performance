@@ -22,9 +22,11 @@
         <h4 class="lead">List of Employees</h4>
 
         @if (session('mng_emp'))
+        @can('add-employee')
           <a href="{{ url('/flex/addEmployee') }}" class="btn btn-main">
             <i class="ph-plus me-2"></i> Register Employee
           </a>
+        @endcan
         @endif
       </div>
     </div>
@@ -38,7 +40,9 @@
           <th>Position</th>
           <th>Linemanager</th>
           <th>Contacts</th>
+          @can('view-employee')
           <th>Options</th>
+          @endcan
         </tr>
       </thead>
 
@@ -59,6 +63,7 @@
                 <b>Email: </b> {{ $row->email }} <br>
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
+            @can('view-employee')
             <td class="options-width">
                 <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
                     <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
@@ -82,6 +87,8 @@
                     </a> --}}
                 @endif
             </td>
+
+            @endcan
         </tr>
         @endforeach
       </tbody>

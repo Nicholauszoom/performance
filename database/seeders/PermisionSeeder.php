@@ -14,14 +14,17 @@ class PermisionSeeder extends Seeder
     public function run()
     {
         $data = [
-            #3.start workforce permissions
+
+
+
+            #1 workforce management permissions
             ['slug' => 'view-workforce','sys_module_id'=>1],
             ['slug' => 'view-employee','sys_module_id'=>1],
             ['slug' => 'edit-employee','sys_module_id'=>1],
             ['slug' => 'delete-employee','sys_module_id'=>1],
             ['slug' => 'add-employee','sys_module_id'=>1],
 
-            ['slug' => 'acticate-employee','sys_module_id'=>1],
+            ['slug' => 'activate-employee','sys_module_id'=>1],
             ['slug' => 'suspend-employee','sys_module_id'=>1],
             ['slug' => 'transfer-employee','sys_module_id'=>1],
             ['slug' => 'terminate-permission','sys_module_id'=>1],

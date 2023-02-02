@@ -62,10 +62,14 @@
 
 
                         @can('view-employee')
+
+                        @can('suspend-employee')
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('flex.inactive_employee') ? 'active' : null }}"
                                     href="{{ route('flex.inactive_employee') }}">Suspended Employees</a>
                             </li>
+                        @endcan
+                        
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.termination') || request()->routeIs('flex.addTermination') ? 'active' : null }}"
                                     href="{{ route('flex.termination') }}">Employee Termination</a>

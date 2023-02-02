@@ -46,8 +46,8 @@
                 <th>Employee Name</th>
                 <th>Department</th>
                 <th>Suspension</th>
-                <th>Date of Charge</th>
-                <th>Action</th>
+                <th>Charge Date</th>
+                <th >Action</th>
             </tr>
         </thead>
 
