@@ -63,7 +63,7 @@
 
                                             <div class="ibox-footer py-3">
                                                 <div class="row justify-content-end mr-1">
-                                                    {!! Form::submit('Save', ['class' => 'btn btn-sm btn-info px-5']) !!}
+                                                    {!! Form::submit('Save', ['class' => 'btn btn-sm btn-main col-4 px-5']) !!}
                                                 </div>
                                             </div>
                                             {!! Form::close() !!}
