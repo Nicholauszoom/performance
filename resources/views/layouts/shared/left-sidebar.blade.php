@@ -81,7 +81,7 @@
                         {{-- / --}}
 
                         {{-- start of promotion/increment link --}}
-                        @can('view-promotion')
+                        @can('view-promotions')
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.promotion') ? 'active' : null }}"
                                     href="{{ route('flex.promotion') }}">Promotions/Increments</a>

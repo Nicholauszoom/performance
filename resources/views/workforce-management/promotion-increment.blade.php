@@ -21,16 +21,25 @@
         <div class="">
             <div class="row">
                 <div class="col-md-7">
-                    <h5 class="mb-0 text-muted text-start">Promotion| Increment</h5>
+                    <h6 class="mb-0 text-muted text-start">Promotion| Increment</h6>
                 </div>
                 <div class="col-md-5">
            
-                    <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom text-end ">
+                        {{-- start of increment salary button --}}
+                        @can('add-increment')
+                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom text-end ">
                         <i class="ph-plus me-2"></i> Increment Salary
                         </a>
+                        @endcan
+                        {{-- / --}}
+
+                        {{--  start of perform promotion button --}}
+                        @can('add-promotion')
                         <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom ">
                             <i class="ph-plus me-2"></i> Peform Promotion
                         </a>
+                        @endcan
+                        {{-- / --}}
                 </div>
             </div>
     
