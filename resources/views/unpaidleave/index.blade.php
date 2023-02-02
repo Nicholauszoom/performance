@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Termination'])
+@extends('layouts.vertical', ['title' => 'Unpaid Leaves'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -41,6 +41,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Reason</th>
+                <th hidden></th>
 
             </tr>
         </thead>
@@ -59,7 +60,7 @@
              <td>
                 {{ $row->reason }}
              </td>
-             
+
              @can('end-unpaid-leaves')
              <td>
                 {{-- start of end unpaid leave button --}}
@@ -69,7 +70,7 @@
                 {{-- / --}}
              </td>
              @endcan
-
+             <td hidden></td>
             </tr>
             @endforeach
         </tbody>
