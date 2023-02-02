@@ -54,9 +54,9 @@
                                     <a href="{{ route('flex.approval-levels', base64_encode($item->id)) }}" class="btn btn-main btn-sm" aria-label="Edit">
                                         <i class="ph-info"></i>
                                     </a>
-                                    <a href="" class="btn btn-main btn-sm" aria-label="Edit">
+                                    {{-- <a href="" class="btn btn-main btn-sm" aria-label="Edit">
                                         <i class="ph-pen"></i>
-                                    </a>
+                                    </a> --}}
                                 </td>
                             </tr>
                         @empty

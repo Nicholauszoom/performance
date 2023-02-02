@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('rank');
             $table->string('label_name');
             $table->boolean('status');
+            $table->foreign('approval_id')->references('id')->on('approvals')
+            ->onDelete('cascade');
             $table->timestamps();
         });
     }

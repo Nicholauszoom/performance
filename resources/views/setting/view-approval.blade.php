@@ -48,7 +48,7 @@
                             <tr>
                                 <td>{{ $i++}}</td>
                                 <td class="text-center">{{ $item->level_name}}</td>
-                                <td class="text-center">{{ $item->role}}</td>
+                                <td class="text-center">{{ $item->roles->name}}</td>
                                 <td class="text-center">{{ $item->label_name}}</td>
                                 <td class="text-center">{{ $item->rank}}</td>
                                 <td class="text-center">{{ $item->escallation=='1'? 'Yes':'No' }}</td>
@@ -92,7 +92,7 @@
             </div>
 
             <form
-                action="{{ route('flex.saveApprovals') }}"
+                action="{{ route('flex.saveApprovalLevel') }}"
                 method="POST"
                 class="form-horizontal"
             >
@@ -104,7 +104,7 @@
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Level: </label>
                             <input type="text"  name="level_name"  value="{{ old('process_name') }}" placeholder="Enter Process Name" class="form-control @error('process_name') is-invalid @enderror">
-
+                            <input type="hidden" name="approval_id" value="{{ $approval->id }}">
                             @error('process_name')
                                 <p class="text-danger mt-1"> Field Process Name has an error </p>
                             @enderror
@@ -113,15 +113,27 @@
 
                     <div class="form-group">
                         <label class="col-form-label col-sm-3">Label Name </label>
-                            <input type="text"  name="label_name"  value="{{ old('process_name') }}" placeholder="Enter Label Name" class="form-control @error('process_name') is-invalid @enderror">
+                            <input type="text"  name="label_name"  value="{{ old('process_name') }}" placeholder="Enter Button Label Name" class="form-control @error('process_name') is-invalid @enderror">
 
                             @error('process_name')
                                 <p class="text-danger mt-1"> Field Process Name has an error </p>
                             @enderror
                     </div>
-                    <div class="form-group col-6">
-                        <label class="col-form-label col-sm-3"> </label>
-                            <select name="rank" class="form-control select">
+                    <div class="form-group">
+                        <label for="role_id" class="col-form-label col-sm-3">Role</label>
+                        <select name="role_id" id="role_id" class=" select form-control">
+                            @foreach ( $roles as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+
+                        </select>
+                            @error('process_name')
+                                <p class="text-danger mt-1"> Field Process Name has an error </p>
+                            @enderror
+                    </div>
+                    <div class="form-group col-9">
+                        <label class="col-form-label col-sm-3">Level Rank </label>
+                            <select name="rank" class="form-control ">
                                 <option value="Not Final">Not Final</option>
                                 <option value="Final">Final</option>
                             </select>
@@ -129,8 +141,8 @@
                                 <p class="text-danger mt-1"> Field Escallation Time has an error </p>
                             @enderror
                     </div>
-                    <div class="form-group col-6 py-3">
-                        <label class="col-form-label" for="escallation">Status</label>
+                    <div class="form-group col-3 py-4">
+                        <label class="col-form-label" for="escallation">Level Status</label>
                             <input type="checkbox" name="escallation" id="escallation">
                             @error('escallation')
                                 <p class="text-danger mt-1"> Field Escallation has an error </p>

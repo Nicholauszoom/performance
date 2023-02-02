@@ -8956,4 +8956,36 @@ public function editNotification(Request $request,$id)
 
 
 
+        // start of add approval level function
+
+        public function saveApprovalLevel(Request $request)
+        {
+            request()->validate(
+                [
+                'label_name' => 'required',
+                'level_name' => 'required',
+                'rank' => 'required',
+                 ]
+                );
+
+
+
+                $approval = new ApprovalLevel();
+                $approval->approval_id=$request->approval_id;
+                $approval->level_name=$request->level_name;
+                $approval->label_name=$request->label_name;
+                $approval->role_id=$request->role_id;
+                $approval->rank=$request->rank;
+                $approval->status=$request->status == true ? '1':'0';
+                $approval->save();
+
+
+                $msg="Approval has been added Successfully !";
+                return redirect('flex/approvals')->with('msg', $msg);
+
+        }
+        // end of add approval level function
+
+
+
     }

@@ -385,6 +385,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         // start of approval_levels settings routes
         Route::any('/approval_levels/{id}','viewApprovalLevels')->name('flex.approval-levels');
+        Route::post('/save-approval-level','saveApprovalLevel')->name('flex.saveApprovalLevel');
         Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
         Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
         // end of approval_levels settings routes
