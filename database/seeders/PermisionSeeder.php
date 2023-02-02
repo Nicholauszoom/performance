@@ -52,6 +52,14 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-promotion','sys_module_id'=>1],
             // end of promotion/increment seeders
 
+            // start of unpaid leaves seeders
+            ['slug' => 'view-unpaid-leaves','sys_module_id'=>1],
+            ['slug' => 'add-unpaid-leaves','sys_module_id'=>1],
+            ['slug' => 'edit-unpaid-leaves','sys_module_id'=>1],
+            ['slug' => 'end-unpaid-leaves','sys_module_id'=>1],
+            ['slug' => 'delete-unpaid-leaves','sys_module_id'=>1],
+            // end of unpaid leaves seeders
+
             //start of overtime seeders 
             ['slug' => 'view-overtime','sys_module_id'=>1],
             ['slug' => 'add-overtime','sys_module_id'=>1],
