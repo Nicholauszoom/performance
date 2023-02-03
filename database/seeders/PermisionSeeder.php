@@ -103,13 +103,13 @@ class PermisionSeeder extends Seeder
             ['slug' => 'hr-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'finance-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'approve-payroll','sys_module_id'=>2],
-            ['slug' => 'view-payslip-mail','sys_module_id'=>2],
             ['slug' => 'mail-payroll','sys_module_id'=>2],
             // end of payroll seeder
 
             // start of payslip seeder
             ['slug' => 'view-payslip','sys_module_id'=>2],
-            
+            ['slug' => 'view-employee-payslip','sys_module_id'=>2],
+          
             // end of payslip seeder
 
             // start of incertives seeder
