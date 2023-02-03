@@ -16,7 +16,7 @@
 @section('content')
     {{-- start of add overtime div --}}
 
-    @can('can-apply-overtime')
+    @can('add-overtime')
     <div id="apply_overtime">
         <div class="row">
             <div class="col-md-6 offset-3">

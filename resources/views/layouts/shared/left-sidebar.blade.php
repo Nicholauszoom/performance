@@ -152,34 +152,47 @@
 
                     <ul
                         class="nav-group-sub collapse {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
-                        @can('add-payroll')
+                            {{-- start of payroll link --}}
+                            @can('add-payroll')
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null }}"
                                     href="{{ route('payroll.payroll') }}"> Payroll </a></li>
 
-                @endcan
-                {{-- / --}}
-@can('view-payslip')
+                            @endcan
+                            {{-- / --}}
+
+                            {{-- start of payslip link  --}}
+                            @can('view-payslip')
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('payroll.employee_payslip') ? 'active' : null }}"
                                     href="{{ route('payroll.employee_payslip') }}"> Payslip </a></li>
                             @endcan
+                            {{-- / --}}
+
+                            {{-- start of incentives link --}}
                             @can('view-incentives')
                                     {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('payroll.comission_bonus') ? 'active' : null }}"
                                     href="{{ route('payroll.comission_bonus') }}">Incentives</a></li> --}}
                             <!--  <li class="nav-item"><a class="nav-link {{ request()->routeIs('payroll.partial_payment') ? 'active' : null }}" href="{{ route('payroll.partial_payment') }}">Partial Payment</a></li> -->
-                        @endcan
+                             @endcan
+                             {{-- / --}}
+
+                        {{--  start of pending payments link --}}
                         @can('view-pending-payments')
                         <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
                                 href="{{ route('flex.approved_financial_payments') }}">Pending Payments </a></li>
-@endcan
+                        @endcan
+                        {{-- / --}}
 
                     </ul>
                 </li>
 @endcan
-@can('view-leave')
+{{-- / --}}
+
+            {{-- start of leave management dropdown --}}
+            @can('view-leave')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('attendance.leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
 
@@ -203,7 +216,8 @@
                                 @endcan
                     </ul>
                 </li>
-@endcan
+            @endcan
+{{-- / --}}
 @can('view-loan')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') ? 'nav-item-expand nav-item-open' : null }}">
