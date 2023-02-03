@@ -45,8 +45,8 @@
 
                     <tr>
                         <th>{{ $loop->iteration }}</th>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->phone }}</td>
+                        <td>{{ $user->fname }}  {{ $user->mname }}  {{ $user->lname }}</td>
+                        <td>{{ $user->mobile }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
                             @foreach($user->roles as $value2)
@@ -63,10 +63,10 @@
 
                         <td>
                             <div class="form-inline">
-                                @if($user->disabled == 0)
-                                    <a class="list-icons-item text-primary" title="Edit" href="{{ route('users.edit', $user->id)}}" onclick="return confirm('Are you sure? you want to Edit')"><i class="icon-pencil7"></i></a>&nbsp&nbsp
-                                    <a class="list-icons-item text-danger"  title="Disable" onclick="return confirm('Are you sure? you want to disable the user')"  href="{{ route('user.disable', $user->id)}}"><i class="icon-user-cancel"></i></a>&nbsp
-                                @endif
+
+                                    <a class="list-icons-item text-primary" title="Edit" href="{{ route('users.edit', $user->id)}}" onclick="return confirm('Are you sure? you want to Edit')"><i class="ph-pen"></i></a>&nbsp&nbsp
+                                    <a class="list-icons-item text-danger"  title="Disable" onclick="return confirm('Are you sure? you want to disable the user')"  href="{{ route('user.disable', $user->id)}}"><i class="ph-x"></i></a>&nbsp
+
                             </div>
                         </td>
                     </tr>

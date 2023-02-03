@@ -529,17 +529,17 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Leave Balance</h5>
+                <h5 class="text-muted">Annual Leave</h5>
             </div>
 
             <form
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.funder') }}"
-                data-parsley-validate class="form-horizontal form-label-left"
-            >
+                action="{{ route('reports.annualleave') }}"
+                data-parsley-validate class="form-horizontal form-label-left">
                 @csrf
+
 
                 <div class="card-body">
                     <div class="row">
@@ -563,11 +563,11 @@
                         <div class="col-md-10">
                             <div class="input-group">
                                 <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="text" class="form-control daterange-predefined" name="duration" placeholder="Select dates">
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} ">
                             </div>
                         </div>
                     </div>
-                  
+
                 </div>
             </form>
         </div>
@@ -581,7 +581,7 @@
  @endsection
 
  @push('footer-script')
- <script>
+ <!-- <script>
     $(function() {
         var today = new Date();
         var dd = today.getDate();
@@ -607,24 +607,17 @@
         }
 
         $('#duration').daterangepicker({
-            drops: 'up',
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, cb);
+             singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'),10)
+  }, cb);
 
         cb(start, end);
 
-    });
+    }); -->
 
-    $(function() {
+    <!-- $(function() {
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
@@ -649,21 +642,14 @@
         }
 
         $('#duration_').daterangepicker({
-            drops: 'up',
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, cb);
+            singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'),10)
+  }, cb);
 
         cb(start, end);
 
-    });
+    }); -->
 </script>
  @endpush

@@ -37,67 +37,71 @@
                             {{ session('status') }}
                         </div>
                         @endif
-            
+
                         <form
                             action="{{ route('flex.saveIncrement') }}"
                             method="POST"
                             class="form-horizontal"
                         >
                             @csrf
-            
+
                             <div class="modal-body">
                                 <div class="row mb-3">
                                     <div class="col-md-12 col-lg-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Incremented Employee:</label>
+                                            <label class="form-label"> Employee:</label>
                                             <select class="form-control select @error('emp_ID') is-invalid @enderror" id="docNo" name="emp_ID">
                                                 <option value=""> Select Employee </option>
                                                 @foreach ($employees as $depart)
-                                                <option value="{{ $depart->id }}">{{ $depart->fname }} {{ $depart->mname }} {{ $depart->lname }}</option>
+                                                <option value="{{ $depart->emp_id }}">{{ $depart->fname }} {{ $depart->mname }} {{ $depart->lname }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                 
+
 
                                 <div class="col-md-6 col-lg-6 mb-3">
                                     <label class="form-label ">Old Salary</label>
-                                  
-                                        <input disabled name="oldSalary"  class="form-control" id="salary">
-            
+
+                                    <input type="hidden" name="oldRate"  class="form-control"  id="oldRate">
+
+                                    <input type="hidden" name="oldSalary"  class="form-control"  id="oldsalary">
+
+                                        <input disabled name=""  class="form-control"  id="salary">
+
                                         @error('name')
                                             <p class="text-danger mt-1"> Input field Error </p>
                                         @enderror
-                                   
+
                                 </div>
 
                                 <div class="col-md-6 col-lg-6 mb-3">
-                                    <label class="form-label ">Incremented Salary</label>
-                                    
+                                    <label class="form-label ">New Salary</label>
+
                                         <input type="text" name="newSalary" class="form-control" id="newSalary" placeholder="Enter New Salary" required>
-            
+
                                         @error('name')
                                             <p class="text-danger mt-1"> Input field Error </p>
                                         @enderror
                                 </div>
-            
-            
+
+
                             </div>
-                                
-                                  
+
+
                             </div>
-            
+
                             <div class="modal-footer">
                                 <hr>
-                              
-                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Send Request</button>
+
+                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            
-            
+
+
 </div>
 
 
@@ -120,15 +124,19 @@ $('#docNo').change(function(){
         dataType: 'json',
         success: function(response){
             if(response != null){
+
+                document.getElementById("oldsalary").value = response.salary;
+                document.getElementById("oldRate").value = response.rate;
+
                 $('#salary').val(response.salary+' '+response.currency);
                 $('#oldLevel').val(response.emp_level);
                 $('#oldPosition').val(response.position.name);
             }
         }
     });
-}); 
+});
 
-    
+
 </script>
 
 

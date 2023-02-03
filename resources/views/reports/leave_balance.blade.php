@@ -42,10 +42,10 @@
                   <td ><?php echo $employee->emp_id; ?></td>
                   <td><?php  echo $employee->fname; ?></td>
                   <td><?php  echo $employee->lname; ?></td>
-                  <td><?php echo number_format($employee->maximum_days,2) ?></td>
+                  <td><?php echo number_format($employee->opening_balance,2) ?></td>
                   <td><?php echo number_format($employee->accrual_days,2) ?></td>
                   <td><?php echo number_format($employee->maximum_days,2) ?></td>
-                  <td><?php echo number_format($employee->accrual_days,2) ?></td>
+                  <td><?php echo number_format($employee->current_balance,2) ?></td>
                 
                   </tr>
 

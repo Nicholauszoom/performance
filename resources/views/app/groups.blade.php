@@ -21,42 +21,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/financial_group')}}" class="nav-link active show" aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-list me-2"></i>
-                            Packages
-                        </a>
-                    </li>
 
-                    <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-list me-2"></i>
-                            Overtime
-                        </a>
-                    </li>
-
-                    <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/allowance')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-list me-2"></i>
-                            Allowance
-                        </a>
-                    </li>
-
-                    <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-list me-2"></i>
-                            Statutory Deductions
-                        </a>
-                    </li>
-
-                    <li class="nav-item" role="presentation">
-                        <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
-                            <i class="ph-list me-2"></i>
-                            Non Statutory Deductions
-                        </a>
-                    </li>
-                </ul>
 
                 <div class="card-header py-3">
                     <h5><?php echo $groupName; ?> &nbsp;&nbsp;(<b> <?php echo $headcounts; ?> Employees</b>) </h5>
@@ -98,7 +63,16 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="remove_roles">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td> <label class="custom-control custom-control-secondary custom-checkbox mb-2">
+                                        <input onClick="setAllCheckboxes('remove_roles', this);" type="checkbox" class="custom-control-input">
+                                        <span class="custom-control-label">All</span>
+                                    </label></td>
+                                </tr>
                                 <?php
                                 // if ($department->num_rows() > 0){
                                 foreach ($members as $row) { ?>
@@ -154,11 +128,20 @@
                             </thead>
 
 
-                            <tbody>
+                            <tbody id="roles">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td> <label class="custom-control custom-control-secondary custom-checkbox mb-2">
+                                        <input onClick="setAllCheckboxes('roles', this);" type="checkbox" class="custom-control-input">
+                                        <span class="custom-control-label">All</span>
+                                    </label></td>
+                                </tr>
                                 <?php
                                 // if ($department->num_rows() > 0){
                                 foreach ($nonmembers as $row) { ?>
-                                <tr>
+                                <tr >
                                     <td width="1px"><?php echo $row->SNo; ?></td>
                                     <td><?php echo $row->NAME; ?></td>
                                     <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
@@ -234,6 +217,18 @@
     }
 
 </script>
+
+<script>
+    function setAllCheckboxes(divId, sourceCheckbox) {
+        divElement = document.getElementById(divId);
+        inputElements = divElement.getElementsByTagName('input');
+        for (i = 0; i < inputElements.length; i++) {
+            if (inputElements[i].type != 'checkbox')
+                continue;
+            inputElements[i].checked = sourceCheckbox.checked;
+        }
+    }
+    </script>
 
 <script type="text/javascript">
     $('#removeFromGroup').submit(function(e){

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('employee_id');
             $table->string('product');
             $table->double('amount');
+            $table->date('date');
             $table->timestamp('created_at')->nullable();
         });
     }

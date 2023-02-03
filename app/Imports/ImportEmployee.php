@@ -65,20 +65,20 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // }
 
              //check department
-            if($row['department']!= NULL){
-            $data  =  DB::table('department')
-             ->where('name',$row['department'])
-             ->select('id')
-             ->first();
-             if($data!= NULL){
-                $data = [
-                'department'=>$data->id,];
-                $recordID = ImportsEmployee::where('emp_id',$row['payroll'])->update($data);
+            // if($row['department']!= NULL){
+            // $data  =  DB::table('department')
+            //  ->where('name',$row['department'])
+            //  ->select('id')
+            //  ->first();
+            //  if($data!= NULL){
+            //     $data = [
+            //     'department'=>$data->id,];
+            //     $recordID = ImportsEmployee::where('emp_id',$row['payroll'])->update($data);
 
-             }else{
-                dd($row['department']);
-             }
-            }
+            //  }else{
+            //     dd($row['department']);
+            //  }
+            // }
 
       //       $branch  =  DB::table('branch')
       //         ->where('name',$row['branch'])
@@ -120,7 +120,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
 	 	//   'form_iV_index'=>$row['form_4_index'],
 	 	//   'heslb'=>$row['heslb'],
             // 'department'=>!empty($data)?$data->id:100,
-             'emp_id'=>$row['payroll'],
+            // 'emp_id'=>$row['payroll'],
             // 'emp_code'=>$row['codeno'],
             // 'company'=>$row['company'],
             // 'state'=>$state,
@@ -139,7 +139,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
             // 'email'=>$row['email'],
             // 'fname'=>$row['fname'],
             // 'mname'=>$row['pname'],
-            // 'lname'=>$row['lname'],
+             'lname'=>trim($row['lname']),
             //  'birthdate'=>$row['birth'],
             //    'gender'=>$row['gender']=='F'?'Female':'Male',
             //    'email'=>$row['email'],
@@ -157,7 +157,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
 
           ];
 
-          //DB::table('employee_clean')->where('payroll_no',$row['payroll'])->update($data);
+          DB::table('employee')->where('emp_id',$row['emp_id'])->update($data);
           // $recordID = ImportsEmployee::where('payroll_no',$row['payroll'])->update($data);
         //   $data2 = [
         //     'state'=>1,
@@ -217,7 +217,7 @@ class ImportEmployee implements ToCollection,WithHeadingRow
         // $flexperformance_model->employeeTransfer($data_transfer);
 
 
-
+       // SELECT CONCAT(UCASE(LEFT(lname, 2)), LCASE(SUBSTRING(lname, 3))) as lname FROM employee;
 
         }
 

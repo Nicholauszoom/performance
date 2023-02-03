@@ -173,6 +173,22 @@
                                         <option value="NO">NO</option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Is Recursive?</label>
+                                    <select class="form-control select_type select" name="recursive" id="policy">
+                                        <option selected disabled> Select </option>
+                                        <option value="YES">YES</option>
+                                        <option value="NO">NO</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Is Benefit In kind?</label>
+                                    <select class="form-control select_type select" name="bik" id="policy">
+                                        <option selected disabled> Select </option>
+                                        <option value="YES">YES</option>
+                                        <option value="NO">NO</option>
+                                    </select>
+                                </div>
 
                                 <div class="mb-3">
                                     <label class="allName">Percent:</label>
@@ -274,11 +290,14 @@
                 })
                 .done(function(data) {
 
-                    $('#resultSubmission').fadeOut('fast', function() {
-                        $('#resultSubmission').fadeIn('fast').html(data);
-                    });
+                    // $('#resultSubmission').fadeOut('fast', function() {
+                    //     $('#resultSubmission').fadeIn('fast').html(data);
+                    // });
 
-                    $('#addAllowance')[0].reset();
+                    // $('#addAllowance')[0].reset();
+                    setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+              }, 1000);
                 })
                 .fail(function() {
                     alert('FAILED, Check Your Network Connection and Try Again! ...');
@@ -299,11 +318,14 @@
                     async: false
                 })
                 .done(function(data) {
-                    $('#resultOvertimeSubmission').fadeOut('fast', function() {
-                        $('#resultOvertimeSubmission').fadeIn('fast').html(data);
-                    });
+                    // $('#resultOvertimeSubmission').fadeOut('fast', function() {
+                    //     $('#resultOvertimeSubmission').fadeIn('fast').html(data);
+                    // });
 
-                    $('#addOvertime')[0].reset();
+                    // $('#addOvertime')[0].reset();
+                    setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+              }, 1000);
                 })
                 .fail(function() {
                     alert('FAILED, Check Your Network Connection and Try Again! ...');
@@ -325,11 +347,14 @@
                     async: false
                 })
                 .done(function(data) {
-                    $('#resultSubmissionDeduction').fadeOut('fast', function() {
-                        $('#resultSubmissionDeduction').fadeIn('fast').html(data);
-                    });
+                    // $('#resultSubmissionDeduction').fadeOut('fast', function() {
+                    //     $('#resultSubmissionDeduction').fadeIn('fast').html(data);
+                    // });
 
-                    $('#addDeduction')[0].reset();
+                    // $('#addDeduction')[0].reset();
+                    setTimeout(function(){// wait for 5 secs(2)
+                   location.reload(); // then reload the page.(3)
+              }, 1000);
                 })
                 .fail(function() {
                     alert('FAILED, Check Your Network Connection and Try Again! ...');

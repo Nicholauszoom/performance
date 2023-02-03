@@ -9,7 +9,7 @@
 @endpush
 
 @section('content')
- <div class="right_col" role="main">    
+ <div class="right_col" role="main">
      <div class="page-title">
                 <div class="title_left">
                     <h3>Organisation</h3>
@@ -27,7 +27,7 @@
                     <i class="ph-plus me-2"></i>Add New
             </button>
           </div>
-          
+
         </div>
         <table class="table datatable-basic">
           <thead>
@@ -39,44 +39,19 @@
             </tr>
           </thead>
           <tbody>
+            @if(!empty($branch))
+            @foreach($branch as $row)
             <tr>
-              <td>Marth</td>
-              <td>Enright</td>
-              
-              <td>
-                <span class="badge bg-success bg-opacity-10 text-success"
-                  >Active</span
-                >
-              </td>
-              <td class="text-center">
-                <div class="d-inline-flex">
-                  <div class="dropdown">
-                    <a
-                      href="#"
-                      class="text-body"
-                      data-bs-toggle="dropdown"
-                    >
-                      <i class="ph-list"></i>
-                    </a>
+              <td>{{ $row->name }}</td>
+              <td></td>
+              <td></td>
+              <td> </td>
 
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-pdf me-2"></i>
-                        Export to .pdf
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-xls me-2"></i>
-                        Export to .csv
-                      </a>
-                      <a href="#" class="dropdown-item">
-                        <i class="ph-file-doc me-2"></i>
-                        Export to .doc
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </td>
+              <td>
+
             </tr>
+            @endforeach
+            @endif
           </tbody>
         </table>
       </div>

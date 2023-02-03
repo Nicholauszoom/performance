@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
+// use App\Http\Controllers\RoleController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ImprestController;
 use App\Http\Controllers\ProfileController;
@@ -128,6 +129,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
+
+        Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
+
         Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
@@ -178,6 +182,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
         Route::any('/index' ,'index')->name('index');
         Route::any('/employee_info/{id}' ,'employee_info')->name('flex.employee_info');
+        // for biodata page
+        // Route::any('/employee_data/{id}' ,'employee_data')->name('flex.employee_data');
 
         //Route::any('/' ,'index')->name('index');
         Route::any('/netTotalSummation' ,'netTotalSummation')->name('netTotalSummation');
@@ -198,6 +204,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
         Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+        // for employee biodata
+        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+        // for employee profile picture
+          // update profile image
+        Route::any('user-image', 'updateImg')->name('flex.userimage');
+
+
         Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
         Route::any('/retire','retire')->name('flex.retire');
         Route::any('/contract','contract')->name('flex.contract');
@@ -316,6 +329,77 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::get('get/details/{id}', 'getDetails')->name('getDetails');
         // end of promotion/increment routes
 
+
+
+        // start of reconcilliation summary route
+        Route::any('/reconciliation-summary','reconcilliationSummary')->name('reports.recoSummary');
+        // end of reconcilliation summary route
+
+        //start of grievances and disciplinary actions routes
+        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+        Route::post('/save-complain','saveComplain')->name('flex.saveComplain');
+        Route::any('/add-action','addDisciplinary')->name('flex.addDisciplinary');
+        Route::post('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
+        Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
+        Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
+        Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
+        Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
+        // end of grievances and disciplinary actions routes
+
+        // start of education qualification route
+        Route::any('/addQualification','addQualification')->name('flex.addQualification');
+        // end of education qualification route
+
+        // start of holidays routes
+        Route::any('/holidays','holidays')->name('flex.holidays');
+        Route::any('/add-holiday','addHoliday')->name('flex.saveHoliday');
+        Route::put('/update-holiday','updateHoliday')->name('flex.updateHoliday');
+        Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
+        Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
+        // end of holidays routes
+
+
+        // start of employee personal details route
+
+        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
+        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
+        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
+        Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
+        Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
+        Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
+        // end of employee personal details  route
+
+        //start of grievances and disciplinary actions routes
+        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+
+        // end of complains
+
+        // start of email notifications settings routes
+        Route::any('/email-notifications','emailNotification')->name('flex.email-notifications');
+        Route::any('/edit-email-notification/{id}','editNotification')->name('flex.editNotification');
+        Route::put('/update-email-notification','updateNotification')->name('flex.updateNotification');
+        // end of email notifications settings routes
+
+        // start of approval settings routes
+        Route::any('/approvals','viewApprovals')->name('flex.approvals');
+        Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
+        Route::any('/edit-approval/{id}','editApproval')->name('flex.editApproval');
+        Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
+        Route::any('/delete-approval/{id}','deleteApproval')->name('flex.deleteApproval');
+        // end of approval settings routes
+
+        // start of approval_levels settings routes
+        Route::any('/approval_levels/{id}','viewApprovalLevels')->name('flex.approval-levels');
+        Route::post('/save-approval-level','saveApprovalLevel')->name('flex.saveApprovalLevel');
+        Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
+        Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
+        Route::any('/delete-approval-level/{id}','deleteApprovalLevel')->name('flex.deleteApprovalLevel');
+        // end of approval_levels settings routes
+
+        // start of reconcilliation summary route
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
         Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
@@ -404,6 +488,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
         Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
         Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
+        Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
+
 
 
 
@@ -451,6 +537,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/updateAllowanceName','updateAllowanceName')->name('flex.updateAllowanceName');
         Route::any('/updateAllowanceTaxable','updateAllowanceTaxable')->name('flex.updateAllowanceTaxable');
         Route::any('/updateAllowancepensionable','updateAllowancepensionable')->name('flex.updateAllowancepensionable');
+
+        Route::any('/updateRecursive','updateRecursive')->name('flex.updateRecursive');
+        Route::any('/updateBik','updateBik')->name('flex.updateBik');
+
+        Route::any('/company_branch_info','company_branch_info')->name('flex.company_branch_info');
+
+
         Route::any('/updateOvertimeName','updateOvertimeName')->name('flex.updateOvertimeName');
         Route::any('/updateOvertimeRateDay','updateOvertimeRateDay')->name('flex.updateOvertimeRateDay');
         Route::any('/updateOvertimeRateNight','updateOvertimeRateNight')->name('flex.updateOvertimeRateNight');
@@ -531,7 +624,11 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
 
 
+
+
     });
+
+
 
 
     Route::prefix('flex/imprest')->controller(ImprestController::class)->group(function (){
@@ -731,6 +828,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/deleteCategory','deleteCategory')->name('performance.deleteCategory');
         Route::any('/deleteException','deleteException')->name('performance.deleteException');
 
+
+
     });
 
 
@@ -837,7 +936,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/netReconciliation','netReconciliation')->name('reports.netReconciliation');
         Route::any('/loanReports','loanReports')->name('reports.loanReports');
         Route::any('/projectTime','projectTime')->name('reports.projectTime');
-        Route::any('/funder','funder')->name('reports.funder');
+        // Route::any('/funder','funder')->name('reports.funder');
+        Route::any('/annualleave','annualleave')->name('reports.annualleave');
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 
 
@@ -859,6 +959,9 @@ Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(f
     Route::post('/loans-import', 'import')->name('loans.import');
     Route::get('/loans-template', 'template')->name('loans.template');
 });
+
+
+
 
 
 //Routes for Recruitment Module

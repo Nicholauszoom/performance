@@ -132,7 +132,7 @@ class AuthenticatedSessionController extends Controller
         $accrued = $diff->format("%a%") + 1;
 
 
-        $this->getPermissions();
+
 
 
         if($data) {
@@ -171,11 +171,15 @@ class AuthenticatedSessionController extends Controller
 
         }
 
+        $this->getPermissions();
+
     }
 
     public function getPermissions()  {
         $id =session('emp_id');
         $empID =session('emp_id');
+
+        // dd( $this->getpermission($empID, '0'),$empID);
 
         // NEW ROLES AND PERMISSION;
         session(['vw_emp_sum'=> $this->getpermission($empID, '0')]);
@@ -233,14 +237,16 @@ class AuthenticatedSessionController extends Controller
 
     public function getpermission($empID, $permissionID)
 	{
-		$query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
-		$results = DB::select(DB::raw($query));
-		// ->count();
-		if ($results > 0) {
-			return true;
-		}else{
-			return false;
-		}
+		// $query = "SELECT r.permissions as permission FROM emp_role er, role r WHERE er.role=r.id and er.userID='".$empID."'  and r.permissions like '%".$permissionID."%'";
+		// $results = DB::select(DB::raw($query));
+		// // ->count();
+		// if ($results > 0) {
+		// 	return true;
+		// }else{
+		// 	return false;
+		// }
+
+        return true;
 	}
 
     public function insertAuditLog($logData)

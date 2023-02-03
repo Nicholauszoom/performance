@@ -14,8 +14,12 @@
 
 @section('content')
 
+
+@can('view-leave')
 <?php $totalAccrued = number_format($leaveBalance,2); ?>
 
+
+{{-- start of leave application --}}
 <div class="card col-lg-6 offset-3">
     <div class="card-header">
         <h5 class="text-main"><i class="ph-tasks"></i> Apply Leave</h5>
@@ -28,7 +32,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Start</label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
-                        <input type="text" name="start" class="form-control col-xs-12 has-feedback-left" placeholder="Start Date" id="leave_startDate" required="" aria-describedby="inputSuccess2Status">
+                        <input type="text" name="start" class="form-control col-xs-12 " placeholder="Start Date" id="leave_startDate" required="" aria-describedby="inputSuccess2Status">
                         <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
                 <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -36,12 +40,14 @@
 
         </div>
             <input type="text" name="limit" hidden value="<?php echo $totalAccrued; ?>">
+            <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}">
+
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Finish
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div class="has-feedback">
-            <input type="text" required="" placeholder="End Date" name="end" class="form-control col-xs-12 has-feedback-left" id="leave_endDate"  aria-describedby="inputSuccess2Status">
+            <input type="text" required="" placeholder="End Date" name="end" class="form-control col-xs-12 " id="leave_endDate"  aria-describedby="inputSuccess2Status">
             <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
           </div>
             <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -50,9 +56,9 @@
         <div class="form-group">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave</label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-          <select required  name="nature"  class="select_leave_type form-control">
+          <select required  name="nature" id="nature"  class="select_leave_type form-control">
               <option></option>
-              <?php  $sex = session('gender');
+              <?php  $sex = Auth::user()->gender;
              if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
              foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
             <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?></option> <?php  } ?>
@@ -91,7 +97,7 @@
             </form>
     </div>
 </div>
-
+{{-- / --}}
 <div class="card">
     <div class="card-header">
         <h3 class="text-main">Leaves</h3>
@@ -103,7 +109,7 @@
         <div class="d-flex justify-content-between">
             <h6 class="text-main">Leaves Applied By You</h6>
 
-            <a href="#bottom"><button type="button"  class="btn btn-main">APPLY LEAVE</button></a>
+            {{-- <a href="#bottom"><button type="button"  class="btn btn-main">APPLY LEAVE</button></a> --}}
         </div>
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
@@ -118,7 +124,6 @@
             <th>Reason</th>
             <th>Status</th>
             <th>Option</th>
-            <th>Remarks</th>
           </tr>
         </thead>
 
@@ -183,15 +188,17 @@
 
               </td>
               <td class="options-width d-flex">
+                {{-- start of cancel leave button --}}
               <?php if($row->status==0 || $row->status==3){ ?>
               <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)" title="cancel " class="me-2">
                   <button  class="btn btn-danger btn-xs" ><i class="ph-x"></i></button></a>
               <?php } ?>
-              <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
+              {{-- / --}}
+              {{-- <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a> --}}
               </td>
-              <td>
+              {{-- <td>
               <?php echo $row->remarks."<br>"; ?>
-              </td>
+              </td> --}}
               </tr>
 
             <?php } //} ?>
@@ -300,7 +307,7 @@
 
                 <a href="javascript:void(0)" onclick="recommendLeaveByHod(<?php echo $row->id;?>)" title="Recommend By HOD">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-                  
+
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
                   <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
 
@@ -319,7 +326,7 @@
 
               ?>
 
-              
+
               <?php if($row->status==6) { ?>
                 <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
@@ -341,7 +348,7 @@
       </table>
 </div>
 @endif
-
+@endcan
 @endsection
 
 
@@ -367,7 +374,7 @@
       }
       var dateToday = dd + '/' + mm + '/' + yyyy;
       $('#leave_startDate').daterangepicker({
-        drops: 'up',
+        drops: 'down',
         singleDatePicker: true,
         autoUpdateInput: false,
         startDate:dateToday,
@@ -404,7 +411,7 @@
       }
       var dateToday = dd + '/' + mm + '/' + yyyy;
       $('#leave_endDate').daterangepicker({
-        drops: 'up',
+        drops: 'down',
         singleDatePicker: true,
         autoUpdateInput: false,
         startDate:dateToday,

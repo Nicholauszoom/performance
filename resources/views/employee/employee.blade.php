@@ -22,9 +22,11 @@
         <h4 class="lead">List of Employees</h4>
 
         @if (session('mng_emp'))
+        @can('add-employee')
           <a href="{{ url('/flex/addEmployee') }}" class="btn btn-main">
             <i class="ph-plus me-2"></i> Register Employee
           </a>
+        @endcan
         @endif
       </div>
     </div>
@@ -38,7 +40,9 @@
           <th>Position</th>
           <th>Linemanager</th>
           <th>Contacts</th>
+          @can('edit-employee')
           <th>Options</th>
+          @endcan
         </tr>
       </thead>
 
@@ -59,15 +63,20 @@
                 <b>Email: </b> {{ $row->email }} <br>
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
+            @can('edit-employee')
             <td class="options-width">
                 <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                    <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
                 </a>
 
                 @if (session('mng_emp'))
-                    <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
-                        <button type="button" class="btn btn-danger btn-xs"><i class="ph-prohibit"></i></button>
-                    </a>
+                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}"  title="Info and Details">
+                    <button type="button" class="btn btn-main btn-xs"><i class="ph-pen"></i></button>
+                </a>
+
+                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
+                 <button class="btn btn-danger ">  <i class="ph-prohibit"></i></button>
+                </a>
 {{--
                     <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
@@ -78,6 +87,8 @@
                     </a> --}}
                 @endif
             </td>
+
+            @endcan
         </tr>
         @endforeach
       </tbody>

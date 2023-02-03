@@ -67,25 +67,47 @@
         <div class="d-flex">
 
             <h3 class="me-4">Payroll Details For : {{ $payrollMonth }}</h3>
-
+            {{-- export info button --}}
             @if($payrollState == 1)
             <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> EXPORT INFO</button>
             </a>
             @endif
+            {{-- / --}}
+
+            {{-- payroll summary button 1--}}
             @if($payrollState != 1)
+            @can('download-summary')
             <a href="{{route('reports.get_payroll_temp_summary',$payrollMonth)}}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+            </a>
+            @endcan
             @endif
+            {{-- / --}}
+
+            {{-- payroll summary button 2 --}}
+            @can('download-summary')
             @if($payrollState == 1)
             <a class="px-4" href="{{route('reports.get_payroll_temp_summary1',$payrollMonth)}}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
-            @endif
-            @if($payrollState != 1)
-            <a class="btn btn-main btn-sm ms-3" href="{{ route('flex.payrollLogs') }}" target="blank">
-                Input Changes Approval
             </a>
             @endif
+            @endcan
+            {{-- / --}}
+
+            {{-- input change approval button  --}}
+           
+            @if($payrollState != 1)
+            @can('download-summary')
+            <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth]) }}" target="blank">
+                <button type="button" name="print" value="print" class="btn btn-main btn-sm"> 
+                    Input Changes Approval
+                </button>     
+            </a>
+            @endcan
+            @endif
+            {{-- / --}}
+
             @if($payrollState == 1)
             <a class="px-4" href="{{route('reports.payroll_report1',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Pay Checklist</button>
@@ -119,7 +141,7 @@
                             <li><span class="fw-semibold">{{ number_format($allowances,2) }}</span></li>
                             <li>{{ number_format($pension_employer,2) }}</li>
                             <li>{{ number_format($pension_employee,2) }}</li>
-                            
+
                             <li>{{ number_format($taxdue,2) }}</li>
                             <li><span class="fw-semibold">{{ number_format($wcf,2) }}</span></li>
                             <li><span class="fw-semibold">{{ number_format($sdl,2) }}</span></li>
@@ -207,8 +229,17 @@
 
                 <div class="mb-2 ms-auto d-flex justify-content-around">
                     <?php if($payrollState == 0 /*&&  session('mng_emp')*/){ ?>
+
+                        @can('approve-payroll')
+                        <a href="{{route('payroll.cancelpayroll','none')}}" class="m-3">
+                            <button type="button" class="btn btn-warning">Cancel Payroll </button>
+                        </a>
+
+
                         <a href="javascript:void(0)" onclick="generate_checklist()" class="m-3">
-                            <button type="button" class="btn btn-main">Confirm Payroll </button></a>
+                            <button type="button" class="btn btn-main">Confirm Payroll </button>
+                        </a>
+                        @endcan
                     <?php }  else { ?>
                     <a href="{{route('ADVtemp_less_payments',['pdate',base64_encode($payrollMonth)])}}">
                         <button type="button" name="print" value="print" class="btn btn-warning">PAY CHECKLIST</button>
@@ -220,13 +251,14 @@
                     </a>
 
                     <?php if($payrollState == 0) {?>
+                    @can('view-gross')
                     <a class="m-3" target="_self" href="{{route('payroll.grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">Gross Recon</button>
                     </a>
-
                     <a class="m-3" target="_self" href="{{route('payroll.netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">Net Recon</button>
                     </a>
+                    @endcan
                     <!-- <a class="m-3" target="_self" href="{{route('payroll.sendReviewEmail',['pdate'=>base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>

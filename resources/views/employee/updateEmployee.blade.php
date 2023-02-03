@@ -26,7 +26,7 @@
         $department = $row->deptname;
         $branch = $row->branch_name;
         $branchCode = $row->branch;
-        $emp_code = $row->emp_code;
+        // $emp_code = $row->emp_code;
         $emp_level = $row->emp_level;
         $empID = $row->emp_id;
         $old_empID = $row->old_emp_id;
@@ -368,7 +368,7 @@
                         <label for="stream" class="form-label">Code</label>
 
                         <div class="input-group">
-                            <input type="text" name="emp_code" value="<?php echo $emp_code; ?>" class="form-control">
+                            {{-- <input type="text" name="emp_code" value="<?php echo $emp_code; ?>" class="form-control"> --}}
                             <button class="btn btn-main">UPDATE</button>
                         </div>
                         <input hidden name="empID" value="<?php echo $empID; ?>">

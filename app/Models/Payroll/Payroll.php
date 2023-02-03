@@ -254,7 +254,17 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, deduction_amount) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+deduction_amount)))) as remained,  '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND NOT type = 3";
             DB::insert(DB::raw($query));
             //INSERT HESLB INTO LOGS
-            $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1)))))) as remained, '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
+            $query = "INSERT into temp_loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid,
+             (amount - IF(
+                ((paid+deduction_amount) >= amount),
+                 amount-paid,
+                 (
+                    (
+                        paid + ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))
+                        ))
+
+                        )) as remained,
+             '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
             DB::insert(DB::raw($query));
             //INSERT DEDUCTION LOGS
             $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
@@ -317,6 +327,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 	        account_no,
 	        sdl,
 	        wcf,
+            rate,
+            currency,
 	        payroll_date
 
 	        )
@@ -1227,10 +1239,14 @@ IF(
                   ,((" . $days . "- day(e.hire_date)+1)*e.salary/31),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1 AND a.type=0 GROUP BY ea.empID), 0)
 
 	    /*End all Allowances and Bonuses*/  ))) as wcf,
+        e.rate as rate,
+        e.currency AS currency,
 
 	     '" . $payroll_date . "' as payroll_date
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
             DB::insert(DB::raw($query));
+
+
         });
         return true;
     }
@@ -1317,6 +1333,14 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             //INSERT HESLB INTO LOGS
             $query = "INSERT into loan_logs(loanID, policy, paid, remained, payment_date) SELECT id as loanID, IF( (deduction_amount = 0), (SELECT rate_employee FROM deduction where id = 3), deduction_amount ) as policy, IF(((paid+deduction_amount) > amount), amount, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1))) as  paid, (amount - IF(((paid+deduction_amount) >= amount), amount-paid,  ((paid+((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1)))))) as remained, '" . $payroll_date . "' as payment_date FROM loan  WHERE  state = 1 AND type = 3";
             DB::insert(DB::raw($query));
+
+            //UPDATE LOAN BOARD
+        $query = "UPDATE loan SET paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) ) > amount), amount, (paid+ (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) )),
+		amount_last_paid = IF(((paid + (SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) ) > amount), amount-paid, ((SELECT rate_employee FROM deduction where id = 3)*(SELECT salary from employee where emp_id=empID and state != 4 and login_user != 1) )),
+		last_paid_date = '".$payroll_date."' WHERE  state = 1 AND type = 3";
+
+           DB::insert(DB::raw($query));
+
             //INSERT DEDUCTION LOGS
             $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
 
@@ -1354,7 +1378,9 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state != 4 and e.login_user != 1 AND a.id = 6";
             DB::insert(DB::raw($query));
             //STOP LOAN
-            // $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
+             $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
+             DB::insert(DB::raw($query));
+
             //INSERT PAYROLL LOG TABLE
             $query = "INSERT INTO payroll_logs(
                 pension2,
@@ -1380,6 +1406,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                 account_no,
                 sdl,
                 wcf,
+                rate,
+                currency,
                 payroll_date
 
                 )
@@ -2378,12 +2406,19 @@ as gross,
                       ,((" . $days . "- day(e.hire_date)+1)*e.salary/31),e.salary)*ea.percent) FROM emp_allowances ea, allowances a  WHERE  a.id = ea.allowance AND ea.empID =  e.emp_id AND ea.mode=2 AND a.state= 1  AND a.temporary=0 AND a.type=0 GROUP BY ea.empID), 0)
 
             /*End all Allowances and Bonuses*/  ))) as wcf,
+             e.rate as rate,
+             e.currency AS currency,
+
 
              '" . $payroll_date . "' as payroll_date
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
                 DB::insert(DB::raw($query));
             $query = " UPDATE payroll_months SET state = 0, appr_author = '" . $empID . "', appr_date = '" . $todate . "'  WHERE state = 1 ";
             DB::insert(DB::raw($query));
+
+            $query = "UPDATE allowances SET state = 0 WHERE type = 1 and Isrecursive = 'NO'";
+            DB::insert(DB::raw($query));
+
             //CLEAR TEMPORARY PAYROLL LOGS
             DB::table('temp_allowance_logs')->delete();
             DB::table('temp_deduction_logs')->delete();

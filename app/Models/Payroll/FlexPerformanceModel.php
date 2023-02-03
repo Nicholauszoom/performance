@@ -32,7 +32,7 @@ class FlexPerformanceModel extends Model
 
     public function financialLogs($date)
     {
-        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) = '".$date."' ORDER BY fn.created_at DESC";
+        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) Like '".$date."%' ORDER BY fn.created_at DESC";
 
         return DB::select(DB::raw($query));
     }
@@ -148,7 +148,7 @@ class FlexPerformanceModel extends Model
 
 	function branch()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, b.*,d.name as department_name FROM branch b,department d,  (SELECT @s:=0) as s WHERE b.department_id = d.id";
+		$query = "SELECT @s:=@s+1 as SNo, b.* FROM branch b";
 
 		return DB::select(DB::raw($query));
 	}
@@ -537,6 +537,14 @@ class FlexPerformanceModel extends Model
 		return $row->counts;
 	}
 
+    function get_employee_overtime($overtimeID){
+        $query  = "Select  (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";
+         $data = DB::select(DB::raw($query));
+      return  $data[0]->amount;
+
+
+    }
+
 
 
     function approveOvertime($id, $signatory, $time_approved) {
@@ -544,8 +552,12 @@ class FlexPerformanceModel extends Model
        {
 		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end,eo.overtime_category, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
          DB::insert(DB::raw($query));
+
+
 	    $query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
 		DB::insert(DB::raw($query));
+
+
 	    });
 
 		return true;
@@ -1290,10 +1302,24 @@ function retire_list()
 
     public function unpaid_leave_employee(){
 
-        $query = "SELECT e.emp_id,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
+        $query = "SELECT e.emp_id,ul.status,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
 
         return DB::select(DB::raw($query));
     }
+
+    public function confirm_upaid_leave($id){
+        DB::transaction(function() use($id)
+        {
+         DB::table('employee')->where('emp_id',$id)->update(['unpaid_leave'=>0]);
+
+         DB::table('unpaid_leave')->where('empID',$id)->update(['status'=>1]);
+
+        });
+
+        return true;
+
+    }
+
     public function end_upaid_leave($id){
         DB::transaction(function() use($id)
         {
@@ -1311,7 +1337,7 @@ function retire_list()
         $data['state'] = 0;
         DB::transaction(function() use($data)
         {
-         DB::table('employee')->where('emp_id',$data['empID'])->update(['unpaid_leave'=>0]);
+        // DB::table('employee')->where('emp_id',$data['empID'])->update(['unpaid_leave'=>0]);
 
          DB::table('unpaid_leave')->insert($data);
 
@@ -1747,6 +1773,7 @@ IF(
     }
 
 	function employeesrole($id) {
+
 	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.emp_id NOT IN (SELECT userID from emp_role where role = ".$id." and group_name = 0 ) ";
     return DB::select(DB::raw($query));
     }
@@ -3306,6 +3333,15 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
         ->where('allowance', $allowanceID)
         ->delete();
         return true;
+    }
+
+    public function get_individual_from_allowance($empID, $allowanceID)
+    {
+        $row = DB::table('emp_allowances')->where('empID', $empID)
+        ->where('group_name', 0)
+        ->where('allowance', $allowanceID)
+        ->select('*')->first();
+        return $row;
     }
 
 

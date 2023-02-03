@@ -144,15 +144,15 @@ class UsersController extends Controller
     {
         //
         $user = User::findOrFail($id);
-        $user->name = $request['name'];
+        // $user->name = $request['name'];
 
-        $user->email = $request['email'];
-        $user->phone = $request['phone'];
-        $user->address = $request['address'];
-        $user->department_id = $request['department_id'];
-        //$user->designation_id = $request['designation_id'];
-         //$user->joining_date = $request['joining_date'];
-        $user->save();
+        // $user->email = $request['email'];
+        // $user->phone = $request['phone'];
+        // $user->address = $request['address'];
+        // $user->department_id = $request['department_id'];
+        // //$user->designation_id = $request['designation_id'];
+        //  //$user->joining_date = $request['joining_date'];
+        // $user->save();
 
         if (!$user) {
 
@@ -164,18 +164,7 @@ class UsersController extends Controller
         $roles['added_by'] = auth()->user()->id;
         $roles['role_id'] = $request['role'];
 
-        // foreach(auth()->user()->roles as $value)
-        // $roles['admin_role'] = $value->id;
 
-       // $exist = CompanyRoles::where('user_id',$id)->where('added_by',auth()->user()->id)->get();
-
-        // if(count($exist) > 0){
-        //     CompanyRoles::where('user_id',$id)->update($roles);
-
-
-        // }else{
-        //     CompanyRoles::create($roles);
-        // }
 
 
         return redirect(route('users.index'));
