@@ -119,6 +119,9 @@
               
               <!--END MY APPLICATION-->               
                 
+              {{-- start of other loans application --}}
+
+              @can('add-loan')
               <?php if(session('recom_paym') || session('appr_paym')){ ?>
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
@@ -325,7 +328,7 @@
                 </div>
                 
                 <?php } ?>
-
+                @endcan
             </div>
           </div>
         </div>
