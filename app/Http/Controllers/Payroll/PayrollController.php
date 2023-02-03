@@ -792,7 +792,7 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->recommendPayroll($empID, $todate, $state, $message);
                 if ($result == true) {
                     // recommend to Head of Finance email
-                    $position_data = SysHelpers::position('Country Head: Finance & Procurement');
+                    $position_data = SysHelpers::position('Managing Director');
                         
                         $fullname = $position_data['full_name'];
                         $email_data = array(
@@ -838,7 +838,7 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->recommendPayroll($empID, $todate, $state, $message);
                 if ($result == true) {
                     // recommend to Head of HR email
-                    $position_data = SysHelpers::position('Country Head: Human Capital');
+                    $position_data = SysHelpers::position('Country Head: Finance & Procurement');
                         
                         $fullname = $position_data['full_name'];
                         $email_data = array(
@@ -1007,6 +1007,18 @@ class PayrollController extends Controller
                 $result = $this->payroll_model->update_payroll_month_only($updates, $payrollMonth);
             }
             if ($result == true) {
+                $position_data = SysHelpers::position('Country Head: Human Capital');
+                        
+                        $fullname = $position_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Payroll Run Notification',
+                            'view' => 'emails.head-human.notification',
+                            'email' => $position_data['email'],
+                            'full_name' => $fullname,
+                        );
+
+                        //kmarealle@bancabc.co.tz
+                        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
                 $description = "Generating checklist of full payment of payroll of date " . $payrollMonth;
                 //$result = SysHelpers::auditLog(2,$description,$request);
 

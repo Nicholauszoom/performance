@@ -90,7 +90,7 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Employee Overtime Approval</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Run Notification</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
                 <p>I Hope you are doing well, </p>
                 <p>Kindly be notified that the payroll has been run for the Month, Please login into the System to Confirm these Result.</p>
