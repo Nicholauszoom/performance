@@ -115,7 +115,11 @@
         <div class="card-header mb-0">
             <div class="d-flex justify-content-between">
                 <h4 class="text-muted">My Overtime</h4>
+                {{-- start of apply overtime button --}}
+                @can('apply-overtme')
                 <a href="#apply_overtime" class="btn btn-perfrom"><i class="ph-plus me-2"></i> Apply Overtime</a>
+                @endcan
+                {{-- / --}}
             </div>
         </div>
 
