@@ -95,20 +95,47 @@ class PermisionSeeder extends Seeder
             ['slug' => 'view-payroll','sys_module_id'=>2],
             ['slug' => 'add-payroll','sys_module_id'=>2],
             ['slug' => 'edit-payroll','sys_module_id'=>2],
+            ['slug' => 'cancel-payroll','sys_module_id'=>2],
+            ['slug' => 'recommend-payroll','sys_module_id'=>2],
+            ['slug' => 'view-comment','sys_module_id'=>2],
+            ['slug' => 'download-approval','sys_module_id'=>2],
+            ['slug' => 'download-summary','sys_module_id'=>2],
             ['slug' => 'hr-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'finance-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'approve-payroll','sys_module_id'=>2],
             ['slug' => 'view-payslip-mail','sys_module_id'=>2],
-            ['slug' => 'send-mail-slip','sys_module_id'=>2],
+            ['slug' => 'mail-payroll','sys_module_id'=>2],
             // end of payroll seeder
 
-            // start of payroll seeder
+            // start of payslip seeder
             ['slug' => 'view-payslip','sys_module_id'=>2],
+            
             // end of payslip seeder
+
+            // start of incertives seeder
             ['slug' => 'view-incentives','sys_module_id'=>2],
             ['slug' => 'add-incentives','sys_module_id'=>2],
+            // end of incertives seeders
+
+            // start of pending payments seeders
             ['slug' => 'view-pending-payments','sys_module_id'=>2],
-            
+            ['slug' => 'view-overtime','sys_module_id'=>2],
+            ['slug' => 'view-payroll','sys_module_id'=>2],
+            ['slug' => 'view-pending-payments','sys_module_id'=>2],
+            ['slug' => 'recommend-pending-payroll','sys_module_id'=>2],
+            ['slug' => 'cancel-pending-payroll','sys_module_id'=>2],
+            ['slug' => 'view-comments','sys_module_id'=>2],
+            ['slug' => 'view-payroll-info','sys_module_id'=>2],
+            // end of pending payments seeders
+
+            // start of payroll info seeders
+            ['slug' => 'download-payroll-summary','sys_module_id'=>2],
+            ['slug' => 'download-change-approval','sys_module_id'=>2],
+            ['slug' => 'view-gross','sys_module_id'=>2],
+            ['slug' => 'view-net','sys_module_id'=>2],
+            // end of payroll info seeders
+
+
 
             //leave management
 
