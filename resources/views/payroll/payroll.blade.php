@@ -27,7 +27,10 @@
 
         <div class="card-body">
 
+            {{-- start of run payroll --}}
+            @can('add-payroll')
             @if ($pendingPayroll == 0 && session('mng_paym'))
+            
                 <div class="col-lg-12">
 
                     <div class="card">
@@ -69,7 +72,11 @@
                     </div>
                 </div>
             @endif
+            @endcan
+            {{-- / --}}
 
+
+            {{-- start of payslip mail list --}}
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
                 <div class="card">
                     <div class="card-header">
@@ -129,6 +136,7 @@
                                     <td class="options-width">
                                         <?php if($row->state==1 || $row->state==2){ ?>
                                         <div class="d-flex">
+                                            {{-- start of cancel payroll button --}}
                                             <span style="margin-right: 4px">
                                                 <a href="javascript:void(0)" onclick="cancelPayroll()"
                                                     title="Cancel Payroll" class="icon-2 info-tooltip">
@@ -138,7 +146,9 @@
                                                     </button>
                                                 </a>
                                             </span>
+                                            {{-- / --}}
 
+                                            {{-- start of resend payslip button --}}
                                             <span style="margin-right: 4px">
                                                 <a href="{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                                     onclick="cancelPayroll()" title="Resend Pay Slip as Email"
@@ -150,6 +160,7 @@
                                                     </button>
                                                 </a>
                                             </span>
+                                            {{-- / --}}
                                         </div>
 
                                         <?php } else {  ?>
@@ -195,6 +206,7 @@
                 </div>
                 <!-- /basic layout -->
             </div>
+            {{-- / --}}
 
         </div>
 
