@@ -87,8 +87,9 @@ class PermisionSeeder extends Seeder
 
             // end of grievances seeders
             
-            //payroll management seederss
+            //payroll management seederss system-module=2
             ['slug' => 'view-payroll-management','sys_module_id'=>2],
+            
 
             // start of payroll  seeder
             ['slug' => 'view-payroll','sys_module_id'=>2],
@@ -97,12 +98,17 @@ class PermisionSeeder extends Seeder
             ['slug' => 'hr-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'finance-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'approve-payroll','sys_module_id'=>2],
-            // end of payslip seeder
+            ['slug' => 'view-payslip-mail','sys_module_id'=>2],
+            ['slug' => 'send-mail-slip','sys_module_id'=>2],
+            // end of payroll seeder
 
+            // start of payroll seeder
             ['slug' => 'view-payslip','sys_module_id'=>2],
+            // end of payslip seeder
             ['slug' => 'view-incentives','sys_module_id'=>2],
             ['slug' => 'add-incentives','sys_module_id'=>2],
             ['slug' => 'view-pending-payments','sys_module_id'=>2],
+            
 
             //leave management
 
