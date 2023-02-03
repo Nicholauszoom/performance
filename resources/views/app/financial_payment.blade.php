@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Payroll'])
+@extends('layouts.vertical', ['title' => 'Pending Payments'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -130,8 +130,11 @@
                                                 @endif
                                             </div>
                                             @if ($state == 1)
+                                            {{-- start of pending payroll --}}
                                                 @if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym'))
                                                     <div>
+                                                        @can('approve-payroll')
+                                                        {{-- approve pending payroll button --}}
                                                         <a href="javascript:void(0)" onclick="approvePayroll()"
                                                             title="Approve Payroll" class="me-2">
                                                             <button type="button" class="btn btn-success text-white">
@@ -139,7 +142,8 @@
                                                                 APPROVE PENDING PAYROLL
                                                             </button>
                                                         </a>
-
+                                                        {{-- / --}}
+                                                        {{-- cancel pending payroll button --}}
                                                         <a href="javascript:void(0)" onclick="cancelPayroll('director')"
                                                             title="Cancel Payroll" class="icon-2 info-tooltip">
                                                             <button type="button" class="btn btn-danger text-white">
@@ -147,8 +151,14 @@
                                                                 CANCEL PENDING PAYROLL
                                                             </button>
                                                         </a>
+                                                        {{-- / --}}
+                                                        @endcan
                                                     </div>
+                                                {{-- / --}}
+
+                                                {{-- hr approval --}}
                                                 @elseif($pendingPayroll == 1 && $payroll->state == 2)
+                                                @can('hr-recommend-patroll')
                                                     <div>
                                                         <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
                                                             title="Approve Payroll" class="me-2">
@@ -166,7 +176,12 @@
                                                             </button>
                                                         </a>
                                                     </div>
+                                                @endcan
+                                                {{-- / --}}
+
+                                                {{-- finance approval --}}
                                                 @elseif($pendingPayroll == 1 && $payroll->state == 3)
+                                                @can('finance-recommend-payroll')
                                                     <div>
                                                         <a href="javascript:void(0)" onclick="recomendPayrollByFinance()"
                                                             title="Approve Payroll" class="me-2">
@@ -185,7 +200,9 @@
                                                             </button>
                                                         </a>
                                                     </div>
+                                                @endcan
                                                 @endif
+                                                {{-- / --}}
                                             @endif
                                         </div>
                                     </div>
