@@ -127,8 +127,8 @@ class PermisionSeeder extends Seeder
             // end of pending payments seeders
 
             // start of payroll info seeders
-            ['slug' => 'download-payroll-summary','sys_module_id'=>2],
-            ['slug' => 'download-change-approval','sys_module_id'=>2],
+            ['slug' => 'download-summary','sys_module_id'=>2],
+            ['slug' => 'download-approval','sys_module_id'=>2],
             ['slug' => 'view-gross','sys_module_id'=>2],
             ['slug' => 'view-net','sys_module_id'=>2],
             // end of payroll info seeders
