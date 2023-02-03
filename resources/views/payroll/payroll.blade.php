@@ -164,17 +164,24 @@
                                         </div>
 
                                         <?php } else {  ?>
+
+                                        {{-- start of view email detail button --}}
                                         <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                             title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-info btn-xs"><i class="ph-circle"></i></button> </a>
-
+                                                class="btn btn-info btn-xs"><i class="ph-circle"></i></button> 
+                                        </a>
+                                        {{-- / --}}
                                         <?php if($row->state==0){ ?>
                                         <?php if($row->pay_checklist==1){ ?>
+
+                                        {{-- start of print report button --}}
                                         <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
                                             target="blank" title="Print Report" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-info btn-xs">
                                                 <i class="ph-printer"></i>
-                                            </button> </a>
+                                            </button> 
+                                        </a>
+                                        {{-- / --}}
                                         <?php } else {  ?>
                                         <a title="Checklist Report Not Ready" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-warning btn-xs"><i
@@ -182,17 +189,26 @@
                                         <?php } ?>
 
                                         <?php if($row->email_status==0){ ?>
+
+                                        {{-- start of send payslip mail button --}}
                                         <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
                                             title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button> </a>
+                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button> 
+                                        </a>
+                                        {{-- / --}}
+
                                         <?php } else { ?>
+
+                                        {{-- start of re-send payslip mail button  --}}
                                         <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
                                             title="Resend Pay Slip as Email" class="icon-2 info-tooltip"><button
                                                 type="button" class="btn btn-warning btn-xs"><i
                                                     class="ph-repeat"></i>&nbsp;&nbsp;<i class="ph-envelope"></i></button>
                                         </a>
+                                        {{-- / --}}
+                                        
                                         <?php } } ?>
                                         <?php } ?>
 
