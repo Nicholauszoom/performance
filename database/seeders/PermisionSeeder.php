@@ -136,10 +136,21 @@ class PermisionSeeder extends Seeder
 
 
 
-            //leave management
+            //leave management seeder sym_module=3
 
+            ['slug' => 'view-leave-management','sys_module_id'=>3],
+
+            // start  of leave application seeders
             ['slug' => 'view-leave','sys_module_id'=>3],
-            ['slug' => 'approve-leave','sys_module_id'=>3],
+
+            // ['slug' => 'applied-leave','sys_module_id'=>3],
+            // ['slug' => 'apply-leave','sys_module_id'=>3],
+            // ['slug' => 'approve-leave','sys_module_id'=>3],
+            // end of leave application seeders
+
+            // start of leave reports
+
+            // end of leave reports
 
 
             //loan management
