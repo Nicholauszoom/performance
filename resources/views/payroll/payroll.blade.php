@@ -77,6 +77,7 @@
 
 
             {{-- start of payslip mail list --}}
+            @can('mail-payroll')
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
                 <div class="card">
                     <div class="card-header">
@@ -222,6 +223,7 @@
                 </div>
                 <!-- /basic layout -->
             </div>
+            @endcan
             {{-- / --}}
 
         </div>

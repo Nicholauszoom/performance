@@ -153,7 +153,7 @@
                     <ul
                         class="nav-group-sub collapse {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
                             {{-- start of payroll link --}}
-                            @can('add-payroll')
+                            @can('view-payroll')
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null }}"
                                     href="{{ route('payroll.payroll') }}"> Payroll </a></li>
