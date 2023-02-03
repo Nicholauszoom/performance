@@ -281,6 +281,7 @@
             </table>
         </div>
     @endif
+    @endcan
     {{-- / --}}
 @endsection
 
