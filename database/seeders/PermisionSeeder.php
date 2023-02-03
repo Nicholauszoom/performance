@@ -65,6 +65,8 @@ class PermisionSeeder extends Seeder
             ['slug' => 'add-overtime','sys_module_id'=>1],
             ['slug' => 'edit-overtime','sys_module_id'=>1],
             ['slug' => 'delete-overtime','sys_module_id'=>1],
+            ['slug' => 'view-my-overtime','sys_module_id'=>1],
+            ['slug' => 'view-others-overtime','sys_module_id'=>1],
             // end of overtime seeders
 
             // start of imprest seeders

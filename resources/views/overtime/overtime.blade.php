@@ -14,8 +14,10 @@
 @endpush
 
 @section('content')
-    <div id="apply_overtime">
+    {{-- start of add overtime div --}}
 
+    @can('can-apply-overtime')
+    <div id="apply_overtime">
         <div class="row">
             <div class="col-md-6 offset-3">
                 <div class="card">
@@ -104,7 +106,11 @@
             </div>
         </div>
     </div>
+    @endcan
+    {{-- / --}}
 
+    {{-- start of view my overtime card --}}
+    @can('view-my-overtimes')
     <div class="card">
         <div class="card-header mb-0">
             <div class="d-flex justify-content-between">
@@ -166,8 +172,11 @@
             </tbody>
         </table>
     </div>
+    @endcan
+    {{-- / --}}
 
-
+    {{--  start of others overtime --}}
+    @cab('view-other-overtime')
     @if (count($line_overtime) > 0)
         <div class="card mt-4">
             <div class="card-header">
@@ -257,6 +266,7 @@
             </table>
         </div>
     @endif
+    {{-- / --}}
 @endsection
 
 @push('footer-script')

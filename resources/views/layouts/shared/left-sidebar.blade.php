@@ -142,7 +142,7 @@
                 {{-- / --}}
 
                 {{-- start of view payroll dropdown --}}
-@can('view-payroll-management')
+                @can('view-payroll-management')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -157,7 +157,7 @@
                                     class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null }}"
                                     href="{{ route('payroll.payroll') }}"> Payroll </a></li>
 
-@endcan
+                @endcan
                 {{-- / --}}
 @can('view-payslip')
                             <li class="nav-item"><a
