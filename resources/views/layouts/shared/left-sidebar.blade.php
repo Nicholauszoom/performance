@@ -233,7 +233,7 @@
                         @can('view-loan')
                                 <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.salary_advance') ? 'active' : null }}"
-                                href="{{ route('flex.salary_advance') }}">Loan Seting</a></li>
+                                href="{{ route('flex.salary_advance') }}">Other Loans(HESLB)</a></li>
                         @endcan
                         @can('approve-loan')
                                 <li class="nav-item"><a
