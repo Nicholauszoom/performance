@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Termination'])
+@extends('layouts.vertical', ['title' => 'Unpaid Leaves'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -19,13 +19,15 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Unpaid Leave Employee List</h5>
+            <h6 class="mb-0 text-muted">Unpaid Leave Employee List</h6>
 
-
-
+                {{-- start of add unpaid leave button --}}
+                @can('add-unpaid-leaves')
                 <a href="{{ route('flex.add_unpaid_leave') }}" class="btn btn-perfrom ">
                     <i class="ph-plus me-2"></i> Add Unpaid Leave
                 </a>
+                @endcan
+                {{-- / --}}
         </div>
          @if(Session::has('note'))      {{ session('note') }}  @endif
     </div>
@@ -59,6 +61,8 @@
              <td>
                 {{ $row->reason }}
              </td>
+
+             @can('end-unpaid-leaves')
              <td>
                 {{ ($row->status == 1)?'Approved':'Not Approved' }}
              </td>
@@ -66,7 +70,10 @@
                 <a  href="{{ route('flex.end_unpaid_leave',$row->emp_id) }}"  title="End Unpaid Leave">
                     <button type="button" class="btn btn-info btn-xs" ><i class="ph-check"></i></button>
                 </a>
+                {{-- / --}}
              </td>
+             @endcan
+             <td hidden></td>
             </tr>
             @endforeach
         </tbody>

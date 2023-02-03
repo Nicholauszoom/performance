@@ -27,7 +27,10 @@
 
         <div class="card-body">
 
+            {{-- start of run payroll --}}
+            @can('add-payroll')
             @if ($pendingPayroll == 0 && session('mng_paym'))
+            
                 <div class="col-lg-12">
 
                     <div class="card">
@@ -69,7 +72,12 @@
                     </div>
                 </div>
             @endif
+            @endcan
+            {{-- / --}}
 
+
+            {{-- start of payslip mail list --}}
+            @can('view-payroll')
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
                 <div class="card">
                     <div class="card-header">
@@ -129,6 +137,8 @@
                                     <td class="options-width">
                                         <?php if($row->state==1 || $row->state==2){ ?>
                                         <div class="d-flex">
+                                            {{-- start of cancel payroll button --}}
+                                            @can('cancel-payroll')
                                             <span style="margin-right: 4px">
                                                 <a href="javascript:void(0)" onclick="cancelPayroll()"
                                                     title="Cancel Payroll" class="icon-2 info-tooltip">
@@ -138,7 +148,11 @@
                                                     </button>
                                                 </a>
                                             </span>
+                                            @endcan
+                                            {{-- / --}}
 
+                                            {{-- start of resend payslip button --}}
+                                            @can('mail-payroll')
                                             <span style="margin-right: 4px">
                                                 <a href="{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/temp_payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                                     onclick="cancelPayroll()" title="Resend Pay Slip as Email"
@@ -150,20 +164,29 @@
                                                     </button>
                                                 </a>
                                             </span>
+                                            @endcan
+                                            {{-- / --}}
                                         </div>
 
                                         <?php } else {  ?>
+
+                                        {{-- start of view email detail button --}}
                                         <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                             title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-info btn-xs"><i class="ph-circle"></i></button> </a>
-
+                                                class="btn btn-info btn-xs"><i class="ph-circle"></i></button> 
+                                        </a>
+                                        {{-- / --}}
                                         <?php if($row->state==0){ ?>
                                         <?php if($row->pay_checklist==1){ ?>
+
+                                        {{-- start of print report button --}}
                                         <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
                                             target="blank" title="Print Report" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-info btn-xs">
                                                 <i class="ph-printer"></i>
-                                            </button> </a>
+                                            </button> 
+                                        </a>
+                                        {{-- / --}}
                                         <?php } else {  ?>
                                         <a title="Checklist Report Not Ready" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-warning btn-xs"><i
@@ -171,17 +194,32 @@
                                         <?php } ?>
 
                                         <?php if($row->email_status==0){ ?>
+
+                                        {{-- start of send payslip mail button --}}
+                                        @can('mail-payroll')
                                         <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
                                             title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button> </a>
+                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button> 
+                                        </a>
+                                        @endcan
+                                        {{-- / --}}
+
                                         <?php } else { ?>
+
+                                        {{-- start of re-send payslip mail button  --}}
+                                        @can('mail-payroll')
                                         <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
-                                            title="Resend Pay Slip as Email" class="icon-2 info-tooltip"><button
-                                                type="button" class="btn btn-warning btn-xs"><i
-                                                    class="ph-repeat"></i>&nbsp;&nbsp;<i class="ph-envelope"></i></button>
+                                            title="Resend Pay Slip as Email" class="icon-2 info-tooltip">
+                                            <button type="button" class="btn btn-warning btn-xs">
+                                                <i class="ph-repeat"></i>&nbsp;&nbsp;
+                                                <i class="ph-envelope"></i>
+                                            </button>
                                         </a>
+                                        @endcan
+                                        {{-- / --}}
+                                        
                                         <?php } } ?>
                                         <?php } ?>
 
@@ -195,6 +233,8 @@
                 </div>
                 <!-- /basic layout -->
             </div>
+            @endcan
+            {{-- / --}}
 
         </div>
 

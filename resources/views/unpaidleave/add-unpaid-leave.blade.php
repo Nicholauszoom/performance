@@ -21,9 +21,11 @@
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 text-muted">Add Employee To Unpaid Leave</h5>
 
+                {{-- start of unpaid all unpaid leaves button --}}
                 <a href="{{ route('flex.unpaid_leave') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Unpaid leave List
                 </a>
+                {{-- / --}}
         </div>
     <hr>
     </div>

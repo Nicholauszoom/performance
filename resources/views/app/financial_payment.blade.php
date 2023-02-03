@@ -31,7 +31,7 @@
 
     <div class="card">
         <div class="card-header border-0">
-            <h2 class="text-muted">Pending Payments <small></small></h2>
+            <h6 class="text-muted">Pending Payments <small></small></h6>
         </div>
 
         <div class="card-body">
@@ -46,6 +46,9 @@
                                 Incentives
                             </a>
                         </li> --}}
+
+                        {{-- start of Overtime tab link  --}}
+                        @can('view-overtime')
                         <li class="nav-item" role="presentation">
                             <a href="#overtimeTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
@@ -53,6 +56,9 @@
                                 Overtime
                             </a>
                         </li>
+                        @endcan
+                        {{-- / --}}
+
                         {{-- <li class="nav-item" role="presentation">
                             <a href="#imprestTab" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
                                 tabindex="-1">
@@ -69,6 +75,7 @@
                                         </a>
                                     </li> -->
 
+                        {{-- start of payroll tab link --}}
                         <li class="nav-item" role="presentation">
                             <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
@@ -76,6 +83,10 @@
                                 Payroll
                             </a>
                         </li>
+                        {{-- / --}}
+
+                    
+
                         {{-- <li class="nav-item" role="presentation">
                             <a href="#arrearsTab" class="nav-link" data-bs-toggle="tab"
                                 aria-selected="false" role="tab" tabindex="-1">
@@ -288,6 +299,7 @@
                                                     <?php } ?>
 
                                                 </td>
+                                                <td hidden></td>
                                             </tr>
                                             <?php } ?>
 
