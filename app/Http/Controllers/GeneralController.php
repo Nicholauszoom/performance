@@ -1912,7 +1912,7 @@ class GeneralController extends Controller
             'full_name' => $fullname,
         );
         Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-        dd('Email Sent Successfully');
+        // dd('Email Sent Successfully');
         //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
 
         // foreach ($line as $row) {
