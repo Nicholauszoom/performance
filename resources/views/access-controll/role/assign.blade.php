@@ -25,11 +25,11 @@
                                         class="ph-left"></i> Back </a>
 
                                 <div class="header-elements">
-                                    <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal"
+                                    {{-- <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal"
                                         data-target="#addRoleModal">
                                         <i class="ph-circle"></i>
                                         Add
-                                    </button>
+                                    </button> --}}
 
                                 </div>
                             </div>
