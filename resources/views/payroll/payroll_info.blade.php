@@ -242,13 +242,14 @@
                     </a>
 
                     <?php if($payrollState == 0) {?>
+                    @can('view-gross')
                     <a class="m-3" target="_self" href="{{route('payroll.grossReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">Gross Recon</button>
                     </a>
-
                     <a class="m-3" target="_self" href="{{route('payroll.netReconciliation',['pdate'=>base64_encode($payrollMonth)])}}">
                         <button type="button" name="print_payroll" class="btn btn-info">Net Recon</button>
                     </a>
+                    @endcan
                     <!-- <a class="m-3" target="_self" href="{{route('payroll.sendReviewEmail',['pdate'=>base64_encode($payrollMonth)])}}"><button
                             type="button" name="print_payroll" class="btn btn-info"><b>REVIEWED<br></button></a> -->
                     <?php } ?>
