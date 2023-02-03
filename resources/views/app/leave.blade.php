@@ -196,9 +196,9 @@
               {{-- / --}}
               {{-- <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a> --}}
               </td>
-              <td>
+              {{-- <td>
               <?php echo $row->remarks."<br>"; ?>
-              </td>
+              </td> --}}
               </tr>
 
             <?php } //} ?>
