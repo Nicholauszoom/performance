@@ -39,6 +39,8 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Reason</th>
+                <th>Status</th>
+                <th>Action</th>
 
             </tr>
         </thead>
@@ -49,13 +51,16 @@
             <td>{{$i++}}</td>
             <td>{{ $row->NAME }}</td>
 
-            
+
              <td>{{ $row->start_date}}</td>
              <td>
                 {{ $row->end_date}}
             </td>
              <td>
                 {{ $row->reason }}
+             </td>
+             <td>
+                {{ ($row->status == 1)?'Approved':'Not Approved' }}
              </td>
              <td>
                 <a  href="{{ route('flex.end_unpaid_leave',$row->emp_id) }}"  title="End Unpaid Leave">

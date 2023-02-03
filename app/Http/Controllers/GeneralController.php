@@ -2221,8 +2221,15 @@ class GeneralController extends Controller
         $signatory = session('emp_id');
         $time_approved = date('Y-m-d');
         $amount = 0;
+
+        $overtime = $this->flexperformance_model->get_employee_overtime($overtimeID);
+        //dd($overtime);
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
+
+
+        SysHelpers::FinancialLogs($id, 'Assigned Overtime', '0',number_format($overtime,2), 'Payroll Input');
+
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -4111,7 +4118,22 @@ class GeneralController extends Controller
         session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Ended Successifully</p>");
 
         }else{
-            session('note', "<p class='alert alert-warning text-center'>End Unpaid Leae Failed </p>");
+            session('note', "<p class='alert alert-warning text-center'>End Unpaid Leave Failed </p>");
+
+        }
+
+        return redirect(route('flex.unpaid_leave'));
+
+
+     }
+
+     public function confirm_unpaid_leave($id){
+        $result = $this->flexperformance_model->confirm_upaid_leave($id);
+        if($result){
+        session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Confirmed Successifully</p>");
+
+        }else{
+            session('note', "<p class='alert alert-warning text-center'>Confirm Unpaid Leave Failed </p>");
 
         }
 
@@ -7863,7 +7885,7 @@ public function savePromotion(Request $request)
 
 
         $id=$request->emp_ID;
-        $empl =Employee::where('id',$id)->first();
+        $empl =Employee::where('emp_id',$id)->first();
 
         // saving old employee data
         $old = new Promotion();
@@ -7879,9 +7901,9 @@ public function savePromotion(Request $request)
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary Increment',$empl->salary*$empl->rate,$request->newSalary*$empl->rate, 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary Increment(promotion)',$empl->salary*$empl->rate,$request->newSalary*$empl->rate, 'Salary Increment');
 
-        $promotion =Employee::where('id',$id)->first();
+        $promotion =Employee::where('emp_id',$id)->first();
         $promotion->position=$request->newPosition;
         $promotion->salary=$request->newSalary;
         $promotion->emp_level=$request->newLevel;
@@ -7928,18 +7950,20 @@ public function saveIncrement(Request $request)
          ]
         );
 
+
+
       $oldSalary = $request->oldSalary;
       $oldRate = $request->oldRate;
 
         $id=$request->emp_ID;
-         dd($id);
-        $empl =Employee::where('id',$id)->first();
+         //dd($id);
+        $empl =Employee::where('emp_id',$id)->first();
 
         // saving old employee data
         $old = new Promotion();
         $old->employeeID=$id;
         $old->oldSalary=$empl->salary;
-        $old->newSalary=$request->newSalary;
+        $old->newSalary = $request->newSalary;
         $old->oldPosition=$empl->position;
         $old->newPosition=$empl->position;;
         $old->oldLevel=$empl->emp_level;
@@ -7951,7 +7975,7 @@ public function saveIncrement(Request $request)
         SysHelpers::FinancialLogs($id, 'Salary Increment',$oldSalary*$oldRate,$request->newSalary*$oldRate, 'Salary Increment');
 
         // saving new employee data
-        $increment =Employee::where('id',$id)->first();
+        $increment =Employee::where('emp_id',$id)->first();
         $increment->salary=$request->newSalary;
         $increment->update();
         $msg="Employee Salary has been Incremented successfully";
@@ -9087,9 +9111,9 @@ public function editNotification(Request $request,$id)
                 $approval->update();
 
                 $level->delete();
-    
+
                 return redirect('flex/approval_levels/'.base64_encode($appID))->with('msg',"Approval Level was deleted successfully!");
-    
+
         }
     // end of delete approval
 
