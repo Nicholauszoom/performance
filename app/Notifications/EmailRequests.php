@@ -46,7 +46,7 @@ class EmailRequests extends Notification
         $new_data = $this->data;
         // dd($new_data);
         return (new MailMessage)
-                    ->subject('Employee Overtime Approval')
+                    ->subject($new_data['subject'])
                     ->view($new_data['view'], $new_data);
                     // ->line('T!');
     }
