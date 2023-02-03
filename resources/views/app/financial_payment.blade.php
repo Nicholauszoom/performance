@@ -158,7 +158,7 @@
 
                                                 {{-- hr approval --}}
                                                 @elseif($pendingPayroll == 1 && $payroll->state == 2)
-                                                @can('hr-recommend-patroll')
+                                                @can('hr-recommend-payroll')
                                                     <div>
                                                         <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
                                                             title="Approve Payroll" class="me-2">
