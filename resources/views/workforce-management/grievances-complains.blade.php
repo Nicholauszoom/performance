@@ -24,9 +24,13 @@
                     <h5 class="mb-0 text-muted text-start">Grievances | Disciplinary Action</h5>
                 </div>
                 <div class="col-md-3">
+                    {{-- start of add disciplinary action button --}}
+                    @can('add-grivance')
                         <a href="{{ route('flex.addDisciplinary') }}" class="btn btn-perfrom ">
                             <i class="ph-plus me-2"></i> Add Disciplinary Action
                         </a>
+                    @endcan
+                    {{-- / --}}
                 </div>
             </div>
 
@@ -63,13 +67,17 @@
                 <a  href="{{ route('flex.viewDisciplinary', base64_encode($item->id)) }}"  title="Info and Details">
                     <button type="button" class="btn btn-sm btn-main btn-xs"><i class="ph-info"></i></button>
                 </a>
+                @can('edit-grivance')
                 <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-main btn-sm">
                     <i class="ph-pen"></i>
                 </a>
+                @endcan
+
+                @can('delete-grivance')
                 <a href="{{ route('flex.deleteDisciplinary', $item->id) }}" class="btn btn-danger btn-sm">
                     <i class="ph-trash"></i>
                 </a>
-                
+                @endcan
              </td>
 
             </tr>
