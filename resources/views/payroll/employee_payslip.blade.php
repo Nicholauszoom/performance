@@ -1,4 +1,4 @@
-@can('view-payroll')
+
 @extends('layouts.vertical', ['title' => 'Payslip'])
 
 @push('head-script')
@@ -202,7 +202,7 @@
                                 <?php if($row->pay_checklist==1){ ?>
                                     {{-- print report button --}}
                                     <a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="me-2">
-                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-file"></i></button>
+                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-printer"></i></button>
                                     </a>
                                     {{-- / --}}
                                 <?php } else {  ?>
@@ -212,14 +212,15 @@
                                     </a>
                                     {{-- / --}}
                                 <?php } ?>
-
+                               
                                 <?php if($row->email_status==0){ ?>
-                                    
-                                    @can('mail-payroll')
+                                                                       
                                     {{-- send payslip mail button --}}
+                                    @can('mail-payroll')
                                     <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
-                                         <button class="btn bg-warning text-white btn-xs"> <i class="ph-envelope"></i></button>
+                                         <button class="btn bg-secondary text-white btn-xs"> <i class="ph-envelope"></i></button>
                                     </a>
+                                    @endcan
                                     {{-- / --}}
                                     <?php } else { ?>
                                     {{-- re-send payslip email button --}}
@@ -227,10 +228,11 @@
                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-repeat"></i>&nbsp;&nbsp;<i class="ph-envelope"></i> </button>
                                     </a>
                                     {{-- / --}}
-                                    
-                                    @endcan
+                                   
 
-                                <?php } } ?>
+                                <?php } 
+                            ?>
+                           <?php } ?>
                         <?php } ?>
                     </div>
 
@@ -320,4 +322,3 @@
 
     </script>
  @endpush
-@endcan
