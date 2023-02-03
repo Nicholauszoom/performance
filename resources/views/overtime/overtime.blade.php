@@ -235,31 +235,46 @@
 
 
                             <?php  if ($row->status==0) {   ?>
+
+                            {{-- start of approve overtime button --}}
+                            @can('approve-overtime')
                             <a href="javascript:void(0)" title="Approve" class="me-2"
                                 onclick="lineapproveOvertime(<?php echo $row->eoid; ?>)">
                                 <button class="btn btn-success btn-xs"><i class="ph-check"></i></button>
                             </a>
+                            @endcan
+                            {{-- / --}}
 
+                            {{-- start of cancel overtime button --}}
+                            @can('cancel-overtime')
                             <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                                 onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
                                 <button class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
                             </a>
+                            @endcan
+                            {{-- /  --}}
+
                             <?php }?>
                         </td>
 
-
+                        {{-- start of cancel overtime --}}
+                        @can('cancel-overtime')
                         <td class="options-width">
                             <?php //if($row->status==1 || $this->session->userdata('line') !=0 ){
                             ?> <?php //}
                             ?>
                             <?php //if ($row->status==2) {
                             ?>
+                            {{-- start of cancel overtime button --}}
                             <a href="{{ route('flex.fetchOvertimeComment', $row->eoid) }}">
                                 <button class='btn btn-primary btn-xs'>Comment</i></button>
                             </a>
+                            {{-- / --}}
                             <?php //}
                             ?>
                         </td>
+                        @endcan
+                        {{-- / --}}
                     </tr>
                     <?php }  ?>
                 </tbody>
