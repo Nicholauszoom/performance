@@ -180,7 +180,7 @@
     {{-- / --}}
 
     {{--  start of others overtime --}}
-    @can('view-other-overtime')
+    @can('view-others-overtime')
     @if (count($line_overtime) > 0)
         <div class="card mt-4">
             <div class="card-header">
