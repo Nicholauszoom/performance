@@ -110,7 +110,7 @@
     {{-- / --}}
 
     {{-- start of view my overtime card --}}
-    @can('view-my-overtimes')
+    @can('view-my-overtime')
     <div class="card">
         <div class="card-header mb-0">
             <div class="d-flex justify-content-between">
