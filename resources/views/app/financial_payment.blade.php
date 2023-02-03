@@ -48,7 +48,7 @@
                         </li> --}}
 
                         {{-- start of Overtime tab link  --}}
-                        @can('view-overtime')
+                        {{-- @can('view-overtime') --}}
                         <li class="nav-item" role="presentation">
                             <a href="#overtimeTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
@@ -56,7 +56,7 @@
                                 Overtime
                             </a>
                         </li>
-                        @endcan
+                        {{-- @endcan --}}
                         {{-- / --}}
 
                         {{-- <li class="nav-item" role="presentation">

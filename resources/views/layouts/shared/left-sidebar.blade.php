@@ -225,7 +225,7 @@
                     </a>
                     <ul
                         class="nav-group-sub collapse {{ request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') || request()->routeIs('bank-loans') ? 'show' : null }}">
-                        @can('view-loan')
+                        @can('view-bank-loan')
                         <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('bank-loans') ? 'active' : null }}"
                                 href="{{ route('bank-loans') }}">Bank Loans</a></li>

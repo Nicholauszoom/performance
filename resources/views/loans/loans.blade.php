@@ -22,7 +22,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-
+                                            {{-- start of upload loans form --}}
+                                            @can('add-loan')
                                             <form action="{{ route('loans.import') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
@@ -50,9 +51,15 @@
 
 
                                             </form>
+                                            @endcan
+                                            {{-- / --}}
+                                            {{-- start of generate loan template --}}
+                                            @can('add-loan')
                                             <div class="col-md-4">
                                                 <a href="{{ route('loans.template') }}" class=""> <span class="badge bg-main"> Get Excel Template</span></a>
-                                                 </div>
+                                            </div>
+                                            @endcan
+                                            {{-- / --}}
                                 </div>
 
                             </div>

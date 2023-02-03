@@ -159,6 +159,8 @@ class PermisionSeeder extends Seeder
             ['slug' => 'add-loan','sys_module_id'=>4],
             ['slug' => 'delete-loan','sys_module_id'=>4],
             ['slug' => 'approve-loan','sys_module_id'=>4],
+            ['slug' => 'view-bank-loan','sys_module_id'=>4],
+            
 
              //Organization
              ['slug' => 'view-organization','sys_module_id'=>5],
