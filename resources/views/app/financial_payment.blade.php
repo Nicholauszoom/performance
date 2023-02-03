@@ -158,7 +158,7 @@
 
                                                 {{-- hr approval --}}
                                                 @elseif($pendingPayroll == 1 && $payroll->state == 2)
-                                                @can('hr-recommend-patroll')
+                                                @can('hr-recommend-payroll')
                                                     <div>
                                                         <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
                                                             title="Approve Payroll" class="me-2">
@@ -295,6 +295,8 @@
                                                     <?php } ?>
 
                                                     <?php if ($row->email_status == 0) { ?>
+                                                    {{-- start of send payslip button --}}
+                                                    @can('mail-payroll')
                                                     <a href="javascript:void(0)"
                                                         onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
                                                         title="Send Pay Slip as Email" class="icon-2 info-tooltip">
@@ -302,6 +304,8 @@
                                                             <i class="ph-envelope"></i>
                                                         </button>
                                                     </a>
+                                                    @endcan
+                                                    {{-- / --}}
                                                     <?php } else { ?>
                                                     <a href="javascript:void(0)"
                                                         onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
