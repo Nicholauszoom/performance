@@ -27,11 +27,11 @@ class PermisionSeeder extends Seeder
             ['slug' => 'add-employee','sys_module_id'=>1],
             // end of active employees seeders
 
-            //start of suspend employee seeders 
+            //start of suspend employee seeders
             ['slug' => 'activate-employee','sys_module_id'=>1],
             ['slug' => 'suspend-employee','sys_module_id'=>1],
             ['slug' => 'transfer-employee','sys_module_id'=>1],
-            //end of suspend employee seeders 
+            //end of suspend employee seeders
 
             //start of employee termination seeders
             ['slug' => 'view-termination','sys_module_id'=>1],
@@ -60,7 +60,7 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-unpaid-leaves','sys_module_id'=>1],
             // end of unpaid leaves seeders
 
-            //start of overtime seeders 
+            //start of overtime seeders
             ['slug' => 'view-overtime','sys_module_id'=>1],
             ['slug' => 'add-overtime','sys_module_id'=>1],
             ['slug' => 'edit-overtime','sys_module_id'=>1],
@@ -86,10 +86,10 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-grivance','sys_module_id'=>1],
 
             // end of grievances seeders
-            
+
             //payroll management seederss system-module=2
             ['slug' => 'view-payroll-management','sys_module_id'=>2],
-            
+
 
             // start of payroll  seeder
             ['slug' => 'view-payroll','sys_module_id'=>2],
@@ -106,10 +106,11 @@ class PermisionSeeder extends Seeder
             ['slug' => 'mail-payroll','sys_module_id'=>2],
             // end of payroll seeder
 
+
             // start of payslip seeder
             ['slug' => 'view-payslip','sys_module_id'=>2],
             ['slug' => 'view-employee-payslip','sys_module_id'=>2],
-          
+
             // end of payslip seeder
 
             // start of incertives seeder
