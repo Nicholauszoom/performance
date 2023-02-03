@@ -131,6 +131,7 @@
             <th>Status</th>
             <th>Mail Status</th>
             <th>Option</th>
+            <th hidden ></th>
           </tr>
         </thead>
 
@@ -223,6 +224,7 @@
                     </div>
 
                     </td>
+                    <td hidden></td>
                 </tr>
             <?php }  ?>
             </tbody>
