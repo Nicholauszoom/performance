@@ -77,25 +77,34 @@
 
             {{-- payroll summary button 1--}}
             @if($payrollState != 1)
+            @can('download-summary')
             <a href="{{route('reports.get_payroll_temp_summary',$payrollMonth)}}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+            </a>
+            @endcan
             @endif
             {{-- / --}}
 
             {{-- payroll summary button 2 --}}
+            @can('download-summary')
             @if($payrollState == 1)
             <a class="px-4" href="{{route('reports.get_payroll_temp_summary1',$payrollMonth)}}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+            </a>
             @endif
+            @endcan
             {{-- / --}}
 
             {{-- input change approval button  --}}
            
             @if($payrollState != 1)
-            
+            @can('download-summary')
             <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth]) }}" target="blank">
-                Input Changes Approval
+                <button type="button" name="print" value="print" class="btn btn-main btn-sm"> 
+                    Input Changes Approval
+                </button>     
             </a>
+            @endcan
             @endif
             {{-- / --}}
 
