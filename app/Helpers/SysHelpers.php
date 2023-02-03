@@ -63,4 +63,9 @@ class SysHelpers
         $details = Employee::where('emp_id',$empID)->first();
         return $details;
     }
+    public static function position($pos)
+    {
+        $details = Employee::where('job_title',$pos)->first();
+        return $details;
+    }
 }
