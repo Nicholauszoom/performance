@@ -1905,8 +1905,9 @@ class GeneralController extends Controller
 
         //fetch Line manager data from employee table and send email
         $linemanager_data = SysHelpers::employeeData($linemanager);
-        $fullname = $linemanager_data['fname'] . ' ' . $linemanager_data['lname'];
+        $fullname = $linemanager_data['full_name'];
         $email_data = array(
+            'subject'=> 'Employee Overtime Approval',
             'view' => 'emails.linemanager.overtime-approval',
             'email' => $linemanager_data['email'],
             'full_name' => $fullname,
