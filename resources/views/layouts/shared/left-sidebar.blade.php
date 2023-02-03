@@ -136,9 +136,7 @@
                     </ul>
                 </li>
                 {{-- / --}}
-
                 @endcan
-
                 {{-- / --}}
 
                 {{-- start of view payroll dropdown --}}
