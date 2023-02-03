@@ -14,6 +14,8 @@
 
 @section('content')
 
+
+@can('view-leave')
 <?php $totalAccrued = number_format($leaveBalance,2); ?>
 
 
@@ -346,7 +348,7 @@
       </table>
 </div>
 @endif
-
+@endcan
 @endsection
 
 
