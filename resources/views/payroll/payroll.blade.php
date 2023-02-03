@@ -211,9 +211,11 @@
                                         @can('mail-payroll')
                                         <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
-                                            title="Resend Pay Slip as Email" class="icon-2 info-tooltip"><button
-                                                type="button" class="btn btn-warning btn-xs"><i
-                                                    class="ph-repeat"></i>&nbsp;&nbsp;<i class="ph-envelope"></i></button>
+                                            title="Resend Pay Slip as Email" class="icon-2 info-tooltip">
+                                            <button type="button" class="btn btn-warning btn-xs">
+                                                <i class="ph-repeat"></i>&nbsp;&nbsp;
+                                                <i class="ph-envelope"></i>
+                                            </button>
                                         </a>
                                         @endcan
                                         {{-- / --}}
