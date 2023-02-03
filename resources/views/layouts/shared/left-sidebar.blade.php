@@ -100,12 +100,12 @@
                         {{-- / --}}
 
                         {{--  start of overtime link --}}
-                        @can('view-overtime')
+                        {{-- @can('view-overtime') --}}
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"
                                 href="{{ route('flex.overtime') }}">Overtime </a>
                         </li>
-                        @endcan
+                        {{-- @endcan --}}
                         {{-- / --}}
 
                         {{-- start of imprest link --}}
