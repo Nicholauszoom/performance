@@ -143,10 +143,14 @@
             <hr>
             <div class="col-9"></div>
             <div class="col-3 mb-2">
+                {{-- start of edit button --}}
+                @can('edit-grivance')
                 <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-main">
                     <i class="ph-pen"></i>
                     Edit Disciplinary Action
                 </a>
+                @endcan
+                {{-- / --}}
             </div>
 
             </div>

@@ -65,6 +65,11 @@ class PermisionSeeder extends Seeder
             ['slug' => 'add-overtime','sys_module_id'=>1],
             ['slug' => 'edit-overtime','sys_module_id'=>1],
             ['slug' => 'delete-overtime','sys_module_id'=>1],
+            ['slug' => 'view-my-overtime','sys_module_id'=>1],
+            ['slug' => 'view-others-overtime','sys_module_id'=>1],
+            ['slug' => 'delete-overtime','sys_module_id'=>1],
+            ['slug' => 'approve-overtime','sys_module_id'=>1],
+            ['slug' => 'cancel-overtime','sys_module_id'=>1],
             // end of overtime seeders
 
             // start of imprest seeders
@@ -82,19 +87,53 @@ class PermisionSeeder extends Seeder
 
             // end of grievances seeders
             
-            //payroll management
+            //payroll management seederss system-module=2
             ['slug' => 'view-payroll-management','sys_module_id'=>2],
+            
+
+            // start of payroll  seeder
             ['slug' => 'view-payroll','sys_module_id'=>2],
             ['slug' => 'add-payroll','sys_module_id'=>2],
             ['slug' => 'edit-payroll','sys_module_id'=>2],
+            ['slug' => 'cancel-payroll','sys_module_id'=>2],
+            ['slug' => 'recommend-payroll','sys_module_id'=>2],
+            ['slug' => 'view-comment','sys_module_id'=>2],
+            ['slug' => 'download-approval','sys_module_id'=>2],
+            ['slug' => 'download-summary','sys_module_id'=>2],
             ['slug' => 'hr-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'finance-recommend-payroll','sys_module_id'=>2],
             ['slug' => 'approve-payroll','sys_module_id'=>2],
+            ['slug' => 'mail-payroll','sys_module_id'=>2],
+            // end of payroll seeder
 
+            // start of payslip seeder
             ['slug' => 'view-payslip','sys_module_id'=>2],
+            ['slug' => 'view-employee-payslip','sys_module_id'=>2],
+          
+            // end of payslip seeder
+
+            // start of incertives seeder
             ['slug' => 'view-incentives','sys_module_id'=>2],
             ['slug' => 'add-incentives','sys_module_id'=>2],
+            // end of incertives seeders
+
+            // start of pending payments seeders
             ['slug' => 'view-pending-payments','sys_module_id'=>2],
+            ['slug' => 'view-overtime','sys_module_id'=>2],
+            ['slug' => 'view-payroll','sys_module_id'=>2],
+            ['slug' => 'view-pending','sys_module_id'=>2],
+            ['slug' => 'view-comments','sys_module_id'=>2],
+            ['slug' => 'view-payroll-info','sys_module_id'=>2],
+            // end of pending payments seeders
+
+            // start of payroll info seeders
+            ['slug' => 'download-summary','sys_module_id'=>2],
+            ['slug' => 'download-approval','sys_module_id'=>2],
+            ['slug' => 'view-gross','sys_module_id'=>2],
+            ['slug' => 'view-net','sys_module_id'=>2],
+            // end of payroll info seeders
+
+
 
             //leave management
 
