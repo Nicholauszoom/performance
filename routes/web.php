@@ -483,6 +483,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
         Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
         Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
+        Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
+
 
 
 

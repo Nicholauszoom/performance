@@ -75,7 +75,9 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <input type="hidden" name="oldRate"  class="form-control"  id="oldRate">
 
+                                    <input type="hidden" name="oldSalary"  class="form-control"  id="oldsalary">
                                     <div class="col-md-6 col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">Current Level:</label>
@@ -158,6 +160,10 @@ $('#docNo').change(function(){
         dataType: 'json',
         success: function(response){
             if(response != null){
+
+                document.getElementById("oldsalary").value = response.salary;
+                document.getElementById("oldRate").value = response.rate;
+
                 $('#salary').val(response.salary+' '+response.currency);
                 $('#oldLevel').val(response.emp_level);
                 $('#oldPosition').val(response.position.name);

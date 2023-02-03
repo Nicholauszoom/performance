@@ -41,7 +41,8 @@
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Reason</th>
-                <th hidden></th>
+                <th>Status</th>
+                <th>Action</th>
 
             </tr>
         </thead>
@@ -52,7 +53,7 @@
             <td>{{$i++}}</td>
             <td>{{ $row->NAME }}</td>
 
-            
+
              <td>{{ $row->start_date}}</td>
              <td>
                 {{ $row->end_date}}
@@ -61,16 +62,23 @@
                 {{ $row->reason }}
              </td>
 
-             @can('end-unpaid-leaves')
+
              <td>
-                {{-- start of end unpaid leave button --}}
+                {{ ($row->status == 1)?'Approved':'Not Approved' }}
+             </td>
+             <td>
+                @can('end-unpaid-leaves')
                 <a  href="{{ route('flex.end_unpaid_leave',$row->emp_id) }}"  title="End Unpaid Leave">
-                    <button type="button" class="btn btn-info btn-xs" ><i class="ph-check"></i></button>
+                    <button type="button" class="btn btn-info btn-xs" ><i class="ph-info"></i></button>
+                </a>
+                @endcan
+                <a  href="{{ route('flex.confirm_unpaid_leave',$row->emp_id) }}"  title="Confirm Unpaid Leave">
+                    <button type="button" class="btn btn-main btn-xs" ><i class="ph-check"></i></button>
                 </a>
                 {{-- / --}}
              </td>
-             @endcan
-             <td hidden></td>
+
+
             </tr>
             @endforeach
         </tbody>

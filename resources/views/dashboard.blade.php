@@ -65,6 +65,8 @@
     <div class="row">
         <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
             <div class="card">
+                <div class="card-head bg-warning text-white">hhh</div>
+                <div class="card-body">
                 <div class="card-header d-flex justify-content-between">
                     <h3 class="text-muted">
                         Welcome to Fléx Performance! <strong> {{ session('fname') . ' ' . session('lname') }} </strong>
@@ -72,6 +74,7 @@
 
                     <p  <?php if(session('pass_age') > 84){?> style="color:red" <?php } ?>>Password Expires in <?php echo 90 - session('pass_age'); ?> Days</p>
                 </div>
+            </div>
             </div>
         </div>
         {{-- /col --}}
