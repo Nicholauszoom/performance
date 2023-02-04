@@ -7557,7 +7557,7 @@ class GeneralController extends Controller
 
     // start of terminations functions
 
-
+    // For all Terminations Page
     public function termination()
     {
 
@@ -7576,6 +7576,8 @@ class GeneralController extends Controller
         return view('workforce-management.termination', $data, compact('terminations', 'i'));
     }
 
+
+    // For Add Termination Page
     public function addTermination()
     {
 
@@ -7592,6 +7594,7 @@ class GeneralController extends Controller
         return view('workforce-management.add-termination', $data);
     }
 
+    // For Saving Termination
     public function saveTermination(Request $request)
     {
 
@@ -7766,8 +7769,13 @@ class GeneralController extends Controller
         return redirect('flex/termination')->with('status', $msg);
     }
 
+    // For Aprroving termination
 
 
+    // For Cancelling Termination
+
+
+    //For Viewing Termination 
     public function viewTermination($id)
     {
         $termination = Termination::where('id', $id)->first();
@@ -7782,6 +7790,8 @@ class GeneralController extends Controller
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
+
+    // For getting employee informations
     public function get_employee_available_info(Request $request)
     {
         $terminationDate =  $request->terminationDate;
@@ -7819,30 +7829,18 @@ class GeneralController extends Controller
             //$leave_balance = $this->flexperformance_model->get_leave_balance($employeeID,$termination_date);
             //get leave balance
             // $leave_pay = $this->flexperformance_model->get_leave_pay($employeeID,$leave_balance);
-
-
-
-
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
-
 
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = $employee_salary;
-
-
-
         return  json_encode($data);
     }
-
-
-
-
     // end of terminations functions
 
 
-    // start of promotion/increment
+    // For view promotion/increment
     public function promotion()
     {
 
@@ -7856,7 +7854,7 @@ class GeneralController extends Controller
         return view('workforce-management.promotion-increment', $data, compact('promotions', 'i'));
     }
 
-
+    // For Viewing Add Promotion page
     public function addPromotion()
     {
 
@@ -7878,6 +7876,12 @@ class GeneralController extends Controller
         return view('workforce-management.add-promotion', $data);
     }
 
+    // For Approve Promotion
+
+
+    // For Cancel Promotion
+
+    // For Save Promotion
     public function savePromotion(Request $request)
     {
 
@@ -7921,6 +7925,10 @@ class GeneralController extends Controller
         return redirect('flex/promotion')->with('msg', $msg);
     }
 
+    // For Approve Promotion
+
+
+    // For Add Increment Page
     public function addIncrement()
     {
 
@@ -7942,7 +7950,7 @@ class GeneralController extends Controller
         return view('workforce-management.add-increment', $data);
     }
 
-
+    // For Save Increment Function
     public function saveIncrement(Request $request)
     {
 
@@ -7975,6 +7983,7 @@ class GeneralController extends Controller
         $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
         $old->action="incremented";
+        $old->status=0;
         $old->save();
 
         SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $request->newSalary * $oldRate, 'Salary Increment');
@@ -7987,28 +7996,39 @@ class GeneralController extends Controller
         return redirect('flex/attendance/flex/promotion')->with('msg', $msg);
     }
 
-    // fetching employee department's positions
+    // For Approve Increment Page
+    public function approveIncrement(Request $request)
+    {
 
+        request()->validate(
+            [
+                'emp_ID' => 'required',
+                'newSalary' => 'required',
+                'oldSalary' => 'required',
+                'oldRate' => 'required',
+            ]
+        );
+
+
+
+    }
+
+    // fetching employee department's positions
     public function getDetails($id = 0)
     {
         $data = EMPL::where('emp_id', $id)->with('position')->first();
         return response()->json($data);
     }
-    // start of promotion/increment
-
 
     // start of reconcilliation summary
     public function reconcilliationSummary()
     {
-
         return view('reports.temp_reconciliation');
     }
-
     // end of reconcilliation summary
 
 
     //start of education qualifications
-
     public function addQualification(Request $request)
     {
 
@@ -8046,11 +8066,9 @@ class GeneralController extends Controller
         $msg = "Education Qualification has been added successfully";
         return redirect('flex/userprofile/' . base64_encode($id))->with('msg', $msg);
     }
-
     // end of education qualifications
 
     // start of grievances
-
     public function grievancesComplains()
     {
 
@@ -8065,15 +8083,13 @@ class GeneralController extends Controller
         return view('workforce-management.grievances-complains', $data, compact('promotions', 'i'));
     }
 
-
+    // For add complain page
     public function addComplain(Request $request)
     {
-
         return view('workforce-management.add-complain');
     }
 
     // start of add disciplinary function
-
     public function addDisciplinary(Request $request)
     {
         // $id=Auth::user()->emp_id;
@@ -8081,12 +8097,10 @@ class GeneralController extends Controller
 
         return view('workforce-management.add-disciplinary', $data);
     }
-
     // end of add discipllinary function
 
 
     // start of save disciplinary action
-
     public function saveDisciplinary(Request $request)
     {
         request()->validate(
@@ -8126,7 +8140,6 @@ class GeneralController extends Controller
         $msg = "Disciplinary Action Has been save Successfully !";
         return redirect('flex/grievancesCompain')->with('msg', $msg);
     }
-
     // end of save disciplinary action
 
     // start of view single displinary action
@@ -8142,8 +8155,6 @@ class GeneralController extends Controller
 
         return view('workforce-management.view-action', $data);
     }
-
-
     // end of view single displinary action
 
 
@@ -8164,7 +8175,6 @@ class GeneralController extends Controller
 
 
     // start of update disciplinary action
-
     public function updateDisciplinary(Request $request)
     {
         // request()->validate(
@@ -8196,7 +8206,6 @@ class GeneralController extends Controller
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
         return view('workforce-management.view-action', $data)->with('msg', $msg);
     }
-
     // end of update disciplinary action
 
     public function saveComplain(Request $request)
@@ -8282,7 +8291,7 @@ class GeneralController extends Controller
 
 
 
-    //start of update employee detail
+    //start of update employee biodata detail
 
     public function updateEmployeeDetails(Request $request)
     {
@@ -8471,7 +8480,6 @@ class GeneralController extends Controller
 
 
             // start of depedants details
-
             $emp_id = $request->employeeID;
             $cert = $request->dep_certficate;
             $dependant = EmployeeDependant::where('employeeID', $emp_id)
@@ -8508,12 +8516,8 @@ class GeneralController extends Controller
 
 
 
-
-
+            // For Parents and Guardians
             $empID = $request->employeeID;
-
-
-            // dd($request->parent_living_status);
             $parent = EmployeeParent::where('employeeID', $empID)
                 ->Where('parent_relation', 'LIKE', $request->parent_relation)
                 ->where('parent_birthdate', 'LIKE', $request->parent_birthdate)
@@ -8543,6 +8547,7 @@ class GeneralController extends Controller
                 }
             }
 
+            // For Educational Qualifiation
             if ($request->institute != null && $request->course != null) {
                 $qualification = new EducationQualification();
 
@@ -8560,7 +8565,7 @@ class GeneralController extends Controller
 
 
 
-
+            // For Professional Certification
             if ($request->cert_qualification != null && $request->cert_number != null) {
                 $certification = new ProfessionalCertification();
 
@@ -8578,7 +8583,7 @@ class GeneralController extends Controller
             }
 
 
-
+            // For Employment History
             if ($request->hist_employer != null && $request->hist_position != null) {
                 $history = new EmploymentHistory();
 
@@ -8627,7 +8632,7 @@ class GeneralController extends Controller
     // end of update employee details
 
 
-    // delete  function
+    // delete child/dependant  function
     public function deleteChild($id)
     {
         $child = EmployeeDependant::find($id);
@@ -8673,7 +8678,7 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Professional Certification was Deleted successfully !');
     }
 
-
+    // For deleting employment history
     public function deleteHistory($id)
     {
         $history = EmploymentHistory::find($id);
@@ -8685,7 +8690,7 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Employment History was Deleted successfully !');
     }
 
-
+    // For deleting disciplinary action
     public function deleteAction($id)
     {
         $disciplinary = Disciplinary::find($id);
@@ -8697,7 +8702,7 @@ class GeneralController extends Controller
         return redirect('flex/grievancesCompain/')->with('msg', 'Disciplinary Action was Deleted successfully !');
     }
 
-
+    // For viewing userbiodata
     public function userdata(Request $request, $id)
     {
         $id = base64_decode($id);
@@ -8836,11 +8841,8 @@ class GeneralController extends Controller
 
         $i = 1;
         $did = base64_decode($id);
-
         $data['holidays'] = Holiday::all();
-
         $data['holiday'] = Holiday::where('id', $did)->first();
-
         $data['parent'] = 'Settings';
         $data['child'] = 'Edit Holiday';
         return view('setting.edit-holiday', $data, compact('i'));

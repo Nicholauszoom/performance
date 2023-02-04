@@ -27,7 +27,7 @@
            
                         {{-- start of increment salary button --}}
                         @can('add-increment')
-                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom text-end ">
+                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom float-end text-end mx-1 ">
                         <i class="ph-plus me-2"></i> Increment Salary
                         </a>
                         @endcan
@@ -35,7 +35,7 @@
 
                         {{--  start of perform promotion button --}}
                         @can('add-promotion')
-                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom ">
+                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom float-end mx-1">
                             <i class="ph-plus me-2"></i> Peform Promotion
                         </a>
                         @endcan
@@ -52,6 +52,39 @@
     {{ session('msg') }}
     </div>
     @endif
+
+    {{-- start of confirm promotion --}}
+    {{-- @can('hr-recommend-payroll') --}}
+    <div class="col-8 mx-auto">
+
+        {{-- start of confirmation div --}}
+
+
+        {{-- / --}}
+        {{-- start of confirm promotion --}}
+        <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
+            title="Approve Payroll" class="me-2">
+            <button type="button" class="btn btn-success text-white">
+                <i class="ph-check me-2"></i>
+                APROVE PROMOTION
+            </button>
+        </a>
+        {{-- / --}}
+
+        {{-- start of cancel promotion --}}
+        <a href="javascript:void(0)" onclick="cancelPayroll('hr')"
+            title="Cancel Payroll" class="icon-2 info-tooltip">
+            <button type="button" class="btn btn-danger text-white">
+                <i class="ph-x me-2"></i>
+                CANCEL PROMOTION
+            </button>
+        </a>
+        {{-- / --}}
+
+    </div>
+    {{-- @endcan --}}
+{{-- / --}}
+    {{-- / --}}
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
             <tr>
@@ -93,3 +126,7 @@
 @endsection
 
 
+
+@push('footer-script')
+
+@endpush
