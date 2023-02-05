@@ -66,5 +66,7 @@ class Kernel extends HttpKernel
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'workforce' => \App\Http\Middleware\WorkForce::class, //workforce management middleware
         'payroll' => \App\Http\Middleware\Payroll::class, // Payroll management access middleware
+        'employee' => \App\Http\Middleware\Employee ::class, // For Employee related issues
+        'suspension' => \App\Http\Middleware\EmployeeSuspension ::class, // For Employee Suspension
     ];
 }

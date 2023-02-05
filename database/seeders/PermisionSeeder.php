@@ -122,7 +122,7 @@ class PermisionSeeder extends Seeder
 
             // start of pending payments seeders
             ['slug' => 'view-pending-payments','sys_module_id'=>2],
-            ['slug' => 'view-overtime','sys_module_id'=>2],
+            ['slug' => 'check-overtime','sys_module_id'=>2],
             ['slug' => 'view-payroll','sys_module_id'=>2],
             ['slug' => 'view-pending','sys_module_id'=>2],
             ['slug' => 'view-comments','sys_module_id'=>2],

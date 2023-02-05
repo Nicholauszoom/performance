@@ -53,47 +53,16 @@
     </div>
     @endif
 
-    {{-- start of confirm promotion --}}
-    {{-- @can('hr-recommend-payroll') --}}
-    <div class="col-8 mx-auto">
 
-        {{-- start of confirmation div --}}
-
-
-        {{-- / --}}
-        {{-- start of confirm promotion --}}
-        <a href="javascript:void(0)" onclick="recomendPayrollByHr()"
-            title="Approve Payroll" class="me-2">
-            <button type="button" class="btn btn-success text-white">
-                <i class="ph-check me-2"></i>
-                APROVE PROMOTION
-            </button>
-        </a>
-        {{-- / --}}
-
-        {{-- start of cancel promotion --}}
-        <a href="javascript:void(0)" onclick="cancelPayroll('hr')"
-            title="Cancel Payroll" class="icon-2 info-tooltip">
-            <button type="button" class="btn btn-danger text-white">
-                <i class="ph-x me-2"></i>
-                CANCEL PROMOTION
-            </button>
-        </a>
-        {{-- / --}}
-
-    </div>
-    {{-- @endcan --}}
-{{-- / --}}
-    {{-- / --}}
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
             <tr>
                 <th>SN</th>
-                <th>Date</th>
                 <th>Employee Name</th>
                 <th>Position</th>
                 <th>Old Salary</th>
                 <th>New Salary</th>
+                <th>Activity</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -102,7 +71,6 @@
                @foreach ($promotions as $item)
             <tr>
             <td>{{$i++}}</td>
-            <td>{{ $item->created_at->format('d-m-Y') }}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
              <td>{{ $item->position->name}}</td>
              <td>{{ number_format($item->oldSalary,2)}} </td>
@@ -114,6 +82,29 @@
                 @else
                     <span class="badge bg-success bg-opacity-20 text-success">{{ $item->action}}</span>
 
+                @endif
+            </td>
+            <td>
+                @if($level)
+                @if($item->status!='Successful')
+                @if ($item->status!=$check)
+                @can('confirm-termination')
+                <small class="text-gray text-center"> Please Approve {{ $item->action =='promoted' ? 'Promotion':'Incremention' }} !</small>
+                <br>
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/approve-promotion/'.$item->id) }}"  title="Confirm Promotion">
+                    <button type="button" class="btn btn-success btn-xs" > <i class="ph-check"></i> Confirm</button>
+                </a>
+                {{-- / --}}
+
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Cancel Termination">
+                    <button type="button" class="btn btn-danger btn-xs" ><i class="ph-trash"></i> Cancel </button>
+                </a>
+                {{-- / --}}
+                @endcan
+                @endif
+                @endif
                 @endif
             </td>
     

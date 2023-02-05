@@ -7788,7 +7788,7 @@ class GeneralController extends Controller
        
        $employee=Auth::User()->id;
     
-    //    dd($termination);
+    
 
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -7821,8 +7821,7 @@ class GeneralController extends Controller
        }
        else
        {
-            // dd('Huna access');
-            $msg="Huna access";
+            $msg="Failed To Terminate !";
             return redirect('flex/termination')->with('msg', $msg);
        }
    
@@ -7905,6 +7904,15 @@ class GeneralController extends Controller
         $data['employees'] = $this->flexperformance_model->Employee();
         $promotions = Promotion::orderBy('created_at', 'desc')->get();
         $i = 1;
+        $employee=Auth::User()->id;
+    
+        $role=UserRole::where('user_id',$employee)->first();
+        $role_id=$role->role_id;
+        $terminate=Approvals::where('process_name','Promotion Approval')->first();
+        $roles=Role::where('id',$role_id)->first();
+        $data['level']=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+
+        $data['check']='Approved By '.$roles->name;
         $data['parent'] = 'Workforce';
         $data['child'] = 'Promotion|Increment';
 
@@ -7935,6 +7943,48 @@ class GeneralController extends Controller
 
     // For Approve Promotion
 
+    public function  approvePromotion($id)
+    {
+       
+       $employee=Auth::User()->id;
+       $role=UserRole::where('user_id',$employee)->first();
+       $role_id=$role->role_id;
+       $terminate=Approvals::where('process_name','Promotion Approval')->first();
+       $roles=Role::where('id',$role_id)->first();
+       $level=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+       if($level)
+       {
+            $approval_id=$level->approval_id;
+            $approval=Approvals::where('id',$approval_id)->first();
+            
+            if ($approval->levels==$level->level_name) {
+
+                $promotion=Promotion::where('id',$id)->first();
+
+                // dd($promotion);
+                $promotion->status="Successful";
+                $promotion->update();
+                $msg='Employee Promotion is Confirmed Successfully !';
+                return redirect('flex/promotion')->with('msg', $msg);
+            }
+            else
+            {
+                $promotion=Promotion::where('id',$id)->first();
+                $promotion->status='Approved By '.$roles->name;
+                $promotion->update();
+
+                $msg='Approved By '.$roles->name;
+                return redirect('flex/promotion')->with('msg', $msg);
+            }
+           
+       }
+       else
+       {
+            $msg="Failed To Promote !";
+            return redirect('flex/promotion')->with('msg', $msg);
+       }
+   
+    }
 
     // For Cancel Promotion
 

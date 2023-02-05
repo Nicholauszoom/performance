@@ -45,13 +45,13 @@
                 {{-- start of workforce management dropdown --}}
                 @can('view-workforce')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee')||request()->routeIs('flex.grievancesCompain')  || request()->routeIs('flex.addTermination') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-users-three"></i>
                         <span>Workforce Management</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.employee')||request()->routeIs('flex.grievancesCompain')  || request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.termination') || request()->routeIs('flex.promotion') || request()->routeIs('flex.addTermination') || request()->routeIs('flex.termination') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.employee')||  request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'show' : null }}">
                         {{-- start of active employee link --}}
                         @can('view-employee')
                         <li class="nav-item">
@@ -84,7 +84,7 @@
                         {{-- start of promotion/increment link --}}
                         @can('view-promotions')
                             <li class="nav-item ">
-                                <a class="nav-link {{ request()->routeIs('flex.promotion') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.promotion') ? 'active' : null }}"
+                                <a class="nav-link "
                                     href="{{ route('flex.promotion') }}">Promotions/Increments</a>
                             </li>
                         @endcan
