@@ -46,6 +46,7 @@
                 <th>Reason(Description)</th>
                 <th>Payments</th>
                 <th>Deductions</th>
+                <th>Status</th>
                 <th>Option</th>
             </tr>
         </thead>
@@ -83,10 +84,21 @@
                     )}}
              </td>
              <td>
+                <span class="badge bg-secondary disabled">
+                    {{ $item->status }}
+                </span>
+                
+             </td>
+             <td>
+                @if($item->status=='Terminated')
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
                     <button type="button" class="btn btn-secondary btn-xs" ><i class="ph-printer"></i></button>
                 </a>
+                @endif
                 <br><br>
+                @if($level)
+                @if($item->status!='Terminated')
+                @if ($item->status!=$check)
                 @can('confirm-termination')
                 <small class="text-gray text-center"> Please Approve !</small>
                 <br>
@@ -102,6 +114,9 @@
                 </a>
                 {{-- / --}}
                 @endcan
+                @endif
+                @endif
+                @endif
              </td>
             </tr>
             @endforeach

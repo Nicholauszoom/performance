@@ -64,5 +64,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
+        'workforce' => \App\Http\Middleware\WorkForce::class, //workforce management middleware
+        'payroll' => \App\Http\Middleware\Payroll::class, // Payroll management access middleware
     ];
 }

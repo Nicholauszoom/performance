@@ -15,9 +15,12 @@ class PermisionSeeder extends Seeder
     {
         $data = [
 
-            #1 workforce management permissions
-            ['slug' => 'view-workforce','sys_module_id'=>1],
 
+            // For Workforce access
+           
+            #1 workforce management permissions
+            ['slug' => 'access-workforce','sys_module_id'=>1],
+            ['slug' => 'view-workforce','sys_module_id'=>1],
             // start of active employees seeders
             ['slug' => 'view-employee','sys_module_id'=>1],
             ['slug' => 'edit-employee','sys_module_id'=>1],
@@ -87,8 +90,8 @@ class PermisionSeeder extends Seeder
             // end of grievances seeders
 
             //payroll management seederss system-module=2
+            ['slug' => 'access-payroll','sys_module_id'=>2],
             ['slug' => 'view-payroll-management','sys_module_id'=>2],
-
 
             // start of payroll  seeder
             ['slug' => 'view-payroll','sys_module_id'=>2],

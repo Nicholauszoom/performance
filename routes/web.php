@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Middleware\Payroll;
+use App\Http\Middleware\WorkForce;
 use Illuminate\Support\Facades\Auth;
+// use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
-// use App\Http\Controllers\RoleController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ImprestController;
 use App\Http\Controllers\ProfileController;
@@ -36,6 +39,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+    
+
 Route::middleware('auth')->group(function () {
 
 
@@ -45,13 +50,15 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
-    // preoject
+    // project
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+    // Route For Resources
     Route::resources([
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
@@ -63,6 +70,179 @@ Route::middleware('auth')->group(function () {
         'skill' => SkillsController::class,
         'trainingApp'=>TrainingAppController::class,
     ]);
+
+    // Routes with workforce access permission
+    Route::prefix('flex')->controller(GeneralController::class)->middleware('auth')->middleware([WorkForce::class])->group(function(){
+
+        Route::get('error', [HomeController::class,'home']);
+         // start of overtime routes
+         Route::any('/overtime','overtime')->name('flex.overtime');
+         Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
+         Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
+         Route::any('/overtime_category_info/{id}','overtime_category_info')->name('flex.overtime_category_info');
+         Route::any('/confirmOvertime/{id}','confirmOvertime')->name('flex.confirmOvertime');
+         Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
+         Route::any('/arrears_info','arrears_info')->name('flex.arrears_info');
+         Route::any('/individual_arrears_info','individual_arrears_info')->name('flex.individual_arrears_info');
+         Route::any('/holdOvertime','holdOvertime')->name('flex.holdOvertime');
+         Route::any('/approveOvertime/{id}','approveOvertime')->name('flex.approveOvertime');
+         Route::any('/lineapproveOvertime/{id}','lineapproveOvertime')->name('flex.lineapproveOvertime');
+         Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
+         Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
+         Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
+         Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
+ 
+         // start of termination routes
+         Route::any('/termination','termination')->name('flex.termination');
+         Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
+         Route::any('/add-termination','addTermination')->name('flex.addTermination');
+         Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
+         Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
+
+        //start of grievances and disciplinary actions routes
+        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+        // end of complains
+        
+        //start of grievances and disciplinary actions routes
+        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+        Route::post('/save-complain','saveComplain')->name('flex.saveComplain');
+        Route::any('/add-action','addDisciplinary')->name('flex.addDisciplinary');
+        Route::post('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
+        Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
+        Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
+        Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
+        Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
+        // end of grievances and disciplinary actions routes
+ 
+ 
+         // start of approvals route
+         Route::get('/approve-termination/{id}','approveTermination')->name('flex.approveTermination');
+         Route::get('/cancel-termination/{id}','cancelTermination')->name('flex.cancelTermination');
+         // end of termination routes
+ 
+         // start of promotion/increment routes
+         Route::any('/promotion','promotion')->name('flex.promotion');
+         Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
+         Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
+         Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
+         Route::any('/add-increment','addIncrement')->name('flex.addIncrement');
+         Route::post('/save-increment','saveIncrement')->name('flex.saveIncrement');
+         Route::get('/view-increment/{id}','viewIncrement')->name('flex.viewIncrement');
+         Route::any('/depPositionFetcher','depPositionFetcher')->name('depPositionFetcher');
+         Route::get('get/details/{id}', 'getDetails')->name('getDetails');
+         // end of promotion/increment routes
+
+        // start of employee personal details route
+        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
+        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
+        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
+        Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
+        Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
+        Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
+        Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
+        Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
+        Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
+        // end of employee personal details  route
+
+
+        // start of overtime routes
+        Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
+
+        // end of overtime routes
+
+
+        // start of employees routes
+        Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
+        Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
+        Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
+        Route::any('/commentOvertime','commentOvertime')->name('flex.commentOvertime');
+        Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
+        Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
+        Route::any('/employee','employee')->name('flex.employee');
+        // end of employees routes
+
+        // start of unpaid leaves
+        Route::any('/unpaid_leave','unpaid_leave')->name('flex.unpaid_leave');
+        Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
+        Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
+        Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
+        Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
+        //end of unpaid leaves
+
+
+ 
+
+    });
+    // end of routes with workforce access permission
+
+
+    // Routes with Payroll access permission
+
+    Route::prefix('flex')->controller(GeneralController::class)->middleware('auth')->middleware([Payroll::class])->group(function(){
+
+        Route::get('error', [HomeController::class,'home']);
+  
+        Route::any('/payroll','payroll')->name('flex.payroll');
+        
+        Route::any('/approved_financial_payments','approved_financial_payments')->name('flex.approved_financial_payments');
+
+
+    });
+
+    Route::prefix('flex/payroll')->middleware('auth')->middleware([Payroll::class])->controller(PayrollController::class)->group(function (){
+
+        Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
+        Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
+        Route::any('/employee_payslip','employee_payslip')->name('payroll.employee_payslip');
+        Route::any('/payroll','payroll')->name('payroll.payroll');
+        Route::any('/temp_payroll_info','temp_payroll_info')->name('payroll.temp_payroll_info');
+        Route::any('/payroll_info','payroll_info')->name('payroll.payroll_info');
+        Route::any('/temp_less_payments','temp_less_payments')->name('payroll.temp_less_payments');
+        Route::any('/ADVtemp_less_payments','ADVtemp_less_payments')->name('payroll.ADVtemp_less_payments');
+        Route::any('/less_payments','less_payments')->name('payroll.less_payments');
+        Route::any('/less_payments_print','less_payments_print')->name('payroll.less_payments_print');
+        Route::any('/concatArrays','concatArrays')->name('payroll.concatArrays');
+        Route::any('/grossReconciliation','grossReconciliation')->name('payroll.grossReconciliation');
+        Route::any('/netReconciliation','netReconciliation')->name('payroll.netReconciliation');
+        Route::any('/sendReviewEmail','sendReviewEmail')->name('payroll.sendReviewEmail');
+        Route::any('/sendMail','sendMail')->name('payroll.sendMail');
+        Route::any('/comission_bonus','comission_bonus')->name('payroll.comission_bonus');
+        Route::any('/partial_payment','partial_payment')->name('payroll.partial_payment');
+        Route::any('/getComment/{date}','getComment')->name('payroll.getComment');
+        Route::any('/salary_calculator','salary_calculator')->name('payroll.salary_calculator');
+        Route::any('/calculateSalary','calculateSalary')->name('payroll.calculateSalary');
+        Route::any('/recommendpayrollByHr/{pdate}/{message}','recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
+        Route::any('/recommendpayrollByFinance/{pdate}/{message}','recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
+        Route::any('/runpayroll/{pdate}','runpayroll')->name('payroll.runpayroll');
+        Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
+        Route::any('/generate_checklist','generate_checklist')->name('payroll.generate_checklist');
+        Route::any('/arrearsPayment','arrearsPayment')->name('payroll.arrearsPayment');
+        Route::any('/temp_submitLessPayments','temp_submitLessPayments')->name('payroll.temp_submitLessPayments');
+        Route::any('/submitLessPayments','submitLessPayments')->name('payroll.submitLessPayments');
+        Route::any('/arrearsPayment_schedule','arrearsPayment_schedule')->name('payroll.arrearsPayment_schedule');
+        Route::any('/monthlyArrearsPayment_schedule','monthlyArrearsPayment_schedule')->name('payroll.monthlyArrearsPayment_schedule');
+        Route::any('/cancelArrearsPayment','cancelArrearsPayment')->name('payroll.cancelArrearsPayment');
+        Route::any('/confirmArrearsPayment','confirmArrearsPayment')->name('payroll.confirmArrearsPayment');
+        Route::any('/recommendArrearsPayment','recommendArrearsPayment')->name('payroll.recommendArrearsPayment');
+        Route::any('/cancelpayroll/{type}','cancelpayroll')->name('payroll.cancelpayroll');
+        Route::any('/temp_payroll_review','temp_payroll_review')->name('payroll.temp_payroll_review');
+        Route::any('/payroll_review','payroll_review')->name('payroll.payroll_review');
+        Route::any('/send_payslips','send_payslips')->name('payroll.send_payslips');
+        Route::any('/payslip_attachments','payslip_attachments')->name('payroll.payslip_attachments');
+        Route::any('/mailConfiguration','mailConfiguration')->name('payroll.mailConfiguration');
+        Route::any('/saveMail','saveMail')->name('payroll.saveMail');
+        Route::any('/employeeFilter','employeeFilter')->name('payroll.employeeFilter');
+        Route::any('/password_generator','password_generator')->name('payroll.password_generator');
+        Route::any('/TestMail','TestMail')->name('payroll.TestMail');
+
+        // for pay slip template
+        Route::any('/salary_slip','getSlip')->name('payroll.salary_slip');
+    });
+
+    // End of routes with payroll access permission
 
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
 
@@ -282,68 +462,14 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/deletePosition','deletePosition')->name('flex.deletePosition');
         Route::any('/activatePosition','activatePosition')->name('flex.activatePosition');
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
-        Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
+      
 
-        Route::any('/overtime','overtime')->name('flex.overtime');
-        Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
-        Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
-        Route::any('/overtime_category_info/{id}','overtime_category_info')->name('flex.overtime_category_info');
-        Route::any('/confirmOvertime/{id}','confirmOvertime')->name('flex.confirmOvertime');
-        Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
-        Route::any('/approved_financial_payments','approved_financial_payments')->name('flex.approved_financial_payments');
-        Route::any('/arrears_info','arrears_info')->name('flex.arrears_info');
-        Route::any('/individual_arrears_info','individual_arrears_info')->name('flex.individual_arrears_info');
-        Route::any('/holdOvertime','holdOvertime')->name('flex.holdOvertime');
-        Route::any('/approveOvertime/{id}','approveOvertime')->name('flex.approveOvertime');
-        Route::any('/lineapproveOvertime/{id}','lineapproveOvertime')->name('flex.lineapproveOvertime');
-        Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
-        Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
-        Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
-        Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
-
-        // start of termination routes
-        Route::any('/termination','termination')->name('flex.termination');
-        Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
-        Route::any('/add-termination','addTermination')->name('flex.addTermination');
-        Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
-        Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
-
-        // start of approvals route
-        Route::get('/approve-termination/{id}','approveTermination')->name('flex.approveTermination');
-        Route::get('/cancel-termination/{id}','cancelTermination')->name('flex.cancelTermination');
-        // end of termination routes
-
-
-        // start of promotion/increment routes
-        Route::any('/promotion','promotion')->name('flex.promotion');
-        Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
-        Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
-        Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
-        Route::any('/add-increment','addIncrement')->name('flex.addIncrement');
-        Route::post('/save-increment','saveIncrement')->name('flex.saveIncrement');
-        Route::get('/view-increment/{id}','viewIncrement')->name('flex.viewIncrement');
-        Route::any('/depPositionFetcher','depPositionFetcher')->name('depPositionFetcher');
-
-        Route::get('get/details/{id}', 'getDetails')->name('getDetails');
-        // end of promotion/increment routes
-
-
+       
 
         // start of reconcilliation summary route
         Route::any('/reconciliation-summary','reconcilliationSummary')->name('reports.recoSummary');
         // end of reconcilliation summary route
 
-        //start of grievances and disciplinary actions routes
-        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
-        Route::any('/add-complain','addComplain')->name('flex.addComplain');
-        Route::post('/save-complain','saveComplain')->name('flex.saveComplain');
-        Route::any('/add-action','addDisciplinary')->name('flex.addDisciplinary');
-        Route::post('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
-        Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
-        Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
-        Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
-        Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
-        // end of grievances and disciplinary actions routes
 
         // start of education qualification route
         Route::any('/addQualification','addQualification')->name('flex.addQualification');
@@ -357,23 +483,6 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
         // end of holidays routes
 
-
-        // start of employee personal details route
-
-        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
-        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
-        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
-        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
-        Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
-        Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
-        Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
-        // end of employee personal details  route
-
-        //start of grievances and disciplinary actions routes
-        Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
-        Route::any('/add-complain','addComplain')->name('flex.addComplain');
-
-        // end of complains
 
         // start of email notifications settings routes
         Route::any('/email-notifications','emailNotification')->name('flex.email-notifications');
@@ -397,15 +506,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/delete-approval-level/{id}','deleteApprovalLevel')->name('flex.deleteApprovalLevel');
         // end of approval_levels settings routes
 
-        // start of reconcilliation summary route
-        Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
-        Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
-        Route::any('/fetchOvertimeComment/{id}','fetchOvertimeComment')->name('flex.fetchOvertimeComment');
-        Route::any('/commentOvertime','commentOvertime')->name('flex.commentOvertime');
-        Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
-        Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
-        Route::any('/employee','employee')->name('flex.employee');
-        Route::any('/payroll','payroll')->name('flex.payroll');
+       
         Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
         Route::any('/updateCode','updateCode')->name('flex.updateCode');
@@ -476,20 +577,11 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->name('flex.employeeDeactivationRequest');
         Route::any('/employeeActivationRequest/{id}','employeeActivationRequest')->name('flex.employeeActivationRequest');
         Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->name('flex.cancelRequest');
-        Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
-        Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
-        Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
+
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
         Route::any('/delete_non_statutory_deduction/{id}','delete_non_statutory_deduction')->name('flex.delete_non_statutory_deduction');
 
-        Route::any('/unpaid_leave','unpaid_leave')->name('flex.unpaid_leave');
-        Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
-        Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
-        Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
-        Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
-
-
-
+ 
 
 
         Route::any('/deduction_info/{pattern}','deduction_info')->name('flex.deduction_info');
@@ -663,56 +755,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
     });
 
 
-    Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
-
-        Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
-        Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
-        Route::any('/employee_payslip','employee_payslip')->name('payroll.employee_payslip');
-        Route::any('/payroll','payroll')->name('payroll.payroll');
-        Route::any('/temp_payroll_info','temp_payroll_info')->name('payroll.temp_payroll_info');
-        Route::any('/payroll_info','payroll_info')->name('payroll.payroll_info');
-        Route::any('/temp_less_payments','temp_less_payments')->name('payroll.temp_less_payments');
-        Route::any('/ADVtemp_less_payments','ADVtemp_less_payments')->name('payroll.ADVtemp_less_payments');
-        Route::any('/less_payments','less_payments')->name('payroll.less_payments');
-        Route::any('/less_payments_print','less_payments_print')->name('payroll.less_payments_print');
-        Route::any('/concatArrays','concatArrays')->name('payroll.concatArrays');
-        Route::any('/grossReconciliation','grossReconciliation')->name('payroll.grossReconciliation');
-        Route::any('/netReconciliation','netReconciliation')->name('payroll.netReconciliation');
-        Route::any('/sendReviewEmail','sendReviewEmail')->name('payroll.sendReviewEmail');
-        Route::any('/sendMail','sendMail')->name('payroll.sendMail');
-        Route::any('/comission_bonus','comission_bonus')->name('payroll.comission_bonus');
-        Route::any('/partial_payment','partial_payment')->name('payroll.partial_payment');
-        Route::any('/getComment/{date}','getComment')->name('payroll.getComment');
-        Route::any('/salary_calculator','salary_calculator')->name('payroll.salary_calculator');
-        Route::any('/calculateSalary','calculateSalary')->name('payroll.calculateSalary');
-        Route::any('/recommendpayrollByHr/{pdate}/{message}','recommendpayrollByHr')->name('payroll.recommendpayrollByHr');
-        Route::any('/recommendpayrollByFinance/{pdate}/{message}','recommendpayrollByFinance')->name('payroll.recommendpayrollByFinance');
-        Route::any('/runpayroll/{pdate}','runpayroll')->name('payroll.runpayroll');
-        Route::any('/partial_payment_manipulation','partial_payment_manipulation')->name('payroll.partial_payment_manipulation');
-        Route::any('/generate_checklist','generate_checklist')->name('payroll.generate_checklist');
-        Route::any('/arrearsPayment','arrearsPayment')->name('payroll.arrearsPayment');
-        Route::any('/temp_submitLessPayments','temp_submitLessPayments')->name('payroll.temp_submitLessPayments');
-        Route::any('/submitLessPayments','submitLessPayments')->name('payroll.submitLessPayments');
-        Route::any('/arrearsPayment_schedule','arrearsPayment_schedule')->name('payroll.arrearsPayment_schedule');
-        Route::any('/monthlyArrearsPayment_schedule','monthlyArrearsPayment_schedule')->name('payroll.monthlyArrearsPayment_schedule');
-        Route::any('/cancelArrearsPayment','cancelArrearsPayment')->name('payroll.cancelArrearsPayment');
-        Route::any('/confirmArrearsPayment','confirmArrearsPayment')->name('payroll.confirmArrearsPayment');
-        Route::any('/recommendArrearsPayment','recommendArrearsPayment')->name('payroll.recommendArrearsPayment');
-        Route::any('/cancelpayroll/{type}','cancelpayroll')->name('payroll.cancelpayroll');
-        Route::any('/temp_payroll_review','temp_payroll_review')->name('payroll.temp_payroll_review');
-        Route::any('/payroll_review','payroll_review')->name('payroll.payroll_review');
-        Route::any('/send_payslips','send_payslips')->name('payroll.send_payslips');
-        Route::any('/payslip_attachments','payslip_attachments')->name('payroll.payslip_attachments');
-        Route::any('/mailConfiguration','mailConfiguration')->name('payroll.mailConfiguration');
-        Route::any('/saveMail','saveMail')->name('payroll.saveMail');
-        Route::any('/employeeFilter','employeeFilter')->name('payroll.employeeFilter');
-        Route::any('/password_generator','password_generator')->name('payroll.password_generator');
-        Route::any('/TestMail','TestMail')->name('payroll.TestMail');
-
-        // for pay slip template
-        Route::any('/salary_slip','getSlip')->name('payroll.salary_slip');
-    });
-
+  
 
     Route::prefix('flex/performance')->controller(PerformanceController::class)->group(function (){
 

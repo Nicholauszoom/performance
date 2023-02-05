@@ -7569,7 +7569,16 @@ class GeneralController extends Controller
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
         $i = 1;
-        // }
+        $employee=Auth::User()->id;
+    
+        $role=UserRole::where('user_id',$employee)->first();
+        $role_id=$role->role_id;
+        $terminate=Approvals::where('process_name','Termination Approval')->first();
+        $roles=Role::where('id',$role_id)->first();
+        $data['level']=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+
+        $data['check']='Approved By '.$roles->name;
+
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'Workforce';
         $data['child'] = 'Termination';
@@ -7783,8 +7792,9 @@ class GeneralController extends Controller
 
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
+       $terminate=Approvals::where('process_name','Termination Approval')->first();
        $roles=Role::where('id',$role_id)->first();
-       $level=ApprovalLevel::where('role_id',$role_id)->first();
+       $level=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
        if($level)
        {
             $approval_id=$level->approval_id;
@@ -7795,13 +7805,13 @@ class GeneralController extends Controller
                 $termination=Termination::where('id',$id)->first();
                 $termination->status="Terminated";
                 $termination->update();
-
-                // dd('employee terminated');
+                $msg='Employee Termination is Confirmed Successfully !';
+                return redirect('flex/termination')->with('msg', $msg);
             }
             else
             {
                 $termination=Termination::where('id',$id)->first();
-                $termination->status="Terminated";
+                $termination->status='Approved By '.$roles->name;
                 $termination->update();
 
                 $msg='Approved By '.$roles->name;
