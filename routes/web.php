@@ -420,6 +420,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
     });
     // end of report access permissions routes
+
+
+
+     // start of settings access permissions routes
+
+     // end of settings access permissions routes
+     
     // Start of other routes
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
 
