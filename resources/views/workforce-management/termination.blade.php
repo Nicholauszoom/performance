@@ -95,12 +95,11 @@
                     <button type="button" class="btn btn-secondary btn-xs" ><i class="ph-printer"></i></button>
                 </a>
                 @endif
-                <br><br>
                 @if($level)
                 @if($item->status!='Terminated')
                 @if ($item->status!=$check)
                 @can('confirm-termination')
-                <small class="text-gray text-center"> Please Approve !</small>
+                <small class="text-gray text-center"> Please Approve Employee Termination!</small>
                 <br>
                 {{-- start of termination confirm button --}}
                 <a  href="{{ url('flex/approve-termination/'.$item->id) }}"  title="Confirm Termination">
