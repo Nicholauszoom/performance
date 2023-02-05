@@ -15,8 +15,6 @@ class PermisionSeeder extends Seeder
     {
         $data = [
 
-
-
             #1 workforce management permissions
             ['slug' => 'view-workforce','sys_module_id'=>1],
 
@@ -38,6 +36,7 @@ class PermisionSeeder extends Seeder
             ['slug' => 'add-termination','sys_module_id'=>1],
             ['slug' => 'edit-termination','sys_module_id'=>1],
             ['slug' => 'delete-termination','sys_module_id'=>1],
+            ['slug' => 'confirm-termination','sys_module_id'=>1],
             ['slug' => 'print-termination','sys_module_id'=>1],
             //end of employee termination seeders
 

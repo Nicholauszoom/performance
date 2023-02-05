@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Position;
+use App\Models\UserRole;
 use App\Models\Approvals;
 use App\Models\Promotion;
 use Illuminate\Http\File;
@@ -33,13 +34,14 @@ use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
 use App\Models\EmailNotification;
-use App\Models\EmployeeDependant;
 
+use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
+use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -52,7 +54,6 @@ use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
-use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -7594,6 +7595,8 @@ class GeneralController extends Controller
         return view('workforce-management.add-termination', $data);
     }
 
+
+  
     // For Saving Termination
     public function saveTermination(Request $request)
     {
@@ -7674,6 +7677,7 @@ class GeneralController extends Controller
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
+        $termination->status ="Pending";
 
 
 
@@ -7770,6 +7774,49 @@ class GeneralController extends Controller
     }
 
     // For Aprroving termination
+    public function  approveTermination($id)
+    {
+       
+       $employee=Auth::User()->id;
+    
+    //    dd($termination);
+
+       $role=UserRole::where('user_id',$employee)->first();
+       $role_id=$role->role_id;
+       $roles=Role::where('id',$role_id)->first();
+       $level=ApprovalLevel::where('role_id',$role_id)->first();
+       if($level)
+       {
+            $approval_id=$level->approval_id;
+            $approval=Approvals::where('id',$approval_id)->first();
+            
+            if ($approval->levels==$level->level_name) {
+
+                $termination=Termination::where('id',$id)->first();
+                $termination->status="Terminated";
+                $termination->update();
+
+                // dd('employee terminated');
+            }
+            else
+            {
+                $termination=Termination::where('id',$id)->first();
+                $termination->status="Terminated";
+                $termination->update();
+
+                $msg='Approved By '.$roles->name;
+                return redirect('flex/termination')->with('msg', $msg);
+            }
+           
+       }
+       else
+       {
+            // dd('Huna access');
+            $msg="Huna access";
+            return redirect('flex/termination')->with('msg', $msg);
+       }
+   
+    }
 
 
     // For Cancelling Termination

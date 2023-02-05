@@ -37,6 +37,7 @@ return new class extends Migration
             $table->double('salaryAdvance');
             $table->double('otherDeductions')->nullable();
             $table->double('otherPayments')->nullable();
+            $table->integer('status');
             $table->timestamps();
         });
     }

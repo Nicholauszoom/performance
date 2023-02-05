@@ -304,10 +304,13 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         // start of termination routes
         Route::any('/termination','termination')->name('flex.termination');
         Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
-
         Route::any('/add-termination','addTermination')->name('flex.addTermination');
         Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
         Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
+
+        // start of approvals route
+        Route::get('/approve-termination/{id}','approveTermination')->name('flex.approveTermination');
+        Route::get('/cancel-termination/{id}','cancelTermination')->name('flex.cancelTermination');
         // end of termination routes
 
 

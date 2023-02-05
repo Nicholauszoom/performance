@@ -31,6 +31,11 @@
         </div>
     </div>
 
+    @if (session('msg'))
+    <div class="alert alert-success col-md-8 mx-auto" role="alert">
+    {{ session('msg') }}
+    </div>
+    @endif
 
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
@@ -79,8 +84,24 @@
              </td>
              <td>
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
-                    <button type="button" class="btn btn-info btn-xs" ><i class="ph-printer"></i></button>
+                    <button type="button" class="btn btn-secondary btn-xs" ><i class="ph-printer"></i></button>
                 </a>
+                <br><br>
+                @can('confirm-termination')
+                <small class="text-gray text-center"> Please Approve !</small>
+                <br>
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/approve-termination/'.$item->id) }}"  title="Confirm Termination">
+                    <button type="button" class="btn btn-success btn-xs" > <i class="ph-check"></i> Confirm</button>
+                </a>
+                {{-- / --}}
+
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Cancel Termination">
+                    <button type="button" class="btn btn-danger btn-xs" ><i class="ph-trash"></i> Cancel </button>
+                </a>
+                {{-- / --}}
+                @endcan
              </td>
             </tr>
             @endforeach
