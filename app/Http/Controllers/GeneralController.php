@@ -7829,7 +7829,14 @@ class GeneralController extends Controller
 
 
     // For Cancelling Termination
+    public function cancelTermination($id)
+    {
+        $promotion =Termination::find($id);
 
+        $promotion->delete();
+
+        return redirect('flex/termination')->with('msg', 'Termination was Cancelled successfully !');
+    }
 
     //For Viewing Termination 
     public function viewTermination($id)
@@ -7941,52 +7948,7 @@ class GeneralController extends Controller
         return view('workforce-management.add-promotion', $data);
     }
 
-    // For Approve Promotion
 
-    public function  approvePromotion($id)
-    {
-       
-       $employee=Auth::User()->id;
-       $role=UserRole::where('user_id',$employee)->first();
-       $role_id=$role->role_id;
-       $terminate=Approvals::where('process_name','Promotion Approval')->first();
-       $roles=Role::where('id',$role_id)->first();
-       $level=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
-       if($level)
-       {
-            $approval_id=$level->approval_id;
-            $approval=Approvals::where('id',$approval_id)->first();
-            
-            if ($approval->levels==$level->level_name) {
-
-                $promotion=Promotion::where('id',$id)->first();
-
-                // dd($promotion);
-                $promotion->status="Successful";
-                $promotion->update();
-                $msg='Employee Promotion is Confirmed Successfully !';
-                return redirect('flex/promotion')->with('msg', $msg);
-            }
-            else
-            {
-                $promotion=Promotion::where('id',$id)->first();
-                $promotion->status='Approved By '.$roles->name;
-                $promotion->update();
-
-                $msg='Approved By '.$roles->name;
-                return redirect('flex/promotion')->with('msg', $msg);
-            }
-           
-       }
-       else
-       {
-            $msg="Failed To Promote !";
-            return redirect('flex/promotion')->with('msg', $msg);
-       }
-   
-    }
-
-    // For Cancel Promotion
 
     // For Save Promotion
     public function savePromotion(Request $request)
@@ -8021,11 +7983,11 @@ class GeneralController extends Controller
 
         SysHelpers::FinancialLogs($id, 'Salary Increment(promotion)',$empl->salary*$empl->rate,$request->newSalary*$empl->rate, 'Salary Increment');
 
-        $promotion =Employee::where('emp_id',$id)->first();
-        $promotion->position=$request->newPosition;
-        $promotion->salary=$request->newSalary;
-        $promotion->emp_level=$request->newLevel;
-        $promotion->update();
+        // $promotion =Employee::where('emp_id',$id)->first();
+        // $promotion->position=$request->newPosition;
+        // $promotion->salary=$request->newSalary;
+        // $promotion->emp_level=$request->newLevel;
+        // $promotion->update();
 
 
         $msg = "Employee Promotion has been saved successfully";
@@ -8033,7 +7995,65 @@ class GeneralController extends Controller
     }
 
     // For Approve Promotion
+    public function  approvePromotion($id)
+    {
+       
+       $employee=Auth::User()->id;
+       $role=UserRole::where('user_id',$employee)->first();
+       $role_id=$role->role_id;
+       $terminate=Approvals::where('process_name','Promotion Approval')->first();
+       $roles=Role::where('id',$role_id)->first();
+       $level=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+       if($level)
+       {
+            $approval_id=$level->approval_id;
+            $approval=Approvals::where('id',$approval_id)->first();
+            
+            if ($approval->levels==$level->level_name) {
 
+                $promotion=Promotion::where('id',$id)->first();
+
+                // dd($promotion);
+                $promotion->status="Successful";
+                $promotion->update();
+
+
+                $increment =Employee::where('emp_id',$promotion->employeeID)->first();
+                $increment->salary=$promotion->newSalary;
+                $increment->position=$promotion->newPosition;
+                $increment->emp_level=$promotion->newLevel;
+                $increment->update();
+                $msg='Employee Promotion is Confirmed Successfully !';
+                return redirect('flex/promotion')->with('msg', $msg);
+            }
+            else
+            {
+                $promotion=Promotion::where('id',$id)->first();
+                $promotion->status='Approved By '.$roles->name;
+                $promotion->update();
+
+                $msg='Approved By '.$roles->name;
+                return redirect('flex/promotion')->with('msg', $msg);
+            }
+           
+       }
+       else
+       {
+            $msg="Failed To Promote !";
+            return redirect('flex/promotion')->with('msg', $msg);
+       }
+   
+    }
+
+    // For Cancel Promotion
+    public function cancelPromotion($id)
+    {
+        $promotion =Promotion::find($id);
+
+        $promotion->delete();
+
+        return redirect('flex/promotion')->with('msg', 'Promotion was Canceled successfully !');
+    }
 
     // For Add Increment Page
     public function addIncrement()
@@ -8090,35 +8110,17 @@ class GeneralController extends Controller
         $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
         $old->action="incremented";
-        $old->status=0;
+    
         $old->save();
 
         SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $request->newSalary * $oldRate, 'Salary Increment');
 
-        // saving new employee data
-        $increment =Employee::where('emp_id',$id)->first();
-        $increment->salary=$request->newSalary;
-        $increment->update();
-        $msg = "Employee Salary has been Incremented successfully";
-        return redirect('flex/attendance/flex/promotion')->with('msg', $msg);
+  
+        $msg = "Employee Salary  Incremention has been requested successfully !";
+        return redirect('flex/promotion')->with('msg', $msg);
     }
 
-    // For Approve Increment Page
-    public function approveIncrement(Request $request)
-    {
 
-        request()->validate(
-            [
-                'emp_ID' => 'required',
-                'newSalary' => 'required',
-                'oldSalary' => 'required',
-                'oldRate' => 'required',
-            ]
-        );
-
-
-
-    }
 
     // fetching employee department's positions
     public function getDetails($id = 0)
@@ -8978,11 +8980,9 @@ class GeneralController extends Controller
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
     }
-
     // end of update holiday function
 
     // start of delete holiday function
-
     public function deleteHoliday($id)
     {
         $holiday = Holiday::find($id);

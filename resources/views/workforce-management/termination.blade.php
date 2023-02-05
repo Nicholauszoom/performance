@@ -109,7 +109,7 @@
                 {{-- / --}}
 
                 {{-- start of termination confirm button --}}
-                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Cancel Termination">
+                <a  href="{{ url('flex/cancel-termination/'.$item->id) }}"  title="Cancel Termination">
                     <button type="button" class="btn btn-danger btn-xs" ><i class="ph-trash"></i> Cancel </button>
                 </a>
                 {{-- / --}}

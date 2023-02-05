@@ -63,7 +63,10 @@
                 <th>Old Salary</th>
                 <th>New Salary</th>
                 <th>Activity</th>
+                <th>Status</th>
+                @can('edit-promotion')
                 <th>Action</th>
+                @endcan
             </tr>
         </thead>
 
@@ -77,18 +80,22 @@
              <td>{{ number_format($item->newSalary,2)}} </td>
              <td>
                 @if($item->action=="incremented")
-                    <span class="badge bg-success bg-opacity-10 text-success">{{ $item->action}}</span>
+                    <span class="badge bg-secondary  bg-opacity-60 text-light">{{ $item->action}}</span>
                     <br>
                 @else
-                    <span class="badge bg-success bg-opacity-20 text-success">{{ $item->action}}</span>
+                    <span class="badge bg-secondary bg-opacity-60 text-light">{{ $item->action}}</span>
 
                 @endif
             </td>
             <td>
-                @if($level)
-                @if($item->status!='Successful')
-                @if ($item->status!=$check)
-                @can('confirm-termination')
+                <span class="badge bg-success bg-opacity-30 text-light">{{ $item->status}}</span>
+            </td>
+            @can('edit-promotion')
+            <td>
+            @if($level)
+            @if($item->status!='Successful')
+            @if ($item->status!=$check)
+           
                 <small class="text-gray text-center"> Please Approve {{ $item->action =='promoted' ? 'Promotion':'Incremention' }} !</small>
                 <br>
                 {{-- start of termination confirm button --}}
@@ -98,15 +105,16 @@
                 {{-- / --}}
 
                 {{-- start of termination confirm button --}}
-                <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Cancel Termination">
+                <a  href="{{ url('flex/cancel-promotion/'.$item->id) }}"  title="Cancel Promotion">
                     <button type="button" class="btn btn-danger btn-xs" ><i class="ph-trash"></i> Cancel </button>
                 </a>
                 {{-- / --}}
+           
+                @endif
+                @endif
+                @endif
+                </td>
                 @endcan
-                @endif
-                @endif
-                @endif
-            </td>
     
             </tr>
             @endforeach
