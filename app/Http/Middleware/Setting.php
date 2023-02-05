@@ -3,7 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\UserRole;
+use App\Models\Permission;
 use Illuminate\Http\Request;
+use App\Models\RolePermission;
 
 class Setting
 {
@@ -19,7 +22,7 @@ class Setting
         $empID=auth()->user()->id;
         $role=UserRole::where('user_id',$empID)->first();
         $role_id=$role->role_id;
-        $permission=Permission::where('slug','access-report')->first();
+        $permission=Permission::where('slug','access-setting')->first();
         $role_permision=RolePermission::where('role_id',$role_id)->where('permission_id',$permission->id)->first();
         
         if ($role_permision) {

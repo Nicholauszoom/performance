@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
         'loan' => \App\Http\Middleware\Loan ::class, // For Loan Management
         'organisation' => \App\Http\Middleware\Organisation ::class, // For Organisation Management
         'report' => \App\Http\Middleware\Report ::class, // For Report
+        'setting' => \App\Http\Middleware\Setting ::class, // For Report
 
     ];
 }

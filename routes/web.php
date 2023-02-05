@@ -43,6 +43,7 @@ use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
+use App\Http\Middleware\Setting;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -421,12 +422,58 @@ Route::middleware('auth')->group(function () {
     });
     // end of report access permissions routes
 
-
-
      // start of settings access permissions routes
+     Route::prefix('flex/')->middleware('auth')->middleware([Setting::class])->controller(GeneralController::class)->group(function (){
+        
+        // For Financial Groups Settings
+        Route::any('/financial_group','financial_group')->name('flex.financial_group');
+        Route::any('/financial_groups_details/{id}','financial_groups_details')->name('flex.financial_groups_details');
+        Route::any('/financial_groups_byRole_details/{id}','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
+        
+        // Permission Settings
 
+
+          // start of holidays routes
+          Route::any('/holidays','holidays')->name('flex.holidays');
+          Route::any('/add-holiday','addHoliday')->name('flex.saveHoliday');
+          Route::put('/update-holiday','updateHoliday')->name('flex.updateHoliday');
+          Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
+          Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
+          // end of holidays routes
+  
+  
+          // start of email notifications settings routes
+          Route::any('/email-notifications','emailNotification')->name('flex.email-notifications');
+          Route::any('/edit-email-notification/{id}','editNotification')->name('flex.editNotification');
+          Route::put('/update-email-notification','updateNotification')->name('flex.updateNotification');
+          // end of email notifications settings routes
+  
+          // start of approval settings routes
+          Route::any('/approvals','viewApprovals')->name('flex.approvals');
+          Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
+          Route::any('/edit-approval/{id}','editApproval')->name('flex.editApproval');
+          Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
+          Route::any('/delete-approval/{id}','deleteApproval')->name('flex.deleteApproval');
+          // end of approval settings routes
+  
+          // start of approval_levels settings routes
+          Route::any('/approval_levels/{id}','viewApprovalLevels')->name('flex.approval-levels');
+          Route::post('/save-approval-level','saveApprovalLevel')->name('flex.saveApprovalLevel');
+          Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
+          Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
+          Route::any('/delete-approval-level/{id}','deleteApprovalLevel')->name('flex.deleteApprovalLevel');
+          // end of approval_levels settings routes
+
+
+         //For Audit Logs     
+          Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
+          Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
+          Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');   
+        
+
+    });  
      // end of settings access permissions routes
-     
+
     // Start of other routes
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
 
@@ -563,37 +610,6 @@ Route::middleware('auth')->group(function () {
         Route::any('/addQualification','addQualification')->name('flex.addQualification');
         // end of education qualification route
 
-        // start of holidays routes
-        Route::any('/holidays','holidays')->name('flex.holidays');
-        Route::any('/add-holiday','addHoliday')->name('flex.saveHoliday');
-        Route::put('/update-holiday','updateHoliday')->name('flex.updateHoliday');
-        Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
-        Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
-        // end of holidays routes
-
-
-        // start of email notifications settings routes
-        Route::any('/email-notifications','emailNotification')->name('flex.email-notifications');
-        Route::any('/edit-email-notification/{id}','editNotification')->name('flex.editNotification');
-        Route::put('/update-email-notification','updateNotification')->name('flex.updateNotification');
-        // end of email notifications settings routes
-
-        // start of approval settings routes
-        Route::any('/approvals','viewApprovals')->name('flex.approvals');
-        Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
-        Route::any('/edit-approval/{id}','editApproval')->name('flex.editApproval');
-        Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
-        Route::any('/delete-approval/{id}','deleteApproval')->name('flex.deleteApproval');
-        // end of approval settings routes
-
-        // start of approval_levels settings routes
-        Route::any('/approval_levels/{id}','viewApprovalLevels')->name('flex.approval-levels');
-        Route::post('/save-approval-level','saveApprovalLevel')->name('flex.saveApprovalLevel');
-        Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
-        Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
-        Route::any('/delete-approval-level/{id}','deleteApprovalLevel')->name('flex.deleteApprovalLevel');
-        // end of approval_levels settings routes
-
        
         Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
@@ -717,10 +733,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
-        Route::any('/financial_group','financial_group')->name('flex.financial_group');
-        Route::any('/financial_groups_details/{id}','financial_groups_details')->name('flex.financial_groups_details');
-        Route::any('/financial_groups_byRole_details/{id}','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
-
+      
         Route::any('/payroll_report_Logs', 'payrollReportLogs')->name('flex.payrollLogs');
 
         Route::any('/groups','groups')->name('flex.groups');
@@ -752,10 +765,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/addEmployee','addEmployee')->name('flex.addEmployee');
         Route::any('/getPositionSalaryRange','getPositionSalaryRange')->name('flex.getPositionSalaryRange');
         Route::any('/registerEmployee','registerEmployee')->name('flex.registerEmployee');
-       
-        Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
-        Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
-        Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');
+ 
 
         Route::any('/userArray','userArray')->name('flex.userArray');
         Route::any('/userAgent','userAgent')->name('flex.userAgent');
