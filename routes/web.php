@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Middleware\Loan;
+use App\Http\Middleware\Leave;
+use App\Http\Middleware\Report;
+// use App\Http\Controllers\RoleController;
 use App\Http\Middleware\Payroll;
 use App\Http\Middleware\Employee;
+use App\Http\Middleware\Overtime;
 use App\Http\Middleware\WorkForce;
-// use App\Http\Controllers\RoleController;
+use App\Http\Middleware\Termination;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\Organisation;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\HomeController;
@@ -35,9 +41,8 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\DesignationController;
+use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Middleware\Overtime;
-use App\Http\Middleware\Termination;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -179,8 +184,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
         //end of unpaid leaves
 
+        // For Employee Transfers
+        Route::any('/transfers','transfers')->name('flex.transfers');
 
- 
 
     });
     // end of routes with workforce access permission
@@ -250,9 +256,171 @@ Route::middleware('auth')->group(function () {
 
 
 
+    // start of attendance access permission routes 
 
+    // Routes 1
+    Route::prefix('attendance')->middleware('auth')->middleware([Leave::class])->controller(AttendanceController::class)->group(function (){
+
+            Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
+            Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
+            Route::any('/leave' ,'leave')->name('attendandance.leave');
+            Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
+            Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
+            Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave');
+            Route::any('/holdLeave' ,'holdLeave')->name('attendandance.holdLeave');
+            Route::any('/approveLeave' ,'approveLeave')->name('attendandance.approveLeave');
+            Route::any('/rejectLeave' ,'rejectLeave')->name('attendandance.rejectLeave');
+            Route::any('/leavereport' ,'leavereport')->name('attendandance.leavereport');
+            Route::any('/customleavereport' ,'customleavereport')->name('attendandance.customleavereport');
+            Route::any('/leave_remarks' ,'leave_remarks')->name('attendandance.leave_remarks');
+            Route::any('/leave_application_info' ,'leave_application_info')->name('attendandance.leave_application_info');
+            Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendandance.updateLeaveReason');
+            Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendandance.updateLeaveAddress');
+            Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendandance.updateLeaveMobile');
+            Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType');
+            Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange');
+            Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress');
+    
+    });
+
+    // Routes 2
+    Route::prefix('flex/attendance')->middleware('auth')->middleware([Leave::class])->controller(AttendanceController::class)->group(function (){
+
+        Route::any('/attendance' ,'attendance')->name('attendance.attendance');
+        Route::any('/attendees' ,'attendees')->name('attendance.attendees');
+        Route::any('/leave' ,'leave')->name('attendance.leave');
+
+        Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
+
+        Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
+        Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
+        Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
+        Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
+
+        Route::any('/holdLeave' ,'holdLeave')->name('attendance.holdLeave');
+        Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
+        Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
+        Route::any('/leavereport' ,'leavereport')->name('attendance.leavereport');
+        Route::any('/customleavereport' ,'customleavereport')->name('attendance.customleavereport');
+        Route::any('/leave_remarks/{id}' ,'leave_remarks')->name('attendance.leave_remarks');
+        Route::any('/leave_application_info/{id}/{empID}' ,'leave_application_info')->name('attendance.leave_application_info');
+        Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendance.updateLeaveReason');
+        Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendance.updateLeaveAddress');
+        Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendance.updateLeaveMobile');
+        Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendance.updateLeaveType');
+        Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendance.updateLeaveDateRange');
+        Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendance.current_leave_progress');
+
+    });
+    // end of attendance routes
+
+    // start of  loans access permission routes
+    Route::prefix('flex/')->middleware('auth')->middleware([Loan::class])->controller(GeneralController::class)->group(function (){
+        Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
+        Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
+        Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
+        Route::any('/insert_directLoan','insert_directLoan')->name('flex.insert_directLoan');
+        Route::any('/confirmed_loans','confirmed_loans')->name('flex.confirmed_loans');
+        Route::any('/loan_advanced_payments','loan_advanced_payments')->name('flex.loan_advanced_payments');
+        Route::any('/adv_loan_pay','adv_loan_pay')->name('flex.adv_loan_pay');
+        Route::any('/cancelLoan','cancelLoan')->name('flex.cancelLoan');
+        Route::any('/recommendLoan/{id}','recommendLoan')->name('flex.recommendLoan');
+        Route::any('/hrrecommendLoan/{id}','hrrecommendLoan')->name('flex.hrrecommendLoan');
+        Route::any('/holdLoan/{id}','holdLoan')->name('flex.holdLoan');
+        Route::any('/approveLoan/{id}','approveLoan')->name('flex.approveLoan');
+        Route::any('/pauseLoan/{id}','pauseLoan')->name('flex.pauseLoan');
+        Route::any('/resumeLoan/{id}','resumeLoan')->name('flex.resumeLoan');
+        Route::any('/rejectLoan/{id}','rejectLoan')->name('flex.rejectLoan');
+        Route::any('/loan_application_info','loan_application_info')->name('flex.loan_application_info');
+        Route::any('/updateloan','updateloan')->name('flex.updateloan');
+        Route::any('/updateloan_info','updateloan_info')->name('flex.updateloan_info');
+        
+    });
+
+    //bank loans routes
+    Route::prefix('flex/bank-loans')->middleware('auth')->middleware([Loan::class])->controller(BankLoanController::class)->group(function(){
+        Route::get('/all-loans', 'index')->name('bank-loans');;
+        Route::get('/loans-export', 'export')->name('loans.export');
+        Route::post('/loans-import', 'import')->name('loans.import');
+        Route::get('/loans-template', 'template')->name('loans.template');
+    });
+    // end of  loans access permission routes
+
+
+    //start of organization access permission  routes
+    Route::prefix('flex/')->middleware('auth')->middleware([Organisation::class])->controller(GeneralController::class)->group(function (){
+   
+        Route::any('/department','department')->name('flex.department');
+        Route::any('/organization_level','organization_level')->name('flex.organization_level');
+        Route::any('/organization_level_info/{id}','organization_level_info')->name('flex.organization_level_info');
+        Route::any('/alldepartment','alldepartment')->name('flex.alldepartment');
+        Route::any('/updateOrganizationLevelName','updateOrganizationLevelName')->name('flex.updateOrganizationLevelName');
+        Route::any('/updateMinSalary','updateMinSalary')->name('flex.updateMinSalary');
+        Route::any('/updateMaxSalary','updateMaxSalary')->name('flex.updateMaxSalary');
+        Route::any('/departmentAdd','departmentAdd')->name('flex.departmentAdd');
+        Route::any('/branch','branch')->name('flex.branch');
+        Route::any('/costCenter','costCenter')->name('flex.costCenter');
+        Route::any('/nationality','nationality')->name('flex.nationality');
+        Route::any('/addEmployeeNationality','addEmployeeNationality')->name('flex.addEmployeeNationality');
+        Route::any('/deleteCountry','deleteCountry')->name('flex.deleteCountry');
+        Route::any('/addCompanyBranch','addCompanyBranch')->name('flex.addCompanyBranch');
+        Route::any('/addCostCenter','addCostCenter')->name('flex.addCostCenter');
+        Route::any('/updateCompanyBranch','updateCompanyBranch')->name('flex.updateCompanyBranch');
+        Route::any('/updateCostCenter','updateCostCenter')->name('flex.updateCostCenter');
+        Route::any('/addBank','addBank')->name('flex.addBank');
+        Route::any('/addBankBranch','addBankBranch')->name('flex.addBankBranch');
+        Route::any('/updateBank','updateBank')->name('flex.updateBank');
+        Route::any('/updateBankBranchName','updateBankBranchName')->name('flex.updateBankBranchName');
+        Route::any('/updateBankName','updateBankName')->name('flex.updateBankName');
+        Route::any('/updateAbbrev','updateAbbrev')->name('flex.updateAbbrev');
+        Route::any('/updateBankCode','updateBankCode')->name('flex.updateBankCode');
+        Route::any('/updateBranchName','updateBranchName')->name('flex.updateBranchName');
+        Route::any('/updateBranchCode','updateBranchCode')->name('flex.updateBranchCode');
+        Route::any('/updateBranchSwiftcode','updateBranchSwiftcode')->name('flex.updateBranchSwiftcode');
+        Route::any('/updateBranchStreet','updateBranchStreet')->name('flex.updateBranchStreet');
+        Route::any('/updateBranchRegion','updateBranchRegion')->name('flex.updateBranchRegion');
+        Route::any('/updateBranchCountry','updateBranchCountry')->name('flex.updateBranchCountry');
+        Route::any('/deleteDepartment/{id}','deleteDepartment')->name('flex.deleteDepartment');
+        Route::any('/activateDepartment/{id}','activateDepartment')->name('flex.activateDepartment');
+        Route::any('/position_info/{id}','position_info')->name('flex.position_info');
+        Route::any('/department_info/{id}','department_info')->name('flex.department_info');
+
+        Route::any('/updatePositionName','updatePositionName')->name('flex.updatePositionName');
+        Route::any('/updatePositionReportsTo','updatePositionReportsTo')->name('flex.updatePositionReportsTo');
+        Route::any('/updatePositionCode','updatePositionCode')->name('flex.updatePositionCode');
+        Route::any('/updatePositionOrganizationLevel','updatePositionOrganizationLevel')->name('flex.updatePositionOrganizationLevel');
+        Route::any('/position','position')->name('flex.position');
+        Route::any('/addPosition','addPosition')->name('flex.addPosition');
+        Route::any('/addOrganizationLevel','addOrganizationLevel')->name('flex.addOrganizationLevel');
+        Route::any('/deletePosition','deletePosition')->name('flex.deletePosition');
+        Route::any('/activatePosition','activatePosition')->name('flex.activatePosition');
+
+        Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
+        Route::any('/retire','retire')->name('flex.retire');
+        Route::any('/contract','contract')->name('flex.contract');
+        Route::any('/addContract','addContract')->name('flex.addContract');
+        Route::any('/updatecontract','updatecontract')->name('flex.updatecontract');
+        Route::any('/deletecontract','deletecontract')->name('flex.deletecontract');
+
+        Route::any('/organization_structure','organization_structure')->name('flex.organization_structure');
+        Route::any('/accounting_coding','accounting_coding')->name('flex.accounting_coding');
+        Route::any('/department_structure','department_structure')->name('flex.department_structure');
+        Route::any('/Oldorganization_structure','Oldorganization_structure')->name('flex.Oldorganization_structure');
+        Route::any('/grievances','grievances')->name('flex.grievances');
+        Route::any('/grievance_details','grievance_details')->name('flex.grievance_details');
+        Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
+        Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
+    });
+    //start of organization access permission  routes
+
+
+    // start of report access permissions routes
+    Route::prefix('flex/')->middleware('auth')->middleware([Report::class])->controller(GeneralController::class)->group(function (){
+        Route::any('/financial_reports','financial_reports')->name('flex.financial_reports');
+        Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
+    });
+    // end of report access permissions routes
     // Start of other routes
-
     Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
 
     Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
@@ -308,58 +476,8 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
+   
 
-        Route::any('/attendance' ,'attendance')->name('attendance.attendance');
-        Route::any('/attendees' ,'attendees')->name('attendance.attendees');
-        Route::any('/leave' ,'leave')->name('attendance.leave');
-
-        Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
-
-        Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
-        Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
-        Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
-        Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
-
-        Route::any('/holdLeave' ,'holdLeave')->name('attendance.holdLeave');
-        Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
-        Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
-        Route::any('/leavereport' ,'leavereport')->name('attendance.leavereport');
-        Route::any('/customleavereport' ,'customleavereport')->name('attendance.customleavereport');
-        Route::any('/leave_remarks/{id}' ,'leave_remarks')->name('attendance.leave_remarks');
-        Route::any('/leave_application_info/{id}/{empID}' ,'leave_application_info')->name('attendance.leave_application_info');
-        Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendance.updateLeaveReason');
-        Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendance.updateLeaveAddress');
-        Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendance.updateLeaveMobile');
-        Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendance.updateLeaveType');
-        Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendance.updateLeaveDateRange');
-        Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendance.current_leave_progress');
-
-    });
-
-Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
-
-    Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
-    Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
-    Route::any('/leave' ,'leave')->name('attendandance.leave');
-    Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
-    Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
-    Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave');
-    Route::any('/holdLeave' ,'holdLeave')->name('attendandance.holdLeave');
-    Route::any('/approveLeave' ,'approveLeave')->name('attendandance.approveLeave');
-    Route::any('/rejectLeave' ,'rejectLeave')->name('attendandance.rejectLeave');
-    Route::any('/leavereport' ,'leavereport')->name('attendandance.leavereport');
-    Route::any('/customleavereport' ,'customleavereport')->name('attendandance.customleavereport');
-    Route::any('/leave_remarks' ,'leave_remarks')->name('attendandance.leave_remarks');
-    Route::any('/leave_application_info' ,'leave_application_info')->name('attendandance.leave_application_info');
-    Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendandance.updateLeaveReason');
-    Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendandance.updateLeaveAddress');
-    Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendandance.updateLeaveMobile');
-    Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType');
-    Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange');
-    Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress');
-
-});
 
 
     Route::prefix('')->controller(BaseController::class)->group(function (){
@@ -395,47 +513,9 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
 
-        Route::any('/contract_expire','contract_expire')->name('flex.contract_expire');
-        Route::any('/retire','retire')->name('flex.retire');
-        Route::any('/contract','contract')->name('flex.contract');
-        Route::any('/addContract','addContract')->name('flex.addContract');
-        Route::any('/updatecontract','updatecontract')->name('flex.updatecontract');
-        Route::any('/deletecontract','deletecontract')->name('flex.deletecontract');
+     
         Route::any('/bank','bank')->name('flex.bank');
-        Route::any('/department','department')->name('flex.department');
-        Route::any('/organization_level','organization_level')->name('flex.organization_level');
-        Route::any('/organization_level_info/{id}','organization_level_info')->name('flex.organization_level_info');
-        Route::any('/alldepartment','alldepartment')->name('flex.alldepartment');
-        Route::any('/updateOrganizationLevelName','updateOrganizationLevelName')->name('flex.updateOrganizationLevelName');
-        Route::any('/updateMinSalary','updateMinSalary')->name('flex.updateMinSalary');
-        Route::any('/updateMaxSalary','updateMaxSalary')->name('flex.updateMaxSalary');
-        Route::any('/departmentAdd','departmentAdd')->name('flex.departmentAdd');
-        Route::any('/branch','branch')->name('flex.branch');
-        Route::any('/costCenter','costCenter')->name('flex.costCenter');
-        Route::any('/nationality','nationality')->name('flex.nationality');
-        Route::any('/addEmployeeNationality','addEmployeeNationality')->name('flex.addEmployeeNationality');
-        Route::any('/deleteCountry','deleteCountry')->name('flex.deleteCountry');
-        Route::any('/addCompanyBranch','addCompanyBranch')->name('flex.addCompanyBranch');
-        Route::any('/addCostCenter','addCostCenter')->name('flex.addCostCenter');
-        Route::any('/updateCompanyBranch','updateCompanyBranch')->name('flex.updateCompanyBranch');
-        Route::any('/updateCostCenter','updateCostCenter')->name('flex.updateCostCenter');
-        Route::any('/addBank','addBank')->name('flex.addBank');
-        Route::any('/addBankBranch','addBankBranch')->name('flex.addBankBranch');
-        Route::any('/updateBank','updateBank')->name('flex.updateBank');
-        Route::any('/updateBankBranchName','updateBankBranchName')->name('flex.updateBankBranchName');
-        Route::any('/updateBankName','updateBankName')->name('flex.updateBankName');
-        Route::any('/updateAbbrev','updateAbbrev')->name('flex.updateAbbrev');
-        Route::any('/updateBankCode','updateBankCode')->name('flex.updateBankCode');
-        Route::any('/updateBranchName','updateBranchName')->name('flex.updateBranchName');
-        Route::any('/updateBranchCode','updateBranchCode')->name('flex.updateBranchCode');
-        Route::any('/updateBranchSwiftcode','updateBranchSwiftcode')->name('flex.updateBranchSwiftcode');
-        Route::any('/updateBranchStreet','updateBranchStreet')->name('flex.updateBranchStreet');
-        Route::any('/updateBranchRegion','updateBranchRegion')->name('flex.updateBranchRegion');
-        Route::any('/updateBranchCountry','updateBranchCountry')->name('flex.updateBranchCountry');
-        Route::any('/deleteDepartment/{id}','deleteDepartment')->name('flex.deleteDepartment');
-        Route::any('/activateDepartment/{id}','activateDepartment')->name('flex.activateDepartment');
-        Route::any('/position_info/{id}','position_info')->name('flex.position_info');
-        Route::any('/department_info/{id}','department_info')->name('flex.department_info');
+     
         Route::any('/addBudget','addBudget')->name('flex.addBudget');
         Route::any('/updateBudgetDescription','updateBudgetDescription')->name('flex.updateBudgetDescription');
         Route::any('/updateBudgetAmount','updateBudgetAmount')->name('flex.updateBudgetAmount');
@@ -461,15 +541,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/confirmEmployeeCertification','confirmEmployeeCertification')->name('flex.confirmEmployeeCertification');
         Route::any('/addAccountability','addAccountability')->name('flex.addAccountability');
         Route::any('/addskills','addskills')->name('flex.addskills');
-        Route::any('/updatePositionName','updatePositionName')->name('flex.updatePositionName');
-        Route::any('/updatePositionReportsTo','updatePositionReportsTo')->name('flex.updatePositionReportsTo');
-        Route::any('/updatePositionCode','updatePositionCode')->name('flex.updatePositionCode');
-        Route::any('/updatePositionOrganizationLevel','updatePositionOrganizationLevel')->name('flex.updatePositionOrganizationLevel');
-        Route::any('/position','position')->name('flex.position');
-        Route::any('/addPosition','addPosition')->name('flex.addPosition');
-        Route::any('/addOrganizationLevel','addOrganizationLevel')->name('flex.addOrganizationLevel');
-        Route::any('/deletePosition','deletePosition')->name('flex.deletePosition');
-        Route::any('/activatePosition','activatePosition')->name('flex.activatePosition');
+      
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
       
 
@@ -552,27 +624,8 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/updatePensionFundNo','updatePensionFundNo')->name('flex.updatePensionFundNo');
         Route::any('/updateOldID','updateOldID')->name('flex.updateOldID');
         Route::any('/updateEmployeePhoto','updateEmployeePhoto')->name('flex.updateEmployeePhoto');
-        Route::any('/transfers','transfers')->name('flex.transfers');
-        Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
-        Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
-        Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
-        Route::any('/insert_directLoan','insert_directLoan')->name('flex.insert_directLoan');
-        Route::any('/confirmed_loans','confirmed_loans')->name('flex.confirmed_loans');
-        Route::any('/loan_advanced_payments','loan_advanced_payments')->name('flex.loan_advanced_payments');
-        Route::any('/adv_loan_pay','adv_loan_pay')->name('flex.adv_loan_pay');
-        Route::any('/cancelLoan','cancelLoan')->name('flex.cancelLoan');
-        Route::any('/recommendLoan/{id}','recommendLoan')->name('flex.recommendLoan');
-        Route::any('/hrrecommendLoan/{id}','hrrecommendLoan')->name('flex.hrrecommendLoan');
-        Route::any('/holdLoan/{id}','holdLoan')->name('flex.holdLoan');
-        Route::any('/approveLoan/{id}','approveLoan')->name('flex.approveLoan');
-        Route::any('/pauseLoan/{id}','pauseLoan')->name('flex.pauseLoan');
-        Route::any('/resumeLoan/{id}','resumeLoan')->name('flex.resumeLoan');
-        Route::any('/rejectLoan/{id}','rejectLoan')->name('flex.rejectLoan');
-        Route::any('/loan_application_info','loan_application_info')->name('flex.loan_application_info');
-        Route::any('/updateloan','updateloan')->name('flex.updateloan');
-        Route::any('/updateloan_info','updateloan_info')->name('flex.updateloan_info');
-        Route::any('/financial_reports','financial_reports')->name('flex.financial_reports');
-        Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
+
+        
         Route::any('/not_logged_in','not_logged_in')->name('flex.not_logged_in');
         Route::any('/viewrecords','viewrecords')->name('flex.viewrecords');
         Route::any('/home','home')->name('flex.home');
@@ -692,14 +745,7 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
         Route::any('/addEmployee','addEmployee')->name('flex.addEmployee');
         Route::any('/getPositionSalaryRange','getPositionSalaryRange')->name('flex.getPositionSalaryRange');
         Route::any('/registerEmployee','registerEmployee')->name('flex.registerEmployee');
-        Route::any('/organization_structure','organization_structure')->name('flex.organization_structure');
-        Route::any('/accounting_coding','accounting_coding')->name('flex.accounting_coding');
-        Route::any('/department_structure','department_structure')->name('flex.department_structure');
-        Route::any('/Oldorganization_structure','Oldorganization_structure')->name('flex.Oldorganization_structure');
-        Route::any('/grievances','grievances')->name('flex.grievances');
-        Route::any('/grievance_details','grievance_details')->name('flex.grievance_details');
-        Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
-        Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
+       
         Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
         Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
         Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');
@@ -1002,13 +1048,6 @@ Route::prefix('attendance')->controller(AttendanceController::class)->group(func
 
 
 
-//bank loans routes
-Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
-    Route::get('/all-loans', 'index')->name('bank-loans');;
-    Route::get('/loans-export', 'export')->name('loans.export');
-    Route::post('/loans-import', 'import')->name('loans.import');
-    Route::get('/loans-template', 'template')->name('loans.template');
-});
 
 
 

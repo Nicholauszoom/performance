@@ -68,5 +68,10 @@ class Kernel extends HttpKernel
         'payroll' => \App\Http\Middleware\Payroll::class, // Payroll management access middleware
         'employee' => \App\Http\Middleware\Employee ::class, // For Employee related issues
         'suspension' => \App\Http\Middleware\EmployeeSuspension ::class, // For Employee Suspension
+        'leave' => \App\Http\Middleware\Leave ::class, // For Employee leave
+        'loan' => \App\Http\Middleware\Loan ::class, // For Loan Management
+        'organisation' => \App\Http\Middleware\Organisation ::class, // For Organisation Management
+        'report' => \App\Http\Middleware\Report ::class, // For Report
+
     ];
 }

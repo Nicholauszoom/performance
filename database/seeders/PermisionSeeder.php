@@ -139,7 +139,7 @@ class PermisionSeeder extends Seeder
 
 
             //leave management seeder sym_module=3
-
+            ['slug' => 'access-leave','sys_module_id'=>3],
             ['slug' => 'view-leave-management','sys_module_id'=>3],
 
             // start  of leave application seeders
@@ -156,6 +156,7 @@ class PermisionSeeder extends Seeder
 
 
             //loan management
+            ['slug' => 'access-loan','sys_module_id'=>4],
             ['slug' => 'view-loan','sys_module_id'=>4],
             ['slug' => 'edit-loan','sys_module_id'=>4],
             ['slug' => 'add-loan','sys_module_id'=>4],
@@ -166,18 +167,21 @@ class PermisionSeeder extends Seeder
             
 
              //Organization
+             ['slug' => 'access-organization','sys_module_id'=>5],
              ['slug' => 'view-organization','sys_module_id'=>5],
              ['slug' => 'edit-organization','sys_module_id'=>5],
              ['slug' => 'add-organization','sys_module_id'=>5],
              ['slug' => 'delete-organization','sys_module_id'=>5],
 
               //Reports
+              ['slug' => 'access-report','sys_module_id'=>6],
               ['slug' => 'view-report','sys_module_id'=>6],
               ['slug' => 'view-statutory-report','sys_module_id'=>6],
               ['slug' => 'edit-organization-report','sys_module_id'=>6],
 
 
                //Settings
+               ['slug' => 'access-setting','sys_module_id'=>7],
                ['slug' => 'view-setting','sys_module_id'=>7],
                ['slug' => 'view-financial-setting','sys_module_id'=>7],
                ['slug' => 'view-Banking-information','sys_module_id'=>7],
