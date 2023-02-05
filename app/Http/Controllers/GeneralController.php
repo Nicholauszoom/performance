@@ -8375,6 +8375,7 @@ class GeneralController extends Controller
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
+        
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -8859,7 +8860,7 @@ class GeneralController extends Controller
         $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
         $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-
+        $child = EmployeeDependant::where('employeeID', $empID)->count();
         $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
 
         $data['photo'] = "";
@@ -8868,7 +8869,7 @@ class GeneralController extends Controller
 
         // return view('employee.userprofile', $data);
 
-        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents'));
+        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','child'));
     }
 
     // For updating profile image
