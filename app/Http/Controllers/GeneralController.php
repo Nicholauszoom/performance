@@ -7670,7 +7670,6 @@ class GeneralController extends Controller
     // For Saving Termination
     public function saveTermination(Request $request)
     {
-
         // request()->validate(
         //     [
         //         'employeeID' => 'required',
@@ -7836,10 +7835,26 @@ class GeneralController extends Controller
             $termination->total_deductions = $total_deductions;
             $termination->save();
             // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
+
+            // NOTIFYING HEAD OF HUMAN CAPITAL
+            $position_data = SysHelpers::position('Country Head: Human Capital');
+
+                $fullname = $position_data['full_name'];
+                $email_data = array(
+                    'subject' => 'Employee Termination Request',
+                    'view' => 'emails.termination-request',
+                    'email' => $position_data['email'],
+                    'full_name' => $fullname,
+                );
+
+                //kmarealle@bancabc.co.tz
+                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+                
         } else {
 
             dd('YES');
         }
+
         return redirect('flex/termination')->with('status', $msg);
     }
 
@@ -7864,9 +7879,25 @@ class GeneralController extends Controller
             if ($approval->levels==$level->level_name) {
 
                 $termination=Termination::where('id',$id)->first();
+                // dd($termination->employeeID);
                 $termination->status=1;
                 $termination->update();
                 $msg='Employee is Terminated Successfully !';
+
+                // SENDING AN EMAIL TO THE APPROVED USER
+                $employee_data = SysHelpers::employeeData($termination->employeeID);
+                // dd($employee_data);
+                $fullname = $employee_data['full_name'];
+                $email_data = array(
+                    'subject' => 'Employee Termination Approval',
+                    'view' => 'emails.termination-approval',
+                    'email' => $employee_data['email'],
+                    'full_name' => $fullname,
+                );
+
+                //kmarealle@bancabc.co.tz
+                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+
                 return redirect('flex/termination')->with('msg', $msg);
             }
             else
