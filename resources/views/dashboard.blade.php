@@ -55,67 +55,56 @@
         $net = $row->takehome - $arrears;
     }
 
-    // if (session('pass_age') > 89 || 90 - session('pass_age') == 0 || 90 - session('pass_age') < 0) {
-    //     redirect('cipay/login_info');
-    // }
-
     ?>
 
 
     <div class="row">
         <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
-            <div class="card">
-                <div class="card-head bg-warning text-white">.</div>
-                <div class="card-body">
-                <div class="card-header d-flex justify-content-between">
-                    <h3 class="text-muted">
-                        Welcome to Fléx Performance! <strong> {{ session('fname') . ' ' . session('lname') }} </strong>
-                    </h3>
+            <div class="card bg-success bg-opacity-10 border-success rounded-0">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <p class="text-main">Welcome to Fléx Performance! <strong> {{ session('fname') . ' ' . session('lname') }} </strong></p>
 
                     <p  <?php if(session('pass_age') > 84){?> style="color:red" <?php } ?>>Password Expires in <?php echo 90 - session('pass_age'); ?> Days</p>
                 </div>
-            </div>
             </div>
         </div>
         {{-- /col --}}
 
         @if (session('vw_emp_sum'))
             <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <h4 class="col-md-6 text-muted">Active Employess :</h4>
-                            <h4 class="col-md-6 text-muted">{{ $employees }}</h4>
-                        </div>
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
 
-                        <div class="row">
-                            <h4 class="col-md-6 text-muted">Males :</h4>
-                            <h4 class="col-md-6 text-muted">{{ $males }}</h4>
-                        </div>
-
-                        <div class="row">
-                            <h4 class="col-md-6 text-muted">Females :</h4>
-                            <h4 class="col-md-6 text-muted">{{ $females }}</h4>
-                        </div>
-
-                        <div class="row">
-                            <h4 class="col-md-6 text-muted">Local Employees :</h4>
-                            <h4 class="col-md-6 text-muted">{{ $local_employee }}</h4>
-                        </div>
-
-                        <div class="row">
-                            <h4 class="col-md-6 text-muted">Expatriates :</h4>
-                            <h4 class="col-md-6 text-muted">{{ $expatriate }}</h4>
-                        </div>
-                    </div>
+                    <ul class="list-group list-group-flush border-top">
+                        <li class="list-group-item d-flex">
+                            <span class="fw-semibold">Active Employess:</span>
+                            <div class="ms-auto">{{ $employees }}</div>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <span class="fw-semibold">Males:</span>
+                            <div class="ms-auto">{{ $males }}</div>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <span class="fw-semibold">Females:</span>
+                            <div class="ms-auto">{{ $females }}</div>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <span class="fw-semibold">Local Employees:</span>
+                            <div class="ms-auto">{{ $local_employee }}</div>
+                        </li>
+                        <li class="list-group-item d-flex">
+                            <span class="fw-semibold">Expatriates:</span>
+                            <div class="ms-auto">{{ $expatriate }}</div>
+                        </li>
+                    </ul>
                 </div>
+
             </div>
         @endif
         {{-- /col --}}
 
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+        <div class="col-xl-12">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
+                <div class="card-header bg-main text-center">
                     <h5 class="mb-0">Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
                 </div>
 
@@ -184,9 +173,9 @@
         </div>
 
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="text-muted">Payroll Reconciliation Summary (Current & Previous)</h4>
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
+                <div class="card-header bg-main text-center">
+                    <h5 class="">Payroll Reconciliation Summary (Current & Previous)</h5>
                 </div>
 
 

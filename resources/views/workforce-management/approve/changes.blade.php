@@ -23,7 +23,7 @@
         <!-- Highlighted tabs -->
         <div class="row">
             <div class="col-md-12 col-lg-12">
-                <div class="card card-primary card-outline card-outline-tabs border-0 shadow-none">
+                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0card-primary card-outline card-outline-tabs border-0 shadow-none">
 
                     <div class="card-header border-0 shadow-none">
                         <ul class="nav nav-tabs nav-tabs-highlight">
@@ -35,7 +35,7 @@
                         <div class="tab-content" id="custom-tabs-four-tabContent">
                             <div class="tab-pane fade show active" id="{{ route('approve.changes') }}" role="tabpanel" aria-labelledby="custom-tabs-four-ivr-tab">
 
-                                <div class="card border-0 shadow-none">
+                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                     <div class="card-header border-0 shadow-none">
                                         <h5 class="text-muted">Current Employee Transfer</h5>
                                     </div>
