@@ -16,7 +16,7 @@
                 </div>
             </div>
   <!-- Basic datatable -->
-      <div class="card">
+      <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header">
           <div class="d-flex justify-content-between">
             <h5 class="mb-0">Company Branches</h5>

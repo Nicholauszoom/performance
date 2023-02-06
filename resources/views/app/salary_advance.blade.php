@@ -27,7 +27,7 @@
               
               
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
                     <h2>My Loans 
                     </h2>
@@ -124,7 +124,7 @@
               @can('add-loan')
               <?php if(session('recom_paym') || session('appr_paym')){ ?>
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-2">
                     <h2>Loans Aplication/Assignment(To Be Responded)
                     
@@ -248,7 +248,7 @@
                 <?php if(session('mng_emp')){ ?>
                <div id="insertDirectForm"  class="col-md-6 col-sm-6 col-xs-12 offset-3">
                             
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                       <div class="card-head px-3 py-2">
                         <h2><i class="fa fa-tasks"></i> Insert Direct Deduction (HESLB, Custom Deductions, etc..)</h2>
                         <ul class="nav navbar-right panel_toolbox">

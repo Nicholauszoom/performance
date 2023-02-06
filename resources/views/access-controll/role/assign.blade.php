@@ -16,7 +16,7 @@
 
             <div class="row">
                 <div class="col-12 col-sm-6 col-lg-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-header">
                             <h3 class="text-uppercase">{{ $role->slug }} ( Role ) - Permissions</h3>
 

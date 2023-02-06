@@ -16,7 +16,7 @@
     <div class="row">
          <!--Start Tabs Content-->
           <div class="col-md-12 col-sm-6 col-xs-12">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0">
               <!-- <div class="card-head">
                   
                   <h3 class="green"></h3>
@@ -41,7 +41,7 @@
                   
                 
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+        <div class="card ">
           <div class="card-head px-3">
             <h2>List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php if(session('mng_org')){ ?>
@@ -100,7 +100,7 @@
       <?php if(session('mng_org')){ ?>
                 <div id="bottom" class="col-md-6 col-lg-6 col-sm-12 col-xs-12 offset-3">
                             
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                       <div class="card-head">
                         <h2><i class="fa fa-tasks"></i> Add Position</h2>
                         <ul class="nav navbar-right panel_toolbox">

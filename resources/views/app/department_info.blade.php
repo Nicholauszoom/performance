@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12 offset-3">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 mx-2">
                     <div class="card-head">
                         <h2>Departments Info</h2>
 
