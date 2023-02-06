@@ -593,7 +593,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Annual Leave</h5>
+                <h5 class="text-muted">Annual Leave Report</h5>
             </div>
 
             <form
