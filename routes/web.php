@@ -60,8 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
     Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
     // Dashboard
-    Route::get('/dashboard', [GeneralController::class, 'home']);
-    //->middleware('auth')->middleware([Dashboard::class])->name('dashboard.index');
+    Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+    //->middleware('auth')->middleware([Dashboard::class]);
 
     // project
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
