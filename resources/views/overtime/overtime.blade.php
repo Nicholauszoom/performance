@@ -14,12 +14,11 @@
 @endpush
 
 @section('content')
-    {{-- start of add overtime div --}}
-
+    {{-- start of apply overtime div --}}
     @can('add-overtime')
     <div id="apply_overtime">
         <div class="row">
-            <div class="col-md-6 offset-3">
+            <div class="col-md-7 offset-3">
                 <div class="card">
                     <div class="card-header border-0 shadow-none">
                         <h5 class="text-muted">Apply Overtime</h5>

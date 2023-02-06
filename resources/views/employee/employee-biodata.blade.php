@@ -98,7 +98,8 @@
         <div class="card border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
+                {{-- rounded-circle --}}
+                  <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>
@@ -540,7 +541,7 @@
                                          <h6 class="text-main">Number of children :</h6>
                                      </div>
                                      <div class="col-6">
-                                         <p class="text-muted">  Here </p>
+                                         <p class="text-muted"> @if($child) {{ $child }} @endif </p>
                                      </div>
                                      <div class="col-12">
 

@@ -53,7 +53,7 @@
     ?>
 
     <div class="mb-3">
-        <h5 class="text-muted">User Profile</h5>
+        <h5 class="text-muted">Employee Profile</h5>
     </div>
 
     <div class="row">
@@ -61,9 +61,10 @@
             <div class="card border-0 shadow-none pb-4">
                 <div class="sidebar-section-body text-center">
                     <div class="card-img-actions d-inline-block my-3">
-                        <img class="img-fluid rounded-circle"
+                        {{-- rounded-circle --}}
+                        <img class="img-fluid "
                             src="{{ $photo == 'user.png' ? 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}"
-                            width="10" height="150" alt="">
+                            width="150" height="150" alt="">
                     </div>
 
                     <h6 class="mb-0">{{ $name }}</h6>

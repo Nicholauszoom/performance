@@ -49,7 +49,7 @@
                 <th>SN</th>
                 <th>Employee Name</th>
                 <th>Department</th>
-                <th>Suspension</th>
+                {{-- <th>Suspension</th> --}}
                 <th>Charge Date</th>
                 <th >Action</th>
             </tr>
@@ -61,7 +61,7 @@
             <td>{{$i++}}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
              <td>{{ $item->departments->name}}</td>
-             <td>  {{ $item->suspension}}  </td>
+             {{-- <td>  {{ $item->suspension}}  </td> --}}
              <td> {{ $item->date_of_charge}}</td>
              <td>
                 <a  href="{{ route('flex.viewDisciplinary', base64_encode($item->id)) }}"  title="Info and Details">

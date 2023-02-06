@@ -134,7 +134,7 @@
                                         <div class="card border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="60px" height="60px" alt="">
+                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -284,18 +284,22 @@
                                                         <input type="text" name="birthcountry" @if($details) value="{{ $details->birthcountry}}" @endif   class="form-control">
                                                     </div>
                                                     <div class="form-group col-6 mb-2">
+                                                        <label for="">Religion</label>
+                                                        <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-12 mb-2">
                                                         <label for="">Gender/ Sex</label>
-                                                        <br>
+                                                        <hr>
                                                         <input type="radio" id="male" name="gender" @foreach($employee as $item) {{$item->gender == "Male" ? 'checked':'' }} @endforeach value="Male"   class="">
                                                         <label for="male">Male</label>
                                                         <input type="radio" id="female" @foreach($employee as $item) {{$item->gender == "Female" ? 'checked':'' }} @endforeach name="gender" value="Female">
                                                         <label for="female">Female</label>
                                                     </div>
-                                                    <div class="form-group col-6 mb-3">
+                                                    <div class="form-group col-12 mb-3">
                                                         <label for="">Martial Status</label>
-                                                       <br>
+                                                        <hr>
                                                        <div class="row">
-                                                        <div class="col-2 mb-2">
+                                                        <div class="col mb-2">
                                                             <input type="radio" id="Single" name="merital" @foreach($employee as $item) {{$item->merital_status == "Single" ? 'checked':'' }} @endforeach value="Single">
                                                             <label for="Single">Single</label>
                                                         </div>
@@ -311,11 +315,11 @@
                                                             <input type="date" class="" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
 
                                                         </div>
-                                                        <div class="col-3 mb-2">
+                                                        <div class="col mb-2">
                                                             <input type="radio" id="Separated" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Separated" ? 'checked':'' }} @endforeach value="Separated">
                                                             <label for="Separated">Separated</label>
                                                         </div>
-                                                        <div class="col-3 mb-2">
+                                                        <div class="col mb-2">
                                                             <input type="radio" id="divorced" name="merital" id="Divorced" @foreach($employee as $item) {{$item->merital_status == "Divorced" ? 'checked':'' }} @endforeach value="Divorced">
                                                             <label for="divorced" class="pr-5">Divorced</label> <br>
 
@@ -334,10 +338,7 @@
 
 
                                                     </div>
-                                                    <div class="form-group col-6 mb-2">
-                                                        <label for="">Religion</label>
-                                                        <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
-                                                    </div>
+                                                
 
                                                 </div>
                                                 <div class="card-footer ">

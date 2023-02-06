@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Allowance Info'])
+@extends('layouts.vertical', ['title' => 'System Role'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -22,7 +22,7 @@
                             <h4 class="card-title">Roles</h4>
 
                             <div class="header-elements">
-                                <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal" data-target="#addRoleModal">
+                                <button type="button" class="btn btn-main btn-xs px-4" data-toggle="modal" data-target="#addRoleModal">
                                     <i class="fa fa-plus-circle"></i> Add
                                 </button>
                             </div>

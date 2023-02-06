@@ -27,7 +27,7 @@
            
                         {{-- start of increment salary button --}}
                         @can('add-increment')
-                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom text-end ">
+                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom float-end text-end mx-1 ">
                         <i class="ph-plus me-2"></i> Increment Salary
                         </a>
                         @endcan
@@ -35,7 +35,7 @@
 
                         {{--  start of perform promotion button --}}
                         @can('add-promotion')
-                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom ">
+                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom float-end mx-1">
                             <i class="ph-plus me-2"></i> Peform Promotion
                         </a>
                         @endcan
@@ -52,16 +52,21 @@
     {{ session('msg') }}
     </div>
     @endif
+
+
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
             <tr>
                 <th>SN</th>
-                <th>Date</th>
                 <th>Employee Name</th>
                 <th>Position</th>
                 <th>Old Salary</th>
                 <th>New Salary</th>
+                <th>Activity</th>
+                <th>Status</th>
+                @can('edit-promotion')
                 <th>Action</th>
+                @endcan
             </tr>
         </thead>
 
@@ -69,20 +74,47 @@
                @foreach ($promotions as $item)
             <tr>
             <td>{{$i++}}</td>
-            <td>{{ $item->created_at->format('d-m-Y') }}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
              <td>{{ $item->position->name}}</td>
              <td>{{ number_format($item->oldSalary,2)}} </td>
              <td>{{ number_format($item->newSalary,2)}} </td>
              <td>
                 @if($item->action=="incremented")
-                    <span class="badge bg-success bg-opacity-10 text-success">{{ $item->action}}</span>
+                    <span class="badge bg-secondary  bg-opacity-60 text-light">{{ $item->action}}</span>
                     <br>
                 @else
-                    <span class="badge bg-success bg-opacity-20 text-success">{{ $item->action}}</span>
+                    <span class="badge bg-secondary bg-opacity-60 text-light">{{ $item->action}}</span>
 
                 @endif
             </td>
+            <td>
+                <span class="badge bg-success bg-opacity-30 text-light">{{ $item->status}}</span>
+            </td>
+            @can('edit-promotion')
+            <td>
+            @if($level)
+            @if($item->status!='Successful')
+            @if ($item->status!=$check)
+           
+                <small class="text-gray text-center"> Please Approve {{ $item->action =='promoted' ? 'Promotion':'Incremention' }} !</small>
+                <br>
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/approve-promotion/'.$item->id) }}"  title="Confirm Promotion">
+                    <button type="button" class="btn btn-success btn-xs" > <i class="ph-check"></i> Confirm</button>
+                </a>
+                {{-- / --}}
+
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/cancel-promotion/'.$item->id) }}"  title="Cancel Promotion">
+                    <button type="button" class="btn btn-danger btn-xs" ><i class="ph-trash"></i> Cancel </button>
+                </a>
+                {{-- / --}}
+           
+                @endif
+                @endif
+                @endif
+                </td>
+                @endcan
     
             </tr>
             @endforeach
@@ -93,3 +125,7 @@
 @endsection
 
 
+
+@push('footer-script')
+
+@endpush

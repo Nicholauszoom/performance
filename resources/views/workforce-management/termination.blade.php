@@ -31,6 +31,11 @@
         </div>
     </div>
 
+    @if (session('msg'))
+    <div class="alert alert-success col-md-8 mx-auto" role="alert">
+    {{ session('msg') }}
+    </div>
+    @endif
 
     <table class="table table-striped table-bordered datatable-basic">
         <thead>
@@ -41,6 +46,7 @@
                 <th>Reason(Description)</th>
                 <th>Payments</th>
                 <th>Deductions</th>
+                <th>Status</th>
                 <th>Option</th>
             </tr>
         </thead>
@@ -78,9 +84,38 @@
                     )}}
              </td>
              <td>
+                <span class="badge bg-secondary disabled">
+                    {{ $item->status }}
+                </span>
+                
+             </td>
+             <td>
+                @if($item->status=='Terminated')
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
-                    <button type="button" class="btn btn-info btn-xs" ><i class="ph-printer"></i></button>
+                    <button type="button" class="btn btn-secondary btn-xs" ><i class="ph-printer"></i></button>
                 </a>
+                @endif
+                @if($level)
+                @if($item->status!='Terminated')
+                @if ($item->status!=$check)
+                @can('confirm-termination')
+                <small class="text-gray text-center"> Please Approve Employee Termination!</small>
+                <br>
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/approve-termination/'.$item->id) }}"  title="Confirm Termination">
+                    <button type="button" class="btn btn-success btn-xs" > <i class="ph-check"></i> Confirm</button>
+                </a>
+                {{-- / --}}
+
+                {{-- start of termination confirm button --}}
+                <a  href="{{ url('flex/cancel-termination/'.$item->id) }}"  title="Cancel Termination">
+                    <button type="button" class="btn btn-danger btn-xs" ><i class="ph-trash"></i> Cancel </button>
+                </a>
+                {{-- / --}}
+                @endcan
+                @endif
+                @endif
+                @endif
              </td>
             </tr>
             @endforeach

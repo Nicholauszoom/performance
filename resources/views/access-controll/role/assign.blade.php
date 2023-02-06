@@ -21,7 +21,7 @@
                             <h3 class="text-uppercase">{{ $role->slug }} ( Role ) - Permissions</h3>
 
                             <div class="card-header header-elements-sm-inline">
-                                <a href="{{ route('roles.index') }}" class="btn btn-outline-info btn-xs px-4"><i
+                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-xs px-4"><i
                                         class="ph-left"></i> Back </a>
 
                                 <div class="header-elements">

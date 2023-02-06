@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('newPosition')->nullable();
             $table->string('action');
             $table->integer('created_by');
-            $table->integer('status')->default(0);
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
