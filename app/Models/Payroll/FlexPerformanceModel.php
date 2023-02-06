@@ -96,15 +96,48 @@ class FlexPerformanceModel extends Model
 	{
 		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.* FROM department d, employee e,  (SELECT @s:=0) as s  WHERE d.hod = e.emp_id and and d.state = 1 AND d.hod='".$id."'";
 
+
+		// return DB::select(DB::raw($query));
 		return DB::select(DB::raw($query));
 	}
 
-	function alldepartment()
+	public function alldepartment()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.*, pd.name as parentdept,cs.name as CostCenterName FROM department d, department pd, employee e,cost_center as cs,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 1 AND d.type = 1 AND d.cost_center_id = cs.id  AND d.hod = e.emp_id";
 
-		return DB::select(DB::raw($query));
+        $test = DB::table('department')
+            ->join('cost_center', 'cost_center.id', '=', 'department.cost_center_id')
+            ->join('employee', 'employee.emp_id', '=', 'department.hod')
+            ->join('department as d2', 'department.reports_to', '=', 'd2.id')
+            ->select('cost_center.name as CostCenterName', 'department.*', DB::raw("CONCAT(employee.fname, ' ', employee.mname, ' ', employee.lname) as HOD"), 'd2.name as parentdept')
+            ->where('department.state', 1)
+            ->where('department.type', 1)
+            ->get();
+
+        return $test;
+
 	}
+
+    public function costDepartments()
+	{
+        $query = DB::table('department')
+            ->select('dept_no as id', 'name')
+            ->where('state', 1)
+            ->where('type', 1)
+            ->get();
+
+        return $query;
+	}
+
+    public function costProjects()
+	{
+        $query = DB::table('project')
+            ->select('id', 'name')
+            ->get();
+
+        return $query;
+	}
+
+
 
 	function inactive_department()
 	{

@@ -3,6 +3,21 @@
     color: #fff;
 }
 
+.border-main {
+    --border-opacity: 1;
+    border-top-color: (#00204e, var(--border-opacity)) !important;
+}
+
+.border-top-main {
+    --border-opacity: 1;
+    border-top-color: (#00204e, var(--border-opacity)) !important;
+}
+
+.bg-main-light {
+    --bg-opacity: 1;
+    background-color: rgba(#00204e, var(--bg-opacity)) !important;
+}
+
 .logout-btn {
     /* background-color: red; */
     width: 100%;
