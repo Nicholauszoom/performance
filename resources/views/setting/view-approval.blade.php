@@ -169,9 +169,6 @@
 
 @endsection
 
-@push('footer-script')
 
-
-@endpush
 
 

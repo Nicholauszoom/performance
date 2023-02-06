@@ -120,7 +120,7 @@
                          {{-- profile --}}
                          <div role="tabpanel" class="tab-pane fade active show " id="profile" aria-labelledby="work-tab">
 
-                            <div class="card shadow-none">
+                            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0shadow-none">
                                 <div class="card-header mb-2">
                                     <h5 class="text-main">PROFILE PICTURE: </h5>
                                 </div>
@@ -131,7 +131,7 @@
                                 @endif
 
                                     <div class="col-md-12 mt-1">
-                                        <div class="card border-0 shadow-none pb-4">
+                                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
                                                 <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
@@ -186,7 +186,7 @@
                     {{-- page 1 --}}
                     <div role="tabpanel" class="tab-pane fade show " id="page1" aria-labelledby="work-tab">
 
-                        <div class="card shadow-none">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0shadow-none">
                             <div class="card-header">
                                 <h5 class="text-main">BASIC DETAILS: </h5>
                             </div>
@@ -209,7 +209,7 @@
                                 <div class="row">
 
                                     <div class="col-12">
-                                        <div class="card p-2">
+                                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                             <h5>Name Information</h5>
 
                                                 <div class="row mb-2">
@@ -263,7 +263,7 @@
 
                                     </div>
                                     <div class="col-12">
-                                        <div class="card p-2">
+                                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                             <h5>Biography Information</h5>
 
 
@@ -363,7 +363,7 @@
 
                     {{-- page 2 --}}
                     <div role="tabpanel" class="tab-pane " id="page2" aria-labelledby="permission-tab">
-                        <div class="card border-0 shadow-none">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                             <div class="card-header">
                                 <h5 class="text-main">ADDRESS AND IDENTIFICATION: </h5>
 
@@ -372,7 +372,7 @@
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                         <h5>Address Information</h5>
                                         <p>
                                             <small>
@@ -405,7 +405,7 @@
 
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                         <h5>Personal Identification Information</h5>
 
 
@@ -451,14 +451,14 @@
                     {{-- page 3 --}}
                     <div role="tabpanel" class="tab-pane " id="page3" aria-labelledby="asset-tab">
 
-                        <div class="card border-0 shadow-none">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                             <div class="card-header">
                                 <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
                             </div>
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                         <h5>Emmergency Contact Details</h5>
                                         <p>
                                             <small>
@@ -507,7 +507,7 @@
 
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                         <h5>Employment Details</h5>
 
 
@@ -529,10 +529,10 @@
                                                     <label for="">Department : <?php echo $department; ?></label>
                                                     <br>
                                                     <label for="">Branch : <?php echo $branch; ?></label>
-                                                
+
                                                 </div>
 
-             
+
 
                                                 <div class="form-group col-12 mb-2">
                                                     <label for="">Line Manager</label>
@@ -573,14 +573,14 @@
 
                     {{-- Page 4--}}
                     <div role="tabpanel" class="tab-pane " id="page4" aria-labelledby="l-d-tab">
-                        <div class="card border-0 shadow-none mb-3">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none mb-3">
                             <div class="card-header">
                                 <h5 class="text-main">FAMILY DETAILS </h5>
                             </div>
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
                                         <h5>Spouse Details</h5>
                                         <p>
                                             <small>
@@ -825,7 +825,7 @@
 
                     {{-- Page 5 --}}
                     <div role="tabpanel" class="tab-pane " id="page5" aria-labelledby="exit-tab">
-                        <div class="card border-0 shadow-none">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
 
                             <div class="card-header">
                                 <h5 class="text-main">EDUCATIONAL BACKGROUND: </h5>
@@ -1002,7 +1002,7 @@
 
                     {{-- Page 6 --}}
                     <div role="tabpanel" class="tab-pane " id="page6" aria-labelledby="exit-tab">
-                        <div class="card border-0 shadow-none">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
 
                             <div class="card-header">
                                 <h5 class="text-main">EMPLOYMENT HISTORY: </h5>

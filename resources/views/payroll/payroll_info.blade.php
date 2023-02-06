@@ -96,13 +96,13 @@
             {{-- / --}}
 
             {{-- input change approval button  --}}
-           
+
             @if($payrollState != 1)
             @can('download-summary')
             <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth]) }}" target="blank">
-                <button type="button" name="print" value="print" class="btn btn-main btn-sm"> 
+                <button type="button" name="print" value="print" class="btn btn-main btn-sm">
                     Input Changes Approval
-                </button>     
+                </button>
             </a>
             @endcan
             @endif
@@ -121,7 +121,7 @@
     <div class="card-body">
 
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="card border-0 shadow-none">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div class="mb-2 ms-auto">
                     <h4 class="text-muted">Payloll Details:</h4>
                     <div class="d-flex flex-wrap wmin-lg-400">
@@ -156,7 +156,7 @@
 
         <?php if($payrollState == 0){ ?>
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="card border-0 shadow-none">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div id="resultConfirmation"></div>
 
                 <div class="mb-2 ms-auto">
@@ -331,35 +331,78 @@ if (check) {
 
 <script>
 function generate_checklist() {
-    if (confirm("Are you sure? you whant to confirm payroll") == true) {
-        // var id = id;
-        $('#hideList').hide();
-        $.ajax({
-            url: "{{route('payroll.generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
-            success: function(data) {
-                if (data.status == 1) {
-                    alert("Pay CheckList Generated Successiful!");
 
-                    $('#resultConfirmation').fadeOut('fast', function() {
-                        $('#resultConfirmation').fadeIn('fast').html(data.message);
-                    });
-                    setTimeout(function() { // wait for 2 secs(2)
-                        location.reload(); // then reload the div to clear the success notification
-                    }, 1500);
-                } else {
-                    alert(
-                        "FAILED to Generate Pay Checklist, Try again, If the Error persists Contact Your System Admin."
-                    );
+    // Advanced initialization
+    Swal.fire({
+        title: 'Are you sure? you whant to confirm payroll',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, confirm it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
 
-                    $('#resultConfirmation').fadeOut('fast', function() {
-                        $('#resultConfirmation').fadeIn('fast').html(data.message);
-                    });
+            $('#hideList').hide();
+
+            $.ajax({
+                url: "{{route('payroll.generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
+                success: function(data) {
+                    if (data.status == 1) {
+                        alert("Pay CheckList Generated Successiful!");
+
+                        $('#resultConfirmation').fadeOut('fast', function() {
+                            $('#resultConfirmation').fadeIn('fast').html(data.message);
+                        });
+                        setTimeout(function() { // wait for 2 secs(2)
+                            location.reload(); // then reload the div to clear the success notification
+                        }, 1500);
+                    } else {
+                        alert(
+                            "FAILED to Generate Pay Checklist, Try again, If the Error persists Contact Your System Admin."
+                        );
+
+                        $('#resultConfirmation').fadeOut('fast', function() {
+                            $('#resultConfirmation').fadeIn('fast').html(data.message);
+                        });
+                    }
+
                 }
 
-            }
+            });
 
-        });
-    }
+        }
+    });
+
+    // if (confirm("Are you sure? you whant to confirm payroll") == true) {
+    //     // var id = id;
+    //     $('#hideList').hide();
+    //     $.ajax({
+    //         url: "{{route('payroll.generate_checklist',['pdate'=>base64_encode($payroll_date)])}}",
+    //         success: function(data) {
+    //             if (data.status == 1) {
+    //                 alert("Pay CheckList Generated Successiful!");
+
+    //                 $('#resultConfirmation').fadeOut('fast', function() {
+    //                     $('#resultConfirmation').fadeIn('fast').html(data.message);
+    //                 });
+    //                 setTimeout(function() { // wait for 2 secs(2)
+    //                     location.reload(); // then reload the div to clear the success notification
+    //                 }, 1500);
+    //             } else {
+    //                 alert(
+    //                     "FAILED to Generate Pay Checklist, Try again, If the Error persists Contact Your System Admin."
+    //                 );
+
+    //                 $('#resultConfirmation').fadeOut('fast', function() {
+    //                     $('#resultConfirmation').fadeIn('fast').html(data.message);
+    //                 });
+    //             }
+
+    //         }
+
+    //     });
+    // }
 }
 </script>
 @endpush

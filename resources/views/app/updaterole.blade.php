@@ -1,17 +1,14 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
 @endpush
 
 @section('content')
-<?php
-?>
-
 
 <!-- page content -->
 <div class="right_col" role="main">
@@ -20,80 +17,64 @@
             <div class="title_left">
                 <h3>Roles and Permission </h3>
             </div>
-
         </div>
-
-        <div class="clearfix"></div>
 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="card-head">
                         <h2>Role Info</h2>
-
-
-                        <div class="clearfix"></div>
                     </div>
-                    <div class="card-body">
 
+                    <div class="card-body">
                         @if (Session::has('note'))
-                        {{ session('note') }}
+                            {{ session('note') }}
                         @endif
 
-                        <!-- <table id="datatable" class="table table-striped table-bordered"> -->
                         <?php
-                        if (isset($role)) {
-
-                            $roleID = $role->id;
-                            $permissionTag = $role->permissions;
-                            $permission_arrray = json_decode($role->permissions);
-                            $counter=1;
-
-                            // dd(json_decode("hello"));
-                            // dd("Here")
+                            if (isset($role)) {
+                                $roleID = $role->id;
+                                $permissionTag = $role->permissions;
+                                $permission_arrray = json_decode($role->permissions);
+                                $counter = 1;
                         ?>
 
 
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <div class="card">
-                                        <div class="card-head">
-                                            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Change Role Name</b></h2>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                        <div class="card-body">
-                                            <form align="center" enctype="multipart/form-data" method="post" action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>" data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Change Role Name</b></h2>
+                                    </div>
 
-                                                @csrf
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Role Name
-                                                    </label>
-                                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input required="" value="<?php echo $role->name; ?>" name="name" class="form-control col-md-7 col-xs-12">
-                                                        <span class="text-danger"><?php // echo form_error("lname");
-                                                                                    ?></span>
-                                                    </div>
+                                    <div class="card-body">
+                                        <form align="center" enctype="multipart/form-data" method="post" action="<?php echo url(''); ?>/flex/updaterole/<?php echo $roleID; ?>" data-parsley-validate class="form-horizontal form-label-left" autocomplete="off">
+                                            @csrf
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Role Name </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <input required="" value="<?php echo $role->name; ?>" name="name" class="form-control col-md-7 col-xs-12">
+                                                    <span class="text-danger"><?php // echo form_error("lname");  ?></span>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group" style="display: none">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Permission Tag
-                                                    </label>
-                                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                                        <input disabled="disabled" value="<?php echo $role->permissions; ?>" class="form-control col-md-7 col-xs-12">
-                                                        <span class="text-danger"><?php // echo form_error("lname");
-                                                                                    ?></span>
-                                                    </div>
+                                            <div class="form-group" style="display: none">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Permission Tag
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <input disabled="disabled" value="<?php echo $role->permissions; ?>" class="form-control col-md-7 col-xs-12">
+                                                    <span class="text-danger"><?php // echo form_error("lname"); ?></span>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-3">
-                                                        <button type="submit" name="updatename" class="btn btn-main">Update</button>
-                                                    </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3 py-3">
+                                                    <button type="submit" name="updatename" class="btn btn-main">Update</button>
                                                 </div>
-
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
+                            </div>
 
 
 
@@ -121,7 +102,7 @@
                                                             <option></option>
                                                             <?php
                                                             foreach ($employeesnot as $row) {
-                                                                # code... 
+                                                                # code...
                                                             ?>
                                                                 <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?>
                                                                 </option> <?php } ?>
@@ -151,7 +132,7 @@
                                                             <option></option>
                                                             <?php
                                                             foreach ($groupsnot as $row) {
-                                                                # code... 
+                                                                # code...
                                                             ?>
                                                                 <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?>
                                                                 </option> <?php } ?>
@@ -231,7 +212,7 @@
                                                     @foreach ($permissions_grouped as $key => $permission)
 
                                                     <div role="tabpanel" role="tabpanel" class="tab-pane <?php if($counter==1){echo "active";$counter=$counter+1;} else{echo "fade";}?> " id="Permission{{ $key }}Tab" aria-labelledby="home-tab">
-                                                        
+
 
                                                         <p class="lead"><button type="submit" name="assign" class="btn btn-main">update</button></p>
                                                         <table class="table table-striped table-bordered">
@@ -356,9 +337,20 @@
 
 <script type="text/javascript">
     $('#removeFromRole').submit(function(e) {
-        if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Role?") == true) {
-            e.preventDefault();
-            $.ajax({
+
+        // Advanced initialization
+        Swal.fire({
+            title: 'Are You Sure You Want To Remove The Selected Employee(s) From  This Role?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                e.preventDefault();
+                $.ajax({
                     url: "<?php echo url(''); ?>/flex/removeEmployeeFromRole",
                     type: "post",
                     data: new FormData(this),
@@ -379,7 +371,34 @@
                 .fail(function() {
                     alert('Update Failed!! ...');
                 });
-        }
+
+            }
+        });
+
+        // if (confirm("Are You Sure You Want To Remove The Selected Employee(s) From  This Role?") == true) {
+        //     e.preventDefault();
+        //     $.ajax({
+        //         url: "<?php echo url(''); ?>/flex/removeEmployeeFromRole",
+        //         type: "post",
+        //         data: new FormData(this),
+        //         processData: false,
+        //         contentType: false,
+        //         cache: false,
+        //         async: false
+        //     })
+        //     .done(function(data) {
+        //         $('#feedBackRemove').fadeOut('fast', function() {
+        //             $('#feedBackRemove').fadeIn('fast').html(data);
+        //         });
+
+        //         setTimeout(function() { // wait for 5 secs(2)
+        //             location.reload(); // then reload the page.(3)
+        //         }, 2000);
+        //     })
+        //     .fail(function() {
+        //         alert('Update Failed!! ...');
+        //     });
+        // }
     });
 </script>
 

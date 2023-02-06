@@ -33,7 +33,7 @@
             <div class="clearfix"></div>
 
             <div class="row">
-                <div class="card col-md-6">
+                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0col-md-6">
                     <div class="card-header">
                         <h5 class="mb-0">Details</h5>
                     </div>

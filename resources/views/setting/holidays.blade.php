@@ -67,7 +67,7 @@
 
 
         <div id="save_termination" class="col-7 mx-auto">
-            <div class="card ">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0">
                 <div class="card-header">
                     <h6>Add Holiday</h6>
                 </div>

@@ -58,7 +58,7 @@
 
     <div class="row">
         <div class="col-md-4 mt-1">
-            <div class="card border-0 shadow-none pb-4">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none pb-4">
                 <div class="sidebar-section-body text-center">
                     <div class="card-img-actions d-inline-block my-3">
                         {{-- rounded-circle --}}
@@ -91,7 +91,7 @@
                 </ul>
             </div>
 
-            <div class="card border-0 shadow-none">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div class="card-header border-0 shadow-none">
                     <h6 class="text-muted">Basic Details</h6>
                 </div>
@@ -134,7 +134,7 @@
                 </table>
             </div>
 
-            <div class="card border-0 shadow-none">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div class="card-header">
                     <h6 class="text-muted">Work Details</h6>
                 </div>
@@ -277,7 +277,7 @@
                                 <div role="tabpanel" class="tab-pane fade active show " id="work"
                                     aria-labelledby="work-tab">
 
-                                    <div class="card m-2 shadow-none">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
                                         <div class="card-header d-flex justify-content-between">
                                             <h5 class="text-main">Next of Kin(s)</h5>
 
@@ -333,14 +333,14 @@
 
                                 {{-- Permission --}}
                                 <div role="tabpanel" class="tab-pane " id="permission" aria-labelledby="permission-tab">
-                                    <div class="card border-0 shadow-none">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                         <div class="card-header">
                                             <h6 class="text-muted">Permissons</h6>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="card border-0 shadow-none">
+                                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Roles Granted</h6>
                                                     </div>
@@ -399,7 +399,7 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <div class="card border-0 shadow-none">
+                                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Roles Not Granted</h6>
                                                     </div>
@@ -512,7 +512,7 @@
 
                                 {{-- L & D --}}
                                 <div role="tabpanel" class="tab-pane " id="l-d" aria-labelledby="l-d-tab">
-                                    <div class="card border-0 shadow-none mb-3">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none mb-3">
                                         <div class="card-header">
                                             <h4 class="text-main">Skills Acquired </h4>
                                         </div>
@@ -539,7 +539,7 @@
                                     <?php if(session('mng_emp')) { ?>
                                     <hr class="my-4">
 
-                                    <div class="card border-0 shadow-none">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                         <div class="card-header">
                                             <h5 class="text-main">Skills Not Acquired (To be Trained)</h5>
                                         </div>
@@ -612,7 +612,7 @@
 
                                     <hr class="my-4">
 
-                                    <div class="card border-0 shadow-none">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                         <div class="card-header">
                                             <h4 class="text-main">Skills Requested For Training</h4>
                                         </div>
@@ -681,14 +681,14 @@
 
                                 {{-- Pension --}}
                                 <div role="tabpanel" class="tab-pane " id="pension" aria-labelledby="permission-tab">
-                                    <div class="card border-0 shadow-none">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                         <div class="card-header">
                                             <h6 class="text-muted">Pension History</h6>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12 col-sm-12">
-                                                <div class="card border-0 shadow-none">
+                                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Summary</h6>
                                                     </div>
@@ -739,7 +739,7 @@
                                             </div>
 
                                             <div class="col-md-12 col-lg-12 col-sm-12">
-                                                <div class="card border-1 col-md-12">
+                                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-1 col-md-12">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Detailed</h6>
                                                     </div>
@@ -787,7 +787,7 @@
 
                                 {{-- Exit --}}
                                 <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
-                                    <div class="card border-0 shadow-none">
+                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
 
                                         <div class="card-body">
                                             <form id="upload_form" method="post" enctype="multipart/form-data"

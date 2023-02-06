@@ -10,7 +10,7 @@
 
 @section('content')
 
-<?php   
+<?php
 ?>
 
 
@@ -40,8 +40,8 @@
                             Allowance
                         </a>
                     </li>
-    
-    
+
+
                     <li class="nav-item" role="presentation">
                         <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
                             aria-selected="false" role="tab" tabindex="-1">
@@ -56,13 +56,13 @@
                           Non Statutory Deductions
                       </a>
                   </li>
-    
+
                 </ul>
             </div>
             <div class="clearfix"></div>
-            
-            
-            <?php 
+
+
+            <?php
 
             foreach($category as $row){
                 $categoryID = $row->id;
@@ -71,8 +71,8 @@
                 $night_percent = $row->night_percent;
                 $state = $row->state;
             }
-            
-            ?>            
+
+            ?>
             <!--START Overtimes-->
             {{-- <div class="row">
               <!-- Groups -->
@@ -94,7 +94,7 @@
                 </div>
               </div>
               <!-- Groups -->
-              
+
               <!--UPDATE-->
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="card">
@@ -150,7 +150,7 @@
             </div> <!--end row Overtimes --> --}}
 
             <div class="row">
-              <div class="card col-md-6">
+              <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0col-md-6">
                   <div class="card-header">
                       <h5 class="mb-0">Details</h5>
                   </div>
@@ -288,7 +288,7 @@
                                       </div>
                                   </div>
                               </div>
-                          </div}}> 
+                          </div}}>
                               <div class="form-group">
                                   <div class="col-sm-9">
                                       <div class="input-group">
@@ -323,23 +323,23 @@
               </div> --}}
           </div>
 
-            <!--END DEDUCTION-->            
+            <!--END DEDUCTION-->
             <?php  //} ?>
-            
-            
+
+
           </div>
         </div>
 
 
-        <!-- /page content -->   
+        <!-- /page content -->
 
-{{-- 
-  <?php 
+{{--
+  <?php
 //@include("app/includes/update_deductions")
 
 <script type="text/javascript">
     $('#updateOvertimeName').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateOvertimeName",
                  type:"post",
@@ -353,20 +353,20 @@
          $('#feedBackSubmission').fadeOut('fast', function(){
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
-    
-    
+
+
         setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    }); 
+    });
 </script>
 <script type="text/javascript">
     $('#updateRateDay').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateOvertimeRateDay",
                  type:"post",
@@ -380,20 +380,20 @@
          $('#feedBackSubmission').fadeOut('fast', function(){
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
-    
-    
+
+
         setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    }); 
+    });
 </script>
 <script type="text/javascript">
     $('#updateRateNight').submit(function(e){
-        e.preventDefault(); 
+        e.preventDefault();
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateOvertimeRateNight",
                  type:"post",
@@ -407,15 +407,15 @@
          $('#feedBackSubmission').fadeOut('fast', function(){
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
-    
-    
+
+
         setTimeout(function(){// wait for 5 secs(2)
            location.reload(); // then reload the page.(3)
-      }, 3000); 
+      }, 3000);
         })
         .fail(function(){
-     alert('Update Failed!! ...'); 
+     alert('Update Failed!! ...');
         });
-    }); 
+    });
 </script> --}}
  @endsection

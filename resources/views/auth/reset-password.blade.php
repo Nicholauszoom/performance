@@ -29,7 +29,7 @@
                     <form action="{{ route('password.new') }}" method="POST" class="login-form"
                         enctype="multipart/form-data">
                         @csrf
-                        <div class="card mb-0">
+                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0mb-0">
                             <div class="card-body">
                                 <div class="text-center mb-3">
                                     <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
