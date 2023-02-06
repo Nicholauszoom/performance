@@ -45,6 +45,19 @@
                         </select>
                         <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                     </div>
+                    <div class="mt-2">
+                        <label class="form-label">Report Format:</label>
+                        <div class="">
+                            <div class="d-inline-flex align-items-center me-3">
+                                <input type="radio" name="type" value="1" id="p9">
+                                <label class="ms-2" for="p9">PDF</label>
+                            </div>
+                            <div class="d-inline-flex align-items-center">
+                                <input type="radio" name="type" value="2" id="p9a">
+                                <label class="ms-2" for="p9a">Data table</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -77,26 +90,25 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
-
+                        <label class="form-label">Report Format:</label>
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
-
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Input Journal</h5>
@@ -123,24 +135,24 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
         <div class="card">
@@ -169,17 +181,17 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -188,7 +200,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Master Payroll</h5>
@@ -215,24 +227,24 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
         <div class="card">
@@ -261,17 +273,17 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -280,7 +292,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Gross Reconciliation</h5>
@@ -307,26 +319,26 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Net Reconciliation</h5>
@@ -353,24 +365,24 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
         <div class="card">
@@ -399,17 +411,17 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -418,7 +430,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Input Journal (Time)</h5>
@@ -445,24 +457,24 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
         <div class="card">
@@ -507,17 +519,17 @@
                     </div> --}}
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>

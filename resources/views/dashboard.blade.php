@@ -65,7 +65,7 @@
     <div class="row">
         <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
             <div class="card">
-                <div class="card-head bg-warning text-white">hhh</div>
+                <div class="card-head bg-warning text-white">.</div>
                 <div class="card-body">
                 <div class="card-header d-flex justify-content-between">
                     <h3 class="text-muted">

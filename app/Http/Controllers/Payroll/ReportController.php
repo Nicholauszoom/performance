@@ -172,12 +172,12 @@ class ReportController extends Controller
     function p9(Request $request)
     {
         $reportType = 1;
-        // dd($request->all());
+        $reportformat = $request->input('type');
 
         if (1) {
             $payrolldate = $request->input('payrolldate');
             $reportType = 1;
-            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+             //Staff = 1, temporary = 2
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
                 $data['total'] = $this->reports_model->s_totalp9($payrolldate);
@@ -196,23 +196,23 @@ class ReportController extends Controller
             $info = $data['info'];
             $payroll_date = $data['payroll_date'];
 
-            // dd(app_path());
-            // if($request->print_type == "PDF")
+            if($reportformat == 1)
             include(app_path() . '/reports/p9.php');
-            // else
-            // return view('reports/p9', $data);
+            else
+         return view('reports/p9', $data);
         }
     }
 
     function p10(Request $request)
-    {$reportType = 1;  //Staff = 1, temporary = 2
-        $reportType = 1;
-        // dd("here");
+    {
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type');
+
+         //  dd($reportformat);
 
         $period = $request->input('period');
         //dd($period);
         $year = $request->input('payrolldate');
-        $reportformat = $request->input('type');
 
         $period1start = $year . "-01-01";
         $period1end = $year . "-06-30";
@@ -239,7 +239,10 @@ class ReportController extends Controller
             $total = $data['total'];
             $info = $data['info'];
 
+            if($reportformat == 1)
             include app_path() . '/reports/p10.php';
+            else
+            return view('reports/p10', $data);
         } elseif ($period == 2 && $checkup2 >= 1) {
             // exit($date2start."<br>".$date2end);
             if ($reportType == 1) {
@@ -258,9 +261,11 @@ class ReportController extends Controller
             $total = $data['total'];
             $info = $data['info'];
 
-            dd('here');
+            if($reportformat == 1)
             include app_path() . '/reports/p10.php';
-            //  return view('app.reports/p10', $data);
+            else
+            return view('reports/p10', $data);
+
         } else {
             exit('NO PAYROLL');
         }
@@ -285,8 +290,9 @@ class ReportController extends Controller
         $total = $data['total'];
         $info = $data['info'];
 
-        //include(app_path() . '/reports/heslb.php');
-
+        if($reportformat == 1)
+        include(app_path() . '/reports/heslb.php');
+        else
         return view('reports/heslb', $data);
     }
 
@@ -369,10 +375,11 @@ class ReportController extends Controller
     function pension(Request $request)
     {
         $reportType = 1;
+        $reportformat = $request->input('type');
+
 
         $payrollMonth = $request->input('payrolldate');
         $pensionFund = $request->input('fund');
-        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
 
         $datewell = explode("-", $payrollMonth);
         $mm = $datewell[1];
@@ -398,19 +405,23 @@ class ReportController extends Controller
         $payroll_month = $data['payroll_month'];
         $pension_fund = $data['pension_fund'];
 
+        if($reportformat == 1)
         include(app_path() . '/reports/pension.php');
-        //return view('reports/pension', $data);
+        else
+        return view('reports/pension', $data);
 
     }
 
     function wcf(Request $request)
     {
+        $reportformat = $request->input('type');
+
+
         // dd($request->all());
         $reportType = 1;
         if (1) {
             $calendar = $request->input('payrolldate');
             $datewell = explode("-", $calendar);
-            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
 
             $mm = $datewell[1];
             $dd = $datewell[2];
@@ -432,8 +443,9 @@ class ReportController extends Controller
             $totalwcf = $data['totalwcf'];
             $info = $data['info'];
             $payroll_month = $data['payroll_month'];
-
-            //include(app_path() . '/reports/wcf.php');
+            if($reportformat == 1)
+            include(app_path() . '/reports/wcf.php');
+            else
             return view('reports/wcf', $data);
         }
     }
@@ -2666,9 +2678,9 @@ EOD;
 
 
         // return $pdf->download('itsolutionstuff.pdf');
-
-        // return view('reports.payrolldetails_datatable',$data);
-
+         if($request->type != 1)
+         return view('reports.payrolldetails_datatable',$data);
+         else
         return view('reports.payroll_details', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
@@ -2683,8 +2695,12 @@ EOD;
 
         $data['title'] = 'Payroll Input Changes Approval Report';
         $data['parent'] = 'Payroll Log Report';
-
+        if($request->type == 1)
         return view('reports.input_approval', $data);
+        else
+        return view('audit-trail.financial_logs', $data);
+
+
     }
 
 
