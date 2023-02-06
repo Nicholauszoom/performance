@@ -45,13 +45,13 @@
                 {{-- start of workforce management dropdown --}}
                 @can('view-workforce')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination')  || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee') || request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination')  || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-users-three"></i>
                         <span>Workforce Management</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.employee')|| request()->routeIs('flex.promotion') || request()->routeIs('flex.termination') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.employee')|| request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'show' : null }}">
                         {{-- start of active employee link --}}
                         @can('view-employee')
                         <li class="nav-item">

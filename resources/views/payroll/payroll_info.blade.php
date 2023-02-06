@@ -62,7 +62,7 @@
 
 @endphp
 
-<div class="card">
+<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
     <div class="card-header border-0">
         <div class="d-flex">
 
@@ -121,7 +121,7 @@
     <div class="card-body">
 
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
+            <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                 <div class="mb-2 ms-auto">
                     <h4 class="text-muted">Payloll Details:</h4>
                     <div class="d-flex flex-wrap wmin-lg-400">
@@ -156,7 +156,7 @@
 
         <?php if($payrollState == 0){ ?>
         <div class="col-md-6 col-sm-6 col-xs-12">
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
+            <div class="card border-top border-bottom border-bottom-width-3 border-bottom-main rounded-0 border-0 shadow-none">
                 <div id="resultConfirmation"></div>
 
                 <div class="mb-2 ms-auto">

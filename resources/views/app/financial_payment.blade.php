@@ -29,7 +29,7 @@
     @endforeach
 
 
-    <div class="card">
+    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header border-0">
             <h6 class="text-muted">Pending Payments <small></small></h6>
         </div>
@@ -37,7 +37,7 @@
         <div class="card-body">
             <div class="col-lg-12">
 
-                <div class="border rounded p-3 mb-3">
+                <div class="border rounded-0 p-3 mb-3">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
                         {{-- <li class="nav-item" role="presentation">
                             <a href="#incentivesTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
@@ -119,7 +119,7 @@
                             <?php } ?>
 
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
+                                <div class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
                                     <div class="card-header border-0 shadow-none">
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -333,7 +333,7 @@
                         </div>
                         <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="card">
+                                <div class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
                                     <div class="tab-head py-2 px-2">
                                         <h2>Overtime</h2>
                                         <div class="clearfix"></div>

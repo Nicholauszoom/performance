@@ -51,7 +51,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-
+    
 
 Route::middleware('auth')->group(function () {
 
@@ -84,11 +84,11 @@ Route::middleware('auth')->group(function () {
     ]);
 
     // Routes with workforce access permission
-    Route::prefix('flex')->controller(GeneralController::class)->group(function(){
+    Route::prefix('flex')->controller(GeneralController::class)->middleware('auth')->middleware([WorkForce::class])->group(function(){
 
         Route::get('error', [HomeController::class,'home']);
          // start of overtime routes
-         Route::any('/overtime','overtime')->name('flex.overtime');
+         Route::any('/overtime','overtime')->middleware([Overtime::class])->name('flex.overtime');
          Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
          Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
          Route::any('/overtime_category_info/{id}','overtime_category_info')->name('flex.overtime_category_info');
@@ -103,13 +103,13 @@ Route::middleware('auth')->group(function () {
          Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
          Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
          Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
-
+ 
          // start of termination routes
-         Route::any('/termination','termination')->name('flex.termination');
-         Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
-         Route::any('/add-termination','addTermination')->name('flex.addTermination');
-         Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
-         Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
+         Route::any('/termination','termination')->middleware([Termination::class])->name('flex.termination');
+         Route::any('/get_employee_available_info','get_employee_available_info')->middleware([Termination::class])->name('flex.get_employee_available_info');
+         Route::any('/add-termination','addTermination')->middleware([Termination::class])->name('flex.addTermination');
+         Route::post('/save-termination','saveTermination')->middleware([Termination::class])->name('flex.saveTermination');
+         Route::get('/view-termination/{id}','viewTermination')->middleware([Termination::class])->name('flex.viewTermination');
         
          // start of approvals route
          Route::get('/approve-termination/{id}','approveTermination')->name('flex.approveTermination');
@@ -120,7 +120,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
         // end of complains
-
+        
         //start of grievances and disciplinary actions routes
         Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
@@ -132,18 +132,18 @@ Route::middleware('auth')->group(function () {
         Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
         Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
         // end of grievances and disciplinary actions routes
-
-
-
+ 
+      
+ 
          // start of promotion/increment routes
-         Route::any('promotion','promotion')->name('flex.promotion');
-         Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
-         Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
-         Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
-         Route::any('/add-increment','addIncrement')->name('flex.addIncrement');
-         Route::post('/save-increment','saveIncrement')->name('flex.saveIncrement');
-         Route::get('/view-increment/{id}','viewIncrement')->name('flex.viewIncrement');
-         Route::any('/depPositionFetcher','depPositionFetcher')->name('depPositionFetcher');
+         Route::any('promotion','promotion')->middleware([Promotion::class])->name('flex.promotion');
+         Route::any('/add-promotion','addPromotion')->middleware([Promotion::class])->name('flex.addPromotion');
+         Route::post('/save-promotion','savePromotion')->middleware([Promotion::class])->name('flex.savePromotion');
+         Route::get('/view-promotion/{id}','viewPromotion')->middleware([Promotion::class])->name('flex.viewPromotion');
+         Route::any('/add-increment','addIncrement')->middleware([Promotion::class])->name('flex.addIncrement');
+         Route::post('/save-increment','saveIncrement')->middleware([Promotion::class])->name('flex.saveIncrement');
+         Route::get('/view-increment/{id}','viewIncrement')->middleware([Promotion::class])->name('flex.viewIncrement');
+         Route::any('/depPositionFetcher','depPositionFetcher')->middleware([Promotion::class])->name('depPositionFetcher');
          Route::get('get/details/{id}', 'getDetails')->name('getDetails');
 
          // start of approvals route
@@ -152,8 +152,8 @@ Route::middleware('auth')->group(function () {
          // end of promotion/increment routes
 
         // start of employee personal details route
-        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
-        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+        Route::any('/employee-profile/{id}','viewProfile')->middleware([Employee::class])->name('flex.viewProfile');
+        Route::post('/save-details','updateEmployeeDetails')->middleware([Employee::class])->name('flex.saveDetails');
         Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
         Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
         Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
@@ -161,7 +161,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
         Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
-        Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
+        Route::any('/inactive_employee','inactive_employee')->middleware([EmployeeSuspension::class])->name('flex.inactive_employee');
         // end of employee personal details  route
 
         // start of overtime routes
@@ -176,22 +176,22 @@ Route::middleware('auth')->group(function () {
         Route::any('/commentOvertime','commentOvertime')->name('flex.commentOvertime');
         Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
-        Route::any('/employee','employee')->name('flex.employee');
+        Route::any('/employee','employee')->middleware([Employee::class])->name('flex.employee');
 
-        Route::any('/addkin/{id}','addkin')->name('flex.addkin');
-        Route::any('/deletekin/{empID}/{id}','deletekin')->name('flex.deletekin');
-        Route::any('/addproperty','addproperty')->name('flex.addproperty');
-        Route::any('/employee_exit/{id}','employee_exit')->name('flex.employee_exit');
-        Route::any('/deleteproperty/$id','deleteproperty')->name('flex.deleteproperty');
-        Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->name('flex.employeeDeactivationRequest');
-        Route::any('/employeeActivationRequest/{id}','employeeActivationRequest')->name('flex.employeeActivationRequest');
-        Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->name('flex.cancelRequest');
+        Route::any('/addkin/{id}','addkin')->middleware([Employee::class])->name('flex.addkin');
+        Route::any('/deletekin/{empID}/{id}','deletekin')->middleware([Employee::class])->name('flex.deletekin');
+        Route::any('/addproperty','addproperty')->middleware([Employee::class])->name('flex.addproperty');
+        Route::any('/employee_exit/{id}','employee_exit')->middleware([Employee::class])->name('flex.employee_exit');
+        Route::any('/deleteproperty/$id','deleteproperty')->middleware([Employee::class])->name('flex.deleteproperty');
+        Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->middleware([Employee::class])->name('flex.employeeDeactivationRequest');
+        Route::any('/employeeActivationRequest/{id}','employeeActivationRequest')->middleware([Employee::class])->name('flex.employeeActivationRequest');
+        Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->middleware([Employee::class])->name('flex.cancelRequest');
 
         // end of employees routes
 
    
         // For Employee Transfers
-        Route::any('/transfers','transfers')->name('flex.transfers');
+        Route::any('/transfers','transfers')->middleware([Employee::class])->name('flex.transfers');
 
 
     });
@@ -199,17 +199,17 @@ Route::middleware('auth')->group(function () {
 
 
     // Routes with Payroll access permission
-    Route::prefix('flex')->controller(GeneralController::class)->group(function(){
+    Route::prefix('flex')->controller(GeneralController::class)->middleware('auth')->middleware([Payroll::class])->group(function(){
 
         Route::get('error', [HomeController::class,'home']);
-
+  
         Route::any('/payroll','payroll')->name('flex.payroll');
-
+        
         Route::any('/approved_financial_payments','approved_financial_payments')->name('flex.approved_financial_payments');
 
 
     });
-    Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
+    Route::prefix('flex/payroll')->middleware('auth')->middleware([Payroll::class])->controller(PayrollController::class)->group(function (){
 
         Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
         Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
@@ -262,10 +262,10 @@ Route::middleware('auth')->group(function () {
 
 
 
-    // start of attendance access permission routes
+    // start of attendance access permission routes 
 
     // Routes 1
-    Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
+    Route::prefix('attendance')->middleware('auth')->middleware([Leave::class])->controller(AttendanceController::class)->group(function (){
 
             Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
             Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
@@ -286,11 +286,11 @@ Route::middleware('auth')->group(function () {
             Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType');
             Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange');
             Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress');
-
+    
     });
 
     // Routes 2
-    Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
+    Route::prefix('flex/attendance')->middleware('auth')->middleware([Leave::class])->controller(AttendanceController::class)->group(function (){
 
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
@@ -321,7 +321,7 @@ Route::middleware('auth')->group(function () {
     // end of attendance routes
 
     // start of  loans access permission routes
-    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Loan::class])->controller(GeneralController::class)->group(function (){
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
@@ -340,11 +340,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/loan_application_info','loan_application_info')->name('flex.loan_application_info');
         Route::any('/updateloan','updateloan')->name('flex.updateloan');
         Route::any('/updateloan_info','updateloan_info')->name('flex.updateloan_info');
-
+        
     });
 
     //bank loans routes
-    Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
+    Route::prefix('flex/bank-loans')->middleware('auth')->middleware([Loan::class])->controller(BankLoanController::class)->group(function(){
         Route::get('/all-loans', 'index')->name('bank-loans');;
         Route::get('/loans-export', 'export')->name('loans.export');
         Route::post('/loans-import', 'import')->name('loans.import');
@@ -354,7 +354,7 @@ Route::middleware('auth')->group(function () {
 
 
     //start of organization access permission  routes
-    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Organisation::class])->controller(GeneralController::class)->group(function (){
    
         Route::any('/department','department')->name('flex.department');
         Route::any('/organization_level','organization_level')->name('flex.organization_level');
@@ -421,20 +421,20 @@ Route::middleware('auth')->group(function () {
 
 
     // start of report access permissions routes
-    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Report::class])->controller(GeneralController::class)->group(function (){
         Route::any('/financial_reports','financial_reports')->name('flex.financial_reports');
         Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
     });
     // end of report access permissions routes
 
      // start of settings access permissions routes
-     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+     Route::prefix('flex/')->middleware('auth')->middleware([Setting::class])->controller(GeneralController::class)->group(function (){
         
         // For Financial Groups Settings
         Route::any('/financial_group','financial_group')->name('flex.financial_group');
         Route::any('/financial_groups_details/{id}','financial_groups_details')->name('flex.financial_groups_details');
         Route::any('/financial_groups_byRole_details/{id}','financial_groups_byRole_details')->name('flex.financial_groups_byRole_details');
-
+        
         // Permission Settings
 
      // start of unpaid leaves
@@ -452,14 +452,14 @@ Route::middleware('auth')->group(function () {
           Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
           Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
           // end of holidays routes
-
-
+  
+  
           // start of email notifications settings routes
           Route::any('/email-notifications','emailNotification')->name('flex.email-notifications');
           Route::any('/edit-email-notification/{id}','editNotification')->name('flex.editNotification');
           Route::put('/update-email-notification','updateNotification')->name('flex.updateNotification');
           // end of email notifications settings routes
-
+  
           // start of approval settings routes
           Route::any('/approvals','viewApprovals')->name('flex.approvals');
           Route::post('/save-approvals','saveApprovals')->name('flex.saveApprovals');
@@ -467,7 +467,7 @@ Route::middleware('auth')->group(function () {
           Route::put('/update-approval','updateApproval')->name('flex.updateApproval');
           Route::any('/delete-approval/{id}','deleteApproval')->name('flex.deleteApproval');
           // end of approval settings routes
-
+  
           // start of approval_levels settings routes
           Route::any('/approval_levels/{id}','viewApprovalLevels')->name('flex.approval-levels');
           Route::post('/save-approval-level','saveApprovalLevel')->name('flex.saveApprovalLevel');
@@ -477,13 +477,13 @@ Route::middleware('auth')->group(function () {
           // end of approval_levels settings routes
 
 
-         //For Audit Logs
+         //For Audit Logs     
           Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
           Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
-          Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');
+          Route::any('/audit_logs/destroy','auditLogsDestry')->name('flex.LogsDestroy');   
+        
 
-
-    });
+    });  
      // end of settings access permissions routes
 
     // Start of other routes
@@ -547,7 +547,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-
+   
 
 
 
@@ -584,9 +584,9 @@ Route::middleware('auth')->group(function () {
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
 
-
+     
         Route::any('/bank','bank')->name('flex.bank');
-
+     
         Route::any('/addBudget','addBudget')->name('flex.addBudget');
         Route::any('/updateBudgetDescription','updateBudgetDescription')->name('flex.updateBudgetDescription');
         Route::any('/updateBudgetAmount','updateBudgetAmount')->name('flex.updateBudgetAmount');
@@ -612,11 +612,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/confirmEmployeeCertification','confirmEmployeeCertification')->name('flex.confirmEmployeeCertification');
         Route::any('/addAccountability','addAccountability')->name('flex.addAccountability');
         Route::any('/addskills','addskills')->name('flex.addskills');
-
+      
         Route::any('/updateskills','updateskills')->name('flex.updateskills');
+      
 
-
-
+       
 
         // start of reconcilliation summary route
         Route::any('/reconciliation-summary','reconcilliationSummary')->name('reports.recoSummary');
@@ -627,7 +627,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/addQualification','addQualification')->name('flex.addQualification');
         // end of education qualification route
 
-
+       
         Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
         Route::any('/updateCode','updateCode')->name('flex.updateCode');
@@ -665,7 +665,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateOldID','updateOldID')->name('flex.updateOldID');
         Route::any('/updateEmployeePhoto','updateEmployeePhoto')->name('flex.updateEmployeePhoto');
 
-
+        
         Route::any('/not_logged_in','not_logged_in')->name('flex.not_logged_in');
         Route::any('/viewrecords','viewrecords')->name('flex.viewrecords');
         Route::any('/home','home')->name('flex.home');
@@ -675,7 +675,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
         Route::any('/delete_non_statutory_deduction/{id}','delete_non_statutory_deduction')->name('flex.delete_non_statutory_deduction');
 
-
+ 
 
 
         Route::any('/deduction_info/{pattern}','deduction_info')->name('flex.deduction_info');
@@ -742,7 +742,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/recommendBonus/{id}','recommendBonus')->name('flex.recommendBonus');
         Route::any('/deleteBonus/{id}','deleteBonus')->name('flex.deleteBonus');
         Route::any('/role','role')->name('flex.role');
-
+      
         Route::any('/payroll_report_Logs', 'payrollReportLogs')->name('flex.payrollLogs');
 
         Route::any('/groups','groups')->name('flex.groups');
@@ -758,7 +758,7 @@ Route::middleware('auth')->group(function () {
 
         Route::any('/updategroup','updategroup')->name('flex.updategroup');
         Route::any('/deleteRole/{id}','deleteRole')->name('flex.deleteRole');
-        Route::any('/deleteGroup/{id}','deleteGroup')->name('flex.deleteGroup');
+        Route::any('/deleteGroup','deleteGroup')->name('flex.deleteGroup');
         Route::any('/permission','permission')->name('flex.permission');
         Route::any('/assignrole2','assignrole2')->name('flex.assignrole2');
         Route::any('/role_info','role_info')->name('flex.role_info');
@@ -774,7 +774,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/addEmployee','addEmployee')->name('flex.addEmployee');
         Route::any('/getPositionSalaryRange','getPositionSalaryRange')->name('flex.getPositionSalaryRange');
         Route::any('/registerEmployee','registerEmployee')->name('flex.registerEmployee');
-
+ 
 
         Route::any('/userArray','userArray')->name('flex.userArray');
         Route::any('/userAgent','userAgent')->name('flex.userAgent');
@@ -836,7 +836,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-
+  
 
     Route::prefix('flex/performance')->controller(PerformanceController::class)->group(function (){
 

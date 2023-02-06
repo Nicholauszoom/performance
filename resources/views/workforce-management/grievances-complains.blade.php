@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="">
             <div class="row">
@@ -52,6 +52,7 @@
                 {{-- <th>Suspension</th> --}}
                 <th>Charge Date</th>
                 <th >Action</th>
+                <th hidden></th>
             </tr>
         </thead>
 
@@ -74,10 +75,14 @@
                 @endcan
 
                 @can('delete-grivance')
-                <a href="{{ route('flex.deleteDisciplinary', $item->id) }}" class="btn btn-danger btn-sm">
-                    <i class="ph-trash"></i>
-                </a>
+                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                onclick="cancelTermination(<?php echo $item->id; ?>)">
+                <button class="btn btn-danger btn-sm">  <i class="ph-trash"></i></button>
+                 </a>
                 @endcan
+             </td>
+             <td hidden>
+
              </td>
 
             </tr>
@@ -88,4 +93,72 @@
 
 @endsection
 
+@push('footer-script')
+    {{-- @include("app.includes.overtime_operations") --}}
+
+    <script>
+      
+
+
+        function cancelTermination(id) {
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Delete This Disciplinary Action?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var terminationid = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/delete-disciplinary') }}/" + terminationid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+
+                        $('#status' + id).fadeOut('fast', function() {
+                            $('#status' + id).fadeIn('fast').html(
+                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                                );
+                        });
+
+                        // alert('Request Cancelled Successifully!! ...');
+
+                        Swal.fire(
+                            'Cancelled!',
+                            'Disciplinary Action Deleted Successifully!!.',
+                            'success'
+                        )
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .fail(function() {
+                        Swal.fire(
+                            'Failed!',
+                            'Disciplinary Action deletion  Failed!! ....',
+                            'success'
+                        )
+
+                        alert('Disciplinary Action deletion Failed!! ...');
+                    });
+                }
+            });
+
+          
+        }
+    </script>
+
+
+
+ 
+
+@endpush
 

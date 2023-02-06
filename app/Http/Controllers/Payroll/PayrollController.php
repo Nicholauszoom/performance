@@ -180,7 +180,7 @@ class PayrollController extends Controller
         return view('payroll.payroll', [
             'data' => $data,
             'parent' => 'Payroll',
-            'child' => 'Paayroll'
+            'child' => 'Payroll'
 
         ]);
 
