@@ -74,10 +74,14 @@ class SysHelpers
     {
         // $first = DB::table('employees')
         //     ->where('job_title', $position1);
-        $users = Position::with('employee')
-            ->where('name',$position1)
+        $pos = Position::with('employees')->where('name',$position1)
             ->orWhere('name','LIKE', '%'.$position2.'%')
             ->get();
-        return $users;
+
+        // $pos = Position::where('name', $name)->get();
+        // return $users;
+
+        return $pos;
+        // dd($users->toArray());
     }
 }
