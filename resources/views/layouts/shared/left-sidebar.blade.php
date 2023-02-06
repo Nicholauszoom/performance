@@ -92,12 +92,12 @@
 
 
                         {{--  start of overtime link --}}
-                     
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"
                                 href="{{ route('flex.overtime') }}">Overtime </a>
                         </li>
-                      
+
                         {{-- / --}}
 
                         {{-- start of imprest link --}}
@@ -393,12 +393,7 @@
 
 
 
-                <li class="nav-item">
-                    <a href="{{ route('flex.departmentCost') }}" class="nav-link {{ request()->routeIs('flex.departmentCost') ? 'active' : null }}">
-                        <i class="ph-clipboard-text"></i>
-                        <span>Department Cost</span>
-                    </a>
-                </li>
+               
 
 
 

@@ -186,7 +186,7 @@
                             <div class="modal-footer">
                                 <hr>
 
-                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Send Request</button>
+                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
                             </div>
                         </form>
                     </div>
