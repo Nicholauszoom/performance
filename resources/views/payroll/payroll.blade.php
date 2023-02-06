@@ -20,9 +20,10 @@
         $pendingPayroll = $data['pendingPayroll'];
     @endphp
 
-    <div class="card">
-        <div class="card-header border-0">
+<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+    <div class="card-header border-0">
             <h5 class="mb-0 text-muted">Payroll</h5>
+            <hr>
         </div>
 
         <div class="card-body">
@@ -33,7 +34,7 @@
 
                 <div class="col-lg-12">
 
-                    <div class="card">
+                    <div class="card border-top  ">
                         <div class="card-header">
                             <h5 class="card-title">Run Payroll</h5>
                         </div>
@@ -79,7 +80,7 @@
             {{-- start of payslip mail list --}}
             {{-- @can('view-payroll') --}}
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                     <div class="card-header">
                         <h5 class="card-title">Payslip Mail Delivery List</h5>
                     </div>

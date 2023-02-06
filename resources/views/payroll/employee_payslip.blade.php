@@ -19,7 +19,7 @@
     @endphp
 
 
-<div class="card">
+<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
 
      {{-- start of view employee payslip--}}
     <div class="card-header">
