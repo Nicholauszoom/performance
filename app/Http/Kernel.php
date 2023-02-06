@@ -73,6 +73,11 @@ class Kernel extends HttpKernel
         'organisation' => \App\Http\Middleware\Organisation ::class, // For Organisation Management
         'report' => \App\Http\Middleware\Report ::class, // For Report
         'setting' => \App\Http\Middleware\Setting ::class, // For Report
+        'dashboard' => \App\Http\Middleware\Dashboard::class, // For Dashboard
+        'emptermination' => \App\Http\Middleware\EmployeeTermination::class, // For Employee Termination
+        'promotion' => \App\Http\Middleware\Promotion::class, // For Employee Promotion
+
+        
 
     ];
 }

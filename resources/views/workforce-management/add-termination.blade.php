@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card  border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 text-muted">Terminate Employee</h5>

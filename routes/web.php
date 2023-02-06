@@ -5,8 +5,10 @@ use App\Http\Middleware\Leave;
 use App\Http\Middleware\Report;
 // use App\Http\Controllers\RoleController;
 use App\Http\Middleware\Payroll;
+use App\Http\Middleware\Setting;
 use App\Http\Middleware\Employee;
 use App\Http\Middleware\Overtime;
+use App\Http\Middleware\Dashboard;
 use App\Http\Middleware\WorkForce;
 use App\Http\Middleware\Termination;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +45,7 @@ use App\Http\Controllers\AccessControll\PermissionController;
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Middleware\Setting;
+use App\Http\Middleware\Promotion;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -58,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
     Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
     // Dashboard
-    Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+    Route::get('/dashboard', [GeneralController::class, 'home'])->middleware('auth')->middleware([Dashboard::class])->name('dashboard.index');
 
     // project
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
@@ -134,14 +136,14 @@ Route::middleware('auth')->group(function () {
 
 
          // start of promotion/increment routes
-         Route::any('/promotion','promotion')->name('flex.promotion');
-         Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
-         Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
-         Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
-         Route::any('/add-increment','addIncrement')->name('flex.addIncrement');
-         Route::post('/save-increment','saveIncrement')->name('flex.saveIncrement');
-         Route::get('/view-increment/{id}','viewIncrement')->name('flex.viewIncrement');
-         Route::any('/depPositionFetcher','depPositionFetcher')->name('depPositionFetcher');
+         Route::any('promotion','promotion')->middleware([Promotion::class])->name('flex.promotion');
+         Route::any('/add-promotion','addPromotion')->middleware([Promotion::class])->name('flex.addPromotion');
+         Route::post('/save-promotion','savePromotion')->middleware([Promotion::class])->name('flex.savePromotion');
+         Route::get('/view-promotion/{id}','viewPromotion')->middleware([Promotion::class])->name('flex.viewPromotion');
+         Route::any('/add-increment','addIncrement')->middleware([Promotion::class])->name('flex.addIncrement');
+         Route::post('/save-increment','saveIncrement')->middleware([Promotion::class])->name('flex.saveIncrement');
+         Route::get('/view-increment/{id}','viewIncrement')->middleware([Promotion::class])->name('flex.viewIncrement');
+         Route::any('/depPositionFetcher','depPositionFetcher')->middleware([Promotion::class])->name('depPositionFetcher');
          Route::get('get/details/{id}', 'getDetails')->name('getDetails');
 
          // start of approvals route
@@ -175,18 +177,21 @@ Route::middleware('auth')->group(function () {
         Route::any('/deleteposition','deleteposition')->name('flex.deleteposition');
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
         Route::any('/employee','employee')->middleware([Employee::class])->name('flex.employee');
+
+        Route::any('/addkin/{id}','addkin')->middleware([Employee::class])->name('flex.addkin');
+        Route::any('/deletekin/{empID}/{id}','deletekin')->middleware([Employee::class])->name('flex.deletekin');
+        Route::any('/addproperty','addproperty')->middleware([Employee::class])->name('flex.addproperty');
+        Route::any('/employee_exit/{id}','employee_exit')->middleware([Employee::class])->name('flex.employee_exit');
+        Route::any('/deleteproperty/$id','deleteproperty')->middleware([Employee::class])->name('flex.deleteproperty');
+        Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->middleware([Employee::class])->name('flex.employeeDeactivationRequest');
+        Route::any('/employeeActivationRequest/{id}','employeeActivationRequest')->middleware([Employee::class])->name('flex.employeeActivationRequest');
+        Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->middleware([Employee::class])->name('flex.cancelRequest');
+
         // end of employees routes
 
-        // start of unpaid leaves
-        Route::any('/unpaid_leave','unpaid_leave')->name('flex.unpaid_leave');
-        Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
-        Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
-        Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
-        Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
-        //end of unpaid leaves
-
+   
         // For Employee Transfers
-        Route::any('/transfers','transfers')->name('flex.transfers');
+        Route::any('/transfers','transfers')->middleware([Employee::class])->name('flex.transfers');
 
 
     });
@@ -432,6 +437,13 @@ Route::middleware('auth')->group(function () {
 
         // Permission Settings
 
+     // start of unpaid leaves
+     Route::any('/unpaid_leave','unpaid_leave')->name('flex.unpaid_leave');
+     Route::any('/add_unpaid_leave','add_unpaid_leave')->name('flex.add_unpaid_leave');
+     Route::any('/save_unpaid_leave','save_unpaid_leave')->name('flex.save_unpaid_leave');
+     Route::any('/end_unpaid_leave/{id}','end_unpaid_leave')->name('flex.end_unpaid_leave');
+     Route::any('/confirm_unpaid_leave/{id}','confirm_unpaid_leave')->name('flex.confirm_unpaid_leave');
+     //end of unpaid leaves
 
           // start of holidays routes
           Route::any('/holidays','holidays')->name('flex.holidays');
@@ -564,9 +576,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
-        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+        Route::any('/userprofile/{id}','userprofile')->middleware([Employee::class])->name('flex.userprofile');
         // for employee biodata
-        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+        Route::any('/userdata/{id}','userdata')->middleware([Employee::class])->name('flex.userdata');
         // for employee profile picture
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
@@ -659,15 +671,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/home','home')->name('flex.home');
         Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
         Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
-        Route::any('/addkin/{id}','addkin')->name('flex.addkin');
-        Route::any('/deletekin/{empID}/{id}','deletekin')->name('flex.deletekin');
-        Route::any('/addproperty','addproperty')->name('flex.addproperty');
-        Route::any('/employee_exit/{id}','employee_exit')->name('flex.employee_exit');
-        Route::any('/deleteproperty/$id','deleteproperty')->name('flex.deleteproperty');
-        Route::any('/employeeDeactivationRequest','employeeDeactivationRequest')->name('flex.employeeDeactivationRequest');
-        Route::any('/employeeActivationRequest/{id}','employeeActivationRequest')->name('flex.employeeActivationRequest');
-        Route::any('/cancelRequest/{id}/{empID}','cancelRequest')->name('flex.cancelRequest');
-
+   
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
         Route::any('/delete_non_statutory_deduction/{id}','delete_non_statutory_deduction')->name('flex.delete_non_statutory_deduction');
 

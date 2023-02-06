@@ -3881,7 +3881,7 @@ class GeneralController extends Controller
         //echo "Record Added";
         session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $id;
+        $reload = '/flex/userprofile/?id=' .base64_encode($id);
 
         return redirect($reload);
     }
@@ -3895,7 +3895,7 @@ class GeneralController extends Controller
 
         session('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $empID;
+        $reload = '/flex/userprofile/' .base64_encode($empID);
 
         return redirect($reload);
     }
@@ -3921,7 +3921,7 @@ class GeneralController extends Controller
         $this->flexperformance_model->addproperty($data);
         session('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $request->input("employee");
+        $reload = '/flex/userprofile/' . base64_encode($request->input("employee"));
         return redirect($reload);
     }
 
@@ -3995,7 +3995,7 @@ class GeneralController extends Controller
         // $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =" . $request->input("empID") . "");
         session('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $request->input("empID");
+        $reload = '/flex/userprofile/' .base64_encode( $request->input("empID"));
         return redirect($reload);
     }
 
@@ -6268,10 +6268,10 @@ class GeneralController extends Controller
                 // $this->flexperformance_model->audit_log("Assigned a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
 
                 session('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
+                return redirect('/flex/userprofile/' .base64_encode($userID) . '#tab_role');
             } else {
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
+                return redirect('/flex/userprofile/?id=' . base64_encode($userID)  . '#tab_role');
             }
         }
     }
@@ -6286,7 +6286,7 @@ class GeneralController extends Controller
         if (sizeof($arr) <= 0) {
 
             session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
-            return redirect('/flex/userprofile/?id=' . $userID);
+            return redirect('/flex/userprofile/' .base64_encode($userID) );
         } else {
             for ($i = 0; $i < sizeof($arr); $i++) {
                 $rolename = $arr[$i];
@@ -6298,11 +6298,11 @@ class GeneralController extends Controller
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
                 session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID);
+                return redirect('/flex/userprofile/' . base64_encode($userID) );
             } else {
 
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID);
+                return redirect('/flex/userprofile/' . base64_encode($userID) );
             }
         }
     }
@@ -7670,7 +7670,6 @@ class GeneralController extends Controller
     // For Saving Termination
     public function saveTermination(Request $request)
     {
-
         // request()->validate(
         //     [
         //         'employeeID' => 'required',
@@ -7863,10 +7862,26 @@ class GeneralController extends Controller
             $termination->total_deductions = $total_deductions;
             $termination->save();
             // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
+
+            // NOTIFYING HEAD OF HUMAN CAPITAL
+            $position_data = SysHelpers::position('Country Head: Human Capital');
+
+                $fullname = $position_data['full_name'];
+                $email_data = array(
+                    'subject' => 'Employee Termination Request',
+                    'view' => 'emails.termination-request',
+                    'email' => $position_data['email'],
+                    'full_name' => $fullname,
+                );
+
+                //kmarealle@bancabc.co.tz
+                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+                
         } else {
 
             dd('YES');
         }
+
         return redirect('flex/termination')->with('status', $msg);
     }
      function save_log($id,$message,$from,$to){
@@ -7895,6 +7910,7 @@ class GeneralController extends Controller
             if ($approval->levels==$level->level_name) {
 
                 $termination=Termination::where('id',$id)->first();
+                // dd($termination->employeeID);
                 $termination->status=1;
                 $termination->update();
 
@@ -7902,6 +7918,21 @@ class GeneralController extends Controller
                 Employee::where('emp_id',$id)->update(['state'=>4]);
 
                 $msg='Employee is Terminated Successfully !';
+
+                // SENDING AN EMAIL TO THE APPROVED USER
+                $employee_data = SysHelpers::employeeData($termination->employeeID);
+                // dd($employee_data);
+                $fullname = $employee_data['full_name'];
+                $email_data = array(
+                    'subject' => 'Employee Termination Approval',
+                    'view' => 'emails.termination-approval',
+                    'email' => $employee_data['email'],
+                    'full_name' => $fullname,
+                );
+
+                //kmarealle@bancabc.co.tz
+                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+
                 return redirect('flex/termination')->with('msg', $msg);
             }
             else
@@ -8983,7 +9014,7 @@ class GeneralController extends Controller
         $employee = EMPL::where('emp_id', $user)->first();
         if ($request->hasfile('image')) {
 
-            $newImageName = $request->userfile->hashName();
+            $newImageName = $request->image->hashName();
             $request->image->move(public_path('storage/profile'), $newImageName);
 
             //    $filename=time().'.'.$file->getClientOriginalExtension();
