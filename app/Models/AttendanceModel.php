@@ -164,10 +164,12 @@ class AttendanceModel extends Model
 
 	function approve_leave($leaveID, $signatory, $todate)
 	{
-		DB::transaction(function () use ($leaveID, $signatory, $todate) {
+        $leave = DB::table('leave_application')->where('id',$leaveID)->first();
+        $leave_days = $this->getNumberOfWorkingDays($leave->start,$leave->end);
+		DB::transaction(function () use ($leaveID, $signatory, $todate,$leave_days) {
 
 			$query = "INSERT INTO leaves(empID, start, end, days, leave_address, mobile, nature, state, application_date, approved_by, recommended_by)
-		SELECT la.empID, la.start, la.end,  DATEDIFF(la.end, la.start) AS days, la.leave_address, la.mobile, la.nature, 1, la.application_date, '" . $signatory . "', la.approved_by_line  FROM leave_application la WHERE la.id = '" . $leaveID . "'  ";
+		SELECT la.empID, la.start, la.end,  '".$leave_days."' AS days, la.leave_address, la.mobile, la.nature, 1, la.application_date, '" . $signatory . "', la.approved_by_line  FROM leave_application la WHERE la.id = '" . $leaveID . "'  ";
 			DB::insert(DB::raw($query));
 			$query = "UPDATE leave_application SET status = 2, approved_by_hr = '" . $signatory . "', approved_date_hr = '" . $todate . "'  WHERE id ='" . $leaveID . "'";
 			DB::insert(DB::raw($query));

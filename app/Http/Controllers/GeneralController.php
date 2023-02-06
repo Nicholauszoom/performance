@@ -7697,27 +7697,53 @@ class GeneralController extends Controller
         //     ]
         // );
         $employeeID = $request->employeeID;
+
         $terminationDate = $request->terminationDate;
+        $this->save_log($employeeID,'Termination date','-',$terminationDate);
         $reason = $request->reason;
         $salaryEnrollment = $request->salaryEnrollment;
+        if(!empty($salaryEnrollment))$this->save_log($employeeID,'Salary enrollment','-',$salaryEnrollment);
         $normalDays = $request->normalDays;
         $publicDays = $request->publicDays;
         $noticePay = $request->noticePay;
+        if(!empty($noticePay))$this->save_log($employeeID,'Notice Pay','-',$noticePay);
         $leavePay = $request->leavePay;
+        if(!empty($leavePay))$this->save_log($employeeID,'Leave Pay','-',$leavePay);
+
         $livingCost = $request->livingCost;
+        if(!empty($livingCost))$this->save_log($employeeID,'Living Cost','-',$livingCost);
         $houseAllowance = $request->houseAllowance;
+        if(!empty($houseAllowance))$this->save_log($employeeID,'House Allowance','-',$houseAllowance);
+
         $utilityAllowance = $request->utilityAllowance;
+        if(!empty($utilityAllowance))$this->save_log($employeeID,'Utility Allowance','-',$utilityAllowance);
+
         $leaveAllowance = $request->leaveAllowance;
+        if(!empty($leaveAllowance))$this->save_log($employeeID,'Leave Allowance','-',$leaveAllowance);
+
         $tellerAllowance = $request->tellerAllowance;
+        if(!empty($tellerAllowance))$this->save_log($employeeID,'Teller Allowance','-',$tellerAllowance);
+
         $serevancePay = $request->serevancePay;
+        if(!empty($serevancePay))$this->save_log($employeeID,'Sevenance Allowance','-',$serevancePay);
+
         $leaveStand = $request->leaveStand;
         $arrears = $request->arrears;
+        if(!empty($arrears))$this->save_log($employeeID,'Areas','-',$arrears);
+
         $exgracia = $request->exgracia;
+        if(!empty($exgracia))$this->save_log($employeeID,'Areas','-',$exgracia);
         $bonus = $request->bonus;
+        if(!empty($bonus))$this->save_log($employeeID,'Bonus','-',$bonus);
         $longServing = $request->longServing;
+        if(!empty($longServing))$this->save_log($employeeID,'Long Serving','-',$longServing);
         $salaryAdvance = $request->salaryAdvance;
+        if(!empty($salaryAdvance))$this->save_log($employeeID,'Salary advance','-',$salaryAdvance);
+
         $otherDeductions = $request->otherDeductions;
+        if(!empty($otherDeductions))$this->save_log($employeeID,'Other Deduction','-',$otherDeductions);
         $otherPayments = $request->otherPayments;
+        if(!empty($otherPayments))$this->save_log($employeeID,'Other Payments','-',$otherPayments);
         $employee_actual_salary = $request->employee_actual_salary;
         $loan_balance = $request->loan_balance;
 
@@ -7726,6 +7752,7 @@ class GeneralController extends Controller
 
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
+
         $termination->terminationDate = $request->terminationDate;
         $termination->reason = $request->reason;
         $termination->salaryEnrollment = $request->salaryEnrollment;
@@ -7842,7 +7869,11 @@ class GeneralController extends Controller
         }
         return redirect('flex/termination')->with('status', $msg);
     }
+     function save_log($id,$message,$from,$to){
 
+        SysHelpers::FinancialLogs($id, $message,$from,$to, 'Employee Termination');
+
+     }
     // For Aprroving termination
     public function  approveTermination($id)
     {
@@ -7898,6 +7929,8 @@ class GeneralController extends Controller
     public function cancelTermination($id)
     {
         $promotion =Termination::find($id);
+
+        $this->flexperformance_model->deleteLog($promotion->employeeID);
 
         $promotion->delete();
 

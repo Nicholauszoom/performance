@@ -21,7 +21,7 @@
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 text-muted">Terminated Employees</h5>
 
-           
+
             @can('add-termination')
 
                 <a href="{{ route('flex.addTermination') }}" class="btn btn-perfrom ">
@@ -85,16 +85,16 @@
              </td>
              <td>
                 <span class="badge btn-main disabled">
-                    {{ $item->status == '1' ? 'Terminated':'Pending' }} 
+                    {{ $item->status == '1' ? 'Terminated':'Pending' }}
                 </span>
-                
+
              </td>
              <td>
-                @if($item->status=='1')
+               
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
                     <button type="button" class="btn btn-main btn-xs" ><i class="ph-printer"></i></button>
                 </a>
-                @endif
+
                 @if($level)
                 @if($item->status!='1')
                 @if ($item->status!=$check)

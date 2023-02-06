@@ -574,8 +574,14 @@
                         <label class="col-form-label col-md-2">Select Date</label>
                         <div class="col-md-10">
                             <div class="input-group">
-                                <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} ">
+                                <select required name="duration" class="select_payroll_month form-control select" data-width="1%">
+                                    <option selected disabled>Select Month</option>
+                                    <?php foreach ($month_list as $row) { ?>
+                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                    <?php } ?>
+                                </select>
+                                {{-- <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} "> --}}
                             </div>
                         </div>
                     </div>

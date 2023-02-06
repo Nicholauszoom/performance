@@ -1302,7 +1302,7 @@ function retire_list()
 
     public function unpaid_leave_employee(){
 
-        $query = "SELECT e.emp_id,ul.status,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
+        $query = "SELECT e.emp_id,ul.status,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID  AND ul.state=0";
 
         return DB::select(DB::raw($query));
     }
@@ -1335,6 +1335,7 @@ function retire_list()
 
     public function save_unpaid_leave($data){
         $data['state'] = 0;
+
         DB::transaction(function() use($data)
         {
         // DB::table('employee')->where('emp_id',$data['empID'])->update(['unpaid_leave'=>0]);
@@ -1465,6 +1466,12 @@ function getMeaslById($deductionID)
 	function employee_deduction($deduction) {
 	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_deductions WHERE deduction = ".$deduction." AND group_name = 0 ) ";
     return DB::select(DB::raw($query));
+    }
+
+    function deleteLog($id){
+        DB::table('financial_logs')->where('payrollno',$id)->delete();
+
+        return true;
     }
 
 
