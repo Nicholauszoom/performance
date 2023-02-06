@@ -541,7 +541,7 @@
                                          <h6 class="text-main">Number of children :</h6>
                                      </div>
                                      <div class="col-6">
-                                         <p class="text-muted"> @if($child) {{ $child }} @endif </p>
+                                         <p class="text-muted"> @if($childs) {{ $childs }} @endif </p>
                                      </div>
                                      <div class="col-12">
 

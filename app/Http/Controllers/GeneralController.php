@@ -7864,13 +7864,14 @@ class GeneralController extends Controller
             if ($approval->levels==$level->level_name) {
 
                 $termination=Termination::where('id',$id)->first();
-                $termination->status="Terminated";
+                $termination->status=1;
                 $termination->update();
-                $msg='Employee Termination is Confirmed Successfully !';
+                $msg='Employee is Terminated Successfully !';
                 return redirect('flex/termination')->with('msg', $msg);
             }
             else
             {
+                // To be upgraded
                 $termination=Termination::where('id',$id)->first();
                 $termination->status='Approved By '.$roles->name;
                 $termination->update();
@@ -8921,7 +8922,7 @@ class GeneralController extends Controller
         $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
         $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-        $child = EmployeeDependant::where('employeeID', $empID)->count();
+        $childs = EmployeeDependant::where('employeeID', $empID)->count();
         $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
 
         $data['photo'] = "";
@@ -8930,7 +8931,7 @@ class GeneralController extends Controller
 
         // return view('employee.userprofile', $data);
 
-        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','child'));
+        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
     }
 
     // For updating profile image
