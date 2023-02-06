@@ -90,11 +90,11 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Termination Approval Notification</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Termination Approval</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
-                <p>I Hope you are doing well,</p>
-                <p>You have been terminated as per requested</p>
-                <p>Thank you</p>
+                <p>This is to notify you that, termination process has been approved</p>
+                <p>Regards,</p>
+                <p>Flex Performance</p>
                 {{-- <p style="text-align: center;margin: 2.5em auto;">
                   <a class="button" href="/" style="background: #00204e; 
                        text-decoration: none; 
