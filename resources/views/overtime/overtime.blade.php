@@ -294,15 +294,7 @@
     <script>
         function holdOvertime(id) {
             Swal.fire({
-                title: 'Are You Sure You Want to Hold This Overtime Request?',
-                // text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, hold it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+             
                     var overtimeid = id;
 
                     $.ajax({

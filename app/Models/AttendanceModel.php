@@ -207,9 +207,9 @@ class AttendanceModel extends Model
 	}
 
 
-	function getNumberOfWorkingDays($startDate, $endDate, $holidays)
+	function getNumberOfWorkingDays($startDate, $endDate, $holidays=null)
 	{
-
+        $number_of_hodays = DB::table('holidays')->whereBetween('date', array($startDate, $endDate))->count();
 		// do strtotime calculations just once
 		$endDate = strtotime($endDate);
 		$startDate = strtotime($startDate);
@@ -259,14 +259,14 @@ class AttendanceModel extends Model
 		}
 
 		//We subtract the holidays
-		foreach ($holidays as $holiday) {
-			$time_stamp = strtotime($holiday);
-			//If the holiday doesn't fall in weekend
-			if ($startDate <= $time_stamp && $time_stamp <= $endDate && date("N", $time_stamp) != 6 && date("N", $time_stamp) != 7)
-				$workingDays--;
-		}
+		// foreach ($holidays as $holiday) {
+		// 	$time_stamp = strtotime($holiday);
+		// 	//If the holiday doesn't fall in weekend
+		// 	if ($startDate <= $time_stamp && $time_stamp <= $endDate && date("N", $time_stamp) != 6 && date("N", $time_stamp) != 7)
+		// 		$workingDays--;
+		// }
 
-		return $workingDays;
+		return $workingDays -$number_of_hodays;
 	}
 
 
@@ -345,7 +345,7 @@ class AttendanceModel extends Model
 			if ($leave->start <= $end_this_month && $leave->end >= $first_this_month) {//if leave doesn't end this month
 
 
-				if ($leave->start <= $first_this_month) {  //If leave doesn't start this month 
+				if ($leave->start <= $first_this_month) {  //If leave doesn't start this month
 					$leave_start = $first_this_month;
 				}
 
@@ -362,7 +362,7 @@ class AttendanceModel extends Model
 				$total_leave = $total_leave + $this->getNumberOfWorkingDays($leave_start, $leave_end, $holidays);
 			}
 		}
-		
+
 		return $total_leave;
 	}
 
