@@ -7866,6 +7866,10 @@ class GeneralController extends Controller
                 $termination=Termination::where('id',$id)->first();
                 $termination->status=1;
                 $termination->update();
+
+                //update employee status
+                Employee::where('emp_id',$id)->update(['state'=>4]);
+
                 $msg='Employee is Terminated Successfully !';
                 return redirect('flex/termination')->with('msg', $msg);
             }
