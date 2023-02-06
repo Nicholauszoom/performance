@@ -96,13 +96,13 @@
                 <p>Kindly be notified that Payroll run has been approved by the Managing Director. You can proceed with other payment processes</p>
                 <p>Thank you for your Kindly response.</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="https://dopplerhealth.com/" style="background: #DE4D3B; 
+                  <a class="button" href="/login" style="background: #00204e; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 
                        border-radius: 48px;
                        mso-padding-alt:0;
-                       text-underline-color:#ff3884">
+                       text-underline-color:#00204e">
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt">&nbsp;</i><![endif]-->
                     {{-- <span style="mso-text-raise:10pt;font-weight:bold;" class="btn btn-perfrom"> Login Link</span> --}}
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]-->

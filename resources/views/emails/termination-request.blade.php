@@ -90,13 +90,13 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Approval Notification</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Termination Request Notification</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
                 <p>I Hope you are doing well,</p>
                 <p>This is to notify you that there is a certain pending termination to be confirmed, Kindly login into the system to accomplish the Operation</p>
                 <p>Thank you for your Kindly response.</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="/" style="background: #00204e; 
+                  <a class="button" href="/login" style="background: #00204e; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 

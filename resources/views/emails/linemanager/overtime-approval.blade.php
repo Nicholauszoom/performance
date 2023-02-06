@@ -93,11 +93,11 @@
                 <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Employee Overtime Approval</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
                 <p>Hope your are doing well,</p>
-                <p>Theres an Employee Waiting to be approved on the overtime category, You may Login into the system to accomplish this task</p>
+                <p>This is to notify you that there is an Employee Overtime Approval to be performed, You may Login into the system to accomplish this task</p>
                 <p>Thank you in advance for consideration!!!</p>
                 <p>Welcome</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="/" style="background: #DE4D3B; 
+                  <a class="button" href="/login" style="background: #DE4D3B; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 
