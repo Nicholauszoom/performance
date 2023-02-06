@@ -850,7 +850,7 @@ class PayrollController extends Controller
 
                         //kmarealle@bancabc.co.tz
                         Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-                        dd("Email sent successfully");
+                        // dd("Email sent successfully");
                     $description = "Recommendation of payroll of date " . $todate;
 
                     //  $result = SysHelpers::auditLog(1,$description,$request);
@@ -872,6 +872,23 @@ class PayrollController extends Controller
 
     function runpayroll($pdate)
     {
+        // dd('Nimepokea');
+        $position1 ="Country Head: Finance & Procurement";
+        // $position2 ="Country Head: Human Capital";
+        $position2 ="Human Capital";
+        $position_data = SysHelpers::approvalEmp($position1, $position2);
+                        dd($position_data->toArray());
+                        $fullname = $position_data['full_name'];
+                        $email_data = array(
+                            'subject' => 'Payroll Run Notification',
+                            'view' => 'emails.head-human.notification',
+                            'email' => $position_data['email'],
+                            'full_name' => $fullname,
+                        );
+
+                        //kmarealle@bancabc.co.tz
+                        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+
         $payrollMonth = $pdate;
         if ($payrollMonth != "") {
 
