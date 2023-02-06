@@ -1966,7 +1966,9 @@ class GeneralController extends Controller
 
         //fetch Line manager data from employee table and send email
         $linemanager_data = SysHelpers::employeeData($linemanager);
+
         $fullname = $linemanager_data['full_name'];
+        
         $email_data = array(
             'subject'=> 'Employee Overtime Approval',
             'view' => 'emails.linemanager.overtime-approval',
@@ -7876,7 +7878,7 @@ class GeneralController extends Controller
 
                 //kmarealle@bancabc.co.tz
                 Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-                
+
         } else {
 
             dd('YES');

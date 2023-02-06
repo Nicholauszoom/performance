@@ -48,7 +48,7 @@ $performance_model = new \App\Models\Payroll\FlexPerformanceModel;
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                   <div class="card-head">
                     <h3>Position Info: &nbsp;&nbsp;&nbsp;<b><?php echo $positionName; ?></b> </h3>
                     <div class="clearfix"></div>
@@ -143,7 +143,7 @@ $performance_model = new \App\Models\Payroll\FlexPerformanceModel;
                   </div>
                   <!-- /.col-lg-6 (nested) -->
                 <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                   <div class="card-head">
                     <h2>Requirement and Qualification For This position</h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -271,7 +271,7 @@ $performance_model = new \App\Models\Payroll\FlexPerformanceModel;
                    <!-- /.col-lg-6 (nested) -->
                 <!-- /.col-lg-6 (nested) -->
                 <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                   <div class="card-head">
                     <h2>Accountabilities For This position</h2>
                     <ul class="nav navbar-right panel_toolbox">

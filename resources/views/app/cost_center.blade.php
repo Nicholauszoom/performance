@@ -20,7 +20,7 @@
 
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
           <div class="card-head py-3 px-3">
             <h2>Cost Center
              <a href="#bottom"><button type="button" id="modal" data-toggle="modal" data-target="#departmentModal" class="btn btn-main">ADD NEW</button></a> </h2>
@@ -120,7 +120,7 @@
 
       <?php ?>
        <div id="bottom" class="col-md-12 col-sm-12 col-xs-12">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0">
               <div class="card-head py-3 px-3">
                 <h2><i class="fa fa-tasks"></i> Add Cost Center</h2>
                 <ul class="nav navbar-right panel_toolbox">
@@ -164,7 +164,7 @@
                   </div>
                   <!-- END -->
                   <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-1">
                        <button class="btn btn-main" >ADD</button>
                     </div>
                   </div>

@@ -21,7 +21,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Reconciliation Summary</h5>
             </div>
@@ -64,7 +64,7 @@
     </div>
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Input Changes Approval Report </h5>
             </div>
@@ -155,7 +155,7 @@
     </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Pay Checklist</h5>
             </div>
@@ -247,7 +247,7 @@
     </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Employee BioData</h5>
             </div>
@@ -385,7 +385,7 @@
     </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Loans</h5>
             </div>
@@ -477,7 +477,7 @@
     </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Details</h5>
             </div>
@@ -539,7 +539,7 @@
     </div>
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Annual Leave</h5>
             </div>

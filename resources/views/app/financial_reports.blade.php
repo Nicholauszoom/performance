@@ -49,7 +49,7 @@
 
 
                         <!-- PANEL-->
-                        <div class="card">
+                        <div class="card ">
                             <div class="card-header">
                                 <h2>P9 (P.A.Y.E)</h2>
                                 <div class="clearfix"></div>
