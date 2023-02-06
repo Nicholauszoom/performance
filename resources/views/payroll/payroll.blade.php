@@ -30,7 +30,7 @@
             {{-- start of run payroll --}}
             @can('add-payroll')
             @if ($pendingPayroll == 0 && session('mng_paym'))
-            
+
                 <div class="col-lg-12">
 
                     <div class="card">
@@ -77,7 +77,7 @@
 
 
             {{-- start of payslip mail list --}}
-            @can('view-payroll')
+            {{-- @can('view-payroll') --}}
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
                 <div class="card">
                     <div class="card-header">
@@ -140,10 +140,8 @@
                                             {{-- start of cancel payroll button --}}
                                             @can('cancel-payroll')
                                             <span style="margin-right: 4px">
-                                                <a href="javascript:void(0)" onclick="cancelPayroll()"
-                                                    title="Cancel Payroll" class="icon-2 info-tooltip">
-                                                    <button type="button"
-                                                        class="btn bg-danger bg-opacity-20 text-danger btn-xs">
+                                                <a href="javascript:void(0)" onclick="cancelPayroll()" title="Cancel Payroll" class="icon-2 info-tooltip">
+                                                    <button type="button" class="btn bg-danger bg-opacity-20 text-danger btn-xs">
                                                         <i class="ph-x"></i>
                                                     </button>
                                                 </a>
@@ -173,7 +171,7 @@
                                         {{-- start of view email detail button --}}
                                         <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                             title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-info btn-xs"><i class="ph-circle"></i></button> 
+                                                class="btn btn-info btn-xs"><i class="ph-info"></i></button>
                                         </a>
                                         {{-- / --}}
                                         <?php if($row->state==0){ ?>
@@ -184,7 +182,7 @@
                                             target="blank" title="Print Report" class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-info btn-xs">
                                                 <i class="ph-printer"></i>
-                                            </button> 
+                                            </button>
                                         </a>
                                         {{-- / --}}
                                         <?php } else {  ?>
@@ -200,7 +198,7 @@
                                         <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
                                             title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button> 
+                                                class="btn btn-success btn-xs"><i class="ph-envelope"></i></button>
                                         </a>
                                         @endcan
                                         {{-- / --}}
@@ -219,7 +217,7 @@
                                         </a>
                                         @endcan
                                         {{-- / --}}
-                                        
+
                                         <?php } } ?>
                                         <?php } ?>
 
@@ -233,7 +231,7 @@
                 </div>
                 <!-- /basic layout -->
             </div>
-            @endcan
+            {{-- @endcan --}}
             {{-- / --}}
 
         </div>
@@ -279,86 +277,180 @@
 
     <script>
         function approvePayroll() {
-            if (confirm("Are You Sure You Want To Approve This Payroll") == true) {
-                // var id = id;
-                $('#hideList').hide();
-                $.ajax({
-                    url: "{{route('payroll.runpayroll',$pendingPayroll_month)}}",
-                    success: function(data) {
-                        if (data.status == 'OK') {
-                            alert("Payroll Approved Successifully");
 
-                            // SEND EMAILS
-                            if (confirm(
-                                    "Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??"
-                                ) == true) {
-                                $.ajax({
-                                    url: "{{route('payroll.send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
-                                    success: function(data) {}
-                                });
+            // if (confirm("Are You Sure You Want To Approve This Payroll") == true) {
+            //     // var id = id;
+            //     // $('#hideList').hide();
+            //     // $.ajax({
+            //     //     url: "{{route('payroll.runpayroll',$pendingPayroll_month)}}",
+            //     //     success: function(data) {
+            //     //         if (data.status == 'OK') {
+            //     //             alert("Payroll Approved Successifully");
+
+            //     //             // SEND EMAILS
+            //     //             if (confirm(
+            //     //                     "Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??"
+            //     //                 ) == true) {
+            //     //                 $.ajax({
+            //     //                     url: "{{route('payroll.send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
+            //     //                     success: function(data) {}
+            //     //                 });
+            //     //                 // SEND EMAILS
+            //     //             }
+
+            //     //             $('#payrollFeedback').fadeOut('fast', function() {
+            //     //                 $('#payrollFeedback').fadeIn('fast').html(data.message);
+            //     //             });
+            //     //             setTimeout(function() { // wait for 2 secs(2)
+            //     //                 location.reload(); // then reload the div to clear the success notification
+            //     //             }, 1500);
+            //     //         } else {
+            //     //             alert(
+            //     //                 "Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin."
+            //     //                 );
+
+            //     //             $('#payrollFeedback').fadeOut('fast', function() {
+            //     //                 $('#payrollFeedback').fadeIn('fast').html(data.message);
+            //     //             });
+            //     //         }
+
+            //     //     }
+
+            //     // });
+            // }
+
+
+            // Advanced initialization
+            Swal.fire({
+                title: 'Are You Sure You Want To Approve This Payroll?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $('#hideList').hide();
+
+                    $.ajax({
+                        url: "{{route('payroll.runpayroll',$pendingPayroll_month)}}",
+                        success: function(data) {
+                            if (data.status == 'OK') {
+                                alert("Payroll Approved Successifully");
+
                                 // SEND EMAILS
+                                if (confirm(
+                                        "Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??"
+                                    ) == true) {
+                                    $.ajax({
+                                        url: "{{route('payroll.send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
+                                        success: function(data) {}
+                                    });
+                                    // SEND EMAILS
+                                }
+
+                                $('#payrollFeedback').fadeOut('fast', function() {
+                                    $('#payrollFeedback').fadeIn('fast').html(data.message);
+                                });
+                                setTimeout(function() { // wait for 2 secs(2)
+                                    location.reload(); // then reload the div to clear the success notification
+                                }, 1500);
+                            } else {
+                                alert(
+                                    "Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin."
+                                    );
+
+                                $('#payrollFeedback').fadeOut('fast', function() {
+                                    $('#payrollFeedback').fadeIn('fast').html(data.message);
+                                });
                             }
 
-                            $('#payrollFeedback').fadeOut('fast', function() {
-                                $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            });
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
-                        } else {
-                            alert(
-                                "Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin."
-                                );
-
-                            $('#payrollFeedback').fadeOut('fast', function() {
-                                $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            });
                         }
 
-                    }
+                    });
 
-                });
-            }
+                }
+            });
+
         }
     </script>
 
-    <script>
-
-    </script>
 
 
     <script>
         function cancelPayroll() {
-            if (confirm("Are You Sure You Want To Cancel This Payroll") == true) {
-                // var id = id;
-                $('#hideList').hide();
-                $.ajax({
-                    url: "{{route('payroll.cancelpayroll','none')}}",
-                    success: function(data) {
-                        var data = JSON.parse(data);
-                        if (data.status == 'OK') {
-                            alert("Payroll was Cancelled Successifully!");
+            // if (confirm("Are You Sure You Want To Cancel This Payroll") == true) {
+            //     // var id = id;
+            //     $('#hideList').hide();
+            //     $.ajax({
+            //         url: "{{route('payroll.cancelpayroll','none')}}",
+            //         success: function(data) {
+            //             var data = JSON.parse(data);
+            //             if (data.status == 'OK') {
+            //                 alert("Payroll was Cancelled Successifully!");
 
-                            $('#payrollFeedback').fadeOut('fast', function() {
-                                $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            });
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
-                        } else {
-                            alert(
-                                "FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin."
-                                );
+            //                 $('#payrollFeedback').fadeOut('fast', function() {
+            //                     $('#payrollFeedback').fadeIn('fast').html(data.message);
+            //                 });
+            //                 setTimeout(function() { // wait for 2 secs(2)
+            //                     location.reload(); // then reload the div to clear the success notification
+            //                 }, 1500);
+            //             } else {
+            //                 alert(
+            //                     "FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin."
+            //                     );
 
-                            $('#payrollFeedback').fadeOut('fast', function() {
-                                $('#payrollFeedback').fadeIn('fast').html(data.message);
-                            });
+            //                 $('#payrollFeedback').fadeOut('fast', function() {
+            //                     $('#payrollFeedback').fadeIn('fast').html(data.message);
+            //                 });
+            //             }
+
+            //         }
+
+            //     });
+            // }
+
+            // Advanced initialization
+            Swal.fire({
+                title: 'Are You Sure You Want To Cancel This Payroll?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#hideList').hide();
+
+                    $.ajax({
+                        url: "{{route('payroll.cancelpayroll','none')}}",
+                        success: function(data) {
+                            var data = JSON.parse(data);
+                            if (data.status == 'OK') {
+                                alert("Payroll was Cancelled Successifully!");
+
+                                $('#payrollFeedback').fadeOut('fast', function() {
+                                    $('#payrollFeedback').fadeIn('fast').html(data.message);
+                                });
+                                setTimeout(function() { // wait for 2 secs(2)
+                                    location.reload(); // then reload the div to clear the success notification
+                                }, 1500);
+                            } else {
+                                alert(
+                                    "FAILED to Cancel Payroll, Try again,  If the Error persists Contact Your System Admin."
+                                    );
+
+                                $('#payrollFeedback').fadeOut('fast', function() {
+                                    $('#payrollFeedback').fadeIn('fast').html(data.message);
+                                });
+                            }
+
                         }
+                    });
 
-                    }
-
-                });
-            }
+                }
+            });
         }
     </script>
 
@@ -395,36 +487,77 @@
     <script>
         function sendEmail(payrollDate) {
 
-            if (confirm(
-                    "Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??"
-                ) == true) {
+            // if (confirm(
+            //         "Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??"
+            //     ) == true) {
 
-                $.ajax({
-                    url: "{{route('payroll.send_payslips',['payrollDate'=>" + payrollDate + "])}}",
-                    success: function(data) {
-                        let jq_json_obj = $.parseJSON(data);
-                        let jq_obj = eval(jq_json_obj);
-                        if (jq_obj.status === 'SENT') {
-                            $('#feedBackMail').fadeOut('fast', function() {
-                                $('#feedBackMail').fadeIn('fast').html(
-                                    "<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>"
-                                );
-                            });
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
-                        } else {
-                            $('#feedBackMail').fadeOut('fast', function() {
-                                $('#feedBackMail').fadeIn('fast').html(
-                                    "<p class='alert alert-danger text-center'>Emails sent error</p>");
-                            });
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
+            //     $.ajax({
+            //         url: "{{route('payroll.send_payslips',['payrollDate'=>" + payrollDate + "])}}",
+            //         success: function(data) {
+            //             let jq_json_obj = $.parseJSON(data);
+            //             let jq_obj = eval(jq_json_obj);
+            //             if (jq_obj.status === 'SENT') {
+            //                 $('#feedBackMail').fadeOut('fast', function() {
+            //                     $('#feedBackMail').fadeIn('fast').html(
+            //                         "<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>"
+            //                     );
+            //                 });
+            //                 setTimeout(function() { // wait for 2 secs(2)
+            //                     location.reload(); // then reload the div to clear the success notification
+            //                 }, 1500);
+            //             } else {
+            //                 $('#feedBackMail').fadeOut('fast', function() {
+            //                     $('#feedBackMail').fadeIn('fast').html(
+            //                         "<p class='alert alert-danger text-center'>Emails sent error</p>");
+            //                 });
+            //                 setTimeout(function() { // wait for 2 secs(2)
+            //                     location.reload(); // then reload the div to clear the success notification
+            //                 }, 1500);
+            //             }
+            //         }
+            //     });
+            // }
+
+
+            Swal.fire({
+                title: 'Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, send it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{route('payroll.send_payslips',['payrollDate'=>" + payrollDate + "])}}",
+                        success: function(data) {
+                            let jq_json_obj = $.parseJSON(data);
+                            let jq_obj = eval(jq_json_obj);
+                            if (jq_obj.status === 'SENT') {
+                                $('#feedBackMail').fadeOut('fast', function() {
+                                    $('#feedBackMail').fadeIn('fast').html(
+                                        "<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>"
+                                    );
+                                });
+                                setTimeout(function() { // wait for 2 secs(2)
+                                    location.reload(); // then reload the div to clear the success notification
+                                }, 1500);
+                            } else {
+                                $('#feedBackMail').fadeOut('fast', function() {
+                                    $('#feedBackMail').fadeIn('fast').html(
+                                        "<p class='alert alert-danger text-center'>Emails sent error</p>");
+                                });
+                                setTimeout(function() { // wait for 2 secs(2)
+                                    location.reload(); // then reload the div to clear the success notification
+                                }, 1500);
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+            });
+
+
+
         }
     </script>
 @endpush

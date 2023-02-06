@@ -209,6 +209,3 @@
 </div>
 
 @endsection
-@push('footer-script')
-
-@endpush
