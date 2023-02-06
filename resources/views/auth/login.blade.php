@@ -25,7 +25,7 @@
                         <form action="{{ route('login') }}" method="POST" class="login-form" autocomplete="off">
                             @csrf
 
-                            <div class="card mb-0">
+                            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0mb-0">
 
                                 <div class="card-body">
                                     <div class="text-center mb-3">
@@ -106,7 +106,7 @@
                                   </div>
                             </div>
                         </form>
-                        {{-- /login card --}}
+                        {{-- /login card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
 
                     </div>
                 </div>

@@ -72,7 +72,7 @@
 
         @if (session('vw_emp_sum'))
             <div class="col-xl-12">
-                <div class="card border-top border-top-width-3 border-top-main rounded-0">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
 
                     <ul class="list-group list-group-flush border-top">
                         <li class="list-group-item d-flex">
@@ -103,8 +103,8 @@
         {{-- /col --}}
 
         <div class="col-xl-12">
-            <div class="card">
-                <div class="card-header">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
+                <div class="card-header bg-main text-center">
                     <h5 class="mb-0">Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
                 </div>
 
@@ -173,9 +173,9 @@
         </div>
 
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="text-muted">Payroll Reconciliation Summary (Current & Previous)</h4>
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
+                <div class="card-header bg-main text-center">
+                    <h5 class="">Payroll Reconciliation Summary (Current & Previous)</h5>
                 </div>
 
 

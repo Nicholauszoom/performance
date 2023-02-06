@@ -109,7 +109,7 @@
     @endcan
     {{-- / --}}
 
-    {{-- start of view my overtime card --}}
+    {{-- start of view my overtime card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
     @can('view-my-overtime')
     <div class="card">
         <div class="card-header mb-0">
@@ -182,7 +182,7 @@
     {{--  start of others overtime --}}
     @can('view-others-overtime')
     @if (count($line_overtime) > 0)
-        <div class="card mt-4">
+        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0mt-4">
             <div class="card-header">
                 <h4 class="text-main">Others Overtime</h4>
 

@@ -20,7 +20,7 @@
 
 
 {{-- start of leave application --}}
-<div class="card col-lg-6 offset-3">
+<div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0col-lg-6 offset-3">
     <div class="card-header">
         <h5 class="text-main"><i class="ph-tasks"></i> Apply Leave</h5>
     </div>
