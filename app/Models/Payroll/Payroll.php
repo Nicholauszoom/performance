@@ -2425,7 +2425,7 @@ as gross,
             DB::table('temp_loan_logs')->delete();
             DB::table('temp_payroll_logs')->delete();
             DB::table('bonus')->delete();
-           // DB::table('overtimes')->delete();
+            DB::table('overtimes')->delete();
             DB::table('once_off_deduction')->delete();
         });
         return true;
