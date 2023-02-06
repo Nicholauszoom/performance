@@ -907,7 +907,7 @@ class PayrollController extends Controller
                     if ($result) {
 
                         $description = "Approved payment of payroll of date " . $payroll_date;
-                        //SENDING EMAIL BACK TO PREVIOUS RECOMMENDED USERS
+                        //SENDING EMAIL BACK TO PREVIOUS RECOMMENDED EMPLOYEES
                         $position1 = "Country Head: Finance & Procurement";
                         $position2 = "Human Capital";
                         $position_data = SysHelpers::approvalEmp($position1, $position2);
@@ -915,8 +915,6 @@ class PayrollController extends Controller
                         foreach ($position_data as $position) {
                             # code...
                             foreach ($position->employees as $employee) {
-                                # code...
-                                // var_dump($employee->full_name);
                                 $fullname = $employee->full_name;
                                 $email_data = array(
                                     'subject' => 'Payroll Approval Notification',
