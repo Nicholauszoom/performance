@@ -22,7 +22,7 @@ class Report
         $empID=auth()->user()->id;
         $role=UserRole::where('user_id',$empID)->first();
         $role_id=$role->role_id;
-        $permission=Permission::where('slug','access-report')->first();
+        $permission=Permission::where('slug','view-report')->first();
         $role_permision=RolePermission::where('role_id',$role_id)->where('permission_id',$permission->id)->first();
         
         if ($role_permision) {

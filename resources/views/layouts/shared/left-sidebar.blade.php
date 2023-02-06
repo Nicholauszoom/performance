@@ -204,14 +204,14 @@
                         @if (session('mng_attend'))
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li> --}}
                         @endif
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('attendance.leave') ? 'active' : null }}"
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('attendance.leave') ? 'active' : null }}"
                                 href="{{ route('attendance.leave') }}">Leave Applications</a></li>
-                       @can('approve-leave')
-                                <li class="nav-item"><a
+                         @can('view-report')
+                            <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('attendance.leavereport') ? 'active' : null }}"
                                 href="{{ route('attendance.leavereport') }}">Leave Reports</a></li>
-                                @endcan
+                         @endcan
                     </ul>
                 </li>
             @endcan

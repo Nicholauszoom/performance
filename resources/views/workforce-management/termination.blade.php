@@ -80,30 +80,28 @@
              <td>
                 {{ (
                     $item->salaryAdvance
-                    +$item->otherDeductions
+                    +$item->otherDeduction
                     )}}
              </td>
              <td>
-                <span class="badge bg-secondary disabled">
-                    {{ $item->status }}
+                <span class="badge btn-main disabled">
+                    {{ $item->status == '1' ? 'Terminated':'Pending' }} 
                 </span>
                 
              </td>
              <td>
-                @if($item->status=='Terminated')
+                @if($item->status=='1')
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
-                    <button type="button" class="btn btn-secondary btn-xs" ><i class="ph-printer"></i></button>
+                    <button type="button" class="btn btn-main btn-xs" ><i class="ph-printer"></i></button>
                 </a>
                 @endif
                 @if($level)
-                @if($item->status!='Terminated')
+                @if($item->status!='1')
                 @if ($item->status!=$check)
                 @can('confirm-termination')
-                <small class="text-gray text-center"> Please Approve Employee Termination!</small>
-                <br>
                 {{-- start of termination confirm button --}}
                 <a  href="{{ url('flex/approve-termination/'.$item->id) }}"  title="Confirm Termination">
-                    <button type="button" class="btn btn-success btn-xs" > <i class="ph-check"></i> Confirm</button>
+                    <button type="button" class="btn btn-main btn-xs" > <i class="ph-check"></i> Confirm</button>
                 </a>
                 {{-- / --}}
 
