@@ -831,7 +831,7 @@ class CI_Security
                 $matches['attributes'] = preg_replace('#^[^a-z]+#i', '', $matches['attributes']);
 
                 if (!preg_match($attributes_pattern, $matches['attributes'], $attribute, PREG_OFFSET_CAPTURE)) {
-                    // No (valid) attribute found? Discard everything else inside the tag
+                    // No (valid) attribute found? Discard border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0everything else inside the tag
                     break;
                 }
 

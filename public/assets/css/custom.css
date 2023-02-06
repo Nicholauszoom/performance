@@ -13,6 +13,11 @@
     border-top-color: (#00204e, var(--border-opacity)) !important;
 }
 
+.border-bottom-main {
+    --border-opacity: 1;
+    border-bottom-color: (#00204e, var(--border-opacity)) !important;
+}
+
 .bg-main-light {
     --bg-opacity: 1;
     background-color: rgba(#00204e, var(--bg-opacity)) !important;

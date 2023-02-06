@@ -85,7 +85,7 @@
                         </li>
                         {{-- / --}}
 
-                    
+
 
                         {{-- <li class="nav-item" role="presentation">
                             <a href="#arrearsTab" class="nav-link" data-bs-toggle="tab"
@@ -119,7 +119,7 @@
                             <?php } ?>
 
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <div class="card border-0 shadow-none">
+                                <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                                     <div class="card-header border-0 shadow-none">
                                         <div class="d-flex justify-content-between">
                                             <div>

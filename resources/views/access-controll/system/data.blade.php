@@ -18,7 +18,7 @@
 
 @section('content')
 
-<div class="card card-outline card-outline-tabs">
+<div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0card-outline card-outline-tabs">
     <div class="card-header">
         <ul class="nav nav-tabs" id="myTab2" role="tablist">
             <li class="nav-item">

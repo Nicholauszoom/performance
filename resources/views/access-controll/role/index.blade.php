@@ -43,7 +43,7 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($roles as $role)
-                                                  
+
                                                     <tr>
                                                         <th>{{ $loop->iteration }}</th>
                                                         <td>{{ $role->slug }}</td>
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- end of card --}}
+                    {{-- end of card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
                 </div>
                 {{-- end of col --}}
             </div>

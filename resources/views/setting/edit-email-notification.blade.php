@@ -28,7 +28,7 @@
     <div class="row mx-1">
 
         <div id="save_termination" class="col-6 mx-auto" tabindex="-1">
-            <div class="card p-1">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-1">
                 <div class="card-header">
                     <h6>Edit Email Notification</h6>
                 </div>
