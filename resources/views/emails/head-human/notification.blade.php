@@ -96,7 +96,7 @@
                 <p>Kindly be notified that the payroll has been run for the Month, Please login into the System to Confirm these Result.</p>
                 <p>Thank you for your Kindly response.</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="/login" style="background: #00204e; 
+                  <a class="button" href="{{url('/')}}" style="background: #00204e; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 

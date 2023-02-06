@@ -90,20 +90,20 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Employee Overtime Approval</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Employee Overtime Approval Request</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
                 <p>Hope your are doing well,</p>
                 <p>This is to notify you that there is an Employee Overtime Approval to be performed, You may Login into the system to accomplish this task</p>
                 <p>Thank you in advance for consideration!!!</p>
                 <p>Welcome</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="/login" style="background: #DE4D3B; 
+                  <a class="button" href="{{url('/')}}" style="background: #00204e; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 
                        border-radius: 48px;
                        mso-padding-alt:0;
-                       text-underline-color:#ff3884">
+                       text-underline-color:#00204e">
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt">&nbsp;</i><![endif]-->
                     <span style="mso-text-raise:10pt;font-weight:bold;" class="btn btn-perfrom"> Login Link</span>
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]-->
