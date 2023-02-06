@@ -93,8 +93,9 @@
                 <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Run Notification</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
                 <p>I Hope you are doing well, </p>
-                <p>Kindly be notified that the payroll has been run for the Month, Please login into the System to Confirm these Result.</p>
-                <p>Thank you for your Kindly response.</p>
+                <p>This is to inform you that payroll has been initiated, Kindly login to review and recommend.</p>
+                <p>Regards,</p>
+                <p>Flex Performance</p>
                 <p style="text-align: center;margin: 2.5em auto;">
                   <a class="button" href="{{url('/')}}" style="background: #00204e; 
                        text-decoration: none; 
