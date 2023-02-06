@@ -350,7 +350,7 @@ function generate_checklist() {
                 success: function(data) {
                     if (data.status == 1) {
                         alert("Pay CheckList Generated Successiful!");
-
+                        
                         $('#resultConfirmation').fadeOut('fast', function() {
                             $('#resultConfirmation').fadeIn('fast').html(data.message);
                         });
