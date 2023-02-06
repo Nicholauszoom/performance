@@ -90,25 +90,25 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Approval Notification</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payroll Approval</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
-                <p>I Hope you are doing well, </p>
-                <p>Kindly be notified that Payroll run has been approved by the Managing Director. You can proceed with other payment processes</p>
-                <p>Thank you for your Kindly response.</p>
-                <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="https://dopplerhealth.com/" style="background: #DE4D3B; 
+                <p>This is to notify you that there is pending payroll required to be approved</p>
+                <p>Regards,</p>
+                <p>Flex Performance</p>
+                {{-- <p style="text-align: center;margin: 2.5em auto;">
+                  <a class="button" href="{{url('/')}}" style="background: #00204e; 
                        text-decoration: none; 
                        padding: 1em 1.5em;
                        color: #ffffff; 
                        border-radius: 48px;
                        mso-padding-alt:0;
-                       text-underline-color:#ff3884">
+                       text-underline-color:#00204e">
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%;mso-text-raise:20pt">&nbsp;</i><![endif]-->
-                    {{-- <span style="mso-text-raise:10pt;font-weight:bold;" class="btn btn-perfrom"> Login Link</span> --}}
+                    {{-- <span style="mso-text-raise:10pt;font-weight:bold;" class="btn btn-perfrom"> Login Link</span>
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]-->
                   </a>
-                </p>
-                <p>Thanks!!!</p>
+                </p> --}}
+                {{-- <p>Thanks!!!</p> --}}
               </td>
             </tr>
             

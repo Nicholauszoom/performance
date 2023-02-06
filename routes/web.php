@@ -60,7 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
     Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
     // Dashboard
-    Route::get('/dashboard', [GeneralController::class, 'home'])->middleware('auth')->middleware([Dashboard::class])->name('dashboard.index');
+    Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+    //->middleware('auth')->middleware([Dashboard::class]);
 
     // project
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
@@ -110,7 +111,7 @@ Route::middleware('auth')->group(function () {
          Route::any('/add-termination','addTermination')->name('flex.addTermination');
          Route::post('/save-termination','saveTermination')->name('flex.saveTermination');
          Route::get('/view-termination/{id}','viewTermination')->name('flex.viewTermination');
-        
+
          // start of approvals route
          Route::get('/approve-termination/{id}','approveTermination')->name('flex.approveTermination');
          Route::get('/cancel-termination/{id}','cancelTermination')->name('flex.cancelTermination');
@@ -189,7 +190,7 @@ Route::middleware('auth')->group(function () {
 
         // end of employees routes
 
-   
+
         // For Employee Transfers
         Route::any('/transfers','transfers')->name('flex.transfers');
 
@@ -355,7 +356,7 @@ Route::middleware('auth')->group(function () {
 
     //start of organization access permission  routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
-   
+
         Route::any('/department','department')->name('flex.department');
         Route::any('/organization_level','organization_level')->name('flex.organization_level');
         Route::any('/organization_level_info/{id}','organization_level_info')->name('flex.organization_level_info');
@@ -429,7 +430,7 @@ Route::middleware('auth')->group(function () {
 
      // start of settings access permissions routes
      Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
-        
+
         // For Financial Groups Settings
         Route::any('/financial_group','financial_group')->name('flex.financial_group');
         Route::any('/financial_groups_details/{id}','financial_groups_details')->name('flex.financial_groups_details');
@@ -671,7 +672,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/home','home')->name('flex.home');
         Route::any('/positionFetcher','positionFetcher')->name('flex.positionFetcher');
         Route::any('/bankBranchFetcher','bankBranchFetcher')->name('flex.bankBranchFetcher');
-   
+
         Route::any('/delete_deduction','delete_deduction')->name('flex.delete_deduction');
         Route::any('/delete_non_statutory_deduction/{id}','delete_non_statutory_deduction')->name('flex.delete_non_statutory_deduction');
 

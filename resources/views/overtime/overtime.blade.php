@@ -293,41 +293,11 @@
 
     <script>
         function holdOvertime(id) {
-            Swal.fire({
-             
-                    var overtimeid = id;
+            // Swal.fire({
 
-                    $.ajax({
-                        url: "{{ url('flex/holdOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
+            //         var overtimeid = id;
 
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-success">HELD</span></div>'
-                                );
-                        });
-
-                        alert('Request Canceled!');
-
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Hold Failed!! ...');
-                    });
-                }
-            });
-
-
-            // if (confirm("Are You Sure You Want to Hold This Overtime Request") == true) {
-            //     var overtimeid = id;
-
-            //     $.ajax({
+            //         $.ajax({
             //             url: "{{ url('flex/holdOvertime') }}/" + overtimeid
             //         })
             //         .done(function(data) {
@@ -350,7 +320,37 @@
             //         .fail(function() {
             //             alert('Overtime Hold Failed!! ...');
             //         });
-            // }
+            //     }
+            // });
+
+
+            if (confirm("Are You Sure You Want to Hold This Overtime Request") == true) {
+                var overtimeid = id;
+
+                $.ajax({
+                        url: "{{ url('flex/holdOvertime') }}/" + overtimeid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+
+                        $('#status' + id).fadeOut('fast', function() {
+                            $('#status' + id).fadeIn('fast').html(
+                                '<div class="col-md-12"><span class="label label-success">HELD</span></div>'
+                                );
+                        });
+
+                        alert('Request Canceled!');
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    })
+                    .fail(function() {
+                        alert('Overtime Hold Failed!! ...');
+                    });
+            }
         }
 
         function approveOvertime(id) {

@@ -420,7 +420,7 @@
                                                         <br><br>
 
 
-                                                        <?php //if ($row->status == 1 && session('mng_emp') && $pendingPayroll == 0) {
+                                                        <?php if ($row->status == 1 && $pendingPayroll == 0) {
                                                         ?>
 
                                                         <a href="javascript:void(0)" title="Approve"
@@ -438,8 +438,8 @@
                                                         </a>
 
 
-                                                        <?php// }
-                                                                                                                     //   if ($row->status == 3 && session('recom_paym')) { ?> ?>
+                                                        <?php }
+                                                                      if ($row->status == 3) { ?> 
                                                         <a href="javascript:void(0)" title="Recommend"
                                                             class="icon-2 info-tooltip"
                                                             onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
@@ -454,8 +454,8 @@
                                                                     class="ph-x"></i></button>
                                                         </a>
 
-                                                        <?php// }
-                                                                                                                     //   if ($row->status == 4 && session('appr_paym')) { ?> ?>
+                                                        <?php  }
+                                                         if ($row->status == 4) { ?>
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="approveOvertime(<?php echo $row->eoid; ?>)">
@@ -469,7 +469,7 @@
                                                             <button class="btn btn-danger btn-xs"><i
                                                                     class="ph-x"></i></button>
                                                         </a>
-                                                        <?php// } ?> ?>
+                                                        <?php } ?>
 
 
                                                     </td>
