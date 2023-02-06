@@ -2775,7 +2775,11 @@ EOD;
         return view('reports.leave_balance', ['employees' => $employees]);
     }
 
-
+     public function annualLeaveData()
+    {
+        # code...
+        return view('app.reports.annual_leave_data');
+    }
 
     public function netTotalSummation($payroll_date)
     {

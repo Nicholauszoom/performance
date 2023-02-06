@@ -590,6 +590,59 @@
             </form>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="text-muted">Annual Leave</h5>
+            </div>
+
+            <form
+                id="demo-form2"
+                enctype="multipart/form-data"
+                method="post"
+                action="{{ route('reports.annualleave.data') }}"
+                data-parsley-validate class="form-horizontal form-label-left"
+            >
+                @csrf
+
+                <div class="card-body">
+
+                    <div class="row mt-3">
+                        <label class="col-form-label col-md-2">Select Date</label>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <select required name="duration" class="select_payroll_month form-control select" data-width="1%">
+                                    <option selected disabled>Select Month</option>
+                                    <?php foreach ($month_list as $row) { ?>
+                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                    <?php } ?>
+                                </select>
+                                {{-- <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} "> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label class="form-label">Report Format:</label>
+
+                        <div class="">
+                            <div class="d-inline-flex align-items-center me-3">
+                                <input type="radio" name="type" value="1" id="p9">
+                                <label class="ms-2" for="p9">PDF</label>
+                            </div>
+
+                            <div class="d-inline-flex align-items-center">
+                                <input type="radio" name="type" value="2" id="p9a">
+                                <label class="ms-2" for="p9a">Data table</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
 
 
 
