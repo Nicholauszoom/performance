@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Allowance Info'])
+@extends('layouts.vertical', ['title' => 'Assign Role'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -126,7 +126,7 @@
                                         <div class="row justify-content-end p-0 mr-1">
                                             <div class="p-2 ">
                                                 <a href="{{ route('roles.index') }}"
-                                                    class="btn btn-outline-secondary btn-xs px-6"><i
+                                                    class="btn btn-main btn-xs px-6"><i
                                                         class="fa fa-arrow-circle-left"></i> Back </a>
                                                 {!! Form::submit('Assign', [
                                                     'class' => 'btn btn-outline-success btn-xs

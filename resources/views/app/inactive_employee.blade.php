@@ -12,7 +12,7 @@
 @section('content')
 
 {{-- Deactivated Employess --}}
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-header">
     <h5 class="text-muted mb-0">Employee</h5>
   </div>
@@ -80,7 +80,7 @@
 {{-- /Deativated Employees --}}
 
 {{-- exit Request employee --}}
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-body">Exit Requests</div>
 
   <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
@@ -157,7 +157,7 @@
 {{-- /exit request employee --}}
 
 {{-- exit employee --}}
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-body">Exit Employee List</div>
 
   <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">

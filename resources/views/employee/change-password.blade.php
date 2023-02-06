@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-md-6 offset-3">
-        <div class="card">
+        <div class="card  border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <div class="d-flex justify-content-between mb-3">
                     <h4 class="text-main">Update Password</h4>

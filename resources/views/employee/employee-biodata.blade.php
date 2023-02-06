@@ -94,8 +94,8 @@
 
   <div class="row">
 
-    <div class="col-md-12 mt-1">
-        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none pb-4">
+    <div class="col-md-7 mx-auto mt-1">
+        <div class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
                 {{-- rounded-circle --}}
@@ -132,8 +132,8 @@
 
     {{-- Start of employee Bio data --}}
     <div class="row mx-auto">
-        <div class="col-md-12">
-            <div class="card">
+        <div class="col-md-12 ">
+            <div class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -174,7 +174,7 @@
                     {{-- start of basic information details --}}
                     <div role="tabpanel" class="tab-pane fade active show " id="basic" aria-labelledby="work-tab">
 
-                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
 
@@ -272,7 +272,7 @@
 
                     {{-- start of address and identification details --}}
                     <div role="tabpanel" class="tab-pane fade show " id="address" aria-labelledby="permission-tab">
-                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -346,7 +346,7 @@
 
                     {{-- start of employment informations --}}
                     <div role="tabpanel" class="tab-pane  fade show " id="asset" aria-labelledby="asset-tab">
-                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -460,7 +460,7 @@
                     {{-- Start of Family Informations --}}
                     <div role="tabpanel" class="tab-pane fade show" id="l-d" aria-labelledby="l-d-tab">
 
-                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
+                        <div class="card  rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -622,7 +622,7 @@
 
                     {{-- Start of Education --}}
                     <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
-                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -714,7 +714,7 @@
 
                     {{-- start of Employment History --}}
                     <div role="tabpanel" class="tab-pane " id="history" aria-labelledby="exit-tab">
-                        <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}

@@ -14,7 +14,7 @@
     <h4 class="text-muted">Approvals</h4>
 </div>
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body border-0">
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
             <li class="nav-item" role="presentation">
