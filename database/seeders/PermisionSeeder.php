@@ -54,13 +54,7 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-promotion','sys_module_id'=>1],
             // end of promotion/increment seeders
 
-            // start of unpaid leaves seeders
-            ['slug' => 'view-unpaid-leaves','sys_module_id'=>1],
-            ['slug' => 'add-unpaid-leaves','sys_module_id'=>1],
-            ['slug' => 'edit-unpaid-leaves','sys_module_id'=>1],
-            ['slug' => 'end-unpaid-leaves','sys_module_id'=>1],
-            ['slug' => 'delete-unpaid-leaves','sys_module_id'=>1],
-            // end of unpaid leaves seeders
+
 
             //start of overtime seeders
             ['slug' => 'view-overtime','sys_module_id'=>1],
@@ -80,6 +74,13 @@ class PermisionSeeder extends Seeder
             ['slug' => 'edit-imprest','sys_module_id'=>1],
             ['slug' => 'delete-imprest','sys_module_id'=>1],
             // end of imprest seeders
+
+             // start of employee approval seeders
+            ['slug' => 'employee-approval','sys_module_id'=>1],
+            ['slug' => 'view-transfer','sys_module_id'=>1],
+            ['slug' => 'confirm-transfer','sys_module_id'=>1],
+            // end of  employee approval seeders
+
 
             // start of grievances seeders
             ['slug' => 'view-grivance','sys_module_id'=>1],
@@ -144,6 +145,14 @@ class PermisionSeeder extends Seeder
 
             // start  of leave application seeders
             ['slug' => 'view-leave','sys_module_id'=>3],
+
+            // start of unpaid leaves seeders
+            ['slug' => 'view-unpaid-leaves','sys_module_id'=>3],
+            ['slug' => 'add-unpaid-leaves','sys_module_id'=>3],
+            ['slug' => 'edit-unpaid-leaves','sys_module_id'=>3],
+            ['slug' => 'end-unpaid-leaves','sys_module_id'=>3],
+            ['slug' => 'delete-unpaid-leaves','sys_module_id'=>3],
+            // end of unpaid leaves seeders
 
             // ['slug' => 'applied-leave','sys_module_id'=>3],
             // ['slug' => 'apply-leave','sys_module_id'=>3],
