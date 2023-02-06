@@ -172,6 +172,8 @@
                 url:"<?php echo url('flex/deleteGroup');?>/"+id,
                 success:function(data)
                 {
+
+                    var data = JSON.parse(data);
                     if(data.status == 'OK'){
                         alert("Group DELETED Successifully");
                         $('#feedBackRoleGroup').fadeOut('fast', function(){
@@ -198,6 +200,7 @@
                 url:"<?php echo url('flex/deleteGroup');?>/"+id,
                 success:function(data)
                 {
+                    var data = JSON.parse(data);
                     if(data.status == 'OK'){
                         alert("Group DELETED Successifully");
                         $('#feedBackFinanceGroup').fadeOut('fast', function(){

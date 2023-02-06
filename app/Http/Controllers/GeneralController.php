@@ -5988,9 +5988,9 @@ class GeneralController extends Controller
         }
     }
 
-    public function deleteGroup(Request $request)
+    public function deleteGroup($id,Request $request)
     {
-        $groupID = $this->uri->segment(3);
+        $groupID = $id;
         $result = $this->flexperformance_model->deleteGroup($groupID);
         if ($result == true) {
             $response_array['status'] = "OK";
@@ -7570,7 +7570,7 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee=Auth::User()->id;
-    
+
         $role=UserRole::where('user_id',$employee)->first();
         $role_id=$role->role_id;
         $terminate=Approvals::where('process_name','Termination Approval')->first();
@@ -7605,7 +7605,7 @@ class GeneralController extends Controller
     }
 
 
-  
+
     // For Saving Termination
     public function saveTermination(Request $request)
     {
@@ -7785,10 +7785,10 @@ class GeneralController extends Controller
     // For Aprroving termination
     public function  approveTermination($id)
     {
-       
+
        $employee=Auth::User()->id;
-    
-    
+
+
 
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -7799,7 +7799,7 @@ class GeneralController extends Controller
        {
             $approval_id=$level->approval_id;
             $approval=Approvals::where('id',$approval_id)->first();
-            
+
             if ($approval->levels==$level->level_name) {
 
                 $termination=Termination::where('id',$id)->first();
@@ -7817,14 +7817,14 @@ class GeneralController extends Controller
                 $msg='Approved By '.$roles->name;
                 return redirect('flex/termination')->with('msg', $msg);
             }
-           
+
        }
        else
        {
             $msg="Failed To Terminate !";
             return redirect('flex/termination')->with('msg', $msg);
        }
-   
+
     }
 
 
@@ -7838,7 +7838,7 @@ class GeneralController extends Controller
         return redirect('flex/termination')->with('msg', 'Termination was Cancelled successfully !');
     }
 
-    //For Viewing Termination 
+    //For Viewing Termination
     public function viewTermination($id)
     {
         $termination = Termination::where('id', $id)->first();
@@ -7912,7 +7912,7 @@ class GeneralController extends Controller
         $promotions = Promotion::orderBy('created_at', 'desc')->get();
         $i = 1;
         $employee=Auth::User()->id;
-    
+
         $role=UserRole::where('user_id',$employee)->first();
         $role_id=$role->role_id;
         $terminate=Approvals::where('process_name','Promotion Approval')->first();
@@ -7997,7 +7997,7 @@ class GeneralController extends Controller
     // For Approve Promotion
     public function  approvePromotion($id)
     {
-       
+
        $employee=Auth::User()->id;
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -8008,7 +8008,7 @@ class GeneralController extends Controller
        {
             $approval_id=$level->approval_id;
             $approval=Approvals::where('id',$approval_id)->first();
-            
+
             if ($approval->levels==$level->level_name) {
 
                 $promotion=Promotion::where('id',$id)->first();
@@ -8035,14 +8035,14 @@ class GeneralController extends Controller
                 $msg='Approved By '.$roles->name;
                 return redirect('flex/promotion')->with('msg', $msg);
             }
-           
+
        }
        else
        {
             $msg="Failed To Promote !";
             return redirect('flex/promotion')->with('msg', $msg);
        }
-   
+
     }
 
     // For Cancel Promotion
@@ -8110,12 +8110,12 @@ class GeneralController extends Controller
         $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
         $old->action="incremented";
-    
+
         $old->save();
 
         SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $request->newSalary * $oldRate, 'Salary Increment');
 
-  
+
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);
     }
@@ -8375,7 +8375,7 @@ class GeneralController extends Controller
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
-        
+
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
