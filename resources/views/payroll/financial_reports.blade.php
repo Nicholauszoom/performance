@@ -21,7 +21,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-muted">P9 (P.A.Y.E)</h5>
                 </div>
@@ -70,7 +70,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-muted">Workers Compasation Fund:</h5>
                 </div>
@@ -120,7 +120,7 @@
 
         <div class="col-md-6">
 
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-muted">Pension Fund</h5>
                 </div>
@@ -178,7 +178,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-muted">Skills Development Levy SDL (P10)</h5>
                 </div>
@@ -241,7 +241,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="text-muted">HESLB:</h5>
                 </div>

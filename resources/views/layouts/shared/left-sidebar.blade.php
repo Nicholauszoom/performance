@@ -228,10 +228,10 @@
                         <span>Loan Management</span>
                     </a>
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') || request()->routeIs('bank-loans') ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans')  ? 'show' : null }}">
                         @can('view-bank-loan')
                         <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('bank-loans') ? 'active' : null }}"
+                                class="nav-link "
                                 href="{{ route('bank-loans') }}">Bank Loans</a></li>
                         @endcan
                         @can('view-loan')

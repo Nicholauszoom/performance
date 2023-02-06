@@ -7,7 +7,7 @@
 <body>
 
 <div class="container">
-    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0mt-3 mb-3">
+    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 mt-3 mb-3">
         <div class="card-header text-center">
             <h4>Employee Loans Uploads</h4>
         </div>

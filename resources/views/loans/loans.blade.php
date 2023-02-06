@@ -11,7 +11,7 @@
 @endpush
 
 @section('content')
-    <div class="card">
+    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
 
             <div class="row">
                 <div class="col-md-12">

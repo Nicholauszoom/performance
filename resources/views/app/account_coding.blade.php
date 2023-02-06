@@ -24,7 +24,7 @@
 
             <div class="row">
               <div class="col-md-8 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                   <div class="card-head">
                     <h2> Account Codes</h2>
                     <div class="clearfix"></div>

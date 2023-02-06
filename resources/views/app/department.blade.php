@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="@if(session('mng_org')) col-md-7 @else col-md-12 @endif">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-main">Department List</h4>
                 <?php session("note"); ?>
@@ -25,7 +25,7 @@
 
             <table id="datatable" class="table table-striped table-bordered">
                 <thead>
-                    <tr>
+                    {{-- <tr> --}}
                         <th>S/N</th>
                         <th>Name</th>
                         <th>Cost Center</th>
@@ -35,7 +35,8 @@
                         <?php if(session('mng_org')){ ?>
                         <th>Option</th>
                         <?php } ?>
-                    </tr>
+                        <th hidden></th>
+                    {{-- </tr> --}}
                 </thead>
                 <tbody>
                     @foreach ($department as $row)
@@ -54,6 +55,7 @@
                                 <?php } ?>
                             </td>
                             <?php } ?>
+                            <td hidden></td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -63,7 +65,7 @@
 
     <?php if(session('mng_org')){ ?>
     <div class="col-md-5">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-main">Add Department</h4>
                 <div id="feedBack" class="mt-2"></div>
@@ -119,7 +121,7 @@
     <?php } ?>
 </div>
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header">
         <h4 class="text-main"> Disabled Departments</h4>
         <?php echo session("note");  ?>
