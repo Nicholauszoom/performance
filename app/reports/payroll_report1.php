@@ -157,13 +157,14 @@ $style = array('width' => 0.25, 'dash' => 0, 'color' => array(0, 0, 0));
 
 $date = date('F, Y', strtotime($payroll_month));
 $pdf->SetXY(127, 10);
-$path=public_path().'/img/logo/logo.png';
+//$path=public_path().'/img/logo/logo.png';
+$path=public_path().'/assets/images/logo-dif2.png';
 
 $pdf->Image($path, '', '',  35, 30, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 
 $pdf->SetY($pdf->GetY()+25);
 $headertable = <<<"EOD"
-<p align="center"><h3>Payroll Summary For $date</h3></p>
+<p align="center"><h3>Payments List For $date</h3></p>
 EOD;
 $pdf->writeHTMLCell(0, 12, '', '', $headertable, 0, 1, 0, true, '', true);
 
@@ -328,7 +329,7 @@ $html = '
     <th width="210"><b>Name</b></th>
 
     <th width="165"><b>Bank</b></th>
-    
+
     <th width="90"><b>BranchCode</b></th>
     <th width="125"><b>Account No</b></th>
     <th width="125"><b>Currency</b></th>
@@ -380,16 +381,33 @@ $signatory = '
  </thead>';
   $signatory .='
       <tr nobr="true">
-            <td width="332" align="left"><br><br>Signatory 1.........................</td>
+            <td width="332" align="left"><br><br>Prepared By.........................</td>
+
             <td width="320"><br><br>Signature..................</td>
             <td width="295"><br><br>Date.......................</td>
     </tr>';
 
+    $signatory .='
+    <tr nobr="true">
+          <td width="332" align="left"><br><br>Checked & Appr By.........................</td>
+
+          <td width="320"><br><br>Signature..................</td>
+          <td width="295"><br><br>Date.......................</td>
+  </tr>';
+
+  $signatory .='
+  <tr nobr="true">
+        <td width="332" align="left"><br><br>Checked & Appr By.........................</td>
+
+        <td width="320"><br><br>Signature..................</td>
+        <td width="295"><br><br>Date.......................</td>
+</tr>';
   $signatory .='<tbody>
       <tr nobr="true">
-            <td width="332" align="left"><br><br><br><br>Signatory 2........................</td>
-            <td width="312"><br><br><br><br>Signature....................</td>
-            <td width="312"><br><br><br><br>Date.........................</td>
+      <td width="332" align="left"><br><br>Approved By.........................</td>
+
+      <td width="320"><br><br>Signature..................</td>
+      <td width="295"><br><br>Date.......................</td>
     </tr>
     </tbody>';
 

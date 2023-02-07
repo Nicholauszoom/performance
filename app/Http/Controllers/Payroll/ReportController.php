@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceModel;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use SebastianBergmann\Timer\Duration;
 
 // use PDF;
 // use App\Helpers\SysHelpers;
@@ -114,7 +115,7 @@ class ReportController extends Controller
 
     function pay_checklist(Request $request)
     {
-        dd($request->all());
+        ;
         if (1) {
             $payroll_date = $request->input('payrolldate');
             $isReady = $this->reports_model->payCheklistStatus($payroll_date);
@@ -2740,6 +2741,9 @@ EOD;
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
 
                 // $accrual_days = $days*$employee->accrual_rate/$days_this_month;
+                $employee->day_entitled = $employee->leave_days_entitled;
+
+                $employee->rate = $employee->salary/$employee->leave_days_entitled;
 
                 $employee->accrual_days = $employee->accrual_rate;
 
@@ -2786,10 +2790,19 @@ EOD;
         return view('reports.leave_balance', ['employees' => $employees]);
     }
 
-     public function annualLeaveData()
+     public function annualLeaveData(Request $request)
     {
         # code...
-        return view('app.reports.annual_leave_data');
+        
+        $date = explode('-',$request->duration);
+        // $dur = $date[0].'-'.$date[1];
+        $year =$date[0];
+        $month =$date[1];
+        // $dur = date('Y-m', strtotime($month));
+        // dd($dur);
+        $leave_data = $this->attendance_model->getMonthlyLeave();
+        // dd($leave_data);
+        return view('app.reports.annual_leave_data', compact('leave_data'));
     }
 
     public function netTotalSummation($payroll_date)
