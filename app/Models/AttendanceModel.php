@@ -591,6 +591,13 @@ class AttendanceModel extends Model
 
 	function getMonthlyLeave(){
 		$monthlyleave = DB::table('leaves')
-			      ->select 
+		->join('employee', 'leaves.empID','=','employee.emp_id')
+		->select('*')
+		// ->whereMonth('application_date', '<=', $month)
+		// ->whereYear('application_date','<=', $year)
+		->get();
+		// ->where('employee.emp_id',$name)
+		// ->where('job_posts.id',$job_id)
+		return $monthlyleave;
 	}
 }

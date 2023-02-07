@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceModel;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use SebastianBergmann\Timer\Duration;
 
 // use PDF;
 // use App\Helpers\SysHelpers;
@@ -2780,11 +2781,14 @@ EOD;
         # code...
         
         $date = explode('-',$request->duration);
-        $month = $date[0].'-'.$date[1];
-        // dd($month);
-        $monthlyleave = $this->attendance_model->getMonthlyLeave();
-        dd($monthlyleave);
-        return view('app.reports.annual_leave_data');
+        // $dur = $date[0].'-'.$date[1];
+        $year =$date[0];
+        $month =$date[1];
+        // $dur = date('Y-m', strtotime($month));
+        // dd($dur);
+        $leave_data = $this->attendance_model->getMonthlyLeave();
+        // dd($leave_data);
+        return view('app.reports.annual_leave_data', compact('leave_data'));
     }
 
     public function netTotalSummation($payroll_date)
