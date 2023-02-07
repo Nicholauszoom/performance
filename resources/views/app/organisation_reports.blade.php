@@ -256,17 +256,17 @@
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.employeeBioDataExport') }}"
+                action="{{ route('flex.biodata') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf
 
                 <div class="card-body">
                     <div class="input-group">
-                        <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                            <option selected disabled>Select Month</option>
-                            <?php foreach ($month_list as $row) { ?>
-                            <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                        <select required name="emp_id" class="select_payroll_month form-control select" data-width="1%">
+                            <option selected disabled>Select Employee</option>
+                            <?php foreach ($employee as $row) { ?>
+                            <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname.' '.$row->mname.' '.$row->lname; ?></option>
                             <?php } ?>
                         </select>
                         <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>

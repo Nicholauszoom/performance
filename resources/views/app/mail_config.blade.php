@@ -37,7 +37,7 @@
 
         <!-- Tabs -->
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-head">
                     <h2><i class="fa fa-bars"></i> Mail Configuration</h2>
                     <ul class="nav navbar-right panel_toolbox">
@@ -95,7 +95,7 @@
 
                         <input type="hidden" name="id" value="<?php if (isset($id)) echo $id;?>">
 
-                        <button style="margin-left: 37%" type="submit" class="btn btn-success">Save</button>
+                        <button style="margin-left: 37%" type="submit" class="btn btn-main">Save</button>
 
                     </form>
 

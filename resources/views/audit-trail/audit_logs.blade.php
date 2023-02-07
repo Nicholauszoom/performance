@@ -11,7 +11,7 @@
 
 @section('content')
 
-    <div class="card">
+    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
         <div class="card-header">
             <div class="d-flex justify-content-between align-center">
                 <h5 class="text-main">User Activity Logs</h5>

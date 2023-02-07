@@ -20,7 +20,7 @@
 
     <form id="addEmployee" enctype="multipart/form-data" autocomplete="off" method="post" data-parsley-validate>
 
-        <div class="card">
+        <div class="card  border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h5 class="mb-0 text-muted">Personal Details</h5>
             </div>

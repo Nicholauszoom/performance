@@ -53,7 +53,7 @@
         </ul>
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
                         <h5 class="text-muted">Add Allowance</h5>
                     </div>
@@ -137,7 +137,7 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header border-0 shadow-none">
                         <div class="d-flex justify-content-between align-itens-center">
                             <h5 class="h5 text-muted">Allowance</h5>
