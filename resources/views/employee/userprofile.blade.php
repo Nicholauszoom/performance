@@ -63,7 +63,7 @@
                     <div class="card-img-actions d-inline-block my-3">
                         {{-- rounded-circle --}}
                         <img class="img-fluid "
-                            src="{{ $photo == 'user.png' ? 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}"
+                            src="{{ $photo == 'user.png' ? 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}"
                             width="150" height="150" alt="">
                     </div>
 

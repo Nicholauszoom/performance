@@ -577,10 +577,14 @@ Route::middleware('auth')->group(function () {
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
-        Route::any('/userprofile/{id}','userprofile')->middleware([Employee::class])->name('flex.userprofile');
+        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
         // for employee biodata
-        Route::any('/userdata/{id}','userdata')->middleware([Employee::class])->name('flex.userdata');
+        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
         // for employee profile picture
+
+
+        // Download biodata
+        Route::any('/biodata','viewBiodata')->name('flex.biodata');
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 

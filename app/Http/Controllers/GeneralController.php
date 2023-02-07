@@ -1966,9 +1966,7 @@ class GeneralController extends Controller
 
         //fetch Line manager data from employee table and send email
         $linemanager_data = SysHelpers::employeeData($linemanager);
-
         $fullname = $linemanager_data['full_name'];
-        
         $email_data = array(
             'subject'=> 'Employee Overtime Approval',
             'view' => 'emails.linemanager.overtime-approval',
@@ -4187,6 +4185,8 @@ class GeneralController extends Controller
     {
 
         $data['employees'] = $this->flexperformance_model->Employee();
+
+
         return view("unpaidleave.add-unpaid-leave", $data);
     }
 
@@ -4230,6 +4230,7 @@ class GeneralController extends Controller
         );
 
         $data = ['empID' => $request->empID, 'start_date' => $request->start_date, 'end_date' => $request->end_date, 'reason' => $request->reason];
+
         SysHelpers::FinancialLogs($request->empID, 'Assigned  To Unpaid Leave', $request->start_date, $request->end_date, 'Payroll Input');
 
         $result = $this->flexperformance_model->save_unpaid_leave($data);
@@ -6051,9 +6052,9 @@ class GeneralController extends Controller
         }
     }
 
-    public function deleteGroup($id,Request $request)
+    public function deleteGroup(Request $request)
     {
-        $groupID = $id;
+        $groupID = $this->uri->segment(3);
         $result = $this->flexperformance_model->deleteGroup($groupID);
         if ($result == true) {
             $response_array['status'] = "OK";
@@ -7633,7 +7634,7 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee=Auth::User()->id;
-
+    
         $role=UserRole::where('user_id',$employee)->first();
         $role_id=$role->role_id;
         $terminate=Approvals::where('process_name','Termination Approval')->first();
@@ -7668,10 +7669,11 @@ class GeneralController extends Controller
     }
 
 
-
+  
     // For Saving Termination
     public function saveTermination(Request $request)
     {
+
         // request()->validate(
         //     [
         //         'employeeID' => 'required',
@@ -7698,53 +7700,27 @@ class GeneralController extends Controller
         //     ]
         // );
         $employeeID = $request->employeeID;
-
         $terminationDate = $request->terminationDate;
-        $this->save_log($employeeID,'Termination date','-',$terminationDate);
         $reason = $request->reason;
         $salaryEnrollment = $request->salaryEnrollment;
-        if(!empty($salaryEnrollment))$this->save_log($employeeID,'Salary enrollment','-',$salaryEnrollment);
         $normalDays = $request->normalDays;
         $publicDays = $request->publicDays;
         $noticePay = $request->noticePay;
-        if(!empty($noticePay))$this->save_log($employeeID,'Notice Pay','-',$noticePay);
         $leavePay = $request->leavePay;
-        if(!empty($leavePay))$this->save_log($employeeID,'Leave Pay','-',$leavePay);
-
         $livingCost = $request->livingCost;
-        if(!empty($livingCost))$this->save_log($employeeID,'Living Cost','-',$livingCost);
         $houseAllowance = $request->houseAllowance;
-        if(!empty($houseAllowance))$this->save_log($employeeID,'House Allowance','-',$houseAllowance);
-
         $utilityAllowance = $request->utilityAllowance;
-        if(!empty($utilityAllowance))$this->save_log($employeeID,'Utility Allowance','-',$utilityAllowance);
-
         $leaveAllowance = $request->leaveAllowance;
-        if(!empty($leaveAllowance))$this->save_log($employeeID,'Leave Allowance','-',$leaveAllowance);
-
         $tellerAllowance = $request->tellerAllowance;
-        if(!empty($tellerAllowance))$this->save_log($employeeID,'Teller Allowance','-',$tellerAllowance);
-
         $serevancePay = $request->serevancePay;
-        if(!empty($serevancePay))$this->save_log($employeeID,'Sevenance Allowance','-',$serevancePay);
-
         $leaveStand = $request->leaveStand;
         $arrears = $request->arrears;
-        if(!empty($arrears))$this->save_log($employeeID,'Areas','-',$arrears);
-
         $exgracia = $request->exgracia;
-        if(!empty($exgracia))$this->save_log($employeeID,'Areas','-',$exgracia);
         $bonus = $request->bonus;
-        if(!empty($bonus))$this->save_log($employeeID,'Bonus','-',$bonus);
         $longServing = $request->longServing;
-        if(!empty($longServing))$this->save_log($employeeID,'Long Serving','-',$longServing);
         $salaryAdvance = $request->salaryAdvance;
-        if(!empty($salaryAdvance))$this->save_log($employeeID,'Salary advance','-',$salaryAdvance);
-
         $otherDeductions = $request->otherDeductions;
-        if(!empty($otherDeductions))$this->save_log($employeeID,'Other Deduction','-',$otherDeductions);
         $otherPayments = $request->otherPayments;
-        if(!empty($otherPayments))$this->save_log($employeeID,'Other Payments','-',$otherPayments);
         $employee_actual_salary = $request->employee_actual_salary;
         $loan_balance = $request->loan_balance;
 
@@ -7753,7 +7729,6 @@ class GeneralController extends Controller
 
         $termination = new Termination();
         $termination->employeeID = $request->employeeID;
-
         $termination->terminationDate = $request->terminationDate;
         $termination->reason = $request->reason;
         $termination->salaryEnrollment = $request->salaryEnrollment;
@@ -7864,40 +7839,20 @@ class GeneralController extends Controller
             $termination->total_deductions = $total_deductions;
             $termination->save();
             // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
-
-            // NOTIFYING HEAD OF HUMAN CAPITAL
-            $position_data = SysHelpers::position('Country Head: Human Capital');
-
-                $fullname = $position_data['full_name'];
-                $email_data = array(
-                    'subject' => 'Employee Termination Request',
-                    'view' => 'emails.termination-request',
-                    'email' => $position_data['email'],
-                    'full_name' => $fullname,
-                );
-
-                //kmarealle@bancabc.co.tz
-                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-
         } else {
 
             dd('YES');
         }
-
         return redirect('flex/termination')->with('status', $msg);
     }
-     function save_log($id,$message,$from,$to){
 
-        SysHelpers::FinancialLogs($id, $message,$from,$to, 'Employee Termination');
-
-     }
     // For Aprroving termination
     public function  approveTermination($id)
     {
-
+       
        $employee=Auth::User()->id;
-
-
+    
+    
 
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -7908,33 +7863,13 @@ class GeneralController extends Controller
        {
             $approval_id=$level->approval_id;
             $approval=Approvals::where('id',$approval_id)->first();
-
+            
             if ($approval->levels==$level->level_name) {
 
                 $termination=Termination::where('id',$id)->first();
-                // dd($termination->employeeID);
                 $termination->status=1;
                 $termination->update();
-
-                //update employee status
-                Employee::where('emp_id',$id)->update(['state'=>4]);
-
                 $msg='Employee is Terminated Successfully !';
-
-                // SENDING AN EMAIL TO THE APPROVED USER
-                $employee_data = SysHelpers::employeeData($termination->employeeID);
-                // dd($employee_data);
-                $fullname = $employee_data['full_name'];
-                $email_data = array(
-                    'subject' => 'Employee Termination Approval',
-                    'view' => 'emails.termination-approval',
-                    'email' => $employee_data['email'],
-                    'full_name' => $fullname,
-                );
-
-                //kmarealle@bancabc.co.tz
-                Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-
                 return redirect('flex/termination')->with('msg', $msg);
             }
             else
@@ -7947,14 +7882,14 @@ class GeneralController extends Controller
                 $msg='Approved By '.$roles->name;
                 return redirect('flex/termination')->with('msg', $msg);
             }
-
+           
        }
        else
        {
             $msg="Failed To Terminate !";
             return redirect('flex/termination')->with('msg', $msg);
        }
-
+   
     }
 
 
@@ -7963,14 +7898,12 @@ class GeneralController extends Controller
     {
         $promotion =Termination::find($id);
 
-        $this->flexperformance_model->deleteLog($promotion->employeeID);
-
         $promotion->delete();
 
         return redirect('flex/termination')->with('msg', 'Termination was Cancelled successfully !');
     }
 
-    //For Viewing Termination
+    //For Viewing Termination 
     public function viewTermination($id)
     {
         $termination = Termination::where('id', $id)->first();
@@ -8044,7 +7977,7 @@ class GeneralController extends Controller
         $promotions = Promotion::orderBy('created_at', 'desc')->get();
         $i = 1;
         $employee=Auth::User()->id;
-
+    
         $role=UserRole::where('user_id',$employee)->first();
         $role_id=$role->role_id;
         $terminate=Approvals::where('process_name','Promotion Approval')->first();
@@ -8129,7 +8062,7 @@ class GeneralController extends Controller
     // For Approve Promotion
     public function  approvePromotion($id)
     {
-
+       
        $employee=Auth::User()->id;
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -8140,7 +8073,7 @@ class GeneralController extends Controller
        {
             $approval_id=$level->approval_id;
             $approval=Approvals::where('id',$approval_id)->first();
-
+            
             if ($approval->levels==$level->level_name) {
 
                 $promotion=Promotion::where('id',$id)->first();
@@ -8167,14 +8100,14 @@ class GeneralController extends Controller
                 $msg='Approved By '.$roles->name;
                 return redirect('flex/promotion')->with('msg', $msg);
             }
-
+           
        }
        else
        {
             $msg="Failed To Promote !";
             return redirect('flex/promotion')->with('msg', $msg);
        }
-
+   
     }
 
     // For Cancel Promotion
@@ -8242,12 +8175,12 @@ class GeneralController extends Controller
         $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
         $old->action="incremented";
-
+    
         $old->save();
 
         SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $request->newSalary * $oldRate, 'Salary Increment');
 
-
+  
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);
     }
@@ -8507,7 +8440,7 @@ class GeneralController extends Controller
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
-
+        
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -9313,6 +9246,68 @@ class GeneralController extends Controller
 
         }
     // end of delete approval
+
+
+
+    //  For Employee Biodata download
+        public function viewBiodata(Request $request)
+        {
+            $id = $request->emp_id;
+    
+    
+            $extra = $request->input('extra');
+            $data['employee'] = $this->flexperformance_model->userprofile($id);
+    
+            // dd($data['employee'] );
+            $data['kin'] = $this->flexperformance_model->getkin($id);
+            $data['property'] = $this->flexperformance_model->getproperty($id);
+            $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+            $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+            $data['allrole'] = $this->flexperformance_model->role($id);
+            $data['role'] = $this->flexperformance_model->getuserrole($id);
+            $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+            $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+            $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+            $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+            $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+    
+            $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+    
+            $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+            $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+            $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+            $data['title'] = "Profile";
+            $empID = $id;
+            $details = EmployeeDetail::where('employeeID', $empID)->first();
+    
+            $emergency = EmergencyContact::where('employeeID', $empID)->first();
+    
+            $children = EmployeeDependant::where('employeeID', $empID)->get();
+    
+    
+            $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+    
+            $parents = EmployeeParent::where('employeeID', $empID)->get();
+    
+            $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+    
+    
+            $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+    
+            $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+            $data['profile'] = EMPL::where('emp_id', $empID)->first();
+    
+            $childs = EmployeeDependant::where('employeeID', $empID)->count();
+            $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+    
+            $data['photo'] = "";
+    
+            $data['parent'] = "Employee Profile";
+    
+            // return view('employee.userprofile', $data);
+    
+            return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+        }
 
 
 }
