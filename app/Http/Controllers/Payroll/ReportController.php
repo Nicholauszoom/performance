@@ -2703,6 +2703,12 @@ EOD;
 
     }
 
+    public function annualleave1(Request $request)
+{
+    $data = $this->attendance_model->get_anual_leave_position($request->duration);
+
+    //dd($request->duration);
+}
 
 
     public function annualleave(Request $request)
@@ -2739,7 +2745,12 @@ EOD;
 
                 $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
 
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+                $employee->current_balance = $this->attendance_model->getClossingLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+                // $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+               // $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
             }
             // dd("all here");
         } else {
@@ -2775,7 +2786,11 @@ EOD;
         return view('reports.leave_balance', ['employees' => $employees]);
     }
 
-
+     public function annualLeaveData()
+    {
+        # code...
+        return view('app.reports.annual_leave_data');
+    }
 
     public function netTotalSummation($payroll_date)
     {
