@@ -64,18 +64,18 @@
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
             @can('edit-employee')
-            <td class="options-width">
-                <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
+            <td class="options-width" style="width:200px !important;">
+                <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm" title="Info and Details">
+                    <i class="ph-info"></i>
                 </a>
 
                 @if (session('mng_emp'))
-                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-main btn-xs"><i class="ph-pen"></i></button>
+                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Info and Details">
+                    <i class="ph-pen"></i>
                 </a>
 
-                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
-                 <button class="btn btn-danger ">  <i class="ph-prohibit"></i></button>
+                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  class="btn btn-danger btn-sm"  title="Deactivate">
+                <i class="ph-prohibit"></i>
                 </a>
 {{--
                     <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
