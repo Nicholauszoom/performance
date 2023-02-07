@@ -2775,9 +2775,15 @@ EOD;
         return view('reports.leave_balance', ['employees' => $employees]);
     }
 
-     public function annualLeaveData()
+     public function annualLeaveData(Request $request)
     {
         # code...
+        
+        $date = explode('-',$request->duration);
+        $month = $date[0].'-'.$date[1];
+        // dd($month);
+        $monthlyleave = $this->attendance_model->getMonthlyLeave();
+        dd($monthlyleave);
         return view('app.reports.annual_leave_data');
     }
 
