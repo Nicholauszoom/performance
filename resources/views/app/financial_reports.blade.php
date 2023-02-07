@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header border-0">
         <h2 class="text-muted">Pending Payments <small>Need To Be Responded On</small></h2>
     </div>
@@ -31,7 +31,7 @@
 
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-head">
                         <h2>Statutory Reports</h2>
                         <ul class="nav navbar-right panel_toolbox">
@@ -49,7 +49,7 @@
 
 
                         <!-- PANEL-->
-                        <div class="card">
+                        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2 ">
                             <div class="card-header">
                                 <h2>P9 (P.A.Y.E)</h2>
                                 <div class="clearfix"></div>
@@ -81,12 +81,12 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <label class="containercheckbox"> Staff Payroll
+                                            <label class="containercheckbox"> PDF
                                                 <input type="radio" checked name="type" value="1">
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">temporary Payroll
+                                            <label class="containercheckbox">Data Table
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -101,7 +101,7 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="card">
+                        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                             <div class="card-head">
                                 <h2>Skills Development Levy SDL (P10)</h2>
                                 <div class="clearfix"></div>
@@ -128,7 +128,7 @@
 <!--                          <input type="submit" value="PRINT" name="run" class="btn btn-main"/>-->
 <!--                      </span>-->
 <!--                                    </div>-->
-                                      
+
 <div class="form-group">
                                         <label class="control-label col-md-3  col-xs-6" >Payroll Month</label>
                                         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -167,12 +167,12 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <label class="containercheckbox"> Staff Payroll
+                                            <label class="containercheckbox"> PDF
                                                 <input type="radio" checked name="type" value="1">
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">temporary Payroll
+                                            <label class="containercheckbox">Data Table
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -187,7 +187,7 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="card">
+                        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                             <div class="card-head">
                                 <h2>Pension Fund</h2>
                                 <div class="clearfix"></div>
@@ -238,12 +238,12 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <label class="containercheckbox"> Staff Payroll
+                                            <label class="containercheckbox"> PDF
                                                 <input type="radio" checked name="type" value="1">
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">temporary Payroll
+                                            <label class="containercheckbox">Data Table
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -258,7 +258,7 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="card">
+                        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                             <div class="card-head">
                                 <h2>Workers Compasation Fund</h2>
                                 <div class="clearfix"></div>
@@ -288,12 +288,12 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <label class="containercheckbox"> Staff Payroll
+                                            <label class="containercheckbox"> PDF
                                                 <input type="radio" checked name="type" value="1">
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">temporary Payroll
+                                            <label class="containercheckbox">Data Table
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>
@@ -308,7 +308,7 @@
                         <!--PANEL-->
 
                         <!-- PANEL-->
-                        <div class="card">
+                        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                             <div class="card-head">
                                 <h2>HESLB</h2>
                                 <div class="clearfix"></div>
@@ -339,12 +339,12 @@
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Report
                                             Type</label>
                                         <div class="col-md-6 col-sm-6 col-xs-12">
-                                            <label class="containercheckbox"> Staff Payroll
+                                            <label class="containercheckbox"> PDF
                                                 <input type="radio" checked name="type" value="1">
                                                 <span class="checkmark"></span>
                                             </label>
 
-                                            <label class="containercheckbox">temporary Payroll
+                                            <label class="containercheckbox">Data Table
                                                 <input type="radio" name="type" value="2">
                                                 <span class="checkmark"></span>
                                             </label>

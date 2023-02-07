@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Allowance Info'])
+@extends('layouts.vertical', ['title' => 'Assign Role'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -16,20 +16,20 @@
 
             <div class="row">
                 <div class="col-12 col-sm-6 col-lg-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-header">
                             <h3 class="text-uppercase">{{ $role->slug }} ( Role ) - Permissions</h3>
 
                             <div class="card-header header-elements-sm-inline">
-                                <a href="{{ route('roles.index') }}" class="btn btn-outline-info btn-xs px-4"><i
+                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-xs px-4"><i
                                         class="ph-left"></i> Back </a>
 
                                 <div class="header-elements">
-                                    <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal"
+                                    {{-- <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal"
                                         data-target="#addRoleModal">
                                         <i class="ph-circle"></i>
                                         Add
-                                    </button>
+                                    </button> --}}
 
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                         <div class="row justify-content-end p-0 mr-1">
                                             <div class="p-2 ">
                                                 <a href="{{ route('roles.index') }}"
-                                                    class="btn btn-outline-secondary btn-xs px-6"><i
+                                                    class="btn btn-main btn-xs px-6"><i
                                                         class="fa fa-arrow-circle-left"></i> Back </a>
                                                 {!! Form::submit('Assign', [
                                                     'class' => 'btn btn-outline-success btn-xs

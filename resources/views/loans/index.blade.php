@@ -7,17 +7,21 @@
 <body>
 
 <div class="container">
-    <div class="card mt-3 mb-3">
+    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 mt-3 mb-3">
         <div class="card-header text-center">
             <h4>Employee Loans Uploads</h4>
         </div>
         <div class="card-body">
+            {{-- start of loan upload form --}}
+            @can('add-loan')
             <form action="{{ route('loans.import') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="file" name="file" class="form-control">
                 <br>
                 <button type="submit" class="btn btn-primary">Import User Data</button>
             </form>
+            @endcan
+            {{-- / --}}
 
             <table class="table table-bordered mt-3">
                 <tr>

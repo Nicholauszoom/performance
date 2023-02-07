@@ -118,7 +118,8 @@ class ReportController extends Controller
         if (1) {
             $payroll_date = $request->input('payrolldate');
             $isReady = $this->reports_model->payCheklistStatus($payroll_date);
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             if ($isReady == true) {
                 $data['info'] = $this->reports_model->company_info();
                 $toDate = date('Y-m-d');
@@ -170,12 +171,13 @@ class ReportController extends Controller
 
     function p9(Request $request)
     {
-
-        // dd($request->all());
+        $reportType = 1;
+        $reportformat = $request->input('type');
 
         if (1) {
             $payrolldate = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;
+             //Staff = 1, temporary = 2
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
                 $data['total'] = $this->reports_model->s_totalp9($payrolldate);
@@ -194,23 +196,23 @@ class ReportController extends Controller
             $info = $data['info'];
             $payroll_date = $data['payroll_date'];
 
-            // dd(app_path());
-            // if($request->print_type == "PDF")
+            if($reportformat == 1)
             include(app_path() . '/reports/p9.php');
-            // else
-            // return view('reports/p9', $data);
+            else
+         return view('reports/p9', $data);
         }
     }
 
     function p10(Request $request)
     {
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type');
 
-        // dd("here");
+         //  dd($reportformat);
 
         $period = $request->input('period');
         //dd($period);
         $year = $request->input('payrolldate');
-        $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
         $period1start = $year . "-01-01";
         $period1end = $year . "-06-30";
@@ -237,7 +239,10 @@ class ReportController extends Controller
             $total = $data['total'];
             $info = $data['info'];
 
+            if($reportformat == 1)
             include app_path() . '/reports/p10.php';
+            else
+            return view('reports/p10', $data);
         } elseif ($period == 2 && $checkup2 >= 1) {
             // exit($date2start."<br>".$date2end);
             if ($reportType == 1) {
@@ -256,9 +261,11 @@ class ReportController extends Controller
             $total = $data['total'];
             $info = $data['info'];
 
-            dd('here');
+            if($reportformat == 1)
             include app_path() . '/reports/p10.php';
-            //  return view('app.reports/p10', $data);
+            else
+            return view('reports/p10', $data);
+
         } else {
             exit('NO PAYROLL');
         }
@@ -266,8 +273,9 @@ class ReportController extends Controller
 
     function heslb(Request $request)
     {
+        $reportType = 1;
         $payrolldate = $request->input('payrolldate');
-        $reportType = $request->input('type'); //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
         if ($reportType == 1) {
             $data['heslb'] = $this->reports_model->s_heslb($payrolldate);
             $data['total'] = $this->reports_model->s_totalheslb($payrolldate);
@@ -282,8 +290,9 @@ class ReportController extends Controller
         $total = $data['total'];
         $info = $data['info'];
 
-        //include(app_path() . '/reports/heslb.php');
-
+        if($reportformat == 1)
+        include(app_path() . '/reports/heslb.php');
+        else
         return view('reports/heslb', $data);
     }
 
@@ -365,10 +374,12 @@ class ReportController extends Controller
 
     function pension(Request $request)
     {
+        $reportType = 1;
+        $reportformat = $request->input('type');
+
 
         $payrollMonth = $request->input('payrolldate');
         $pensionFund = $request->input('fund');
-        $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
         $datewell = explode("-", $payrollMonth);
         $mm = $datewell[1];
@@ -394,19 +405,23 @@ class ReportController extends Controller
         $payroll_month = $data['payroll_month'];
         $pension_fund = $data['pension_fund'];
 
+        if($reportformat == 1)
         include(app_path() . '/reports/pension.php');
-        //return view('reports/pension', $data);
+        else
+        return view('reports/pension', $data);
 
     }
 
     function wcf(Request $request)
     {
-        // dd($request->all());
+        $reportformat = $request->input('type');
 
+
+        // dd($request->all());
+        $reportType = 1;
         if (1) {
             $calendar = $request->input('payrolldate');
             $datewell = explode("-", $calendar);
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
 
             $mm = $datewell[1];
             $dd = $datewell[2];
@@ -428,8 +443,9 @@ class ReportController extends Controller
             $totalwcf = $data['totalwcf'];
             $info = $data['info'];
             $payroll_month = $data['payroll_month'];
-
-            //include(app_path() . '/reports/wcf.php');
+            if($reportformat == 1)
+            include(app_path() . '/reports/wcf.php');
+            else
             return view('reports/wcf', $data);
         }
     }
@@ -687,7 +703,8 @@ class ReportController extends Controller
             // DATE MANIPULATION
             $start = $request->input("payrolldate");
             $date_separate = explode("-", $start);
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;  //Staff = 1, temporary = 2
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
 
             $mm = $date_separate[1];
             $yyyy = $date_separate[0];
@@ -934,7 +951,8 @@ class ReportController extends Controller
 
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
 
             //start
             $todayDate = date('d/m/Y');
@@ -1292,10 +1310,11 @@ class ReportController extends Controller
 
     public function payrollInputJournalExportTime(Request $request)
     {
-        dd($request->all());
+       // dd($request->all());
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;  //Staff = 1, temporary = 2
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
 
             //start
             $todayDate = date('d/m/Y');
@@ -1706,7 +1725,8 @@ class ReportController extends Controller
         //dd($request->all());
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;  //Staff = 1, temporary = 2
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -1835,7 +1855,8 @@ class ReportController extends Controller
         $today = date('Y-m-d');
 
         $current_payroll_month = $request->input('payrolldate');
-        $reportType = $request->input('type'); //Staff = 1, temporary = 2
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
@@ -2140,7 +2161,8 @@ EOD;
         dd($request->all());
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;  //Staff = 1, temporary = 2
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -2407,7 +2429,8 @@ EOD;
 
         if (1 && $request->input('status') != '') {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             $status = $request->input('status'); //active = 1, exited = 4
             $suffix = "";
 
@@ -2534,7 +2557,8 @@ EOD;
 
         if (1) {
             $current_payroll_month = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;  //Staff = 1, temporary = 2
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
@@ -2567,10 +2591,11 @@ EOD;
 
     public function netReconciliation(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
 
         if (1) {
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             $current_payroll_month = $request->input('payrolldate');
             $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
             $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
@@ -2607,7 +2632,8 @@ EOD;
 
         if (1) {
             $payroll_date = $request->input('payrolldate');
-            $reportType = $request->input('type'); //Staff = 1, temporary = 2
+            $reportType = 1;
+            $reportformat = $request->input('type'); //Staff = 1, temporary = 2
             $suffix = "";
             if ($reportType == 1) {
                 $suffix = "Salary";
@@ -2652,9 +2678,9 @@ EOD;
 
 
         // return $pdf->download('itsolutionstuff.pdf');
-
-        // return view('reports.payrolldetails_datatable',$data);
-
+         if($request->type != 1)
+         return view('reports.payrolldetails_datatable',$data);
+         else
         return view('reports.payroll_details', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
@@ -2669,10 +2695,20 @@ EOD;
 
         $data['title'] = 'Payroll Input Changes Approval Report';
         $data['parent'] = 'Payroll Log Report';
-
+        if($request->type == 1)
         return view('reports.input_approval', $data);
+        else
+        return view('audit-trail.financial_logs', $data);
+
+
     }
 
+    public function annualleave1(Request $request)
+{
+    $data = $this->attendance_model->get_anual_leave_position($request->duration);
+
+    //dd($request->duration);
+}
 
 
     public function annualleave(Request $request)
@@ -2709,7 +2745,12 @@ EOD;
 
                 $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
 
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+                $employee->current_balance = $this->attendance_model->getClossingLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+                // $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+               // $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
             }
             // dd("all here");
         } else {
@@ -2745,7 +2786,11 @@ EOD;
         return view('reports.leave_balance', ['employees' => $employees]);
     }
 
-
+     public function annualLeaveData()
+    {
+        # code...
+        return view('app.reports.annual_leave_data');
+    }
 
     public function netTotalSummation($payroll_date)
     {

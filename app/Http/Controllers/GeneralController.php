@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 //use App\Http\Controllers\Controller;
 
 use App\Models\EMPL;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Position;
+use App\Models\UserRole;
+use App\Models\Approvals;
 use App\Models\Promotion;
 use Illuminate\Http\File;
 use App\Models\AuditTrail;
@@ -18,6 +21,7 @@ use App\Models\Termination;
 use App\Models\Disciplinary;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\ApprovalLevel;
 use App\Models\FinancialLogs;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
@@ -29,13 +33,15 @@ use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
+use App\Models\EmailNotification;
+
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
-
 use App\Models\Payroll\ImprestModel;
+use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -179,7 +185,7 @@ class GeneralController extends Controller
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
 
-       // dd($data['employee'] );
+        // dd($data['employee'] );
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -199,7 +205,10 @@ class GeneralController extends Controller
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
 
-        $data['qualifications'] = EducationQualification::where('employeeID',$id)->get();
+        $data['employee_pension'] = $this->reports_model->employee_pension($id);
+
+        //dd($data['employee_pension']);
+        $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
 
         $data['photo'] = "";
 
@@ -317,7 +326,7 @@ class GeneralController extends Controller
         }
     }
 
-    public function department(Request $request)
+    public function department()
     {
         $id = session('emp_id');
         $data['employee'] = $this->flexperformance_model->customemployee();
@@ -330,8 +339,68 @@ class GeneralController extends Controller
         $data['parent'] = "Organisation";
         $data['child'] = "Departments";
 
+        // dd($data['department']);
+
         return view('app.department', $data);
     }
+
+
+
+
+
+
+
+
+
+
+
+    public function departmentCost(){
+        $data['projects'] = $this->flexperformance_model->costProjects();
+        $data['departments'] =  $this->flexperformance_model->costDepartments();
+        $data['parent'] = "Department";
+        $data['child'] = "Costs";
+
+        return view('department-cost.index', $data);
+    }
+
+    public function storeDepartmentCost(Request $request){
+
+        $type = $request->type;
+
+        if($type == 1){
+            $data = [
+                // 'type' => $request->type,
+                'project_id' => $request->project,
+                'from_department' => $request->from_department,
+                'to_department' => $request->to_department,
+                'amount' => $request->amount,
+                'description' => $request->description,
+            ];
+
+            DB::table('department_cost_transfer')->insert($data);
+        }else{
+            $data = [
+                'department_id' => $request->department,
+                'project_id' => $request->project,
+                'type' => $request->type,
+                'amount' => $request->amount,
+                'description' => $request->description,
+            ];
+
+            DB::table('department_cost')->insert($data);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public function organization_level(Request $request)
     {
@@ -452,7 +521,7 @@ class GeneralController extends Controller
     {
         $id = session('emp_id');
         $data['branch'] = $this->flexperformance_model->branch();
-       // $data['department'] = $this->flexperformance_model->alldepartment();
+        // $data['department'] = $this->flexperformance_model->alldepartment();
         $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
         $data['title'] = "Company Branch";
         return view('app.branch', $data);
@@ -1873,6 +1942,7 @@ class GeneralController extends Controller
         $finish = $request->input('time_finish');
         $reason = $request->input('reason');
         $category = $request->input('category');
+        $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
 
@@ -1894,7 +1964,18 @@ class GeneralController extends Controller
 
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
-        $linemanager = $this->flexperformance_model->get_linemanagerID($empID);
+        //fetch Line manager data from employee table and send email
+        $linemanager_data = SysHelpers::employeeData($linemanager);
+        $fullname = $linemanager_data['full_name'];
+        $email_data = array(
+            'subject'=> 'Employee Overtime Approval',
+            'view' => 'emails.linemanager.overtime-approval',
+            'email' => $linemanager_data['email'],
+            'full_name' => $fullname,
+        );
+        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+        // dd('Email Sent Successfully');
+        //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
 
         // foreach ($line as $row) {
         //     $linemanager = $row->line_manager;
@@ -2025,6 +2106,8 @@ class GeneralController extends Controller
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        $data['employees'] = $this->flexperformance_model->Employee();
+
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
         // elseif (session('line')!=0) {
@@ -2211,8 +2294,15 @@ class GeneralController extends Controller
         $signatory = session('emp_id');
         $time_approved = date('Y-m-d');
         $amount = 0;
+
+        $overtime = $this->flexperformance_model->get_employee_overtime($overtimeID);
+        //dd($overtime);
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
+
+
+        SysHelpers::FinancialLogs($id, 'Assigned Overtime', '0',number_format($overtime,2), 'Payroll Input');
+
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
@@ -3622,9 +3712,10 @@ class GeneralController extends Controller
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
             $data['projects'] = $this->project_model->allProjects();
-            $data['employee'] = Employee::where('state','=',1)->get();
+            $data['employee'] = Employee::where('state', '=', 1)->get();
 
             $data['title'] = "Organisation Reports";
+            $data['employee'] = Employee::where('state','=',1)->get();
             return view('app.organisation_reports', $data);
         } else {
             echo 'Unauthorized Access';
@@ -3790,7 +3881,7 @@ class GeneralController extends Controller
         //echo "Record Added";
         session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $id;
+        $reload = '/flex/userprofile/?id=' .base64_encode($id);
 
         return redirect($reload);
     }
@@ -3804,7 +3895,7 @@ class GeneralController extends Controller
 
         session('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $empID;
+        $reload = '/flex/userprofile/' .base64_encode($empID);
 
         return redirect($reload);
     }
@@ -3830,7 +3921,7 @@ class GeneralController extends Controller
         $this->flexperformance_model->addproperty($data);
         session('note', "<p class='alert alert-success text-center'>Property Assigned Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $request->input("employee");
+        $reload = '/flex/userprofile/' . base64_encode($request->input("employee"));
         return redirect($reload);
     }
 
@@ -3904,7 +3995,7 @@ class GeneralController extends Controller
         // $this->flexperformance_model->audit_log("Requested Deactivation of an Employee with ID =" . $request->input("empID") . "");
         session('note', "<p class='alert alert-success text-center'>Employee Done Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' . $request->input("empID");
+        $reload = '/flex/userprofile/' .base64_encode( $request->input("empID"));
         return redirect($reload);
     }
 
@@ -4083,25 +4174,30 @@ class GeneralController extends Controller
 
     ###########################UNPAID LESVE #################################
 
-     public function unpaid_leave(){
+    public function unpaid_leave()
+    {
 
         $data['employee'] = $this->flexperformance_model->unpaid_leave_employee();
-        return view("unpaidleave.index",$data);
-     }
+        return view("unpaidleave.index", $data);
+    }
 
-     public function add_unpaid_leave(){
+    public function add_unpaid_leave()
+    {
 
         $data['employees'] = $this->flexperformance_model->Employee();
-        return view("unpaidleave.add-unpaid-leave",$data);
-     }
 
-     public function end_unpaid_leave($id){
+
+        return view("unpaidleave.add-unpaid-leave", $data);
+    }
+
+    public function end_unpaid_leave($id)
+    {
         $result = $this->flexperformance_model->end_upaid_leave($id);
         if($result){
         session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Ended Successifully</p>");
 
         }else{
-            session('note', "<p class='alert alert-warning text-center'>End Unpaid Leae Failed </p>");
+            session('note', "<p class='alert alert-warning text-center'>End Unpaid Leave Failed </p>");
 
         }
 
@@ -4109,28 +4205,43 @@ class GeneralController extends Controller
 
 
      }
-     public function save_unpaid_leave(Request $request){
-        request()->validate(
-            [
-            'empID' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required',
-            'reason' => 'required',
-             ]
-            );
 
-            $data = ['empID'=>$request->empID,'start_date'=>$request->start_date,'end_date'=>$request->end_date,'reason'=>$request->reason];
-            SysHelpers::FinancialLogs($request->empID, 'Assigned  To Unpaid Leave', $request->start_date,$request->end_date, 'Payroll Input');
+     public function confirm_unpaid_leave($id){
+        $result = $this->flexperformance_model->confirm_upaid_leave($id);
+        if($result){
+        session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Confirmed Successifully</p>");
 
-            $result = $this->flexperformance_model->save_unpaid_leave($data);
+        }else{
+            session('note', "<p class='alert alert-warning text-center'>Confirm Unpaid Leave Failed </p>");
 
-           session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Added Successifully</p>");
+        }
 
         return redirect(route('flex.unpaid_leave'));
-     }
+    }
+    public function save_unpaid_leave(Request $request)
+    {
+        request()->validate(
+            [
+                'empID' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'reason' => 'required',
+            ]
+        );
+
+        $data = ['empID' => $request->empID, 'start_date' => $request->start_date, 'end_date' => $request->end_date, 'reason' => $request->reason];
+
+        SysHelpers::FinancialLogs($request->empID, 'Assigned  To Unpaid Leave', $request->start_date, $request->end_date, 'Payroll Input');
+
+        $result = $this->flexperformance_model->save_unpaid_leave($data);
+
+        session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Added Successifully</p>");
+
+        return redirect(route('flex.unpaid_leave'));
+    }
     #####################DEDUCTIONS############################################
 
-    public function delete_deduction($id,Request $request)
+    public function delete_deduction($id, Request $request)
     {
 
         // $is_active = 0;
@@ -4146,7 +4257,7 @@ class GeneralController extends Controller
         }
     }
 
-      public function delete_non_statutory_deduction($id,Request $request)
+    public function delete_non_statutory_deduction($id, Request $request)
     {
 
         // $is_active = 0;
@@ -4226,7 +4337,7 @@ class GeneralController extends Controller
             $deductionName = DB::table('deductions')->select('name')->where('id', $request->input('deduction'))->first();
 
 
-            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned '.$deductionName->name, '0', $deductionName->amount/$deductionName->rate.' '.$deductionName->currency, 'Payroll Input');
+            SysHelpers::FinancialLogs($request->input('empID'), 'Assigned ' . $deductionName->name, '0', $deductionName->amount / $deductionName->rate . ' ' . $deductionName->currency, 'Payroll Input');
 
             if ($result == true) {
                 SysHelpers::AuditLog(1, "Assigned a Deduction to an Employee of ID =" . $request->input('empID') . "", $request);
@@ -4254,9 +4365,9 @@ class GeneralController extends Controller
                 $result = $this->flexperformance_model->assign_deduction($data);
 
                 $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deduction'))->limit(1)->first();
-                SysHelpers::FinancialLogs($request->input('empID'), 'Assigned '.$deductionName->name, '0', $deductionName->amount/$deductionName->rate.' '.$deductionName->currency, 'Payroll Input');
+                SysHelpers::FinancialLogs($request->input('empID'), 'Assigned ' . $deductionName->name, '0', $deductionName->amount / $deductionName->rate . ' ' . $deductionName->currency, 'Payroll Input');
 
-               // SysHelpers::FinancialLogs($row->empID, 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
+                // SysHelpers::FinancialLogs($row->empID, 'Assigned deduction', '0', $deductionName->name, 'Payroll Input');
             }
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Assigned a Deduction to a Group of ID =" . $request->input('group') . "");
@@ -4291,7 +4402,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from '.$deductionName->name,$deductionName->amount/$deductionName->rate.' '.$deductionName->currency,'0', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from ' . $deductionName->name, $deductionName->amount / $deductionName->rate . ' ' . $deductionName->currency, '0', 'Payroll Input');
 
                     //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4330,7 +4441,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $deductionID)->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from '.$deductionName->name,$deductionName->amount/$deductionName->rate.' '.$deductionName->currency,'0', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from ' . $deductionName->name, $deductionName->amount / $deductionName->rate . ' ' . $deductionName->currency, '0', 'Payroll Input');
 
                     // SysHelpers::FinancialLogs($groupID, 'Removed Group from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4910,7 +5021,7 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            SysHelpers::FinancialLogs($row->empID, 'Assign '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
+            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
 
 
             if ($result == true) {
@@ -4948,7 +5059,7 @@ class GeneralController extends Controller
 
                 $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-                SysHelpers::FinancialLogs($row->empID, 'Assign '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
+                SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
             }
 
             if ($result == true) {
@@ -4981,12 +5092,11 @@ class GeneralController extends Controller
 
                     $amount = $this->flexperformance_model->get_individual_from_allowance($empID, $allowanceID);
 
-                   // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
+                    // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
 
-                    SysHelpers::FinancialLogs($empID, 'Removed from'.$allowanceName->name,$amount->percent != 0? ($amount->percent*100).'%' : $amount->amount.' '.$amount->currency, '0', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID, 'Removed from' . $allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : $amount->amount . ' ' . $amount->currency, '0', 'Payroll Input');
 
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
-
                 }
                 if ($result == true) {
                     //  $this->flexperformance_model->audit_log("Removed Employees of IDs = " . implode(',', $arr) . " From an allowance  with Id = " . $allowanceID . " ");
@@ -5697,7 +5807,6 @@ class GeneralController extends Controller
                     echo "<p class='alert alert-danger text-center'>Not Removed, Try Again</p>";
                 }
             }
-
         }
     }
 
@@ -5844,7 +5953,6 @@ class GeneralController extends Controller
                             } else {
                                 SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', $deductionName->name, 'Payroll Input');
                             }
-
                         }
                     }
 
@@ -6014,7 +6122,7 @@ class GeneralController extends Controller
 
         $id = base64_decode($request->id);
 
-        $permissions =DB::table('permission')->get();
+        $permissions = DB::table('permission')->get();
         $permissions_raw = array();
 
 
@@ -6040,7 +6148,7 @@ class GeneralController extends Controller
         // dd($permissions_grouped);
         // $permisions=DB::table('permissions')->get();
         // $permisions=DB::table('permissions')->get();
-        $role=DB::table('role')->where('id',$id)->first();
+        $role = DB::table('role')->where('id', $id)->first();
 
         // dd($role);
 
@@ -6050,7 +6158,7 @@ class GeneralController extends Controller
         $members = $this->flexperformance_model->role_members_byid($id);
 
 
-        return view('app.updaterole', compact('role', 'permissions', 'permissions_grouped','employeesnot','groupsnot','members'));
+        return view('app.updaterole', compact('role', 'permissions', 'permissions_grouped', 'employeesnot', 'groupsnot', 'members'));
 
         // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
 
@@ -6058,10 +6166,10 @@ class GeneralController extends Controller
         // if (session('mng_roles_grp')) {
         //     $id = base64_decode($request->id);
 
-            // $data['employeesnot'] = $this->flexperformance_model->employeesrole($id);
+        // $data['employeesnot'] = $this->flexperformance_model->employeesrole($id);
         //     $data['role'] = $this->flexperformance_model->getrolebyid($id);
         //     $data['roleID'] = $id;
-            // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
+        // $data['groupsnot'] = $this->flexperformance_model->rolesgroupsnot();
         //     $data['groupsin'] = $this->flexperformance_model->rolesgroupsin();
         //     $data['members'] = $this->flexperformance_model->role_members_byid($id);
         //     $data['permissions'] = $this->flexperformance_model->permission();
@@ -6077,7 +6185,7 @@ class GeneralController extends Controller
         //     foreach ($all_member_in_role as $item) {
         //         $data['group'][$item->userID] = $this->flexperformance_model->memberWithGroup($id, $item->userID);
         //     }
-            // return view('app.updaterole', $data);
+        // return view('app.updaterole', $data);
         // }
     }
 
@@ -6112,7 +6220,7 @@ class GeneralController extends Controller
 
 
             if ($result == 1) {
-                SysHelpers::AuditLog(1, "Added Permissions to a Role  permission tag as " .json_encode($request->permissions). " ", $request);
+                SysHelpers::AuditLog(1, "Added Permissions to a Role  permission tag as " . json_encode($request->permissions) . " ", $request);
                 session('note', "<p class='alert alert-success text-center'>Permissions Assigned Successifully!</p>");
                 return redirect('/flex/role/');
             } else {
@@ -6163,10 +6271,10 @@ class GeneralController extends Controller
                 // $this->flexperformance_model->audit_log("Assigned a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
 
                 session('note', "<p class='alert alert-success text-center'>Role(s) Granted Successifully!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
+                return redirect('/flex/userprofile/' .base64_encode($userID) . '#tab_role');
             } else {
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role(s) NOT Granted, Please Try Again!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID . '#tab_role');
+                return redirect('/flex/userprofile/?id=' . base64_encode($userID)  . '#tab_role');
             }
         }
     }
@@ -6181,7 +6289,7 @@ class GeneralController extends Controller
         if (sizeof($arr) <= 0) {
 
             session('note', "<p class='alert alert-danger text-center'>Sorry, No Role Selected!</p>");
-            return redirect('/flex/userprofile/?id=' . $userID);
+            return redirect('/flex/userprofile/' .base64_encode($userID) );
         } else {
             for ($i = 0; $i < sizeof($arr); $i++) {
                 $rolename = $arr[$i];
@@ -6193,11 +6301,11 @@ class GeneralController extends Controller
             if ($result == true) {
                 // $this->flexperformance_model->audit_log("Revoked a Role with IDs  " . implode(",", $arr) . "  to User with ID " . $userID . " ");
                 session('note', "<p class='alert alert-warning text-center'>Role Revoked Successifully!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID);
+                return redirect('/flex/userprofile/' . base64_encode($userID) );
             } else {
 
                 session('note', "<p class='alert alert-danger text-center'>FAILED: Role NOT Revoked, Please Try Again!</p>");
-                return redirect('/flex/userprofile/?id=' . $userID);
+                return redirect('/flex/userprofile/' . base64_encode($userID) );
             }
         }
     }
@@ -6461,6 +6569,9 @@ class GeneralController extends Controller
 
                 if ($recordID > 0) {
 
+                    SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
+
+
                     /*give 100 allocation*/
                     $data = array(
                         'empID' => $request->input("emp_id"),
@@ -6499,7 +6610,7 @@ class GeneralController extends Controller
                             'password' => $password
                         );
 
-                        $user=User::first();
+                        $user = User::first();
                         $user->notify(new RegisteredUser($email_data));
                         Notification::route('mail', $email_data['email'])->notify(new RegisteredUser($email_data));
                         //});
@@ -7511,18 +7622,27 @@ class GeneralController extends Controller
 
     // start of terminations functions
 
-
+    // For all Terminations Page
     public function termination()
     {
 
-    $data['title'] = "Termination";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
-    $data['employees'] = $this->flexperformance_model->Employee();
-    $terminations= Termination::orderBy('created_at','desc')->get();
-    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['title'] = "Termination";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['employees'] = $this->flexperformance_model->Employee();
+        $terminations = Termination::orderBy('created_at', 'desc')->get();
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
         $i = 1;
-        // }
+        $employee=Auth::User()->id;
+    
+        $role=UserRole::where('user_id',$employee)->first();
+        $role_id=$role->role_id;
+        $terminate=Approvals::where('process_name','Termination Approval')->first();
+        $roles=Role::where('id',$role_id)->first();
+        $data['level']=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+
+        $data['check']='Approved By '.$roles->name;
+
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'Workforce';
         $data['child'] = 'Termination';
@@ -7530,13 +7650,15 @@ class GeneralController extends Controller
         return view('workforce-management.termination', $data, compact('terminations', 'i'));
     }
 
+
+    // For Add Termination Page
     public function addTermination()
     {
 
-    $data['title'] = "Terminate Employee";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
-    $data['employees'] = $this->flexperformance_model->Employee();
-    $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['title'] = "Terminate Employee";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['employees'] = $this->flexperformance_model->Employee();
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
 
         // }
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -7546,6 +7668,9 @@ class GeneralController extends Controller
         return view('workforce-management.add-termination', $data);
     }
 
+
+  
+    // For Saving Termination
     public function saveTermination(Request $request)
     {
 
@@ -7625,6 +7750,7 @@ class GeneralController extends Controller
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
+        $termination->status ="Pending";
 
 
 
@@ -7642,8 +7768,8 @@ class GeneralController extends Controller
         $today = date('Y-m-d');
 
 
-        $normal_days_overtime_amount = ($employee_actual_salary/176)*1.5*$normalDays;
-        $public_overtime_amount = ($employee_actual_salary/176)*2.0*$publicDays;
+        $normal_days_overtime_amount = ($employee_actual_salary / 176) * 1.5 * $normalDays;
+        $public_overtime_amount = ($employee_actual_salary / 176) * 2.0 * $publicDays;
 
         $total_gross = $salaryEnrollment +
             $normal_days_overtime_amount +
@@ -7664,64 +7790,120 @@ class GeneralController extends Controller
 
 
 
-            //overtime calculation
+        //overtime calculation
 
 
 
-                //check whether if is after payroll or before payroll
-                $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
-                //get employee basic salary
-                //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
-                $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
+        //check whether if is after payroll or before payroll
+        $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($payroll_month);
+        //get employee basic salary
+        //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
+        $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
 
-                if($check_termination_date == false){
-                    $net_pay = 0;
-                    $take_home = 0;
-                   // $total_gross = 0;
-                    $taxable = 0;
-
-
-                $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$employeeID);
-
-                $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount,$employeeID);
-
-                $total_deductions = $salaryAdvance + $otherDeductions;
-
-                $net_pay = $total_gross - $total_deductions;
-
-                $taxable = ($net_pay - $pension_employee);
-                //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
-
-                $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
+        if ($check_termination_date == false) {
+            $net_pay = 0;
+            $take_home = 0;
+            // $total_gross = 0;
+            $taxable = 0;
 
 
+            $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
 
-                $paye = $paye1->excess_added + $paye1->rate * ($taxable- $paye1->minimum);
-                    $take_home = $taxable -  $paye;
+            $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
 
-                    $termination->total_gross = $total_gross;
+            $total_deductions = $salaryAdvance + $otherDeductions;
 
-                    $termination->loan_balance = $loan_balance;
+            $net_pay = $total_gross - $total_deductions;
 
-                    $termination->taxable = $taxable;
-                    $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
-                    $termination->public_overtime_amount = $public_overtime_amount;
-                    $termination->paye = $paye;
-                    $termination->pension_employee = $pension_employee;
-                    $termination->net_pay = $net_pay;
-                    $termination->take_home = $take_home;
-                    $termination->total_deductions = $total_deductions;
-                    $termination->save();
-                // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
-                }else{
+            $taxable = ($net_pay - $pension_employee);
+            //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
 
-             dd('YES');
-                }
+            $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
+
+
+
+            $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
+            $take_home = $taxable -  $paye;
+
+            $termination->total_gross = $total_gross;
+
+            $termination->loan_balance = $loan_balance;
+
+            $termination->taxable = $taxable;
+            $termination->normal_days_overtime_amount = $normal_days_overtime_amount;
+            $termination->public_overtime_amount = $public_overtime_amount;
+            $termination->paye = $paye;
+            $termination->pension_employee = $pension_employee;
+            $termination->net_pay = $net_pay;
+            $termination->take_home = $take_home;
+            $termination->total_deductions = $total_deductions;
+            $termination->save();
+            // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
+        } else {
+
+            dd('YES');
+        }
         return redirect('flex/termination')->with('status', $msg);
     }
 
+    // For Aprroving termination
+    public function  approveTermination($id)
+    {
+       
+       $employee=Auth::User()->id;
+    
+    
+
+       $role=UserRole::where('user_id',$employee)->first();
+       $role_id=$role->role_id;
+       $terminate=Approvals::where('process_name','Termination Approval')->first();
+       $roles=Role::where('id',$role_id)->first();
+       $level=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+       if($level)
+       {
+            $approval_id=$level->approval_id;
+            $approval=Approvals::where('id',$approval_id)->first();
+            
+            if ($approval->levels==$level->level_name) {
+
+                $termination=Termination::where('id',$id)->first();
+                $termination->status=1;
+                $termination->update();
+                $msg='Employee is Terminated Successfully !';
+                return redirect('flex/termination')->with('msg', $msg);
+            }
+            else
+            {
+                // To be upgraded
+                $termination=Termination::where('id',$id)->first();
+                $termination->status='Approved By '.$roles->name;
+                $termination->update();
+
+                $msg='Approved By '.$roles->name;
+                return redirect('flex/termination')->with('msg', $msg);
+            }
+           
+       }
+       else
+       {
+            $msg="Failed To Terminate !";
+            return redirect('flex/termination')->with('msg', $msg);
+       }
+   
+    }
 
 
+    // For Cancelling Termination
+    public function cancelTermination($id)
+    {
+        $promotion =Termination::find($id);
+
+        $promotion->delete();
+
+        return redirect('flex/termination')->with('msg', 'Termination was Cancelled successfully !');
+    }
+
+    //For Viewing Termination 
     public function viewTermination($id)
     {
         $termination = Termination::where('id', $id)->first();
@@ -7729,14 +7911,17 @@ class GeneralController extends Controller
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
 
-        $pdf = Pdf::loadView('reports.terminalbenefit', compact('termination','employee_info'));
+        $pdf = Pdf::loadView('reports.terminalbenefit', compact('termination', 'employee_info'));
         $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
         return $pdf->download('terminal-benefit-slip.pdf');
         //return view('reports.terminalbenefit',compact('termination'));
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
 
-    public function get_employee_available_info(Request $request){
+
+    // For getting employee informations
+    public function get_employee_available_info(Request $request)
+    {
         $terminationDate =  $request->terminationDate;
         $employeeID = $request->employeeID;
 
@@ -7749,329 +7934,375 @@ class GeneralController extends Controller
         $termination_date = $yyyy . "-" . $mm . "-" . $dd;
         $j_mm = "01";
         $j_dd = "01";
-        $january_date = $yyyy."-" . $j_mm . "-" . $j_dd;
+        $january_date = $yyyy . "-" . $j_mm . "-" . $j_dd;
         $termination_month = $yyyy . "-" . $mm;
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
         //check whether if after payroll or before payroll
         $check_termination_date = $this->flexperformance_model->check_termination_payroll_date($termination_month);
-        if($check_termination_date == true){
-          // dd('yes');
+        if ($check_termination_date == true) {
+            // dd('yes');
             //get leave allowance
-        $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID,$termination_date,$january_date);
-        //get salary
-        $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID,$termination_date,$dd);
-        }else{
+            $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
+            //get salary
+            $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
+        } else {
 
-        //get leave allowance
-        $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID,$termination_date,$january_date);
-        //get salary
-        $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID,$termination_date,$dd);
-        //get leave balance
-        //$leave_balance = $this->flexperformance_model->get_leave_balance($employeeID,$termination_date);
-         //get leave balance
-        // $leave_pay = $this->flexperformance_model->get_leave_pay($employeeID,$leave_balance);
-
-
-
-
+            //get leave allowance
+            $leave_allowance = $this->flexperformance_model->get_leave_allowance($employeeID, $termination_date, $january_date);
+            //get salary
+            $employee_salary = $this->flexperformance_model->get_employee_salary($employeeID, $termination_date, $dd);
+            //get leave balance
+            //$leave_balance = $this->flexperformance_model->get_leave_balance($employeeID,$termination_date);
+            //get leave balance
+            // $leave_pay = $this->flexperformance_model->get_leave_pay($employeeID,$leave_balance);
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
-
 
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = $employee_salary;
-
-
-
         return  json_encode($data);
+    }
+    // end of terminations functions
+
+
+    // For view promotion/increment
+    public function promotion()
+    {
+
+        $data['title'] = "Promtion|Increment";
+        $data['employees'] = $this->flexperformance_model->Employee();
+        $promotions = Promotion::orderBy('created_at', 'desc')->get();
+        $i = 1;
+        $employee=Auth::User()->id;
+    
+        $role=UserRole::where('user_id',$employee)->first();
+        $role_id=$role->role_id;
+        $terminate=Approvals::where('process_name','Promotion Approval')->first();
+        $roles=Role::where('id',$role_id)->first();
+        $data['level']=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+
+        $data['check']='Approved By '.$roles->name;
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'Promotion|Increment';
+
+        return view('workforce-management.promotion-increment', $data, compact('promotions', 'i'));
+    }
+
+    // For Viewing Add Promotion page
+    public function addPromotion()
+    {
+
+        $data['title'] = "Promote Employee";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['employees'] = $this->flexperformance_model->employee();
+        $data['pdrop'] = Position::all();
+        $data['contract'] = $this->flexperformance_model->contractdrop();
+        $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+        $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+
+
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'Promote Employee';
 
 
 
+
+        return view('workforce-management.add-promotion', $data);
     }
 
 
 
+    // For Save Promotion
+    public function savePromotion(Request $request)
+    {
 
-    // end of terminations functions
-
-
-// start of promotion/increment
-public function promotion()
-{
-
-    $data['title'] = "Promtion|Increment";
-    $data['employees'] = $this->flexperformance_model->Employee();
-    $promotions= Promotion::orderBy('created_at','desc')->get();
-    $i=1;
-    $data['parent'] = 'Workforce';
-    $data['child'] = 'Promotion|Increment';
-
-    return view('workforce-management.promotion-increment', $data,compact('promotions','i'));
-
-}
-
-
-public function addPromotion()
-{
-
-    $data['title'] = "Promote Employee";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
-    $data['employees'] = $this->flexperformance_model->employee();
-    $data['pdrop'] = Position::all();
-    $data['contract'] = $this->flexperformance_model->contractdrop();
-    $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
-    $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
-
-
-    $data['parent'] = 'Workforce';
-    $data['child'] = 'Promote Employee';
-
-
-
-
-    return view('workforce-management.add-promotion', $data);
-
-}
-
-public function savePromotion(Request $request)
-{
-
-    request()->validate(
-        [
-        'emp_ID' => 'required',
-        'newPosition' => 'required',
-        'newLevel' => 'required',
-        'newSalary' => 'required',
-         ]
+        request()->validate(
+            [
+                'emp_ID' => 'required',
+                'newPosition' => 'required',
+                'newLevel' => 'required',
+                'newSalary' => 'required',
+            ]
         );
 
 
         $id=$request->emp_ID;
-        $empl =Employee::where('id',$id)->first();
+        $empl =Employee::where('emp_id',$id)->first();
 
         // saving old employee data
         $old = new Promotion();
-        $old->employeeID=$id;
-        $old->oldSalary=$empl->salary;
-        $old->newSalary=$request->newSalary;
-        $old->oldPosition=$empl->position;
-        $old->newPosition=$request->newPosition;
-        $old->oldLevel=$empl->emp_level;
-        $old->newLevel=$request->newLevel;
-        $old->created_by=Auth::user()->id;
-        $old->action="promoted";
+        $old->employeeID = $id;
+        $old->oldSalary = $empl->salary;
+        $old->newSalary = $request->newSalary;
+        $old->oldPosition = $empl->position;
+        $old->newPosition = $request->newPosition;
+        $old->oldLevel = $empl->emp_level;
+        $old->newLevel = $request->newLevel;
+        $old->created_by = Auth::user()->id;
+        $old->action = "promoted";
         $old->save();
         // saving new employee data
-        $promotion =Employee::where('id',$id)->first();
-        $promotion->position=$request->newPosition;
-        $promotion->salary=$request->newSalary;
-        $promotion->emp_level=$request->newLevel;
-        $promotion->update();
+
+        SysHelpers::FinancialLogs($id, 'Salary Increment(promotion)',$empl->salary*$empl->rate,$request->newSalary*$empl->rate, 'Salary Increment');
+
+        // $promotion =Employee::where('emp_id',$id)->first();
+        // $promotion->position=$request->newPosition;
+        // $promotion->salary=$request->newSalary;
+        // $promotion->emp_level=$request->newLevel;
+        // $promotion->update();
 
 
-        $msg="Employee Promotion has been saved successfully";
+        $msg = "Employee Promotion has been saved successfully";
         return redirect('flex/promotion')->with('msg', $msg);
+    }
 
-}
+    // For Approve Promotion
+    public function  approvePromotion($id)
+    {
+       
+       $employee=Auth::User()->id;
+       $role=UserRole::where('user_id',$employee)->first();
+       $role_id=$role->role_id;
+       $terminate=Approvals::where('process_name','Promotion Approval')->first();
+       $roles=Role::where('id',$role_id)->first();
+       $level=ApprovalLevel::where('role_id',$role_id)->where('approval_id',$terminate->id)->first();
+       if($level)
+       {
+            $approval_id=$level->approval_id;
+            $approval=Approvals::where('id',$approval_id)->first();
+            
+            if ($approval->levels==$level->level_name) {
 
-public function addIncrement()
-{
+                $promotion=Promotion::where('id',$id)->first();
 
-    $data['title'] = "Increment Salary";
-    $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
-    $data['employees'] = $this->flexperformance_model->employee();
-    $data['pdrop'] = $this->flexperformance_model->positiondropdown();
-    $data['contract'] = $this->flexperformance_model->contractdrop();
-    $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
-    $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+                // dd($promotion);
+                $promotion->status="Successful";
+                $promotion->update();
 
 
-    $data['parent'] = 'Workforce';
-    $data['child'] = 'Increment Salary';
+                $increment =Employee::where('emp_id',$promotion->employeeID)->first();
+                $increment->salary=$promotion->newSalary;
+                $increment->position=$promotion->newPosition;
+                $increment->emp_level=$promotion->newLevel;
+                $increment->update();
+                $msg='Employee Promotion is Confirmed Successfully !';
+                return redirect('flex/promotion')->with('msg', $msg);
+            }
+            else
+            {
+                $promotion=Promotion::where('id',$id)->first();
+                $promotion->status='Approved By '.$roles->name;
+                $promotion->update();
+
+                $msg='Approved By '.$roles->name;
+                return redirect('flex/promotion')->with('msg', $msg);
+            }
+           
+       }
+       else
+       {
+            $msg="Failed To Promote !";
+            return redirect('flex/promotion')->with('msg', $msg);
+       }
+   
+    }
+
+    // For Cancel Promotion
+    public function cancelPromotion($id)
+    {
+        $promotion =Promotion::find($id);
+
+        $promotion->delete();
+
+        return redirect('flex/promotion')->with('msg', 'Promotion was Canceled successfully !');
+    }
+
+    // For Add Increment Page
+    public function addIncrement()
+    {
+
+        $data['title'] = "Increment Salary";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['employees'] = $this->flexperformance_model->employee();
+        $data['pdrop'] = $this->flexperformance_model->positiondropdown();
+        $data['contract'] = $this->flexperformance_model->contractdrop();
+        $data['ldrop'] = $this->flexperformance_model->linemanagerdropdown();
+        $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
+
+
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'Increment Salary';
 
 
 
 
-    return view('workforce-management.add-increment', $data);
+        return view('workforce-management.add-increment', $data);
+    }
 
-}
+    // For Save Increment Function
+    public function saveIncrement(Request $request)
+    {
 
-
-public function saveIncrement(Request $request)
-{
-
-    request()->validate(
-        [
-        'emp_ID' => 'required',
-        'newSalary' => 'required',
-        // 'oldSalary' => 'required',
-         ]
+        request()->validate(
+            [
+                'emp_ID' => 'required',
+                'newSalary' => 'required',
+                'oldSalary' => 'required',
+                'oldRate' => 'required',
+            ]
         );
 
 
-        $id=$request->emp_ID;
 
-        $empl =Employee::where('id',$id)->first();
+      $oldSalary = $request->oldSalary;
+      $oldRate = $request->oldRate;
+
+        $id=$request->emp_ID;
+         //dd($id);
+        $empl =Employee::where('emp_id',$id)->first();
 
         // saving old employee data
         $old = new Promotion();
         $old->employeeID=$id;
         $old->oldSalary=$empl->salary;
-        $old->newSalary=$request->newSalary;
+        $old->newSalary = $request->newSalary;
         $old->oldPosition=$empl->position;
         $old->newPosition=$empl->position;;
         $old->oldLevel=$empl->emp_level;
         $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
         $old->action="incremented";
+    
         $old->save();
 
+        SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $request->newSalary * $oldRate, 'Salary Increment');
 
-        // saving new employee data
-        $increment =Employee::where('id',$id)->first();
-        $increment->salary=$request->newSalary;
-        $increment->update();
-        $msg="Employee Salary has been Incremented successfully";
-        return redirect('flex/attendance/flex/promotion')->with('msg', $msg);
-
-}
-
-// fetching employee department's positions
-
-public function getDetails($id = 0)
-{
-    $data =EMPL::where('id',$id)->with('position')->first();
-    return response()->json($data);
-}
-// start of promotion/increment
+  
+        $msg = "Employee Salary  Incremention has been requested successfully !";
+        return redirect('flex/promotion')->with('msg', $msg);
+    }
 
 
-// start of reconcilliation summary
-public function reconcilliationSummary()
-{
 
-    return view('reports.temp_reconciliation');
+    // fetching employee department's positions
+    public function getDetails($id = 0)
+    {
+        $data = EMPL::where('emp_id', $id)->with('position')->first();
+        return response()->json($data);
+    }
 
-}
+    // start of reconcilliation summary
+    public function reconcilliationSummary()
+    {
+        return view('reports.temp_reconciliation');
+    }
+    // end of reconcilliation summary
 
-// end of reconcilliation summary
 
+    //start of education qualifications
+    public function addQualification(Request $request)
+    {
 
-//start of education qualifications
-
-public function addQualification(Request $request)
-{
-
-    request()->validate(
-        [
-        // 'employeeID' => 'required',
-        'level' => 'required',
-        'course' => 'required',
-        'institute' => 'required',
-        'start_year' => 'required',
-        'finish_year' => 'required',
-         ]
+        request()->validate(
+            [
+                // 'employeeID' => 'required',
+                'level' => 'required',
+                'course' => 'required',
+                'institute' => 'required',
+                'start_year' => 'required',
+                'finish_year' => 'required',
+            ]
         );
 
 
-        $id=$request->employeeID;
+        $id = $request->employeeID;
 
         $qualification = new EducationQualification();
-        $qualification->employeeID=$id;
-        $qualification->institute=$request->institute;
-        $qualification->level=$request->level;
-        $qualification->course=$request->course;
-        $qualification->start_year=$request->start_year;
-        $qualification->end_year=$request->finish_year;
+        $qualification->employeeID = $id;
+        $qualification->institute = $request->institute;
+        $qualification->level = $request->level;
+        $qualification->course = $request->course;
+        $qualification->start_year = $request->start_year;
+        $qualification->end_year = $request->finish_year;
 
-        if($request->hasfile('image')){
-            $file=$request->file('image');
-            $filename=time().'.'.$file->getClientOriginalExtension();
+        if ($request->hasfile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move('uploads/certificates/', $filename);
-            $qualification->certificate=$filename;
+            $qualification->certificate = $filename;
         }
         $qualification->save();
 
 
-        $msg="Education Qualification has been added successfully";
-        return redirect('flex/userprofile/'.base64_encode($id))->with('msg', $msg);
+        $msg = "Education Qualification has been added successfully";
+        return redirect('flex/userprofile/' . base64_encode($id))->with('msg', $msg);
+    }
+    // end of education qualifications
 
-}
+    // start of grievances
+    public function grievancesComplains()
+    {
 
-// end of education qualifications
+        $data['title'] = "Grievances|Disciplinary";
+        $data['employees'] = $this->flexperformance_model->Employee();
+        $promotions = Promotion::orderBy('created_at', 'desc')->get();
+        $i = 1;
+        $data['parent'] = 'Workforce';
+        $data['child'] = 'Disciplinary Actions';
+        $data['actions'] = Disciplinary::orderBy('created_at', 'desc')->get();
 
-// start of grievances
+        return view('workforce-management.grievances-complains', $data, compact('promotions', 'i'));
+    }
 
-public function grievancesComplains()
-{
+    // For add complain page
+    public function addComplain(Request $request)
+    {
+        return view('workforce-management.add-complain');
+    }
 
-    $data['title'] = "Grievances|Disciplinary";
-    $data['employees'] = $this->flexperformance_model->Employee();
-    $promotions= Promotion::orderBy('created_at','desc')->get();
-    $i=1;
-    $data['parent'] = 'Workforce';
-    $data['child'] = 'Disciplinary Actions';
-    $data['actions'] =Disciplinary::orderBy('created_at','desc')->get();
+    // start of add disciplinary function
+    public function addDisciplinary(Request $request)
+    {
+        // $id=Auth::user()->emp_id;
+        $data['employees'] = EMPL::all();
 
-    return view('workforce-management.grievances-complains', $data,compact('promotions','i'));
-
-}
-
-
-public function addComplain(Request $request)
-{
-
-    return view('workforce-management.add-complain');
-
-}
-
-// start of add disciplinary function
-
-public function addDisciplinary(Request $request)
-{
-    // $id=Auth::user()->emp_id;
-    $data['employees'] = EMPL::all();
-
-    return view('workforce-management.add-disciplinary',$data);
-
-}
-
-// end of add discipllinary function
+        return view('workforce-management.add-disciplinary', $data);
+    }
+    // end of add discipllinary function
 
 
-// start of save disciplinary action
-
-public function saveDisciplinary(Request $request)
-{
-    request()->validate(
-        [
-        'employeeID' => 'required',
-         ]
+    // start of save disciplinary action
+    public function saveDisciplinary(Request $request)
+    {
+        request()->validate(
+            [
+                'employeeID' => 'required',
+            ]
         );
 
 
-        $id=$request->employeeID;
+        $id = $request->employeeID;
 
-        $emp=EMPL::where('emp_id',$id)->first();
-        $department=$emp->department;
+        $emp = EMPL::where('emp_id', $id)->first();
+        $department = $emp->department;
 
 
         // dd($emp);
 
         $disciplinary = new Disciplinary();
-        $disciplinary->employeeID=$id;
-        $disciplinary->department=$department;
-        $disciplinary->suspension=$request->suspension;
-        $disciplinary->date_of_charge=$request->date_of_charge;
-        $disciplinary->detail_of_charge=$request->charge_description;
-        $disciplinary->date_of_hearing=$request->date_of_hearing;
-        $disciplinary->detail_of_hearing=$request->hearing_description;
-        $disciplinary->findings=$request->findings;
-        $disciplinary->recommended_sanctum=$request->recommended_sanctum;
-        $disciplinary->final_decission=$request->final_decission;
+        $disciplinary->employeeID = $id;
+        $disciplinary->department = $department;
+        $disciplinary->suspension = $request->suspension;
+        $disciplinary->date_of_charge = $request->date_of_charge;
+        $disciplinary->detail_of_charge = $request->charge_description;
+        $disciplinary->date_of_hearing = $request->date_of_hearing;
+        $disciplinary->detail_of_hearing = $request->hearing_description;
+        $disciplinary->findings = $request->findings;
+        $disciplinary->recommended_sanctum = $request->recommended_sanctum;
+        $disciplinary->final_decission = $request->final_decission;
 
 
 
@@ -8080,114 +8311,106 @@ public function saveDisciplinary(Request $request)
         $disciplinary->save();
 
 
-        $msg="Disciplinary Action Has been save Successfully !";
+        $msg = "Disciplinary Action Has been save Successfully !";
         return redirect('flex/grievancesCompain')->with('msg', $msg);
+    }
+    // end of save disciplinary action
 
-}
-
-// end of save disciplinary action
-
-// start of view single displinary action
-public function viewDisciplinary(Request $request,$id)
+    // start of view single displinary action
+    public function viewDisciplinary(Request $request, $id)
     {
 
         $did = base64_decode($id);
 
         $data['title'] = "Employee";
 
-        $data['actions']= Disciplinary::where('id',$did)->with('employee')->with('departments')->get();
+        $data['actions'] = Disciplinary::where('id', $did)->with('employee')->with('departments')->get();
 
 
-        return view('workforce-management.view-action',$data);
+        return view('workforce-management.view-action', $data);
     }
+    // end of view single displinary action
 
 
-// end of view single displinary action
-
-
-// start of edit disciplinary action
-public function editDisciplinary(Request $request,$id)
+    // start of edit disciplinary action
+    public function editDisciplinary(Request $request, $id)
     {
 
         $did = base64_decode($id);
 
         $data['title'] = "Employee";
 
-        $data['actions']= Disciplinary::where('id',$did)->with('employee')->with('departments')->get();
+        $data['actions'] = Disciplinary::where('id', $did)->with('employee')->with('departments')->get();
 
 
-        return view('workforce-management.edit-action',$data);
+        return view('workforce-management.edit-action', $data);
     }
-// end of edit disciplinary action
+    // end of edit disciplinary action
 
 
-// start of update disciplinary action
+    // start of update disciplinary action
+    public function updateDisciplinary(Request $request)
+    {
+        // request()->validate(
+        //     [
+        //     'employeeID' => 'required',
+        //      ]
+        //     );
 
-public function updateDisciplinary(Request $request)
-{
-    // request()->validate(
-    //     [
-    //     'employeeID' => 'required',
-    //      ]
-    //     );
 
-
-        $id=$request->id;
-        $disciplinary =Disciplinary::where('id',$id)->first();
-        $disciplinary->suspension=$request->suspension;
-        $disciplinary->date_of_charge=$request->date_of_charge;
-        $disciplinary->detail_of_charge=$request->charge_description;
-        $disciplinary->date_of_hearing=$request->date_of_hearing;
-        $disciplinary->detail_of_hearing=$request->hearing_description;
-        $disciplinary->findings=$request->findings;
-        $disciplinary->recommended_sanctum=$request->recommended_sanctum;
-        $disciplinary->final_decission=$request->final_decission;
+        $id = $request->id;
+        $disciplinary = Disciplinary::where('id', $id)->first();
+        $disciplinary->suspension = $request->suspension;
+        $disciplinary->date_of_charge = $request->date_of_charge;
+        $disciplinary->detail_of_charge = $request->charge_description;
+        $disciplinary->date_of_hearing = $request->date_of_hearing;
+        $disciplinary->detail_of_hearing = $request->hearing_description;
+        $disciplinary->findings = $request->findings;
+        $disciplinary->recommended_sanctum = $request->recommended_sanctum;
+        $disciplinary->final_decission = $request->final_decission;
         $disciplinary->update();
-        $emp=base64_encode($id);
+        $emp = base64_encode($id);
         $data['title'] = "Employee";
 
-        $data['actions']= Disciplinary::where('id',$id)->with('employee')->with('departments')->get();
+        $data['actions'] = Disciplinary::where('id', $id)->with('employee')->with('departments')->get();
 
 
 
-        $msg="Disciplinary Action Has been Updated Successfully !";
+        $msg = "Disciplinary Action Has been Updated Successfully !";
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
-         return view('workforce-management.view-action',$data)->with('msg', $msg);
+        return view('workforce-management.view-action', $data)->with('msg', $msg);
+    }
+    // end of update disciplinary action
 
-}
+    public function saveComplain(Request $request)
+    {
 
-// end of update disciplinary action
-
-public function saveComplain(Request $request)
-{
-
-    request()->validate(
-        [
-        'employeeID' => 'required',
-        'description' => 'required',
-         ]
+        request()->validate(
+            [
+                'employeeID' => 'required',
+                'description' => 'required',
+            ]
         );
 
 
-        $id=$request->employeeID;
+        $id = $request->employeeID;
 
         $complain = new EmployeeComplain();
-        $complain->employeeID=$id;
-        $complain->description=$request->description;
+        $complain->employeeID = $id;
+        $complain->description = $request->description;
         $complain->save();
 
 
-        $msg="Your Disciplinary Action Has been save Successfully !";
+        $msg = "Your Disciplinary Action Has been save Successfully !";
         return redirect('flex/grievancesCompain')->with('msg', $msg);
+    }
 
-}
-
-// end of grievances
-
+    // end of grievances
 
 
-// start of profile (employee biodata)
-public function viewProfile(Request $request,$id)
+
+    // start of profile (employee biodata)
+    public function viewProfile(Request $request, $id)
     {
 
         $empID = base64_decode($id);
@@ -8204,23 +8427,24 @@ public function viewProfile(Request $request,$id)
         // $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['pension'] = $this->flexperformance_model->pension_fund();
 
-        $details=EmployeeDetail::where('employeeID',$empID)->first();
+        $details = EmployeeDetail::where('employeeID', $empID)->first();
 
-        $emergency=EmergencyContact::where('employeeID',$empID)->first();
+        $emergency = EmergencyContact::where('employeeID', $empID)->first();
 
-        $children=EmployeeDependant::where('employeeID',$empID)->get();
-
-
-        $spouse=EmployeeSpouse::where('employeeID',$empID)->first();
-
-        $parents=EmployeeParent::where('employeeID',$empID)->get();
-
-        $data['qualifications'] =EducationQualification::where('employeeID',$empID)->orderBy('end_year','desc')->get();
+        $children = EmployeeDependant::where('employeeID', $empID)->get();
 
 
-        $data['certifications'] =ProfessionalCertification::where('employeeID',$empID)->orderBy('cert_end','desc')->get();
+        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
 
-        $data['histories'] =EmploymentHistory::where('employeeID',$empID)->orderBy('hist_end','desc')->get();
+        $parents = EmployeeParent::where('employeeID', $empID)->get();
+
+        $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+
+        
+
+        $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+
+        $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
 
         $data['salaryTransfer'] = $this->flexperformance_model->pendingSalaryTranferCheck($empID);
 
@@ -8236,546 +8460,511 @@ public function viewProfile(Request $request,$id)
         // dd($data);
 
         // return view('employee.updateEmployee', $data);
-        return view('employee.employee-profile', $data,compact('details','emergency','spouse','children','parents'));
+        return view('employee.employee-profile', $data, compact('details', 'emergency', 'spouse', 'children', 'parents'));
     }
-// end of profile
+    // end of profile
 
 
 
-//start of update employee detail
+    //start of update employee biodata detail
 
-public function updateEmployeeDetails(Request $request)
-{
+    public function updateEmployeeDetails(Request $request)
+    {
 
-    request()->validate(
-        [
+        request()->validate(
+            [
 
-        // start of name information validation
-        'employeeID' => 'required',
-        'fname' => 'required',
-        'mname' => 'nullable',
-        'lname' => 'required',
-        'maide_name' => 'nullable',
-
-
-        // start of biographical informations
-        'bithdate' => 'nullable',
-        'country_of_birth' => 'nullable',
-        'gender' => 'required',
-        // 'martial' => 'nullable',
-        'religion' => 'nullable',
-
-        // Address Information
-        'physical_address' => 'nullable',
-        'landmark' => 'nullable',
-
-        // Start of Personal Identification details
-        'TIN' => 'required',
-        'NIDA' => 'required',
-        'passport' => 'nullable',
-        'pension' => 'required',
-        'HELSB' => 'nullable',
-
-        // Start of Emmegence Contact
-
-        'em_fname' => 'nullable',
-        'em_mname' => 'nullable',
-        'spouse_birthplace' => 'nullaspousee',
-      'em_relationship' => 'nullable',
-        'em_ocupation' => 'nullable',
-        'em_phone' => 'nullable',
-
-        // Start of Employment Details
-        'employment_date' => 'nullable',
-        'former_title' => 'nullable',
-        'current_title' => 'nullable',
-        'department' => 'nullable',
-        'line_manager' => 'nullable',
-        'hod' => 'nullable',
-        'employee_status' => 'nullable',
-
-        // start of spouse details
-        'spouse_name' => 'nullable',
-        'spouse_birthdate' => 'nullable',
-        'spouse_birthplace' => 'nullable',
-        'spouse_nationality' => 'nullable',
-        'spouse_employer' => 'nullable',
-        'spouse_job_title' => 'nullable',
-        'spouse_medical_status' => 'nullable',
-
-        // start of children details
+                // start of name information validation
+                'employeeID' => 'required',
+                'fname' => 'required',
+                'mname' => 'nullable',
+                'lname' => 'required',
+                'maide_name' => 'nullable',
 
 
-        // start of former works
-         ]
+                // start of biographical informations
+                'bithdate' => 'nullable',
+                'country_of_birth' => 'nullable',
+                'gender' => 'required',
+                // 'martial' => 'nullable',
+                'religion' => 'nullable',
+
+                // Address Information
+                'physical_address' => 'nullable',
+                'landmark' => 'nullable',
+
+                // Start of Personal Identification details
+                'TIN' => 'required',
+                'NIDA' => 'required',
+                'passport' => 'nullable',
+                'pension' => 'required',
+                'HELSB' => 'nullable',
+
+                // Start of Emmegence Contact
+
+                'em_fname' => 'nullable',
+                'em_mname' => 'nullable',
+                'spouse_birthplace' => 'nullaspousee',
+                'em_relationship' => 'nullable',
+                'em_ocupation' => 'nullable',
+                'em_phone' => 'nullable',
+
+                // Start of Employment Details
+                'employment_date' => 'nullable',
+                'former_title' => 'nullable',
+                'current_title' => 'nullable',
+                'department' => 'nullable',
+                'line_manager' => 'nullable',
+                'hod' => 'nullable',
+                'employee_status' => 'nullable',
+
+                // start of spouse details
+                'spouse_name' => 'nullable',
+                'spouse_birthdate' => 'nullable',
+                'spouse_birthplace' => 'nullable',
+                'spouse_nationality' => 'nullable',
+                'spouse_employer' => 'nullable',
+                'spouse_job_title' => 'nullable',
+                'spouse_medical_status' => 'nullable',
+
+                // start of children details
+
+
+                // start of former works
+            ]
         );
 
 
-        $id=$request->employeeID;
+        $id = $request->employeeID;
 
         // dd($request->landmark);
-        $empl =Employee::where('emp_id',$id)->first();
+        $empl = Employee::where('emp_id', $id)->first();
 
-        if($empl){
-        // updating employee data
-        $employee =Employee::where('emp_id',$id)->first();
-        $employee->fname=$request->fname;
-        $employee->mname=$request->mname;
-        $employee->lname=$request->lname;
-        $employee->line_manager=$request->line_manager;
-        $employee->job_title=$request->current_job;
-        $employee->gender=$request->gender;
-        $employee->birthdate=$request->birthdate;
-        $employee->merital_status=$request->merital;
+        if ($empl) {
+            // updating employee data
+            $employee = Employee::where('emp_id', $id)->first();
+            $employee->fname = $request->fname;
+            $employee->mname = $request->mname;
+            $employee->lname = $request->lname;
+            $employee->line_manager = $request->line_manager;
+            $employee->job_title = $request->current_job;
+            $employee->gender = $request->gender;
+            $employee->birthdate = $request->birthdate;
+            $employee->merital_status = $request->merital;
 
 
-        // dd($request->current_job);
-        $employee->national_id=$request->NIDA;
-        $employee->form_4_index=$request->HELSB;
-        $employee->pension_fund=$request->pension_fund;
-        $employee->physical_address=$request->physical_address;
-        $employee->update();
+            // dd($request->current_job);
+            $employee->national_id = $request->NIDA;
+            $employee->form_4_index = $request->HELSB;
+            $employee->pension_fund = $request->pension_fund;
+            $employee->physical_address = $request->physical_address;
+            $employee->update();
 
-        // Start of Employee Details
-        $profile=EmployeeDetail::where('employeeID',$id)->first();
+            // Start of Employee Details
+            $profile = EmployeeDetail::where('employeeID', $id)->first();
 
-        if ($profile) {
+            if ($profile) {
 
-        $profile->marriage_date=$request->marriage_date;
-        $profile->maide_name=$request->maide_name;
-        $profile->birthplace=$request->birthplace;
-        $profile->birthcountry=$request->birthcountry;
-        $profile->religion=$request->religion;
-        $profile->employeeID=$request->employeeID;
-        $profile->passport_number=$request->passport_number;
-        $profile->landmark=$request->landmark;
-        $profile->prefix=$request->prefix;
-        $profile->former_title=$request->former_title;
-        $profile->divorced_date=$request->divorced_date;
+                $profile->marriage_date = $request->marriage_date;
+                $profile->maide_name = $request->maide_name;
+                $profile->birthplace = $request->birthplace;
+                $profile->birthcountry = $request->birthcountry;
+                $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                $profile->passport_number = $request->passport_number;
+                $profile->landmark = $request->landmark;
+                $profile->prefix = $request->prefix;
+                $profile->former_title = $request->former_title;
+                $profile->divorced_date = $request->divorced_date;
 
-         $profile->update();
-        }
-        else{
-        $profile=new EmployeeDetail();
-        $profile->prefix=$request->prefix;
-        $profile->maide_name=$request->maide_name;
-        $profile->birthplace=$request->birthplace;
-        $profile->birthcountry=$request->birthcountry;
-        $profile->religion=$request->religion;
-        $profile->employeeID=$request->employeeID;
-        $profile->passport_number=$request->passport_number;
-        $profile->former_title=$request->former_title;
-        $profile->divorced_date=$request->divorced_date;
-        $profile->marriage_date=$request->marriage_date;
-        $profile->save();
-        }
+                $profile->update();
+            } else {
+                $profile = new EmployeeDetail();
+                $profile->prefix = $request->prefix;
+                $profile->maide_name = $request->maide_name;
+                $profile->birthplace = $request->birthplace;
+                $profile->birthcountry = $request->birthcountry;
+                $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                $profile->passport_number = $request->passport_number;
+                $profile->former_title = $request->former_title;
+                $profile->divorced_date = $request->divorced_date;
+                $profile->marriage_date = $request->marriage_date;
+                $profile->save();
+            }
 
-        // start of emergency contacts
-        $emergency=EmergencyContact::where('employeeID',$id)->first();
+            // start of emergency contacts
+            $emergency = EmergencyContact::where('employeeID', $id)->first();
 
-        if ($emergency) {
+            if ($emergency) {
 
-        $emergency->employeeID=$request->employeeID;
-        $emergency->em_fname=$request->em_fname;
-        $emergency->em_mname=$request->em_mname;
-        $emergency->em_sname=$request->em_lname;
-        $emergency->em_relationship=$request->em_relationship;
-        $emergency->em_occupation=$request->em_occupation;
-        $emergency->em_phone=$request->em_phone;
-         $emergency->update();
-        }
-        else{
-        $emergency=new EmergencyContact();
-        $emergency->employeeID=$request->employeeID;
-        $emergency->em_fname=$request->em_fname;
-        $emergency->em_mname=$request->em_mname;
-        $emergency->em_sname=$request->em_lname;
-        $emergency->em_relationship=$request->em_relationship;
-        $emergency->em_occupation=$request->em_occupation;
-        $emergency->em_phone=$request->em_phone;
-        $emergency->save();
-        }
+                $emergency->employeeID = $request->employeeID;
+                $emergency->em_fname = $request->em_fname;
+                $emergency->em_mname = $request->em_mname;
+                $emergency->em_sname = $request->em_lname;
+                $emergency->em_relationship = $request->em_relationship;
+                $emergency->em_occupation = $request->em_occupation;
+                $emergency->em_phone = $request->em_phone;
+                $emergency->update();
+            } else {
+                $emergency = new EmergencyContact();
+                $emergency->employeeID = $request->employeeID;
+                $emergency->em_fname = $request->em_fname;
+                $emergency->em_mname = $request->em_mname;
+                $emergency->em_sname = $request->em_lname;
+                $emergency->em_relationship = $request->em_relationship;
+                $emergency->em_occupation = $request->em_occupation;
+                $emergency->em_phone = $request->em_phone;
+                $emergency->save();
+            }
 
 
 
-        // start of spouse details
-        $spouse=EmployeeSpouse::where('employeeID',$id)->first();
+            // start of spouse details
+            $spouse = EmployeeSpouse::where('employeeID', $id)->first();
 
-        if ($spouse) {
+            if ($spouse) {
 
-        $spouse->employeeID=$request->employeeID;
-        $spouse->spouse_fname=$request->spouse_name;
-        $spouse->spouse_birthdate=$request->spouse_birthdate;
-        $spouse->spouse_birthplace=$request->spouse_birthplace;
-        $spouse->spouse_birthcountry=$request->spouse_birthcountry;
-        $spouse->spouse_nationality=$request->spouse_nationality;
-        $spouse->spouse_passport=$request->spouse_passport;
-        $spouse->spouse_employer=$request->spouse_employer;
-        $spouse->spouse_job_title=$request->spouse_job_title;
-        $spouse->spouse_nida=$request->spouse_nida;
-         $spouse->update();
-        }
-        else{
-            $spouse=new EmployeeSpouse();
+                $spouse->employeeID = $request->employeeID;
+                $spouse->spouse_fname = $request->spouse_name;
+                $spouse->spouse_birthdate = $request->spouse_birthdate;
+                $spouse->spouse_birthplace = $request->spouse_birthplace;
+                $spouse->spouse_birthcountry = $request->spouse_birthcountry;
+                $spouse->spouse_nationality = $request->spouse_nationality;
+                $spouse->spouse_passport = $request->spouse_passport;
+                $spouse->spouse_employer = $request->spouse_employer;
+                $spouse->spouse_job_title = $request->spouse_job_title;
+                $spouse->spouse_nida = $request->spouse_nida;
+                $spouse->update();
+            } else {
+                $spouse = new EmployeeSpouse();
 
-            $spouse->employeeID=$request->employeeID;
-            $spouse->spouse_fname=$request->spouse_name;
-            $spouse->spouse_birthdate=$request->spouse_birthdate;
-            $spouse->spouse_birthplace=$request->spouse_birthplace;
-            $spouse->spouse_birthcountry=$request->spouse_birthcountry;
-            $spouse->spouse_nationality=$request->spouse_nationality;
-            $spouse->spouse_passport=$request->spouse_passport;
-            $spouse->spouse_employer=$request->spouse_employer;
-            $spouse->spouse_job_title=$request->spouse_job_title;
-            $spouse->spouse_nida=$request->spouse_nida;
+                $spouse->employeeID = $request->employeeID;
+                $spouse->spouse_fname = $request->spouse_name;
+                $spouse->spouse_birthdate = $request->spouse_birthdate;
+                $spouse->spouse_birthplace = $request->spouse_birthplace;
+                $spouse->spouse_birthcountry = $request->spouse_birthcountry;
+                $spouse->spouse_nationality = $request->spouse_nationality;
+                $spouse->spouse_passport = $request->spouse_passport;
+                $spouse->spouse_employer = $request->spouse_employer;
+                $spouse->spouse_job_title = $request->spouse_job_title;
+                $spouse->spouse_nida = $request->spouse_nida;
 
-            $spouse->save();
+                $spouse->save();
             }
 
 
             // start of depedants details
-
-        $emp_id=$request->employeeID;
-        $cert=$request->dep_certficate;
-        $dependant=EmployeeDependant::where('employeeID',$emp_id)
-                              ->Where('dep_certificate','LIKE',$request->dep_certficate)
-                              ->where('dep_surname',$request->dep_surname)
-                                ->first();
-
+            $emp_id = $request->employeeID;
+            $cert = $request->dep_certficate;
+            $dependant = EmployeeDependant::where('employeeID', $emp_id)
+                ->Where('dep_certificate', 'LIKE', $request->dep_certficate)
+                ->where('dep_surname', $request->dep_surname)
+                ->first();
 
 
-        if($dependant)
-        {
 
-            // $dependant->employeeID=$request->employeeID;
-            $dependant->dep_name=$request->dep_name;
-            $dependant->dep_surname=$request->dep_surname;
-            $dependant->dep_birthdate=$request->dep_birthdate;
-            $dependant->dep_gender=$request->dep_gender;
-            $dependant->dep_certificate=$request->dep_certificate;
+            if ($dependant) {
 
-            $dependant->update();
-        }
-        else
-        {
-            if($request->dep_name!='' || $request->dep_certificate!='')
-            {
-                $dependant=new EmployeeDependant();
+                // $dependant->employeeID=$request->employeeID;
+                $dependant->dep_name = $request->dep_name;
+                $dependant->dep_surname = $request->dep_surname;
+                $dependant->dep_birthdate = $request->dep_birthdate;
+                $dependant->dep_gender = $request->dep_gender;
+                $dependant->dep_certificate = $request->dep_certificate;
 
-                $dependant->employeeID=$request->employeeID;
-                $dependant->dep_name=$request->dep_name;
-                $dependant->dep_surname=$request->dep_surname;
-                $dependant->dep_birthdate=$request->dep_birthdate;
-                $dependant->dep_gender=$request->dep_gender;
-                $dependant->dep_certificate=$request->dep_certificate;
+                $dependant->update();
+            } else {
+                if ($request->dep_name != '' || $request->dep_certificate != '') {
+                    $dependant = new EmployeeDependant();
 
-                $dependant->save();
+                    $dependant->employeeID = $request->employeeID;
+                    $dependant->dep_name = $request->dep_name;
+                    $dependant->dep_surname = $request->dep_surname;
+                    $dependant->dep_birthdate = $request->dep_birthdate;
+                    $dependant->dep_gender = $request->dep_gender;
+                    $dependant->dep_certificate = $request->dep_certificate;
+
+                    $dependant->save();
+                }
             }
 
 
-        }
 
+            // For Parents and Guardians
+            $empID = $request->employeeID;
+            $parent = EmployeeParent::where('employeeID', $empID)
+                ->Where('parent_relation', 'LIKE', $request->parent_relation)
+                ->where('parent_birthdate', 'LIKE', $request->parent_birthdate)
+                ->first();
 
+            if ($parent) {
+                $parent->employeeID = $request->employeeID;
+                $parent->parent_names = $request->parent_names;
+                $parent->parent_relation = $request->parent_relation;
+                $parent->parent_birthdate = $request->parent_birthdate;
+                $parent->parent_residence = $request->parent_residence;
+                $parent->parent_living_status = $request->parent_living_status;
 
+                $parent->update();
+            } else {
+                if ($request->parent_names != null && $request->parent_relation != null) {
+                    $parent = new EmployeeParent();
 
+                    $parent->employeeID = $request->employeeID;
+                    $parent->parent_names = $request->parent_names;
+                    $parent->parent_relation = $request->parent_relation;
+                    $parent->parent_birthdate = $request->parent_birthdate;
+                    $parent->parent_residence = $request->parent_residence;
+                    $parent->parent_living_status = $request->parent_living_status;
 
-                $empID=$request->employeeID;
+                    $parent->save();
+                }
+            }
 
+            // For Educational Qualifiation
+            if ($request->institute != null && $request->course != null) {
+                $qualification = new EducationQualification();
 
-                // dd($request->parent_living_status);
-        $parent=EmployeeParent::where('employeeID',$empID)
-                                ->Where('parent_relation','LIKE',$request->parent_relation)
-                                ->where('parent_birthdate','LIKE',$request->parent_birthdate)
-                                ->first();
+                $qualification->employeeID = $request->employeeID;
+                $qualification->institute = $request->institute;
+                $qualification->level = $request->level;
+                $qualification->course = $request->course;
+                $qualification->start_year = $request->start_year;
+                $qualification->end_year = $request->finish_year;
+                $qualification->final_score = $request->final_score;
+                $qualification->study_location = $request->study_location;
 
-                if($parent)
-        {
-            $parent->employeeID=$request->employeeID;
-            $parent->parent_names=$request->parent_names;
-            $parent->parent_relation=$request->parent_relation;
-            $parent->parent_birthdate=$request->parent_birthdate;
-            $parent->parent_residence=$request->parent_residence;
-            $parent->parent_living_status=$request->parent_living_status;
-
-            $parent->update();
-        }
-        else
-        {
-            if($request->parent_names!=null && $request->parent_relation!=null)
-            {
-                $parent=new EmployeeParent();
-
-                $parent->employeeID=$request->employeeID;
-                $parent->parent_names=$request->parent_names;
-                $parent->parent_relation=$request->parent_relation;
-                $parent->parent_birthdate=$request->parent_birthdate;
-                $parent->parent_residence=$request->parent_residence;
-                $parent->parent_living_status=$request->parent_living_status;
-
-                $parent->save();
+                $qualification->save();
             }
 
 
-        }
 
-        if($request->institute!=null && $request->course!=null )
-        {
-            $qualification=new EducationQualification();
+            // For Professional Certification
+            if ($request->cert_qualification != null && $request->cert_number != null) {
+                $certification = new ProfessionalCertification();
 
-            $qualification->employeeID=$request->employeeID;
-            $qualification->institute=$request->institute;
-            $qualification->level=$request->level;
-            $qualification->course=$request->course;
-            $qualification->start_year=$request->start_year;
-            $qualification->end_year=$request->finish_year;
-            $qualification->final_score=$request->final_score;
-            $qualification->study_location=$request->study_location;
-
-            $qualification->save();
-        }
+                $certification->employeeID = $request->employeeID;
+                $certification->cert_start = $request->cert_start;
+                // dd($request->cert_start);
+                $certification->cert_end = $request->cert_end;
+                $certification->cert_name = $request->cert_name;
+                $certification->cert_qualification = $request->cert_qualification;
+                $certification->cert_number = $request->cert_number;
+                $certification->cert_status = $request->cert_status;
 
 
+                $certification->save();
+            }
 
 
-        if($request->cert_qualification!=null && $request->cert_number!=null )
-        {
-            $certification=new ProfessionalCertification();
+            // For Employment History
+            if ($request->hist_employer != null && $request->hist_position != null) {
+                $history = new EmploymentHistory();
 
-            $certification->employeeID=$request->employeeID;
-            $certification->cert_start=$request->cert_start;
-            // dd($request->cert_start);
-            $certification->cert_end=$request->cert_end;
-            $certification->cert_name=$request->cert_name;
-            $certification->cert_qualification=$request->cert_qualification;
-            $certification->cert_number=$request->cert_number;
-            $certification->cert_status=$request->cert_status;
+                $history->employeeID = $request->employeeID;
+                $history->hist_start = $request->hist_start;
+                $history->hist_end = $request->hist_end;
+                $history->hist_employer = $request->hist_employer;
+                $history->hist_industry = $request->hist_industry;
+                $history->hist_position = $request->hist_position;
+                $history->hist_status = $request->hist_status;
+                $history->hist_reason = $request->hist_reason;
 
+                $history->save();
+            }
 
-            $certification->save();
-        }
+            if ($request->image != null) {
+                $user = $request->empID;
 
+                $employee = EMPL::where('emp_id', $user)->first();
+                if ($request->hasfile('image')) {
+                    $newImageName = $request->image->hashName();
+                    $request->image->move(public_path('storage\profile'), $newImageName);
 
-
-        if($request->hist_employer!=null && $request->hist_position!=null )
-        {
-            $history=new EmploymentHistory();
-
-            $history->employeeID=$request->employeeID;
-            $history->hist_start=$request->hist_start;
-            $history->hist_end=$request->hist_end;
-            $history->hist_employer=$request->hist_employer;
-            $history->hist_industry=$request->hist_industry;
-            $history->hist_position=$request->hist_position;
-            $history->hist_status=$request->hist_status;
-            $history->hist_reason=$request->hist_reason;
-
-            $history->save();
-        }
-
-        if($request->image!=null  )
-        {
-            $user=$request->empID;
-
-           $employee=EMPL::where('emp_id',$user)->first();
-           if($request->hasfile('image')){
-            $newImageName = $request->image->hashName();
-            $request->image->move(public_path('storage\profile'), $newImageName);
-
-            //    $file=$request->file('image');
-            //    $filename=time().'.'.$file->getClientOriginalExtension();
-            //    $file->move('storage/profile/', $newImageName);
-               $employee->photo=$newImageName;
-           }
-           // saving data
-           $employee->update();
+                    //    $file=$request->file('image');
+                    //    $filename=time().'.'.$file->getClientOriginalExtension();
+                    //    $file->move('storage/profile/', $newImageName);
+                    $employee->photo = $newImageName;
+                }
+                // saving data
+                $employee->update();
+            }
         }
 
 
 
-         }
 
 
 
 
 
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
 
 
+    // end of update employee details
 
-        $msg="Employee Details Have Been Updated successfully";
-        return redirect('flex/employee-profile/'.base64_encode($id))->with('msg', $msg);
 
-}
+    // delete child/dependant  function
+    public function deleteChild($id)
+    {
+        $child = EmployeeDependant::find($id);
 
+        $empID = $child->employeeID;
 
-// end of update employee details
+        $child->delete();
 
+        return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Dependant is Deleted successfully !');
+    }
 
-             // delete  function
-             public function deleteChild($id)
-             {
-                 $child=EmployeeDependant::find($id);
 
-                 $empID=$child->employeeID;
+    public function deleteParent($id)
+    {
+        $parent = EmployeeParent::find($id);
 
-                     $child->delete();
+        $empID = $parent->employeeID;
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Dependant is Deleted successfully !');
+        $parent->delete();
 
-             }
+        return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Parent is Deleted successfully !');
+    }
 
+    public function deleteQualification($id)
+    {
+        $qualification = EducationQualification::find($id);
 
-             public function deleteParent($id)
-             {
-                 $parent=EmployeeParent::find($id);
+        $empID = $qualification->employeeID;
 
-                 $empID=$parent->employeeID;
+        $qualification->delete();
 
-                     $parent->delete();
+        return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Education Qualification was Deleted successfully !');
+    }
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Parent is Deleted successfully !');
+    public function deleteCertification($id)
+    {
+        $certification = ProfessionalCertification::find($id);
 
-             }
+        $empID = $certification->employeeID;
 
-             public function deleteQualification($id)
-             {
-                 $qualification=EducationQualification::find($id);
+        $certification->delete();
 
-                 $empID=$qualification->employeeID;
+        return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Professional Certification was Deleted successfully !');
+    }
 
-                     $qualification->delete();
+    // For deleting employment history
+    public function deleteHistory($id)
+    {
+        $history = EmploymentHistory::find($id);
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Education Qualification was Deleted successfully !');
+        $empID = $history->employeeID;
 
-             }
+        $history->delete();
 
-             public function deleteCertification($id)
-             {
-                 $certification=ProfessionalCertification::find($id);
+        return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Employment History was Deleted successfully !');
+    }
 
-                 $empID=$certification->employeeID;
+    // For deleting disciplinary action
+    public function deleteAction($id)
+    {
+        $disciplinary = Disciplinary::find($id);
 
-                     $certification->delete();
+        $empID = $disciplinary->id;
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Professional Certification was Deleted successfully !');
+        $disciplinary->delete();
 
-             }
+        return redirect('flex/grievancesCompain/')->with('msg', 'Disciplinary Action was Deleted successfully !');
+    }
 
+    // For viewing userbiodata
+    public function userdata(Request $request, $id)
+    {
+        $id = base64_decode($id);
 
-             public function deleteHistory($id)
-             {
-                 $history=EmploymentHistory::find($id);
 
-                 $empID=$history->employeeID;
+        $extra = $request->input('extra');
+        $data['employee'] = $this->flexperformance_model->userprofile($id);
 
-                     $history->delete();
+        // dd($data['employee'] );
+        $data['kin'] = $this->flexperformance_model->getkin($id);
+        $data['property'] = $this->flexperformance_model->getproperty($id);
+        $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+        $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+        $data['allrole'] = $this->flexperformance_model->role($id);
+        $data['role'] = $this->flexperformance_model->getuserrole($id);
+        $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+        $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+        $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+        $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+        $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
 
-                     return redirect('flex/employee-profile/'.base64_encode($empID))->with('msg','Employee Employment History was Deleted successfully !');
+        $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
 
-             }
+        $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+        $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+        $data['title'] = "Profile";
+        $empID = $id;
+        $details = EmployeeDetail::where('employeeID', $empID)->first();
 
+        $emergency = EmergencyContact::where('employeeID', $empID)->first();
 
-             public function deleteAction($id)
-             {
-                 $disciplinary=Disciplinary::find($id);
+        $children = EmployeeDependant::where('employeeID', $empID)->get();
 
-                 $empID=$disciplinary->id;
 
-                     $disciplinary->delete();
+        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
 
-                     return redirect('flex/grievancesCompain/')->with('msg','Disciplinary Action was Deleted successfully !');
+        $parents = EmployeeParent::where('employeeID', $empID)->get();
 
-             }
+        $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
 
-             public function userdata(Request $request, $id)
-             {
-                 $id = base64_decode($id);
+        $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
+        $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+        $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-                 $extra = $request->input('extra');
-                 $data['employee'] = $this->flexperformance_model->userprofile($id);
+        $childs = EmployeeDependant::where('employeeID', $empID)->count();
+        $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
 
-                // dd($data['employee'] );
-                 $data['kin'] = $this->flexperformance_model->getkin($id);
-                 $data['property'] = $this->flexperformance_model->getproperty($id);
-                 $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
-                 $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
-                 $data['allrole'] = $this->flexperformance_model->role($id);
-                 $data['role'] = $this->flexperformance_model->getuserrole($id);
-                 $data['rolecount'] = $this->flexperformance_model->rolecount($id);
-                 $data['task_duration'] = $this->performanceModel->total_task_duration($id);
-                 $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
-                 $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
-                 $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+        $data['photo'] = "";
 
-                 $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+        $data['parent'] = "Employee Profile";
 
-                 $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
-                 $data['skills_have'] = $this->flexperformance_model->skills_have($id);
-                 $data['month_list'] = $this->flexperformance_model->payroll_month_list();
-                 $data['title'] = "Profile";
-                 $empID=$id;
-                 $details=EmployeeDetail::where('employeeID',$empID)->first();
+        // return view('employee.userprofile', $data);
 
-                 $emergency=EmergencyContact::where('employeeID',$empID)->first();
+        return view('employee.employee-biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+    }
 
-                 $children=EmployeeDependant::where('employeeID',$empID)->get();
-
-
-                 $spouse=EmployeeSpouse::where('employeeID',$empID)->first();
-
-                 $parents=EmployeeParent::where('employeeID',$empID)->get();
-
-                 $data['qualifications'] =EducationQualification::where('employeeID',$empID)->orderBy('end_year','desc')->get();
-
-
-                 $data['certifications'] =ProfessionalCertification::where('employeeID',$empID)->orderBy('cert_end','desc')->get();
-
-                 $data['histories'] =EmploymentHistory::where('employeeID',$empID)->orderBy('hist_end','desc')->get();
-                 $data['profile'] =EMPL::where('emp_id',$empID)->first();
-
-
-                 $data['qualifications'] = EducationQualification::where('employeeID',$id)->get();
-
-                 $data['photo'] = "";
-
-                 $data['parent'] = "Employee Profile";
-
-                 // return view('employee.userprofile', $data);
-
-                 return view('employee.employee-biodata', $data,compact('details','emergency','spouse','children','parents'));
-
-             }
-
-        // For updating profile image
-       public function updateImg(Request $request)
-       {
+    // For updating profile image
+    public function updateImg(Request $request)
+    {
 
         request()->validate([
             'image' => 'required'
         ]);
-           $user=$request->empID;
+        $user = $request->empID;
 
-           $employee=EMPL::where('emp_id',$user)->first();
-           if($request->hasfile('image')){
+        $employee = EMPL::where('emp_id', $user)->first();
+        if ($request->hasfile('image')) {
 
-                $newImageName = $request->userfile->hashName();
-                $request->image->move(public_path('storage/profile'), $newImageName);
+            $newImageName = $request->image->hashName();
+            $request->image->move(public_path('storage/profile'), $newImageName);
 
             //    $filename=time().'.'.$file->getClientOriginalExtension();
             //    $file->move('uploads/userprofile/', $filename);
-               $employee->photo= $newImageName;
-           }
+            $employee->photo = $newImageName;
+        }
 
 
 
-           // saving data
-           $employee->update();
+        // saving data
+        $employee->update();
 
         //    return redirect('flex/employee')->with('status', 'Image Has been uploaded');
-        return redirect('flex/employee-profile/'.base64_encode($user))->with('msg','Employee Image has been updated successfully !');
-
-       }
+        return redirect('flex/employee-profile/' . base64_encode($user))->with('msg', 'Employee Image has been updated successfully !');
+    }
 
 
 
@@ -8784,14 +8973,13 @@ public function updateEmployeeDetails(Request $request)
     public function holidays()
     {
 
-        $data['title'] = "Grievances|Disciplinary";
-        $data['holidays'] =Holiday::orderBy('date','asc')->get();
-        $i=1;
-        $data['parent'] = 'Workforce';
+
+        $data['holidays'] = Holiday::orderBy('date', 'asc')->get();
+        $i = 1;
+        $data['parent'] = 'Settings';
         $data['child'] = 'Holidays';
 
-        return view('setting.holidays', $data,compact('i'));
-
+        return view('setting.holidays', $data, compact('i'));
     }
 
     // end of view all holidays functions
@@ -8803,80 +8991,325 @@ public function updateEmployeeDetails(Request $request)
     {
         request()->validate(
             [
-            'name' => 'required',
-            'date' => 'required',
-             ]
-            );
+                'name' => 'required',
+                'date' => 'required',
+            ]
+        );
 
 
 
-            $holiday = new Holiday();
-            $holiday->name=$request->name;
-            $holiday->date=$request->date;
-            $holiday->recurring=$request->recurring == true ? '1':'0';;
-            $holiday->save();
+        $holiday = new Holiday();
+        $holiday->name = $request->name;
+        $holiday->date = $request->date;
+        $holiday->recurring = $request->recurring == true ? '1' : '0';;
+        $holiday->save();
 
 
-            $msg="Holiday has been save Successfully !";
-            return redirect('flex/holidays')->with('msg', $msg);
-
+        $msg = "Holiday has been save Successfully !";
+        return redirect('flex/holidays')->with('msg', $msg);
     }
     // end of saving new holiday function
 
-// start of edit disciplinary action
-public function editHoliday(Request $request,$id)
+    // start of edit disciplinary action
+    public function editHoliday(Request $request, $id)
     {
 
-        $i=1;
+        $i = 1;
         $did = base64_decode($id);
-
         $data['holidays'] = Holiday::all();
-
-        $data['holiday']= Holiday::where('id',$did)->first();
-
-
-        return view('setting.edit-holiday',$data,compact('i'));
+        $data['holiday'] = Holiday::where('id', $did)->first();
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Edit Holiday';
+        return view('setting.edit-holiday', $data, compact('i'));
     }
-// end of edit disciplinary action
+    // end of edit disciplinary action
 
     // start of update holiday function
     public function updateHoliday(Request $request)
     {
         request()->validate(
             [
-            'name' => 'required',
-            'date' => 'required',
-             ]
-            );
+                'name' => 'required',
+                'date' => 'required',
+            ]
+        );
 
 
-            $id=$request->id;
-            $holiday = Holiday::find($id);
-            $holiday->name=$request->name;
-            $holiday->date=$request->date;
-            $holiday->recurring=$request->recurring == true ? '1':'0';;
-            $holiday->update();
+        $id = $request->id;
+        $holiday = Holiday::find($id);
+        $holiday->name = $request->name;
+        $holiday->date = $request->date;
+        $holiday->recurring = $request->recurring == true ? '1' : '0';;
+        $holiday->update();
 
 
-            $msg="Holiday has been save Successfully !";
-            return redirect('flex/holidays')->with('msg', $msg);
-
+        $msg = "Holiday has been save Successfully !";
+        return redirect('flex/holidays')->with('msg', $msg);
     }
-
     // end of update holiday function
 
     // start of delete holiday function
-
     public function deleteHoliday($id)
     {
-        $holiday=Holiday::find($id);
+        $holiday = Holiday::find($id);
 
-            $holiday->delete();
+        $holiday->delete();
 
-            return redirect('flex/holidays/')->with('msg','Holiday was Deleted successfully !');
-
+        return redirect('flex/holidays/')->with('msg', 'Holiday was Deleted successfully !');
     }
     // end of delete holiday function
 
 
+
+    // start of view email notification settings
+    public function emailNotification()
+    {
+
+        $data['title'] = "Email Notifications";
+        $data['notifications'] = EmailNotification::orderBy('id', 'asc')->get();
+        $i = 1;
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Email Notifications';
+
+        return view('setting.email-notifications', $data, compact('i'));
     }
+    // end of view email notification settings
+
+
+    // start of edit email notification settings function
+    public function editNotification(Request $request, $id)
+    {
+
+        $i = 1;
+        $did = base64_decode($id);
+
+        $data['notifications'] = EmailNotification::all();
+
+        $data['notification'] = EmailNotification::where('id', $did)->first();
+
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Edit Notification';
+        return view('setting.edit-email-notification', $data, compact('i'));
+    }
+    // end of edit email notification settings function
+
+
+
+    // start of update holiday function
+    public function updateNotification(Request $request)
+    {
+
+        $id = $request->id;
+        $email = EmailNotification::find($id);
+        $email->status = $request->status == true ? '1' : '0';;
+        $email->update();
+
+
+        $msg = "Email Permission has been Updated Successfully !";
+        return redirect('flex/email-notifications')->with('msg', $msg);
+    }
+
+    // end of update holiday function
+
+
+
+    // start of view all approvals settings
+    public function viewApprovals()
+    {
+
+        $data['title'] = "Approval Settings";
+        $data['approvals'] = Approvals::orderBy('id', 'asc')->get();
+        $i = 1;
+        $data['parent'] = 'Settings';
+        $data['child'] = 'Approvals';
+
+        return view('setting.approvals', $data, compact('i'));
+    }
+    // end of view email notification settings
+
+
+
+    // start of add approval function
+
+    public function saveApprovals(Request $request)
+    {
+        request()->validate(
+            [
+                'process_name' => 'required',
+                'escallation' => 'nullable',
+                'escallation_time' => 'nullable',
+            ]
+        );
+
+
+
+        $approval = new Approvals();
+        $approval->process_name = $request->process_name;
+        $approval->escallation = $request->escallation == true ? '1' : '0';
+        $approval->escallation_time = $request->escallation_time;
+        $approval->save();
+
+
+        $msg = "Approval has been added Successfully !";
+        return redirect('flex/approvals')->with('msg', $msg);
+    }
+    // end of add approval function
+
+
+    // start of view approval levels function
+    public function viewApprovalLevels(Request $request, $id)
+    {
+
+        $i = 1;
+        $did = base64_decode($id);
+
+        $data['roles'] = Role::all();
+        $data['approval'] = Approvals::where('id', $did)->first();
+        $approval = Approvals::where('id', $did)->first();
+        $data['levels'] = ApprovalLevel::where('approval_id', $did)->get();
+
+        $data['parent'] = 'Settings';
+
+        $data['child'] = $approval->process_name . '/Approval Levels';
+        return view('setting.view-approval', $data, compact('i'));
+    }
+    // end of view approval levels function
+
+
+
+
+    // start of add approval level function
+
+    public function saveApprovalLevel(Request $request)
+    {
+        request()->validate(
+            [
+                'label_name' => 'required',
+                'level_name' => 'required',
+                'rank' => 'required',
+            ]
+        );
+
+
+
+        $Level = new ApprovalLevel();
+        $Level->approval_id = $request->approval_id;
+        $Level->level_name = $request->level_name;
+        $Level->label_name = $request->label_name;
+        $Level->role_id = $request->role_id;
+        $Level->rank = $request->rank;
+        $Level->status = $request->status == true ? '1' : '0';
+
+        // for changing approval levels
+
+        $appID = $request->approval_id;
+        $approval = Approvals::where('id', $appID)->first();
+        $approval->levels = $approval->levels + 1;
+        $approval->update();
+
+
+        $Level->save();
+
+
+        $msg = "Approval has been added Successfully !";
+        return redirect('flex/approval_levels/' . base64_encode($appID))->with('msg', $msg);
+    }
+    // end of add approval level function
+
+
+
+    // start of delete approval
+    public function deleteApproval($id)
+    {
+        $approval = Approvals::where('id', $id)->first();
+        $approval->delete();
+
+        return redirect('flex/approvals')->with('msg', "Approval role was deleted successfully!");
+    }
+    // end of delete approval
+
+    // start of delete approval
+    public function deleteApprovalLevel($id)
+    {
+        $level = ApprovalLevel::where('id', $id)->first();
+
+        // for changing approval level
+
+        $appID = $level->approval_id;
+        $approval = Approvals::where('id', $appID)->first();
+        $approval->levels = $approval->levels - 1;
+        $approval->update();
+
+                $level->delete();
+
+                return redirect('flex/approval_levels/'.base64_encode($appID))->with('msg',"Approval Level was deleted successfully!");
+
+        }
+    // end of delete approval
+
+
+
+    //  For Employee Biodata download
+        public function viewBiodata(Request $request)
+        {
+            $id = $request->emp_id;
+    
+    
+            $extra = $request->input('extra');
+            $data['employee'] = $this->flexperformance_model->userprofile($id);
+    
+            // dd($data['employee'] );
+            $data['kin'] = $this->flexperformance_model->getkin($id);
+            $data['property'] = $this->flexperformance_model->getproperty($id);
+            $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+            $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+            $data['allrole'] = $this->flexperformance_model->role($id);
+            $data['role'] = $this->flexperformance_model->getuserrole($id);
+            $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+            $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+            $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+            $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+            $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+    
+            $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+    
+            $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+            $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+            $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+            $data['title'] = "Profile";
+            $empID = $id;
+            $details = EmployeeDetail::where('employeeID', $empID)->first();
+    
+            $emergency = EmergencyContact::where('employeeID', $empID)->first();
+    
+            $children = EmployeeDependant::where('employeeID', $empID)->get();
+    
+    
+            $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+    
+            $parents = EmployeeParent::where('employeeID', $empID)->get();
+    
+            $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+    
+    
+            $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+    
+            $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+            $data['profile'] = EMPL::where('emp_id', $empID)->first();
+    
+            $childs = EmployeeDependant::where('employeeID', $empID)->count();
+            $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+    
+            $data['photo'] = "";
+    
+            $data['parent'] = "Employee Profile";
+    
+            // return view('employee.userprofile', $data);
+            // $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+            // return $pdf->download('employee_biodata.pdf');
+            return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+        }
+
+
+}

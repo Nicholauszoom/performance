@@ -73,7 +73,7 @@
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card border-top  rounded-0 border-0 shadow-none">
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -120,7 +120,7 @@
                          {{-- profile --}}
                          <div role="tabpanel" class="tab-pane fade active show " id="profile" aria-labelledby="work-tab">
 
-                            <div class="card shadow-none">
+                            <div class="card rounded-0 shadow-none">
                                 <div class="card-header mb-2">
                                     <h5 class="text-main">PROFILE PICTURE: </h5>
                                 </div>
@@ -131,10 +131,10 @@
                                 @endif
 
                                     <div class="col-md-12 mt-1">
-                                        <div class="card border-0 shadow-none pb-4">
+                                        <div class="card rounded-0 border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="60px" height="60px" alt="">
+                                                <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -186,7 +186,7 @@
                     {{-- page 1 --}}
                     <div role="tabpanel" class="tab-pane fade show " id="page1" aria-labelledby="work-tab">
 
-                        <div class="card shadow-none">
+                        <div class="card    rounded-0 shadow-none">
                             <div class="card-header">
                                 <h5 class="text-main">BASIC DETAILS: </h5>
                             </div>
@@ -209,7 +209,7 @@
                                 <div class="row">
 
                                     <div class="col-12">
-                                        <div class="card p-2">
+                                        <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                             <h5>Name Information</h5>
 
                                                 <div class="row mb-2">
@@ -263,7 +263,7 @@
 
                                     </div>
                                     <div class="col-12">
-                                        <div class="card p-2">
+                                        <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                             <h5>Biography Information</h5>
 
 
@@ -284,18 +284,22 @@
                                                         <input type="text" name="birthcountry" @if($details) value="{{ $details->birthcountry}}" @endif   class="form-control">
                                                     </div>
                                                     <div class="form-group col-6 mb-2">
+                                                        <label for="">Religion</label>
+                                                        <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
+                                                    </div>
+                                                    <div class="form-group col-12 mb-2">
                                                         <label for="">Gender/ Sex</label>
-                                                        <br>
+                                                        <hr>
                                                         <input type="radio" id="male" name="gender" @foreach($employee as $item) {{$item->gender == "Male" ? 'checked':'' }} @endforeach value="Male"   class="">
                                                         <label for="male">Male</label>
                                                         <input type="radio" id="female" @foreach($employee as $item) {{$item->gender == "Female" ? 'checked':'' }} @endforeach name="gender" value="Female">
                                                         <label for="female">Female</label>
                                                     </div>
-                                                    <div class="form-group col-6 mb-3">
+                                                    <div class="form-group col-12 mb-3">
                                                         <label for="">Martial Status</label>
-                                                       <br>
+                                                        <hr>
                                                        <div class="row">
-                                                        <div class="col-2 mb-2">
+                                                        <div class="col mb-2">
                                                             <input type="radio" id="Single" name="merital" @foreach($employee as $item) {{$item->merital_status == "Single" ? 'checked':'' }} @endforeach value="Single">
                                                             <label for="Single">Single</label>
                                                         </div>
@@ -311,11 +315,11 @@
                                                             <input type="date" class="" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
 
                                                         </div>
-                                                        <div class="col-3 mb-2">
+                                                        <div class="col mb-2">
                                                             <input type="radio" id="Separated" name="merital"  @foreach($employee as $item) {{$item->merital_status == "Separated" ? 'checked':'' }} @endforeach value="Separated">
                                                             <label for="Separated">Separated</label>
                                                         </div>
-                                                        <div class="col-3 mb-2">
+                                                        <div class="col mb-2">
                                                             <input type="radio" id="divorced" name="merital" id="Divorced" @foreach($employee as $item) {{$item->merital_status == "Divorced" ? 'checked':'' }} @endforeach value="Divorced">
                                                             <label for="divorced" class="pr-5">Divorced</label> <br>
 
@@ -334,10 +338,7 @@
 
 
                                                     </div>
-                                                    <div class="form-group col-6 mb-2">
-                                                        <label for="">Religion</label>
-                                                        <input type="text" name="religion" @if($details) value="{{ $details->religion}}" @endif  class="form-control">
-                                                    </div>
+                                                
 
                                                 </div>
                                                 <div class="card-footer ">
@@ -362,7 +363,7 @@
 
                     {{-- page 2 --}}
                     <div role="tabpanel" class="tab-pane " id="page2" aria-labelledby="permission-tab">
-                        <div class="card border-0 shadow-none">
+                        <div class="card  rounded-0 border-0 shadow-none">
                             <div class="card-header">
                                 <h5 class="text-main">ADDRESS AND IDENTIFICATION: </h5>
 
@@ -371,7 +372,7 @@
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                         <h5>Address Information</h5>
                                         <p>
                                             <small>
@@ -404,7 +405,7 @@
 
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
                                         <h5>Personal Identification Information</h5>
 
 
@@ -450,14 +451,14 @@
                     {{-- page 3 --}}
                     <div role="tabpanel" class="tab-pane " id="page3" aria-labelledby="asset-tab">
 
-                        <div class="card border-0 shadow-none">
+                        <div class="card  rounded-0 border-0 shadow-none">
                             <div class="card-header">
                                 <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
                             </div>
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top border-top-width-3 border-top-main  rounded-0 p-2">
                                         <h5>Emmergency Contact Details</h5>
                                         <p>
                                             <small>
@@ -506,7 +507,7 @@
 
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                         <h5>Employment Details</h5>
 
 
@@ -528,10 +529,10 @@
                                                     <label for="">Department : <?php echo $department; ?></label>
                                                     <br>
                                                     <label for="">Branch : <?php echo $branch; ?></label>
-                                                
+
                                                 </div>
 
-             
+
 
                                                 <div class="form-group col-12 mb-2">
                                                     <label for="">Line Manager</label>
@@ -572,14 +573,14 @@
 
                     {{-- Page 4--}}
                     <div role="tabpanel" class="tab-pane " id="page4" aria-labelledby="l-d-tab">
-                        <div class="card border-0 shadow-none mb-3">
+                        <div class="card rounded-0  border-0 shadow-none mb-3">
                             <div class="card-header">
                                 <h5 class="text-main">FAMILY DETAILS </h5>
                             </div>
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card p-2">
+                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                         <h5>Spouse Details</h5>
                                         <p>
                                             <small>
@@ -644,7 +645,7 @@
                                 </div>
 
                                 <div class="col-md-12">
-                                    <div class="card">
+                                    <div class="card  border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                       <div class="card-header">
                                         Children/Dependants Details:
                                       </div>
@@ -717,7 +718,7 @@
                                     </div>
                                   </div>
                                 <div class="col-md-12">
-                                    <div class="card">
+                                    <div class="card  border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                       <div class="card-header">
                                           Parents Details:
                                       </div>
@@ -824,7 +825,7 @@
 
                     {{-- Page 5 --}}
                     <div role="tabpanel" class="tab-pane " id="page5" aria-labelledby="exit-tab">
-                        <div class="card border-0 shadow-none">
+                        <div class="card rounded-0 border-0 shadow-none">
 
                             <div class="card-header">
                                 <h5 class="text-main">EDUCATIONAL BACKGROUND: </h5>
@@ -833,7 +834,7 @@
 
 
                                 <div class="col-md-12">
-                                    <div class="card">
+                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                       <div class="card-body">
                                         <h5>Add Academic Qualification</h5>
                                         <hr>
@@ -916,7 +917,7 @@
                                     </div>
                                   </div>
                                 <div class="col-md-12">
-                                    <div class="card">
+                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                       <div class="card-body">
                                         <h5>Add Professional Certifications/License</h5>
                                         <hr>
@@ -1001,7 +1002,7 @@
 
                     {{-- Page 6 --}}
                     <div role="tabpanel" class="tab-pane " id="page6" aria-labelledby="exit-tab">
-                        <div class="card border-0 shadow-none">
+                        <div class="card rounded-0 border-0 shadow-none">
 
                             <div class="card-header">
                                 <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
@@ -1010,7 +1011,7 @@
 
 
                                 <div class="col-md-12">
-                                    <div class="card">
+                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                       <div class="card-body">
                                         <h5>Add Employment History</h5>
                                         <hr>

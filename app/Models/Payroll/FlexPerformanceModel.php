@@ -96,15 +96,48 @@ class FlexPerformanceModel extends Model
 	{
 		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.* FROM department d, employee e,  (SELECT @s:=0) as s  WHERE d.hod = e.emp_id and and d.state = 1 AND d.hod='".$id."'";
 
+
+		// return DB::select(DB::raw($query));
 		return DB::select(DB::raw($query));
 	}
 
-	function alldepartment()
+	public function alldepartment()
 	{
-		$query = "SELECT @s:=@s+1 as SNo, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as HOD,  d.*, pd.name as parentdept,cs.name as CostCenterName FROM department d, department pd, employee e,cost_center as cs,  (SELECT @s:=0) as s  WHERE d.reports_to = pd.id AND d.state = 1 AND d.type = 1 AND d.cost_center_id = cs.id  AND d.hod = e.emp_id";
 
-		return DB::select(DB::raw($query));
+        $test = DB::table('department')
+            ->join('cost_center', 'cost_center.id', '=', 'department.cost_center_id')
+            ->join('employee', 'employee.emp_id', '=', 'department.hod')
+            ->join('department as d2', 'department.reports_to', '=', 'd2.id')
+            ->select('cost_center.name as CostCenterName', 'department.*', DB::raw("CONCAT(employee.fname, ' ', employee.mname, ' ', employee.lname) as HOD"), 'd2.name as parentdept')
+            ->where('department.state', 1)
+            ->where('department.type', 1)
+            ->get();
+
+        return $test;
+
 	}
+
+    public function costDepartments()
+	{
+        $query = DB::table('department')
+            ->select('dept_no as id', 'name')
+            ->where('state', 1)
+            ->where('type', 1)
+            ->get();
+
+        return $query;
+	}
+
+    public function costProjects()
+	{
+        $query = DB::table('project')
+            ->select('id', 'name')
+            ->get();
+
+        return $query;
+	}
+
+
 
 	function inactive_department()
 	{
@@ -504,6 +537,14 @@ class FlexPerformanceModel extends Model
 		return $row->counts;
 	}
 
+    function get_employee_overtime($overtimeID){
+        $query  = "Select  (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";
+         $data = DB::select(DB::raw($query));
+      return  $data[0]->amount;
+
+
+    }
+
 
 
     function approveOvertime($id, $signatory, $time_approved) {
@@ -511,8 +552,12 @@ class FlexPerformanceModel extends Model
        {
 		$query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT eo.id, eo.empID, eo.time_start, eo.time_end,eo.overtime_category, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount, eo.linemanager, '".$signatory."', eo.application_time, eo.time_confirmed_line, '".$time_approved."' FROM employee e, employee_overtime eo WHERE e.emp_id = eo.empID AND eo.id = '".$id."'  ";
          DB::insert(DB::raw($query));
+
+
 	    $query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
 		DB::insert(DB::raw($query));
+
+
 	    });
 
 		return true;
@@ -1257,10 +1302,24 @@ function retire_list()
 
     public function unpaid_leave_employee(){
 
-        $query = "SELECT e.emp_id,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID AND e.unpaid_leave = 0 AND ul.state=0";
+        $query = "SELECT e.emp_id,ul.status,ul.start_date,ul.end_date,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME,ul.reason FROM employee e,unpaid_leave ul where e.emp_id=ul.empID  AND ul.state=0";
 
         return DB::select(DB::raw($query));
     }
+
+    public function confirm_upaid_leave($id){
+        DB::transaction(function() use($id)
+        {
+         DB::table('employee')->where('emp_id',$id)->update(['unpaid_leave'=>0]);
+
+         DB::table('unpaid_leave')->where('empID',$id)->update(['status'=>1]);
+
+        });
+
+        return true;
+
+    }
+
     public function end_upaid_leave($id){
         DB::transaction(function() use($id)
         {
@@ -1276,9 +1335,10 @@ function retire_list()
 
     public function save_unpaid_leave($data){
         $data['state'] = 0;
+
         DB::transaction(function() use($data)
         {
-         DB::table('employee')->where('emp_id',$data['empID'])->update(['unpaid_leave'=>0]);
+        // DB::table('employee')->where('emp_id',$data['empID'])->update(['unpaid_leave'=>0]);
 
          DB::table('unpaid_leave')->insert($data);
 
@@ -1406,6 +1466,12 @@ function getMeaslById($deductionID)
 	function employee_deduction($deduction) {
 	$query = "SELECT e.emp_id as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 AND  e.emp_id NOT IN (SELECT empID from emp_deductions WHERE deduction = ".$deduction." AND group_name = 0 ) ";
     return DB::select(DB::raw($query));
+    }
+
+    function deleteLog($id){
+        DB::table('financial_logs')->where('payrollno',$id)->delete();
+
+        return true;
     }
 
 

@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Allowance Info'])
+@extends('layouts.vertical', ['title' => 'System Role'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -17,12 +17,12 @@
 
             <div class="row">
                 <div class="col-12 col-sm-6 col-lg-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header header-elements-sm-inline">
                             <h4 class="card-title">Roles</h4>
 
                             <div class="header-elements">
-                                <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal" data-target="#addRoleModal">
+                                <button type="button" class="btn btn-main btn-xs px-4" data-toggle="modal" data-target="#addRoleModal">
                                     <i class="fa fa-plus-circle"></i> Add
                                 </button>
                             </div>
@@ -43,7 +43,7 @@
                                             </thead>
                                             <tbody>
                                                 @foreach($roles as $role)
-                                                  
+
                                                     <tr>
                                                         <th>{{ $loop->iteration }}</th>
                                                         <td>{{ $role->slug }}</td>
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- end of card --}}
+                    {{-- end of card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
                 </div>
                 {{-- end of col --}}
             </div>

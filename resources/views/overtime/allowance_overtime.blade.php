@@ -62,7 +62,7 @@
 
             <div class="row">
                 <div class="col-md-7">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
                           <h4 class="text-main">Overtime </h4>
                         </div>
@@ -91,8 +91,8 @@
                                     <tr id="record<?php echo $row->id;?>">
                                         <td width="1px"><?php echo $SNo; ?></td>
                                         <td><?php echo $row->name; ?></td>
-                                        <td><?php echo number_format((100*$row->day_percent), 2); ?>%</td>
-                                        <td><?php echo number_format((100*$row->night_percent),2); ?>%</td>
+                                        <td><?php echo number_format(($row->day_percent), 2); ?>%</td>
+                                        <td><?php echo number_format(($row->night_percent),2); ?>%</td>
 
                                         <?php if($pendingPayroll==0){ ?>
                                         <td class="options-width">
@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="col-md-5">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
                             <h4 class="text-main">Add Overtime</h4>
                         </div>

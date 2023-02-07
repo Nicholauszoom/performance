@@ -14,9 +14,13 @@
 
 @section('content')
 
+
+@can('view-leave')
 <?php $totalAccrued = number_format($leaveBalance,2); ?>
 
-<div class="card col-lg-6 offset-3">
+
+{{-- start of leave application --}}
+<div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-6 offset-3">
     <div class="card-header">
         <h5 class="text-main"><i class="ph-tasks"></i> Apply Leave</h5>
     </div>
@@ -93,8 +97,8 @@
             </form>
     </div>
 </div>
-
-<div class="card">
+{{-- / --}}
+<div class="card border-top  border-top-width-3 border-top-main rounded-0" >
     <div class="card-header">
         <h3 class="text-main">Leaves</h3>
     </div>
@@ -105,7 +109,7 @@
         <div class="d-flex justify-content-between">
             <h6 class="text-main">Leaves Applied By You</h6>
 
-            <a href="#bottom"><button type="button"  class="btn btn-main">APPLY LEAVE</button></a>
+            {{-- <a href="#bottom"><button type="button"  class="btn btn-main">APPLY LEAVE</button></a> --}}
         </div>
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
@@ -120,7 +124,6 @@
             <th>Reason</th>
             <th>Status</th>
             <th>Option</th>
-            <th>Remarks</th>
           </tr>
         </thead>
 
@@ -185,15 +188,17 @@
 
               </td>
               <td class="options-width d-flex">
+                {{-- start of cancel leave button --}}
               <?php if($row->status==0 || $row->status==3){ ?>
               <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)" title="cancel " class="me-2">
                   <button  class="btn btn-danger btn-xs" ><i class="ph-x"></i></button></a>
               <?php } ?>
-              <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
+              {{-- / --}}
+              {{-- <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a> --}}
               </td>
-              <td>
+              {{-- <td>
               <?php echo $row->remarks."<br>"; ?>
-              </td>
+              </td> --}}
               </tr>
 
             <?php } //} ?>
@@ -202,7 +207,7 @@
 </div>
 
 @if (session('mng_emp') || session('appr_leave'))
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body">
         <h5 class="text-main">Leaves Applied By Others(To be Confirmed if Not Yet)</h5>
 
@@ -343,7 +348,7 @@
       </table>
 </div>
 @endif
-
+@endcan
 @endsection
 
 

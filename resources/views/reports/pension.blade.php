@@ -23,9 +23,9 @@
 							<thead>
 								<tr> <th>S/N</th>
 									<th>MEMBER NO</th>
-									<th>FIRST NAME</th>
-									<th>MIDDLE NAME</th>
-									<th>SURNAME</th>
+									<th>FULL NAME</th>
+									<th hidden>MIDDLE NAME</th>
+									<th hidden>SURNAME</th>
                                     <th>WAGE</th>
 
 
@@ -52,9 +52,9 @@
                                 <tr>
                                     <td>{{ $row->SNo }}</td>
 									<td>{{ !empty($member_no)? $member_no : "unknown" }}</td>
-									<td>{{ $row->fname }}</td>
-									<td>{{ $row->mname }}</td>
-                                    <td>{{ $row->lname }}</td>
+									<td>{{ $row->name }}</td>
+									<td hidden>{{ $row->mname }}</td>
+                                    <td hidden>{{ $row->lname }}</td>
 									<td>{{ $total_contribution }}</td>
 
 

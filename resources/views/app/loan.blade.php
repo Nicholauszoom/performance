@@ -34,8 +34,8 @@
 
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="card-head">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+                        <div class="card-head px-2">
                             <h2> My Approved Loans </h2>
 
                             <div class="clearfix"></div>
@@ -84,7 +84,7 @@
                 <?php if(session('appr_loan')!=''){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-head px-3">
                             <h2> Approved Loans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#loanModal"

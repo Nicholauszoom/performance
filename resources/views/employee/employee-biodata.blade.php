@@ -94,11 +94,12 @@
 
   <div class="row">
 
-    <div class="col-md-12 mt-1">
-        <div class="card border-0 shadow-none pb-4">
+    <div class="col-md-7 mx-auto mt-1">
+        <div class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
-                  <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('uploads/userprofile/' . $photo) }}" width="200px" height="200px" alt="">
+                {{-- rounded-circle --}}
+                  <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="200px" height="200px" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>
@@ -131,8 +132,8 @@
 
     {{-- Start of employee Bio data --}}
     <div class="row mx-auto">
-        <div class="col-md-12">
-            <div class="card">
+        <div class="col-md-12 ">
+            <div class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -173,7 +174,7 @@
                     {{-- start of basic information details --}}
                     <div role="tabpanel" class="tab-pane fade active show " id="basic" aria-labelledby="work-tab">
 
-                        <div class="card m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
 
@@ -271,7 +272,7 @@
 
                     {{-- start of address and identification details --}}
                     <div role="tabpanel" class="tab-pane fade show " id="address" aria-labelledby="permission-tab">
-                        <div class="card m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -345,7 +346,7 @@
 
                     {{-- start of employment informations --}}
                     <div role="tabpanel" class="tab-pane  fade show " id="asset" aria-labelledby="asset-tab">
-                        <div class="card m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -459,7 +460,7 @@
                     {{-- Start of Family Informations --}}
                     <div role="tabpanel" class="tab-pane fade show" id="l-d" aria-labelledby="l-d-tab">
 
-                        <div class="card m-2 shadow-none">
+                        <div class="card  rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -540,7 +541,7 @@
                                          <h6 class="text-main">Number of children :</h6>
                                      </div>
                                      <div class="col-6">
-                                         <p class="text-muted">  Here </p>
+                                         <p class="text-muted"> @if($childs) {{ $childs }} @endif </p>
                                      </div>
                                      <div class="col-12">
 
@@ -621,7 +622,7 @@
 
                     {{-- Start of Education --}}
                     <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
-                        <div class="card m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -713,7 +714,7 @@
 
                     {{-- start of Employment History --}}
                     <div role="tabpanel" class="tab-pane " id="history" aria-labelledby="exit-tab">
-                        <div class="card m-2 shadow-none">
+                        <div class="card rounded-0 m-2 shadow-none">
                             {{-- <div class="card-header d-flex justify-content-between">
 
                             </div> --}}
@@ -996,7 +997,7 @@
                     updateQualification();
                 }
             })
-         
+
             /*
                 show modal for creating a record and
                 empty the values of form and remove existing alerts
@@ -1014,7 +1015,7 @@
                 $("#end_year").val("");
                 $("#qualification-modal").modal('show');
             }
-         
+
             /*
                 submit the form and will be stored to the database
             */
@@ -1050,7 +1051,7 @@
                     },
                     error: function(response) {
                         $("#save-community-btn").prop('disabled', false);
-         
+
                         /*
             show validation error
                         */
@@ -1072,7 +1073,7 @@
                             {
                                 nameValidation = '<li>' + errors.name[0] + '</li>';
                             }
-             
+
             let errorHtml = '<div class="alert alert-danger" role="alert">' +
                 '<b>Validation Error!</b>' +
                 '<ul>' + nameValidation + abbreviationValidation +locationValidation + '</ul>' +
@@ -1082,9 +1083,9 @@
                     }
                 });
             }
-         
-         
-             
+
+
+
 
     </script>
 <script>

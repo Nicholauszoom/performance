@@ -6,9 +6,6 @@
 
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
-
-    {{-- <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}"> --}}
 @endpush
 
 @section('content')
@@ -19,16 +16,16 @@
 
 <div class="row">
     <div class="@if(session('mng_org')) col-md-7 @else col-md-12 @endif">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-main">Department List</h4>
-                <?php session("note");  ?>
+                <?php session("note"); ?>
                 <div id="feedBackTable"></div>
             </div>
 
             <table id="datatable" class="table table-striped table-bordered">
                 <thead>
-                    <tr>
+                    {{-- <tr> --}}
                         <th>S/N</th>
                         <th>Name</th>
                         <th>Cost Center</th>
@@ -38,27 +35,29 @@
                         <?php if(session('mng_org')){ ?>
                         <th>Option</th>
                         <?php } ?>
-                    </tr>
+                        <th hidden></th>
+                    {{-- </tr> --}}
                 </thead>
                 <tbody>
-                <?php foreach ($department as $row) { ?>
-                    <tr id="domain<?php echo $row->id;?>">
-                        <td width="1px"><?php echo $row->SNo; ?></td>
-                        <td><?php echo $row->name; ?></td>
-                        <td><?php echo $row->CostCenterName; ?></td>
-                        <td><a title="More Details"  href="{{ route('flex.employee_info',$row->hod) }}"><?php echo $row->HOD; ?></a></td>
-                        <td><?php echo $row->parentdept; ?></td>
+                    @foreach ($department as $row)
+                        <tr id="domain<?php echo $row->id;?>">
+                            <td width="1px">{{ $loop->iteration }}</td>
+                            <td><?php echo $row->name; ?></td>
+                            <td><?php echo $row->CostCenterName; ?></td>
+                            <td><a title="More Details"  href="{{ route('flex.employee_info',$row->hod) }}"><?php echo $row->HOD; ?></a></td>
+                            <td><?php echo $row->parentdept; ?></td>
 
-                        <?php if(session('mng_org')){ ?>
-                        <td class="options-width">
-                            <a href="{{ route('flex.department_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
-                            <?php if($row->id!=3){ ?>
-                            <a href="javascript:void(0)" onclick="deleteDepartment(<?php echo $row->id; ?>)" title="Delete Department" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
+                            <?php if(session('mng_org')){ ?>
+                            <td class="options-width">
+                                <a href="{{ route('flex.department_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
+                                <?php if($row->id!=3){ ?>
+                                <a href="javascript:void(0)" onclick="deleteDepartment(<?php echo $row->id; ?>)" title="Delete Department" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
+                                <?php } ?>
+                            </td>
                             <?php } ?>
-                        </td>
-                        <?php } ?>
-                    </tr>
-                <?php } //} ?>
+                            <td hidden></td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -66,14 +65,14 @@
 
     <?php if(session('mng_org')){ ?>
     <div class="col-md-5">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-main">Add Department</h4>
                 <div id="feedBack" class="mt-2"></div>
             </div>
             <div class="card-body">
 
-                <form autocomplete="off" id="departmentAdd" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                <form autocomplete="off" id="departmentAdd" enctype="multipart/form-data"  method="post"  data-parsley-validate>
 
                     <!-- START -->
                     <div class="mb-3">
@@ -122,7 +121,7 @@
     <?php } ?>
 </div>
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header">
         <h4 class="text-main"> Disabled Departments</h4>
         <?php echo session("note");  ?>
@@ -243,28 +242,40 @@
           e.preventDefault();
 
                $.ajax({
-                   url:"{{ route('flex.departmentAdd') }}",
-                   headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                   type:"post",
-                   data:new FormData(this),
-                   processData:false,
-                   contentType:false,
-                   cache:false,
-                   async:false
-               }).done(function(data){
+                    url:"{{ route('flex.departmentAdd') }}",
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type:"post",
+                    data:new FormData(this),
+                    processData:false,
+                    contentType:false,
+                    cache:false,
+                    async:false
+                }).done(function(data){
 
-            notify('Department added successfuly!', 'top', 'right', 'success');
+                    new Noty({
+                        text: 'Department added successfuly.',
+                        type: 'success'
+                    }).show();
 
-           // $('#feedBack').fadeOut('fast', function(){
-           //      $('#feedBack').fadeIn('fast').html(data);
-           //    });
-            setTimeout(function(){// wait for 2 secs(2)
-                  location.reload(); // then reload the page.(3)
-              }, 2000);
-      //   $('#updateMiddleName')[0].reset();
-              }).fail(function(){
-                alert('Request Failed!! ...');
-              });
+                    //notify('Department added successfuly!', 'top', 'right', 'success');
+
+                    // $('#feedBack').fadeOut('fast', function(){
+                    //      $('#feedBack').fadeIn('fast').html(data);
+                    //    });
+
+                    setTimeout(function(){// wait for 2 secs(2)
+                        location.reload(); // then reload the page.(3)
+                    }, 2000);
+
+                    //   $('#updateMiddleName')[0].reset();
+                }).fail(function(){
+                    // alert('Request Failed!! ...');
+
+                    new Noty({
+                        text: 'Request Failed!! ....',
+                        type: 'warning'
+                    }).show();
+                });
       });
   </script>
   <script> //For Deleting records without Page Refreshing
@@ -346,7 +357,11 @@
 
                     $('#domain'+id).hide();
                     $('#delete').modal('hide');
-                    notify('Department activated successfuly!', 'top', 'right', 'success');
+
+                    new Noty({
+                        text: 'Department activated successfuly.',
+                        type: 'success'
+                    }).show();
 
                     //   $('#feedBackTable2').fadeOut('fast', function(){
                     //   $('#feedBackTable2').fadeIn('fast').html(data.message);
@@ -363,12 +378,8 @@
                         text: 'Department not deleted.',
                         type: 'warning'
                     }).show();
-
-                    //   notify('Department not deleted!', 'top', 'right', 'warning');
-                    // alert("Property Not Deleted, Error In Deleting");
                 }
 
-              // document.location.reload();
 
               }
 

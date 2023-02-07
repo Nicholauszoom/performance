@@ -7,7 +7,7 @@
         @include('layouts.alerts.message')
         <div class="row">
             <div class="col-12 col-sm-6 col-lg-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                    <div class="card-header header-elements-sm-inline">
 								<h4 class="card-title"> Permissions</h4>
 								<div class="header-elements">

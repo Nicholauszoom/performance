@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Terminal Benefits</title>
+    <title>Input Change Approval</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <style type="text/css">
@@ -34,7 +34,8 @@
 
                 <div class="d-flex justify-content-between" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
                     <div>
-                        <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" class="image-fluid">
+
+                        <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" class="image-fluid">
                     </div>
                     <div class="text-center">
                         <p style="font-weight:600">AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>

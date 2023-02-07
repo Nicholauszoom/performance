@@ -139,7 +139,7 @@
 
                                         <?php
 
-                                                if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym')) { ?>&nbsp;&nbsp;&nbsp;
+                                        if ($pendingPayroll == 1 && $payroll->state == 1 && session('appr_paym')) { ?>&nbsp;&nbsp;&nbsp;
                                         <a href="javascript:void(0)" onclick="approvePayroll()" title="Approve Payroll"
                                             class="icon-2 info-tooltip">
                                             <button type="button" class="btn btn-success"><i class="fa fa-check"></i>
@@ -1192,7 +1192,4 @@
 </div>
 
 @endsection
-@push('footer-script')
 
-
-@endpush

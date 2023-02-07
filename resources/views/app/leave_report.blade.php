@@ -12,7 +12,7 @@
 @section('content')
 
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header">
         <h3 class="text-main">Leaves </h3>
     </div>

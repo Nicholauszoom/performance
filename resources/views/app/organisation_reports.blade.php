@@ -21,7 +21,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Reconciliation Summary</h5>
             </div>
@@ -45,13 +45,26 @@
                         </select>
                         <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                     </div>
+                    <div class="mt-2">
+                        <label class="form-label">Report Format:</label>
+                        <div class="">
+                            <div class="d-inline-flex align-items-center me-3">
+                                <input type="radio" name="type" value="1" id="p9">
+                                <label class="ms-2" for="p9">PDF</label>
+                            </div>
+                            <div class="d-inline-flex align-items-center">
+                                <input type="radio" name="type" value="2" id="p9a">
+                                <label class="ms-2" for="p9a">Data table</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Input Changes Approval Report </h5>
             </div>
@@ -77,26 +90,25 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
-
+                        <label class="form-label">Report Format:</label>
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
-
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Input Journal</h5>
@@ -123,27 +135,27 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Pay Checklist</h5>
             </div>
@@ -169,17 +181,17 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -188,7 +200,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Master Payroll</h5>
@@ -215,27 +227,27 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Employee BioData</h5>
             </div>
@@ -244,34 +256,34 @@
                 id="demo-form2"
                 enctype="multipart/form-data"
                 method="post"
-                action="{{ route('reports.employeeBioDataExport') }}"
+                action="{{ route('flex.biodata') }}"
                 data-parsley-validate class="form-horizontal form-label-left"
             >
                 @csrf
 
                 <div class="card-body">
                     <div class="input-group">
-                        <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                            <option selected disabled>Select Month</option>
-                            <?php foreach ($month_list as $row) { ?>
-                            <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                        <select required name="emp_id" class="select_payroll_month form-control select" data-width="1%">
+                            <option selected disabled>Select Employee</option>
+                            <?php foreach ($employee as $row) { ?>
+                            <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname.' '.$row->mname.' '.$row->lname; ?></option>
                             <?php } ?>
                         </select>
                         <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -280,7 +292,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Gross Reconciliation</h5>
@@ -307,26 +319,26 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Net Reconciliation</h5>
@@ -353,27 +365,27 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Loans</h5>
             </div>
@@ -399,17 +411,17 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -418,7 +430,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Input Journal (Time)</h5>
@@ -445,27 +457,27 @@
                     </div>
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Payroll Details</h5>
             </div>
@@ -507,17 +519,17 @@
                     </div> --}}
 
                     <div class="mt-2">
-                        <label class="form-label">Report Type:</label>
+                        <label class="form-label">Report Format:</label>
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
                                 <input type="radio" name="type" value="1" id="p9">
-                                <label class="ms-2" for="p9">Staff</label>
+                                <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">temporary</label>
+                                <label class="ms-2" for="p9a">Data table</label>
                             </div>
                         </div>
                     </div>
@@ -527,7 +539,7 @@
     </div>
 
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Annual Leave</h5>
             </div>
@@ -562,8 +574,14 @@
                         <label class="col-form-label col-md-2">Select Date</label>
                         <div class="col-md-10">
                             <div class="input-group">
-                                <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} ">
+                                <select required name="duration" class="select_payroll_month form-control select" data-width="1%">
+                                    <option selected disabled>Select Month</option>
+                                    <?php foreach ($month_list as $row) { ?>
+                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                    <?php } ?>
+                                </select>
+                                {{-- <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} "> --}}
                             </div>
                         </div>
                     </div>
@@ -572,6 +590,59 @@
             </form>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="text-muted">Annual Leave Report</h5>
+            </div>
+
+            <form
+                id="demo-form2"
+                enctype="multipart/form-data"
+                method="post"
+                action="{{ route('reports.annualleave.data') }}"
+                data-parsley-validate class="form-horizontal form-label-left"
+            >
+                @csrf
+
+                <div class="card-body">
+
+                    <div class="row mt-3">
+                        <label class="col-form-label col-md-2">Select Date</label>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <select required name="duration" class="select_payroll_month form-control select" data-width="1%">
+                                    <option selected disabled>Select Month</option>
+                                    <?php foreach ($month_list as $row) { ?>
+                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                    <?php } ?>
+                                </select>
+                                {{-- <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} "> --}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <label class="form-label">Report Format:</label>
+
+                        <div class="">
+                            <div class="d-inline-flex align-items-center me-3">
+                                <input type="radio" name="type" value="1" id="p9">
+                                <label class="ms-2" for="p9">PDF</label>
+                            </div>
+
+                            <div class="d-inline-flex align-items-center">
+                                <input type="radio" name="type" value="2" id="p9a">
+                                <label class="ms-2" for="p9a">Data table</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
 
 
 

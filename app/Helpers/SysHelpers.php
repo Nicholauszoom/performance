@@ -3,10 +3,12 @@
 namespace App\Helpers;
 
 use App\Models\AuditTrail;
-use App\Models\Employee;
+use App\Models\EMPL;
 use App\Models\FinancialLogs;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SysHelpers
 {
@@ -24,9 +26,9 @@ class SysHelpers
      * @param string $ip
      * @return void
      */
-    public static function AuditLog( $risk, $action, Request $request)
+    public static function AuditLog($risk, $action, Request $request)
     {
-        $employee = Auth::user()->fname. ' ' .Auth::user()->mname. ' ' .Auth::user()->lname;
+        $employee = Auth::user()->fname . ' ' . Auth::user()->mname . ' ' . Auth::user()->lname;
 
         AuditTrail::create([
             'emp_id' => Auth::user()->emp_id,
@@ -58,5 +60,28 @@ class SysHelpers
             'input_screen' => $inputScreen
         ]);
     }
+    public static function employeeData($empID)
+    {
+        $details = EMPL::where('emp_id', $empID)->first();
+        return $details;
+    }
+    public static function position($pos)
+    {
+        $details = EMPL::where('job_title', $pos)->first();
+        return $details;
+    }
+    public static function approvalEmp($position1, $position2)
+    {
+        // $first = DB::table('employees')
+        //     ->where('job_title', $position1);
+        $pos = Position::with('employees')->where('name',$position1)
+            ->orWhere('name','LIKE', '%'.$position2.'%')
+            ->get();
 
+        // $pos = Position::where('name', $name)->get();
+        // return $users;
+
+        return $pos;
+        // dd($users->toArray());
+    }
 }

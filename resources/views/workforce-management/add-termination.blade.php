@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card  border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
             <h5 class="mb-0 text-muted">Terminate Employee</h5>
@@ -186,7 +186,7 @@
                             <div class="modal-footer">
                                 <hr>
 
-                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Send Request</button>
+                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
                             </div>
                         </form>
                     </div>

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('newPosition')->nullable();
             $table->string('action');
             $table->integer('created_by');
+           
             $table->timestamps();
         });
     }

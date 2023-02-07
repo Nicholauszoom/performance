@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="">
             <div class="row">
@@ -24,9 +24,13 @@
                     <h5 class="mb-0 text-muted text-start">Grievances | Disciplinary Action</h5>
                 </div>
                 <div class="col-md-3">
+                    {{-- start of add disciplinary action button --}}
+                    @can('add-grivance')
                         <a href="{{ route('flex.addDisciplinary') }}" class="btn btn-perfrom ">
                             <i class="ph-plus me-2"></i> Add Disciplinary Action
                         </a>
+                    @endcan
+                    {{-- / --}}
                 </div>
             </div>
 
@@ -45,9 +49,10 @@
                 <th>SN</th>
                 <th>Employee Name</th>
                 <th>Department</th>
-                <th>Suspension</th>
-                <th>Date of Charge</th>
-                <th>Action</th>
+                {{-- <th>Suspension</th> --}}
+                <th>Charge Date</th>
+                <th >Action</th>
+                <th hidden></th>
             </tr>
         </thead>
 
@@ -57,19 +62,27 @@
             <td>{{$i++}}</td>
              <td>{{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}</td>
              <td>{{ $item->departments->name}}</td>
-             <td>  {{ $item->suspension}}  </td>
+             {{-- <td>  {{ $item->suspension}}  </td> --}}
              <td> {{ $item->date_of_charge}}</td>
              <td>
                 <a  href="{{ route('flex.viewDisciplinary', base64_encode($item->id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-sm btn-info btn-xs"><i class="ph-info"></i></button>
+                    <button type="button" class="btn btn-sm btn-main btn-xs"><i class="ph-info"></i></button>
                 </a>
-                <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-info btn-sm">
+                @can('edit-grivance')
+                <a href="{{ route('flex.editDisciplinary', base64_encode($item->id)) }}" class="btn btn-main btn-sm">
                     <i class="ph-pen"></i>
                 </a>
-                <a href="{{ route('flex.deleteDisciplinary', $item->id) }}" class="btn btn-danger btn-sm">
-                    <i class="ph-trash"></i>
-                </a>
-                
+                @endcan
+
+                @can('delete-grivance')
+                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                onclick="cancelTermination(<?php echo $item->id; ?>)">
+                <button class="btn btn-danger btn-sm">  <i class="ph-trash"></i></button>
+                 </a>
+                @endcan
+             </td>
+             <td hidden>
+
              </td>
 
             </tr>
@@ -80,4 +93,72 @@
 
 @endsection
 
+@push('footer-script')
+    {{-- @include("app.includes.overtime_operations") --}}
+
+    <script>
+      
+
+
+        function cancelTermination(id) {
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Delete This Disciplinary Action?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var terminationid = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/delete-disciplinary') }}/" + terminationid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+
+                        $('#status' + id).fadeOut('fast', function() {
+                            $('#status' + id).fadeIn('fast').html(
+                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                                );
+                        });
+
+                        // alert('Request Cancelled Successifully!! ...');
+
+                        Swal.fire(
+                            'Cancelled!',
+                            'Disciplinary Action Deleted Successifully!!.',
+                            'success'
+                        )
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .fail(function() {
+                        Swal.fire(
+                            'Failed!',
+                            'Disciplinary Action deletion  Failed!! ....',
+                            'success'
+                        )
+
+                        alert('Disciplinary Action deletion Failed!! ...');
+                    });
+                }
+            });
+
+          
+        }
+    </script>
+
+
+
+ 
+
+@endpush
 

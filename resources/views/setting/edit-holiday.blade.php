@@ -27,7 +27,7 @@
     </div>
     <div class="row mx-1">
         <div id="save_termination" class="col-12" tabindex="-1">
-            <div class="card p-1">
+            <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                 <div class="card-header">
                     <h6 class="text-main">Edit Holiday</h6>
                 </div>
@@ -85,7 +85,7 @@
             </div>
         </div>
         <div class="col-12">
-            <div class="card">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <table class="table  datatable-basic">
                     <thead>
                         <th>SN</th>

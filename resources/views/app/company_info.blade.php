@@ -14,7 +14,7 @@
 {{-- <div class="col-md-6"> --}}
   <h3>Organization structure </h3>
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
   <div class="card-header">
 
   <h5>Position Organization structure</h5>
@@ -45,7 +45,7 @@
       </tbody>
   </table>
 </div>
-  <div class="card">
+  <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header">
 <h5>Department OrganizationStructure</h5>
 </div>

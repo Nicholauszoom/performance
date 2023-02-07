@@ -77,7 +77,7 @@
                     </div>
                 </div> --}}
 
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
 
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
