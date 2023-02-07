@@ -653,4 +653,16 @@ class AttendanceModel extends Model
 		$query = "SELECT l.id FROM leave_application l  WHERE l.notification =3 ";
 		return $query->num_rows();
 	}
+
+	function getMonthlyLeave(){
+		$monthlyleave = DB::table('leaves')
+		->join('employee', 'leaves.empID','=','employee.emp_id')
+		->select('*')
+		// ->whereMonth('application_date', '<=', $month)
+		// ->whereYear('application_date','<=', $year)
+		->get();
+		// ->where('employee.emp_id',$name)
+		// ->where('job_posts.id',$job_id)
+		return $monthlyleave;
+	}
 }

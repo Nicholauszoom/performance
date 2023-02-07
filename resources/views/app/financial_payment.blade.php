@@ -215,7 +215,7 @@
                                                 <th>S/N</th>
                                                 <th>Payroll Month</th>
                                                 <th>Status</th>
-                                                <th>Mail Status</th>
+                                                {{-- <th>Mail Status</th> --}}
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
@@ -244,14 +244,14 @@
                                                             <br>
                                                             <?php } ?>
                                                 </td>
-                                                <td>
+                                                {{-- <td>
                                                     <?php if ($row->email_status == 0) { ?>
                                                     <span class="badge bg-warning">NOT SENT</span>
                                                     <br>
                                                     <?php } else { ?>
                                                     <span class="badge bg-success">SENT</span><br>
                                                     <?php } ?>
-                                                </td>
+                                                </td> --}}
 
                                                 <td class="options-width">
                                                     <a href="javascript:void(0)"
@@ -439,7 +439,7 @@
 
 
                                                         <?php }
-                                                                      if ($row->status == 3) { ?> 
+                                                                      if ($row->status == 3) { ?>
                                                         <a href="javascript:void(0)" title="Recommend"
                                                             class="icon-2 info-tooltip"
                                                             onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">

@@ -32,7 +32,7 @@
 
     <div class="tab-content" id="myTabContent">
         {{-- transfered employee --}}
-        <div role="tabpanel" class="tab-pane fade  show " id="employee-transfer" aria-labelledby="transfer-tab">
+        <div role="tabpanel" class="tab-pane fade  " id="employee-transfer" aria-labelledby="transfer-tab">
 
             <h6 class="text-muted mb-3 mx-3">Current Employee Tranfer</h6>
 
@@ -131,7 +131,7 @@
         {{-- / --}}
 
         {{-- Approve registered employee --}}
-        <div role="tabpanel" class="tab-pane fade active show" id="register-approve" aria-labelledby="approve-tab">
+        <div role="tabpanel" class="tab-pane active show " id="register-approve" aria-labelledby="approve-tab">
 
             <h6 class="text-muted mb-3 mx-3">Current Employee Registered</h6>
 

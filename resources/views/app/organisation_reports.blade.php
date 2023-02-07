@@ -613,10 +613,11 @@
                             <div class="input-group">
                                 <select required name="duration" class="select_payroll_month form-control select" data-width="1%">
                                     <option selected disabled>Select Month</option>
-                                    <?php foreach ($month_list as $row) { ?>
-                                    <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                    <?php } ?>
+                                    @foreach ($month_list as $row)
+                                    <option value="{{$row->payroll_date}}"> {{date('F, Y', strtotime($row->payroll_date))   }}</option>
+                                    @endforeach
                                 </select>
+                                <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>   
                                 {{-- <span class="input-group-text"><i class="ph-calendar"></i></span>
                                 <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('m/d/Y') }} "> --}}
                             </div>
