@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Payroll Input Changes Approval Report'])
+@extends('layouts.vertical', ['title' => 'Annual Leave Report'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -13,49 +13,59 @@
 
     <div class="card">
         <div class="card-header">
-            <h5 class="text-main">Employee Annual Leave Report</h5>
+            <h5 class="text-main">Annual Leave Report</h5>
         </div>
 
         <table class="table datatable-excel-filter">
             <thead>
                 <tr>
-                <th>No.</th>
+                <th>No</th>
                   <th>Employee Name</th>
-                  <th>Position</th>
-                  <th>Contacts</th>
+                  {{-- 100032 100252 --}}
+                  {{-- <th>Position</th> --}}
+                  <th>Email</th>
+                  <th>Leave Address</th>
                   <th>From</th>
                   <th>To</th>
-                  <th>InputScreen</th>
+                  {{-- <th>InputScreen</th> --}}
                 </tr>
             </thead>
 
             <tbody>
-                {{-- @foreach ($logs as $row)
-                    <tr id="{{ 'domain'.$row->id }}">
-                        <td>{{ $row->payrollno }}</td>
+                @php
+                    $i = 1;
+                @endphp
+                @foreach ($leave_data as $row)
+                    {{-- <tr id="{{ 'domain'.$row->id }}"> --}}
+                        <td>{{ $i++ }}</td>
+                        {{-- <td>{{ $row->empName }}</td> --}}
+                        {{-- <td>{{ $row->position }}</td> --}}
+                        <td>{{ $row->full_name }}</td>
+                        {{-- <td>{{ $row->full_name }}</td> --}}
 
-                        <td> {{ $row->empName }} </td>
+                        {{-- <td> {{ $row->empName }} </td> --}}
 
-                        <td>
+                        {{-- <td>
                             @php
                                 $temp = explode(' ',$row->created_at);
                             @endphp
 
                             <p> <strong>Date </strong> : {{ $temp[0] }} </p>
                             <p> <strong>Time </strong> : {{ $temp[1] }} </p>
-                        </td>
+                        </td> --}}
+                        <td>{{ $row->email }}</td>
 
-                        <td> {{ $row->authName }} </td>
+                        <td>{{ $row->leave_address }}</td>
+                        <td> {{ $row->start }} </td>
 
-                        <td>{{ $row->field_name }}</td>
+                        <td>{{ $row->end }}</td>
 
-                        <td>{{ $row->action_from }}</td>
 
-                        <td>{{ $row->action_to }}</td>
+                        
 
-                        <td>{{ $row->input_screen }}</td>
+                        {{-- <td>{{ $row->input_screen }}</td> --}}
                     </tr>
-                @endforeach --}}
+                @endforeach
               </tbody>
         </table>
     </div>
