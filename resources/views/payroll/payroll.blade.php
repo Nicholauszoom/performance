@@ -92,7 +92,7 @@
                                     <th>S/N</th>
                                     <th>Payroll Month</th>
                                     <th>Status</th>
-                                    <th>Mail status</th>
+                                    {{-- <th>Mail status</th> --}}
                                     <th>Option</th>
                                 </tr>
                             </thead>
@@ -125,7 +125,7 @@
                                         <br>
                                         <?php  } ?>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <?php if($row->email_status==0){ ?>
                                         <span class="badge bg-warning bg-opacity-10 text-warning">NOT SENT</span>
                                         <br>
@@ -133,7 +133,7 @@
                                         <span class="badge bg-success bg-opacity-20 text-success">SENT</span>
 
                                         <?php  } ?>
-                                    </td>
+                                    </td> --}}
 
                                     <td class="options-width">
                                         <?php if($row->state==1 || $row->state==2){ ?>

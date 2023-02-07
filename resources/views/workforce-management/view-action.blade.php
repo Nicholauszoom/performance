@@ -46,68 +46,68 @@
         <div class="row mx-2">
             <div class="col-12">
                 <h6 class="text-main" >Employee Name:
-        
+
                     <span class="text-muted font-weight-light">
                         {{ $item->employee->fname}} {{ $item->employee->mname}} {{ $item->employee->lname}}
-                    </span> 
+                    </span>
                 </h6>
-                
+
             </div>
-            <div class="col-12">                
+            <div class="col-12">
             <h6 class="text-main" > Department Name:
-        
+
                 <span class="text-muted font-weight-light">
                     {{ $item->departments->name}}
-                </span> 
+                </span>
             </h6>
             </div>
             <div class="col-12">
-                <h6 class="text-main" > Suspension: 
-        
+                <h6 class="text-main" > Suspension:
+
                     <span class="text-danger font-weight-light">
                         {{ $item->suspension}}
-                    </span> 
+                    </span>
                 </h6>
                 <hr>
 
             </div>
-          
-        
-          
+
+
+
             <div class="col-12">
                 <h6 class="text-main">
-                    Date of Charge sheet: 
-                    
+                    Date of Charge sheet:
+
                     <span class="text-muted font-weight-light">
                     {{ $item->date_of_charge}}
-                    </span> 
+                    </span>
                 </h6>
+                <hr>
 
                 <h6 class="text-main">
-                    Details of the Charge: 
+                    Details of the Charge:
                 </h6>
-
                 <p>
-                    {{ $item->detail_of_charge}}
+                    {!! $item->detail_of_charge !!}
                 </p>
 
                 <hr>
             </div>
-         
-              
+
+
             <div class="col-12">
                 <h6 class="text-main">
                     Findings & Sanction-Recommendations <small> (from the disciplinary Committee)</small>
                 </h6>
                 <h6 class="text-main">Date of Hearing:
-        
+
                     <span class="text-muted font-weight-light">
                         {{ $item->date_of_hearing }}
-                    </span> 
+                    </span>
                 </h6>
-             
-               
-               
+
+
+
             <table class="table table-bordered">
                 <thead>
                     <th>Hearing <small> (from the disciplinary Committee)</small></th>
@@ -117,12 +117,15 @@
                 <tr>
                     <td>
                         <p class="text-muted font-weight-light">
-                            {{ $item->detail_of_hearing }}
-                        </p> 
+                            {!!$item->detail_of_hearing !!}
+                        </p>
                     </td>
                     <td>
-                        <p>{{ $item->findings}}</p>
-        
+                        <p>
+                            {!!$item->findings !!}
+
+                        </p>
+
                     </td>
                     <td>
                         <p>{{ $item->recommended_sanctum}}</p>
@@ -131,14 +134,17 @@
             </table>
            <hr>
             </div>
-     
-    
+
+
 
             <div class="col-12 mx-1">
                 <h6 class="text-main">
                     Final Decision/Sanction Imposed
                 </h6>
-                 <p> {{ $item->final_decission}} </p>
+                 <p>
+                    {!!$item->final_decission !!}
+                </p>
+
             </div>
             <hr>
             <div class="col-9"></div>

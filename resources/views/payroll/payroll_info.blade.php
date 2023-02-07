@@ -99,7 +99,7 @@
 
             @if($payrollState != 1)
             @can('download-summary')
-            <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth]) }}" target="blank">
+            <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>1]) }}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main btn-sm">
                     Input Changes Approval
                 </button>
@@ -350,7 +350,7 @@ function generate_checklist() {
                 success: function(data) {
                     if (data.status == 1) {
                         alert("Pay CheckList Generated Successiful!");
-                        
+
                         $('#resultConfirmation').fadeOut('fast', function() {
                             $('#resultConfirmation').fadeIn('fast').html(data.message);
                         });
