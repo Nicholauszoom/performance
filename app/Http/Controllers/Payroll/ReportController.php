@@ -114,7 +114,7 @@ class ReportController extends Controller
 
     function pay_checklist(Request $request)
     {
-        dd($request->all());
+        ;
         if (1) {
             $payroll_date = $request->input('payrolldate');
             $isReady = $this->reports_model->payCheklistStatus($payroll_date);
@@ -2740,6 +2740,9 @@ EOD;
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
 
                 // $accrual_days = $days*$employee->accrual_rate/$days_this_month;
+                $employee->day_entitled = $employee->leave_days_entitled;
+
+                $employee->rate = $employee->salary/$employee->leave_days_entitled;
 
                 $employee->accrual_days = $employee->accrual_rate;
 
