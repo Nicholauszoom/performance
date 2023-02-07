@@ -227,12 +227,11 @@ elseif($nature == 7)
                     'mobile' =>$request->mobile,
                     'nature' =>$request->nature,
                     'reason' =>$request->reason,
-                    'application_date' =>date('Y-m-d')
-                    
+                    'application_date' =>date('Y-m-d'),
+                    'attachment'=>$newImageName
                 );
 
-
-
+                dd($data);
                 $result = $this->attendance_model->applyleave($data);
                 if($result ==true){
                     echo "<p class='alert alert-success text-center'>Application Sent Added Successifully</p>";
