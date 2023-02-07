@@ -110,8 +110,8 @@
 
             <table class="table table-bordered">
                 <thead>
-                    <th>Hearing <small> (from the disciplinary Committee)</small></th>
-                    <th>Findings  <small> (from the disciplinary Committee)</small></th>
+                    <th>Findings <small> (from the disciplinary Committee)</small></th>
+                    {{-- <th>Findings  <small> (from the disciplinary Committee)</small></th> --}}
                     <th>Sanction-Recommendations</th>
                 </thead>
                 <tr>
@@ -120,13 +120,13 @@
                             {!!$item->detail_of_hearing !!}
                         </p>
                     </td>
-                    <td>
+                    {{-- <td>
                         <p>
                             {!!$item->findings !!}
 
                         </p>
 
-                    </td>
+                    </td> --}}
                     <td>
                         <p>{{ $item->recommended_sanctum}}</p>
                     </td>
