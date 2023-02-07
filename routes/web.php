@@ -125,12 +125,12 @@ Route::middleware('auth')->group(function () {
         //start of grievances and disciplinary actions routes
         Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
-        Route::post('/save-complain','saveComplain')->name('flex.saveComplain');
+        Route::any('/save-complain','saveComplain')->name('flex.saveComplain');
         Route::any('/add-action','addDisciplinary')->name('flex.addDisciplinary');
-        Route::post('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
+        Route::any('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
         Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
         Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
-        Route::put('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
+        Route::any('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
         Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
         // end of grievances and disciplinary actions routes
 
