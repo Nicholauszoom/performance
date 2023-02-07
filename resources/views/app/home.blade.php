@@ -64,7 +64,7 @@
 
     <div class="row">
         <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
-            <div class="card">
+            <div class="card border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header d-flex justify-content-between">
                     <h3 class="text-muted">
                         Welcome to Fléx Performance! <strong> {{ session('fname') . ' ' . session('lname') }} </strong>
@@ -78,7 +78,7 @@
 
         @if (session('vw_emp_sum'))
             <div class="col-xl-12">
-                <div class="card">
+                <div class="card border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-body">
                         <div class="row">
                             <h4 class="col-md-6 text-muted">Active Employess :</h4>
@@ -111,7 +111,7 @@
         {{-- /col --}}
 
         <div class="col-md-12">
-            <div class="card">
+            <div class="card border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                     <h5 class="mb-0">Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
                 </div>

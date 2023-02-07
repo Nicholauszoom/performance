@@ -591,7 +591,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
                 <h5 class="text-muted">Annual Leave Report</h5>
             </div>
@@ -608,8 +608,8 @@
                 <div class="card-body">
 
                     <div class="row mt-3">
-                        <label class="col-form-label col-md-2">Select Date</label>
-                        <div class="col-md-10">
+                        <label class="col-form-label col-md-4">Select Date</label>
+                        <div class="col-md-8">
                             <div class="input-group">
                                 <select required name="duration" class="select_payroll_month form-control select" data-width="1%">
                                     <option selected disabled>Select Month</option>

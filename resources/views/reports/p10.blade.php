@@ -15,7 +15,7 @@
 
 @section('content')
     <!-- Column selectors -->
-    <div class="card">
+    <div class="card border-top-width-3 border-top-width-3 border-top-main  border-top-main  p-2">
         <div class="card-header">
             <h5 class="mb-0">(SDL)</h5>
 

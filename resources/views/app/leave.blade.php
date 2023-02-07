@@ -26,7 +26,7 @@
     </div>
 
     <div class="card-body">
-        <form id="applyLeave" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
+        <form id="applyLeave" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data">
             <!-- START -->
             <div class="form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Start</label>
@@ -86,6 +86,16 @@
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
             <span class="text-danger"><?php// echo form_error("lname");?></span>
+          </div>
+        </div>
+
+        {{-- start of attachment --}}
+
+        <div class="form-group">
+          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment</label>
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <input required="required" class="form-control col-md-7 col-xs-12" type="file" name="image">
+            <span class="text-danger"><?php// echo form_error("mname");?></span>
           </div>
         </div>
             <!-- END -->

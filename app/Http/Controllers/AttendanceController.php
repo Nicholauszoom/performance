@@ -204,6 +204,12 @@ elseif($nature == 7)
             $diff2=date_diff($date_today, $date1);
 
             // START
+            if ($request->hasfile('image')) {
+
+              $newImageName = $request->image->hashName();
+              $request->image->move(public_path('storage/leaves'), $newImageName);
+              // $employee->photo = $newImageName;
+          }
 
             if ($request->start==$request->end) {
                 echo "<p class='alert alert-warning text-center'>Invalid Start date or End date Selection</p>";
@@ -222,7 +228,9 @@ elseif($nature == 7)
                     'nature' =>$request->nature,
                     'reason' =>$request->reason,
                     'application_date' =>date('Y-m-d')
+                    
                 );
+
 
 
                 $result = $this->attendance_model->applyleave($data);
