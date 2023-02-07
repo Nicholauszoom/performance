@@ -266,7 +266,7 @@
                         <select required name="emp_id" class="select_payroll_month form-control select" data-width="1%">
                             <option selected disabled>Select Employee</option>
                             <?php foreach ($employee as $row) { ?>
-                            <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname.''.$row->mname.''.$row->lname; ?></option>
+                            <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname.' '.$row->mname.' '.$row->lname; ?></option>
                             <?php } ?>
                         </select>
                         <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>

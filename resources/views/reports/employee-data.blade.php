@@ -108,7 +108,7 @@
                 <div class="col-12">
                     <h5 class="text-center">
                         EMPLOYEE PERSONAL DETAILS FORM:
-        
+                    <br>
                     </h5>
                 </div>
             </div>
@@ -145,38 +145,38 @@
     
                                 <div class="row">
                                     {{-- start of name information --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-md-6 col-lg-6 col-6">
                                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;">Name Information</h5>
                                        <div class="row mb-1">
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <h6 class="text-main">  Prefix</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <p class="text-muted"> @if($details) {{$details->prefix}} @endif</p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <h6 class="text-main"> First Name</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <p class="text-muted"> @if($profile) {{$profile->fname}} @endif </p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <h6 class="text-main"> Middle Name</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <p class="text-muted"> @if($profile) {{$profile->mname}} @endif</p>
                                         </div>
     
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <h6 class="text-main"> Surname</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <p class="text-muted"> @if($profile) {{$profile->lname}} @endif </p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <h6 class="text-main"> Maiden Name</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-lg-6 col-6">
                                             <p class="text-muted">  @if($details) {{$details->maide_name}} @endif</p>
                                         </div>
                                        </div>
@@ -184,7 +184,7 @@
                                     {{-- end of name information --}}
     
                                     {{-- start of biography information --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-md-6 col-lg-6 col-6">
                                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;"> Biography Information</h5>
                                         <div class="row mb-1">
                                          <div class="col-6">
@@ -236,7 +236,7 @@
     
                                 <div class="row">
                                     {{-- start of address information --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-md-6 col-6 col-lg-6">
                                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;">Address Information</h5>
                                        <div class="row mb-1">
                                         <div class="col-12">
@@ -257,38 +257,38 @@
                                     {{-- end of address information --}}
     
                                     {{-- start of personal identification information --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-md-6 col-6 col-lg-6">
                                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;"> Personal Identification Information</h5>
                                         <div class="row mb-1">
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main">TIN Number : </h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted">  @if($profile) {{$profile->tin}} @endif</p>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> NIDA Number </h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> <?php echo $national_id; ?></p>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main">Passport Number:</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> @if($details) {{$details->passport_number}} @endif</p>
                                          </div>
     
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> Pension Fund Number:</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"><?php echo $pf_membership_no; ?> </p>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> HELSB <small> (Loan Fund Index) </small>Number:</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"><?php echo $HELSB; ?></p>
                                          </div>
     
@@ -304,43 +304,43 @@
     
                                 <div class="row">
                                     {{-- start of emergency contacts --}}
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-md-6 col-6 col-lg-6">
                                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;">Emergency Contact Details</h5>
                                        <div class="row mb-1">
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main">  First Name</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted">@if($emergency) {{ $emergency->em_fname}} @endif</p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main"> Middle Name </h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted">@if($emergency) {{ $emergency->em_mname}} @endif</p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main"> Surname </h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> @if($emergency) {{ $emergency->em_sname}} @endif </p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main"> Relationship </h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> @if($emergency) {{ $emergency->em_relationship}} @endif </p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main"> Occupation </h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> @if($emergency) {{ $emergency->em_occupation}} @endif </p>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main"> Cellphone Number </h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> @if($emergency) {{ $emergency->em_phone}} @endif </p>
                                         </div>
     
@@ -349,51 +349,51 @@
                                     {{-- end of emergency contacts --}}
     
                                     {{-- start of employment details --}}
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-6 col-md-6 col-6 col-lg-6 ">
                                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;"> Employment Details</h5>
                                         <div class="row mb-1">
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main">Date of Employment :</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> <?php echo $hire_date; ?></p>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> First Job Title </h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> @if($details) {{ $details->former_title}} @endif</p>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main">Current Job Title:</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> <?php echo $title; ?> </p>
                                          </div>
     
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> Department & Branch:</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"><?php echo $department; ?> ,<?php echo $branch; ?> </p>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> Line Manager:</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> <?php echo $linemanager; ?></p>
                                          </div>
-                                         {{-- <div class="col-6">
+                                         {{-- <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main"> Head of Department:</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> Name Here </p>
                                         </div>
     
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main">Employment Status:</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> <?php echo $ctype; ?> </p>
                                         </div> --}}
     
@@ -411,18 +411,19 @@
     
                                 <div class="row">
 
-                                    <h5>FAMILY DETAILS</h5>
-                                    <hr>
+                                    <h5 style="border-bottom:4px solid black !important;">FAMILY DETAILS</h5>
+
                                     {{-- start of spouse details --}}
+                                    @if($spouse)
                                     <div class="col-md-12">
                                         
                                         <h5 class="">Spouse Details:</h5>
                                         <br>
                                         <div class="row mb-1">
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main">  Name as per NIDA/Passport</h6>
                                         </div>
-                                        <div class="col-6">
+                                        <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <p class="text-muted"> @if($spouse) {{ $spouse->spouse_fname}} @endif </p>
                                         </div>
                                         <div class="col-3">
@@ -480,6 +481,7 @@
     
     
                                     </div>
+                                    @endif
                                     {{-- end of spouse details --}}
     
                                     {{-- start of children details --}}
@@ -488,10 +490,10 @@
                                         <hr>
                                         <h5 > Children/ Details</h5>
                                         <div class="row mb-1">
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main">Number of children :</h6>
                                          </div>
-                                         <div class="col-6">
+                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <p class="text-muted"> @if($childs) {{ $childs }} @endif </p>
                                          </div>
                                          <div class="col-12">
@@ -523,6 +525,8 @@
                                             </table>
                                              @endif
                                          </div>
+                                        </div>
+                                    </div>
                                          @endif
                                        
                                          {{-- start of Parents details --}}
@@ -558,28 +562,28 @@
                                          </div>
                                          @endif
                                         {{-- end of parents details --}}
-                                         </div>
+                                         
     
     
-    
-                                        </div>
                                     {{-- end of children details --}}
     
                                 </div>
+
                  
                                 
                         {{-- / --}}
     
                         {{-- Start of Education --}}
  
-                        @if($qualifications->count() >0)
+                        @if($qualifications->count() > 0 || $certifications->count() > 0)
                                 <div class="row">
     
     
                                     {{-- start of Academic Qualifications details --}}
                                     <div class="col-md-12">
-                                        <hr>
-                                        <h5 class=""> Academic Qualification : </h5>
+                                      
+                                        <h5 class="" style="border-bottom:4px solid black !important;">EDUCATIONAL BACKGROUND: </h5>
+                                     
                                         <div class="row mb-1">
                                          <div class="col-12">
     
@@ -614,10 +618,10 @@
     
                                          </div>
                                         {{-- start of Proffessional Certification details --}}
-                                        <h5 class="bg-light"> Professional Certification/License</h5>
+                                        <h6 class=""> Professional Certification/License</h6>
     
                                          <div class="col-12">
-                                            <table class="table table-border-none" id="dynamicAddRemoveParent">
+                                            <table class="table table-bordered" id="dynamicAddRemoveParent">
                                                 <tr>
                                                 <th class="text-center">From/To (Month & Year)</th>
                                                 <th class="text-center">Name of Professional Certification/License If any</th>
@@ -660,22 +664,17 @@
                         {{-- / --}}
     
                         {{-- start of Employment History --}}
-                        <div role="tabpanel" class="tab-pane " id="history" aria-labelledby="exit-tab">
-                            <div class="card rounded-0 m-2 shadow-none">
-                                {{-- <div class="card-header d-flex justify-content-between">
-    
-                                </div> --}}
-    
+                        @if($histories->count() >0)
                                 <div class="row">
     
     
                                     {{-- start of previous employment details --}}
                                     <div class="col-md-12">
-                                        <h5 class="bg-light"> Employment History</h5>
+                                        <h5 class=""> EMPLOYMENT HISTORY:</h5>
                                         <div class="row mb-1">
                                          <div class="col-12">
     
-                                            <table class="table table-border" id="dynamicAddRemove">
+                                            <table class="table table-bordered" id="dynamicAddRemove">
                                                 <tr>
                                                 <th class="text-center">From /To(Month & Year)</th>
                                                 <th class="text-center">Employer</th>
@@ -715,17 +714,54 @@
                                     {{-- end of children details --}}
     
                                 </div>
-                            </div>
-                         </div>
+                        @endif
                         {{-- / --}}
     
                     </div>
                 </div>
             </div>
+                   {{-- start of disclosure statement --}}
+        <div class="row mt-2">
+            <h5 style="border-bottom:4px solid black !important;">DISCLOSURE STATEMENT</h5>
+            <p>
+                I declare that all information furnished is true. I authorise and consent the bank to obtain anu other information form any
+                other sources and by whatever means considered appropriate. 
+            </p>
+            <p>
+                I understand that any misrepresentation/ false declaration and omission of facts made in this form will be sufficient cause
+                for my termination at any time during my employment with African Banking Corporation Tanzania Limited also trading as BancABC. 
+            </p>
+
+            <p>
+
+                Employee’s Name: ………………………………………………... <br>
+                Signature: …………………………………………………………. <br>
+                Date :……………………………………………………………… <br>
+            </p>
+        </div>
+
+
+        {{-- / --}}
           </div>
     
     
         {{-- end of employee bio data --}}
+
+ 
+
+        <div class="row p-2" style="border-top:1px solid black !important;margin-top:2px !important; ">
+        <div class="col-6 col-md-6 col-6 col-lg-6 text-danger">
+            <i>
+                H i g h l y C o n f i d e n t i a l
+            </i>
+        </div>
+        <div class="col-6 col-md-6 col-6 col-lg-6 text-secondary">
+            <i>
+                E m p l o y e e s I n i t i a l : _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+            </i>
+           
+        </div>
+        </div>
     
       </div>
 </div>
@@ -734,8 +770,6 @@
 
 
 <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-
 <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
 
 
