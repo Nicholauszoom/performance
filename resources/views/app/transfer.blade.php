@@ -17,11 +17,11 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body border-0">
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-            <li class="nav-item" role="presentation">
+            {{-- <li class="nav-item" role="presentation">
                 <a href="#employee-transfer" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
                     Employee Transfer
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item" role="presentation">
                 <a href="#register-approve" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
                     Employee Registered
@@ -32,7 +32,7 @@
 
     <div class="tab-content" id="myTabContent">
         {{-- transfered employee --}}
-        <div role="tabpanel" class="tab-pane fade active show " id="employee-transfer" aria-labelledby="transfer-tab">
+        <div role="tabpanel" class="tab-pane fade  show " id="employee-transfer" aria-labelledby="transfer-tab">
 
             <h6 class="text-muted mb-3 mx-3">Current Employee Tranfer</h6>
 
@@ -131,7 +131,7 @@
         {{-- / --}}
 
         {{-- Approve registered employee --}}
-        <div role="tabpanel" class="tab-pane " id="register-approve" aria-labelledby="approve-tab">
+        <div role="tabpanel" class="tab-pane fade active show" id="register-approve" aria-labelledby="approve-tab">
 
             <h6 class="text-muted mb-3 mx-3">Current Employee Registered</h6>
 

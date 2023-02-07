@@ -134,7 +134,7 @@
                                         <div class="card rounded-0 border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid rounded-circle" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
+                                                <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -458,7 +458,7 @@
                             <div class="row p-2">
 
                                 <div class="col-md-12">
-                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
+                                    <div class="card border-top border-top-width-3 border-top-main  rounded-0 p-2">
                                         <h5>Emmergency Contact Details</h5>
                                         <p>
                                             <small>
@@ -507,7 +507,7 @@
 
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0p-2">
+                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                                         <h5>Employment Details</h5>
 
 

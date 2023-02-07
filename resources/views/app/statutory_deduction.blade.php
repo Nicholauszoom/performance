@@ -12,7 +12,7 @@
 
 
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
         <li class="nav-item" role="presentation">
             <a href="{{ url('/flex/financial_group')}}" class="nav-link "
@@ -98,7 +98,7 @@
     </table>
 </div>
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header">
         <div class="d-flex justify-content-between">
             <h5 class="mb-0">List of Deduction</h5>
@@ -139,7 +139,7 @@
     </table>
 </div>
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header">
         <div class="d-flex justify-content-between">
             <h5 class="mb-0">P .A .Y .E Ranges</h5>

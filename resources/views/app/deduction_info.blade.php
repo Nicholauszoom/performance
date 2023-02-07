@@ -10,7 +10,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header">
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
             <li class="nav-item" role="presentation">
@@ -112,7 +112,7 @@
 
                 <!--UPDATE-->
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
                             <h2 class="text-main">Update</h2>
                         </div>
@@ -174,7 +174,7 @@
 
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
                             <h5 class="text-main">Details</h5>
                         </div>
@@ -234,7 +234,7 @@
 
                {{-- Update --}}
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
                             <h5 class="text-main">Update</h5>
                         </div>
@@ -317,7 +317,7 @@
 
             <div class="row">
                 <div class="col-md-12 col-sm-6 col-xs-12">
-                    <div class="card">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
                             <h5 class="text-main">Allowance Beneficiaries in Details</h5>
                         </div>
@@ -325,7 +325,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="card">
+                                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                                         <div class="card-header">
                                             <h5 class="text-main">Groups(s)</h5>
                                         </div>
@@ -364,7 +364,7 @@
                                 </div>
 
                                 <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <div class="card">
+                                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                                         <div class="card-header">
                                             <h5 class="text-main">Individual Employees </h5>
                                         </div>

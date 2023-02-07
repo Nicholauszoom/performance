@@ -11,7 +11,7 @@
 @section('content')
     <!-- Basic datatable -->
     <div class="right_col" role="main">
-        <div class="card">
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
           <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/financial_group')}}" class="nav-link "
@@ -56,7 +56,7 @@
           <div class="clearfix"></div>
 <div class="row">
           <div class="col-md-8 col-xs-12">
-              <div class="card">
+              <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
                   <h2>Deductions</h2>
 
@@ -111,7 +111,7 @@
               </div>
 
             <div class="col-md-4 col-xs-12">
-              <div class="card">
+              <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-head px-2 py-2">
                   <h2>Add Deduction</h2>
 

@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header border-0">
         <div class="">
             <h6 class="mb-0 text-muted">Approval Level</h6>
