@@ -89,7 +89,7 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label">New Job Level:</label>
-                                                <select name="emp_level" id="" class="form-select select">
+                                                <select name="newLevel" id="newLevel" class="form-select select">
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
