@@ -64,9 +64,10 @@
 
 <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
     <div class="card-header border-0">
+        <h3 class="me-4 text-center">Payroll Review For : {{ date('F, Y',strtotime($payrollMonth)) }}</h3>
         <div class="d-flex">
 
-            <h3 class="me-4">Payroll Details For : {{ $payrollMonth }}</h3>
+
             {{-- export info button --}}
             @if($payrollState == 1)
             <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($payrollMonth)])}}>" target="blank">
@@ -79,7 +80,7 @@
             @if($payrollState != 1)
             @can('download-summary')
             <a href="{{route('reports.get_payroll_temp_summary',$payrollMonth)}}" target="blank">
-                <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+                <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Summary</button>
             </a>
             @endcan
             @endif
@@ -89,7 +90,7 @@
             @can('download-summary')
             @if($payrollState == 1)
             <a class="px-4" href="{{route('reports.get_payroll_temp_summary1',$payrollMonth)}}" target="blank">
-                <button type="button" name="print" value="print" class="btn btn-main"> <i class="ph-download-simple me-2"></i> Payroll Summary</button>
+                <button type="button" name="print" value="print" class="btn btn-main"> Payroll Summary</button>
             </a>
             @endif
             @endcan
@@ -99,10 +100,26 @@
 
             @if($payrollState != 1)
             @can('download-summary')
-            <a class="btn btn-main btn-sm ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>1]) }}" target="blank">
+            <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>2]) }}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main btn-sm">
-                    Input Changes Approval
+                    Payroll Changes
                 </button>
+            </a>
+            <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>1]) }}" target="blank">
+                <button type="button" name="print" value="print" class="btn btn-main btn-sm">
+                    Payroll Inputs
+                </button>
+            </a>
+            <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>1]) }}" target="blank">
+                <button type="button" name="print" value="print" class="btn btn-main btn-sm">
+                    Payroll Details
+                </button>
+            </a>
+            <a href="javascript:void(0)" onclick="generate_checklist()" class="ms-3">
+                <button type="button" class="btn btn-main">Perform Calculation </button>
+            </a>
+            <a href="{{route('payroll.cancelpayroll','none')}}" class="ms-3">
+                <button type="button" class="btn btn-warning">Cancel Payroll </button>
             </a>
             @endcan
             @endif
@@ -119,7 +136,7 @@
 
 
     <div class="card-body">
-
+        <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                 <div class="mb-2 ms-auto">
@@ -151,10 +168,41 @@
             </div>
 
         </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+                <div class="mb-2 ms-auto">
+                    <h4 class="text-muted">Payloll Details:</h4>
+                    <div class="d-flex flex-wrap wmin-lg-400">
+                        <ul class="list list-unstyled mb-0">
+                            <li><h5 class="my-2">Salaries:</h5></li>
+                            <li>Total Allowances:</li>
+                            <li>Pension(Employer):</li>
+                            <li>Pension (Employee):</li>
 
+                            <li>Taxdue (PAYE):</li>
+                            <li>WCF:</li>
+                            <li>SDL:</li>
+                        </ul>
+
+                        <ul class="list list-unstyled text-end mb-0 ms-auto">
+                            <li><h5 class="my-2">{{ number_format($salary,2) }}</h5></li>
+                            <li><span class="fw-semibold">{{ number_format($allowances,2) }}</span></li>
+                            <li>{{ number_format($pension_employer,2) }}</li>
+                            <li>{{ number_format($pension_employee,2) }}</li>
+
+                            <li>{{ number_format($taxdue,2) }}</li>
+                            <li><span class="fw-semibold">{{ number_format($wcf,2) }}</span></li>
+                            <li><span class="fw-semibold">{{ number_format($sdl,2) }}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       </div>
         <hr>
 
-        <?php if($payrollState == 0){ ?>
+         <?php if($payrollState == 9){ ?> {{-- was 0 --}}
         <div class="col-md-6 col-sm-6 col-xs-12">
             <div class="card border-top border-bottom border-bottom-width-3 border-bottom-main rounded-0 border-0 shadow-none">
                 <div id="resultConfirmation"></div>
@@ -237,7 +285,7 @@
 
 
                         <a href="javascript:void(0)" onclick="generate_checklist()" class="m-3">
-                            <button type="button" class="btn btn-main">Confirm Payroll </button>
+                            <button type="button" class="btn btn-main">Perform Calculation </button>
                         </a>
                         @endcan
                     <?php }  else { ?>

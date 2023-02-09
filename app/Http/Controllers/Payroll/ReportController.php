@@ -2692,12 +2692,17 @@ EOD;
         $date = explode('-',$request->payrolldate);
         $month = $date[0].'-'.$date[1];
         $data['payroll_date'] = $request->payrolldate;
+        $data['payrollMonth'] = $request->payrolldate;
+
+
         $data['logs'] = $this->flexperformance_model->financialLogs($month);
 
         $data['title'] = 'Payroll Input Changes Approval Report';
         $data['parent'] = 'Payroll Log Report';
         if($request->type == 1)
         return view('reports.input_approval', $data);
+        elseif($request->type = 2)
+        return view('payroll.payroll.payroll_changes',$data);
         else
         return view('audit-trail.financial_logs', $data);
 
@@ -2793,7 +2798,7 @@ EOD;
      public function annualLeaveData(Request $request)
     {
         # code...
-        
+
         $date = explode('-',$request->duration);
         // $dur = $date[0].'-'.$date[1];
         $year =$date[0];

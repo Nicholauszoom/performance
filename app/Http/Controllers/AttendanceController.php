@@ -166,7 +166,7 @@ elseif($nature == 6)
 }
 elseif($nature == 7)
 {
- $leave_balance =   $this->attendance_model->get_pertenity_leave_balance($empID,$nature,$year,$today);
+ $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
 
 }
 
