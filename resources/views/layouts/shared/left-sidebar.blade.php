@@ -3,7 +3,10 @@
     <div class="sidebar-content">
 
         <div class="sidebar-section">
-            <div class="sidebar-section-body d-flex justify-content-center">
+            <div class="p-2 my-2">
+                {{-- <img src="{{  asset('img/logo.png'); }}" class="img-fluid" alt=""> --}}
+            </div>
+            {{-- <div class="sidebar-section-body d-flex justify-content-center">
                 <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
 
                 <div>
@@ -17,12 +20,14 @@
                         <i class="ph-x"></i>
                     </button>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         {{-- {{ request()->routeIs('dashboard.index') ? 'active' : null }} --}}
 
         <div class="sidebar-section">
+        
+
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
                 @can('view-dashboard')
                 <li class="nav-item">

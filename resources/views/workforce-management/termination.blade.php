@@ -16,10 +16,10 @@
 
 @section('content')
 
-<div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-header border-0">
+<div class="card border-top card-flex border-top-width-3 border-top-main rounded-0">
+    <div class="card-header rounded-0 border-0" >
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Terminated Employees</h5>
+            <h5 class="mb-0 text-main">Terminated Employees</h5>
 
 
             @can('add-termination')
@@ -29,7 +29,9 @@
                 </a>
             @endcan
         </div>
+        
     </div>
+    <hr class="text-warning">
 
     @if (session('msg'))
     <div class="alert alert-success col-md-8 mx-auto" role="alert">

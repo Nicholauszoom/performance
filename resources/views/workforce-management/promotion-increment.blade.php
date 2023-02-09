@@ -19,15 +19,15 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="">
-            <div class="row">
+            <div class="row  py-2">
                 <div class="col-md-7">
-                    <h6 class="mb-0 text-muted text-start">Promotion| Increment</h6>
+                    <h6 class="mb-0 text-warning text-start">Promotion| Increment</h6>
                 </div>
                 <div class="col-md-5">
            
                         {{-- start of increment salary button --}}
                         @can('add-increment')
-                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom btn-sm text-end mx-1 ">
+                        <a href="{{ route('flex.addIncrement') }}" class="btn btn-perfrom btn-xs text-end mx-1 float-end">
                         <i class="ph-plus me-2"></i> Increment Salary
                         </a>
                         @endcan
@@ -35,13 +35,14 @@
 
                         {{--  start of perform promotion button --}}
                         @can('add-promotion')
-                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom btn-sm mx-1">
+                        <a href="{{ route('flex.addPromotion') }}" class="btn btn-perfrom btn-xs mx-1 float-end">
                             <i class="ph-plus me-2"></i> Peform Promotion
                         </a>
                         @endcan
                         {{-- / --}}
                 </div>
             </div>
+            <hr class="text-warning">
     
 
 
@@ -80,10 +81,10 @@
              <td>{{ number_format($item->newSalary,2)}} </td>
              <td>
                 @if($item->action=="incremented")
-                    <span class="badge bg-secondary  bg-opacity-60 text-light">{{ $item->action}}</span>
+                    <span class="badge bg-main  bg-opacity-40 text-light">{{ $item->action}}</span>
                     <br>
                 @else
-                    <span class="badge bg-secondary bg-opacity-60 text-light">{{ $item->action}}</span>
+                    <span class="badge bg-main bg-opacity-60 text-light">{{ $item->action}}</span>
 
                 @endif
             </td>

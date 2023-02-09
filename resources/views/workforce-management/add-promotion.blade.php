@@ -19,7 +19,7 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Promote Employee</h5>
+            <h5 class="mb-0 text-warning">Promote Employee</h5>
 
                 <a href="{{ route('flex.promotion') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Promotions|Increments
@@ -89,7 +89,7 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label">New Job Level:</label>
-                                                <select name="emp_level" id="" class="form-select select">
+                                                <select name="newLevel" id="newLevel" class="form-select select">
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
