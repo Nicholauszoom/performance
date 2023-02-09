@@ -21,17 +21,17 @@
 
 
 
-        <div class="page-content">
+        <div class="page-content" >
             <div class="content-wrapper">
                 <div class="content-inner">
                     <div class="content d-flex justify-content-center align-items-center">
                         
-                            <div class="col-md-7 ">
-                                <div class="card border-top border-bottom border-bottom-width-4 border-top-width-3 border-top-main border-bottom-main rounded-0mb-0">
+                            <div class="col-md-7 " >
+                                <div class="card border-top border-bottom border-bottom-width-4 border-top-width-3 border-top-main border-bottom-main rounded-0 mb-0">
                                     <div class="card-body">
                                           <div class="row">
                    
-                                <div class="col-md-6">
+                                <div class="col-md-6 d-sm-none d-md-block col-6  ">
                                     <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                           <div class="carousel-item active">
@@ -43,16 +43,18 @@
                                           <div class="carousel-item">
                                             <img src="{{ asset('img/slide3.png') }}" class="d-block w-100" alt="...">
                                           </div>
+                                          <div class="carousel-item">
+                                            <img src="{{ asset('img/slide4.png') }}" class="d-block w-100" alt="...">
+                                          </div>
                                         </div>
                                       </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <img src="{{ asset('img/logo.png') }}" class="img-fluid text-center" style="height: 3em" alt="logo">
+                                <div class="col-md-6 col-sm-12 col-12">
 
-                                    <form action="{{ route('login') }}" method="POST" class="login-form my-4 py-4" autocomplete="off">
+                                    <form action="{{ route('login') }}" method="POST" class="mb-4 py-4" autocomplete="off">
                                       @csrf
           
-                                      <div class="border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main mb-0">
+                                      <div class=" border-bottom-main mb-0">
           
                                           <div class="">
                                               <div class="text-center mb-3">
@@ -126,16 +128,21 @@
                                                   <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
                                               </div> --}}
           
-                                              <div class="mb-3">
-                                                  <button type="submit" class="btn btn-main w-100 border-0" style="background: #00204e">Log In</button>
+                                              <div class="mb-1">
+                                                  <button type="submit" class="btn btn-main  w-100 border-0" style="background: #00204e">Log In</button>
                                               </div>
           
                                             </div>
                                       </div>
                                   </form>
                                   {{-- /login card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
-          
+
                                       </div>
+                                      <div class="">
+                                        <img src="{{ asset('img/logo.png') }}" class=" float-end"  style="height:1.6em;width:30%;float-left;opacity:80%" alt="logo">
+
+                                      </div>
+
                                       
                             </div>
                                     </div>

@@ -3,8 +3,8 @@
     <div class="sidebar-content">
 
         <div class="sidebar-section">
-            <div class=" p-2 my-2">
-                <img src="{{  asset('img/logo.png'); }}" class="img-fluid" alt="">
+            <div class="p-2 my-2">
+                {{-- <img src="{{  asset('img/logo.png'); }}" class="img-fluid" alt=""> --}}
             </div>
             {{-- <div class="sidebar-section-body d-flex justify-content-center">
                 <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
