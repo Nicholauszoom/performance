@@ -26,7 +26,7 @@
 
             <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-4">
                     <h2>Add Remarks </h2>
 

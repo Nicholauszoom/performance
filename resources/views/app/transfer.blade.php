@@ -11,7 +11,7 @@
 @section('content')
 
 <div class="mb-3">
-    <h4 class="text-muted">Approvals</h4>
+    <h4 class="text-main">Approvals</h4>
 </div>
 
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
@@ -34,7 +34,7 @@
         {{-- transfered employee --}}
         <div role="tabpanel" class="tab-pane fade  " id="employee-transfer" aria-labelledby="transfer-tab">
 
-            <h6 class="text-muted mb-3 mx-3">Current Employee Tranfer</h6>
+            <h6 class="mb-3 mx-3 text-warning">Current Employee Tranfer</h6>
 
             <?php echo session("note");  ?>
             <div id="resultFeedback" class="my-3"></div>
@@ -133,7 +133,7 @@
         {{-- Approve registered employee --}}
         <div role="tabpanel" class="tab-pane active show " id="register-approve" aria-labelledby="approve-tab">
 
-            <h6 class="text-muted mb-3 mx-3">Current Employee Registered</h6>
+            <h6 class="text-warning mb-3 mx-3">Current Employee Registered</h6>
 
             <?php echo session("note");  ?>
             <div id="resultFeedback"></div>

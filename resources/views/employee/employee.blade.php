@@ -13,13 +13,13 @@
 
   @if (session('mng_emp') || session('vw_emp') || session('appr_emp'))
   <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-header mb-0">
-      <h5 class="text-muted">Employees</h5>
+    <div class="card-header  mb-0">
+      <h5 class="text-main">Employees</h5>
     </div>
 
-    <div class="card-body">
+    <div class="card-body ">
       <div class="d-flex justify-content-between">
-        <h4 class="lead">List of Employees</h4>
+        <h4 class="lead text-warning ">List of Employees</h4>
 
         @if (session('mng_emp'))
         @can('add-employee')

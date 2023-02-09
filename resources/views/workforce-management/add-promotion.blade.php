@@ -19,7 +19,7 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Promote Employee</h5>
+            <h5 class="mb-0 text-warning">Promote Employee</h5>
 
                 <a href="{{ route('flex.promotion') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Promotions|Increments

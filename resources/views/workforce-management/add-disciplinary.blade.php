@@ -19,13 +19,13 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Add Disciplinary Action</h5>
+            <h5 class="mb-0 text-warning">Add Disciplinary Action</h5>
 
                 <a href="{{ route('flex.grievancesCompain') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Disciplinary Actions
                 </a>
         </div>
-    <hr>
+    <hr class="text-warning">
     </div>
 
 

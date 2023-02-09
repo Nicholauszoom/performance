@@ -14,7 +14,7 @@
 
 @section('content')
     <div class="mb-3">
-        <h6 class="mb-0">Employee Registration</h6>
+        <h6 class="mb-0 text-main">Employee Registration</h6>
         <span class="text-muted d-block">All the required fields need to be filled</span>
     </div>
 
@@ -22,7 +22,7 @@
 
         <div class="card  border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
-                <h5 class="mb-0 text-muted">Personal Details</h5>
+                <h5 class="mb-0 text-warning">Personal Details</h5>
             </div>
 
             <div class="card-body">
@@ -122,7 +122,7 @@
             <hr>
 
             <div class="card-header">
-                <h5 class="mb-0 text-muted">Work Details</h5>
+                <h5 class="mb-0 text-warning">Work Details</h5>
             </div>
 
             <div class="card-body">

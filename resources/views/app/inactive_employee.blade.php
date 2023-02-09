@@ -14,11 +14,11 @@
 {{-- Deactivated Employess --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-header">
-    <h5 class="text-muted mb-0">Employee</h5>
+    <h5 class="text-main mb-0">Employee</h5>
   </div>
 
-  <div class="card-body">
-    Deactiveted Employees
+  <div class="card-body text-warning">
+    Deactivated Employees
   </div>
 
   <table id="datatable" class="table table-striped table-bordered datatable-basic">
@@ -60,7 +60,7 @@
               <?php if($row->isRequested==0){
                 if( session('mng_emp')){ ?>
                   <a href="javascript:void(0)" title="Request Activation" class="icon-2 info-tooltip" id="reactivate">
-                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                    <button type="button" class="btn btn-main btn-xs"><i class="ph-check"></i></button>
                   </a>
                 <?php } } else { ?>
                   <div class="col-md-12">
@@ -81,7 +81,7 @@
 
 {{-- exit Request employee --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-  <div class="card-body">Exit Requests</div>
+  <div class="card-body text-warning">Exit Requests</div>
 
   <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
     <thead>
@@ -113,7 +113,7 @@
           <td><?php echo "<b>Email: </b>".$row->email."<br><b>Mobile: </b>".$row->mobile; ?></td>
           <td >
             <?php if ($row->current_state==1 && $row->log_state==1){  ?>
-              <span class="badge bg-success">ACTIVE</span>
+              <span class="badge bg-main">ACTIVE</span>
             <?php } elseif($row->current_state==1 && $row->log_state==0){ ?>
               <span class="badge bg-danger">INACTIVE</span>
             <?php }  if ($row->log_state==2){ ?>
@@ -129,13 +129,13 @@
               if( session('appr_emp')){
                 if ($row->log_state==2){  ?>
                   <a href="javascript:void(0)" onclick="activateEmployee(<?php echo $row->logID.','.$row->emp_id; ?>)"  title="Confirm and Activate Employee" class="me-2 text-body">
-                    <span class="badge bg-success">ACTIVATE</span>
+                    <span class="badge bg-main">ACTIVATE</span>
                   </a>
                 <?php }
 
                 if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
                   <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
-                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                    <button type="button" class="btn btn-main btn-xs"><i class="ph-check"></i></button>
                   </a>
                 <?php }
               }
@@ -158,7 +158,7 @@
 
 {{-- exit employee --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-  <div class="card-body">Exit Employee List</div>
+  <div class="card-body text-warning">Exit Employee List</div>
 
   <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
     <thead>
@@ -206,20 +206,20 @@
               if( session('appr_emp')){
                 if ($row->log_state==2){  ?>
                   <a href="javascript:void(0)" onclick="activateEmployee(<?php echo $row->logID.','.$row->emp_id; ?>)"  title="Confirm and Activate Employee" class="me-2 text-body">
-                    <span class="badge bg-success">ACTIVATE</span>
+                    <span class="badge bg-main">ACTIVATE</span>
                   </a>
                 <?php }
 
                 if ($row->log_state==3 && ($row->initiator != session('emp_id'))){ ?>
                   <a href="javascript:void(0)" onclick="deactivateEmployee(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Confirm exit employee" class="me-2 text-body">
-                    <button type="button" class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                    <button type="button" class="btn btn-main btn-sm"><i class="ph-check"></i></button>
                   </a>
                 <?php }
               }
 
               if( session('mng_emp')){ ?>
                 <a href="javascript:void(0)" onclick="cancelRequest(<?php echo $row->logID; ?>,'<?php echo $row->emp_id; ?>')"  title="Cancel exit" class="me-2 text-body">
-                  <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
+                  <button type="button" class="btn btn-danger btn-sm"><i class="ph-x"></i></button>
                 </a>
               <?php } }  else { ?>
                 <span class="label label-primary">comitted</span>
