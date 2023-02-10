@@ -48,6 +48,12 @@
   
 }
 
+.border-top-warnin {
+    --border-opacity: 1;
+    border-bottom-color: (#f0ab00, var(--border-opacity)) !important;
+}
+
+
 .bg-pending{
     background:  #f58646 !important;
 }

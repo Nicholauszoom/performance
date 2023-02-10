@@ -33,12 +33,12 @@
                 <div class="content-inner">
                     <div class="content d-flex justify-content-center align-items-center">
                         
-                            <div class="col-md-7 " >
+                            <div class="col-md-7 col-12" >
                                 <div class=" rounded-0 mb-0">
                                     <div class="">
-                                          <div class="row bg-white">
+                                          <div class="row "  style="height:43.4em;">
                    
-                                <div class="col-md-6 d-none d-md-block col-6 " style="height:43.4em;">
+                                <div class="col-md-6  d-none d-md-block col-12 ">
                                     <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                           <div class="carousel-item active">
@@ -59,8 +59,8 @@
                                         </div>
                                       </div>
                                 </div>
-                                <div class="col-md-6 col-sm-12 col-12 bg-white">
-
+                                <div class="col-md-6  col-sm-11 col-11 mx-auto bg-white border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0">
+                                 
                                     <form action="{{ route('login') }}" method="POST" class="mb-4 py-4" autocomplete="off">
                                       @csrf
           
@@ -94,7 +94,7 @@
                                                   @endif
                                               @endif
           
-                                              <div class="mb-4">
+                                              <div class="mb-5">
                                                   <label class="form-label text-main">Username</label>
           
                                                   <div class="form-control-feedback form-control-feedback-start">
