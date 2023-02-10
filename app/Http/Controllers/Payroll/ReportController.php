@@ -322,7 +322,7 @@ class ReportController extends Controller
         $data['info'] = $this->reports_model->company_info();
         $data['payroll_month'] = $date;
         $data['pension_fund'] = $pensionFund;
-
+        $data['employees'] = $this->flexperformance_model->Employee();
         $data['payrollMonth'] = $request->date;
 
 
@@ -331,7 +331,7 @@ class ReportController extends Controller
         $data['payroll_date'] = $request->date;
 
         $summary = $data['summary'];
-        
+
         return view('payroll.payroll_inputs',$data);
     }
     function get_payroll_temp_summary(Request $request)
@@ -412,6 +412,13 @@ class ReportController extends Controller
         return view('reports.temp_payroll1', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
+    }
+
+    function get_payroll_inputs(Request $request){
+
+      $data['employees'] = $this->reports_model->get_payroll_inputs($request->empID);
+
+      return json_encode($data);
     }
 
     function pension(Request $request)
