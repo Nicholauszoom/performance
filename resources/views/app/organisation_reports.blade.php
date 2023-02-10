@@ -16,14 +16,14 @@
 @section('content')
 
 <div class="mb-3">
-    <h4 class="text-muted">Organisation Financial Reports</h4>
+    <h4 class="text-main">Organisation Financial Reports</h4>
 </div>
 
 <div class="row">
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Payroll Reconciliation Summary</h5>
+                <h5 class="text-warning">Payroll Reconciliation Summary</h5>
             </div>
 
             <form
@@ -66,7 +66,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Payroll Input Changes Approval Report </h5>
+                <h5 class="text-warning">Payroll Input Changes Approval Report </h5>
             </div>
 
             <form
@@ -111,7 +111,7 @@
     {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Payroll Input Journal</h5>
+                <h5 class="text-warning">Payroll Input Journal</h5>
             </div>
 
             <form
@@ -157,7 +157,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Pay Checklist</h5>
+                <h5 class="text-warning">Pay Checklist</h5>
             </div>
 
             <form
@@ -203,7 +203,7 @@
     {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Master Payroll</h5>
+                <h5 class="text-warning">Master Payroll</h5>
             </div>
 
             <form
@@ -249,7 +249,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Employee BioData</h5>
+                <h5 class="text-warning">Employee BioData</h5>
             </div>
 
             <form
@@ -295,7 +295,7 @@
     {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Gross Reconciliation</h5>
+                <h5 class="text-warning">Gross Reconciliation</h5>
             </div>
 
             <form
@@ -341,7 +341,7 @@
     {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Net Reconciliation</h5>
+                <h5 class="text-warning">Net Reconciliation</h5>
             </div>
 
             <form
@@ -387,7 +387,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Loans</h5>
+                <h5 class="text-warning">Loans</h5>
             </div>
 
             <form
@@ -433,7 +433,7 @@
     {{-- <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h5 class="text-muted">Payroll Input Journal (Time)</h5>
+                <h5 class="text-warning">Payroll Input Journal (Time)</h5>
             </div>
 
             <form
@@ -479,7 +479,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Payroll Details</h5>
+                <h5 class="text-warning">Payroll Details</h5>
             </div>
 
             <form
@@ -541,7 +541,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Annual Leave</h5>
+                <h5 class="text-warning">Annual Leave</h5>
             </div>
 
             <form
@@ -593,7 +593,7 @@
     <div class="col-md-6">
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
             <div class="card-header">
-                <h5 class="text-muted">Annual Leave Report</h5>
+                <h5 class="text-warning">Annual Leave Report</h5>
             </div>
 
             <form

@@ -93,7 +93,8 @@
 
             <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div class="card-header border-0 shadow-none">
-                    <h6 class="text-muted">Basic Details</h6>
+                    {{-- text-muted --}}
+                    <h6 class=" text-warning">Basic Details</h6>
                 </div>
 
                 <table class="table table-borderless">
@@ -136,7 +137,7 @@
 
             <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                 <div class="card-header">
-                    <h6 class="text-muted">Work Details</h6>
+                    <h6 class="text-warning">Work Details</h6>
                 </div>
 
                 <table class="table table-borderless">
@@ -198,7 +199,7 @@
                             @csrf
                             <div class="card border-0 rounded-0">
                                 <div class="m-3">
-                                    <label class="form-label" for="stream">Pay Slip</label>
+                                    <label class="form-label text-warning" for="stream">Pay Slip</label>
 
                                     <input hidden name="employee" value="{{ $empID }}">
                                     <input hidden name="profile" value="1">

@@ -109,7 +109,7 @@
                     <!--[if mso]><i style="letter-spacing: 25px;mso-font-width:-100%">&nbsp;</i><![endif]-->
                   </a>
                 </p>
-                <p>Thanks!!!</p>
+                {{-- <p>Thanks!!!</p> --}}
               </td>
             </tr>
             

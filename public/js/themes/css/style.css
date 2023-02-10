@@ -35,6 +35,8 @@ select {
     cursor: pointer
 }
 
+
+
 input {
     -webkit-transition: all .1s ease-in-out;
     -moz-transition: all .1s ease-in-out;

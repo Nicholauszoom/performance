@@ -22,8 +22,8 @@
 
 <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
     <div class="card-header border-0">
-            <h5 class="mb-0 text-muted">Payroll</h5>
-            <hr>
+            <h5 class="mb-0 text-main">Payroll</h5>
+            <hr class="text-warning">
         </div>
 
         <div class="card-body">
@@ -34,9 +34,9 @@
 
                 <div class="col-lg-12">
 
-                    <div class="card border-top  ">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-header">
-                            <h5 class="card-title">Run Payroll</h5>
+                            <h5 class="card-title">Payroll</h5>
                         </div>
 
                         <div class="card-body">
@@ -58,7 +58,7 @@
                                             </div>
 
                                             <div class="col-3">
-                                                <button name="init" type="submit" class="btn btn-main">RUN PAYROLL</button>
+                                                <button name="init" type="submit" class="btn btn-main">Change Payroll Period</button>
                                             </div>
 
                                         </div>
@@ -82,7 +82,7 @@
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                     <div class="card-header">
-                        <h5 class="card-title">Payslip Mail Delivery List</h5>
+                        <h5 class="card-title text-warning">Payslip Mail Delivery List</h5>
                     </div>
 
                     <div class="card-body">
@@ -92,7 +92,7 @@
                                     <th>S/N</th>
                                     <th>Payroll Month</th>
                                     <th>Status</th>
-                                    {{-- <th>Mail status</th> --}}
+                                    <th>Mail status</th>
                                     <th>Option</th>
                                 </tr>
                             </thead>
@@ -107,7 +107,7 @@
                                     </td>
                                     <td>
                                         <?php if($row->state==1 || $row->state==2 ){   ?>
-                                        <span class="badge bg-warning bg-opacity-10 text-warning">PENDING</span>
+                                        <span class="badge bg-pending bg-opacity-10 text-warning">PENDING</span>
 
 
                                         <?php if(!$row->pay_checklist==1){ ?>
@@ -125,7 +125,7 @@
                                         <br>
                                         <?php  } ?>
                                     </td>
-                                    {{-- <td>
+                                    <td>
                                         <?php if($row->email_status==0){ ?>
                                         <span class="badge bg-warning bg-opacity-10 text-warning">NOT SENT</span>
                                         <br>
@@ -133,7 +133,7 @@
                                         <span class="badge bg-success bg-opacity-20 text-success">SENT</span>
 
                                         <?php  } ?>
-                                    </td> --}}
+                                    </td>
 
                                     <td class="options-width">
                                         <?php if($row->state==1 || $row->state==2){ ?>
@@ -172,7 +172,7 @@
                                         {{-- start of view email detail button --}}
                                         <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url('index.php/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>"
                                             title="Info and Details" class="icon-2 info-tooltip"><button type="button"
-                                                class="btn btn-info btn-xs"><i class="ph-info"></i></button>
+                                                class="btn btn-main btn-xs"><i class="ph-info"></i></button>
                                         </a>
                                         {{-- / --}}
                                         <?php if($row->state==0){ ?>
@@ -181,7 +181,7 @@
                                         {{-- start of print report button --}}
                                         <a href="{{route('reports.payroll_report',['pdate'=>base64_encode($row->payroll_date)])}}<?php //echo base_url(); ?>index.php/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>"
                                             target="blank" title="Print Report" class="icon-2 info-tooltip">
-                                            <button type="button" class="btn btn-info btn-xs">
+                                            <button type="button" class="btn btn-main btn-xs">
                                                 <i class="ph-printer"></i>
                                             </button>
                                         </a>

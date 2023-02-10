@@ -20,13 +20,13 @@
 
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Increment Employee Salary</h5>
+            <h5 class="mb-0 text-warning">Increment Employee Salary</h5>
 
                 <a href="{{ route('flex.promotion') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Promotions|Increments
                 </a>
         </div>
-    <hr>
+    <hr class="text-warning">
     </div>
 
 
@@ -95,7 +95,7 @@
                             <div class="modal-footer">
                                 <hr>
 
-                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
+                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Submit Request</button>
                             </div>
                         </form>
                     </div>

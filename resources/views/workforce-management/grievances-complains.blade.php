@@ -21,7 +21,7 @@
         <div class="">
             <div class="row">
                 <div class="col-md-9">
-                    <h5 class="mb-0 text-muted text-start">Grievances | Disciplinary Action</h5>
+                    <h5 class="mb-0 text-muted text-warning">Grievances | Disciplinary Action</h5>
                 </div>
                 <div class="col-md-3">
                     {{-- start of add disciplinary action button --}}
@@ -33,6 +33,7 @@
                     {{-- / --}}
                 </div>
             </div>
+            <hr class="text-warning">
 
 
 

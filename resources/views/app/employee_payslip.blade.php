@@ -19,7 +19,7 @@
                       <!-- PANEL-->
                 <div class="card">
                   <div class="card-head">
-                    <h2>Employee Payslip llll</h2>
+                    <h2>Employee Payslip </h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="card-body">

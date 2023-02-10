@@ -20,9 +20,9 @@
 
 
 {{-- start of leave application --}}
-<div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-6 offset-3">
+<div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
     <div class="card-header">
-        <h5 class="text-main"><i class="ph-tasks"></i> Apply Leave</h5>
+        <h5 class="text-warning"> Apply Leave</h5>
     </div>
 
     <div class="card-body">
@@ -110,7 +110,7 @@
 {{-- / --}}
 <div class="card border-top  border-top-width-3 border-top-main rounded-0" >
     <div class="card-header">
-        <h3 class="text-main">Leaves</h3>
+        <h3 class="text-warning">Leaves</h3>
     </div>
 
     <div class="card-body">
@@ -219,7 +219,7 @@
 @if (session('mng_emp') || session('appr_leave'))
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body">
-        <h5 class="text-main">Leaves Applied By Others(To be Confirmed if Not Yet)</h5>
+        <h5 class="text-warning">Leaves Applied By Others(To be Confirmed if Not Yet)</h5>
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
         <div id ="resultfeed"></div>
