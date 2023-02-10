@@ -22,7 +22,7 @@
 
 <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
     <div class="card-header border-0">
-            <h5 class="mb-0 text-main">Payroll</h5>
+            <h5 class="mb-0 text-warning">Payroll</h5>
             <hr class="text-warning">
         </div>
 
@@ -94,6 +94,7 @@
                                     <th>Status</th>
                                     <th>Mail status</th>
                                     <th>Option</th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
@@ -107,7 +108,7 @@
                                     </td>
                                     <td>
                                         <?php if($row->state==1 || $row->state==2 ){   ?>
-                                        <span class="badge bg-pending bg-opacity-10 text-warning">PENDING</span>
+                                        <span class="badge bg-pending bg-opacity-10 bg-pending">PENDING</span>
 
 
                                         <?php if(!$row->pay_checklist==1){ ?>
@@ -127,7 +128,7 @@
                                     </td>
                                     <td>
                                         <?php if($row->email_status==0){ ?>
-                                        <span class="badge bg-warning bg-opacity-10 text-warning">NOT SENT</span>
+                                        <span class="badge bg-warning bg-opacity-10 text-pending">NOT SENT</span>
                                         <br>
                                         <?php } else { ?>
                                         <span class="badge bg-success bg-opacity-20 text-success">SENT</span>

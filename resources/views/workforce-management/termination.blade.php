@@ -19,7 +19,7 @@
 <div class="card border-top card-flex border-top-width-3 border-top-main rounded-0">
     <div class="card-header rounded-0 border-0" >
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-main">Terminated Employees</h5>
+            <h5 class="mb-0 text-warning">Terminated Employees</h5>
 
 
             @can('add-termination')

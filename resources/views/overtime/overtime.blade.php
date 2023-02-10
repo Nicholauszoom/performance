@@ -32,6 +32,9 @@
                             @csrf
 
                             <div class="modal-body">
+                                <div class="row">
+
+                            
                                 <div class="row mb-3">
                                     <label class="col-form-label col-sm-3">Overtime Category <span
                                             class="text-danger">*</span> :</label>
