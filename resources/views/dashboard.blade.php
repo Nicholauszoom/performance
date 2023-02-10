@@ -236,7 +236,7 @@
                     </tr>
                     <tr>
                         <td rowspan="2"><b>Gross Salary</b></td>
-                        <td><b>Staff</b></td>
+                        <td><b>Employee</b></td>
                         <td align="right">{{ number_format($s_gross_c, 2) }}</td>
                         <td align="right">{{ number_format($s_gross_p, 2) }}</td>
                         <td align="right">{{ number_format($s_gross_c - $s_gross_p, 2) }} </td>
@@ -249,7 +249,7 @@
                     </tr>
                     <tr>
                         <td rowspan="2"><b>Net Salary</b></td>
-                        <td><b>Staff</b></td>
+                        <td><b>Employee</b></td>
                         <td align="right">{{ number_format($s_net_c_, 2) }}</td>
                         <td align="right">{{ number_format($s_net_p_, 2) }}</td>
                         <td align="right">{{ number_format($s_net_c_ - $s_net_p_, 2) }}</td>
@@ -262,7 +262,7 @@
                     </tr>
                     <tr>
                         <td rowspan="2"><b>Head Count</b></td>
-                        <td><b>Staff</b></td>
+                        <td><b>Employee</b></td>
                         <td align="right">{{ $staff }}</td>
                         <td align="right">{{ $staff_p }}</td>
                         <td align="right">{{ $staff - $staff_p }}</td>

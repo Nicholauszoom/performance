@@ -95,7 +95,7 @@
                         <div>
                             <label class="form-check form-check-inline">
                                 <input type="radio" class="form-check-input" name="type" value="1" checked>
-                                <span class="form-check-label">Staff</span>
+                                <span class="form-check-label">Employee</span>
                             </label>
 
                             <label class="form-check form-check-inline">

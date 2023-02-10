@@ -224,12 +224,13 @@
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <label  for="first-name" for="stream" >Is Taxable?</label>
+                            <label  for="first-name" for="stream" >Taxable</label>
                             <div class="input-group">
                                 <select name="taxable" class="select_type form-control" required tabindex="-1" id="policy">
                                     <option> Select</option>
-                                    <option value="YES" <?php if($taxable == 'YES') echo "selected";   ?>>YES</option>
-                                    <option value="NO" <?php if($taxable == 'NO') echo "selected";   ?>>NO</option>
+                                    <option value="0" <?php if($taxable == '0') echo "selected";   ?>>PERMANENT</option>
+                                    <option value="2" <?php if($taxable == '2') echo "selected";   ?>>TEMPORARY</option>
+                                    <option value="1" <?php if($taxable == '1') echo "selected";   ?>>ONCE OFF</option>
                                 </select>
                                 <button  class="btn btn-main">Update Taxable</button>
                             </div>
@@ -242,7 +243,7 @@
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <label  for="first-name" for="stream" >Is pensionable?</label>
+                            <label  for="first-name" for="stream" >Pensionable</label>
                             <div class="input-group">
                                 <select name="pensionable" class="select_type form-control" required tabindex="-1" id="policy">
                                     <option> Select</option>

@@ -84,6 +84,39 @@ thead{
     text-transform: uppercase;
 }
 
+h5 {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+h2 {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
 
 
 .active>.page-link

@@ -116,8 +116,8 @@
     <div id="employeeList">
         <table class="table table-striped table-bordered">
             <thead>
-            <th><b>Staff changes</b></th>
-            <th><b>Number of staff</b></th>
+            <th><b>Employee changes</b></th>
+            <th><b>Number of Employee</b></th>
             </thead>
             <tbody>
             <tr>
@@ -137,7 +137,7 @@
     <div id="employeeList">
         <table class="table table-striped table-bordered">
             <thead>
-            <th><b>Staff Exit</b></th>
+            <th><b>Employee Exit</b></th>
             </thead>
             <tbody>
             <?php
@@ -168,7 +168,7 @@
     <div id="employeeList" class="card-body">
         <table class="table table-striped table-bordered">
             <thead>
-            <th><b>Staff Joining</b></th>
+            <th><b>Employee Joining</b></th>
             </thead>
             <tbody>
             <?php

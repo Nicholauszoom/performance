@@ -128,7 +128,7 @@
                                     </td>
                                     <td>
                                         <?php if($row->email_status==0){ ?>
-                                        <span class="badge bg-warning bg-opacity-10 text-pending">NOT SENT</span>
+                                        <span class="badge bg-warning bg-opacity-10 bg-pending">NOT SENT</span>
                                         <br>
                                         <?php } else { ?>
                                         <span class="badge bg-success bg-opacity-20 text-success">SENT</span>
