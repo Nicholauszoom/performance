@@ -295,27 +295,46 @@ elseif($nature == 7)
             else
             {
               $days=$different_days;
+
               $total_leave_days=$leaves+$different_days;
+              $max=11;
+              if($total_leave_days<$max_leave_days)
+              {
+                // dd($leaves);
+
+                $remaining=$max_leave_days-($leaves-$different_days);
+                $leaves=new Leaves();
+                $empID=Auth::user()->emp_id;
+                $leaves->empID = $empID;
+                $leaves->start = $request->start;
+                $leaves->end=$request->end;
+                $leaves->leave_address=$request->address;
+                $leaves->mobile = $request->mobile;
+                $leaves->nature = $request->nature;
+                $leaves->reason = $request->reason;
+                $leaves->remaining = $remaining;
+                $leaves->sub_category = $request->sub_cat;
+                $leaves->application_date = date('Y-m-d');
+                $leaves->attachment = $request->image;
+          
+                $leaves->save();
+                           
+              $msg="Request is submitted successfully!";
+              return $url->with('msg', $msg);
+              }
+              else{
+
+                
+              $msg="Sorry, You have finished your leave days!";
+              return $url->with('msg', $msg);
+                // dd($msg);
+
+              }
               // $maximum=$sub->max_days;
               // Case hasnt used all days
               if ($total_leave_days < $max_leave_days) {
-              $leaves=new Leaves();
-              $empID=Auth::user()->emp_id;
-              $leaves->empID = $empID;
-              $leaves->start = $request->start;
-              $leaves->end=$request->end;
-              $leaves->leave_address=$request->address;
-              $leaves->mobile = $request->mobile;
-              $leaves->nature = $request->nature;
-              $leaves->reason = $request->reason;
-              $leaves->sub_category = $request->sub_cat;
-              $leaves->application_date = date('Y-m-d');
-              $leaves->attachment = $request->image;
-        
-              $leaves->save();
+             
 
-              $msg="Leave Request  Has been Requested Successfully!";
-              return $url->with('msg', $msg);
 
 
               // $msg="You Have Successfully Requested ".$days." Leave days.";
@@ -357,7 +376,7 @@ elseif($nature == 7)
         }
           // $text="njuka";
         }
-        dd($text);
+        // dd($text);
 
      
           //  dd( $total_remaining);
