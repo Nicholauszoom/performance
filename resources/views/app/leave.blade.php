@@ -20,15 +20,25 @@
 
 
 {{-- start of leave application --}}
+
+@if (session('msg'))
+    <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
+    {{ session('msg') }}
+    </div>
+    @endif
 <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
     <div class="card-header">
         <h5 class="text-warning"> Apply Leave</h5>
     </div>
-
+    {{-- id="applyLeave" --}}
     <div class="card-body">
-        <form id="applyLeave" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data">
+        <form  autocomplete="off" action="{{ url('flex/attendance/save_leave') }}"  method="post"  enctype="multipart/form-data">
+          @csrf
             <!-- START -->
-            <div class="form-group">
+            <div class="row">
+
+        
+            <div class="form-group col-6">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Start</label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
@@ -42,7 +52,7 @@
             <input type="text" name="limit" hidden value="<?php echo $totalAccrued; ?>">
             <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}">
 
-        <div class="form-group">
+        <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Finish
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -53,19 +63,26 @@
             <span class="text-danger"><?php// echo form_error("fname");?></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave</label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-          <select required  name="nature" id="nature"  class="select_leave_type form-control">
-              <option></option>
-              <?php  $sex = Auth::user()->gender;
-             if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
-             foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
-            <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?></option> <?php  } ?>
-          </select>
-          </div>
+                  <select class="form-control select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature">
+                      <option value=""> Leave Nature </option>
+                      <?php  $sex = Auth::user()->gender;
+                      if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
+                      foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
+                     <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?></option> <?php  } ?>
+                  </select>
+      
         </div>
-        <div class="form-group">
+
+        <div class="col-6 form-group" >
+          <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category</label>
+          <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
+            <option value="">--Select Sub Nature --</option>
+          </select>
+
+      </div>
+        <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -73,14 +90,23 @@
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group col-6">
           <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile</label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <input required="required" class="form-control col-md-7 col-xs-12" type="text" name="mobile">
             <span class="text-danger"><?php// echo form_error("mname");?></span>
           </div>
         </div>
-        <div class="form-group">
+          {{-- start of attachment --}}
+
+          <div class="form-group col-6">
+            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment</label>
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+              <input required="required" class="form-control col-md-7 col-xs-12" type="file" name="image">
+              <span class="text-danger"><?php// echo form_error("mname");?></span>
+            </div>
+          </div>
+        <div class="form-group col-12">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave(Optional)
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -89,21 +115,15 @@
           </div>
         </div>
 
-        {{-- start of attachment --}}
-
-        <div class="form-group">
-          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment</label>
-          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <input required="required" class="form-control col-md-7 col-xs-12" type="file" name="image">
-            <span class="text-danger"><?php// echo form_error("mname");?></span>
-          </div>
-        </div>
+      
             <!-- END -->
             <div class="form-group py-2">
               <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
-                 <button  class="btn btn-main" >APPLY</button>
+                 <button  type="submit" class="btn btn-main" >APPLY</button>
               </div>
             </div>
+
+          </div>
             </form>
     </div>
 </div>
@@ -369,6 +389,43 @@
 
 @include('app.includes.leave_operations')
 
+<script>
+
+  $('#docNo').change(function(){
+      var id = $(this).val();
+      var url = '{{ route("getSubs", ":id") }}';
+      url = url.replace(':id', id);
+
+      $('#subs_cat').find('option').not(':first').remove();
+  
+      $.ajax({
+          url: url,
+          type: 'get',
+          dataType: 'json',
+          success: function(response){
+             let subs=response;
+
+           
+
+            for (var i = 0; i < response.length; i++) {
+              
+              var id=subs[i].id;
+              var name=subs[i].name;
+              var option = "<option value='"+id+"'>"+name+"</option>";
+              // console.log(id);
+              // console.log(name);
+              // console.log(option);
+
+              $("#subs_cat").append(option);
+            }
+        
+          }
+      });
+  });
+  
+  
+  </script>
+  
 <script>
     $(function() {
       var today = new Date();

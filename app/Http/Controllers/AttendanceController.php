@@ -4,18 +4,24 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
-use App\Models\Payroll\Payroll;
-use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Payroll\ReportModel;
-use App\Models\Payroll\ImprestModel;
+use App\Models\EMPL;
+use App\Models\Leaves;
+use App\Models\LeaveType;
 use App\Helpers\SysHelpers;
+use App\Models\LeaveSubType;
+use App\Models\ProjectModel;
+use Illuminate\Http\Request;
+use App\Http\Middleware\Leave;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
 use App\CustomModels\PayrollModel;
-use App\CustomModels\flexFerformanceModel;
 use App\CustomModels\ReportsModel;
-use App\Models\AttendanceModel;
-use App\Models\ProjectModel;
+use App\Models\Payroll\ReportModel;
+use App\Models\Payroll\ImprestModel;
+use Illuminate\Support\Facades\Auth;
+use App\CustomModels\flexFerformanceModel;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class AttendanceController extends Controller
 {
@@ -124,6 +130,8 @@ class AttendanceController extends Controller
       }else{
         $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
+      $data['leave_types'] =LeaveType::all();
+      $data['employees'] =EMPL::all();
 
       $data['title'] = 'Leave';
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
@@ -131,6 +139,16 @@ class AttendanceController extends Controller
       return view('app.leave', $data);
 
    }
+
+  //  for fetching sub categories of leave
+      // fetching employee department's positions
+      public function getDetails($id = 0)
+      {
+          $data = LeaveSubType::where('category_id', $id)->get();
+          // dd($data);
+          return response()->json($data);
+      }
+  
 
    public  function check_leave_balance(Request $request){
     $today = date('Y-m-d');
@@ -174,6 +192,82 @@ elseif($nature == 7)
 
     return json_encode($year);
    }
+
+
+// start of save leave Function
+
+      public function savelLeave(Request $request) {
+
+        // received variables
+        //For Gender 
+        $gender=Auth::user()->gender;
+        if($gender=="Male"){$gender=1; }else { $gender=2;  }
+        // For Sub Cart
+        $sub_cat=$request->sub_cat;
+        $sub=LeaveSubType::where('id',$sub_cat)->first();
+        // for checking balance
+        $today = date('Y-m-d');
+        $arryear = explode('-',$today);
+        $year = $arryear[0];
+        $nature  = $request->nature;
+        $empID  = $request->empID;
+
+
+        // Checking used leave days based on leave type and sub type
+        $leaves=Leaves::where('emp_id',$empID)->where('type',$nature)->count('days');
+
+
+
+      // for Annual Leave
+       if($nature == 1){
+          $type="Annual";
+          }
+      // For Sick Leave
+        elseif($nature == 2)
+        {
+          $type="Sick";
+          $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+
+        }
+      // For Compassionate
+        elseif($nature == 3)
+        {
+          $type="Compassionate";
+
+          
+          // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+        
+        }
+        // For Maternity
+        elseif($nature == 4)
+        {
+          $type="Maternity";
+        }
+        // For Paternity
+        elseif($nature == 5)
+        {
+          $type="Paternity";
+          $leave_balance =   $this->attendance_model->get_pertenity_leave_balance($empID,$nature,$year,$today);
+        
+        }
+        // For Study
+        elseif($nature == 6)
+        {
+          $type="Study";
+        // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+        
+        }
+        // For Widowed
+        elseif($nature == 7)
+        {
+          $type="widowed";
+        }
+          $start=$request->image;
+          dd($empID);
+
+
+      }
+
 
     public function apply_leave(Request $request) {
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
