@@ -32,6 +32,9 @@
                             @csrf
 
                             <div class="modal-body">
+                                <div class="row">
+
+                            
                                 <div class="row mb-3">
                                     <label class="col-form-label col-sm-3">Overtime Category <span
                                             class="text-danger">*</span> :</label>
@@ -1063,4 +1066,35 @@
                 });
         });
     </script>
+
+
+<script>
+
+$('#docNo').change(function(){
+    var id = $(this).val();
+    var url = '{{ route("getDetails", ":id") }}';
+    url = url.replace(':id', id);
+
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        success: function(response){
+            if(response != null){
+
+                document.getElementById("oldsalary").value = response.salary;
+                document.getElementById("oldRate").value = response.rate;
+
+                $('#salary').val(response.salary+' '+response.currency);
+                $('#oldLevel').val(response.emp_level);
+                $('#oldPosition').val(response.position.name);
+            }
+        }
+    });
+});
+
+
+</script>
+
+
 @endpush

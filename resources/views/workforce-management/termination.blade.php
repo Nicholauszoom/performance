@@ -19,7 +19,7 @@
 <div class="card border-top card-flex border-top-width-3 border-top-main rounded-0">
     <div class="card-header rounded-0 border-0" >
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-main">Terminated Employees</h5>
+            <h5 class="mb-0 text-warning">Terminated Employees</h5>
 
 
             @can('add-termination')
@@ -37,9 +37,9 @@
     <div class="alert alert-success col-md-8 mx-auto" role="alert">
     {{ session('msg') }}
     </div>
-    @endif
+    @endif   
 
-    <table class="table table-striped table-bordered datatable-basic">
+    <table class="table table-striped table-bordered  datatable-basic">
         <thead>
             <tr>
                 <th>SN</th>
@@ -96,15 +96,19 @@
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
                     <button type="button" class="btn btn-main btn-xs" ><i class="ph-printer"></i></button>
                 </a>
-
+           
                 @if($level)
                 @if($item->status!='1')
                 @if ($item->status!=$check)
+                <br><br>
                 @can('confirm-termination')
                 {{-- start of termination confirm button --}}
                 <a href="javascript:void(0)" title="Approve" class="me-2"
                 onclick="approveTermination(<?php echo $item->id; ?>)">
-                <button class="btn btn-main btn-xs"><i class="ph-check"></i> Confirm</button>
+                <button class="btn btn-main btn-xs">
+                    <i class="ph-check"></i> 
+                    Confirm
+                </button>
             </a>
                 {{-- / --}}
 
@@ -112,7 +116,10 @@
               
                 <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                 onclick="cancelTermination(<?php echo $item->id; ?>)">
-                <button class="btn btn-danger btn-xs"><i class="ph-x"></i>  Cancel</button>
+                <button class="btn btn-danger btn-xs">
+                    <i class="ph-x"></i>
+                      Cancel
+                </button>
                  </a>
                 {{-- / --}}
                 @endcan

@@ -48,6 +48,12 @@
   
 }
 
+.border-top-warnin {
+    --border-opacity: 1;
+    border-bottom-color: (#f0ab00, var(--border-opacity)) !important;
+}
+
+
 .bg-pending{
     background:  #f58646 !important;
 }
@@ -61,10 +67,15 @@
     background-image: linear-gradient(180deg, #00204e 10%, #070e23 100%);
     background-size: cover;
 }
+
+thead{
+    background-color:#00204e !important; 
+    border: none !important;
+    color: #fff;
+}
 .text-warning {
     color: #f0ab00 !important;
     /* font-weight: 600; */
-    font: Verdana, Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif !important;
     font-style: normal;
     font-variant-caps: normal;
     font-variant-ligatures: normal;
@@ -72,12 +83,46 @@
     font-variant-east-asian: normal;
     font-weight: normal;
     font-stretch: normal;
-    /* font-size: 12px; */
+    font-size: 1.1em;
     line-height: normal;
     font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
-    /* font: 16px Verdana, Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif; */
+    margin-bottom: 10px;
+    text-transform: uppercase;
 }
 
+h5 {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+h2 {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
 
 
 .active>.page-link

@@ -271,6 +271,8 @@ Route::middleware('auth')->group(function () {
             Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
             Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
             Route::any('/leave' ,'leave')->name('attendandance.leave');
+   
+
             Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
             Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
             Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave');
@@ -296,10 +298,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
-
+         // for fetching sub leave type
+         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
-        Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
+        Route::post('/save_leave' ,'savelLeave')->name('attendance.saveLeave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
         Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
