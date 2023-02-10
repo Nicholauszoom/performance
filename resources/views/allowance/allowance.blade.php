@@ -11,7 +11,9 @@
 @endpush
 
 @section('content')
-    <div class="card">
+ 
+        <div class="card border-top  border-top-width-3 border-top-main rounded-0 ">
+
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
             <li class="nav-item" role="presentation">
                 <a href="{{ url('/flex/financial_group') }}" class="nav-link" aria-selected="false" role="tab"
@@ -55,7 +57,7 @@
             <div class="col-md-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header">
-                        <h5 class="text-muted">Add Allowance</h5>
+                        <h5 class="text-warning">Add Allowance</h5>
                     </div>
 
                     <div class="card-body">
@@ -64,8 +66,8 @@
                         <form id="addAllowance" method="post" autocomplete="off" class="form-horizontal form-label-left">
                             <div class="form-group row">
                                 <div class=" col-md-3 mb-3">
-                                    <label class="allName">Allowance Name:</label>
-                                    <textarea required type="text" name="name" class="form-control"></textarea>
+                                    <label class="form-label">Allowance Name:</label>
+                                    <input type="text"  name="name" class="form-control">
                                 </div>
 
                                 <div class=" col-md-3 mb-3">
@@ -77,7 +79,7 @@
                                     </select>
                                 </div>
                                 <div class=" col-md-3 mb-3">
-                                    <label class="form-label">Is Taxable?</label>
+                                    <label class="form-label">Taxable</label>
                                     <select class="form-control select_type select" name="taxable" id="policy">
                                         <option selected disabled> Select </option>
                                         <option value="YES">YES</option>
@@ -86,7 +88,7 @@
                                 </div>
 
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label">Is pensionable?</label>
+                                    <label class="form-label">Pensionable</label>
                                     <select class="form-control select_type select" name="pensionable" id="policy">
                                         <option selected disabled> Select </option>
                                         <option value="YES">YES</option>
@@ -99,15 +101,17 @@
 
                             <div class="form-group row">
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label">Is Recursive?</label>
+                                    <label class="form-label">Nature</label>
                                     <select class="form-control select_type select" name="recursive" id="policy">
                                         <option selected disabled> Select </option>
-                                        <option value="YES">YES</option>
-                                        <option value="NO">NO</option>
+                                        <option value="0">Permanent</option>
+                                        <option value="2">Temporaly</option>
+                                        <option value="1">Once Off</option>
+
                                     </select>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label">Is Benefit In kind?</label>
+                                    <label class="form-label">Benefit In kind</label>
                                     <select class="form-control select_type select" name="bik" id="policy">
                                         <option selected disabled> Select </option>
                                         <option value="YES">YES</option>
@@ -116,14 +120,14 @@
                                 </div>
 
                                 <div class="col-md-3 mb-3">
-                                    <label class="allName">Percent:</label>
+                                    <label class="form-label select_type allName">Percent:</label>
                                     <input required id="percentf" type="number" name="rate" min="0"
                                         max="99" step="0.1" placeholder="Percent (Less Than 100)"
                                         class="form-control">
                                 </div>
 
                                 <div class="col-md-3 mb-3">
-                                    <label class="allName">Amount:</label>
+                                    <label class="allName select_type form-label">Amount:</label>
                                     <input required id="amountf" type="number" step="1"
                                         placeholder="Fixed Amount" name="amount" class="form-control">
                                 </div>
@@ -140,7 +144,7 @@
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                     <div class="card-header border-0 shadow-none">
                         <div class="d-flex justify-content-between align-itens-center">
-                            <h5 class="h5 text-muted">Allowance</h5>
+                            <h5 class="h5 text-warning">Allowance</h5>
                         </div>
                     </div>
 

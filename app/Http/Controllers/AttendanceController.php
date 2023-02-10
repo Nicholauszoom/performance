@@ -186,7 +186,7 @@ elseif($nature == 6)
 }
 elseif($nature == 7)
 {
- $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
+//  $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
 
 }
 
@@ -343,7 +343,7 @@ elseif($nature == 7)
         elseif($nature == 2)
         {
           $type="Sick";
-          $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+          // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
         }
       // For Compassionate
@@ -364,7 +364,7 @@ elseif($nature == 7)
         elseif($nature == 5)
         {
           $type="Paternity";
-          $leave_balance =   $this->attendance_model->get_pertenity_leave_balance($empID,$nature,$year,$today);
+          // $leave_balance =   $this->attendance_model->get_pertenity_leave_balance($empID,$nature,$year,$today);
         
         }
         // For Study

@@ -258,7 +258,7 @@
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <label  for="first-name" for="stream" >Is recursive?</label>
+                            <label  for="first-name" for="stream" >Nature</label>
                             <div class="input-group">
                                 <select name="Isrecursive" class="select_type form-control" required tabindex="-1" id="Isrecursive">
                                     <option> Select</option>
@@ -273,7 +273,7 @@
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
-                            <label  for="first-name" for="stream" >Is Benefit In Kind?</label>
+                            <label  for="first-name" for="stream" >Benefit In Kind</label>
                             <div class="input-group">
                                 <select name="Isbik" class="select_type form-control" required tabindex="-1" id="Isbik">
                                     <option> Select</option>

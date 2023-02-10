@@ -13,10 +13,17 @@
         <script src="{{ asset('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
         <script src="{{ asset('assets/js/app.js') }}"></script>
+ <style>
+    body {
+ background-image: url('{{ asset('img/bg.png') }}');
+ background-color: #cccccc;
  
+}
+ </style>
 
-    <body style="background: #00204e;">
+    <body class="bg-white" >
 
+        {{-- style="background: #00204e;" --}}
 
 
 
@@ -27,29 +34,32 @@
                     <div class="content d-flex justify-content-center align-items-center">
                         
                             <div class="col-md-7 " >
-                                <div class="card border-top border-bottom border-bottom-width-4 border-top-width-3 border-top-main border-bottom-main rounded-0 mb-0">
-                                    <div class="card-body">
-                                          <div class="row">
+                                <div class=" rounded-0 mb-0">
+                                    <div class="">
+                                          <div class="row bg-white">
                    
-                                <div class="col-md-6 d-sm-none d-md-block col-6  ">
+                                <div class="col-md-6 d-none d-md-block col-6 " style="height:43.4em;">
                                     <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                           <div class="carousel-item active">
-                                            <img src="{{ asset('img/slide1.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('img/slide1.png') }}" class="img-fluid d-block w-100" alt="...">
                                           </div>
                                           <div class="carousel-item">
-                                            <img src="{{ asset('img/slide2.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('img/slide2.png') }}" class="img-fluid d-block w-100" alt="...">
                                           </div>
                                           <div class="carousel-item">
-                                            <img src="{{ asset('img/slide3.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('img/slide5.png') }}" class="img-fluid d-block w-100" alt="...">
                                           </div>
                                           <div class="carousel-item">
-                                            <img src="{{ asset('img/slide4.png') }}" class="d-block w-100" alt="...">
+                                            <img src="{{ asset('img/slide3.png') }}" class="img-fluid d-block w-100" alt="...">
+                                          </div>
+                                          <div class="carousel-item">
+                                            <img src="{{ asset('img/slide4.png') }}" class="img-fluid d-block w-100" alt="...">
                                           </div>
                                         </div>
                                       </div>
                                 </div>
-                                <div class="col-md-6 col-sm-12 col-12">
+                                <div class="col-md-6 col-sm-12 col-12 bg-white">
 
                                     <form action="{{ route('login') }}" method="POST" class="mb-4 py-4" autocomplete="off">
                                       @csrf
@@ -84,7 +94,7 @@
                                                   @endif
                                               @endif
           
-                                              <div class="mb-3">
+                                              <div class="mb-4">
                                                   <label class="form-label text-main">Username</label>
           
                                                   <div class="form-control-feedback form-control-feedback-start">
@@ -104,7 +114,7 @@
                                                   </div>
                                               </div>
           
-                                              <div class="mb-3">
+                                              <div class="mb-5">
                                                   <label class="form-label text-main">Password</label>
           
                                                   <div class="form-control-feedback form-control-feedback-start">
@@ -128,7 +138,7 @@
                                                   <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
                                               </div> --}}
           
-                                              <div class="mb-1">
+                                              <div class="mb-1 mt-3">
                                                   <button type="submit" class="btn btn-main  w-100 border-0" style="background: #00204e">Log In</button>
                                               </div>
           
@@ -138,11 +148,7 @@
                                   {{-- /login card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
 
                                       </div>
-                                      <div class="">
-                                        <img src="{{ asset('img/logo.png') }}" class=" float-end"  style="height:1.6em;width:30%;float-left;opacity:80%" alt="logo">
-
-                                      </div>
-
+                            
                                       
                             </div>
                                     </div>
@@ -155,6 +161,14 @@
                 </div>
             </div>
         </div>
+            <div class="mb-2">
+            <img src="{{ asset('img/logo.png') }}" class=" float-end"  style="height:2.4em;width:16%;float-left;opacity:100%" alt="logo">
+
+          </div>
+          <div class="">
+            <img src="{{ asset('img/top.png') }}" class=" float-end"  style="height:3.5em;width:100%;float-left;opacity:100%" alt="logo">
+
+         </div>
 
     </body>
 
