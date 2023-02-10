@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use DateTime;
+use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Leaves;
 use App\Models\LeaveType;
@@ -123,7 +125,7 @@ class AttendanceController extends Controller
    }
 
   public function leave() {
-      $data['myleave'] = $this->attendance_model->myleave(session('emp_id'));
+      $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
 
       if(session('appr_leave')){
         $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
@@ -197,27 +199,142 @@ elseif($nature == 7)
 // start of save leave Function
 
       public function savelLeave(Request $request) {
-
-        // received variables
+     
         //For Gender 
         $gender=Auth::user()->gender;
         if($gender=="Male"){$gender=1; }else { $gender=2;  }
-        // For Sub Cart
-        $sub_cat=$request->sub_cat;
-        $sub=LeaveSubType::where('id',$sub_cat)->first();
         // for checking balance
         $today = date('Y-m-d');
         $arryear = explode('-',$today);
         $year = $arryear[0];
         $nature  = $request->nature;
-        $empID  = $request->empID;
+        $empID  = Auth::user()->emp_id;
 
+        // dd($request->end);
 
         // Checking used leave days based on leave type and sub type
-        $leaves=Leaves::where('emp_id',$empID)->where('type',$nature)->count('days');
+        $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->sum('days');
+        
+        // For Leave Nature days
+        $type=LeaveType::where('id',$nature)->first();
+        $max_leave_days= $type->max_days;
+       
+        // For  Requested days
+        $start = $request->start;
+        $end = $request->end;
+
+        $date1=date('d-m-Y', strtotime($start));
+        $date2=date('d-m-Y', strtotime($end));
+        $start_date = Carbon::createFromFormat('d-m-Y', $date1);
+        $end_date = Carbon::createFromFormat('d-m-Y', $date2);
+        $different_days = $start_date->diffInDays($end_date);
+
+        // For Total Leave days
+         $total_remaining=$leaves+$different_days;
+
+        // For Working days
+        $d1 = new DateTime (Auth::user()->hire_date);
+        $d2 = new DateTime();
+        $interval = $d2->diff($d1);
+        $day=$interval->days;
+        // $month=$interval->m->format('%m months');
+
+        // For Redirection Url
+        $url = redirect('flex/attendance/leave');
+
+        if($day>336)
+        {
+          // $text="mkongwe";
+
+            //  For Checking sub Category
+            if($request->sub_cat > 0){
+
+              // For Sub Cart
+              $sub_cat=$request->sub_cat;
+              $sub=LeaveSubType::where('id',$sub_cat)->first();
+
+              $total_leave_days=$leaves+$different_days;
+              $maximum=$sub->max_days;
+              // Case hasnt used all days
+              if ($total_leave_days < $maximum) {
+                $leaves=new Leaves();
+                $empID=Auth::user()->emp_id;
+                $leaves->empID = $empID;
+                $leaves->start = $request->start;
+                $leaves->end=$request->end;
+                $leaves->leave_address=$request->address;
+                $leaves->mobile = $request->mobile;
+                $leaves->nature = $request->nature;
+                $leaves->reason = $request->reason;
+                $leaves->sub_category = $request->sub_cat;
+                $leaves->application_date = date('Y-m-d');
+                $leaves->attachment = $request->image;
+          
+                $leaves->save();
+
+                $msg="Leave Request  Has been Requested Successfully!";
+                return $url->with('msg', $msg);
+
+              }
+              //  Case has used up all days
+              else
+              {
+                // dd("zimeisha");
+                $msg="zimeisha";
+
+                return $url->with('msg', $msg);
+              }
+      
+              // if ($) {
+              //   # code...
+              // }
 
 
+            }
 
+            else
+            {
+              $days=$different_days;
+
+            
+
+              $msg="You Have Successfully Requested ".$days." Leave days.";
+
+              return redirect('flex/attendance/leave')->with('msg', $msg);
+
+            }
+
+            }
+        else
+        {
+
+             //  For Checking sub Category
+
+        if($request->sub_cat!=null || $request->sub_cat !=''){
+
+                  // For Sub Cart
+        $sub_cat=$request->sub_cat;
+        $sub=LeaveSubType::where('id',$sub_cat)->first();
+            dd($sub->name);
+        }
+
+        else
+        {
+          $days=$different_days;
+
+        
+
+          $msg="You Have Successfully Requested ".$days." Leave days.";
+
+          return redirect('flex/attendance/leave')->with('msg', $msg);
+
+        }
+          $text="njuka";
+        }
+        dd($text);
+
+     
+          //  dd( $total_remaining);
       // for Annual Leave
        if($nature == 1){
           $type="Annual";
@@ -257,13 +374,24 @@ elseif($nature == 7)
         // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
         
         }
-        // For Widowed
-        elseif($nature == 7)
-        {
-          $type="widowed";
-        }
+
+       
+
+            // For Balance checking
+            if($max_leave_days <= $total_remaining){
+              $extra=$leaves-$total_remaining ;
+              $balance="You have finished your leave days, and you need ".-1*($extra)." extra days.";
+              $msg="You have finished your ".$type. " leave days, and you need ".$extra." extra days.";
+    
+              return redirect('flex/attendance/leave')->with('msg', $msg);
+            } 
+            else
+            {
+              $balance=$max_leave_days-$leaves;
+            }
+            
           $start=$request->image;
-          dd($empID);
+          dd($balance);
 
 
       }
@@ -343,12 +471,20 @@ elseif($nature == 7)
       if($id!=''){
         $leaveID = $id;
 
-        $result = $this->attendance_model->deleteLeave($leaveID);
-        if($result ==true){
-          echo "<p class='alert alert-warning text-center'>Leave Cancelled Successifully</p>";
-        } else {
-          echo "<p class='alert alert-danger text-center'>Leave Not Deleted, Please Try Again</p>";
-        }
+        $leave=Leaves::where('id',$leaveID)->first();
+
+        $leave->delete();
+
+        // $result = $this->attendance_model->deleteLeave($leaveID);
+        // if($result ==true){
+        //   echo "<p class='alert alert-warning text-center'>Leave Cancelled Successifully</p>";
+        // } else {
+        //   echo "<p class='alert alert-danger text-center'>Leave Not Deleted, Please Try Again</p>";
+        // }
+
+        $msg="Leave Was Deleted Successfully !";
+    
+        return redirect('flex/attendance/leave')->with('msg', $msg);
       }
    }
 
