@@ -8,9 +8,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Payroll\FlexPerformanceModel;
+
 
 class AuthController extends Controller
 {
+    protected $flexperformance_model;
+    protected $imprest_model;
+    protected $reports_model;
+    protected $attendance_model;
+    protected $project_model;
+    protected $performanceModel;
+    protected $payroll_model;
+
+    public function __construct( FlexPerformanceModel $flexperformance_model)
+    {
+        $this->flexperformance_model = $flexperformance_model;
+
+    }
     /**
      * Create User
      * @param Request $request
@@ -85,8 +100,9 @@ class AuthController extends Controller
             }
 
             $user = User::where('emp_id', $request->emp_id)->first();
-
+            $data['employee'] = $this->flexperformance_model->userprofile($request->emp_id);
             return response()->json([
+                'employee'=>$data['employee'],
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken

@@ -297,12 +297,11 @@ class ReportController extends Controller
         return view('reports/heslb', $data);
     }
 
-    function get_payroll_temp_summary($date)
-    {
-
+    function payroll_inputs(Request $request){
+        $date = $request->date;
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
 
-        $payrollMonth = $date;
+        $payrollMonth = $request->date;
         $pensionFund = 2;
         $reportType = 1; //Staff = 1, temporary = 2
 
@@ -321,20 +320,60 @@ class ReportController extends Controller
         }
 
         $data['info'] = $this->reports_model->company_info();
-        $data['payroll_month'] = $payrollMonth;
+        $data['payroll_month'] = $date;
         $data['pension_fund'] = $pensionFund;
 
-        $pension = $data['pension'];
-        $total = $data['total'];
-        $info = $data['info'];
-        $payroll_month = $data['payroll_month'];
-        $pension_fund = $data['pension_fund'];
-        $payroll_month = $date;
+        $data['payrollMonth'] = $request->date;
+
+
         $info = $this->reports_model->company_info();
 
-        $data['payroll_date'] = $date;
+        $data['payroll_date'] = $request->date;
 
         $summary = $data['summary'];
+        
+        return view('payroll.payroll_inputs',$data);
+    }
+    function get_payroll_temp_summary(Request $request)
+    {
+
+        $date = $request->date;
+        $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
+
+        $payrollMonth = $request->date;
+        $pensionFund = 2;
+        $reportType = 1; //Staff = 1, temporary = 2
+
+        $datewell = explode("-", $payrollMonth);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $date = $yyyy . "-" . $mm;
+
+        if ($reportType == 1) {
+            $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
+        } else {
+            $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
+            $data['total'] = $this->reports_model->v_totalpension($date, $pensionFund);
+        }
+
+        $data['info'] = $this->reports_model->company_info();
+        $data['payroll_month'] = $date;
+        $data['pension_fund'] = $pensionFund;
+
+        $data['payrollMonth'] = $request->date;
+
+
+        $info = $this->reports_model->company_info();
+
+        $data['payroll_date'] = $request->date;
+
+        $summary = $data['summary'];
+
+        if($request->type == 1)
+
+        return view('payroll.payroll_details', $data);
 
         return view('reports.payroll_details', $data);
 
@@ -367,7 +406,9 @@ class ReportController extends Controller
 
 
         $summary = $data['summary'];
+         if($request->type ==1){
 
+         }
         return view('reports.temp_payroll1', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
@@ -2702,7 +2743,7 @@ EOD;
         if($request->type == 1)
         return view('reports.input_approval', $data);
         elseif($request->type = 2)
-        return view('payroll.payroll.payroll_changes',$data);
+        return view('payroll.payroll_changes',$data);
         else
         return view('audit-trail.financial_logs', $data);
 

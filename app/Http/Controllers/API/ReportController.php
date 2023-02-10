@@ -297,12 +297,13 @@ class ReportController extends Controller
         return view('reports/heslb', $data);
     }
 
-    function get_payroll_temp_summary($date)
+    function get_payroll_temp_summary(Request $requst)
     {
 
+        $date = $requesr->date;
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
 
-        $payrollMonth = $date;
+        $payrollMonth = $request->date;
         $pensionFund = 2;
         $reportType = 1; //Staff = 1, temporary = 2
 
@@ -336,16 +337,20 @@ class ReportController extends Controller
 
         $summary = $data['summary'];
 
+        if($reques->type == 1)
+
+        return view('payroll.payroll_details', $data);
+
         return view('reports.payroll_details', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
-    function get_payroll_temp_summary1($date)
+    function get_payroll_temp_summary1(Request $request)
     {
 
-        $data['summary'] = $this->reports_model->get_payroll_temp_summary1($date);
+        $data['summary'] = $this->reports_model->get_payroll_temp_summary1($request->date);
 
-        $payrollMonth = $date;
+        $payrollMonth = $request->date;
         $pensionFund = 2;
         $reportType = 1; //Staff = 1, temporary = 2
 

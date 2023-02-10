@@ -27,7 +27,8 @@
 
 <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
     <div class="card-header border-0">
-        @include('payroll.payroll_info_buttons')
+
+       @include('payroll.payroll_info_buttons')
 
     </div>
 
@@ -37,54 +38,134 @@
         <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <hr>
-            <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>1]) }}" target="blank">
-                <button type="button" name="print" value="print" class="btn btn-main btn-sm">
-                    PDF
-                </button>
-            </a>
-        <table class="table datatable-excel-filter">
-            <thead>
-                <tr>
-                  <th>Payrollno</th>
-                  <th>Name</th>
-                  <th>Time Stamp</th>
-                  <th>Change Made By</th>
-                  <th>FieldName</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>InputScreen</th>
-                </tr>
-            </thead>
+             <a href="{{route('reports.get_payroll_temp_summary',['date'=>$payrollMonth,'type'=>2])}}" target="blank">
+         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+     </a>
+            <table class="table datatable-excel-filter">
+                <thead>
+                    <tr>
+                        <th scope="col"><b>Pay No</b></th>
+                        <th scope="col"><b>Name</b></th>
+                        <th scope="col" class="text-end"><b>Monthly Basic Salary</b></th>
+                        <th scope="col" class="text-end"><b>Overtime</b></th>
+                        <th scope="col" class="text-end"><b>Allowance</b></th>
+                        <th scope="col" class="text-end"><b>Utility</b></th>
+                        <th scope="col" class="text-end"><b>House Allowance</b></th>
+                        <th scope="col" class="text-end"><b>Areas</b></th>
+                        <th scope="col" class="text-end"><b>Other Payments</b></th>
+                        <th scope="col" class="text-end"><b>Gross Salary</b></th>
+                        <th scope="col" class="text-end"><b>Tax Benefit</b></th>
+                        <th scope="col" class="text-end"><b>Taxable Gross</b></th>
+                        <th scope="col" class="text-end"><b>PAYE</b></th>
+                        <th scope="col" class="text-end"><b>SDL</b></th>
+                        <th scope="col" class="text-end"><b>WCF</b></th>
+                        <th scope="col" class="text-end"><b>NSSF</b></th>
+                        <th scope="col" class="text-end"><b>Loan Board</b></th>
+                        <th scope="col" class="text-end"><b>Total Deduction</b></th>
+                        <th scope="col" class="text-end"><b>Amount Payable</b></th>
 
-            <tbody>
-                @foreach ($logs as $row)
-                    <tr id="{{ 'domain'.$row->id }}">
-                        <td>{{ $row->payrollno }}</td>
-
-                        <td> {{ $row->empName }} </td>
-
-                        <td>
-                            @php
-                                $temp = explode(' ',$row->created_at);
-                            @endphp
-
-                            <p> <strong>Date </strong> : {{ $temp[0] }} </p>
-                            <p> <strong>Time </strong> : {{ $temp[1] }} </p>
-                        </td>
-
-                        <td> {{ $row->authName }} </td>
-
-                        <td>{{ $row->field_name }}</td>
-
-                        <td>{{ $row->action_from }}</td>
-
-                        <td>{{ $row->action_to }}</td>
-
-                        <td>{{ $row->input_screen }}</td>
                     </tr>
-                @endforeach
-              </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php
+                                    $i =0;
+                                    if(!empty($summary)){
+                                        $total_loans = 0;
+                                        $total_taxable_amount = 0;
+                                        $total_taxs = 0;
+                                        $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
+                                        $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
+                                    foreach ($summary as $row){
+                                        $i++;
+                                        $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
+                                        $total_netpay = $total_netpay +  $amount;
+
+                                        $total_gross_salary = $total_gross_salary +  ($row->salary + $row->allowances);
+                                        $total_salary = $total_salary + $row->salary;
+                                        $total_allowance = $total_allowance + $row->allowances ;
+                                        $total_overtime = $total_overtime +$row->overtime;
+                                        $total_house_rent = $total_house_rent + $row->house_rent;
+                                        $total_others = $total_others + $row->other_payments ;
+                                        $total_taxs += $row->taxdue ;
+                                        $total_pension = $total_pension + $row->pension_employer;
+                                        $total_deduction = $total_deduction + ($row->salary + $row->allowances)-$amount;
+                                        $total_sdl = $total_sdl + $row->sdl;
+                                        $total_wcf = $total_wcf + $row->wcf;
+                                        $total_taxable_amount += ($row->salary + $row->allowances-$row->pension_employer);
+                                        $total_loans = $total_loans + $row->total_loans;
+
+                                    ?>
+                    <tr>
+
+                        <td class=""><b>{{ $row->emp_id }}</b></td>
+
+                        <td class=""><b>{{ $row->fname }} {{ $row->mname }}
+                                {{ $row->lname }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->salary, 2) }}</b></td>
+                        {{-- <td class="text-end"><b>{{ number_format($row->allowance_id =="Overtime"? $row->allowance_amount:0 }}</b></td> --}}
+                        <td class="text-end"><b>{{ number_format($row->overtime, 2) }}</b></td>
+
+                        <td class="text-end"><b>{{ number_format($row->allowances, 2) }}</b></td>
+
+                        <td class="text-end"><b>{{ number_format(0, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->house_rent, 2) }}</b></td>
+
+                        <td class="text-end"><b>{{ number_format(0, 2) }}<b></td>
+
+                        <td class="text-end"><b>{{ number_format($row->other_payments, 2) }}</b></td>
+
+                        <td class="text-end"><b>{{ number_format($row->salary + $row->allowances, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format(0, 2) }}</b></td>
+                        <td class="text-end">
+                            <b>{{ number_format($row->salary + $row->allowances - $row->pension_employer, 2) }}</b>
+                        </td>
+                        <td class="text-end"><b>{{ number_format($row->taxdue, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->sdl, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->wcf, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->pension_employer * 2, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->loans, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($row->salary + $row->allowances - $amount, 2) }}</b></td>
+                        <td class="text-end"><b>{{ number_format($amount, 2) }}</b></td>
+
+
+                    </tr>
+
+                    <?php } ?>
+
+
+
+                </tbody>
+                <tfoot>
+                    <tr style="">
+
+                        <th></th>
+                        <th class=""><b>
+                                <b>TOTAL</b><b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_salary, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_overtime, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_allowance, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format(0, 2) }}</b></b></th>
+
+                        <th class="text-end"><b><b>{{ number_format($total_house_rent, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format(0, 2) }}<b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_others, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_gross_salary, 2) }}</b></b></th>
+                        <th class="text-end"><b><b> {{ number_format(0, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_taxable_amount, 2) }}</b></b></th>
+
+                        <th class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_sdl, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_wcf, 2) }}</b></b></th>
+
+                        <th class="text-end"><b><b>{{ number_format($total_pension * 2, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_loans, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_deduction, 2) }}</b></b></th>
+                        <th class="text-end"><b><b>{{ number_format($total_netpay, 2) }}</b></b></th>
+
+                    </tr>
+                </tfoot>
+                <?php } ?>
+            </table>
 
         </div>
 
