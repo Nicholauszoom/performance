@@ -194,7 +194,7 @@
 
               <td>
                 <p>Nature :<b> <?php echo $row->type->type; ?></b><br>
-                  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
+                @if($row->sub_category>0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>@endif
                 </p>
               </td>
               <td><?php echo $row->reason; ?></td>
