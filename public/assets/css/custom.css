@@ -64,7 +64,6 @@
 .text-warning {
     color: #f0ab00 !important;
     /* font-weight: 600; */
-    font: Verdana, Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif !important;
     font-style: normal;
     font-variant-caps: normal;
     font-variant-ligatures: normal;
@@ -72,10 +71,11 @@
     font-variant-east-asian: normal;
     font-weight: normal;
     font-stretch: normal;
-    /* font-size: 12px; */
+    font-size: 1.2em;
     line-height: normal;
     font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
-    /* font: 16px Verdana, Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif; */
+    margin-bottom: 10px;
+    text-transform: uppercase;
 }
 
 
