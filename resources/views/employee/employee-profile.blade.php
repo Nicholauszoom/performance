@@ -210,7 +210,7 @@
 
                                     <div class="col-12">
                                         <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                            <h5>Name Information</h5>
+                                            <h5 class="text-warning">Name Information</h5>
 
                                                 <div class="row mb-2">
                                                     <label for="">Prefix</label>
@@ -264,7 +264,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                            <h5>Biography Information</h5>
+                                            <h5 class="text-warning">Biography Information</h5>
 
 
                                                 <div class="row mb-2">
@@ -373,7 +373,7 @@
 
                                 <div class="col-md-12">
                                     <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                        <h5>Address Information</h5>
+                                        <h5 class="text-warning">Address Information</h5>
                                         <p>
                                             <small>
                                             <i>
@@ -406,7 +406,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="card border-top border-top-width-3 border-top-main rounded-0 p-2">
-                                        <h5>Personal Identification Information</h5>
+                                        <h5 class="text-warning">Personal Identification Information</h5>
 
 
 
@@ -508,7 +508,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                        <h5>Employment Details</h5>
+                                        <h5 class="text-warning">Employment Details</h5>
 
 
 
@@ -581,7 +581,7 @@
 
                                 <div class="col-md-12">
                                     <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                        <h5>Spouse Details</h5>
+                                        <h5 class="text-warning">Spouse Details</h5>
                                         <p>
                                             <small>
                                             <i>*(If you are married, please complete the below details and attach your Marriage Certificate)
@@ -646,7 +646,7 @@
 
                                 <div class="col-md-12">
                                     <div class="card  border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                      <div class="card-header">
+                                      <div class="card-header text-warning">
                                         Children/Dependants Details:
                                       </div>
                                       <div class="card-body">

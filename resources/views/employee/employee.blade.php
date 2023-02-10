@@ -13,13 +13,13 @@
 
   @if (session('mng_emp') || session('vw_emp') || session('appr_emp'))
   <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-    <div class="card-header mb-0">
-      <h5 class="text-muted">Employees</h5>
+    <div class="card-header  mb-0">
+      <h5 class="text-main">Employees</h5>
     </div>
 
-    <div class="card-body">
+    <div class="card-body ">
       <div class="d-flex justify-content-between">
-        <h4 class="lead">List of Employees</h4>
+        <h4 class="lead text-warning ">List of Employees</h4>
 
         @if (session('mng_emp'))
         @can('add-employee')
@@ -64,18 +64,18 @@
                 <b>Mobile: </b> {{ $row->mobile }}
             </td>
             @can('edit-employee')
-            <td class="options-width">
-                <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button>
+            <td class="options-width" style="width:200px !important;">
+                <a  href="{{ route('flex.userprofile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm" title="Info and Details">
+                    <i class="ph-info"></i>
                 </a>
 
                 @if (session('mng_emp'))
-                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}"  title="Info and Details">
-                    <button type="button" class="btn btn-main btn-xs"><i class="ph-pen"></i></button>
+                <a  href="{{ route('flex.viewProfile', base64_encode($row->emp_id)) }}" class="btn btn-main  btn-sm"   title="Info and Details">
+                    <i class="ph-pen"></i>
                 </a>
 
-                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  title="Deactivate">
-                 <button class="btn btn-danger ">  <i class="ph-prohibit"></i></button>
+                <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  class="btn btn-danger btn-sm"  title="Deactivate">
+                <i class="ph-prohibit"></i>
                 </a>
 {{--
                     <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">

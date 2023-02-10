@@ -19,7 +19,7 @@
                       <!-- PANEL-->
                 <div class="card">
                   <div class="card-head">
-                    <h2>Employee Payslip llll</h2>
+                    <h2>Employee Payslip </h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="card-body">
@@ -73,7 +73,7 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Payslip Type</label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <label class="containercheckbox"> Staff
+                                    <label class="containercheckbox"> Employee
                                         <input type="radio" checked name="type" value="1">
                                         <span class="checkmark"></span>
                                     </label>

@@ -40,13 +40,116 @@
 }
 
 .bg-danger {
-    background: #c20430;
+    background: #c20430 !important;
 }
 
 .bg-warning {
-    background: #f0ab00;
+    background: #f0ab00 !important;
+  
 }
 
+.border-top-warnin {
+    --border-opacity: 1;
+    border-bottom-color: (#f0ab00, var(--border-opacity)) !important;
+}
+
+
+.bg-pending{
+    background:  #f58646 !important;
+}
+
+.border-warning {
+    border-bottom: 3px solid #f0ab00 !important;
+    
+}
+
+.bg-main-gradient{
+    background-image: linear-gradient(180deg, #00204e 10%, #070e23 100%);
+    background-size: cover;
+}
+
+thead{
+    background-color:#00204e !important; 
+    border: none !important;
+    color: #fff;
+}
+.text-warning {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+h5 {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+h2 {
+    color: #f0ab00 !important;
+    /* font-weight: 600; */
+    font-style: normal;
+    font-variant-caps: normal;
+    font-variant-ligatures: normal;
+    font-variant-numeric: normal;
+    font-variant-east-asian: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-size: 1.1em;
+    line-height: normal;
+    font-family: Verdana, Arial, Helvetica, "Liberation Sans", FreeSans, sans-serif;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+
+.active>.page-link
+{
+    background-color:#00204e !important; 
+    border: none !important;
+
+}
+
+.active.page-link:hover
+{
+    /* background-color:#f0ab00 !important; */
+    background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
+    background-size: cover;
+
+}
+.nav-link:hover{
+    background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
+    background-size: cover;
+    color:#c20430!important; 
+}
+
+
+.btn:hover{
+    background-color: #f0ab00 !important;
+    color:#00204e !important; 
+}
 .nav-tabs-highlight,
 .nav-tabs-overline,
 .nav-tabs-underline {

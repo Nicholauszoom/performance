@@ -31,7 +31,7 @@
 
     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header border-0">
-            <h6 class="text-muted">Pending Payments <small></small></h6>
+            <h5 class="text-main">Pending Payments <small></small></h5>
         </div>
 
         <div class="card-body">
@@ -79,7 +79,7 @@
                         <li class="nav-item" role="presentation">
                             <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
-                                <i class="ph-list me-2"></i>
+                                <i class="ph-list me-2 "></i>
                                 Payroll
                             </a>
                         </li>
@@ -335,7 +335,7 @@
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
                                     <div class="tab-head py-2 px-2">
-                                        <h2>Overtime</h2>
+                                        <h2 class="text-warning">Overtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">

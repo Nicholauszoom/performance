@@ -18,10 +18,10 @@
     @can('add-overtime')
     <div id="apply_overtime">
         <div class="row">
-            <div class="col-md-7 offset-3">
+            <div class="col-md-12 ">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                     <div class="card-header border-0 shadow-none">
-                        <h5 class="text-muted">Apply Overtime</h5>
+                        <h5 class="text-warning">Apply Overtime</h5>
                     </div>
 
                     <div class="card-body">
@@ -32,6 +32,9 @@
                             @csrf
 
                             <div class="modal-body">
+                                <div class="row">
+
+                            
                                 <div class="row mb-3">
                                     <label class="col-form-label col-sm-3">Overtime Category <span
                                             class="text-danger">*</span> :</label>
@@ -113,7 +116,7 @@
     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header mb-0">
             <div class="d-flex justify-content-between">
-                <h4 class="text-muted">My Overtime</h4>
+                <h4 class="text-warning">My Overtime</h4>
                 {{-- start of apply overtime button --}}
                 @can('apply-overtme')
                 <a href="#apply_overtime" class="btn btn-perfrom"><i class="ph-plus me-2"></i> Apply Overtime</a>
@@ -183,7 +186,7 @@
     @if (count($line_overtime) > 0)
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
-                <h4 class="text-main">Others Overtime</h4>
+                <h4 class="text-warning">Others Overtime</h4>
 
                 <?php session('note'); ?>
                 <div id="myResultfeedOvertime"></div>
@@ -243,7 +246,7 @@
                             @can('approve-overtime')
                             <a href="javascript:void(0)" title="Approve" class="me-2"
                                 onclick="lineapproveOvertime(<?php echo $row->eoid; ?>)">
-                                <button class="btn btn-success btn-xs"><i class="ph-check"></i></button>
+                                <button class="btn btn-main btn-xs"><i class="ph-check"></i></button>
                             </a>
                             @endcan
                             {{-- / --}}
@@ -270,7 +273,7 @@
                             ?>
                             {{-- start of cancel overtime button --}}
                             <a href="{{ route('flex.fetchOvertimeComment', $row->eoid) }}">
-                                <button class='btn btn-primary btn-xs'>Comment</i></button>
+                                <button class='btn btn-main btn-xs'>Comment</i></button>
                             </a>
                             {{-- / --}}
                             <?php //}
@@ -1063,4 +1066,35 @@
                 });
         });
     </script>
+
+
+<script>
+
+$('#docNo').change(function(){
+    var id = $(this).val();
+    var url = '{{ route("getDetails", ":id") }}';
+    url = url.replace(':id', id);
+
+    $.ajax({
+        url: url,
+        type: 'get',
+        dataType: 'json',
+        success: function(response){
+            if(response != null){
+
+                document.getElementById("oldsalary").value = response.salary;
+                document.getElementById("oldRate").value = response.rate;
+
+                $('#salary').val(response.salary+' '+response.currency);
+                $('#oldLevel').val(response.emp_level);
+                $('#oldPosition').val(response.position.name);
+            }
+        }
+    });
+});
+
+
+</script>
+
+
 @endpush

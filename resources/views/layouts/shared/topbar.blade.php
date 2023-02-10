@@ -1,5 +1,5 @@
 {{-- Main navbar --}}
-<div class="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10 bg-main">
+<div class="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10 bg-main " >
     <div class="container-fluid">
         <div class="d-flex d-lg-none me-2">
             <button type="button" class="navbar-toggler sidebar-mobile-main-toggle rounded-pill">
@@ -9,7 +9,7 @@
 
         <div class="navbar-brand flex-1 flex-lg-0">
             <a href="index.html" class="d-inline-flex align-items-center">
-                {{-- <img src="{{ asset('assets/images/logo_icon.svg') }}" alt=""> --}}
+                {{-- <img src="{{ asset('img/business_panel_header_bg.png') }}" alt=""  width="" height="300px"> --}}
                 {{-- <img src="{{ asset('assets/images/logo_text_light.svg') }}" class="d-none d-sm-inline-block h-16px ms-3" alt=""> --}}
             </a>
         </div>

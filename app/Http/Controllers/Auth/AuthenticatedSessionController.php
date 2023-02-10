@@ -50,9 +50,12 @@ class AuthenticatedSessionController extends Controller
 
         }else{
             $this->setPermissions(Auth::user()->emp_id);
-
+            $result=$this->dateDiffCalculate();
+            if($result >= 90){
+                return redirect('/change-password')->with('status', 'You password has expired');
+            }
             $request->session()->regenerate();
-
+            // dd(session()->all());
             if (session('pass_age') >= 90) {
 
                 return redirect('/change-password')->with('status', 'You password has expired');
@@ -116,27 +119,17 @@ class AuthenticatedSessionController extends Controller
 		// if(count($row)>0) {
 		// 	return $row;
 		// }
+    //    $res= $this->dateDiffCalculate($data);
+    //    return $res;
 
         $data = $data[0];
         $data = json_encode($data);
         $data = json_decode($data, true);
-
-        $from = $this->password_age(Auth::user()->emp_id);
-
-        $from = date_create($from);
-
-        $today=date_create(date('Y-m-d'));
-
-        $diff=date_diff($from, $today);
-
-        $accrued = $diff->format("%a%") + 1;
-
-
-
-
+        $res = $this->dateDiffCalculate();
+        
 
         if($data) {
-            session(['pass_age' => $accrued]);
+            session(['pass_age' => $res]);
             // session(['logo' =>$this->flexperformance_model->logo()]);
             session(['id' =>$data['id']]);
             session(['emp_id' =>$data['emp_id']]);
@@ -259,14 +252,12 @@ class AuthenticatedSessionController extends Controller
     public function password_age($empID)
 	{
 
-        $query = DB::table('user_passwords')
-        ->select('time')
-        ->where('empID', Auth::user()->emp_id)
-        ->limit(1)
-        ->orderBy('id', 'desc')
-        ->first();
+        $query = DB::table('user_passwords')->select('time')->where('empID', Auth::user()->emp_id)
+            ->limit(1)
+            ->orderBy('id', 'desc')
+            ->first();
 
-        return $query->time;
+            return $query->time;
 	}
 
     function getCurrentStrategy()
@@ -298,5 +289,18 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return  redirect('/');
+    }
+
+    public function dateDiffCalculate(){
+        $from = $this->password_age(Auth::user()->emp_id);
+
+        $from = date_create($from);
+
+        $today=date_create(date('Y-m-d'));
+
+        $diff=date_diff($from, $today);
+
+        $accrued = $diff->format("%a%") + 1;
+        return $accrued;
     }
 }

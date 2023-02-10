@@ -3881,7 +3881,7 @@ class GeneralController extends Controller
         //echo "Record Added";
         session('note', "<p class='alert alert-success text-center'>Record Added Successifully</p>");
 
-        $reload = '/flex/userprofile/?id=' .base64_encode($id);
+        $reload = '/flex/userprofile/' .base64_encode($id);
 
         return redirect($reload);
     }

@@ -9,51 +9,12 @@
 @section('content')
 
 <div class="mb-3">
-    <h4 class="text-main" align="center">Remarks</h4>
+    <h4 class="text-warning" >Overtime Remarks</h4>
 </div>
 
 <div class="row">
-    <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a href="{{ url('/flex/financial_group')}}" class="nav-link "
-                aria-selected="false" role="tab" tabindex="-1">
-                <i class="ph-list me-2"></i>
-                Packages
-            </a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a href="{{ url('/flex/allowance_overtime')}}" class="nav-link active show" aria-selected="false" role="tab"
-                tabindex="-1">
-                <i class="ph-list me-2"></i>
-                Overtime
-            </a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a href="{{ url('/flex/allowance')}}" class="nav-link"
-                aria-selected="false" role="tab" tabindex="-1">
-                <i class="ph-list me-2"></i>
-                Allowance
-            </a>
-        </li>
-
-
-        <li class="nav-item" role="presentation">
-            <a href="{{ url('/flex/statutory_deductions')}}" class="nav-link "
-                aria-selected="false" role="tab" tabindex="-1">
-                <i class="ph-list me-2"></i>
-                Statutory Deductions
-            </a>
-        </li>
-        <li class="nav-item" role="presentation">
-          <a href="{{ url('/flex/non_statutory_deductions')}}" class="nav-link "
-              aria-selected="false" role="tab" tabindex="-1">
-              <i class="ph-list me-2"></i>
-              Non Statutory Deductions
-          </a>
-      </li>
-
-    </ul>
-    <div class="col-md-6 offset-3">
+   
+    <div class="col-md-10 mx-auto ">
         <div class="card">
             <div class="card-header">
                 <?php if ( $mode == 1 ){ ?>
@@ -85,7 +46,7 @@
                         <div class="">
                             <!--<a href="#" class="btn btn-sm btn-main">Add files</a>-->
                             <?php if( $commit ==0 ){ ?>
-                                <button type ="submit" name ="apply" class="btn btn-sm btn-main">COMMENT AND COMMIT</button>
+                                <button type ="submit" name ="apply" class="btn btn-sm btn-main">Submit Remark</button>
                             <?php } ?>
                         </div>
 

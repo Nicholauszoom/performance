@@ -23,7 +23,7 @@
 
      {{-- start of view employee payslip--}}
     <div class="card-header">
-        <h4 class="text-muted">Employee Payslip</h4>
+        <h4 class="text-warning">Employee Payslip</h4>
     </div>
    
     @can('view-employee-payslip')
@@ -95,7 +95,7 @@
                         <div>
                             <label class="form-check form-check-inline">
                                 <input type="radio" class="form-check-input" name="type" value="1" checked>
-                                <span class="form-check-label">Staff</span>
+                                <span class="form-check-label">Employee</span>
                             </label>
 
                             <label class="form-check form-check-inline">
@@ -116,12 +116,13 @@
             </div>
         </form>
     </div>
+    <hr>
     @endcan
     {{-- / --}}
 
     {{-- start of payslip mail delivery --}}
     <div class="card-header">
-        <h4 class="text-muted">Payslip Mail Delivery List</h4>
+        <h4 class="text-warning">Payslip Mail Delivery List</h4>
     </div>
 
     <table id="datatable" class="table datatable-basic table-bordered">
@@ -147,7 +148,7 @@
                     <td>
                         <?php if($row->state==1 || $row->state==2 ){   ?>
 
-                            <span class="badge bg-warning">PENDING</span><br>
+                            <span class="badge bg-pending">PENDING</span><br>
 
                         <?php if(!$row->pay_checklist==1){ ?>
                             <script>   setTimeout(function(){
@@ -163,7 +164,7 @@
                     </td>
                     <td>
                         <?php if($row->email_status==0){ ?>
-                            <span class="badge bg-warning">NOT SENT</span><br>
+                            <span class="badge bg-pending">NOT SENT</span><br>
                         <?php } else { ?>
                             <span class="badge bg-success">SENT</span><br>
                         <?php  } ?>
@@ -194,7 +195,7 @@
 
                             {{-- view payroll details button --}}
                             <a href="<?php echo url('flex/payroll/payroll_info/?pdate='.base64_encode($row->payroll_date));?>" title="Info and Details" class="me-2">
-                                <button class="btn bg-secondary text-white btn-xs"> <i class="ph-info"></i></button>
+                                <button class="btn bg-main text-white btn-xs"> <i class="ph-info"></i></button>
                             </a>
                             {{-- / --}}
 
@@ -202,7 +203,7 @@
                                 <?php if($row->pay_checklist==1){ ?>
                                     {{-- print report button --}}
                                     <a href ="<?php echo  url(''); ?>/flex/reports/payroll_report/?pdate=<?php echo base64_encode($row->payroll_date); ?>" target = "blank" title="Print Report" class="me-2">
-                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-printer"></i></button>
+                                        <button class="btn bg-pending text-white btn-xs"> <i class="ph-printer"></i></button>
                                     </a>
                                     {{-- / --}}
                                 <?php } else {  ?>
@@ -218,7 +219,7 @@
                                     {{-- send payslip mail button --}}
                                     @can('mail-payroll')
                                     <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
-                                         <button class="btn bg-secondary text-white btn-xs"> <i class="ph-envelope"></i></button>
+                                         <button class="btn bg-main text-white btn-xs"> <i class="ph-envelope"></i></button>
                                     </a>
                                     @endcan
                                     {{-- / --}}

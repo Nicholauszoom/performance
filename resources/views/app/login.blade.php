@@ -21,6 +21,7 @@
     </style>
 </head>
 <body>
+    
     <div class="registration-form center-box">
         <?php echo form_open('base_controller/login'); ?>   
                

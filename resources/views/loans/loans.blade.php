@@ -18,7 +18,7 @@
                     <div class="card">
                         <div class="card-header border-0 shadow-none">
                             <div class="d-flex justify-content-between align-itens-center">
-                                <h5 class="h5 text-muted">All Bank Loans</h5>
+                                <h5 class="h5 text-warning">All Bank Loans</h5>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">

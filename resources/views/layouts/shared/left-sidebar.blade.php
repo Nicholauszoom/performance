@@ -3,7 +3,10 @@
     <div class="sidebar-content">
 
         <div class="sidebar-section">
-            <div class="sidebar-section-body d-flex justify-content-center">
+            <div class="p-2 my-2">
+                <img src="{{  asset('img/logo.png'); }}" class="img-fluid" alt="">
+            </div>
+            {{-- <div class="sidebar-section-body d-flex justify-content-center">
                 <h5 class="sidebar-resize-hide flex-grow-1 my-auto text-muted"></h5>
 
                 <div>
@@ -17,12 +20,14 @@
                         <i class="ph-x"></i>
                     </button>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         {{-- {{ request()->routeIs('dashboard.index') ? 'active' : null }} --}}
 
         <div class="sidebar-section">
+        
+
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
                 @can('view-dashboard')
                 <li class="nav-item">
@@ -134,14 +139,14 @@
                 {{-- start of view payroll dropdown --}}
                 @can('view-payroll-management')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.financial_group') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-calculator"></i>
                         <span>Payroll Management</span>
                     </a>
 
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
                             {{-- start of payroll link --}}
                             @can('view-payroll')
                             <li class="nav-item"><a
@@ -157,6 +162,11 @@
                                     class="nav-link {{ request()->routeIs('payroll.employee_payslip') ? 'active' : null }}"
                                     href="{{ route('payroll.employee_payslip') }}"> Payslip </a></li>
                             @endcan
+
+                            <li class="nav-item"><a
+                                class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"
+                                href="{{ route('flex.financial_group') }}">Payroll inputs </a></li>
+
                             {{-- / --}}
 
                             {{-- start of incentives link --}}
@@ -172,7 +182,7 @@
                         @can('view-pending-payments')
                         <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
-                                href="{{ route('flex.approved_financial_payments') }}">Pending Payments </a></li>
+                                href="{{ route('flex.approved_financial_payments') }}">Payroll Approves </a></li>
                         @endcan
                         {{-- / --}}
 
@@ -202,7 +212,7 @@
                         </li>
 
 
-                                
+
                         {{--  start of unpaid leaves link --}}
                         @can('view-unpaid-leaves')
                         <li class="nav-item ">
@@ -311,7 +321,7 @@
                @endcan
 {{-- @can('view-setting') --}}
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.role')|| request()->routeIs('flex.email-notifications')|| request()->routeIs('flex.holidays') || request()->routeIs('flex.permissions') || request()->routeIs('role') || request()->routeIs('flex.financial_group') || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.role')|| request()->routeIs('flex.email-notifications')|| request()->routeIs('flex.holidays') || request()->routeIs('flex.permissions') || request()->routeIs('role')  || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-gear-six"></i>
                         <span>Settings</span>
@@ -324,9 +334,7 @@
                                     class="nav-link {{ request()->routeIs('flex.role') ? 'active' : null }}"
                                     href="{{ route('flex.role') }}">Roles and Groups</a></li> --}}
                         @endif
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"
-                                href="{{ route('flex.financial_group') }}">Financial Settings</a></li>
+
 
 
 
@@ -393,7 +401,7 @@
 
 
 
-               
+
 
 
 
