@@ -416,9 +416,9 @@ class ReportController extends Controller
 
     function get_payroll_inputs(Request $request){
 
-      $data['employees'] = $this->reports_model->get_payroll_inputs($request->empID);
+      $data = $this->reports_model->get_payroll_inputs($request->empID);
 
-      return json_encode($data);
+      echo json_encode($data);
     }
 
     function pension(Request $request)
