@@ -359,7 +359,7 @@
 
                         <li class=" nav-item "><a
                                 class="nav-link  {{ request()->routeIs('users') ? 'active' : null }}"
-                                href="{{ url('users') }}">{{ __('user') }}
+                                href="{{ url('users') }}">{{ __('User') }}
                                 Management</a>
                         </li>
                         <li class="nav-item"><a
