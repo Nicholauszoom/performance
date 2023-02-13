@@ -242,12 +242,13 @@ elseif($nature == 7)
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day=$interval->days;
-        // $month=$interval->m->format('%m months');
+        // $working_month=$interval->format('%months');
 
+// dd($interval);
         // For Redirection Url
         $url = redirect('flex/attendance/leave');
 
-        if($day<336)
+        if($day <= 365)
         {
 
             //  For Checking sub Category
@@ -338,6 +339,7 @@ elseif($nature == 7)
                 else
                 {
 
+                  
                     $paternity=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->first();
                     if ( $paternity) {
                       $d1 = $paternity->created_at;
@@ -346,26 +348,33 @@ elseif($nature == 7)
                       $range=$interval->days;
 
                       // dd($total_leave_days);
-                      // $month=$interval->m->format('%m months');
-                      if ($day <= (28*4) ) {
-                        if($range <= (28*4))
+                      $month=$interval->format('%m months');
+                      if ($month <= 4 ) {
+                        $max_days=7;
+                        if($total_leave_days < $max_days)
                         {
-                          dd('Maximum 7 days');
+                          if($different_days<$max_days)
+                          {
+                            dd('wait');
+                            $leaves->days = $different_days;
+                          }
+                          else
+                          {
+                            dd('Maximum 7 days');
+                          }
+                         
                         }
                         else
                         {
-                          $max_days=10;
-                          if($total_leave_days >  $max_days)
-                          {
-                            dd('Maximum 10 days');
-                          }
-                          
-                        }
+                          dd('All leave days are used up!');
+                      
                         
-                      }
+                        }
+
+                    }
                       else
                       {
-
+                        
                         $leaves->days = $different_days;
                         dd('less than 4 months');
                       }
@@ -445,7 +454,8 @@ elseif($nature == 7)
                     if ($month <= 4 ) {
             
                         $max_days=7;
-                        if($total_leave_days < $max_days)
+                      
+                        if($total_leave_days <= $max_days)
                         {
                           if($different_days<$max_days)
                           {
@@ -457,9 +467,13 @@ elseif($nature == 7)
                           }
                          
                         }
+                        // case All Paternity days have been used up
                         else
                         {
-                          dd('All leave days are used up!');
+
+                          $excess=$total_leave_days-$max_days;
+                          // dd($excess);
+                          dd('You requested for '.$excess.' extra days!');
                         }
                         
                       }
@@ -467,8 +481,26 @@ elseif($nature == 7)
                     else
                     {
                       $max_days=10;
-                      $leaves->days = $different_days;
-                      dd('less than 4 months');
+                      if($total_leave_days <= $max_days)
+                      {
+                        if($different_days<$max_days)
+                        {
+                          $leaves->days = $different_days;
+                        }
+                        else
+                        {
+                          $leaves->days = $max_days;
+                        }
+                       
+                      }
+                      // case All Paternity days have been used up
+                      else
+                      {
+
+                        $excess=$total_leave_days-$max_days;
+                        // dd($excess);
+                        dd('You requested for '.$excess.' extra days!');
+                      }
                     }
                   }
                   else
