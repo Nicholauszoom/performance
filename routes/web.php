@@ -1030,6 +1030,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/get_payroll_temp_summary','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
         Route::any('/get_payroll_temp_summary1','get_payroll_temp_summary1')->name('reports.get_payroll_temp_summary1');
         Route::any('/payroll_inputs','payroll_inputs')->name('reports.payroll_inputs');
+        Route::any('/get_payroll_inputs','get_payroll_inputs')->name('reports.get_payroll_inputs');
+
 
 
 
