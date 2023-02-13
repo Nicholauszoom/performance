@@ -12,7 +12,7 @@
 @section('content')
 
 <div class="mb-3">
-    <h6 class="mb-0">
+    <h6 class="mb-0 text-main">
         User Registration
     </h6>
     <span class="text-muted d-block">All the required fields need to be filled</span>
@@ -23,9 +23,9 @@
     method="POST"
 >
     @csrf
-    <div class="card">
+    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
         <div class="card-header">
-            <h5 class="mb-0 text-muted">User Details</h5>
+            <h5 class="mb-0 text-warning">User Details</h5>
         </div>
 
         <div class="card-body">
