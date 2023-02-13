@@ -416,7 +416,12 @@ class ReportController extends Controller
 
     function get_payroll_inputs(Request $request){
 
-      $data = $this->reports_model->get_payroll_inputs($request->empID);
+      if($request->nature == 1)
+      $data = $this->reports_model->get_payroll_inputs_before_payroll($request->empID);
+      else
+      $data = $this->reports_model->get_payroll_inputs_after_payroll($request->empID);
+
+
 
       echo json_encode($data);
     }
