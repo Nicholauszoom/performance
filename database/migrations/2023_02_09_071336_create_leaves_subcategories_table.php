@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('category_id');
             $table->string('name');
+            $table->integer('working_days');
             $table->integer('max_days');
             $table->integer('sex');
             // $table->integer('required_days');

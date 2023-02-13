@@ -74,14 +74,15 @@
                   </select>
       
         </div>
-
+        @if($days<336)
         <div class="col-6 form-group" >
           <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category</label>
           <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
             <option value="0">--Select Sub Nature --</option>
           </select>
+        </div>
+        @endif
 
-      </div>
         <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address
           </label>
@@ -194,8 +195,9 @@
 
               <td>
                 <p>Nature :<b> <?php echo $row->type->type; ?></b><br>
-                @if($row->sub_category>0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>@endif
-                </p>
+                @if($row->sub_category>0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
+                @endif
+              </p>
               </td>
               <td><?php echo $row->reason; ?></td>
 
