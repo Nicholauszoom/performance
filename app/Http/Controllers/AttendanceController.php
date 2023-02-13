@@ -439,17 +439,27 @@ elseif($nature == 7)
                   $d1 = $paternity->created_at;
                   $d2 = new DateTime();
                   $interval = $d2->diff($d1);
-                  $range=$interval->days;
-
                   
-                  $month=$interval->format('%m months');
-                  dd($month);
-                    if ($range <= 112 ) {
+                  $month=$interval->format('%m');
+
+                    if ($month <= 4 ) {
             
                         $max_days=7;
-                        if($total_leave_days >  $max_days)
+                        if($total_leave_days < $max_days)
                         {
-                          dd('Maximum 10 days');
+                          if($different_days<$max_days)
+                          {
+                            $leaves->days = $different_days;
+                          }
+                          else
+                          {
+                            dd('Maximum 7 days');
+                          }
+                         
+                        }
+                        else
+                        {
+                          dd('All leave days are used up!');
                         }
                         
                       }
