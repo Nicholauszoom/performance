@@ -3,10 +3,12 @@
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/components/tables/datatables/extensions/buttons.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/datatables_extension_buttons_excel.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
 
 @section('content')
@@ -32,15 +34,52 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <hr>
-                    <a href="{{ route('reports.get_payroll_temp_summary', ['date' => $payrollMonth, 'type' => 2]) }}"
-                        target="blank">
-                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
-                    </a>
+                    <div class="d-flex offset-3">
+                        <div>
+                            <h5>Find Employee<h5>
+                        </div>
+                        <div class="px-4">
+                            <div class="mb-3">
+                                <select class="form-control select @error('emp_ID') is-invalid @enderror" id="emp_id"
+                                    name="emp_ID">
+                                    <option value=""> Select Employee </option>
+                                    @if (!empty($employees))
+                                        @foreach ($employees as $depart)
+                                            <option value="{{ $depart->emp_id }}">{{ $depart->fname }} {{ $depart->mname }}
+                                                {{ $depart->lname }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="px-4">
+                            <div class="mb-3">
+                                <select class="form-control select @error('emp_ID') is-invalid @enderror" id="payroll_no"
+                                    name="emp_ID">
+                                    <option value=""> Select Payroll umber </option>
+                                    @if (!empty($employees))
+                                        @foreach ($employees as $depart)
+                                            <option value="{{ $depart->emp_id }}">{{ $depart->fname }} {{ $depart->mname }}
+                                                {{ $depart->lname }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" style="font-size: 8px; font-weight:600;"
                         id="tabs-target-right" role="tablist">
+
                         <li class="nav-item" role="presentation">
-                            <a href="#permanent_payments" class="nav-link active show" data-bs-toggle="tab"
-                                aria-selected="false" role="tab" tabindex="-1">
+                            <a href="#basic_details" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
+                                role="tab" tabindex="-1">
+                                <i class="ph-list me-2"></i>
+                                Basic Info
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#permanent_payments" class="nav-link" data-bs-toggle="tab" aria-selected="false"
+                                role="tab" tabindex="-1">
                                 <i class="ph-list me-2"></i>
                                 Permanent Payments
                             </a>
@@ -84,8 +123,8 @@
 
 
                         <li class="nav-item" role="presentation">
-                            <a href="#pension_no_tax" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab"
-                                tabindex="-1">
+                            <a href="#pension_no_tax" class="nav-link" data-bs-toggle="tab" aria-selected="false"
+                                role="tab" tabindex="-1">
                                 <i class="ph-list me-2"></i>
                                 Pensionable but Not Taxable
                             </a>
@@ -99,123 +138,136 @@
                         </li>
 
                     </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div role="tabpanel" class="tab-pane active show" id="basic_details">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Basic Details</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="permanent_payments">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Permanent Payments</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="temporary_payments">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Tenporary Payments</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="deductions">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Deductions</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="company_pf">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Company PF</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tax_no_pension">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Taxable Not Pensionable</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="pension_no_tax">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Pensionable Not Taxable</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="no_tax_no_pension">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div
+                                    class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div class="tab-head py-2 px-2">
+                                        <h2 class="text-warning">Not Taxable Not Pentionable</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="tab-body">
+                                        oyaaaaaaaaaa
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
             </div>
-            <hr>
 
 
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="tab-content" id="myTabContent">
-                    <div role="tabpanel" class="tab-pane active show" id="permanent_payments">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Permanent Payments</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="temporary_payments">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Tenporary Payments</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="deductions">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Deductions</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="company_pf">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Company PF</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="tax_no_pension">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Taxable Not Pensionable</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="pension_no_tax">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Pensionable Not Taxable</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="no_tax_no_pension">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div
-                                class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
-                                <div class="tab-head py-2 px-2">
-                                    <h2 class="text-warning">Not Taxable Not Pentionable</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="tab-body">
-                                     oyaaaaaaaaaa
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
 
         </div>
@@ -304,7 +356,7 @@
                                 });
                                 setTimeout(function() { // wait for 2 secs(2)
                                     location
-                                .reload(); // then reload the div to clear the success notification
+                                        .reload(); // then reload the div to clear the success notification
                                 }, 1500);
                             } else {
                                 alert(
@@ -354,4 +406,41 @@
             // }
         }
     </script>
+
+    <script type="text/javascript">
+    $('#emp_id').change(function(e){
+
+        var empID  = document.getElementById("emp_id").value;
+        
+        //e.preventDefault();
+             $.ajax({
+                 url:"<?php echo  url(''); ?>/flex/reports/get_payroll_inputs",
+                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                 type:"post",
+                 data:{
+
+                    "empID" : empID,
+                 },
+
+             })
+        .done(function(data){
+            var data =  JSON.parse(data);
+
+             alert(data);
+
+            //  document.getElementById("leaveAllowance").value  =  data.leave_allowance;
+            //  document.getElementById("salaryEnrollment").value = data.employee_salary;
+            //  document.getElementById("employee_actual_salary").value = data.employee_actual_salary;
+
+
+
+
+
+        })
+        .fail(function(){
+     alert('Update Failed!! ...');
+        });
+
+    });
+</script>
 @endpush

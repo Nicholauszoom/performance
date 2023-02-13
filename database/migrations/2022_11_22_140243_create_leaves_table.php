@@ -29,6 +29,7 @@ class CreateLeavesTable extends Migration
             $table->string('recommended_by', 10)->nullable();
             $table->integer('sub_category')->nullable();
             $table->string('attachment')->default('');
+            $table->integer('remaining')->nullable();
             $table->timestamps();
         });
     }

@@ -319,7 +319,7 @@
                         </ul>
                     </li>
                @endcan
-{{-- @can('view-setting') --}}
+@can('view-setting')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.role')|| request()->routeIs('flex.email-notifications')|| request()->routeIs('flex.holidays') || request()->routeIs('flex.permissions') || request()->routeIs('role')  || request()->routeIs('flex.bank') || request()->routeIs('flex.audit_logs') || request()->routeIs('payroll.mailConfiguration') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -359,7 +359,7 @@
 
                         <li class=" nav-item "><a
                                 class="nav-link  {{ request()->routeIs('users') ? 'active' : null }}"
-                                href="{{ url('users') }}">{{ __('user') }}
+                                href="{{ url('users') }}">{{ __('User') }}
                                 Management</a>
                         </li>
                         <li class="nav-item"><a
@@ -390,7 +390,7 @@
                                 href="{{ route('payroll.mailConfiguration') }}"></i> Mail Configuration </a></li>
                     </ul>
                 </li>
-{{-- @endcan --}}
+@endcan
                 {{-- <li class="nav-item">
                     <a href="{{ route('flex.payrollLogs') }}"
                         class="nav-link {{ request()->routeIs('flex.payrollLogs') ? 'active' : null }}">
