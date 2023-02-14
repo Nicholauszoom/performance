@@ -22,7 +22,7 @@
      
     }
      </style>
-    <body >
+    <body class="bg-white">
 
         <div class="page-content">
             <div class="content-wrapper">
@@ -137,7 +137,14 @@
                 </div>
             </div>
         </div>
+        <div class="mb-2">
+            <img src="{{ asset('img/logo.png') }}" class=" float-end"  style="height:2.4em;width:16%;float-left;opacity:100%" alt="logo">
 
+          </div>
+          <div class="">
+            <img src="{{ asset('img/top.png') }}" class=" float-end"  style="height:3.5em;width:100%;float-left;opacity:100%" alt="logo">
+
+         </div>
     </body>
 
 </html>

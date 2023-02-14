@@ -197,6 +197,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Elibyy\TCPDF\ServiceProvider::class,
 
     ],
 
@@ -216,6 +217,7 @@ return [
         'SysHelpers' => App\Helpers\SysHelpers::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDF2' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class,
     ])->toArray(),
 
 ];

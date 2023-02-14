@@ -86,7 +86,7 @@
                     )}}
              </td>
              <td>
-                <span class="badge btn-main disabled">
+                <span class="badge bg-pending disabled">
                     {{ $item->status == '1' ? 'Terminated':'Pending' }}
                 </span>
 
