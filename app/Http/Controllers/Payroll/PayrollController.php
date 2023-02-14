@@ -51,7 +51,7 @@ class PayrollController extends Controller
 
                 $check = $this->payroll_model->payrollcheck($payroll_month);
                 if ($check == 0) {
-                    $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
+                    $result = $this->payroll_model->initPayroll($today, $payroll_date,$payroll_month, $empID);
                     //notify the finance
 
 

@@ -437,20 +437,44 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
       return DB::select(DB::raw($query));
 
     }
-    function get_payroll_inputs($empID){
-        $query = "select e.emp_id,e.fname, e.mname, e.lname, e.gender, e.birthdate, e.nationality, e.email,
+    function get_payroll_inputs_before_payroll($empID){
+        $query = "select e.emp_id,e.fname,e.hire_date,e.cost_center,e.salary, e.mname, IF(e.state = 1,'Active','InActive') as status, e.lname, e.gender, e.birthdate, e.nationality, e.email,
         d.name as department, p.name as position, b.name as branch, concat(el.fname,' ',el.mname,' ',el.lname) as line_manager, c.name as contract, e.salary,
         pf.name as pension, e.pf_membership_no as pension_number, e.account_no, e.mobile
         from employee e, department d, position p, branch b, employee el, contract c, pension_fund pf where e.department = d.id and e.position = p.id
         and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type and e.pension_fund = pf.id and e.state != 4 and e.emp_id = '".$empID."'";
-        $data['emploee']  =  DB::select(DB::raw($query));
 
-        $query = "SELECT al.name as NAME,al.Isrecursive as nature,(IF((SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '".$empID."') > 0,(SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '".$empID."'),0)) as amount from allowances al";
+        $row  =  DB::select(DB::raw($query));
+
+        $data['employee']  =  $row[0];
+
+        $query = "SELECT al.name as NAME,al.Isrecursive as nature,al.pensionable,al.taxable,(IF((SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '".$empID."') > 0,(SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '".$empID."'),0)) as amount from allowances al";
         $data['allowances']  =  DB::select(DB::raw($query));
 
         $query = "SELECT d.name as NAME,(IF((SELECT td.paid from temp_deduction_logs td where td.description = d.name and td.empID = '".$empID."') > 0,(SELECT td.paid from temp_deduction_logs td where td.description = d.name and td.empID = '".$empID."'),0)) as amount from deductions d";
         $data['deductions']  =  DB::select(DB::raw($query));
-        dd($data);
+       // dd($data);
+        return $data;
+
+    }
+
+    function get_payroll_inputs_after_payroll($empID){
+        $query = "select e.emp_id,e.fname,e.hire_date,e.cost_center,e.salary, e.mname, IF(e.state = 1,'Active','InActive') as status, e.lname, e.gender, e.birthdate, e.nationality, e.email,
+        d.name as department, p.name as position, b.name as branch, concat(el.fname,' ',el.mname,' ',el.lname) as line_manager, c.name as contract, e.salary,
+        pf.name as pension, e.pf_membership_no as pension_number, e.account_no, e.mobile
+        from employee e, department d, position p, branch b, employee el, contract c, pension_fund pf where e.department = d.id and e.position = p.id
+        and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type and e.pension_fund = pf.id and e.state != 4 and e.emp_id = '".$empID."'";
+
+        $row  =  DB::select(DB::raw($query));
+
+        $data['employee']  =  $row[0];
+
+        $query = "SELECT al.name as NAME,al.Isrecursive as nature,al.pensionable,al.taxable,(IF((SELECT tl.amount from allowance_logs tl where tl.description = al.name and tl.empID = '".$empID."') > 0,(SELECT tl.amount from allowance_logs tl where tl.description = al.name and tl.empID = '".$empID."'),0)) as amount from allowances al";
+        $data['allowances']  =  DB::select(DB::raw($query));
+
+        $query = "SELECT d.name as NAME,(IF((SELECT td.paid from deduction_logs td where td.description = d.name and td.empID = '".$empID."') > 0,(SELECT td.paid from deduction_logs td where td.description = d.name and td.empID = '".$empID."'),0)) as amount from deductions d";
+        $data['deductions']  =  DB::select(DB::raw($query));
+       // dd($data);
         return $data;
 
     }
@@ -546,8 +570,8 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     }
 
     function employee_pension($empID){
-        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no ,e.fname,e.mname,e.lname, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary, pl.allowances,pl.pension_employee,pl.payroll_date as payment_date, pl.pension_employer
- FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND pl.empID = '".$empID."'";
+        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no ,e.fname,e.mname,e.lname, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary, pl.allowances,pl.pension_employee,pl.receipt_no,pl.receipt_date,pl.payroll_date as payment_date, pl.pension_employer
+ FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND pl.empID = '".$empID."' GROUP BY years";
 
 
         return DB::select(DB::raw($query));
