@@ -569,8 +569,13 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
     }
 
+    function get_pension_years($empID){
+        $query = "SELECT DISTINCT years from payroll_logs where empID = '".$empID."'";
+        return DB::select(DB::raw($query));
+    }
+
     function employee_pension($empID){
-        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no ,e.fname,e.mname,e.lname, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary, pl.allowances,pl.pension_employee,pl.receipt_no,pl.receipt_date,pl.payroll_date as payment_date, pl.pension_employer
+        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no,e.emp_id,e.fname,e.mname,e.lname,e.hire_date, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, pl.salary as salary,pl.years, pl.allowances,pl.pension_employee,pl.receipt_no,pl.receipt_date,pl.payroll_date as payment_date,pl.salary, pl.pension_employer
  FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND pl.empID = '".$empID."' GROUP BY years";
 
 
