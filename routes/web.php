@@ -29,6 +29,7 @@ use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\Import\BankLoanController;
+use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -346,6 +347,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateloan','updateloan')->name('flex.updateloan');
         Route::any('/updateloan_info','updateloan_info')->name('flex.updateloan_info');
 
+    });
+
+    Route::prefix('flex/pension_receipt')->controller(PensionPayslipController::class)->group(function(){
+        Route::get('/index', 'index')->name('pension_receipt.index');
+        Route::get('/receipt_export', 'export')->name('pension_receipt.export');
+        Route::post('/receipt_import', 'import')->name('pension_receipt.import');
+        Route::get('/receipt_template', 'template')->name('pension_receipt.template');
     });
 
     //bank loans routes
