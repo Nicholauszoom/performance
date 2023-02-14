@@ -36,6 +36,7 @@
               <th>Department</th>
               <th>Location</th>
               <th class="text-center">Option</th>
+              <th ></th>
             </tr>
           </thead>
           <tbody>
@@ -47,7 +48,7 @@
               <td></td>
               <td> </td>
 
-              <td>
+              <td></td>
 
             </tr>
             @endforeach

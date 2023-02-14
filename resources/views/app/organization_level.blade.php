@@ -102,6 +102,7 @@
                                 @php if(session('mng_org')) @endphp
                                 <th>Option</th>
                                 <?php ?>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
