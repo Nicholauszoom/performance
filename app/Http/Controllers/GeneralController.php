@@ -3761,7 +3761,7 @@ class GeneralController extends Controller
             return view('auth.password-change');
         } else {
             $employee = EMPL::where('emp_id',session('emp_id'))->first();
-            if(!empty($employee->photo)){
+            if(empty($employee->photo)){
                 return redirect()->route('flex.userdata',base64_encode(session('emp_id')));
             }
 
