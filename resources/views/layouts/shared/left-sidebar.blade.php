@@ -194,7 +194,7 @@
             {{-- start of leave management dropdown --}}
             @can('view-leave')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.add_unpaid_leave')||request()->routeIs('attendance.leave') || request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'nav-item-expand nav-item-open' : null }}">
 
                     <a href="#" class="nav-link">
                         <i class="ph-calendar-check"></i>
@@ -202,7 +202,7 @@
                     </a>
 
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('attendance.leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.add_unpaid_leave')|| request()->routeIs('attendance.leave') || request()->routeIs('flex.unpaid_leave') || request()->routeIs('attendance.leavereport') ? 'show' : null }}">
                         @if (session('mng_attend'))
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ url('/flex/attendance/attendees') }}">Attendance</a></li> --}}
                         @endif
@@ -216,7 +216,7 @@
                         {{--  start of unpaid leaves link --}}
                         @can('view-unpaid-leaves')
                         <li class="nav-item ">
-                            <a class="nav-link {{ request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') ? 'active' : null }}"
+                            <a class="nav-link {{ request()->routeIs('flex.add_unpaid_leave')|| request()->routeIs('flex.end_unpaid_leave') || request()->routeIs('flex.save_unpaid_leave') || request()->routeIs('flex.add_unpaid_leave') || request()->routeIs('flex.unpaid_leave') ? 'active' : null }}"
                                 href="{{ route('flex.unpaid_leave') }}">Unpaid Leaves</a>
                         </li>
                     @endcan
@@ -232,16 +232,16 @@
 {{-- / --}}
 @can('view-loan')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('bank-loans') || request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-bank"></i>
                         <span>Loan Management</span>
                     </a>
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans')  ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('bank-loans') || request()->routeIs('flex.salary_advance') || request()->routeIs('flex.confirmed_loans')  ? 'show' : null }}">
                         @can('view-bank-loan')
                         <li class="nav-item"><a
-                                class="nav-link "
+                                class="nav-link {{ request()->routeIs('bank-loans') ? 'active' : null }}"
                                 href="{{ route('bank-loans') }}">Bank Loans</a></li>
                         @endcan
                         @can('view-loan')

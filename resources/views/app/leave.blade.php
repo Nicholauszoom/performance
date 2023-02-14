@@ -204,13 +204,13 @@
               <td><div >
                       <?php if ($row->status==0){ ?>
                       <div class="col-md-12">
-                      <span class="label label-default">SENT</span></div><?php }
+                      <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
                       elseif($row->status==1){?>
                       <div class="col-md-12">
-                      <span class="label label-info">RECOMMENDED</span></div><?php }
+                      <span class="label badge bg-info text-whites label-info">RECOMMENDED</span></div><?php }
                       elseif($row->status==2){  ?>
                       <div class="col-md-12">
-                      <span class="label label-success">APPROVED</span></div><?php }
+                      <span class="label label-success badge bg-success">APPROVED</span></div><?php }
                       elseif($row->status==3){?>
                       <div class="col-md-12">
                       <span class="label label-warning">HELD</span></div><?php }

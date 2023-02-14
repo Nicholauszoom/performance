@@ -133,7 +133,7 @@ class AttendanceController extends Controller
         $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
       $data['leave_types'] =LeaveType::all();
-      $data['employees'] =EMPL::all();
+      $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
 
       // For Working days
       $d1 = new DateTime (Auth::user()->hire_date);
