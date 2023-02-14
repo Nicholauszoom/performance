@@ -19,7 +19,7 @@
 <div class="card  border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h6 class="mb-0 text-muted">Unpaid Leave Employee List</h6>
+            <h5 class="mb-0 ">Unpaid Leave Employee List</h5>
 
                 {{-- start of add unpaid leave button --}}
                 @can('add-unpaid-leaves')

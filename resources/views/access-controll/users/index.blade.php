@@ -15,7 +15,7 @@
 
     <div class="card-body">
         <div class="d-flex justify-content-between">
-            <h5></h5>
+            <h5 class="text-warning"> User Management</h5>
 
             <a href="{{ route('users.create') }}" class="btn btn-main">ADD</a>
         </div>
@@ -27,7 +27,7 @@
                 <th>S/N</th>
                 <th>Full Name</th>
                 <th>Phone Number</th>
-                <th>User Name</th>
+                <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>

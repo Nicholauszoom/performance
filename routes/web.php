@@ -51,6 +51,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
 Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {

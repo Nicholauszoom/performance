@@ -3,6 +3,7 @@
 
 <head>
     <title>ABC Bank</title>
+    {{-- <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}"> --}}
 </head>
 <style type="text/css">
     * {
@@ -194,7 +195,7 @@
                     <td class="w-50">
                         <div class="box-text">
                             <img class="pl-lg" style="width: 133px;height:120px;"
-                                src="{{ asset('assets/images/logo-dif2.png') }}">
+                                {{-- src="{{ ('assets/images/logo-dif2.png') }}"> --}}
                                 <br>
 
                         </div>
@@ -204,7 +205,7 @@
 
                     <td>
                         <div class="box-text">
-                            <p style="text-align: center; font-weight:700">
+                            <p style="text-align: center; font-weight:700" class="text-danger">
                                 AFRICAN BANKING CORPORATION<br>
                                 P.O. BOX 31 ,DAR ES SALAAM
                                 <br><br><br><br>

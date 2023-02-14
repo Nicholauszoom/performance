@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60523b71118428433747e270e1388e9c",
+    "content-hash": "7346dcb78b8b899e599f57abf964c020",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -654,20 +654,20 @@
         },
         {
             "name": "elibyy/tcpdf-laravel",
-            "version": "9.3.0",
+            "version": "10.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elibyy/tcpdf-laravel.git",
-                "reference": "e73d3ea1ab9bce664667c03c2437230b4e5b4ad9"
+                "reference": "6ce7af84163ec9ba0d32bd034e88061df647fb77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elibyy/tcpdf-laravel/zipball/e73d3ea1ab9bce664667c03c2437230b4e5b4ad9",
-                "reference": "e73d3ea1ab9bce664667c03c2437230b4e5b4ad9",
+                "url": "https://api.github.com/repos/elibyy/tcpdf-laravel/zipball/6ce7af84163ec9ba0d32bd034e88061df647fb77",
+                "reference": "6ce7af84163ec9ba0d32bd034e88061df647fb77",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^6.0|^7.0|^8.0|^9.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0",
                 "tecnickcom/tcpdf": "6.2.*|6.3.*|6.4.*|6.5.*|6.6.*|dev-main"
             },
             "type": "library",
@@ -704,9 +704,9 @@
             ],
             "support": {
                 "issues": "https://github.com/elibyy/tcpdf-laravel/issues",
-                "source": "https://github.com/elibyy/tcpdf-laravel/tree/9.3.0"
+                "source": "https://github.com/elibyy/tcpdf-laravel/tree/10.0.0"
             },
-            "time": "2022-12-15T18:54:08+00:00"
+            "time": "2023-02-08T21:12:41+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
