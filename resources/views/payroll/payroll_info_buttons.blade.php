@@ -8,7 +8,7 @@
      {{-- payroll summary button 1--}}
      @if($payrollState != 1)
      @can('download-summary')
-     <a href="{{route('reports.get_payroll_temp_summary',['date'=>$payrollMonth,'type'=>1])}}" target="blank">
+     <a class="ms-3" href="{{route('reports.get_payroll_temp_summary',['date'=>$payrollMonth,'type'=>1])}}" target="blank">
          <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Summary</button>
      </a>
      @endcan

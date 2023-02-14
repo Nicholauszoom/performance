@@ -426,6 +426,16 @@ class ReportController extends Controller
       echo json_encode($data);
     }
 
+    function employee_pension(Request $request){
+        $id = $request->emp_id;
+        $data['employee_pension'] = $this->reports_model->employee_pension($id);
+        
+        $pdf = Pdf::loadView('reports.employee_pension',$data)->setPaper('a4', 'potrait');
+        return $pdf->download("employee_pension.pdf");
+
+
+    }
+
     function pension(Request $request)
     {
         $reportType = 1;
