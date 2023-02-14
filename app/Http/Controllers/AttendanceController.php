@@ -133,8 +133,13 @@ class AttendanceController extends Controller
         $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
       $data['leave_types'] =LeaveType::all();
-      $data['employees'] =EMPL::all();
+      $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
 
+      // For Working days
+      $d1 = new DateTime (Auth::user()->hire_date);
+      $d2 = new DateTime();
+      $interval = $d2->diff($d1);
+      $data['days']=$interval->days;
       $data['title'] = 'Leave';
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
       $data['leave_type'] = $this->attendance_model->leave_type();
@@ -210,11 +215,9 @@ elseif($nature == 7)
         $nature  = $request->nature;
         $empID  = Auth::user()->emp_id;
 
-        // dd($request->end);
-
         // Checking used leave days based on leave type and sub type
-        $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->sum('days');
-        
+        $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->sum('days');
+        $leave_balance=$leaves;
         // For Leave Nature days
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
@@ -229,6 +232,8 @@ elseif($nature == 7)
         $end_date = Carbon::createFromFormat('d-m-Y', $date2);
         $different_days = $start_date->diffInDays($end_date);
 
+
+       
         // For Total Leave days
          $total_remaining=$leaves+$different_days;
 
@@ -237,14 +242,14 @@ elseif($nature == 7)
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day=$interval->days;
-        // $month=$interval->m->format('%m months');
+        // $working_month=$interval->format('%months');
 
+// dd($interval);
         // For Redirection Url
         $url = redirect('flex/attendance/leave');
 
-        if($day>336)
+        if($day <= 365)
         {
-          // $text="mkongwe";
 
             //  For Checking sub Category
             if($request->sub_cat > 0){
@@ -264,11 +269,29 @@ elseif($nature == 7)
                 $leaves->end=$request->end;
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
-                $leaves->nature = $request->nature;
+                dd($different_days);
+                $leaves->days = $different_days;
+                if($request->nature!=5)
+                {
+                  $leaves->nature = $request->nature;
+                }
+                else
+                {
+                    dd("Iam 5 !");
+                }
                 $leaves->reason = $request->reason;
                 $leaves->sub_category = $request->sub_cat;
+                $leaves->remaining = $request->sub_cat;
                 $leaves->application_date = date('Y-m-d');
-                $leaves->attachment = $request->image;
+              // START
+              if ($request->hasfile('image')) {
+
+              $newImageName = $request->image->hashName();
+              $request->image->move(public_path('storage/leaves'), $newImageName);
+              // $employee->photo = $newImageName;
+              $leaves->attachment =  $newImageName;
+              }
+             
           
                 $leaves->save();
 
@@ -279,88 +302,248 @@ elseif($nature == 7)
               //  Case has used up all days
               else
               {
-                // dd("zimeisha");
+
                 $msg="You have finished Your Leave Days";
 
                 return $url->with('msg', $msg);
               }
       
-              // if ($) {
-              //   # code...
-              // }
 
 
             }
 
             else
             {
-              $days=$different_days;
-              $total_leave_days=$leaves+$different_days;
-              // $maximum=$sub->max_days;
-              // Case hasnt used all days
-              if ($total_leave_days < $max_leave_days) {
-              $leaves=new Leaves();
-              $empID=Auth::user()->emp_id;
-              $leaves->empID = $empID;
-              $leaves->start = $request->start;
-              $leaves->end=$request->end;
-              $leaves->leave_address=$request->address;
-              $leaves->mobile = $request->mobile;
-              $leaves->nature = $request->nature;
-              $leaves->reason = $request->reason;
-              $leaves->sub_category = $request->sub_cat;
-              $leaves->application_date = date('Y-m-d');
-              $leaves->attachment = $request->image;
-        
-              $leaves->save();
+              // $days=$different_days;
 
-              $msg="Leave Request  Has been Requested Successfully!";
+              $total_leave_days=$leaves+$different_days;
+
+              if($total_leave_days<$max_leave_days)
+              {
+                $remaining=$max_leave_days-($leave_balance+$different_days);
+
+                // dd($leave_balance);
+                $leaves=new Leaves();
+                $empID=Auth::user()->emp_id;
+                $leaves->empID = $empID;
+                $leaves->start = $request->start;
+                $leaves->end=$request->end;
+                $leaves->leave_address=$request->address;
+                $leaves->mobile = $request->mobile;
+                $leaves->nature = $request->nature;
+                if($request->nature != 5)
+                {
+                 
+                  $leaves->days = $different_days;
+                }
+                else
+                {
+
+                  
+                    $paternity=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->first();
+                    if ( $paternity) {
+                      $d1 = $paternity->created_at;
+                      $d2 = new DateTime();
+                      $interval = $d2->diff($d1);
+                      $range=$interval->days;
+
+                      // dd($total_leave_days);
+                      $month=$interval->format('%m months');
+                      if ($month <= 4 ) {
+                        $max_days=7;
+                        if($total_leave_days < $max_days)
+                        {
+                          if($different_days<$max_days)
+                          {
+                            dd('wait');
+                            $leaves->days = $different_days;
+                          }
+                          else
+                          {
+                            dd('Maximum 7 days');
+                          }
+                         
+                        }
+                        else
+                        {
+                          dd('All leave days are used up!');
+                      
+                        
+                        }
+
+                    }
+                      else
+                      {
+                        
+                        $leaves->days = $different_days;
+                        dd('less than 4 months');
+                      }
+                    }
+                    else
+                    {
+                      $leaves->days = $different_days;
+                    }
+                
+                }
+                $leaves->reason = $request->reason;
+                $leaves->remaining = $remaining;
+              
+                $leaves->sub_category = $request->sub_cat;
+                $leaves->application_date = date('Y-m-d');
+                 // START
+                if ($request->hasfile('image')) {
+
+                  $newImageName = $request->image->hashName();
+                  $request->image->move(public_path('storage/leaves'), $newImageName);
+                  // $employee->photo = $newImageName;
+                  $leaves->attachment =  $newImageName;
+                }
+                 
+          
+                $leaves->save();
+                           
+              $msg="Request is submitted successfully!";
+              return $url->with('msg', $msg);
+              }
+              else
+              {
+              $msg="Sorry, You have finished your leave days!";
               return $url->with('msg', $msg);
 
-
-              // $msg="You Have Successfully Requested ".$days." Leave days.";
-
-              // return redirect('flex/attendance/leave')->with('msg', $msg);
+              }
 
             }
 
-            else{
-              dd('failed');
+        }
+        else 
+        {
+
+          
+          $total_leave_days=$leaves+$different_days;
+
+          if($total_leave_days<$max_leave_days)
+          {
+            $remaining=$max_leave_days-($leave_balance+$different_days);
+
+            // dd($leave_balance);
+            $leaves=new Leaves();
+            $empID=Auth::user()->emp_id;
+            $leaves->empID = $empID;
+            $leaves->start = $request->start;
+            $leaves->end=$request->end;
+            $leaves->leave_address=$request->address;
+            $leaves->mobile = $request->mobile;
+            $leaves->nature = $request->nature;
+            if($request->nature != 5)
+            {
+             
+              $leaves->days = $different_days;
             }
+            else
+            {
+
+                $paternity=Leaves::where('empID',$empID)->where('nature',5)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->orderBy('created_at','desc')->first();
+                // dd($paternity);
+                if ( $paternity) {
+                  $d1 = $paternity->created_at;
+                  $d2 = new DateTime();
+                  $interval = $d2->diff($d1);
+                  
+                  $month=$interval->format('%m');
+
+                    if ($month <= 4 ) {
+            
+                        $max_days=7;
+                      
+                        if($total_leave_days <= $max_days)
+                        {
+                          if($different_days<$max_days)
+                          {
+                            $leaves->days = $different_days;
+                          }
+                          else
+                          {
+                            dd('Maximum 7 days');
+                          }
+                         
+                        }
+                        // case All Paternity days have been used up
+                        else
+                        {
+
+                          $excess=$total_leave_days-$max_days;
+                          // dd($excess);
+                          dd('You requested for '.$excess.' extra days!');
+                        }
+                        
+                      }
+                      
+                    else
+                    {
+                      $max_days=10;
+                      if($total_leave_days <= $max_days)
+                      {
+                        if($different_days<$max_days)
+                        {
+                          $leaves->days = $different_days;
+                        }
+                        else
+                        {
+                          $leaves->days = $max_days;
+                        }
+                       
+                      }
+                      // case All Paternity days have been used up
+                      else
+                      {
+
+                        $excess=$total_leave_days-$max_days;
+                        // dd($excess);
+                        dd('You requested for '.$excess.' extra days!');
+                      }
+                    }
+                  }
+                  else
+                  {
+                    // $max_days=10;
+                    $leaves->days = $different_days;
+                    dd('wait');
+                  }
+                }
+           
+            
+            
+            $leaves->reason = $request->reason;
+            $leaves->remaining = $remaining;
+          
+            $leaves->sub_category = $request->sub_cat;
+            $leaves->application_date = date('Y-m-d');
+             // START
+            if ($request->hasfile('image')) {
+
+              $newImageName = $request->image->hashName();
+              $request->image->move(public_path('storage/leaves'), $newImageName);
+              // $employee->photo = $newImageName;
+              $leaves->attachment =  $newImageName;
+            }
+             
+      
+            $leaves->save();
+                       
+          $msg="Request is submitted successfully!";
+          return $url->with('msg', $msg);
+          }
+          else
+          {
+          $msg="Sorry, You have finished your leave days!";
+          return $url->with('msg', $msg);
 
           }
-
-            }
-        else
-        {
-
-             //  For Checking sub Category
-
-        if($request->sub_cat!=null || $request->sub_cat !=''){
-
-                  // For Sub Cart
-        $sub_cat=$request->sub_cat;
-        $sub=LeaveSubType::where('id',$sub_cat)->first();
-            dd($sub->name);
+ 
+          
         }
+ 
 
-        else
-        {
-          $days=$different_days;
-
-        
-
-          $msg="You Have Successfully Requested ".$days." Leave days.";
-
-          return redirect('flex/attendance/leave')->with('msg', $msg);
-
-        }
-          // $text="njuka";
-        }
-        dd($text);
-
-     
-          //  dd( $total_remaining);
       // for Annual Leave
        if($nature == 1){
           $type="Annual";
@@ -376,9 +559,6 @@ elseif($nature == 7)
         elseif($nature == 3)
         {
           $type="Compassionate";
-
-          
-          // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
         
         }
         // For Maternity
@@ -401,23 +581,6 @@ elseif($nature == 7)
         
         }
 
-       
-
-            // For Balance checking
-            if($max_leave_days <= $total_remaining){
-              $extra=$leaves-$total_remaining ;
-              $balance="You have finished your leave days, and you need ".-1*($extra)." extra days.";
-              $msg="You have finished your ".$type. " leave days, and you need ".$extra." extra days.";
-    
-              return redirect('flex/attendance/leave')->with('msg', $msg);
-            } 
-            else
-            {
-              $balance=$max_leave_days-$leaves;
-            }
-            
-          $start=$request->image;
-          dd($balance);
 
 
       }

@@ -804,7 +804,7 @@
             <div class="row">
               <div class="text-center col-md-2 mx-auto" >
                 <img class="profile-user-img  img-circle"
-                     src="{{ asset('uploads/userprofile/' . $photo) }}"
+                     src="{{ asset('storage/profile/' . $photo) }}"
                      alt="User passport picture" width="100%" height="100px">
                      <br>
                      <small class="text-gray">
