@@ -29,6 +29,7 @@ use App\Http\Controllers\PerformanceController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\Import\BankLoanController;
+use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -51,6 +52,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
 Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
@@ -271,7 +273,7 @@ Route::middleware('auth')->group(function () {
             Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
             Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
             Route::any('/leave' ,'leave')->name('attendandance.leave');
-   
+
 
             Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
             Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
@@ -345,6 +347,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateloan','updateloan')->name('flex.updateloan');
         Route::any('/updateloan_info','updateloan_info')->name('flex.updateloan_info');
 
+    });
+
+    Route::prefix('flex/pension_receipt')->controller(PensionPayslipController::class)->group(function(){
+        Route::get('/index', 'index')->name('pension_receipt.index');
+        Route::get('/receipt_export', 'export')->name('pension_receipt.export');
+        Route::post('/receipt_import', 'import')->name('pension_receipt.import');
+        Route::get('/receipt_template', 'template')->name('pension_receipt.template');
     });
 
     //bank loans routes
@@ -1026,6 +1035,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
+        Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');
         Route::any('/payroll_report1','payroll_report1')->name('reports.payroll_report1');
         Route::any('/get_payroll_temp_summary','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
         Route::any('/get_payroll_temp_summary1','get_payroll_temp_summary1')->name('reports.get_payroll_temp_summary1');

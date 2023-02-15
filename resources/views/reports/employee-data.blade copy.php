@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Employee Biodata</title>
+        <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
+
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> --}}
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
 </head>
 
 <body>
@@ -102,7 +104,7 @@
         <div class="col-md-4 col-4">
                 <div class="row">
                 <div class="col-6 mx-auto">
-                    <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
+                    {{-- <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%"> --}}
 
                 </div>
                 <div class="col-12">
@@ -118,7 +120,7 @@
 
             <div class="card-img-actions d-inline-block float-end my-3">
                 {{-- rounded-circle --}}
-                  <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150px" height="150px" alt="">
+                  {{-- <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt=""> --}}
               </div>
 
         </div>
@@ -414,7 +416,7 @@
                                     <h5 style="border-bottom:4px solid black !important;">FAMILY DETAILS</h5>
 
                                     {{-- start of spouse details --}}
-                                    @if($spouse->count() >0 )
+                                    @if($spouse)
                                     <div class="col-md-12">
                                         
                                         <h5 class="">Spouse Details:</h5>

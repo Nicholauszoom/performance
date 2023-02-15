@@ -194,7 +194,7 @@
               echo $final."<br>From <b>".$dates."</b><br>To <b>".$datee."</b>";?></td>
 
               <td>
-                <p>Nature :<b> <?php echo $row->type->type; ?></b><br>
+                <p>Nature :<b> <?php echo $row->type->type; ?> Leave</b><br>
                 @if($row->sub_category>0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
                 @endif
               </p>
@@ -204,13 +204,13 @@
               <td><div >
                       <?php if ($row->status==0){ ?>
                       <div class="col-md-12">
-                      <span class="label label-default">SENT</span></div><?php }
+                      <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
                       elseif($row->status==1){?>
                       <div class="col-md-12">
-                      <span class="label label-info">RECOMMENDED</span></div><?php }
+                      <span class="label badge bg-info text-whites label-info">RECOMMENDED</span></div><?php }
                       elseif($row->status==2){  ?>
                       <div class="col-md-12">
-                      <span class="label label-success">APPROVED</span></div><?php }
+                      <span class="label label-success badge bg-success">APPROVED</span></div><?php }
                       elseif($row->status==3){?>
                       <div class="col-md-12">
                       <span class="label label-warning">HELD</span></div><?php }
@@ -226,7 +226,8 @@
               <td class="options-width d-flex">
                 {{-- start of cancel leave button --}}
               <?php if($row->status==0 || $row->status==3){ ?>
-              <a href="<?php echo url('flex/attendance/cancelLeave');?>/{{ $row->id }}"  title="cancel " class="me-2">
+                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                onclick="cancelRequest(<?php echo $row->id; ?>)">
                   <button  class="btn btn-danger btn-xs" ><i class="ph-x"></i></button></a>
               <?php } ?>
               {{-- / --}}
@@ -392,6 +393,139 @@
 
 
 @push('footer-script')
+    {{-- @include("app.includes.overtime_operations") --}}
+
+    <script>
+      
+        function approvePromotion(id) {
+
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Promote This Employee?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Confirm it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var requestid = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/attendance/cancelLeave') }}/" + requestid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+                        /*$('#status'+id).fadeOut('fast', function(){
+                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                           });
+                        $('#record'+id).fadeOut('fast', function(){
+                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                           });*/
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    })
+                    .fail(function() {
+                        alert('Request Cancel Failed!! ...');
+                    });
+                }
+            });
+
+        }
+
+
+
+        function cancelRequest(id) {
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Cancel This Leave Request ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var terminationid = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/attendance/cancelLeave') }}/" + terminationid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+
+                        $('#status' + id).fadeOut('fast', function() {
+                            $('#status' + id).fadeIn('fast').html(
+                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                                );
+                        });
+
+                        // alert('Request Cancelled Successifully!! ...');
+
+                        Swal.fire(
+                            'Cancelled!',
+                            'Leave Request Cancelled Successifully!!.',
+                            'success'
+                        )
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .fail(function() {
+                        Swal.fire(
+                            'Failed!',
+                            'Leave Request Cancellation Failed!! ....',
+                            'success'
+                        )
+
+                        alert('Leave Request Cancellation Failed!! ...');
+                    });
+                }
+            });
+
+            // if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
+
+            //     var overtimeid = id;
+
+            //     $.ajax({
+            //             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+            //         })
+            //         .done(function(data) {
+            //             $('#resultfeedOvertime').fadeOut('fast', function() {
+            //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
+            //             });
+
+            //             $('#status' + id).fadeOut('fast', function() {
+            //                 $('#status' + id).fadeIn('fast').html(
+            //                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+            //                     );
+            //             });
+
+            //             alert('Request Cancelled Successifully!! ...');
+
+            //             setTimeout(function() {
+            //                 location.reload();
+            //             }, 1000);
+            //         })
+            //         .fail(function() {
+            //             alert('Overtime Cancellation Failed!! ...');
+            //         });
+            // }
+        }
+    </script>
+
+
+
+ 
+
 
 @include('app.includes.leave_operations')
 

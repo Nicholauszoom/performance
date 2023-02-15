@@ -170,13 +170,13 @@ class Payroll extends Model {
     }
     public function initPayroll($dateToday, $payroll_date, $payroll_month, $empID) {
 
-
+        $year = date('Y',strtotime($payroll_date));
         $days = intval(date('t', strtotime($payroll_date)));
         $payroll_date = date($payroll_date);
         /// dd($payroll_date);
         //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
         //   DD(DB::select(DB::raw($query)));
-        DB::transaction(function () use ($dateToday, $payroll_date, $payroll_month, $empID, $days) {
+        DB::transaction(function () use ($dateToday, $payroll_date, $payroll_month, $empID, $days,$year) {
             $last_date = date("Y-m-t", strtotime($payroll_date));
             $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";
             DB::insert(DB::raw($query));
@@ -329,7 +329,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 	        wcf,
             rate,
             currency,
-	        payroll_date
+	        payroll_date,
+            years
 
 	        )
 
@@ -1242,7 +1243,9 @@ IF(
         e.rate as rate,
         e.currency AS currency,
 
-	     '" . $payroll_date . "' as payroll_date
+	     '" . $payroll_date . "' as payroll_date,
+
+	     '" . $year . "' as years
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
             DB::insert(DB::raw($query));
 
@@ -1252,12 +1255,13 @@ IF(
     }
     public function run_payroll($payroll_date, $payroll_month, $empID, $todate) {
 
+        $year = date('Y',strtotime($payroll_date));
         $days = intval(date('t', strtotime($payroll_date)));
         $payroll_date = date($payroll_date);
         /// dd($payroll_date);
         //   $query = "SELECT DATEDIFF('".$payroll_date."',e.hire_date) as datediff from employee e";
         //   DD(DB::select(DB::raw($query)));
-        DB::transaction(function () use ($payroll_date, $payroll_month, $empID, $todate, $days) {
+        DB::transaction(function () use ($payroll_date, $payroll_month, $empID, $todate, $days,$year) {
             $last_date = date("Y-m-t", strtotime($payroll_date));
             $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";
             DB::insert(DB::raw($query));
@@ -1408,7 +1412,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                 wcf,
                 rate,
                 currency,
-                payroll_date
+                payroll_date,
+                years
 
                 )
 
@@ -2410,7 +2415,8 @@ as gross,
              e.currency AS currency,
 
 
-             '" . $payroll_date . "' as payroll_date
+             '" . $payroll_date . "' as payroll_date,
+             '" . $year . "' as years
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
                 DB::insert(DB::raw($query));
             $query = " UPDATE payroll_months SET state = 0, appr_author = '" . $empID . "', appr_date = '" . $todate . "'  WHERE state = 1 ";

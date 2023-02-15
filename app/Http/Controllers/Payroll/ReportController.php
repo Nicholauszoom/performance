@@ -416,9 +416,25 @@ class ReportController extends Controller
 
     function get_payroll_inputs(Request $request){
 
-      $data['employees'] = $this->reports_model->get_payroll_inputs($request->empID);
+      if($request->nature == 1)
+      $data = $this->reports_model->get_payroll_inputs_before_payroll($request->empID);
+      else
+      $data = $this->reports_model->get_payroll_inputs_after_payroll($request->empID);
 
-      return json_encode($data);
+
+
+      echo json_encode($data);
+    }
+
+    function employee_pension(Request $request){
+        $id = $request->emp_id;
+        $data['employee_pension'] = $this->reports_model->employee_pension($id);
+        $data['years'] = $this->reports_model->get_pension_years($id);
+
+        $pdf = Pdf::loadView('reports.employee_pension',$data)->setPaper('a4', 'potrait');
+        return $pdf->download("employee_pension.pdf");
+
+
     }
 
     function pension(Request $request)
