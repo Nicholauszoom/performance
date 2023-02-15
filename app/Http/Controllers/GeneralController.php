@@ -9268,10 +9268,10 @@ class GeneralController extends Controller
             $data['parent'] = "Employee Profile";
 
             // return view('employee.userprofile', $data);
-            // $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
-            // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
-            // return $pdf->download('employee_biodata.pdf');
-            return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+            return $pdf->download('employee_biodata.pdf');
+            // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
         }
 
 
