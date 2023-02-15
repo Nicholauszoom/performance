@@ -53,7 +53,7 @@
     ?>
 
     <div class="mb-3">
-        <h5 class="text-muted">Employee Profile</h5>
+        <h5 class="text-warning">Employee Profile</h5>
     </div>
 
     <div class="row">

@@ -8509,6 +8509,7 @@ class GeneralController extends Controller
             $employee->fname = $request->fname;
             $employee->mname = $request->mname;
             $employee->lname = $request->lname;
+            $employee->mobile = $request->mobile;
             $employee->line_manager = $request->line_manager;
             $employee->job_title = $request->current_job;
             $employee->gender = $request->gender;
