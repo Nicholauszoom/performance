@@ -29,14 +29,15 @@
           </div>
 
         </div>
-        <table class="table datatable-basic">
+        <table id="datatable" class="table datatable-basic">
           <thead>
             <tr>
               <th>Name</th>
-              <th>Department</th>
-              <th>Location</th>
-              <th class="text-center">Option</th>
-              <th ></th>
+              <th>Code</th>
+              <th>Street</th>
+              <th>Region</th>
+              {{-- <th class="text-center">Option</th> --}}
+              {{-- <th ></th> --}}
             </tr>
           </thead>
           <tbody>
@@ -44,11 +45,11 @@
             @foreach($branch as $row)
             <tr>
               <td>{{ $row->name }}</td>
-              <td></td>
-              <td></td>
-              <td> </td>
+              <td>@if ( $row->code == null) - @else {{ $row->code }} @endif</td>
+              <td>@if ( $row->street == null) - @else {{ $row->street }} @endif</td>
+              <td>@if ( $row->region == null) - @else {{ $row->region }} @endif</td>
 
-              <td></td>
+              {{-- <td></td> --}}
 
             </tr>
             @endforeach
