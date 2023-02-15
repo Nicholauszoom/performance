@@ -30,7 +30,7 @@
 
 
             <div id="save_termination" class="" tabindex="-1">
-                <div class="modal-dialog modal-lg">
+                <div class="col-12 mx-auto p-2">
                     <div class="modal-content">
                         @if (session('status'))
                         <div class="alert alert-success" role="alert">

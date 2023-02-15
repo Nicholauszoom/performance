@@ -134,7 +134,7 @@
                                         <div class="card rounded-0 border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
+                                                <img class="" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -312,7 +312,7 @@
                                                         </div>
                                                         <div class="col">
                                                             <label for="">Marriage Date</label>
-                                                            <input type="date" class="" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
+                                                            <input type="date" class="form-control" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
 
                                                         </div>
                                                         <div class="col mb-2">
@@ -326,7 +326,7 @@
                                                         </div>
                                                         <div class="col">
                                                             <label>Divorced Date</label><br>
-                                                            <input type="date"  name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
+                                                            <input type="date" class="form-control" name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
                                                            <br>
                                                         </div>
                                                         <div class="col mb-2">
