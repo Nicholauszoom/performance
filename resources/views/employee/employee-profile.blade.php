@@ -397,7 +397,7 @@
 
                                                 <div class="form-group col-6 mb-2">
                                                     <label for="">Phone Number</label>
-                                                    <input type="text" name="phone" @if($details) value="{{ $employee->phone}}" @endif class="form-control">
+                                                    <input type="text" name="mobile" @if($employee)  value="<?php echo $mobile; ?>" @endif class="form-control">
                                                 </div>
                                             </div>
                                             <div class="card-footer ">

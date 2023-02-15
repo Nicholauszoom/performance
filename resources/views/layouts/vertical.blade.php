@@ -11,7 +11,7 @@
     body {
  background-image: url('{{ asset('img/bg.png') }}');
  /* background-color: #f1f1f1; */
- 
+ background-color: #ffff;
  background: cover;
  background-repeat: none;
 
