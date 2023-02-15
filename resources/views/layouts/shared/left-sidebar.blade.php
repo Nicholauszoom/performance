@@ -26,7 +26,7 @@
         {{-- {{ request()->routeIs('dashboard.index') ? 'active' : null }} --}}
 
         <div class="sidebar-section">
-        
+
 
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
                 @can('view-dashboard')
@@ -82,7 +82,7 @@
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.addTermination') || request()->routeIs('flex.termination')  ? 'active' : null }}"
                                     href="{{ route('flex.termination') }}">Employee Termination</a>
-                            </li> 
+                            </li>
                         @endcan
                         {{-- / --}}
 
@@ -139,14 +139,14 @@
                 {{-- start of view payroll dropdown --}}
                 @can('view-payroll-management')
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.financial_group') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ (request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments')) ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-calculator"></i>
                         <span>Payroll Management</span>
                     </a>
 
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
                             {{-- start of payroll link --}}
                             @can('view-payroll')
                             <li class="nav-item"><a
@@ -183,6 +183,12 @@
                         <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
                                 href="{{ route('flex.approved_financial_payments') }}">Payroll Approves </a></li>
+                        @endcan
+
+                        @can('view-payslip')
+                        <li class="nav-item"><a
+                                class="nav-link {{ request()->routeIs('pension_receipt.index') ? 'active' : null }}"
+                                href="{{ route('pension_receipt.index') }}"> Upload Pension Receipt </a></li>
                         @endcan
                         {{-- / --}}
 

@@ -78,47 +78,6 @@ class GeneralController extends Controller
         $this->payroll_model = new Payroll;
     }
 
-    //    public function index()
-    //       {
-    //       $list = $this->flexperformance_model->contract_expire_list();
-    //       foreach($list as $key){
-
-    //       $this->flexperformance_model->terminate_contract($key->IDs);
-    //       }
-    //     $data['title']="Login";
-    //     return view('app.login', $data);
-    //    }
-
-    //   public function password_check($str)
-    //   {
-    //      if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
-    //        return TRUE;
-    //      }
-    //      $this->form_validation->set_message('password_check', 'The Password Should Contain 8 Characters Length with Mix of Letters and Numbers');
-    //      return FALSE;
-    //   }
-
-    //   public function login_info() {
-
-    //     $empID = session('emp_id');
-    //     $data['info'] = $this->flexperformance_model->login_info($empID);
-    //     $data['title'] = "Login Credentials";
-    //     return view('app.update_login_info', $data);
-    //   }
-
-    //   function checkPassword($password){
-    //     $uppercase = preg_match('@[A-Z]@', $password);
-    //     $lowercase = preg_match('@[a-z]@', $password);
-    //     $number    = preg_match('@[0-9]@', $password);
-    //     $specialChars = preg_match('@[^\w]@', $password);
-    //     $res = false;
-    //     if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-    //       $res = false;
-    //       }else{
-    //         $res = true;
-    //     }
-    //     return $res;
-    // }
 
     public function update_login_info(Request $request)
     {
@@ -3801,6 +3760,10 @@ class GeneralController extends Controller
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
+            $employee = EMPL::where('emp_id',session('emp_id'))->first();
+            if(empty($employee->photo)){
+                return redirect()->route('flex.userdata',base64_encode(session('emp_id')));
+            }
 
             $data['parent'] = 'Dashboard';
 
@@ -7634,7 +7597,7 @@ class GeneralController extends Controller
 
         $i = 1;
         $employee=Auth::User()->id;
-    
+
         $role=UserRole::where('user_id',$employee)->first();
         $role_id=$role->role_id;
         $terminate=Approvals::where('process_name','Termination Approval')->first();
@@ -7669,7 +7632,7 @@ class GeneralController extends Controller
     }
 
 
-  
+
     // For Saving Termination
     public function saveTermination(Request $request)
     {
@@ -7849,10 +7812,10 @@ class GeneralController extends Controller
     // For Aprroving termination
     public function  approveTermination($id)
     {
-       
+
        $employee=Auth::User()->id;
-    
-    
+
+
 
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -7863,7 +7826,7 @@ class GeneralController extends Controller
        {
             $approval_id=$level->approval_id;
             $approval=Approvals::where('id',$approval_id)->first();
-            
+
             if ($approval->levels==$level->level_name) {
 
                 $termination=Termination::where('id',$id)->first();
@@ -7882,14 +7845,14 @@ class GeneralController extends Controller
                 $msg='Approved By '.$roles->name;
                 return redirect('flex/termination')->with('msg', $msg);
             }
-           
+
        }
        else
        {
             $msg="Failed To Terminate !";
             return redirect('flex/termination')->with('msg', $msg);
        }
-   
+
     }
 
 
@@ -7903,7 +7866,7 @@ class GeneralController extends Controller
         return redirect('flex/termination')->with('msg', 'Termination was Cancelled successfully !');
     }
 
-    //For Viewing Termination 
+    //For Viewing Termination
     public function viewTermination($id)
     {
         $termination = Termination::where('id', $id)->first();
@@ -7977,7 +7940,7 @@ class GeneralController extends Controller
         $promotions = Promotion::orderBy('created_at', 'desc')->get();
         $i = 1;
         $employee=Auth::User()->id;
-    
+
         $role=UserRole::where('user_id',$employee)->first();
         $role_id=$role->role_id;
         $terminate=Approvals::where('process_name','Promotion Approval')->first();
@@ -8062,7 +8025,7 @@ class GeneralController extends Controller
     // For Approve Promotion
     public function  approvePromotion($id)
     {
-       
+
        $employee=Auth::User()->id;
        $role=UserRole::where('user_id',$employee)->first();
        $role_id=$role->role_id;
@@ -8073,7 +8036,7 @@ class GeneralController extends Controller
        {
             $approval_id=$level->approval_id;
             $approval=Approvals::where('id',$approval_id)->first();
-            
+
             if ($approval->levels==$level->level_name) {
 
                 $promotion=Promotion::where('id',$id)->first();
@@ -8100,14 +8063,14 @@ class GeneralController extends Controller
                 $msg='Approved By '.$roles->name;
                 return redirect('flex/promotion')->with('msg', $msg);
             }
-           
+
        }
        else
        {
             $msg="Failed To Promote !";
             return redirect('flex/promotion')->with('msg', $msg);
        }
-   
+
     }
 
     // For Cancel Promotion
@@ -8175,12 +8138,12 @@ class GeneralController extends Controller
         $old->newLevel=$empl->emp_level;
         $old->created_by=Auth::user()->id;
         $old->action="incremented";
-    
+
         $old->save();
 
         SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $request->newSalary * $oldRate, 'Salary Increment');
 
-  
+
         $msg = "Employee Salary  Incremention has been requested successfully !";
         return redirect('flex/promotion')->with('msg', $msg);
     }
@@ -8440,7 +8403,7 @@ class GeneralController extends Controller
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
-        
+
 
         $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
 
@@ -9253,11 +9216,11 @@ class GeneralController extends Controller
         public function viewBiodata(Request $request)
         {
             $id = $request->emp_id;
-    
-    
+
+
             $extra = $request->input('extra');
             $data['employee'] = $this->flexperformance_model->userprofile($id);
-    
+
             // dd($data['employee'] );
             $data['kin'] = $this->flexperformance_model->getkin($id);
             $data['property'] = $this->flexperformance_model->getproperty($id);
@@ -9270,40 +9233,40 @@ class GeneralController extends Controller
             $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
             $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
             $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
-    
+
             $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
-    
+
             $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
             $data['skills_have'] = $this->flexperformance_model->skills_have($id);
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['title'] = "Profile";
             $empID = $id;
             $details = EmployeeDetail::where('employeeID', $empID)->first();
-    
+
             $emergency = EmergencyContact::where('employeeID', $empID)->first();
-    
+
             $children = EmployeeDependant::where('employeeID', $empID)->get();
-    
-    
+
+
             $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
-    
+
             $parents = EmployeeParent::where('employeeID', $empID)->get();
-    
+
             $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
-    
-    
+
+
             $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
-    
+
             $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
             $data['profile'] = EMPL::where('emp_id', $empID)->first();
-    
+
             $childs = EmployeeDependant::where('employeeID', $empID)->count();
             $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
-    
+
             $data['photo'] = "";
-    
+
             $data['parent'] = "Employee Profile";
-    
+
             // return view('employee.userprofile', $data);
             // $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
             // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');

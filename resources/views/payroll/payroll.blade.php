@@ -19,15 +19,6 @@
         $payrollList = $data['payrollList'];
         $pendingPayroll = $data['pendingPayroll'];
     @endphp
-
-<div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-    <div class="card-header border-0">
-            <h5 class="mb-0 text-warning">Payroll</h5>
-            <hr class="text-warning">
-        </div>
-
-        <div class="card-body">
-
             {{-- start of run payroll --}}
             @can('add-payroll')
             @if ($pendingPayroll == 0 && session('mng_paym'))
@@ -236,10 +227,6 @@
             {{-- @endcan --}}
             {{-- / --}}
 
-        </div>
-
-
-    </div>
 @endsection
 
 @push('footer-script')

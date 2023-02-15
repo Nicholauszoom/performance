@@ -684,16 +684,17 @@
                                 {{-- Pension --}}
                                 <div role="tabpanel" class="tab-pane " id="pension" aria-labelledby="permission-tab">
                                     <div class="card rounded-0 border-0 shadow-none">
-                                        <div class="card-header">
-                                            <h6 class="text-muted">Pension History</h6>
-                                            <hr>
-                                        </div>
-
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12 col-sm-12">
                                                 <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                                                     <div class="card-header border-0">
-                                                        <h6 class="text-muted">Summary</h6>
+                                                        <h6 class="text-muted">Pension Summary</h6>
+
+                                                        <a class="ms-3" href="{{ route('reports.employee_pension',['emp_id'=>$empID]) }}" target="blank">
+                                                            <button type="button" name="print" value="print" class="btn btn-main btn-sm">
+                                                                Print
+                                                            </button>
+                                                        </a>
                                                         <hr>
                                                     </div>
 

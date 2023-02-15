@@ -59,7 +59,8 @@
                                     <option value=""> Select Payroll umber </option>
                                     @if (!empty($employees))
                                         @foreach ($employees as $depart)
-                                            <option value="{{ $depart->emp_id }}">{{ $depart->fname }} {{ $depart->mname }}
+                                            <option value="{{ $depart->emp_id }}">{{ $depart->fname }}
+                                                {{ $depart->mname }}
                                                 {{ $depart->lname }}</option>
                                         @endforeach
                                     @endif
@@ -163,7 +164,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -178,7 +179,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -193,7 +194,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -208,7 +209,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -223,7 +224,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -238,7 +239,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -253,7 +254,7 @@
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
-                                        oyaaaaaaaaaa
+
 
                                     </div>
                                 </div>
@@ -408,39 +409,144 @@
     </script>
 
     <script type="text/javascript">
-    $('#emp_id').change(function(e){
+        $('#emp_id').change(function(e) {
 
-        var empID  = document.getElementById("emp_id").value;
-        
-        //e.preventDefault();
-             $.ajax({
-                 url:"<?php echo  url(''); ?>/flex/reports/get_payroll_inputs",
-                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                 type:"post",
-                 data:{
+            var empID = document.getElementById("emp_id").value;
 
-                    "empID" : empID,
-                 },
+            //e.preventDefault();
+            $.ajax({
+                    url: "<?php echo url(''); ?>/flex/reports/get_payroll_inputs",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "post",
+                    data: {
 
-             })
-        .done(function(data){
-            var data =  JSON.parse(data);
+                        "empID": empID,
+                    },
 
-             alert(data);
-
-            //  document.getElementById("leaveAllowance").value  =  data.leave_allowance;
-            //  document.getElementById("salaryEnrollment").value = data.employee_salary;
-            //  document.getElementById("employee_actual_salary").value = data.employee_actual_salary;
-
-
-
+                })
+                .done(function(data) {
+                      var data = JSON.parse(data);
+              //alert(data.deductions.length);
+                    //alert(data);
+                    setBasics(data.employee);
+                    setDeduction(data.deductions);
+                    setAllowance(data.allowances)
 
 
-        })
-        .fail(function(){
-     alert('Update Failed!! ...');
+
+
+
+
+
+                })
+                .fail(function() {
+                    alert(' Failed!! ...');
+
+                });
         });
 
-    });
-</script>
+        function setBasics(data){
+
+            var htmlString = "";
+           // htmlString += '<div class="row">';
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Payroll Number:</label><div class="col-lg-4"><input type="text" value="'+data.emp_id+'" class="form-control" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Basic Pay:</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data.salary +'" placeholder="0"></div></div>';
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">First Name:</label><div class="col-lg-4"><input type="text" value="'+data.fname+'" class="form-control" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Transport:</label><div class="col-lg-4"><input type="text" class="form-control" placeholder="0"></div></div>';
+
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Last Name:</label><div class="col-lg-4"><input type="text" value="'+data.lname+'" class="form-control" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">House Allowance:</label><div class="col-lg-4"><input type="text" class="form-control" placeholder="0"></div></div>';
+
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Category:</label><div class="col-lg-4"><input type="text" class="form-control"  placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Acting Allowance:</label><div class="col-lg-4"><input type="text" class="form-control" placeholder="0"></div></div>';
+
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Date of Emp:</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data.hire_date+'" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Other Payments:</label><div class="col-lg-4"><input type="text" class="form-control" placeholder="0"></div></div>';
+
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Department:</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data.department+'" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Company House:</label><div class="col-lg-4"><input type="text" class="form-control" placeholder="0"></div></div>';
+
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Cost Center:</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data.cost_center+'" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Company Hse Rent Amt:</label><div class="col-lg-4"><input type="text" class="form-control" placeholder="0"></div></div>';
+
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">Job Title:</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data.position +'" placeholder="0"></div><label class="col-lg-2 col-form-label text-lg-end">Employment Status:</label><div class="col-lg-4"><input type="text" value="'+data.status +'" class="form-control" placeholder="0"></div></div>';
+            document.getElementById("basic_details").innerHTML = htmlString;
+
+        }
+        function setAllowance(data){
+            //parmanent payments
+            var htmlString = "";
+            htmlString += '<div class="row mb-3">';
+            for(i = 0; i < data.length; i++) {
+            htmlString += '<label class="col-lg-2 col-form-label text-lg-end">'+data[i].NAME+':</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data[i].amount+'" placeholder="0"></div>';
+
+            }
+            htmlString +='</div>';
+
+            document.getElementById("permanent_payments").innerHTML = htmlString;
+            //temporary payments
+            var htmlString = "";
+            htmlString += '<div class="row mb-3">';
+            for(i = 0; i < data.length; i++) {
+            htmlString += '<label class="col-lg-2 col-form-label text-lg-end">'+data[i].NAME+':</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data[i].amount+'" placeholder="0"></div>';
+
+            }
+            htmlString +='</div>';
+
+            document.getElementById("temporary_payments").innerHTML = htmlString;
+
+            //taxable no pension
+            var htmlString = "";
+            htmlString += '<div class="row mb-3">';
+            for(i = 0; i < data.length; i++) {
+                if(data[i].taxable == "YES" && data[i].pensionable == "NO"){
+            htmlString += '<label class="col-lg-2 col-form-label text-lg-end">'+data[i].NAME+':</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data[i].amount+'" placeholder="0"></div>';
+             }
+            }
+            htmlString +='</div>';
+
+            document.getElementById("tax_no_pension").innerHTML = htmlString;
+
+             //pension no tax
+             var htmlString = "";
+            htmlString += '<div class="row mb-3">';
+            for(i = 0; i < data.length; i++) {
+                if(data[i].taxable == "NO" && data[i].pensionable == "YES"){
+            htmlString += '<label class="col-lg-2 col-form-label text-lg-end">'+data[i].NAME+':</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data[i].amount+'" placeholder="0"></div>';
+             }
+            }
+            htmlString +='</div>';
+
+            document.getElementById("pension_no_tax").innerHTML = htmlString;
+
+             //no pension no tax
+             var htmlString = "";
+            htmlString += '<div class="row mb-3">';
+            for(i = 0; i < data.length; i++) {
+                if(data[i].taxable == "NO" && data[i].pensionable == "NO"){
+            htmlString += '<label class="col-lg-2 col-form-label text-lg-end">'+data[i].NAME+':</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data[i].amount+'" placeholder="0"></div>';
+             }
+            }
+            htmlString +='</div>';
+
+            document.getElementById("no_tax_no_pension").innerHTML = htmlString;
+
+        }
+
+        function setDeduction(data){
+             var htmlString = "";
+           //  htmlString = "<div class="row mb-3">";
+            for(i = 0; i < data.length; i++) {
+            htmlString += '<div class="row mb-3"><label class="col-lg-2 col-form-label text-lg-end">'+data[i].NAME+':</label><div class="col-lg-4"><input type="text" class="form-control" value="'+data[i].amount+'" placeholder="0"></div></div>';
+            // if(i < (data.length -1)){
+            // htmlString +='<label class="col-lg-2 col-form-label text-lg-end">"'+data[i+1].NAME+'":</label><div class="col-lg-4"><input type="text" value="'+data[i+1].amount+'" class="form-control" placeholder="0"></div>';
+
+            // }
+          //  htmlString += '</div>';
+           //htmlString += '<label class="col-lg-2 col-form-label text-lg-end">"'+data[i].NAME+'":</label><div class="col-lg-4"><input type="text" value="'+data["amount"]+'" class="form-control" placeholder="0"></div>';
+           }
+          // htmlString = "";
+
+
+
+        document.getElementById("deductions").innerHTML = htmlString;
+        }
+
+
+    </script>
 @endpush
