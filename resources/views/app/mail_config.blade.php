@@ -51,52 +51,52 @@
                 <div class="card-body">
 
                     <form autocomplete="off" id="addMail" method="post" class="form-horizontal form-label-left">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Host</label>
-                        <div class="form-group">
-                            <div class="col-sm-4">
-                                <input type="text" required="" name="host" value="<?php if (isset($host)) echo $host; ?>" class="form-control col-xs-12 has-feedback-left">
-                            </div>
+                        
+                      <div class="row">
+                        <div class="form-group col-6 mb-3">
+                            <label class="control-label ">Host</label>
+                            <input type="text" required="" name="host" value="<?php if (isset($host)) echo $host; ?>" class="form-control col-xs-12 has-feedback-left">                 
                         </div>
 
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Name</label>
-                        <div class="form-group">
-                            <div class="col-sm-4">
-                                <input type="text" required="" name="name" value="<?php if (isset($name)) echo $name; ?>" class="form-control col-xs-12 has-feedback-left">
-                            </div>
+                    
+                        <div class="form-group col-6 mb-3">
+                            <label class="control-label">Name</label>
+                             <input type="text" required="" name="name" value="<?php if (isset($name)) echo $name; ?>" class="form-control col-xs-12 has-feedback-left">
                         </div>
 
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Username</label>
-                        <div class="form-group">
-                            <div class="col-sm-4">
+                        
+                        <div class="form-group col-6 mb-3">
+                            <label class="control-label ">Username</label>
                                 <input type="text" required="" name="username" value="<?php if (isset($username)) echo $username; ?>" class="form-control col-xs-12 has-feedback-left">
-                            </div>
+                       
                         </div>
 
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Encryption</label>
-                        <div class="form-group">
-                            <div class="col-sm-4">
+                       
+                        <div class="form-group col-6">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Encryption</label>
                                 <input type="text" required="" name="encryption" value="<?php if (isset($secure)) echo $secure; ?>" class="form-control col-xs-12 has-feedback-left">
-                            </div>
                         </div>
 
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Port</label>
-                        <div class="form-group">
-                            <div class="col-sm-4">
-                                <input type="number" required="" name="port" value="<?php if (isset($port)) echo $port; ?>" class="form-control col-xs-12 has-feedback-left">
-                            </div>
+                      
+                        <div class="form-group col-6 mb-3">
+                            <label class="control-label ">Port</label>
+                            <input type="number" required="" name="port" value="<?php if (isset($port)) echo $port; ?>" class="form-control col-xs-12 has-feedback-left">
                         </div>
 
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Password</label>
-                        <div class="form-group">
-                            <div class="col-sm-4">
-                                <input type="password" required="" name="password" value="<?php if (isset($password)) echo $password; ?>" class="form-control col-xs-12 has-feedback-left">
-                            </div>
+      
+                        <div class="form-group col-6 mb-3">
+                            <label class="control-label ">Password</label>
+                            <input type="password" required="" name="password" value="<?php if (isset($password)) echo $password; ?>" class="form-control col-xs-12 has-feedback-left">
+        
                         </div>
-
+                        <div class="form-group col-8 mb-3">
                         <input type="hidden" name="id" value="<?php if (isset($id)) echo $id;?>">
+                        </div>
+                        <div class="form-group col-4 mb-3">
+                        <button style="width:80%;" type="submit" class="btn btn-main btn-block">Save Settings</button>
+                        </div>
 
-                        <button style="margin-left: 37%" type="submit" class="btn btn-main">Save</button>
-
+                    </div>
                     </form>
 
 

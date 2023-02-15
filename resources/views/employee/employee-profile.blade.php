@@ -395,7 +395,10 @@
                                                     <textarea name="landmark" id="landmark" @if($details) value="{{ $details->landmark}}" @endif class="form-control" rows="3">@if($details) {{ $details->landmark}} @endif</textarea>
                                                 </div>
 
-
+                                                <div class="form-group col-6 mb-2">
+                                                    <label for="">Phone Number</label>
+                                                    <input type="text" name="phone" @if($details) value="{{ $employee->phone}}" @endif class="form-control">
+                                                </div>
                                             </div>
                                             <div class="card-footer ">
                                                 <button type="submit" class="btn btn-main float-end"> Save Details</button>

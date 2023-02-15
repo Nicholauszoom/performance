@@ -74,14 +74,14 @@
                   </select>
       
         </div>
-        @if($days<336)
-        <div class="col-6 form-group" >
+        {{-- @if($days<336) --}}
+        <div class="col-6 form-group" id="sub" style="display:none">
           <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category</label>
           <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
-            <option value="0">--Select Sub Nature --</option>
+            <option value="0" id="first">--Select Sub Nature --</option>
           </select>
         </div>
-        @endif
+        {{-- @endif --}}
 
         <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address
@@ -195,13 +195,14 @@
 
               <td>
                 <p>Nature :<b> <?php echo $row->type->type; ?> Leave</b><br>
-                @if($row->sub_category>0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
+                @if($row->sub_category> 0)  Sub Category :<b> <?php echo $row->sub_type->name; ?></b>
                 @endif
               </p>
               </td>
               <td><?php echo $row->reason; ?></td>
 
-              <td><div >
+              <td>
+                <div >
                       <?php if ($row->status==0){ ?>
                       <div class="col-md-12">
                       <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
@@ -220,7 +221,7 @@
                       elseif($row->status==5){?>
                       <div class="col-md-12">
                       <span class="label label-danger">DISAPPROVED</span></div><?php }  ?>
-                  </div>
+                </div>
 
               </td>
               <td class="options-width d-flex">
@@ -228,7 +229,7 @@
               <?php if($row->status==0 || $row->status==3){ ?>
                 <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                 onclick="cancelRequest(<?php echo $row->id; ?>)">
-                  <button  class="btn btn-danger btn-xs" ><i class="ph-x"></i></button></a>
+                  <button  class="btn btn-danger btn-sm" ><i class="ph-x"></i></button></a>
               <?php } ?>
               {{-- / --}}
               {{-- <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a> --}}
@@ -261,13 +262,84 @@
             <th>Nature</th>
             <th>Reason</th>
             <th>Status</th>
+            <th>Remaining</th>
             <th>Action</th>
-            <th>Remarks</th>
           </tr>
         </thead>
 
 
         <tbody>
+          @foreach($leaves as $item)
+
+
+          @if ( $item->employee->line_manager  ==  Auth::user()->emp_id)
+          <tr>
+            <td>{{ $item->id }}</td>
+            <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
+            <td>
+              {{ $item->days }} Days
+              <br>From <b>{{ $item->start }}</b><br>To <b>{{ $item->end }}</b>
+            </td>
+            <td>
+              Nature: <b>{{ $item->type->type}}</b>
+            </td>
+            <td>
+              <p>
+                {{ $item->reason }} 
+              </p>
+            </td>
+            <td>
+              <div >
+                <?php if ($item->status==0){ ?>
+                <div class="col-md-12">
+                <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
+                elseif($item->status==1){?>
+                <div class="col-md-12">
+                <span class="label badge bg-info text-whites label-info">RECOMMENDED</span></div><?php }
+                elseif($item->status==2){  ?>
+                <div class="col-md-12">
+                <span class="label label-success badge bg-success">APPROVED</span></div><?php }
+                elseif($item->status==3){?>
+                <div class="col-md-12">
+                <span class="label label-warning">HELD</span></div><?php }
+                elseif ($item->status==4) { ?>
+                <div class="col-md-12">
+                <span class="label label-warning">CANCELLED</span></div><?php }
+                elseif($item->status==5){?>
+                <div class="col-md-12">
+                <span class="label label-danger">DISAPPROVED</span></div><?php }  ?>
+          </div>
+            </td>
+            <td>
+              {{ $item->remaining}} Days
+            </td>
+            <td>
+              <a href="" class="btn bg-main btn-sm" title="Download Attachment">
+                <i class="ph ph-download"></i> &nbsp;
+                Attachment
+              </a>
+              <br>
+              <hr>
+              <?php if($item->state==1) { ?>
+
+                {{-- <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                onclick="approveRequest(<?php echo $item->id; ?>)"> --}}
+                <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}">
+                  <button  class="btn btn-main btn-sm" ><i class="ph-check"></i></button>
+                </a>
+
+              <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                  <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
+
+              <?php }  ?>
+            </td>
+        
+          </tr>
+          @endif
+     
+
+
+          @endforeach
           <?php
 
             foreach ($otherleave as $row) {
@@ -340,15 +412,18 @@
 
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
                   <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
-              <?php }  if($row->status==1) { ?>
+              <?php }  
+              if($row->status==1) { ?>
 
-                <a href="javascript:void(0)" onclick="recommendLeaveByHod(<?php echo $row->id;?>)" title="Recommend By HOD">
-                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
+                <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Recommend By HOD">
+                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button>
+                </a>
 
               <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
                   <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
 
-              <?php } if($row->status==3) {  ?>
+              <?php } 
+              if($row->status==3) {  ?>
               <a href="javascript:void(0)" onclick="recommendLeave(<?php echo $row->id;?>)" title="Recommend">
                   <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
               <?php }} ?>
@@ -396,48 +471,88 @@
     {{-- @include("app.includes.overtime_operations") --}}
 
     <script>
-      
-        function approvePromotion(id) {
+function approveRequest(id) {
 
+Swal.fire({
+    title: 'Are You Sure That You Want to Approve This Leave Request ?',
+    // text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Approve it!'
+}).then((result) => {
+    if (result.isConfirmed) {
+        var terminationid = id;
 
-            Swal.fire({
-                title: 'Are You Sure You Want to Promote This Employee?',
-                // text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Confirm it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var requestid = id;
-
-                    $.ajax({
-                        url: "{{ url('flex/attendance/cancelLeave') }}/" + requestid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Request Cancel Failed!! ...');
-                    });
-                }
+        $.ajax({
+            url: "{{ url('flex/attendance/approveLeave') }}/" + terminationid
+        })
+        .done(function(data) {
+            $('#resultfeedOvertime').fadeOut('fast', function() {
+                $('#resultfeedOvertime').fadeIn('fast').html(data);
             });
 
-        }
+            $('#status' + id).fadeOut('fast', function() {
+                $('#status' + id).fadeIn('fast').html(
+                    '<div class="col-md-12"><span class="label label-warning">Approved</span></div>'
+                    );
+            });
 
+            // alert('Request Cancelled Successifully!! ...');
 
+            Swal.fire(
+                'Cancelled!',
+                'Leave Request Approved Successifully!!.',
+                'success'
+            )
+
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
+        })
+        .fail(function() {
+            Swal.fire(
+                'Failed!',
+                'Leave Request Cancellation Failed!! ....',
+                'success'
+            )
+
+            alert('Leave Request Cancellation Failed!! ...');
+        });
+    }
+});
+
+// if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
+
+//     var overtimeid = id;
+
+//     $.ajax({
+//             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+//         })
+//         .done(function(data) {
+//             $('#resultfeedOvertime').fadeOut('fast', function() {
+//                 $('#resultfeedOvertime').fadeIn('fast').html(data);
+//             });
+
+//             $('#status' + id).fadeOut('fast', function() {
+//                 $('#status' + id).fadeIn('fast').html(
+//                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+//                     );
+//             });
+
+//             alert('Request Cancelled Successifully!! ...');
+
+//             setTimeout(function() {
+//                 location.reload();
+//             }, 1000);
+//         })
+//         .fail(function() {
+//             alert('Overtime Cancellation Failed!! ...');
+//         });
+// }
+}
+      
 
         function cancelRequest(id) {
 
@@ -546,7 +661,8 @@
              let subs=response;
 
            
-
+            //  $("#first").remove();
+           
             for (var i = 0; i < response.length; i++) {
               
               var id=subs[i].id;
@@ -555,8 +671,11 @@
               // console.log(id);
               // console.log(name);
               // console.log(option);
-
+             
               $("#subs_cat").append(option);
+              $("#sub").show(); 
+              
+              
             }
         
           }

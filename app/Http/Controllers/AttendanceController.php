@@ -134,6 +134,8 @@ class AttendanceController extends Controller
       }
       $data['leave_types'] =LeaveType::all();
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+      $data['leaves'] =Leaves::get();
+
 
       // For Working days
       $d1 = new DateTime (Auth::user()->hire_date);
@@ -151,7 +153,11 @@ class AttendanceController extends Controller
       // fetching employee department's positions
       public function getDetails($id = 0)
       {
-          $data = LeaveSubType::where('category_id', $id)->get();
+
+                //For Gender 
+        $gender=Auth::user()->gender;
+        if($gender=="Male"){$gender=1; }else { $gender=2;  }
+          $data = LeaveSubType::where('category_id', $id)->orwhere('sex', $gender)->where('sex',0)->get();
           // dd($data);
           return response()->json($data);
       }
@@ -221,6 +227,12 @@ elseif($nature == 7)
         // For Leave Nature days
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
+
+        // Annual leave accurated days
+
+        $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+
+        // dd($annualleaveBalance);
        
         // For  Requested days
         $start = $request->start;
@@ -244,14 +256,14 @@ elseif($nature == 7)
         $day=$interval->days;
         // $working_month=$interval->format('%months');
 
-// dd($interval);
         // For Redirection Url
         $url = redirect('flex/attendance/leave');
 
-        if($day <= 365)
+        // For Employees with less than 12 months of employement
+        if($day = 365)
         {
 
-            //  For Checking sub Category
+            //  For Leaves with sub Category
             if($request->sub_cat > 0){
 
               // For Sub Cart
@@ -269,15 +281,23 @@ elseif($nature == 7)
                 $leaves->end=$request->end;
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
-                dd($different_days);
-                $leaves->days = $different_days;
-                if($request->nature!=5)
+                $leaves->nature = $request->nature;
+                // For Maternity
+                // if ($request->nature==4) 
+                // {
+                //   dd('Iam Maternity');
+                // }
+
+
+           
+                // For Study Leave
+                if ($request->nature == 6) 
                 {
-                  $leaves->nature = $request->nature;
+                  $leaves->days = $different_days;
                 }
-                else
-                {
-                    dd("Iam 5 !");
+                //For Compassionate  
+                else{
+                  $leaves->days = $different_days;
                 }
                 $leaves->reason = $request->reason;
                 $leaves->sub_category = $request->sub_cat;
@@ -294,8 +314,10 @@ elseif($nature == 7)
              
           
                 $leaves->save();
+                $leave_type=LeaveType::where('id',$nature)->first();
+                $type_name=$leave_type->type;
 
-                $msg="Leave Request  Has been Requested Successfully!";
+                $msg=$type_name." Leave Request  Has been Requested Successfully!";
                 return $url->with('msg', $msg);
 
               }
@@ -303,7 +325,9 @@ elseif($nature == 7)
               else
               {
 
-                $msg="You have finished Your Leave Days";
+                $leave_type=LeaveType::where('id',$nature)->first();
+                $type_name=$leave_type->type;
+                $msg="Sorry, You have finished Your ".$type_name." Leave Days";
 
                 return $url->with('msg', $msg);
               }
@@ -311,14 +335,14 @@ elseif($nature == 7)
 
 
             }
-
+           // For Leaves with no sub Category 
             else
             {
               // $days=$different_days;
 
               $total_leave_days=$leaves+$different_days;
 
-              if($total_leave_days<$max_leave_days)
+              if($total_leave_days<$max_leave_days || $request->nature==1)
               {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
 
@@ -331,6 +355,28 @@ elseif($nature == 7)
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
+                // for annual leave
+                if ($request->nature==1) {
+
+                  // checking annual leave balance
+                  if($different_days<$annualleaveBalance)
+                  {
+                    $leaves->days=$different_days;
+                    $remaining=$annualleaveBalance-$different_days;
+                    // dd($remaining);
+
+                  }
+                  else
+                  {
+                    // $leaves->days=$annualleaveBalance;  
+                    $msg='You Have Finished Your Annual  Accrued Days';
+                    return $url->with('msg',$msg);
+                  }
+                         
+                }
+                
+
+                // For Paternity
                 if($request->nature != 5)
                 {
                  
@@ -339,7 +385,7 @@ elseif($nature == 7)
                 else
                 {
 
-                  
+                  // Incase the employee had already applied paternity before
                     $paternity=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->first();
                     if ( $paternity) {
                       $d1 = $paternity->created_at;
@@ -353,35 +399,94 @@ elseif($nature == 7)
                         $max_days=7;
                         if($total_leave_days < $max_days)
                         {
-                          if($different_days<$max_days)
+                          if($different_days<=$max_days)
                           {
-                            dd('wait');
+                            // dd('wait');
                             $leaves->days = $different_days;
                           }
                           else
                           {
-                            dd('Maximum 7 days');
+                            $leaves->days = $max_days;
                           }
                          
                         }
                         else
                         {
-                          dd('All leave days are used up!');
+                         
+                          $leave_type=LeaveType::where('id',$nature)->first();
+                          $type_name=$leave_type->type;
+                          $msg="Sorry, You have finished Your ".$type_name." Leave Days";
+                          return $url->with('msg', $msg);
                       
                         
                         }
 
-                    }
+                      }
                       else
                       {
-                        
-                        $leaves->days = $different_days;
-                        dd('less than 4 months');
+                        $max_days=10;
+
+                        if($different_days<$max_days)
+                        {
+                          $leaves->days = $different_days;
+                          dd('less than 4 months');
+                        }
+                        else
+                        {
+                          // $extra=$different_days-$max_days;
+                          $leaves->days = $max_days;
+                          // dd('You need '.$extra.' days.');
+                        }
+                      
                       }
                     }
+                  // Incase an employee is applying for paternity for the first time
                     else
                     {
-                      $leaves->days = $different_days;
+                      $month=$interval->format('%m months');
+                         if ($month < 4 ) {
+                        $max_days=7;
+                        if($total_leave_days < $max_days)
+                        {
+                          if($different_days<=$max_days)
+                          {
+                            // dd('wait');
+                            $leaves->days = $different_days;
+                          }
+                          else
+                          {
+                            $leaves->days = $max_days;
+                          }
+                         
+                        }
+                        else
+                        {
+                         
+                          $leave_type=LeaveType::where('id',$nature)->first();
+                          $type_name=$leave_type->type;
+                          $msg="Sorry, You have finished Your ".$type_name." Leave Days";
+                          return $url->with('msg', $msg);
+                      
+                        
+                        }
+
+                      }
+                      else
+                      {
+                        $max_days=10;
+
+                        if($different_days<$max_days)
+                        {
+                          $leaves->days = $different_days;
+                        }
+                        else
+                        {
+                          // $extra=$different_days-$max_days;
+                          $leaves->days = $max_days;
+                          // dd('You need '.$extra.' days.');
+                        }
+                      
+                      }
                     }
                 
                 }
@@ -395,19 +500,23 @@ elseif($nature == 7)
 
                   $newImageName = $request->image->hashName();
                   $request->image->move(public_path('storage/leaves'), $newImageName);
-                  // $employee->photo = $newImageName;
                   $leaves->attachment =  $newImageName;
                 }
                  
           
                 $leaves->save();
-                           
-              $msg="Request is submitted successfully!";
+                 
+              $leave_type=LeaveType::where('id',$nature)->first();
+              $type_name=$leave_type->type;
+              $msg=$type_name." Leave Request is submitted successfully!";
               return $url->with('msg', $msg);
               }
               else
               {
-              $msg="Sorry, You have finished your leave days!";
+
+                $leave_type=LeaveType::where('id',$nature)->first();
+                $type_name=$leave_type->type;
+                $msg="Sorry, You have finished Your ".$type_name." Leave Days";
               return $url->with('msg', $msg);
 
               }
@@ -415,17 +524,17 @@ elseif($nature == 7)
             }
 
         }
+
+
+        // For Employee with more than 12 Month
         else 
         {
-
-          
+  
           $total_leave_days=$leaves+$different_days;
 
           if($total_leave_days<$max_leave_days)
           {
             $remaining=$max_leave_days-($leave_balance+$different_days);
-
-            // dd($leave_balance);
             $leaves=new Leaves();
             $empID=Auth::user()->emp_id;
             $leaves->empID = $empID;
@@ -443,7 +552,7 @@ elseif($nature == 7)
             {
 
                 $paternity=Leaves::where('empID',$empID)->where('nature',5)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->orderBy('created_at','desc')->first();
-                // dd($paternity);
+                
                 if ( $paternity) {
                   $d1 = $paternity->created_at;
                   $d2 = new DateTime();
@@ -463,7 +572,7 @@ elseif($nature == 7)
                           }
                           else
                           {
-                            dd('Maximum 7 days');
+                            $leaves->days = $max_days;
                           }
                          
                         }
@@ -529,62 +638,46 @@ elseif($nature == 7)
              
       
             $leaves->save();
-                       
-          $msg="Request is submitted successfully!";
+                   
+            $leave_type=LeaveType::where('id',$nature)->first();
+            $type_name=$leave_type->type;
+
+          $msg=$type_name." Leave Request is submitted successfully!";
           return $url->with('msg', $msg);
           }
           else
           {
-          $msg="Sorry, You have finished your leave days!";
+            $leave_type=LeaveType::where('id',$nature)->first();
+            $type_name=$leave_type->type;
+            $msg="Sorry, You have finished Your ".$type_name." Leave Days";
           return $url->with('msg', $msg);
 
           }
  
           
         }
- 
-
-      // for Annual Leave
-       if($nature == 1){
-          $type="Annual";
-          }
-      // For Sick Leave
-        elseif($nature == 2)
-        {
-          $type="Sick";
-          // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
-
-        }
-      // For Compassionate
-        elseif($nature == 3)
-        {
-          $type="Compassionate";
-        
-        }
-        // For Maternity
-        elseif($nature == 4)
-        {
-          $type="Maternity";
-        }
-        // For Paternity
-        elseif($nature == 5)
-        {
-          $type="Paternity";
-          // $leave_balance =   $this->attendance_model->get_pertenity_leave_balance($empID,$nature,$year,$today);
-        
-        }
-        // For Study
-        elseif($nature == 6)
-        {
-          $type="Study";
-        // $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
-        
-        }
-
-
 
       }
 
+
+    // start of leave approval
+    public function approveLeave($id)
+      {
+        $leave=Leaves::where('id',$id)->first();
+
+
+        $leave->status = 1;
+        $leave->state = 2;
+        $leave->update();
+
+
+
+        $msg = "Leave Request Has been Approves Successfully !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+        return redirect('flex/attendance/leave')->with('msg', $msg);
+
+  
+      }
 
     public function apply_leave(Request $request) {
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
@@ -727,27 +820,27 @@ elseif($nature == 7)
           }
    }
 
-    public function approveLeave($id)
-      {
+  //   public function approveLeave1($id)
+  //     {
 
-          if($id!=''){
+  //         if($id!=''){
 
-        $leaveID = $id;
-        $todate = date('Y-m-d');
-        $data = array(
-                 'status' =>2,
-                 'notification' => 1
-            );
+  //       $leaveID = $id;
+  //       $todate = date('Y-m-d');
+  //       $data = array(
+  //                'status' =>2,
+  //                'notification' => 1
+  //           );
 
-          $result = $this->attendance_model->approve_leave($leaveID, session('emp_id'), $todate);
-          if($result==true){
-              echo "<p class='alert alert-success text-center'>Leave Approved Successifully</p>";
-          } else {
-              echo "<p class='alert alert-warning text-center'>Leave NOT Approved, Please Try Again</p>";
-          }
+  //         $result = $this->attendance_model->approve_leave($leaveID, session('emp_id'), $todate);
+  //         if($result==true){
+  //             echo "<p class='alert alert-success text-center'>Leave Approved Successifully</p>";
+  //         } else {
+  //             echo "<p class='alert alert-warning text-center'>Leave NOT Approved, Please Try Again</p>";
+  //         }
 
-          }
-   }
+  //         }
+  //  }
 
     public function rejectLeave()
       {

@@ -30,6 +30,7 @@ class CreateLeavesTable extends Migration
             $table->integer('sub_category')->nullable();
             $table->string('attachment')->default('');
             $table->integer('remaining')->nullable();
+            $table->integer('status')->defautl(0);
             $table->timestamps();
         });
     }
