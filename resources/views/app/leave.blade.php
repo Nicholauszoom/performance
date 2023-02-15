@@ -208,10 +208,7 @@
                       <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
                       elseif($row->status==1){?>
                       <div class="col-md-12">
-                      <span class="label badge bg-info text-whites label-info">RECOMMENDED</span></div><?php }
-                      elseif($row->status==2){  ?>
-                      <div class="col-md-12">
-                      <span class="label label-success badge bg-success">APPROVED</span></div><?php }
+                      <span class="label badge bg-info text-whites label-info">APPROVES</span></div><?php }
                       elseif($row->status==3){?>
                       <div class="col-md-12">
                       <span class="label label-warning">HELD</span></div><?php }
@@ -226,16 +223,16 @@
               </td>
               <td class="options-width d-flex">
                 {{-- start of cancel leave button --}}
-              <?php if($row->status==0 || $row->status==3){ ?>
+              {{-- <?php if($row->status==0 || $row->status==3){ ?> --}}
                 <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                 onclick="cancelRequest(<?php echo $row->id; ?>)">
                   <button  class="btn btn-danger btn-sm" ><i class="ph-x"></i></button></a>
-              <?php } ?>
+              {{-- <?php } ?> --}}
               {{-- / --}}
               {{-- <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a> --}}
               </td>
               {{-- <td>
-              <?php echo $row->remarks."<br>"; ?>
+              {{-- <?php echo $row->remarks."<br>"; ?> 
               </td> --}}
               </tr>
 
@@ -295,7 +292,7 @@
                 <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
                 elseif($item->status==1){?>
                 <div class="col-md-12">
-                <span class="label badge bg-info text-whites label-info">RECOMMENDED</span></div><?php }
+                <span class="label badge bg-success text-whites label-info">APPROVED</span></div><?php }
                 elseif($item->status==2){  ?>
                 <div class="col-md-12">
                 <span class="label label-success badge bg-success">APPROVED</span></div><?php }
@@ -318,10 +315,10 @@
                 <i class="ph ph-download"></i> &nbsp;
                 Attachment
               </a>
-              <br>
-              <hr>
+         
               <?php if($item->state==1) { ?>
-
+                <br>
+                <hr>
                 {{-- <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                 onclick="approveRequest(<?php echo $item->id; ?>)"> --}}
                 <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}">

@@ -83,7 +83,7 @@ Route::middleware('auth')->group(function () {
         'designations' => DesignationController::class,
 
         'skill' => SkillsController::class,
-        'trainingApp'=>TrainingAppController::class,
+        // 'trainingApp'=>TrainingAppController::class,
     ]);
 
     // Routes with workforce access permission
