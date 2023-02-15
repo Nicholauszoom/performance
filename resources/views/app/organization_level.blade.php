@@ -120,14 +120,15 @@
                                     <td align="center">
 
                                         <a href="{{ route('flex.organization_level_info', [$row->id]) }}"
-                                            class="btn btn-outline-info btn-xs">
-                                            <i class="ph-note-pencil"></i>Edit</a>
+                                            class="btn btn-main btn-sm" title="Edit {{ $row->name }}">
+                                            <i class="ph-note-pencil"></i></a>
         
                                         <button type="button" id="edit" onclick="editOvertime({{ $row->id }})"
-                                            class="btn btn-outline-danger btn-xs edit_permission_btn" data-toggle="modal"
+                                            class="btn btn-danger btn-sm edit_permission_btn" data-toggle="modal" title="Delete {{ $row->name }}"
+
                                             {{-- data-id="{{ $row->id }}"
                                             data-name="{{ $row->name }}" --}}>
-                                            <i class="ph-trash"></i> Delete
+                                            <i class="ph-trash"></i> 
                                         </button>
                                     </td>
                                     {{-- <td><a href="{{ route('flex.organization_level_info',base64_encode($row->id))}}" class="btn btn-perfrom">View</a>
