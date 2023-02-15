@@ -9,8 +9,8 @@
 </head>
 <style>
     body {
- /* background-image: url('{{ asset('img/bg.png') }}'); */
- background-color: #f1f1f1;
+ background-image: url('{{ asset('img/bg.png') }}');
+ /* background-color: #f1f1f1; */
  background: cover;
  background-repeat: none;
 
@@ -18,7 +18,7 @@
 }
  </style>
 
-<body>
+<body oncontextmenu="return false">
     @include('layouts.shared.topbar')
 
     <!-- Page content -->

@@ -120,7 +120,7 @@
             <!-- END -->
             <div class="form-group py-2">
               <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
-                 <button  type="submit" class="btn btn-main" >APPLY</button>
+                 <button  type="submit" class="btn btn-main float-end" >Apply Leave</button>
               </div>
             </div>
 
