@@ -1935,6 +1935,7 @@ class ReportController extends Controller
         $data['total_current_overtime'] = $this->reports_model->s_overtime($current_payroll_month);
 
         $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+        //$data['total_deductions'] = $this->reports_model->total_deduction($current_payroll_month, $previous_payroll_month);
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
@@ -1943,8 +1944,10 @@ class ReportController extends Controller
         $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
         $data['previous_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month);
-        $data['current_decrease'] = $this->reports_model->basic_increase($current_payroll_month);
+        $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
+        $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase($current_payroll_month);
 
 
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);

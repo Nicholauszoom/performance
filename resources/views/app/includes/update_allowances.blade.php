@@ -632,69 +632,69 @@ function deleteBonus(id)
 <script type="text/javascript">
     $('#removeGroup').submit(function(e){
 
-        Swal.fire({
-            title: 'Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?',
-            // text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                e.preventDefault();
+        // Swal.fire({
+        //     title: 'Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?',
+        //     // text: "You won't be able to revert this!",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, delete it!'
+        // }).then((result) => {
+        //     if (result.isConfirmed) {
+        //         e.preventDefault();
 
-                $.ajax({
-                    url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                    type:"post",
-                    data:new FormData(this),
-                    processData:false,
-                    contentType:false,
-                    cache:false,
-                    async:false
-                })
-                .done(function(data){
-                    $('#feedBackRemoveGroup').fadeOut('fast', function(){
-                        $('#feedBackRemoveGroup').fadeIn('fast').html(data);
-                    });
+        //         $.ajax({
+        //             url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
+        //             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        //             type:"post",
+        //             data:new FormData(this),
+        //             processData:false,
+        //             contentType:false,
+        //             cache:false,
+        //             async:false
+        //         })
+        //         .done(function(data){
+        //             $('#feedBackRemoveGroup').fadeOut('fast', function(){
+        //                 $('#feedBackRemoveGroup').fadeIn('fast').html(data);
+        //             });
 
-                    setTimeout(function(){// wait for 5 secs(2)
-                        location.reload(); // then reload the page.(3)
-                    }, 3000);
-                })
-                .fail(function(){
-                    alert('Update Failed!! ...');
-                });
-            }
-        });
-
-        // if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
-        //     e.preventDefault();
-
-        //     $.ajax({
-        //         url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
-        //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        //         type:"post",
-        //         data:new FormData(this),
-        //         processData:false,
-        //         contentType:false,
-        //         cache:false,
-        //         async:false
-        //     })
-        //     .done(function(data){
-        //         $('#feedBackRemoveGroup').fadeOut('fast', function(){
-        //             $('#feedBackRemoveGroup').fadeIn('fast').html(data);
+        //             setTimeout(function(){// wait for 5 secs(2)
+        //                 location.reload(); // then reload the page.(3)
+        //             }, 3000);
+        //         })
+        //         .fail(function(){
+        //             alert('Update Failed!! ...');
         //         });
+        //     }
+        // });
 
-        //         setTimeout(function(){// wait for 5 secs(2)
-        //             location.reload(); // then reload the page.(3)
-        //         }, 3000);
-        //     })
-        //     .fail(function(){
-        //         alert('Update Failed!! ...');
-        //     });
-        // }
+        if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
+            e.preventDefault();
+
+            $.ajax({
+                url:"<?php echo  url(''); ?>/flex/remove_group_from_allowance",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                type:"post",
+                data:new FormData(this),
+                processData:false,
+                contentType:false,
+                cache:false,
+                async:false
+            })
+            .done(function(data){
+                $('#feedBackRemoveGroup').fadeOut('fast', function(){
+                    $('#feedBackRemoveGroup').fadeIn('fast').html(data);
+                });
+
+                setTimeout(function(){// wait for 5 secs(2)
+                    location.reload(); // then reload the page.(3)
+                }, 3000);
+            })
+            .fail(function(){
+                alert('Update Failed!! ...');
+            });
+        }
     });
 </script>
 
