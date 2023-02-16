@@ -8509,6 +8509,7 @@ class GeneralController extends Controller
             $employee->fname = $request->fname;
             $employee->mname = $request->mname;
             $employee->lname = $request->lname;
+            $employee->mobile = $request->mobile;
             $employee->line_manager = $request->line_manager;
             $employee->job_title = $request->current_job;
             $employee->gender = $request->gender;
@@ -8697,6 +8698,13 @@ class GeneralController extends Controller
                 $qualification->end_year = $request->finish_year;
                 $qualification->final_score = $request->final_score;
                 $qualification->study_location = $request->study_location;
+                // $qualification->certificate = $request->certificate;
+
+                if ($request->hasfile('certificate')) {
+                    $newImageName = $request->certificate->hashName();
+                    $request->certificate->move(public_path('storage\certificates'), $newImageName);
+                    $qualification->certificate = $newImageName;
+                }
 
                 $qualification->save();
             }
@@ -8716,7 +8724,11 @@ class GeneralController extends Controller
                 $certification->cert_number = $request->cert_number;
                 $certification->cert_status = $request->cert_status;
 
-
+                if ($request->hasfile('certificate2')) {
+                    $newImageName = $request->certificate2->hashName();
+                    $request->certificate2->move(public_path('storage\certifications'), $newImageName);
+                    $certification->certificate = $newImageName;
+                }
                 $certification->save();
             }
 
@@ -9268,10 +9280,10 @@ class GeneralController extends Controller
             $data['parent'] = "Employee Profile";
 
             // return view('employee.userprofile', $data);
-            // $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
-            // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
-            // return $pdf->download('employee_biodata.pdf');
-            return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+            return $pdf->download('employee_biodata.pdf');
+            // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
         }
 
 

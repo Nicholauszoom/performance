@@ -82,8 +82,8 @@ Route::middleware('auth')->group(function () {
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
 
-        'skill' => SkillsController::class,
-        'trainingApp'=>TrainingAppController::class,
+        // 'skill' => SkillsController::class,
+        // 'trainingApp'=>TrainingAppController::class,
     ]);
 
     // Routes with workforce access permission
@@ -508,8 +508,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/skill', [SkillsController::class, 'skill'])->name('skill');
     Route::get('/skillsList', [SkillsController::class, 'skillsList'])->name('skillsList');
     Route::post('/addSkills', [SkillsController::class, 'skills'])->name('skills');
-    Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
-    Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
+    // Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
+    // Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
 
 
     Route::get('flex/department_cost', [GeneralController::class, 'departmentCost'])->name('flex.departmentCost');

@@ -23,21 +23,20 @@
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
           <div class="card-head py-3 px-3">
             <h2>Cost Center
-             <a href="#bottom"><button type="button" id="modal" data-toggle="modal" data-target="#departmentModal" class="btn btn-main">ADD NEW</button></a> </h2>
+           
+          </h2>
 
             <div class="clearfix"></div>
           </div>
           <div class="card-body">
 
-            <table id="" class="table table-striped table-bordered">
+            <table id="datatable" class="table table-striped table-bordered datatable-basic">
               <thead>
                 <tr>
                   <th>S/N</th>
                   <th>Name</th>
                   <th>Location</th>
-                  <?php  ?>
                   <th>Option</th>
-                  <?php //} ?>
                 </tr>
               </thead>
 
@@ -134,40 +133,33 @@
               <div class="card-body">
                 <div id="feedBack"></div>
                 <form autocomplete="off" id="addCostCenter" enctype="multipart/form-data"  method="post" data-parsley-validate class="form-horizontal form-label-left">
-
+                  <div class="row">
                   <!-- START -->
-                  <div class="form-group">
+                  <div class="form-group col-6 mb-3">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Name</label>
                     </label>
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                      <textarea required="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Name" rows="2"></textarea>
-                    </div>
+                      <input type="text" name="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Name">
                   </div>
-                  <div class="form-group">
-                    <label class="control-label col-md-3  col-xs-6" >Country</label>
-                    <div class="col-md-4 col-sm-6 col-xs-12">
+                  <div class="form-group col-6 mb-3">
+                    <label class="control-label " >Country</label>
                     <select required name="country" class="select_country form-control" tabindex="-1">
-                      <option></option>
                        <?php foreach ($countrydrop as $row){ ?>
                       <option value="<?php echo $row->code; ?>"><?php echo $row->name; ?></option> <?php } ?>
                     </select>
-                    </div>
                   </div>
-                  <div class="form-group">
+                  <div class="form-group col-6 mb-3">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Region</label>
                     </label>
-                    <div class="col-md-4 col-sm-6 col-xs-12">
-                      <input required="" class="form-control col-md-7 col-xs-12" name="region" placeholder="Region" rows="2"/>
-                    </div>
+                      <input required="" class="form-control " name="region" placeholder="Region" rows="2"/>
                   </div>
-
+                  <div class="col-8"></div>
+                  <div class="col-4 ">
+                     <button class="btn btn-main btn-block float-end" width="100%">Save Center</button>
+                  </div>
                   </div>
                   <!-- END -->
-                  <div class="form-group">
-                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-1">
-                       <button class="btn btn-main" >ADD</button>
-                    </div>
-                  </div>
+                  
+                </div>
                   </form>
 
               </div>

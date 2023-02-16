@@ -70,6 +70,19 @@
         </div>
         {{-- /col --}}
 
+        {{-- Start of Self Services  --}}
+        <div class="row">
+            <div class="col-4">
+                <p>Service 1</p>
+            </div>
+            <div class="col-4">
+                <p>Service 2</p>
+            </div>
+            <div class="col-4">
+                <p>Service 3</p>
+            </div>
+        </div>
+
         @if (session('vw_emp_sum'))
             <div class="col-xl-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">

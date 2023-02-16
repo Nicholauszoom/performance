@@ -160,6 +160,12 @@ h2 {
     text-transform: uppercase;
 }
 
+.swal2-title{
+    font-size: 14px !important;
+    text-transform: none;
+    color:#00204e !important;
+    font-weight: 600;
+}
 
 .active>.page-link
 {

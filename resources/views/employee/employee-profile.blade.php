@@ -134,7 +134,7 @@
                                         <div class="card rounded-0 border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="100" height="100" alt="">
+                                                <img class="" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -312,7 +312,7 @@
                                                         </div>
                                                         <div class="col">
                                                             <label for="">Marriage Date</label>
-                                                            <input type="date" class="" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
+                                                            <input type="date" class="form-control" id="Married" name="marriage_date" @if($details) value="{{ $details->marriage_date}}" @endif><br>
 
                                                         </div>
                                                         <div class="col mb-2">
@@ -326,7 +326,7 @@
                                                         </div>
                                                         <div class="col">
                                                             <label>Divorced Date</label><br>
-                                                            <input type="date"  name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
+                                                            <input type="date" class="form-control" name="divorced_date" @if($details) value="{{ $details->divorced_date}}" @endif>
                                                            <br>
                                                         </div>
                                                         <div class="col mb-2">
@@ -395,7 +395,10 @@
                                                     <textarea name="landmark" id="landmark" @if($details) value="{{ $details->landmark}}" @endif class="form-control" rows="3">@if($details) {{ $details->landmark}} @endif</textarea>
                                                 </div>
 
-
+                                                <div class="form-group col-6 mb-2">
+                                                    <label for="">Phone Number</label>
+                                                    <input type="text" name="mobile" @if($employee)  value="<?php echo $mobile; ?>" @endif class="form-control">
+                                                </div>
                                             </div>
                                             <div class="card-footer ">
                                                 <button type="submit" class="btn btn-main float-end"> Save Details</button>
@@ -876,6 +879,11 @@
                                                     <label for="">Final Score & Grades</label>
                                                     <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
                                                 </div>
+
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="">Education Certificate</label>
+                                                    <input type="file" name="certificate"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
+                                                </div>
                                                 <div class="card-footer ">
                                                     <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                                 </div>
@@ -901,7 +909,7 @@
                                             <td class="text-center">{{ $item->study_location }} </td>
                                             <td class="text-center">{{ $item->final_score }} </td>
                                             <td class="text-center">
-                                            <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn danger">
+                                            <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>
                                                 </a>
                                             </td>
@@ -945,11 +953,17 @@
                                                     <input type="year" name="cert_end"  id="cert_end" placeholder="Finish Year" class="form-control" >
                                                 </div>
 
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="">Upload Certification</label>
+                                                    <input type="file" name="certificate2"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
+                                                </div>
                                                 <div class="col-4 mb-2">
                                                     <label for="">Status </label><br>
                                                     <input type="radio" id="active" name="cert_status" value="Active"> <label for="active">Active</label>
                                                     <input type="radio" id="inactive" name="cert_status" value="Active"> <label for="inactive">Inactive</label>
                                                 </div>
+
+
                                                 <div class="card-footer ">
                                                     <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                                 </div>
@@ -975,7 +989,7 @@
                                             <td class="text-center">{{ $item->cert_number }}</td>
                                             <td class="text-center">{{ $item->cert_status }} </td>
                                             <td>
-                                                 <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn danger">
+                                                 <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>
                                                 </a>
                                             </td>
