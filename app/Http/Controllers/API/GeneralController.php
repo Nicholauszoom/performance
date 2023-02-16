@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+// use App\Http\Controllers\Controller;
 
 use App\Models\EMPL;
 use App\Models\Role;
@@ -178,9 +178,9 @@ class GeneralController extends Controller
         return redirect('/flex/Base_controller/');
     }
 
-    public function userprofile(Request $request, $id)
+    public function userprofile(Request $request)
     {
-        $id = base64_decode($id);
+        $id = auth()->user()->emp_id;
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
@@ -214,9 +214,20 @@ class GeneralController extends Controller
 
         $data['parent'] = "Employee Profile";
 
-        return view('employee.userprofile', $data);
+        // return view('employee.userprofile', $data);
+
+
+        return response(
+            [
+                'data'=>$data
+            ],200 );
 
         // return view('employee.employee-biodata', $data);
+
+    }
+
+    public function nssf(Request $request)
+    {
 
     }
 

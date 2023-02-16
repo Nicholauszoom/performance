@@ -8698,6 +8698,13 @@ class GeneralController extends Controller
                 $qualification->end_year = $request->finish_year;
                 $qualification->final_score = $request->final_score;
                 $qualification->study_location = $request->study_location;
+                // $qualification->certificate = $request->certificate;
+
+                if ($request->hasfile('certificate')) {
+                    $newImageName = $request->certificate->hashName();
+                    $request->certificate->move(public_path('storage\certificates'), $newImageName);
+                    $qualification->certificate = $newImageName;
+                }
 
                 $qualification->save();
             }
@@ -8717,7 +8724,11 @@ class GeneralController extends Controller
                 $certification->cert_number = $request->cert_number;
                 $certification->cert_status = $request->cert_status;
 
-
+                if ($request->hasfile('certificate2')) {
+                    $newImageName = $request->certificate2->hashName();
+                    $request->certificate2->move(public_path('storage\certifications'), $newImageName);
+                    $certification->certificate = $newImageName;
+                }
                 $certification->save();
             }
 

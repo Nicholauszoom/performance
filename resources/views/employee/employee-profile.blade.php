@@ -879,6 +879,11 @@
                                                     <label for="">Final Score & Grades</label>
                                                     <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
                                                 </div>
+
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="">Education Certificate</label>
+                                                    <input type="file" name="certificate"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
+                                                </div>
                                                 <div class="card-footer ">
                                                     <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                                 </div>
@@ -904,7 +909,7 @@
                                             <td class="text-center">{{ $item->study_location }} </td>
                                             <td class="text-center">{{ $item->final_score }} </td>
                                             <td class="text-center">
-                                            <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn danger">
+                                            <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>
                                                 </a>
                                             </td>
@@ -948,11 +953,17 @@
                                                     <input type="year" name="cert_end"  id="cert_end" placeholder="Finish Year" class="form-control" >
                                                 </div>
 
+                                                <div class="col-md-6 mb-2">
+                                                    <label for="">Upload Certification</label>
+                                                    <input type="file" name="certificate2"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
+                                                </div>
                                                 <div class="col-4 mb-2">
                                                     <label for="">Status </label><br>
                                                     <input type="radio" id="active" name="cert_status" value="Active"> <label for="active">Active</label>
                                                     <input type="radio" id="inactive" name="cert_status" value="Active"> <label for="inactive">Inactive</label>
                                                 </div>
+
+
                                                 <div class="card-footer ">
                                                     <button type="submit" class="btn btn-main float-end"> Save Details</button>
                                                 </div>
@@ -978,7 +989,7 @@
                                             <td class="text-center">{{ $item->cert_number }}</td>
                                             <td class="text-center">{{ $item->cert_status }} </td>
                                             <td>
-                                                 <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn danger">
+                                                 <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>
                                                 </a>
                                             </td>
