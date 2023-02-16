@@ -1942,6 +1942,10 @@ class ReportController extends Controller
         $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
+        $data['previous_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month);
+        $data['current_decrease'] = $this->reports_model->basic_increase($current_payroll_month);
+
+
 
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
         // $pdf = Pdf::loadView('reports.payroll_details',$data);
@@ -2693,7 +2697,7 @@ EOD;
 
     public function loanReports(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
 
         if (1) {
             $payroll_date = $request->input('payrolldate');

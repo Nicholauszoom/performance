@@ -78,9 +78,9 @@
                                     <td class="text-start">00001</td>
                                     <td class="text-start">Last Month Gross Salary</td>
                                     <td class="text-end">
-                                        {{ number_format($total_previous_basic - $total_previous_basic, 2) }}</td>
+                                        {{ number_format(0, 2) }}</td>
                                     <td class="text-end">
-                                        {{ number_format($total_previous_basic - $total_previous_basic, 2) }}</td>
+                                        {{ number_format(0, 2) }}</td>
                                     <td class="text-end">{{ number_format($total_previous_basic, 2) }}</td>
                                     <td class="text-end">{{ $count_previous_month }}</td>
                                 </tr>
@@ -109,7 +109,7 @@
 
                                 <tr>
                                     <td class="text-start">00004</td>
-                                    <td class="text-start">Less Decrease in Basic Pay incomparison to Las </td>
+                                    <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
                                     <td class="text-end">
                                         {{ number_format($total_previous_gross - $total_previous_gross, 2) }}</td>
                                     <td class="text-end">

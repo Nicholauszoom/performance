@@ -1333,6 +1333,9 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
 
     }
+    function basic_decrease($date){
+        
+    }
     public function total_basic($date){
         $query = "SELECT SUM(pl.salary) as total_amount from payroll_logs pl where  pl.payroll_date = '".$date."'";
         $row  = DB::select(DB::raw($query));
