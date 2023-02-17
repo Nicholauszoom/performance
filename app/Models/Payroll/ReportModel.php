@@ -1339,11 +1339,24 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row[0]->amount ;
     }
 
+    function basic_decrease1($date){
+        $query = "SELECT SUM(pl.actual_salary-pl.salary) as amount from temp_payroll_logs pl where pl.actual_salary > pl.salary and pl.payroll_date = '".$date."'";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->amount ;
+    }
+
     function basic_increase($date){
         $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from payroll_logs pl where pl.actual_salary < pl.salary and pl.payroll_date = '".$date."'";
         $row = DB::select(DB::raw($query));
         return $row[0]->amount ;
     }
+
+    function basic_increase1($date){
+        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from temp_payroll_logs pl where pl.actual_salary < pl.salary and pl.payroll_date = '".$date."'";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->amount ;
+    }
+
 
     public function total_basic($date){
         $query = "SELECT SUM(pl.actual_salary) as total_amount from payroll_logs pl where  pl.payroll_date = '".$date."'";
@@ -1352,6 +1365,28 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row[0]->total_amount;
     }
 
+    public function total_basic1($date){
+        $query = "SELECT SUM(pl.actual_salary) as total_amount from temp_payroll_logs pl where  pl.payroll_date = '".$date."'";
+        $row  = DB::select(DB::raw($query));
+
+        return $row[0]->total_amount;
+    }
+
+    public function allowance_by_employee($current_payroll_month,$previous_payroll_month){
+    //  $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+    //    ";
+          $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+          (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)) as current_amount,
+          (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)) as previous_amount,
+
+          (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)-
+
+          IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)
+
+
+          ) as difference
+           from allowance_logs al,employee e where e.emp_id = al.empID GROUP BY al.description ";
+    }
 
     public function total_allowance($current_payroll_month,$previous_payroll_month){
 
@@ -1372,6 +1407,29 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
 
     }
+
+    public function total_allowance1($current_payroll_month,$previous_payroll_month){
+
+        $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date) SELECT empID, description, policy, amount, payment_date from allowance_logs where payment_date = '".$previous_payroll_month."'";
+        DB::insert(DB::raw($query));
+        $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,
+         (IF((SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)) as current_amount,
+         (IF((SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)) as previous_amount,
+
+         (IF((SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)-
+
+         IF((SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)
+
+
+         ) as difference
+          from temp_allowance_logs al GROUP BY al.description ";
+        $row = DB::select(DB::raw($query));
+
+        DB::table('temp_allowance_logs')->where('payment_date',$previous_payroll_month)->delete();
+
+        return $row;
+
+        }
 
     public function total_deduction($current_payroll_month,$previous_payroll_month){
 

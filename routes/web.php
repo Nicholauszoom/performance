@@ -213,7 +213,8 @@ Route::middleware('auth')->group(function () {
 
     });
     Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
-
+        Route::any('/get_reconsiliation_summary','get_reconsiliation_summary')->name('reports.get_reconsiliation_summary');
+        Route::any('/get_reconsiliation_summary1','get_reconsiliation_summary1')->name('reports.get_reconsiliation_summary1');
         Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
         Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
         Route::any('/employee_payslip','employee_payslip')->name('payroll.employee_payslip');
@@ -1044,6 +1045,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
+
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
         Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');
