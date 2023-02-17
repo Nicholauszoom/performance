@@ -246,13 +246,14 @@ class PayrollController extends Controller
     public function get_reconsiliation_summary(Request $request)
     {
 
-        $row = DB::table('payroll_months')->select('payroll_date')->last();
+        //$row = DB::table('payroll_months')->select('payroll_date')->last();
 
-        $calendar = base64_decode($request->payrolldate);
+        $calendar = $request->payrolldate;
 
 
         $data['payrollMonth'] = $calendar;
         $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
+        //dd($data['payrollMonth']);
 
 
         $datewell = explode("-", $calendar);
@@ -280,7 +281,7 @@ class PayrollController extends Controller
         $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
         $data['count_previous_month'] = $this->reports_model->s_count($previous_payroll_month);
-        $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
+        $data['count_current_month'] = $this->reports_model->s_count1($current_payroll_month);
 
 
         $data['total_allowances'] = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
@@ -319,10 +320,11 @@ class PayrollController extends Controller
     public function get_reconsiliation_summary1(Request $request)
     {
 
-
-        $calendar = base64_decode($request->payrolldate);
+        $data['payroll_state'] = 1;
+        $calendar = $request->payrolldate;
         //dd($calendar);
         $data['payrollMonth'] = $calendar;
+
         $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
 
 
