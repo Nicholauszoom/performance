@@ -23,6 +23,7 @@ use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\ApprovalLevel;
 use App\Models\FinancialLogs;
+use App\Models\LeaveApproval;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSpouse;
@@ -33,8 +34,8 @@ use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
-use App\Models\EmailNotification;
 
+use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
@@ -9280,11 +9281,74 @@ class GeneralController extends Controller
             $data['parent'] = "Employee Profile";
 
             // return view('employee.userprofile', $data);
-            $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
-            $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
-            return $pdf->download('employee_biodata.pdf');
-            // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            // $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+            // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+            // return $pdf->download('employee_biodata.pdf');
+            return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
         }
+
+
+
+        // Start of leave approvals
+
+        public function LeaveApprovals()
+        {
+            $empID=Auth()->user()->emp_id;
+            $data['employees'] = EMPL::get();
+
+            $data['approvals'] = LeaveApproval::get();
+
+            // dd($data);
+
+            return view('setting.leave-approval',$data);
+
+
+        }
+
+        // For Saving Leave Approvals
+        public function saveLeaveApproval(Request $request)
+        {
+            
+            request()->validate(
+                [
+                    'empID' => 'required',
+                    'level_1' => 'required',
+                    'level_2' => 'nullable',
+                    'level_3' => 'nullable',
+                    'escallation_time' => 'nullable',
+                ]
+            );
+
+
+
+            $approval = new LeaveApproval();
+            $approval->empID = $request->empID;
+            $approval->level1 = $request->level_1;
+            $approval->level2 = $request->level_2;
+            $approval->level3 = $request->level_3;
+            $approval->escallation_time = $request->escallation_time;
+            $approval->save();
+
+            // dd('wait');
+
+
+        $msg = "Leave Approval has been added Successfully !";
+        return redirect('flex/leave-approvals')->with('msg', $msg);
+        }
+
+
+
+        // For Deleting Leave Approval
+            public function deleteLeaveApproval($id)
+            {
+                $approval = LeaveApproval::find($id);
+
+                $approval->delete();
+                
+                return redirect('flex/leave-approvals');
+            }
+        // End of Leave Approvals
+
 
 
 }
