@@ -23,7 +23,9 @@ use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use App\CustomModels\flexFerformanceModel;
+use App\Models\LeaveApproval;
 use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Position;
 
 class AttendanceController extends Controller
 {
@@ -136,6 +138,68 @@ class AttendanceController extends Controller
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
       $data['leaves'] =Leaves::get();
 
+
+      // Start of Escallation
+      $leaves=Leaves::get();
+      if ($leaves) {
+
+        foreach($leaves as $item)
+        {
+            $today= new DateTime();
+            $applied =$item->updated_at;
+            $diff= $today->diff($applied);
+            $range=$diff->days;
+            $approval=LeaveApproval::where('empID',$item->empID)->first();
+            if ($range>$approval->escallation_time) {
+              $leave=Leaves::where('id' ,$item->id)->first();
+              $status=$leave->status;
+              
+              if ($status == 0) {
+                if ($approval->level2 != null) {
+                  $leave->status=1;
+                  $leave->updated_at=$today;
+                  $leave->update();
+                  dd('Go Level 2');
+               
+                }
+                else
+                {
+                  dd('Do nothing');
+                }
+              }
+              elseif ($status == 1)
+              {
+                if ($approval->level3 != null) {
+                  $leave->status=2;
+                  $leave->updated_at=$today;
+                  $leave->update();
+                  dd('Go Level 3');
+                }
+                else
+                {
+                  $leave->status=0;
+                  $leave->updated_at=$today;
+                  $leave->update();
+                  dd('Go Level 1');
+                }
+              }
+              elseif ($status == 2)
+              {
+                if ($approval->level1 != null) {
+                  $leave->status=0;
+                  $leave->updated_at=$today;
+                  $leave->update();
+                  dd('Go Level 1');
+                }
+                else
+                {
+                  dd('Wait');
+                }
+              }
+            }
+        }
+      }
+      // End of Escallation
 
       // For Working days
       $d1 = new DateTime (Auth::user()->hire_date);
@@ -260,7 +324,7 @@ elseif($nature == 7)
         $url = redirect('flex/attendance/leave');
 
         // For Employees with less than 12 months of employement
-        if($day = 365)
+        if($day <= 365)
         {
 
             //  For Leaves with sub Category
@@ -524,8 +588,6 @@ elseif($nature == 7)
             }
 
         }
-
-
         // For Employee with more than 12 Month
         else 
         {
@@ -664,11 +726,41 @@ elseif($nature == 7)
     public function approveLeave($id)
       {
         $leave=Leaves::where('id',$id)->first();
+        $empID=$leave->empID;
+        $approval=LeaveApproval::where('empID',$empID)->first();
+        $approver=Auth()->user()->emp_id;
+
+        // chacking level 1
+        if ($approval->level1==$approver) {
+          $employee=Auth()->user()->position;
+
+          $position=Position::where('id',$employee)->first();
+
+          // dd($position->name);
+          $leave->status=1;
+          $leave->position=$position->name;
+          $leave->updated_at= new DateTime();
+          $leave->update();
+     
+
+        }
+        elseif($approval->level2==$approver)
+        {
+          dd('Level 2');
+        }
+        elseif($approval->level3==$approver)
+        {
+          dd('Final');
+        }
+        else
+        {
+            dd('Not Authorized');
+        }
 
 
-        $leave->status = 1;
-        $leave->state = 2;
-        $leave->update();
+        // $leave->status = 1;
+        // $leave->state = 2;
+        // $leave->update();
 
 
 

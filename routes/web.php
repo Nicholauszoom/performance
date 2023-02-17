@@ -495,8 +495,8 @@ Route::middleware('auth')->group(function () {
          // Start of leave approvals
          Route::any('/leave-approvals','LeaveApprovals')->name('flex.leave-approval');
          Route::post('/save-leave-approval','saveLeaveApproval')->name('flex.save-leave-approval');
-        //  Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
-        //  Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
+         Route::any('/edit-leave-approval/{id}','editLeaveApproval')->name('flex.editLeaveApproval');
+         Route::put('/update-leave-approval','updateLeaveApproval')->name('flex.update-leave-approval');
          Route::any('/delete-leave-approval/{id}','deleteLeaveApproval')->name('flex.delete-leave-approval');
 
         //  End of leave approvals

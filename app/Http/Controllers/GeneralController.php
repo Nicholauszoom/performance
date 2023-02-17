@@ -9296,9 +9296,10 @@ class GeneralController extends Controller
             $empID=Auth()->user()->emp_id;
             $data['employees'] = EMPL::get();
 
-            $data['approvals'] = LeaveApproval::get();
+            $data['approvals'] = LeaveApproval::orderBy('created_at','desc')->get();
 
-            // dd($data);
+            $data['parent'] = 'Settings';
+            $data['child'] = 'Leave Approval';
 
             return view('setting.leave-approval',$data);
 
@@ -9329,13 +9330,25 @@ class GeneralController extends Controller
             $approval->escallation_time = $request->escallation_time;
             $approval->save();
 
-            // dd('wait');
-
 
         $msg = "Leave Approval has been added Successfully !";
         return redirect('flex/leave-approvals')->with('msg', $msg);
         }
 
+        // For Edit Leave Approval page
+
+        public function editLeaveApproval(Request $request, $id)
+        {
+            
+    // dd($id);
+            $data['approval'] = LeaveApproval::where('id', $id)->first();
+            $data['employees'] = EMPL::get();
+            $data['parent'] = 'Settings';
+
+            // dd( $data['approval']);
+            $data['child'] = 'Edit Leave Approval';
+            return view('setting.edit-leave-approval', $data);
+        }
 
 
         // For Deleting Leave Approval
@@ -9346,6 +9359,22 @@ class GeneralController extends Controller
                 $approval->delete();
                 
                 return redirect('flex/leave-approvals');
+            }
+
+           // start of update holiday function
+            public function updateLeaveApproval(Request $request)
+            {
+
+                $id = $request->id;
+                $approval = LeaveApproval::find($id);
+                $approval->level1 = $request->level_1;
+                $approval->level2 = $request->level_2;
+                $approval->level3 = $request->level_3;
+                $approval->escallation_time = $request->escallation_time;
+                $approval->update();
+
+                $msg = "Leave Approval has been Updated Successfully !";
+                return redirect('flex/leave-approvals')->with('msg', $msg);
             }
         // End of Leave Approvals
 

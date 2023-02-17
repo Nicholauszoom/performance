@@ -37,7 +37,7 @@
                     <div class="row mb-3">
 
                     <div class="form-group col-6">
-                        <label class="col-form-label col-sm-3">Employee Name: </label>
+                        <label class="col-form-label ">Employee Name: </label>
                             <select name="empID" class="form-control select">
                                 <option value=""> -- Choose Employee Here -- </option>
                                 @foreach($employees as $item)
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="form-group col-6">
-                        <label class="col-form-label col-sm-3">Escallation Time ( <small class="text-danger">*days</small> ) </label>
+                        <label class="col-form-label ">Escallation Time ( <small class="text-danger">*days</small> ) </label>
                             <input type="number" name="escallation_time" placeholder="Enter Escallation Time"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
 
                             @error('escallation_time')
@@ -110,7 +110,6 @@
         <div class="">
             <h6 class="mb-0 text-warning">Leave Approvals</h6>
 
-            <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Add Leave Approval</button>
         </div>
 
     </div>
@@ -142,7 +141,7 @@
                            <td>@if( $item->levelThree != null){{ $item->levelThree->fname }} {{ $item->levelThree->mname }} {{ $item->levelThree->lname }} @else -@endif</td>
                             <td>{{ $item->escallation_time }}</td>
                             <td>
-                                <a href="" class="btn btn-sm bg-main" title="Edit This Leave Approval">
+                                <a href="{{ route('flex.editLeaveApproval', $item->id) }}" class="btn btn-sm bg-main" title="Edit This Leave Approval">
                                     <i class="ph-note-pencil"></i>
                                 </a>
                                 <a href="javascript:void(0)" title="Delete This Approval"  class="icon-2 info-tooltip btn btn-sm btn-danger"
