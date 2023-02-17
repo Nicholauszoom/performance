@@ -27,7 +27,7 @@
               <th>Name</th>
               <th>Status</th>
               <th class="text-center">Actions</th>
-              {{-- <th>action</th> --}}
+              <th></th>
           </tr>
       </thead>
       <tbody>
@@ -57,7 +57,7 @@
             <th>Name</th>
             <th>Status</th>
             <th class="text-center">Actions</th>
-            {{-- <th>action</th> --}}
+            <th></th>
         </tr>
     </thead>
     <tbody>

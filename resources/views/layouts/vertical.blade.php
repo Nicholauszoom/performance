@@ -7,8 +7,21 @@
     <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
 </head>
+<style>
+    body {
+ background-image: url('{{ asset('img/bg.png') }}');
+ /* background-color: #f1f1f1; */
+ background-color: #ffff;
+ background: cover;
+ background-repeat: none;
 
-<body>
+ 
+}
+ </style>
+
+{{-- for hidding source codes --}}
+{{-- oncontextmenu="return false" --}}
+<body >
     @include('layouts.shared.topbar')
 
     <!-- Page content -->

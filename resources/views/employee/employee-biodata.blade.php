@@ -94,12 +94,12 @@
 
   <div class="row">
 
-    <div class="col-md-7 mx-auto mt-1">
+    <div class="col-12 mx-auto mt-1">
         <div class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none pb-4">
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
                 {{-- rounded-circle --}}
-                  <img class="img-fluid " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="200px" height="200px" alt="">
+                  <img class="img " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="200px" height="200px" alt="">
               </div>
 
               <h6 class="mb-0">{{ $name }}</h6>

@@ -246,7 +246,7 @@
                 
                 <!--INSERT DIRECT LOAN-->
                 <?php if(session('mng_emp')){ ?>
-               <div id="insertDirectForm"  class="col-md-6 col-sm-6 col-xs-12 offset-3">
+               <div id="insertDirectForm"  class="col-md-12 col-sm-12 col-xs-12 mx-auto">
                             
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                       <div class="card-head px-3 py-2">
@@ -262,8 +262,22 @@
                       <div class="card-body">
                         <div id ="resultfeedSubmissionDirect"></div>
                         <form id="directLoan" autocomplete="off"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                         <div class="row">
                           <!-- START -->
-                      <div class="form-group">
+                          <div class="form-group col-12 mb-3">
+                            <label class="control-label col-md-3  col-xs-6" >Employee</label>
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                            <select name="employee" class="form-control select" required >
+                   
+                               <?php
+                              foreach ($employee as $row) {
+                                 # code... ?>
+                              <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
+                            </select>
+                            </div>
+                          </div> 
+
+                      <div class="form-group col-6 mb-3">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Type</label>
                         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                         <select name="type" class="select_type form-control" required tabindex="-1" id="type">
@@ -273,34 +287,23 @@
                         </select>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3  col-xs-6" >Employee</label>
-                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                        <select name="employee" class="form-control select" required >
-               
-                           <?php
-                          foreach ($employee as $row) {
-                             # code... ?>
-                          <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
-                        </select>
-                        </div>
-                      </div> 
+                     
                       
-                      <div class="form-group">
+                      <div class="form-group col-6 mb-3">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Amount
                         </label>
                         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                           <input required="required" type="number" min="1" max="100000001" step="0.01" name="amount" placeholder="Amount" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
-                      <div class="form-group"  id="index_no">
+                      <div class="form-group col-6 mb-3"  id="index_no">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Form Four Index No.
                         </label>
                         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                           <input type="text" id="index_nof" required min="1" max="100000001" placeholder="Form Four Index Number" name="index_no" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
-                      <div  class="form-group"  id="deduction">
+                      <div  class="form-group col-6 mb-3"  id="deduction">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Deduction Per Month
                         </label>
                         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -316,9 +319,10 @@
                         </div>
                       </div>
                           <!-- END -->
+                        </div>
                           <div class="form-group py-2">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                               <button  class="btn btn-main" >INSERT</button>
+                            <div class="col-md-12 col-sm-12 col-xs-12 ">
+                               <button  class="btn btn-main float-end" >Insert</button>
                             </div>
                           </div> 
                           </form>

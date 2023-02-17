@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\EMPL;
 use App\Models\LeaveType;
 use App\Models\LeaveSubType;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,11 @@ class Leaves extends Model
       public function type()
       {
           return $this->belongsTo(LeaveType::class, 'nature','id');
+      }
+
+      public function employee()
+      {
+          return $this->belongsTo(EMPL::class, 'empID','emp_id');
       }
 
       public function sub_type()

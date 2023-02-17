@@ -41,18 +41,18 @@
                   
                 
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div class="card ">
-          <div class="card-head px-3">
-            <h2>List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="card border-top   rounded-0 ">
+          <div class="card-head p-2">
+            <h2 class="text-warning">List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php if(session('mng_org')){ ?>
-            <a  href="#bottom"><button type="button"  class="btn btn-main">ADD POSITION</button></a>
+            <a  href="#bottom"><button type="button"  class="btn btn-main float-end">ADD POSITION</button></a>
             <?php } ?>
             <div class="clearfix"></div>
           </div>
           <div class="card-body">
              <?php //echo $this->session->flashdata("note");  ?>
              <div id="feedBackTable"></div>
-            <table id="datatable" class="table table-striped table-bordered">
+            <table id="datatable" class="table table-striped table-bordered datatable-basic">
               <thead>
                 <tr>
                   <th>No.</th>
@@ -74,7 +74,7 @@
                   foreach ($position as $row) { ?>
                   <tr id="record<?php echo $row->id;?>">
                     <td width="1px"><?php echo $row->SNo; ?></td>
-                    <td><?php echo $row->name; ?></td>
+                    <td width="380px"><?php echo $row->name; ?></td>
                     <td>
                         <?php if($row->id == 6) echo "Top Position"; else echo $row->parent; ?>
                     </td>
@@ -82,9 +82,9 @@
 
                     <?php if(session('mng_org')){ ?>
                     <td class="options-width">
-                        <a  href="{{ route('flex.position_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
+                        <a  href="{{ route('flex.position_info',$row->id) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-sm"><i class="ph-info"></i></button> </a>
                         <?php if($row->id!=1){ ?>
-                        <a href="javascript:void(0)" onclick="deletePosition(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-xs"><i class="ph-trash"></i></button> </a>
+                        <a href="javascript:void(0)" onclick="deletePosition(<?php echo $row->id; ?>)" title="Delete" class="icon-2 info-tooltip"><button type="button" class="btn btn-danger btn-sm"><i class="ph-trash"></i></button> </a>
                         <?php } ?>
                     </td>
                         <?php } ?>
@@ -98,11 +98,11 @@
       
     
       <?php if(session('mng_org')){ ?>
-                <div id="bottom" class="col-md-6 col-lg-6 col-sm-12 col-xs-12 offset-3">
+                <div  class="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
                             
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                       <div class="card-head">
-                        <h2><i class="fa fa-tasks"></i> Add Position</h2>
+                        <h2 class="text-warning"><i class="fa fa-tasks"></i> Add Position</h2>
                         <ul class="nav navbar-right panel_toolbox">
                           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                           </li>
@@ -115,40 +115,41 @@
                     <div id="positionAddFeedBack"></div>
             
                         <form id="addPosition" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
-            @csrf
+                           @csrf
                           <!-- START -->
-                          <div class="form-group">
+                          <div class="row">
+                          <div class="form-group col-6 mb-3">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Name</label>
                             </label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                              <textarea required="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Name" rows="2"></textarea> 
-                            </div>
+                            <input type="text" required="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Name" >
+                            
+                         
                           </div>
-                          <div class="form-group">
+                          <div class="form-group col-6 mb-3">
                             <label class="control-label col-md-3  col-xs-6" >Organization Level</label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                     <select required="" id='org' name="organization_level" class="select_level form-control">
-                                    <option></option>
+                                
                                        <?php foreach ($levels as $row){ ?>
                                       <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option> <?php } ?>
                                     </select>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <div class="form-group col-6 mb-3">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Code</label>
                             </label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                               <input type="text" maxlength="10" class="form-control col-md-7 col-xs-12" name="code" placeholder="Position Code"/>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <div class="form-group col-6 mb-3">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Minimum Qualification</label>
                             </label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                              <textarea  class="form-control col-md-7 col-xs-12" name="qualification" placeholder="Minimum Qualification" rows="2"></textarea>
+                              <input type="text" class="form-control col-md-7 col-xs-12" name="qualification" placeholder="Minimum Qualification">
                             </div>
                           </div>
-                          <div class="form-group">
+                          <div class="form-group col-6 mb-3">
                             <label class="control-label col-md-3  col-xs-6" >Department</label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                     <select required="" id='dept' name="department" class="select3_single form-control">
@@ -158,7 +159,7 @@
                                     </select>
                             </div>
                           </div>
-                          <div class="form-group">
+                          <div class="form-group col-6 mb-3">
                             <label class="control-label col-md-3  col-xs-6">Reports To</label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="input-group">
@@ -172,14 +173,14 @@
                                 </div>
                             </div>
                           </div>
-                          <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Purpose of This Position</label>
+                          <div class="form-group col-12 mb-3">
+                            <label class="control-label" for="last-name">Purpose of This Position</label>
                             </label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
                               <textarea class="form-control col-md-7 col-xs-12" name="purpose" placeholder="Purpose" rows="3"></textarea> 
                             </div>
                           </div> <br>
-                            <div class="form-group">
+                            <div class="form-group col-8 mb-3">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                             </label>
                             <div class="col-md-12 col-sm-12 col-xs-12">
@@ -190,11 +191,12 @@
                             </div>
                           </div>  <br>
                           <!-- END -->
-                          <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                              <input type="submit" class="btn btn-main"/>
+                          <div class="form-group col-4">
+                            <div class="">
+                              <input type="submit" class="btn btn-main form-control"/>
                             </div>
                           </div> 
+                          </div>
                           </form>
             
                       </div>

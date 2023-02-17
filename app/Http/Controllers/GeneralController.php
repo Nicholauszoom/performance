@@ -23,6 +23,7 @@ use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\ApprovalLevel;
 use App\Models\FinancialLogs;
+use App\Models\LeaveApproval;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSpouse;
@@ -33,8 +34,8 @@ use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
-use App\Models\EmailNotification;
 
+use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
@@ -8509,6 +8510,7 @@ class GeneralController extends Controller
             $employee->fname = $request->fname;
             $employee->mname = $request->mname;
             $employee->lname = $request->lname;
+            $employee->mobile = $request->mobile;
             $employee->line_manager = $request->line_manager;
             $employee->job_title = $request->current_job;
             $employee->gender = $request->gender;
@@ -8697,6 +8699,13 @@ class GeneralController extends Controller
                 $qualification->end_year = $request->finish_year;
                 $qualification->final_score = $request->final_score;
                 $qualification->study_location = $request->study_location;
+                // $qualification->certificate = $request->certificate;
+
+                if ($request->hasfile('certificate')) {
+                    $newImageName = $request->certificate->hashName();
+                    $request->certificate->move(public_path('storage\certificates'), $newImageName);
+                    $qualification->certificate = $newImageName;
+                }
 
                 $qualification->save();
             }
@@ -8716,7 +8725,11 @@ class GeneralController extends Controller
                 $certification->cert_number = $request->cert_number;
                 $certification->cert_status = $request->cert_status;
 
-
+                if ($request->hasfile('certificate2')) {
+                    $newImageName = $request->certificate2->hashName();
+                    $request->certificate2->move(public_path('storage\certifications'), $newImageName);
+                    $certification->certificate = $newImageName;
+                }
                 $certification->save();
             }
 
@@ -9273,6 +9286,98 @@ class GeneralController extends Controller
             // return $pdf->download('employee_biodata.pdf');
             return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
         }
+
+
+
+        // Start of leave approvals
+
+        public function LeaveApprovals()
+        {
+            $empID=Auth()->user()->emp_id;
+            $data['employees'] = EMPL::get();
+
+            $data['approvals'] = LeaveApproval::orderBy('created_at','desc')->get();
+
+            $data['parent'] = 'Settings';
+            $data['child'] = 'Leave Approval';
+
+            return view('setting.leave-approval',$data);
+
+
+        }
+
+        // For Saving Leave Approvals
+        public function saveLeaveApproval(Request $request)
+        {
+            
+            request()->validate(
+                [
+                    'empID' => 'required',
+                    'level_1' => 'required',
+                    'level_2' => 'nullable',
+                    'level_3' => 'nullable',
+                    'escallation_time' => 'nullable',
+                ]
+            );
+
+
+
+            $approval = new LeaveApproval();
+            $approval->empID = $request->empID;
+            $approval->level1 = $request->level_1;
+            $approval->level2 = $request->level_2;
+            $approval->level3 = $request->level_3;
+            $approval->escallation_time = $request->escallation_time;
+            $approval->save();
+
+
+        $msg = "Leave Approval has been added Successfully !";
+        return redirect('flex/leave-approvals')->with('msg', $msg);
+        }
+
+        // For Edit Leave Approval page
+
+        public function editLeaveApproval(Request $request, $id)
+        {
+            
+    // dd($id);
+            $data['approval'] = LeaveApproval::where('id', $id)->first();
+            $data['employees'] = EMPL::get();
+            $data['parent'] = 'Settings';
+
+            // dd( $data['approval']);
+            $data['child'] = 'Edit Leave Approval';
+            return view('setting.edit-leave-approval', $data);
+        }
+
+
+        // For Deleting Leave Approval
+            public function deleteLeaveApproval($id)
+            {
+                $approval = LeaveApproval::find($id);
+
+                $approval->delete();
+                
+                return redirect('flex/leave-approvals');
+            }
+
+           // start of update holiday function
+            public function updateLeaveApproval(Request $request)
+            {
+
+                $id = $request->id;
+                $approval = LeaveApproval::find($id);
+                $approval->level1 = $request->level_1;
+                $approval->level2 = $request->level_2;
+                $approval->level3 = $request->level_3;
+                $approval->escallation_time = $request->escallation_time;
+                $approval->update();
+
+                $msg = "Leave Approval has been Updated Successfully !";
+                return redirect('flex/leave-approvals')->with('msg', $msg);
+            }
+        // End of Leave Approvals
+
 
 
 }

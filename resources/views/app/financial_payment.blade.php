@@ -119,7 +119,7 @@
                             <?php } ?>
 
                             <div class="col-md-12 col-sm-6 col-xs-12">
-                                <div class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                <div class="card  rounded-0 border-0 shadow-none">
                                     <div class="card-header border-0 shadow-none">
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -333,7 +333,7 @@
                         </div>
                         <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="card border-top  border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                <div class="card  rounded-0 border-0 shadow-none">
                                     <div class="tab-head py-2 px-2">
                                         <h2 class="text-warning">Overtime</h2>
                                         <div class="clearfix"></div>

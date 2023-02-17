@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Import;
+use App\Models\BankLoan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BankLoanTemplateExport;
 use App\Models\Payroll\FlexPerformanceModel;
 
 

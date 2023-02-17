@@ -23,7 +23,7 @@
                 <div id="feedBackTable"></div>
             </div>
 
-            <table id="datatable" class="table table-striped table-bordered">
+            <table id="datatable" class="table table-striped table-bordered datatable-basic">
                 <thead>
                     {{-- <tr> --}}
                         <th>S/N</th>

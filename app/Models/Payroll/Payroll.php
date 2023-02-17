@@ -330,7 +330,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             rate,
             currency,
 	        payroll_date,
-            years
+            years,
+            actual_salary
 
 	        )
 
@@ -1245,7 +1246,8 @@ IF(
 
 	     '" . $payroll_date . "' as payroll_date,
 
-	     '" . $year . "' as years
+	     '" . $year . "' as years,
+         e.salary as actual_salary
 	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
             DB::insert(DB::raw($query));
 
@@ -1387,6 +1389,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
             //INSERT PAYROLL LOG TABLE
             $query = "INSERT INTO payroll_logs(
+
                 pension2,
                 gross,
                 taxable_amount,
@@ -1413,7 +1416,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
                 rate,
                 currency,
                 payroll_date,
-                years
+                years,
+                actual_salary
 
                 )
 
@@ -2416,7 +2420,8 @@ as gross,
 
 
              '" . $payroll_date . "' as payroll_date,
-             '" . $year . "' as years
+             '" . $year . "' as years,
+             e.salary as actual_salary
              FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
                 DB::insert(DB::raw($query));
             $query = " UPDATE payroll_months SET state = 0, appr_author = '" . $empID . "', appr_date = '" . $todate . "'  WHERE state = 1 ";

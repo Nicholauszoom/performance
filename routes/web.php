@@ -82,8 +82,8 @@ Route::middleware('auth')->group(function () {
         'departments' => DepartmentController::class,
         'designations' => DesignationController::class,
 
-        'skill' => SkillsController::class,
-        'trainingApp'=>TrainingAppController::class,
+        // 'skill' => SkillsController::class,
+        // 'trainingApp'=>TrainingAppController::class,
     ]);
 
     // Routes with workforce access permission
@@ -213,7 +213,8 @@ Route::middleware('auth')->group(function () {
 
     });
     Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
-
+        Route::any('/get_reconsiliation_summary','get_reconsiliation_summary')->name('reports.get_reconsiliation_summary');
+        Route::any('/get_reconsiliation_summary1','get_reconsiliation_summary1')->name('reports.get_reconsiliation_summary1');
         Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
         Route::any('/financial_reports','financial_reports')->name('payroll.financial_reports');
         Route::any('/employee_payslip','employee_payslip')->name('payroll.employee_payslip');
@@ -490,6 +491,17 @@ Route::middleware('auth')->group(function () {
           // end of approval_levels settings routes
 
 
+
+         // Start of leave approvals
+         Route::any('/leave-approvals','LeaveApprovals')->name('flex.leave-approval');
+         Route::post('/save-leave-approval','saveLeaveApproval')->name('flex.save-leave-approval');
+         Route::any('/edit-leave-approval/{id}','editLeaveApproval')->name('flex.editLeaveApproval');
+         Route::put('/update-leave-approval','updateLeaveApproval')->name('flex.update-leave-approval');
+         Route::any('/delete-leave-approval/{id}','deleteLeaveApproval')->name('flex.delete-leave-approval');
+
+        //  End of leave approvals
+
+
          //For Audit Logs
           Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
           Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
@@ -508,8 +520,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/skill', [SkillsController::class, 'skill'])->name('skill');
     Route::get('/skillsList', [SkillsController::class, 'skillsList'])->name('skillsList');
     Route::post('/addSkills', [SkillsController::class, 'skills'])->name('skills');
-    Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
-    Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
+    // Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
+    // Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
 
 
     Route::get('flex/department_cost', [GeneralController::class, 'departmentCost'])->name('flex.departmentCost');
@@ -1033,6 +1045,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
+
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
         Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');

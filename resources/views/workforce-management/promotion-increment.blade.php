@@ -127,8 +127,6 @@
 @endsection
 
 @push('footer-script')
-    {{-- @include("app.includes.overtime_operations") --}}
-
     <script>
       
         function approvePromotion(id) {
@@ -255,9 +253,4 @@
             // }
         }
     </script>
-
-
-
- 
-
 @endpush

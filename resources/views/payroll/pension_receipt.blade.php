@@ -54,7 +54,7 @@
                                                         <div class="col-md-3 py-4">
 
                                                             <button class="btn btn-sm btn-main ">
-                                                                <i class="ph-file-csv"></i>
+                                                                <i class=""></i>
                                                                 Update
                                                             </button>
 
@@ -72,7 +72,7 @@
                                             {{-- start of generate loan template --}}
                                             @can('add-loan')
                                             <div class="col-md-4">
-                                                <a href="{{ route('pension_receipt.template') }}" class=""> <span class="badge bg-main"> Get Excel Template</span></a>
+                                                {{-- <a href="{{ route('pension_receipt.template') }}" class=""> <span class="badge bg-main"> Get Excel Template</span></a> --}}
                                             </div>
                                             @endcan
                                             {{-- / --}}

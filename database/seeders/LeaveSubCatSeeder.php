@@ -20,6 +20,8 @@ class LeaveSubCatSeeder extends Seeder
             ['id'=>3,'category_id'=>3,'name' => 'Death of grandparent and grandchild','sex'=>'0','max_days'=>'5'],
             ['id'=>4,'category_id'=>4,'name' => '1 child','sex'=>'2','max_days'=>'84'],
             ['id'=>5,'category_id'=>4,'name' => 'Twins','sex'=>'2','max_days'=>'100'],
+            ['id'=>6,'category_id'=>6,'name' => 'Preparation','sex'=>'0','max_days'=>'6'],
+            ['id'=>7,'category_id'=>6,'name' => 'Exams','sex'=>'0','max_days'=>'6'],
         ];
 
         foreach ($items as $item) {

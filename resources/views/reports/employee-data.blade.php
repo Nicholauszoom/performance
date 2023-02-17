@@ -414,7 +414,7 @@
                                     <h5 style="border-bottom:4px solid black !important;">FAMILY DETAILS</h5>
 
                                     {{-- start of spouse details --}}
-                                    @if($spouse->count() >0 )
+                                    @if($spouse)
                                     <div class="col-md-12">
                                         
                                         <h5 class="">Spouse Details:</h5>

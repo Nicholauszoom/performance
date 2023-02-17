@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\LeaveController;
+use App\Http\Controllers\API\GeneralController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,18 @@ Route::post('login', 'login');
 
 Route::middleware('auth:sanctum')->group( function () {
 
-    Route::resource('products', ProductController::class);
+
+      // For user details
+      Route::get('/user',[AuthController::class,'user']);
+      Route::post('/logout',[AuthController::class,'logout']);
+
+
+      //  For Leaves
+      Route::get('/leaves',[LeaveController::class,'index']);
+
+     //  For NSSF  
+
+     Route::get('/nssf',[GeneralController::class,'userprofile']);
 
 });
 
