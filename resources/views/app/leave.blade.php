@@ -203,7 +203,8 @@
 
               <td>
                 <div >
-                      <?php if ($row->status==0){ ?>
+                  <span class="label label-default badge bg-pending text-white">{{ $row->position }}</span>
+                      {{-- <?php if ($row->status==0){ ?>
                       <div class="col-md-12">
                       <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
                       elseif($row->status==1){?>
@@ -217,7 +218,7 @@
                       <span class="label label-warning">CANCELLED</span></div><?php }
                       elseif($row->status==5){?>
                       <div class="col-md-12">
-                      <span class="label label-danger">DISAPPROVED</span></div><?php }  ?>
+                      <span class="label label-danger">DISAPPROVED</span></div><?php }  ?> --}}
                 </div>
 
               </td>
@@ -287,21 +288,14 @@
             </td>
             <td>
               <div >
-                <?php if ($item->status==0){ ?>
+                <?php if ($item->status==1){ ?>
                 <div class="col-md-12">
                 <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
-                elseif($item->status==1){?>
+                elseif($item->state==0){?>
                 <div class="col-md-12">
-                <span class="label badge bg-success text-whites label-info">APPROVED</span></div><?php }
-                elseif($item->status==2){  ?>
-                <div class="col-md-12">
-                <span class="label label-success badge bg-success">APPROVED</span></div><?php }
-                elseif($item->status==3){?>
-                <div class="col-md-12">
-                <span class="label label-warning">HELD</span></div><?php }
-                elseif ($item->status==4) { ?>
-                <div class="col-md-12">
-                <span class="label label-warning">CANCELLED</span></div><?php }
+                <span class="label badge bg-success text-whites label-info">APPROVED</span>
+                </div>
+                <?php }
                 elseif($item->status==5){?>
                 <div class="col-md-12">
                 <span class="label label-danger">DISAPPROVED</span></div><?php }  ?>
@@ -310,23 +304,65 @@
             <td>
               {{ $item->remaining}} Days
             </td>
-            <td>
+            <td class="text-center">
+
+              @php
+                $approval=App\Models\LeaveApproval::where('empID',$item->empID)->first();
+              @endphp
               <a href="" class="btn bg-main btn-sm" title="Download Attachment">
                 <i class="ph ph-download"></i> &nbsp;
                 Attachment
               </a>
-         
-              <?php if($item->state==1) { ?>
+              <?php if ($item->status==0 && $item->state==1 ){ ?>
+                @if ( Auth()->user()->emp_id == $approval->level1)
+                <div class="col-md-12 text-center mt-1">
+                  <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
+                    <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
+                  </a>
+  
+                <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                    <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
+                </div> 
+                
+                @endif
+                
+                <?php }
+                elseif($item->status==1 && $item->state==1){?>
+                @if ( Auth()->user()->emp_id == $approval->level2)
+                <div class="col-md-12 text-center mt-1">
+                  <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
+                    <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
+                  </a>
+    
+                  <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                      <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
+                  </a>
+                </div> 
+                @endif
+                <?php }
+                elseif($item->status==2){  ?>
+                  @if ( Auth()->user()->emp_id == $approval->level2)
+                  <div class="col-md-12 text-center mt-1">
+                    <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
+                      <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
+                    </a>
+      
+                    <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                        <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
+                    </a>
+                  </div> 
+                  @endif
+                <?php }
+                else{?>
+                <div class="col-md-12 mt-1">
+                <span class="label bg-danger">Denied</span></div>
+                <?php } ?>
+               
+              <?php if($item->state==8) { ?>
                 <br>
                 <hr>
-                {{-- <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
-                onclick="approveRequest(<?php echo $item->id; ?>)"> --}}
-                <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}">
-                  <button  class="btn btn-main btn-sm" ><i class="ph-check"></i></button>
-                </a>
-
-              <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
-                  <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
+            
+            
 
               <?php }  ?>
             </td>
