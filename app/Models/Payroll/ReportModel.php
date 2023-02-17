@@ -1333,8 +1333,20 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
 
     }
+    function basic_decrease($date){
+        $query = "SELECT SUM(pl.actual_salary-pl.salary) as amount from payroll_logs pl where pl.actual_salary > pl.salary and pl.payroll_date = '".$date."'";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->amount ;
+    }
+
+    function basic_increase($date){
+        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from payroll_logs pl where pl.actual_salary < pl.salary and pl.payroll_date = '".$date."'";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->amount ;
+    }
+
     public function total_basic($date){
-        $query = "SELECT SUM(pl.salary) as total_amount from payroll_logs pl where  pl.payroll_date = '".$date."'";
+        $query = "SELECT SUM(pl.actual_salary) as total_amount from payroll_logs pl where  pl.payroll_date = '".$date."'";
         $row  = DB::select(DB::raw($query));
 
         return $row[0]->total_amount;
@@ -1354,12 +1366,32 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
      ) as difference
       from allowance_logs al GROUP BY al.description ";
-        $row = DB::select(DB::raw($query));
+    $row = DB::select(DB::raw($query));
 
 
         return $row;
 
     }
+
+    public function total_deduction($current_payroll_month,$previous_payroll_month){
+
+        $query = "SELECT  distinct(CONCAT('Add/Les ',dl.description)) as description,
+         (IF((SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)) as current_amount,
+         (IF((SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)) as previous_amount,
+
+         (IF((SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$current_payroll_month."' GROUP BY description) > 0,(SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$current_payroll_month."' GROUP BY description),0)-
+
+         IF((SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '".$previous_payroll_month."' GROUP BY description) > 0,(SELECT SUM(paid)  FROM deduction_logs WHERE dl.description = dl.description and  payment_date = '".$previous_payroll_month."' GROUP BY description),0)
+
+
+         ) as difference
+          from deduction_logs dl GROUP BY dl.description ";
+        $row = DB::select(DB::raw($query));
+
+
+            return $row;
+
+        }
 
     public function prevPayrollMonth($date){
         $query = "payroll_date";
