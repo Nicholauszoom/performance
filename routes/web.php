@@ -491,6 +491,17 @@ Route::middleware('auth')->group(function () {
           // end of approval_levels settings routes
 
 
+
+         // Start of leave approvals
+         Route::any('/leave-approvals','LeaveApprovals')->name('flex.leave-approval');
+         Route::post('/save-leave-approval','saveLeaveApproval')->name('flex.save-leave-approval');
+        //  Route::any('/edit-approval-level/{id}','editApprovalLevel')->name('flex.editApprovalLevel');
+        //  Route::put('/update-approvalLevel','updateApprovalLevel')->name('flex.updateApprovalLevel');
+         Route::any('/delete-leave-approval/{id}','deleteLeaveApproval')->name('flex.delete-leave-approval');
+
+        //  End of leave approvals
+
+
          //For Audit Logs
           Route::any('/audit_logs','audit_logs')->name('flex.audit_logs');
           Route::any('/export_audit_logs','export_audit_logs')->name('flex.export_audit_logs');
