@@ -160,7 +160,6 @@ class AttendanceController extends Controller
                   $leave->status=1;
                   $leave->updated_at=$today;
                   $leave->update();
-                  dd('Go Level 2');
                
                 }
                 else
@@ -218,13 +217,9 @@ class AttendanceController extends Controller
      // For My Leaves
      public function myLeaves()
      {
-                  $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
+           $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
 
-            if(session('appr_leave')){
-              $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
-            }else{
-              $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
-            }
+        
             $data['leave_types'] =LeaveType::all();
             $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
             $data['leaves'] =Leaves::get();
@@ -820,18 +815,13 @@ elseif($nature == 7)
   
 
           // dd($position->name);
-          $leave->status=1;
-          $leave->position=$position->name;
-          $leave->updated_at= new DateTime();
-          $leave->update();
      
-
-        }
-        elseif($approval->level2==$approver)
-        {
-          if ($approval->level3 != null) {
-            $leave->status=2;
-            $leave->position=$position->name;
+     
+          if ($approval->level2 != null) 
+          {
+            $leave->status=1;
+            $leave->position='Recommended by '.$position->name;
+            $leave->level1=Auth()->user()->emp_id;
             $leave->updated_at= new DateTime();
             $leave->update();
           }
@@ -839,7 +829,29 @@ elseif($nature == 7)
           {
             $leave->status=3;
             $leave->state=0;
-            $leave->position=$position->name;
+            $leave->level1=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+
+        }
+        elseif($approval->level2==$approver)
+        {
+          if ($approval->level3 != null) 
+          {
+            $leave->status=2;
+            $leave->level2=Auth()->user()->emp_id;
+            $leave->position='Recommended by '.$position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+          else
+          {
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level2=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
           }
@@ -847,7 +859,12 @@ elseif($nature == 7)
         }
         elseif($approval->level3==$approver)
         {
-          dd('Final');
+          $leave->status=3;
+          $leave->state=0;
+          $leave->level3=Auth()->user()->emp_id;
+          $leave->position=$position->name;
+          $leave->updated_at= new DateTime();
+          $leave->update();
         }
         else
         {

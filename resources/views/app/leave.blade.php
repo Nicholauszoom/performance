@@ -120,7 +120,7 @@
                 @endif
                 <?php }
                 elseif($item->status==2){  ?>
-                  @if ( Auth()->user()->emp_id == $approval->level2)
+                  @if ( Auth()->user()->emp_id == $approval->level3)
                   <div class="col-md-12 text-center mt-1">
                     <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
                       <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
@@ -132,18 +132,12 @@
                   </div> 
                   @endif
                 <?php }
-                else{?>
+                elseif ($item->status==4) {?>
                 <div class="col-md-12 mt-1">
-                <span class="label bg-danger">Denied</span></div>
+                <span class="label bg-danger text-white">Denied</span></div>
                 <?php } ?>
                
-              <?php if($item->state==8) { ?>
-                <br>
-                <hr>
-            
-            
-
-              <?php }  ?>
+          
             </td>
         
           </tr>
@@ -152,122 +146,7 @@
 
 
           @endforeach
-          <?php
-
-            foreach ($otherleave as $row) {
-             if($row->status==2){ continue; }
-              $date1=date_create($row->start);
-              $date2=date_create($row->end);
-              $diff=date_diff($date1,$date2);
-              $final = $diff->format("%a Days");
-              $final2 = $diff->format("%a");
-             ?>
-            <tr>
-              <td width="1px"><?php echo $row->SNo; ?></td>
-
-              <td>{{ $row->nature->name; }} </td>
-
-              <td><?php
-              // // DATE MANIPULATION
-                $start = $row->start;
-                $end =$row->end;
-                $datewells = explode("-",$start);
-                $datewelle = explode("-",$end);
-                $mms = $datewells[1];
-                $dds = $datewells[2];
-                $yyyys = $datewells[0];
-                $dates = date('d-m-Y', strtotime($start));
-
-                $mme = $datewelle[1];
-                $dde = $datewelle[2];
-                $yyyye = $datewelle[0];
-                $datee = date('d-m-Y', strtotime($end));
-
-                echo $final."<br>From <b>".$dates."</b><br>To <b>".$datee."</b>";?></td>
-
-              <td><?php echo $row->TYPE; ?></td>
-              <td><?php echo $row->reason; ?></td>
-              <td><div id ="status<?php echo $row->id; ?>">
-
-                  <?php if ($row->status==0){ ?>
-                  <div class="col-md-12">
-                  <span class="label label-default">REQUESTED</span></div><?php }
-                  elseif($row->status==1){?>
-                  <div class="col-md-12">
-                  <span class="label label-info">RECOMMENDED BY LINE MANAGER</span></div><?php }
-                  elseif($row->status==6){  ?>
-                  <div class="col-md-12">
-                  <span class="label label-success">RECOMMENDED BY HOD</span></div><?php }
-                  elseif($row->status==2){  ?>
-                  <div class="col-md-12">
-                  <span class="label label-success">APPROVED BY HR</span></div><?php }
-                  elseif($row->status==3){?>
-                  <div class="col-md-12">
-                  <span class="label label-warning">HELD</span></div><?php }
-                  elseif ($row->status==4) { ?>
-                  <div class="col-md-12">
-                  <span class="label label-warning">CANCELLED</span></div><?php }
-                  elseif($row->status==5){?>
-                  <div class="col-md-12">
-                  <span class="label label-danger">DISAPPROVED</span></div><?php }  ?>
-                  </div>
-              </td>
-                <!--Line Manager and HR -->
-                <td>
-
-              <?php if(session('appr_leave')){
-
-              if($row->status==0){ ?>
-
-              <a href="javascript:void(0)" onclick="recommendLeave(<?php echo $row->id;?>)" title="Recommend">
-                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-
-              <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
-                  <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
-              <?php }  
-              if($row->status==1) { ?>
-
-                <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Recommend By HOD">
-                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button>
-                </a>
-
-              <a href="javascript:void(0)" onclick="holdLeave(<?php echo $row->id;?>)" title="Hold">
-                  <button  class="btn btn-warning btn-xs"><i class="ph-x"></i></button></a>
-
-              <?php } 
-              if($row->status==3) {  ?>
-              <a href="javascript:void(0)" onclick="recommendLeave(<?php echo $row->id;?>)" title="Recommend">
-                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-              <?php }} ?>
-              <?php if($row->status==5){ ?>
-                  <a href="javascript:void(0)" onclick="cancelLeave(<?php echo $row->id;?>)" title="Cancel">
-                  <button  class="btn btn-warning btn-xs"><i class="ph-times"></i></button></a>
-              <?php } ?>
-
-              <!-- HR -->
-
-              <?php if(session('mng_emp')){
-
-              ?>
-
-
-              <?php if($row->status==6) { ?>
-                <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
-                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-              <?php } if($row->status==5) {  ?>
-              <a href="javascript:void(0)" onclick="approveLeave(<?php echo $row->id;?>)" title="Approve">
-                  <button  class="btn btn-main btn-xs"><i class="ph-check"></i></button></a>
-              <?php } } ?>
-              </td>
-              <td>
-              <?php echo $row->remarks."<br>"; ?>
-                <a href="{{ route('attendance.leave_remarks',$row->id) }}">
-                <button type="submit" name="go" class="btn btn-main btn-xs" title="Add Remark"><i class="ph-check"></i></button></a>
-                <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a>
-              </td>
-              </tr>
-
-            <?php } //} ?>
+      
         </tbody>
       </table>
 </div>

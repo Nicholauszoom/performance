@@ -158,7 +158,7 @@
           <?php
           // if ($leave->num_rows() > 0){
             foreach ($myleave as $row) {
-              if($row->status==2){ continue; }
+            //   if($row->status==2){ continue; }
               $date1=date_create($row->start);
               $date2=date_create($row->end);
               $diff=date_diff($date1,$date2);
