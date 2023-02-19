@@ -176,7 +176,7 @@
     @endcan
     {{-- / --}}
 
- 
+</div>
     {{-- @endcan --}}
     {{-- / --}}
 @endsection

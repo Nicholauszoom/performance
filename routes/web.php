@@ -301,7 +301,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
-       // start of selfservices routes
+        // for my leaves routes
         Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
         // for fetching sub leave type
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
@@ -331,6 +331,8 @@ Route::middleware('auth')->group(function () {
 
     // start of  loans access permission routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+
+        Route::any('/my-loans','myLoans')->name('flex.my-loans');
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');

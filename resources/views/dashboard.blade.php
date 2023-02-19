@@ -71,203 +71,49 @@
         {{-- /col --}}
 
         {{-- Start of Self Services  --}}
-
         <section>
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main  rounded-0 rounded-0">
-
-                <div class="row p-1 border-0 round-0">
-
-                    <div class="col-12 col-md-3">
-                        <div class="card p-2 rounded-0 rounded-0">
-                            <div class="sidebar-section-body text-center">
-                                <div class="card-img-actions d-inline-block my-3">
-                                    {{-- rounded-circle --}}
-                                    <img class="img "
-                                        src="{{ Auth()->user()->photo == 'user.png' ? 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=00204e&color=fff' : asset('storage/profile/' . Auth()->user()->photo) }}"
-                                        width="150" height="150" alt="">
-                                </div>
-                                @php
-                                    $name=Auth()->user()->fname.' '.Auth()->user()->mname.' '.Auth()->user()->lname;
-                                @endphp 
-                                <h6 class="text-main  mb-0">{{ $name }}</h6>
-                                <span class="text-secondary mb-3">{{ Auth()->user()->positions->name }}</span>
-
-
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-md-3 col-6">
+                   
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                        <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <h1 class="text-main"><i class="ph-clock panel-text"></i></h1>
+                        <h4 class="panel-footer">My Overtimes <i class="ph-arrow-circle-right"></i></h4>
+                    </a>
                     </div>
-                  
-                    <div class="col-12 col-md-9">
-                        <div class="row mx-auto">
-                            <div class=" border-top  bordered-0 rounded-0">
-                                <div class="card-body border-0">
-                                    <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#my-overtimes" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
-                                                My Overtime
-                                            </a>
-                                        </li> 
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#register-approve" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                                                My Leaves
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#register-approve" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                                                My Loans
-                                            </a>
-                                        </li>  
-                                        
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#register-approve" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                                                My Pensions
-                                            </a>
-                                        </li>  
-                                    </ul>
-                                </div>
-                            
-                                <div class="tab-content" id="myTabContent">
-                                    {{-- start of my Overtimes --}}
-                                    <div role="tabpanel" class="tab-pane fade active show " id="my-overtimes" aria-labelledby="transfer-tab">
-                                        {{-- Apply overtime --}}
-                                        <div id="apply_overtime">
-                                            <div class="row">
-                                                <div class="col-md-12 ">
-                                                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                                                        <div class="card-header border-0 shadow-none">
-                                                            <h5 class="text-warning">Apply Overtime</h5>
-                                                        </div>
-                                    
-                                                        <div class="card-body">
-                                    
-                                                            <form id="applyOvertime" enctype="multipart/form-data" method="post" data-parsley-validate
-                                                                autocomplete="off">
-                                                                @csrf
-                                    
-                                                                <div class="modal-body">
-                                                                    <div class="row">
-                                    
-                                                                
-                                                                    <div class="col-12 col-md-6 mb-3">
-                                                                      
-                                                                        <div class="col-sm-12">
-                                                                            <label class="col-form-label    ">Overtime Category <span
-                                                                                class="text-danger">*</span> :</label>
-                                                                            <select class="form-control select_category select" name="category" required>
-                                                                                <option selected disabled> Select </option>
-                                                                                @foreach ($overtimeCategory as $overtimeCategorie)
-                                                                                    <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}
-                                                                                    </option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                    
-                                                                    <div class="col-6 col-md-3 mb-3">
-                                                                        <label class="col-form-label">Time Start <span class="text-danger">*</span>
-                                                                            :</label>
-                                                                        <div class="col-sm-12">
-                                                                            <div class="input-group">
-                                                                                <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                                                                <input type="text" required placeholder="Start Time" name="time_start"
-                                                                                    id="time_start" class="form-control daterange-single">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                    
-                                                                    <div class="col-6 col-md-3 mb-3">
-                                                                        <label class="col-form-label ">Time End <span class="text-danger">*</span>
-                                                                            :</label>
-                                                                        <div class="col-sm-9">
-                                                                            <div class="input-group">
-                                                                                <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                                                                <input type="text" required placeholder="Finish Time" name="time_finish"
-                                                                                    id="time_end" class="form-control daterange-single">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                    
-{{--                                     
-                                    
-                                                                    <div class="row mb-3">
-                                                                        <label class="col-form-label col-sm-3">Select Aprover <span
-                                                                                class="text-danger">*</span> :</label>
-                                                                        <div class="col-sm-9">
-                                                                            <select class="form-control select" name="linemanager" id="linemanager">
-                                                                                <option selected disabled> Select Approver</option>
-                                                                                @php
-                                                                                $employees=App\Models\EMPL::all();
-                                                                                @endphp
-                                                                                @foreach ($employees as $employee)
-                                                                                    <option value="{{ $employee->emp_id }}">{{ $employee->fname }}
-                                                                                        {{ $employee->mname }} {{ $employee->lname }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div> --}}
-                                    
-                                                                    <div class="row mb-3">
-                                                                        <label class="col-form-label ">Reason for overtime <span
-                                                                                class="text-danger">*</span> :</label>
-                                                                        <div class="col-sm-12">
-                                                                            <textarea rows="3" cols="3" required class="form-control" name="reason" placeholder='Reason'></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                    
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-perfrom">Send Request</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+              
+                </div>
 
-                                        {{-- / --}}
+                <div class="col-md-3 col-6">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                        <a href="{{ route('flex.my-leaves') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <h1 class="text-main"><i class="ph-calendar-check panel-text"></i></h1>
+                        <h4 class="panel-footer">My Leaves <i class="ph-arrow-circle-right"></i></h4>
+                    </a>
+                    </div>
+                </div>
 
+                <div class="col-md-3 col-6">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main  ">
+                        <a href="{{ route('flex.my-loans') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <h1 class="text-main"> <i class="ph-bank panel-text"></i></h1>
+                            <h4 class="panel-footer">My Loans <i class="ph-arrow-circle-right"></i></h4>
+                    
+                    </a>
+                    </div>
+                </div>
+                
 
-                                        <h6 class="mb-3 text-warning">My Overtimes</h6>
-                            
-                                        <table id="datatable" class="table table-striped table-bordered datatable-basic">
-                                            <thead>
-                                                <tr>
-                                                    <th>S/N</th>
-                                                    <th>Date</th>
-                                                    <th>Total Overtime(in Hrs.)</th>
-                                                    <th>Reason(Description)</th>
-                                                    <th>Status</th>
-                                                    <th>Option</th>
-                                                </tr>
-                                            </thead>
-                            
-                                        </table>
-                            
-                                    </div>
-                                    {{-- / --}}
-                            
-                                    {{-- Approve registered employee --}}
-                                    <div role="tabpanel" class="tab-pane  " id="register-approve" aria-labelledby="approve-tab">
-                            
-                                        <h6 class="text-warning mb-3 mx-3">Current Employee Registered</h6>
-                            
-                                        <?php echo session("note");  ?>
-                                        <div id="resultFeedback"></div>
-                            
-                                        
-                                    </div>
-                                    {{-- / --}}
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                        <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <h1 class="text-main"><i class="ph-scales panel-text"></i></h1>
+                        <h4 class="panel-footer">My Complains <i class="ph-arrow-circle-right"></i></h4>
+                    </a>
                     </div>
                 </div>
             </div>
-      
         </section>
-
-
         {{-- end  of self-service --}}
     
         {{-- start of dashboard statistics --}}

@@ -32,7 +32,7 @@
 
 
             <div id="save_termination" class="" tabindex="-1">
-                <div class="modal-dialog modal-lg">
+                <div class="p-2">
                     <div class="modal-content">
 
 
@@ -43,10 +43,10 @@
                         >
                             @csrf
 
-                            <div class="modal-body">
-                                <div class="row mb-3">
-                                    <label class="col-form-label col-sm-3"> Employee :</label>
-                                    <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-4 mb-3">
+                                    <label class="col-form-label "> Employee :</label>
+                                    <div class="col-sm-12">
 
                                         <select class="form-control select" name="empID" id="empID">
                                             <option selected disabled> Select Employee</option>
@@ -61,9 +61,9 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
-                                    <label class="col-form-label col-sm-3">Start Date</label>
-                                    <div class="col-sm-9">
+                                <div class="col-4 mb-3">
+                                    <label class="col-form-label">Start Date</label>
+                                    <div class="col-sm-12">
                                         <input type="date" name="start_date" class="form-control" id="start_date">
 
                                         @error('name')
@@ -72,9 +72,9 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
-                                    <label class="col-form-label col-sm-3">End Date</label>
-                                    <div class="col-sm-9">
+                                <div class="col-4 mb-3">
+                                    <label class="col-form-label ">End Date</label>
+                                    <div class="col-sm-12">
                                         <input type="date" name="end_date" class="form-control" id="start_date">
 
                                         @error('name')
@@ -84,9 +84,9 @@
                                 </div>
 
 
-                                <div class="row mb-3">
-                                    <label class="col-form-label col-sm-3">Reason for Unpaid Leave <span class="text-danger">*</span> :</label>
-                                    <div class="col-sm-9">
+                                <div class="col-12 mb-3">
+                                    <label class="col-form-label">Reason for Unpaid Leave <span class="text-danger">*</span> :</label>
+                                    <div class="col-sm-12">
                                         <textarea rows="3" cols="3" class="form-control" placeholder="Enter your message here" name="reason"></textarea>
                                         @error('name')
                                             <p class="text-danger mt-1"> Input field Error </p>

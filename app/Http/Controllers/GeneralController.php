@@ -9404,15 +9404,9 @@ class GeneralController extends Controller
     
             $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
     
-            // elseif (session('line')!=0) {
-            //   $data['adv_overtime'] = $this->flexperformance_model->overtimesLinemanager(session('emp_id'));
-            // }
-            // elseif (session('conf_overtime')!=0) {
-            //   $data['adv_overtime'] = $this->flexperformance_model->overtimesHR();
-            // }
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
-            $data['parent'] = 'Workforce';
-            $data['child'] = 'Overtime';
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Overtimes';
     
             // return view('overtime.overtime', $data);
             return view('my-services.overtimes',$data);
@@ -9421,9 +9415,24 @@ class GeneralController extends Controller
      
 
         // For My Loans
-        public function myLoans()
+        public function myLoans(Request $request)
         {
-            return view('my-services/loans');
+         
+     
+            $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
+            $empID = session('emp_id');
+
+            $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
+
+            $data['employee'] = $this->flexperformance_model->customemployee();
+            $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
+            $data['title'] = "Loans and Salaries";
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Loans';
+            return view('my-services/loans', $data);
+    
         }
         // For My Complains
         public function myComplains()

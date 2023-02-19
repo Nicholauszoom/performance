@@ -250,13 +250,9 @@ class AttendanceController extends Controller
                         $leave->status=1;
                         $leave->updated_at=$today;
                         $leave->update();
-                        dd('Go Level 2');
                     
                       }
-                      else
-                      {
-                        dd('Do nothing');
-                      }
+                   
                     }
                     elseif ($status == 1)
                     {
@@ -264,14 +260,12 @@ class AttendanceController extends Controller
                         $leave->status=2;
                         $leave->updated_at=$today;
                         $leave->update();
-                        dd('Go Level 3');
                       }
                       else
                       {
                         $leave->status=0;
                         $leave->updated_at=$today;
                         $leave->update();
-                        dd('Go Level 1');
                       }
                     }
                     elseif ($status == 2)
@@ -280,11 +274,6 @@ class AttendanceController extends Controller
                         $leave->status=0;
                         $leave->updated_at=$today;
                         $leave->update();
-                        dd('Go Level 1');
-                      }
-                      else
-                      {
-                        dd('Wait');
                       }
                     }
                   }
@@ -301,6 +290,9 @@ class AttendanceController extends Controller
             $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
             $data['leave_type'] = $this->attendance_model->leave_type();
           
+
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Leaves';
          return view('my-services/leaves', $data);
      }
   
@@ -819,12 +811,13 @@ elseif($nature == 7)
         $empID=$leave->empID;
         $approval=LeaveApproval::where('empID',$empID)->first();
         $approver=Auth()->user()->emp_id;
+        $employee=Auth()->user()->position;
+
+        $position=Position::where('id',$employee)->first();
 
         // chacking level 1
         if ($approval->level1==$approver) {
-          $employee=Auth()->user()->position;
-
-          $position=Position::where('id',$employee)->first();
+  
 
           // dd($position->name);
           $leave->status=1;
@@ -836,7 +829,21 @@ elseif($nature == 7)
         }
         elseif($approval->level2==$approver)
         {
-          dd('Level 2');
+          if ($approval->level3 != null) {
+            $leave->status=2;
+            $leave->position=$position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+          else
+          {
+            $leave->status=3;
+            $leave->state=0;
+            $leave->position=$position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+        
         }
         elseif($approval->level3==$approver)
         {
@@ -844,13 +851,11 @@ elseif($nature == 7)
         }
         else
         {
-            dd('Not Authorized');
+            $msg='Sorry, You are Not Authorized';
+
+            return redirect('flex/attendance/leave')->with('msg', $msg);
         }
 
-
-        // $leave->status = 1;
-        // $leave->state = 2;
-        // $leave->update();
 
 
 
