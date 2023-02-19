@@ -29,8 +29,8 @@ class SysHelpers
     public static function AuditLog($risk, $action, Request $request)
     {
         $employee = Auth::user()->fname . ' ' . Auth::user()->mname . ' ' . Auth::user()->lname;
-        $row = DB::table('payroll_months')->select('payroll_date')->last();
-        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+       // $row = DB::table('payroll_months')->select('payroll_date')->last();
+       // $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
 
         AuditTrail::create([
             'emp_id' => Auth::user()->emp_id,

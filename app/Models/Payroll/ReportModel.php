@@ -1326,6 +1326,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row;
     }
 
+    public function s_count1($date){
+
+        $row = DB::table('temp_payroll_logs')->where('payroll_date',$date)->select('id')->count();
+
+        return $row;
+    }
+
     public function s_overtime($date){
 
         $row = DB::table('allowance_logs')->where('payment_date',$date)->where('allowanceID',23)->sum('amount');
