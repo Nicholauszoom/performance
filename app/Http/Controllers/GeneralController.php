@@ -3758,6 +3758,14 @@ class GeneralController extends Controller
         $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
+        // start of overtime
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        $data['employees'] = EMPL::all();
+
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        // end of overtime
+
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
@@ -9377,6 +9385,54 @@ class GeneralController extends Controller
                 return redirect('flex/leave-approvals')->with('msg', $msg);
             }
         // End of Leave Approvals
+
+
+
+
+
+        // Start of self services
+
+
+        // For MyOvertime
+
+        public function myOvertimes()
+        {
+            $data['title'] = "Overtime";
+            $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+            $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+            $data['employees'] = $this->flexperformance_model->Employee();
+    
+            $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+    
+            // elseif (session('line')!=0) {
+            //   $data['adv_overtime'] = $this->flexperformance_model->overtimesLinemanager(session('emp_id'));
+            // }
+            // elseif (session('conf_overtime')!=0) {
+            //   $data['adv_overtime'] = $this->flexperformance_model->overtimesHR();
+            // }
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+            $data['parent'] = 'Workforce';
+            $data['child'] = 'Overtime';
+    
+            // return view('overtime.overtime', $data);
+            return view('my-services.overtimes',$data);
+        }
+
+     
+
+        // For My Loans
+        public function myLoans()
+        {
+            return view('my-services/loans');
+        }
+        // For My Complains
+        public function myComplains()
+        {
+            return view('my-services/complains');
+        }
+
+        // end of self services
+
 
 
 

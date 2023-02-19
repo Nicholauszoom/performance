@@ -29,7 +29,7 @@
 
 
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
-                @can('view-dashboard')
+                {{-- @can('view-dashboard')/ --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}"
                         class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null }}">
@@ -37,7 +37,68 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                @endcan
+
+                <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.addIncrement') ||request()->routeIs('flex.addTermination') || request()->routeIs('flex.addEmployee')||request()->routeIs('flex.employee') || request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination')  || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-user"></i>
+                        <span>My Services</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.addIncrement') || request()->routeIs('flex.addTermination') || request()->routeIs('flex.addEmployee')|| request()->routeIs('flex.employee')|| request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination') || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'show' : null }}">
+                        {{-- start of active employee link --}}
+                        @can('view-employee')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
+                                    href="{{ route('flex.my-overtimes') }}">
+                                    My Overtime
+                            </a>
+                            </li>
+                        @endcan
+                        {{--  / --}}
+
+                        {{--  start of suspend employee link --}}
+                    
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
+                                    href="{{ route('flex.my-leaves') }}">My Leaves</a>
+                            </li>
+                     
+                        {{-- / --}}
+
+                        {{--  start of employee termination link --}}
+                        @can('view-termination')
+
+                            <li class="nav-item ">
+                                <a class="nav-link {{ request()->routeIs('flex.addTermination') || request()->routeIs('flex.termination')  ? 'active' : null }}"
+                                    href="{{ route('flex.termination') }}">My loans</a>
+                            </li>
+                        @endcan
+                        {{-- / --}}
+
+                        {{-- start of promotion/increment link --}}
+                        @can('view-promotions')
+                            <li class="nav-item ">
+                                <a class="nav-link {{ request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') || request()-> routeIs('flex.promotion')  ? 'active' : null }}"
+                                    href="{{ route('flex.promotion') }}">My Loans</a>
+                            </li>
+                        @endcan
+                        {{-- / --}}
+
+
+                        {{--  start of overtime link --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"
+                                href="{{ route('flex.overtime') }}">My Compains </a>
+                        </li>
+
+                        {{-- / --}}
+
+                        
+                    </ul>
+                </li>
+                {{-- @endcan --}}
 
                 {{--
                     <li class="nav-item">

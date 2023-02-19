@@ -301,8 +301,10 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
-         // for fetching sub leave type
-         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
+       // start of selfservices routes
+        Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
+        // for fetching sub leave type
+        Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
         Route::post('/save_leave' ,'savelLeave')->name('attendance.saveLeave');
@@ -822,6 +824,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateContractEnd','updateContractEnd')->name('flex.updateContractEnd');
         Route::any('/approveRegistration/{id}','approveRegistration')->name('flex.approveRegistration');
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
+
+
+        // start of selfservices routes
+        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+
 
 
 

@@ -126,7 +126,8 @@ class AttendanceController extends Controller
 
    }
 
-  public function leave() {
+  public function leave()
+   {
       $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
 
       if(session('appr_leave')){
@@ -213,8 +214,97 @@ class AttendanceController extends Controller
 
    }
 
-  //  for fetching sub categories of leave
-      // fetching employee department's positions
+  
+     // For My Leaves
+     public function myLeaves()
+     {
+                  $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
+
+            if(session('appr_leave')){
+              $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
+            }else{
+              $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
+            }
+            $data['leave_types'] =LeaveType::all();
+            $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+            $data['leaves'] =Leaves::get();
+
+
+            // Start of Escallation
+            $leaves=Leaves::get();
+            if ($leaves) {
+
+              foreach($leaves as $item)
+              {
+                  $today= new DateTime();
+                  $applied =$item->updated_at;
+                  $diff= $today->diff($applied);
+                  $range=$diff->days;
+                  $approval=LeaveApproval::where('empID',$item->empID)->first();
+                  if ($range>$approval->escallation_time) {
+                    $leave=Leaves::where('id' ,$item->id)->first();
+                    $status=$leave->status;
+                    
+                    if ($status == 0) {
+                      if ($approval->level2 != null) {
+                        $leave->status=1;
+                        $leave->updated_at=$today;
+                        $leave->update();
+                        dd('Go Level 2');
+                    
+                      }
+                      else
+                      {
+                        dd('Do nothing');
+                      }
+                    }
+                    elseif ($status == 1)
+                    {
+                      if ($approval->level3 != null) {
+                        $leave->status=2;
+                        $leave->updated_at=$today;
+                        $leave->update();
+                        dd('Go Level 3');
+                      }
+                      else
+                      {
+                        $leave->status=0;
+                        $leave->updated_at=$today;
+                        $leave->update();
+                        dd('Go Level 1');
+                      }
+                    }
+                    elseif ($status == 2)
+                    {
+                      if ($approval->level1 != null) {
+                        $leave->status=0;
+                        $leave->updated_at=$today;
+                        $leave->update();
+                        dd('Go Level 1');
+                      }
+                      else
+                      {
+                        dd('Wait');
+                      }
+                    }
+                  }
+              }
+            }
+            // End of Escallation
+
+            // For Working days
+            $d1 = new DateTime (Auth::user()->hire_date);
+            $d2 = new DateTime();
+            $interval = $d2->diff($d1);
+            $data['days']=$interval->days;
+            $data['title'] = 'Leave';
+            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+            $data['leave_type'] = $this->attendance_model->leave_type();
+          
+         return view('my-services/leaves', $data);
+     }
+  
+   //  for fetching sub categories of leave
       public function getDetails($id = 0)
       {
 
