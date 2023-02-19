@@ -148,6 +148,7 @@
             <th>Duration</th>
             <th>Nature</th>
             <th>Reason</th>
+            <th>Approval State</th>
             <th>Status</th>
             <th>Option</th>
           </tr>
@@ -195,41 +196,34 @@
               </p>
               </td>
               <td><?php echo $row->reason; ?></td>
-
+            <td><div><span class="label label-default badge bg-pending text-white">{{ $row->position }}</span></div></td>
               <td>
                 <div >
-                  <span class="label label-default badge bg-pending text-white">{{ $row->position }}</span>
-                      {{-- <?php if ($row->status==0){ ?>
+                  
+                      <?php if ($row->state==1){ ?>
                       <div class="col-md-12">
-                      <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
-                      elseif($row->status==1){?>
+                      <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
+                      elseif($row->state==0){?>
                       <div class="col-md-12">
-                      <span class="label badge bg-info text-whites label-info">APPROVES</span></div><?php }
-                      elseif($row->status==3){?>
+                      <span class="label badge bg-info text-whites label-info">APPROVED</span></div><?php }
+                      elseif($row->state==3){?>
                       <div class="col-md-12">
-                      <span class="label label-warning">HELD</span></div><?php }
-                      elseif ($row->status==4) { ?>
-                      <div class="col-md-12">
-                      <span class="label label-warning">CANCELLED</span></div><?php }
-                      elseif($row->status==5){?>
-                      <div class="col-md-12">
-                      <span class="label label-danger">DISAPPROVED</span></div><?php }  ?> --}}
+                      <span class="label badge bg-danger text-white">DENIED</span></div><?php } ?>
                 </div>
 
               </td>
               <td class="options-width d-flex">
                 {{-- start of cancel leave button --}}
-              {{-- <?php if($row->status==0 || $row->status==3){ ?> --}}
-                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+              <?php if($row->status==0 ){ ?>
+                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip disabled"  
                 onclick="cancelRequest(<?php echo $row->id; ?>)">
                   <button  class="btn btn-danger btn-sm" ><i class="ph-x"></i></button></a>
-              {{-- <?php } ?> --}}
+              <?php } else{ ?>
               {{-- / --}}
-              {{-- <a href="{{ route('attendance.leave_application_info',['id'=>$row->id,'empID'=>$row->empID]) }}"    title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i></button> </a> --}}
+              <button  class="btn btn-danger btn-sm"  disabled><i class="ph-x"></i></button></a>
+              <?php }  ?>
               </td>
-              {{-- <td>
-              {{-- <?php echo $row->remarks."<br>"; ?> 
-              </td> --}}
+             
               </tr>
 
             <?php } //} ?>

@@ -151,49 +151,41 @@ class AttendanceController extends Controller
             $diff= $today->diff($applied);
             $range=$diff->days;
             $approval=LeaveApproval::where('empID',$item->empID)->first();
-            if ($range>$approval->escallation_time) {
-              $leave=Leaves::where('id' ,$item->id)->first();
-              $status=$leave->status;
-              
-              if ($status == 0) {
-                if ($approval->level2 != null) {
-                  $leave->status=1;
-                  $leave->updated_at=$today;
-                  $leave->update();
+            if ($approval) {
+              if ($range>$approval->escallation_time) {
+                $leave=Leaves::where('id' ,$item->id)->first();
+                $status=$leave->status;
+                
+                if ($status == 0) {
+                  if ($approval->level2 != null) {
+                    $leave->status=1;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                
+                  }
                
                 }
-                else
+                elseif ($status == 1)
                 {
-                  dd('Do nothing');
+                  if ($approval->level3 != null) {
+                    $leave->status=2;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
+                  else
+                  {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
                 }
-              }
-              elseif ($status == 1)
-              {
-                if ($approval->level3 != null) {
-                  $leave->status=2;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 3');
-                }
-                else
+                elseif ($status == 2)
                 {
-                  $leave->status=0;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 1');
-                }
-              }
-              elseif ($status == 2)
-              {
-                if ($approval->level1 != null) {
-                  $leave->status=0;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 1');
-                }
-                else
-                {
-                  dd('Wait');
+                  if ($approval->level1 != null) {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
                 }
               }
             }
@@ -236,42 +228,46 @@ class AttendanceController extends Controller
                   $diff= $today->diff($applied);
                   $range=$diff->days;
                   $approval=LeaveApproval::where('empID',$item->empID)->first();
-                  if ($range>$approval->escallation_time) {
-                    $leave=Leaves::where('id' ,$item->id)->first();
-                    $status=$leave->status;
-                    
-                    if ($status == 0) {
-                      if ($approval->level2 != null) {
-                        $leave->status=1;
-                        $leave->updated_at=$today;
-                        $leave->update();
-                    
+
+                  if ($approval) {
+                    if ($range>$approval->escallation_time) {
+                      $leave=Leaves::where('id' ,$item->id)->first();
+                      $status=$leave->status;
+                      
+                      if ($status == 0) {
+                        if ($approval->level2 != null) {
+                          $leave->status=1;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                      
+                        }
+                     
                       }
-                   
-                    }
-                    elseif ($status == 1)
-                    {
-                      if ($approval->level3 != null) {
-                        $leave->status=2;
-                        $leave->updated_at=$today;
-                        $leave->update();
-                      }
-                      else
+                      elseif ($status == 1)
                       {
-                        $leave->status=0;
-                        $leave->updated_at=$today;
-                        $leave->update();
+                        if ($approval->level3 != null) {
+                          $leave->status=2;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                        }
+                        else
+                        {
+                          $leave->status=0;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                        }
                       }
-                    }
-                    elseif ($status == 2)
-                    {
-                      if ($approval->level1 != null) {
-                        $leave->status=0;
-                        $leave->updated_at=$today;
-                        $leave->update();
+                      elseif ($status == 2)
+                      {
+                        if ($approval->level1 != null) {
+                          $leave->status=0;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                        }
                       }
                     }
                   }
+            
               }
             }
             // End of Escallation

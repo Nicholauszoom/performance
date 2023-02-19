@@ -92,6 +92,7 @@
                 <i class="ph ph-download"></i> &nbsp;
                 Attachment
               </a>
+              @if($approval)
               <?php if ($item->status==0 && $item->state==1 ){ ?>
                 @if ( Auth()->user()->emp_id == $approval->level1)
                 <div class="col-md-12 text-center mt-1">
@@ -136,9 +137,8 @@
                 <div class="col-md-12 mt-1">
                 <span class="label bg-danger text-white">Denied</span></div>
                 <?php } ?>
-               
-          
-            </td>
+                @endif
+              </td>
         
           </tr>
           @endif
