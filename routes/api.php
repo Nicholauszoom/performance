@@ -39,9 +39,14 @@ Route::middleware('auth:sanctum')->group( function () {
       // For Leaves
       Route::get('/my-leaves',[GeneralController::class,'myLeaves']);
       //For Loans
-      Route::get('/my-loans',[GeneralController::class,'pension']);
+      Route::get('/my-loans',[GeneralController::class,'myLoans']);
       // For Salary slips 
-      Route::get('/my-slips',[GeneralController::class,'pension']);
+      Route::get('/my-slips',[GeneralController::class,'mySlips']);
+
+
+      // For Saving Overtimes
+      Route::post('/apply-overtime',[GeneralController::class,'apply-overtime']);
+      // For Saving Leaves
 
 
 });
