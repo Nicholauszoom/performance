@@ -202,10 +202,7 @@ class GeneralController extends Controller
         // return view('my-services/pensions',$data);
 
         
-        return response(
-            [
-                'data'=>$data
-            ],200 );
+        return response( ['data'=>$data ],200 );
     }
      // end of pension history
 
@@ -478,6 +475,24 @@ class GeneralController extends Controller
     return response( [ 'data'=>$data  ],200 );
     }
     //  end of employee leaves function
+
+
+        //  start of employee leaves function
+        public function myLoans(Request $request)
+        {
+            $empID = auth()->user()->emp_id;
+            // For pending loans
+            $data['pending_loans'] = $this->flexperformance_model->mysalary_advance($empID);
+           
+            // For Approved Loans
+            $data['approved_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
+
+        
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+        return response( [ 'data'=>$data  ],200 );
+        }
+        //  end of employee leaves function
 
 
 
