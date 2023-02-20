@@ -47,14 +47,14 @@
 
                     <ul class="nav-group-sub collapse {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
                         {{-- start of active employee link --}}
-                        @can('view-employee')
+                     
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
                                     href="{{ route('flex.my-overtimes') }}">
                                     Overtimes
                             </a>
                             </li>
-                        @endcan
+                      
                         {{--  / --}}
 
                         {{--  start of suspend employee link --}}
@@ -67,13 +67,13 @@
                         {{-- / --}}
 
                         {{--  start of employee termination link --}}
-                        @can('view-termination')
+                      
 
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.my-loans')  ? 'active' : null }}"
                                     href="{{ route('flex.my-loans') }}">Loans</a>
                             </li>
-                        @endcan
+                   
                         {{-- / --}}
 
                     
