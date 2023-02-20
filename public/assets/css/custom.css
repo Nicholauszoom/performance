@@ -160,6 +160,34 @@ h2 {
     text-transform: uppercase;
 }
 
+.panel-text{
+    font-size: 42px !important;
+
+}
+
+.panel-text:hover{
+    font-size: 42px !important;
+    color: #c20430;
+}
+
+.panel-footer{
+    font-size: 13px !important;
+    color: #c20430;
+    text-transform: uppercase;
+}
+
+.panel-footer:hover{
+    font-size: 13px !important;
+    color: #f0ab00 !important;
+    text-transform: uppercase;
+}
+
+.btn-icon {
+    background-color:#00204e !important;
+    color: #fff;
+    visibility: visible;
+    opacity: 1;
+}
 .swal2-title{
     font-size: 14px !important;
     text-transform: none;
