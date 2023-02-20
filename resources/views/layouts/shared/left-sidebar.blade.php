@@ -90,7 +90,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) ? 'active' : null }}"
-                                href="{{ route('flex.userdata', base64_encode(Auth()->user()->emp_id)) }}"> Biodata </a>
+                                href="{{ route('flex.userdata', base64_encode(Auth()->user()->emp_id)) }}" > Biodata </a>
                         </li>
 
                         {{-- / --}}

@@ -87,7 +87,7 @@
               @php
                 $approval=App\Models\LeaveApproval::where('empID',$item->empID)->first();
               @endphp
-              <a href="" class="btn bg-main btn-sm" title="Download Attachment">
+              <a href="{{asset('storage/leaves/' . $item->attachment) }}" download="attachment" class="btn bg-main btn-sm" title="Download Attachment">
                 <i class="ph ph-download"></i> &nbsp;
                 Attachment
               </a>
