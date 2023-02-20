@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create New Finencial Based-Group of Employees</h5>
+                <h5 class="modal-title">New Package(Group)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -22,7 +22,7 @@
                                 <option value="1">Employee</option>
                                 <option value="2">Role</option>
                             </select>
-                           
+
                         </div>
                     </div>
                 <div class="modal-footer">

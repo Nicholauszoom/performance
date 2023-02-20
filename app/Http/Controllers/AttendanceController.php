@@ -330,11 +330,12 @@ class AttendanceController extends Controller
           {
           $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
-          }
-          elseif($nature == 7)
-          {
+}
+// elseif($nature == 7)
+// {
+//  $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
 
-    }
+// }
 
 
 

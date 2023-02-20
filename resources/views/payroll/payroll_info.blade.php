@@ -8,55 +8,23 @@
 
 @section('content')
     @php
-        $payroll_details = $data['payroll_details'];
-        $payroll_month_info = $data['payroll_month_info'];
-        $payroll_list = $data['payroll_list'];
-        $payroll_date = $data['payroll_date'];
-        $payroll_totals = $data['payroll_totals'];
 
-        $total_allowances = $data['total_allowances'];
-        $total_bonuses = $data['total_bonuses'];
-        $total_loans = $data['total_loans'];
-        $total_overtimes = $data['total_overtimes'];
-        $total_deductions = $data['total_deductions'];
-        $payroll_state = $data['payroll_state'];
 
-        $payrollMonth = $payroll_date;
-        $payrollState = $payroll_state;
 
-        foreach ($payroll_totals as $row) {
-            $salary = $row->salary;
-            $pension_employee = $row->pension_employee;
-            $pension_employer = $row->pension_employer;
-            $medical_employee = $row->medical_employee;
-            $medical_employer = $row->medical_employer;
-            $sdl = $row->sdl;
-            $wcf = $row->wcf;
-            $allowances = $row->allowances;
-            $taxdue = $row->taxdue;
-            $meals = $row->meals;
-        }
+        // $payrollMonth = $payroll_date;
+         $payrollState = $payroll_state;
 
-        $paid_heslb = null;
-        $remained_heslb = null;
-        $paid = null;
-        $remained = null;
 
-        foreach ($total_loans as $key) {
-            if ($key->description == 'HESLB') {
-                $paid_heslb = $key->paid;
-                $remained_heslb = $key->remained;
-            } else {
-                $paid = $key->paid;
-                $remained = $key->remained;
-            }
-        }
 
-        foreach ($payroll_month_info as $key) {
-            // $paid = $key->payroll_date;
-            $cheklist = $key->pay_checklist;
-            $state = $key->state;
-        }
+
+
+
+
+
+
+        $total_previous = 0;
+        $total_current = 0;
+        $total_amount = 0;
 
     @endphp
 
@@ -69,78 +37,151 @@
 
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div
-                        class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-                        <div class="mb-2 ms-auto">
-                            <h4 class="text-muted">Payloll Details:</h4>
-                            <div class="d-flex flex-wrap wmin-lg-400">
-                                <ul class="list list-unstyled mb-0">
-                                    <li>
-                                        <h5 class="my-2">Salaries:</h5>
-                                    </li>
-                                    <li>Total Allowances:</li>
-                                    <li>Pension(Employer):</li>
-                                    <li>Pension (Employee):</li>
+                <div class="col-md-12 col-sm-12 col-xs-12">
 
-                                    <li>Taxdue (PAYE):</li>
-                                    <li>WCF:</li>
-                                    <li>SDL:</li>
-                                </ul>
+                    <table class="table table-stripped " style="font-size:14px;">
+                        <thead>
+                            <tr class="">
+                                <th><b>RefNo</b></th>
+                                <th><b>Desc</b></th>
+                                <th class="text-end"><b>Last Month</b></th>
+                                <th class="text-end"><b>This Month</b></th>
+                                <th class="text-end"><b>Amount</b></th>
+                                <th class="text-end"><b>Count</b></th>
 
-                                <ul class="list list-unstyled text-end mb-0 ms-auto">
-                                    <li>
-                                        <h5 class="my-2">{{ number_format($salary, 2) }}</h5>
-                                    </li>
-                                    <li><span class="fw-semibold">{{ number_format($allowances, 2) }}</span></li>
-                                    <li>{{ number_format($pension_employer, 2) }}</li>
-                                    <li>{{ number_format($pension_employee, 2) }}</li>
+                            </tr>
+                        </thead>
 
-                                    <li>{{ number_format($taxdue, 2) }}</li>
-                                    <li><span class="fw-semibold">{{ number_format($wcf, 2) }}</span></li>
-                                    <li><span class="fw-semibold">{{ number_format($sdl, 2) }}</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                        <tbody>
+                            @php
+                                $total_previous += 0;
+                                $total_current += 0;
+                                $total_amount += $total_previous_gross;
+                            @endphp
+                            <tr>
+                                <td class="text-start">00001</td>
+                                <td class="text-start">Last Month Gross Salary</td>
+                                <td class="text-end">
+                                    {{ number_format(0, 2) }}</td>
+                                <td class="text-end">
+                                    {{ number_format(0, 2) }}</td>
+                                <td class="text-end">{{ number_format($total_previous_gross, 2) }}</td>
+                                <td class="text-end">{{ $count_previous_month }}</td>
+                            </tr>
+                            @if ($total_current_basic - $total_previous_basic != 0)
+                                @if ($total_current_basic > $total_previous_basic != 0)
+                                    <tr>
+                                        <td class="text-start">00002</td>
+                                        <td class="text-start">Add New Employee</td>
+                                        <td class="text-end">
+                                            {{ number_format(0, 2) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($total_current_basic - $total_previous_basic, 2) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($total_current_basic - $total_previous_basic, 2) }}</td>
+                                        <td class="text-end">{{ $count_current_month - $count_previous_month }}</td>
+                                    </tr>
+                                    @php
+                                        $total_previous += 0;
+                                        $total_current += $total_current_basic - $total_previous_basic;
+                                        $total_amount += $total_current_basic - $total_previous_basic;
+                                    @endphp
+                                @else
+                                    <tr>
+                                        <td class="text-start">00002</td>
+                                        <td class="text-start">Less Terminated Employee</td>
+                                        <td class="text-end">
+                                            {{ number_format(0, 2) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($total_previous_basic - $total_current_basic, 2) }}</td>
+                                        <td class="text-end">
+                                            {{ number_format($total_previous_basic - $total_current_basic, 2) }}</td>
+                                        <td class="text-end">{{ $count_previous_month - $count_current_month }}</td>
+                                    </tr>
+                                    @php
+                                        $total_previous += 0;
+                                        $total_current += $total_current_basic - $total_previous_basic;
+                                        $total_amount += $total_current_basic - $total_previous_basic;
+                                    @endphp
+                                @endif
+                            @endif
+                            @if ($current_increase - $previous_increase != 0)
+                                <tr>
+                                    <td class="text-start">00004</td>
+                                    <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
+                                    <td class="text-end">
+                                        {{ number_format($previous_increase, 2) }}</td>
+                                    <td class="text-end">
+                                        {{ number_format($current_increase, 2) }}</td>
+                                    <td class="text-end">
+                                        {{ number_format($current_increase - $previous_increase, 2) }}</td>
+                                    <td class="text-end"></td>
+                                </tr>
+                                @php
+                                    $total_previous += $previous_increase;
+                                    $total_current += $current_increase;
+                                    $total_amount += $current_increase - $previous_increase;
+                                @endphp
+                            @endif
+                            @if ($current_decrease - $previous_decrease != 0)
+                                <tr>
+                                    <td class="text-start">00004</td>
+                                    <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
+                                    <td class="text-end">
+                                        {{ number_format($previous_decrease, 2) }}</td>
+                                    <td class="text-end">
+                                        {{ number_format($current_decrease, 2) }}</td>
+                                    <td class="text-end">
+                                        {{ number_format($current_decrease - $previous_decrease, 2) }}</td>
+                                    <td class="text-end"></td>
+                                </tr>
+                                @php
+                                    $total_previous -= $previous_decrease;
+                                    $total_current -= $current_decrease;
+                                    $total_amount -= $current_decrease - $previous_decrease;
+                                @endphp
+                            @endif
+                            @php $i = 1;  @endphp
+                            @if (count($total_allowances) > 0)
+                                @foreach ($total_allowances as $row)
+                                    @php $i++;  @endphp
+                                    @if ($row->current_amount - $row->previous_amount != 0)
+                                        <tr>
+                                            <td class="text-start">{{ '000' . $i + 4 }}</td>
+                                            <td class="text-start">{{ $row->description }} </td>
+                                            <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
+                                            <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                            <td class="text-end">{{ number_format($row->difference, 2) }}</td>
+                                            <td class="text-end"></td>
+                                        </tr>
+                                        @php
+                                            $total_previous += $row->previous_amount;
+                                            $total_current += $row->current_amount;
+                                            $total_amount = $total_amount + $row->difference;
+                                        @endphp
+                                    @endif
+                                @endforeach
+                            @endif
 
+
+                            {{-- </tbody>
+                        <tbody> --}}
+                            <tr style="border-top: 2px solid rgb(18, 93, 54) !important; ">
+                                <td class="text-start"></td>
+                                <td class="text-start"><b>This Month</b> </td>
+                                <td class="text-end">
+                                    <b>{{ number_format(!empty($total_previous) ? $total_previous : 0, 2) }}</b>
+                                </td>
+                                <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
+                                <td class="text-end">
+                                    <b>{{ number_format($total_amount, 2) }}</b>
+                                </td>
+                                <td class="text-end"><b>{{ $count_current_month }}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <div
-                        class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
-                        <div class="mb-2 ms-auto">
-                            <h4 class="text-muted">Payloll Details:</h4>
-                            <div class="d-flex flex-wrap wmin-lg-400">
-                                <ul class="list list-unstyled mb-0">
-                                    <li>
-                                        <h5 class="my-2">Salaries:</h5>
-                                    </li>
-                                    <li>Total Allowances:</li>
-                                    <li>Pension(Employer):</li>
-                                    <li>Pension (Employee):</li>
 
-                                    <li>Taxdue (PAYE):</li>
-                                    <li>WCF:</li>
-                                    <li>SDL:</li>
-                                </ul>
-
-                                <ul class="list list-unstyled text-end mb-0 ms-auto">
-                                    <li>
-                                        <h5 class="my-2">{{ number_format($salary, 2) }}</h5>
-                                    </li>
-                                    <li><span class="fw-semibold">{{ number_format($allowances, 2) }}</span></li>
-                                    <li>{{ number_format($pension_employer, 2) }}</li>
-                                    <li>{{ number_format($pension_employee, 2) }}</li>
-
-                                    <li>{{ number_format($taxdue, 2) }}</li>
-                                    <li><span class="fw-semibold">{{ number_format($wcf, 2) }}</span></li>
-                                    <li><span class="fw-semibold">{{ number_format($sdl, 2) }}</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
             </div>
             <hr>
 

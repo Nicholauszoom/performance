@@ -4993,7 +4993,7 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
 
 
             if ($result == true) {
@@ -9317,7 +9317,7 @@ class GeneralController extends Controller
         // For Saving Leave Approvals
         public function saveLeaveApproval(Request $request)
         {
-            
+
             request()->validate(
                 [
                     'empID' => 'required',
@@ -9347,7 +9347,7 @@ class GeneralController extends Controller
 
         public function editLeaveApproval(Request $request, $id)
         {
-            
+
     // dd($id);
             $data['approval'] = LeaveApproval::where('id', $id)->first();
             $data['employees'] = EMPL::get();
@@ -9365,7 +9365,7 @@ class GeneralController extends Controller
                 $approval = LeaveApproval::find($id);
 
                 $approval->delete();
-                
+
                 return redirect('flex/leave-approvals');
             }
 

@@ -22,7 +22,7 @@
 
      @if($payrollState != 1)
      @can('download-summary')
-     <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>2]) }}" target="blank">
+     <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>2,'payrollState'=>2]) }}" target="blank">
          <button type="button" name="print" value="print" class="btn btn-main btn-sm">
              Payroll Changes
          </button>
