@@ -140,7 +140,7 @@
 
             <tbody>
                 <?php foreach ($my_overtimes as $row) { ?>
-                <?php if(!$row->status==2) { ?>
+              
                 <tr id="domain<?php //echo $row->id;
                 ?>">
                     <td width="1px"><?php echo $row->SNo; ?></td>
@@ -169,7 +169,7 @@
                     </td>
                 </tr>
                 <?php }  ?>
-                <?php }  ?>
+              
             </tbody>
         </table>
     </div>
