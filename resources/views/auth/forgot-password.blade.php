@@ -12,8 +12,16 @@
 
     <script src="{{ asset('assets/js/app.js') }}"></script>
 </head>
+<style>
+    body {
+ background-image: url('{{ asset('img/bg.png') }}');
+ background-color: #cccccc;
+ 
+}
+ </style>
 
-<body style="background:#3b465a;">
+    <body class="bg-white" >
+{{-- <body style="background:#3b465a;"> --}}
     <div class="page-content">
 
         <!-- Main content -->
