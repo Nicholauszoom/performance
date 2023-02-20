@@ -771,8 +771,8 @@
 
 
 
-<script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+<script src="{{  public_path('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
 
 
 <script>

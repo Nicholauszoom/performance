@@ -19,7 +19,7 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header border-0">
         <div class="">
-            <h6 class="mb-0 text-muted">Approvals</h6>
+            <h6 class="mb-0 text-warning">Approvals</h6>
 
             <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Add Approval</button>
         </div>
@@ -39,7 +39,6 @@
                         <th class="text-center">Process Name</th>
                         <th class="text-center">Levels</th>
                         <th class="text-center">Escallation</th>
-                        <th class="text-center">Escallation Time</th>
                         <th >Actions</th>
                     </thead>
                     <tbody>
@@ -49,7 +48,6 @@
                                 <td class="text-center">{{ $item->process_name}}</td>
                                 <td class="text-center">{{ $item->levels}}</td>
                                 <td class="text-center">{{ $item->escallation=='1'? 'Yes':'No' }}</td>
-                                <td class="text-center">{{ $item->escallation_time}}</td>
                                 <td>
                                     <a href="{{ route('flex.approval-levels', base64_encode($item->id)) }}" class="btn btn-main btn-sm" aria-label="Edit">
                                         <i class="ph-info"></i>

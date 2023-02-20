@@ -19,7 +19,7 @@
 <div class="card">
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-muted">Holidays</h5>
+            <h5 class="mb-0 text-warning">Holidays</h5>
 
 
         </div>
@@ -29,7 +29,7 @@
         <div id="save_termination" class="col-12" tabindex="-1">
             <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
                 <div class="card-header">
-                    <h6 class="text-main">Edit Holiday</h6>
+                    <h6 class="text-warning">Edit Holiday</h6>
                 </div>
                 <div class="modal-content">
                     @if (session('status'))
@@ -106,9 +106,11 @@
                                     <a href="{{ route('flex.editholiday', base64_encode($item->id)) }}" class="btn btn-sm btn-main">
                                         <i class="ph-pen"></i>
                                     </a>
-                                    <a href="{{ route('flex.deleteholiday',$item->id) }}" class="btn btn-sm btn-danger">
-                                        <i class="ph-trash"></i>
-                                        </a>
+
+                                    <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                                    onclick="deleteHoliday(<?php echo $item->id; ?>)">
+                                    <button class="btn btn-danger btn-sm"><i class="ph-trash"></i> </button>
+                                     </a>
                                 </td>
                                 <td hidden>
 
@@ -139,30 +141,99 @@
 
 @push('footer-script')
 
-<script>
 
-$('#docNo').change(function(){
-    var id = $(this).val();
-    var url = '{{ route("getDetails", ":id") }}';
-    url = url.replace(':id', id);
 
-    $.ajax({
-        url: url,
-        type: 'get',
-        dataType: 'json',
-        success: function(response){
-            if(response != null){
-                $('#salary').val(response.salary+' '+response.currency);
-                $('#oldLevel').val(response.emp_level);
-                $('#oldPosition').val(response.position.name);
-            }
+    <script>
+
+
+
+
+        function deleteHoliday(id) {
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Delete This Holiday ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var holidayid = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/delete-holiday') }}/" + holidayid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+
+                        $('#status' + id).fadeOut('fast', function() {
+                            $('#status' + id).fadeIn('fast').html(
+                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                                );
+                        });
+
+                        // alert('Request Cancelled Successifully!! ...');
+
+                        Swal.fire(
+                            'Cancelled!',
+                            'Holiday Deleted Successifully!!.',
+                            'success'
+                        )
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .fail(function() {
+                        Swal.fire(
+                            'Failed!',
+                            'Holiday Deletion Failed!! ....',
+                            'success'
+                        )
+
+                        alert('Holiday Deletion Failed!! ...');
+                    });
+                }
+            });
+
+            // if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
+
+            //     var overtimeid = id;
+
+            //     $.ajax({
+            //             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+            //         })
+            //         .done(function(data) {
+            //             $('#resultfeedOvertime').fadeOut('fast', function() {
+            //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
+            //             });
+
+            //             $('#status' + id).fadeOut('fast', function() {
+            //                 $('#status' + id).fadeIn('fast').html(
+            //                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+            //                     );
+            //             });
+
+            //             alert('Request Cancelled Successifully!! ...');
+
+            //             setTimeout(function() {
+            //                 location.reload();
+            //             }, 1000);
+            //         })
+            //         .fail(function() {
+            //             alert('Overtime Cancellation Failed!! ...');
+            //         });
+            // }
         }
-    });
-});
+    </script>
 
 
-</script>
 
+ 
 
 @endpush
 

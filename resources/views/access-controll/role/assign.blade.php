@@ -21,7 +21,7 @@
                             <h3 class="text-uppercase">{{ $role->slug }} ( Role ) - Permissions</h3>
 
                             <div class="card-header header-elements-sm-inline">
-                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-xs px-4"><i
+                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-sm px-4"><i
                                         class="ph-left"></i> Back </a>
 
                                 <div class="header-elements">
@@ -126,10 +126,10 @@
                                         <div class="row justify-content-end p-0 mr-1">
                                             <div class="p-2 ">
                                                 <a href="{{ route('roles.index') }}"
-                                                    class="btn btn-main btn-xs px-6"><i
+                                                    class="btn btn-main btn-sm px-6"><i
                                                         class="fa fa-arrow-circle-left"></i> Back </a>
                                                 {!! Form::submit('Assign', [
-                                                    'class' => 'btn btn-outline-success btn-xs
+                                                    'class' => 'btn btn-secondary btn-sm
                                                                                             px-4',
                                                 ]) !!}
                                             </div>

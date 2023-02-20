@@ -67,10 +67,11 @@
                                       <div class=" border-bottom-main mb-0">
           
                                           <div class="">
-                                              <div class="text-center mb-3">
+                                              <div class="text-center mb-2 mt-5">
                                                   <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
                                                       <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid" style="height: 10em" alt="logo">
                                                   </div>
+                                                  
           
                                               </div>
           
@@ -94,7 +95,7 @@
                                                   @endif
                                               @endif
           
-                                              <div class="mb-5">
+                                              <div class="mb-3">
                                                   <label class="form-label text-main">Username</label>
           
                                                   <div class="form-control-feedback form-control-feedback-start">
@@ -114,7 +115,7 @@
                                                   </div>
                                               </div>
           
-                                              <div class="mb-5">
+                                              <div class="mb-3">
                                                   <label class="form-label text-main">Password</label>
           
                                                   <div class="form-control-feedback form-control-feedback-start">

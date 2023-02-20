@@ -33,65 +33,17 @@
             <div class="clearfix"></div>
 
             <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                        <div class="card-head px-2">
-                            <h2> My Approved Loans </h2>
-
-                            <div class="clearfix"></div>
-                        </div>
-
-                        <div id="feedBack"></div>
-                        <div id="loanList" class="card-body">
-
-                            <table id="datatable" class="table datatable-basic table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>S/N</th>
-                                        <th>Type</th>
-                                        <th>Amount(Debt)</th>
-                                        <th>Paid</th>
-                                        <th>Remained</th>
-                                        <th>Last Paid</th>
-                                    </tr>
-                                </thead>
-
-
-                                <tbody>
-                                    <?php
-                          foreach ($my_loans as $row) { ?>
-                                    <tr>
-                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->description; ?></td>
-                                        <td><?php echo number_format($row->amount, 2); ?></td>
-                                        <td><?php echo number_format($row->paid, 2); ?></td>
-                                        <td><?php echo number_format($row->amount - $row->paid, 2); ?></td>
-                                        <td><?php echo number_format($row->amount_last_paid, 2); ?>
-                                            <?php if($row->state==1){ ?> <div class="col-md-12"><span
-                                                    class="label label-danger">ACTIVE</span></div><?php } elseif($row->state==0){ ?><div
-                                                class="col-md-12"><span class="label label-success">COMPLETED</span></div>
-                                            <?php } elseif($row->state==2){ ?><div class="col-md-12"><span
-                                                    class="label label-warning">PAUSED</span></div><?php } ?>
-                                        </td>
-                                    </tr>
-                                    <?php }  ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
+             
                 <?php if(session('appr_loan')!=''){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-head px-3">
-                            <h2> Approved Loans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <h2 class="text-warning mt-2"> Approved Loans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 <button type="button" data-bs-toggle="modal" data-bs-target="#loanModal"
-                                    class="btn btn-main">Print Report</button></a>
+                                    class="btn btn-main float-end">Print Report</button></a>
                             </h2>
 
-                            <div class="clearfix"></div>
                         </div>
 
                         <div id="feedBack"></div>
@@ -138,16 +90,16 @@
                                             <?php if($row->state==1){ ?>
 
                                             <a href="javascript:void(0)" onclick="pauseLoan(<?php echo $row->id; ?>)">
-                                                <button class="btn btn-warning btn-xs">PAUSE</button></a>
+                                                <button class="btn btn-warning btn-sm m-1">PAUSE</button></a>
 
                                             <a href="<?php echo url(''); ?>/flex/loan_advanced_payments/?key=<?php echo base64_encode($row->id); ?>"
                                                 title="Advanced Loan Payment">
-                                                <button class="btn btn-success btn-xs">ADV PAYMENT</button></a>
+                                                <button class="btn btn-success btn-sm m-1">ADV PAYMENT</button></a>
                                             <?php }
                                if($row->state==2){ ?>
 
                                             <a href="javascript:void(0)" onclick="resumeLoan(<?php echo $row->id; ?>)">
-                                                <button class="btn btn-info btn-xs">RESUME</button></a>
+                                                <button class="btn btn-info btn-sm m-1">RESUME</button></a>
                                             <?php } ?>
 
                                         </td>

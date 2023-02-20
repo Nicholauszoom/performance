@@ -19,11 +19,11 @@
                 <div class="col-12 col-sm-6 col-lg-12">
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header header-elements-sm-inline">
-                            <h4 class="card-title">Roles</h4>
+                            <h4 class="card-title text-warning">Roles</h4>
 
                             <div class="header-elements">
-                                <button type="button" class="btn btn-main btn-xs px-4" data-toggle="modal" data-target="#addRoleModal">
-                                    <i class="fa fa-plus-circle"></i> Add
+                                <button type="button" class="btn btn-main btn-xs px-4 float-end" data-toggle="modal" data-target="#addRoleModal">
+                                    <i class="fa fa-plus-circle"></i> Add Role
                                 </button>
                             </div>
                         </div>
@@ -49,18 +49,18 @@
                                                         <td>{{ $role->slug }}</td>
                                                         <td>
                                                             <a href="{{ route('roles.show',$role->id) }}"
-                                                            class="btn btn-outline-info btn-xs"><i class="fas fa-plus-circle pr-1"></i> Assign </a>
+                                                            class="btn btn-main btn-xs"><i class="fas fa-plus-circle pr-1"></i> Assign </a>
                                                         </td>
                                                         <td >
                                                             {!! Form::open(['route' => ['roles.destroy', $role->id], 'method' => 'delete']) !!}
-                                                            <button type="button" class="btn btn-outline-info btn-xs edit_role_btn mr-1"
+                                                            <button type="button" class="btn btn-main btn-sm edit_role_btn mr-1"
                                                                     data-toggle="modal"
                                                                     data-id="{{$role->id}}"
                                                                     data-name="{{$role->name}}"
                                                                     data-slug="{{$role->slug}}">
-                                                                <i class="fa fa-edit"></i> Edit
+                                                                <i class="ph-note-pencil"></i> 
                                                             </button>
-                                                            {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
+                                                            {{ Form::button('<i class="ph-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return confirm('Are you sure?')"]) }}
                                                             {{ Form::close() }}
                                                         </td>
                                                     </tr>

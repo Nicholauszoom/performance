@@ -99,7 +99,7 @@ $style = array('width' => 0.25, 'dash' => 0, 'color' => array(0, 0, 0));
 
 $date = date('F, Y', strtotime($payroll_date));
 $pdf->SetXY(127, 10);
-$path=FCPATH.'uploads/logo/logo.png';
+$path='uploads/logo/logo.png';
 
 $pdf->Image($path, '', '',  35, 30, '', '', 'T', false, 300, '', false, false, '', false, false, false);
 
@@ -153,7 +153,7 @@ foreach($loans as $key){
 // setlocale(LC_MONETARY, 'en_US');
 
 $html .="</table><br><table border='1px'><tr>
-  <td colspan='4'><br><br><b></b><br><br> 
+  <td colspan='4'><br><br><b></b><br><br>
   </td>
   <td></td>
   <td colspan='4'><br><br><br><br></td>

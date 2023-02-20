@@ -53,7 +53,7 @@
     ?>
 
     <div class="mb-3">
-        <h5 class="text-muted">Employee Profile</h5>
+        <h5 class="text-warning">Employee Profile</h5>
     </div>
 
     <div class="row">
@@ -62,7 +62,7 @@
                 <div class="sidebar-section-body text-center">
                     <div class="card-img-actions d-inline-block my-3">
                         {{-- rounded-circle --}}
-                        <img class="img-fluid "
+                        <img class="img "
                             src="{{ $photo == 'user.png' ? 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}"
                             width="150" height="150" alt="">
                     </div>

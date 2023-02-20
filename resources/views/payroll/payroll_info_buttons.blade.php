@@ -1,10 +1,15 @@
 
  <h3 class="me-4 text-center">Payroll Review For : {{ date('F, Y',strtotime($payrollMonth)) }}</h3>
  <div class="d-flex">
-    <a href="{{route('payroll.payroll_info',['pdate'=>base64_encode($payrollMonth)])}}" target="blank">
+    @if($payrollState != 1)
+    <a href="{{route('reports.get_reconsiliation_summary',['payrolldate'=>$payrollMonth])}}" target="blank">
         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconsiliation</button>
     </a>
-
+    @else
+    <a href="{{route('reports.get_reconsiliation_summary1',['payrolldate'=>$payrollMonth])}}" target="blank">
+        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconsiliation</button>
+    </a>
+@endif
      {{-- payroll summary button 1--}}
      @if($payrollState != 1)
      @can('download-summary')

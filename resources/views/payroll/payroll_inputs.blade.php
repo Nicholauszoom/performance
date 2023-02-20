@@ -34,12 +34,12 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <hr>
-                    <div class="d-flex offset-3">
-                        <div>
-                            <h5>Find Employee<h5>
+                    <div class="row offset-2">
+                        <div class="col-lg-3 ">
+                            <h5 class="px-3">Find Employee<h5>
                         </div>
-                        <div class="px-4">
-                            <div class="mb-3">
+                        <div class="col-lg-6">
+                            <div class="mb-5">
                                 <select class="form-control select @error('emp_ID') is-invalid @enderror" id="emp_id"
                                     name="emp_ID">
                                     <option value=""> Select Employee </option>
@@ -52,7 +52,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="px-4">
+                        {{--  <div class="px-4">
                             <div class="mb-3">
                                 <select class="form-control select @error('emp_ID') is-invalid @enderror" id="payroll_no"
                                     name="emp_ID">
@@ -67,6 +67,7 @@
                                 </select>
                             </div>
                         </div>
+                        --}}
                     </div>
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" style="font-size: 8px; font-weight:600;"
                         id="tabs-target-right" role="tablist">

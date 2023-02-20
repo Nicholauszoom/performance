@@ -18,18 +18,21 @@ class CreateLeavesTable extends Migration
             $table->string('empID');
             $table->date('start')->nullable();
             $table->date('end')->nullable();
+            $table->date('application_date')->nullable();
             $table->integer('days')->default(0);
             $table->string('leave_address', 50)->nullable();
             $table->string('mobile', 15)->nullable();
             $table->string('nature', 50)->default('');
             $table->text('reason')->default('');
             $table->string('state', 1)->default('1')->comment("0-completed, 1-on progress");
-            $table->date('application_date')->nullable();
-            $table->string('approved_by', 10)->nullable();
-            $table->string('recommended_by', 10)->nullable();
+            $table->string('position')->nullable();
+            $table->string('level1', 10)->nullable();
+            $table->string('level2', 10)->nullable();
+            $table->string('level3', 10)->nullable();
             $table->integer('sub_category')->nullable();
             $table->string('attachment')->default('');
             $table->integer('remaining')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
