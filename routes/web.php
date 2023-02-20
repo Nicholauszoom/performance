@@ -301,8 +301,10 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
-         // for fetching sub leave type
-         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
+        // for my leaves routes
+        Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
+        // for fetching sub leave type
+        Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
         Route::post('/save_leave' ,'savelLeave')->name('attendance.saveLeave');
@@ -329,6 +331,8 @@ Route::middleware('auth')->group(function () {
 
     // start of  loans access permission routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+
+        Route::any('/my-loans','myLoans')->name('flex.my-loans');
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
@@ -824,6 +828,13 @@ Route::middleware('auth')->group(function () {
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
 
 
+        // start of selfservices routes
+        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
+        // end of self services
+
+
+
 
 
     });
@@ -1140,5 +1151,5 @@ Route::middleware('auth')->group(function () {
 
 
 
-// Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
+Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';

@@ -4,13 +4,16 @@ namespace App\Models;
 
 
 
+use App\Models\post;
+use App\Models\Position;
+use App\Models\Department;
+use Laravel\Sanctum\HasApiTokens;
+use App\Permissions\HasPermissionsTrait;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use App\Models\post;
-use Laravel\Sanctum\HasApiTokens;
-use App\Permissions\HasPermissionsTrait;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -61,6 +64,14 @@ class User extends Authenticatable
     // }
 
     use HasPermissionsTrait; //Import The Trait
-
+    // for relationship
+    public function positions()
+    {
+        return $this->belongsTo(Position::class, 'position','id');
+    }
+    public function departments()
+    {
+        return $this->belongsTo(Department::class, 'department','id');
+    }
 
 }

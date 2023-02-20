@@ -2062,7 +2062,7 @@ class GeneralController extends Controller
 
     public function overtime()
     {
-
+        
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
@@ -3757,6 +3757,14 @@ class GeneralController extends Controller
         $data['v_staff_p'] = $this->reports_model->v_payrollEmployee($previous_payroll_month, '');
         $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
+
+        // start of overtime
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        $data['employees'] = EMPL::all();
+
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        // end of overtime
 
         if (session('password_set') == "1") {
             return view('auth.password-change');
@@ -9377,6 +9385,76 @@ class GeneralController extends Controller
                 return redirect('flex/leave-approvals')->with('msg', $msg);
             }
         // End of Leave Approvals
+
+
+
+
+
+        // Start of self services
+
+
+        // For MyOvertime
+
+        public function myOvertimes()
+        {
+            $data['title'] = "Overtime";
+            $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+            $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+            $data['employees'] = $this->flexperformance_model->Employee();
+    
+            $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+    
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Overtimes';
+    
+            // return view('overtime.overtime', $data);
+            return view('my-services.overtimes',$data);
+        }
+
+     
+
+        // For My Loans
+        public function myLoans(Request $request)
+        {
+         
+     
+            $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
+            $empID = session('emp_id');
+
+            $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
+
+            $data['employee'] = $this->flexperformance_model->customemployee();
+            $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
+            $data['title'] = "Loans and Salaries";
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Loans';
+            return view('my-services/loans', $data);
+    
+        }
+
+        // For My Complains
+        public function myPensions()
+        {
+            $id = auth()->user()->emp_id;
+
+            $data['employee_pension'] = $this->reports_model->employee_pension($id);
+    
+            $data['child'] = "Employee Profile";
+            $data['parent'] = "My Services";
+    
+            return view('my-services/pensions',$data);
+        }
+        // For My Complains
+        // public function myComplains()
+        // {
+        //     return view('my-services/complains');
+        // }
+
+        // end of self services
+
 
 
 

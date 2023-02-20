@@ -71,19 +71,56 @@
         {{-- /col --}}
 
         {{-- Start of Self Services  --}}
-        <div class="row">
-            <div class="col-4">
-                <p>Service 1</p>
-            </div>
-            <div class="col-4">
-                <p>Service 2</p>
-            </div>
-            <div class="col-4">
-                <p>Service 3</p>
-            </div>
-        </div>
+        <section>
+            <div class="row">
+                <div class="col-md-3 col-6">
+                   
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                        <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to here view your Overtimes">
+                        <h1 class="text-main"><i class="ph-clock panel-text"></i></h1>
+                        <h4 class="panel-footer">My Overtimes <i class="ph-arrow-circle-right"></i></h4>
+                    </a>
+                    </div>
+              
+                </div>
 
-        @if (session('vw_emp_sum'))
+                <div class="col-md-3 col-6">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                        <a href="{{ route('flex.my-leaves') }}" style="text-decoration:none;"  title="Click to here view your Leaves">
+                        <h1 class="text-main"><i class="ph-calendar-check panel-text"></i></h1>
+                        <h4 class="panel-footer">My Leaves <i class="ph-arrow-circle-right"></i></h4>
+                    </a>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-6">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main  ">
+                        <a href="{{ route('flex.my-loans') }}" style="text-decoration:none;"  title="Click here to view your Loans">
+                        <h1 class="text-main"> <i class="ph-bank panel-text"></i></h1>
+                            <h4 class="panel-footer">My Loans <i class="ph-arrow-circle-right"></i></h4>
+                    
+                    </a>
+                    </div>
+                </div>
+                
+
+                <div class="col-md-3 col-6">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                        <a href="{{ route('flex.my-pensions') }}" style="text-decoration:none;"  title="Click here to view your Pension History">
+                        <h1 class="text-main"><i class="ph-scales panel-text"></i></h1>
+                        <h4 class="panel-footer">My Pensions <i class="ph-arrow-circle-right"></i></h4>
+                    </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {{-- end  of self-service --}}
+    
+        {{-- start of dashboard statistics --}}
+        @can('view-dashboard')
+
+        <section>
+            @if (session('vw_emp_sum'))
             <div class="col-xl-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
 
@@ -289,7 +326,12 @@
                 </table>
 
             </div>
-        </div>
+        </div>  
+        </section>
+   
+        @endcan
+
+        {{-- end of dashboard statistics --}}
 
     </div>
     {{-- /row --}}
