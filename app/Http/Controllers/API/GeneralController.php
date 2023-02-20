@@ -197,7 +197,7 @@ class GeneralController extends Controller
     {
         $id = auth()->user()->emp_id;
 
-        $data['employee_pension'] = $this->reports_model->employee_pension($id);
+        $data['pensions'] = $this->reports_model->employee_pension($id);
 
         // return view('my-services/pensions',$data);
 
@@ -210,14 +210,16 @@ class GeneralController extends Controller
      // end of pension history
 
     //  start of employee overtimes function
-    public function myOvetimes(Request $request)
+    public function myOvetimes()
     {
+
+        $emp_id=auth()->user()->emp_id;
        
-        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes($emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session($emp_id));
 
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';
@@ -399,10 +401,12 @@ class GeneralController extends Controller
     {
         $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
 
+
+        $emp_id=auth()->user()->emp_id;
         
-        $data['leave_types'] =LeaveType::all();
-        $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
-        $data['leaves'] =Leaves::get();
+        // $data['leave_types'] =LeaveType::all();
+        // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+        // $data['leaves'] =Leaves::get();
 
 
         // Start of Escallation
@@ -461,20 +465,17 @@ class GeneralController extends Controller
         // End of Escallation
 
         // For Working days
-        $d1 = new DateTime (Auth::user()->hire_date);
-        $d2 = new DateTime();
-        $interval = $d2->diff($d1);
-        $data['days']=$interval->days;
-        $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
-        $data['leave_type'] = $this->attendance_model->leave_type();
+        // $d1 = new DateTime (Auth::user()->hire_date);
+        // $d2 = new DateTime();
+        // $interval = $d2->diff($d1);
+        // $data['days']=$interval->days;
+        // $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($emp_id, auth()->user()->hire_date, date('Y-m-d'));
+        // $data['leave_type'] = $this->attendance_model->leave_type();
       
 
-    //  return view('my-services/leaves', $data);
+  
 
-    return response(
-        [
-            'data'=>$data
-        ],200 );
+    return response( [ 'data'=>$data  ],200 );
     }
     //  end of employee leaves function
 

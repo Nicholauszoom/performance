@@ -2062,7 +2062,7 @@ class GeneralController extends Controller
 
     public function overtime()
     {
-
+        
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
