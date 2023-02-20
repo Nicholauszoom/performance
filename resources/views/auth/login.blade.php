@@ -71,6 +71,7 @@
                                                   <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
                                                       <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid" style="height: 10em" alt="logo">
                                                   </div>
+                                                  
           
                                               </div>
           
@@ -132,11 +133,11 @@
                                                           <i class="ph-lock text-muted"></i>
                                                       </div>
                                                   </div>
-                                                  <div class="d-flex align-items-center mb-1">
-                                                      <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
-                                                  </div>
                                               </div>
           
+                                              {{-- <div class="d-flex align-items-center mb-3">
+                                                  <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
+                                              </div> --}}
           
                                               <div class="mb-1 mt-3">
                                                   <button type="submit" class="btn btn-main  w-100 border-0" style="background: #00204e">Log In</button>
