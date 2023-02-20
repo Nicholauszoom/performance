@@ -30,14 +30,19 @@ Route::middleware('auth:sanctum')->group( function () {
       // For user details
       Route::get('/user',[AuthController::class,'user']);
       Route::post('/logout',[AuthController::class,'logout']);
-
-
       //  For Leaves
       Route::get('/leaves',[LeaveController::class,'index']);
+     //  For Pensions 
+      Route::get('/my-pension',[GeneralController::class,'pension']);
+      // For Overtime
+      Route::get('/my-overtime',[GeneralController::class,'pension']);
+      // For Leaves
+      Route::get('/my-leaves',[GeneralController::class,'pension']);
+      //For Loans
+      Route::get('/my-loans',[GeneralController::class,'pension']);
+      // For Salary slips 
+      Route::get('/my-slips',[GeneralController::class,'pension']);
 
-     //  For NSSF  
-
-     Route::get('/nssf',[GeneralController::class,'userprofile']);
 
 });
 

@@ -4,14 +4,17 @@ namespace App\Http\Controllers\API;
 
 // use App\Http\Controllers\Controller;
 
+use DateTime;
 use App\Models\EMPL;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Leaves;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\UserRole;
 use App\Models\Approvals;
+use App\Models\LeaveType;
 use App\Models\Promotion;
 use Illuminate\Http\File;
 use App\Models\AuditTrail;
@@ -23,6 +26,7 @@ use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\ApprovalLevel;
 use App\Models\FinancialLogs;
+use App\Models\LeaveApproval;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSpouse;
@@ -30,11 +34,11 @@ use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
+
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
 use App\Models\EmailNotification;
-
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
