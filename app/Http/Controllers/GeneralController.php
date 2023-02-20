@@ -9434,11 +9434,24 @@ class GeneralController extends Controller
             return view('my-services/loans', $data);
     
         }
+
         // For My Complains
-        public function myComplains()
+        public function myPensions()
         {
-            return view('my-services/complains');
+            $id = auth()->user()->emp_id;
+
+            $data['employee_pension'] = $this->reports_model->employee_pension($id);
+    
+            $data['child'] = "Employee Profile";
+            $data['parent'] = "My Services";
+    
+            return view('my-services/pensions',$data);
         }
+        // For My Complains
+        // public function myComplains()
+        // {
+        //     return view('my-services/complains');
+        // }
 
         // end of self services
 

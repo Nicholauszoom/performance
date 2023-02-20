@@ -67,17 +67,16 @@
             </td>
             <td>
               <div >
-                <?php if ($item->status==1){ ?>
+                  
+                <?php if ($item->state==1){ ?>
                 <div class="col-md-12">
-                <span class="label label-default badge bg-pending text-white">SENT</span></div><?php }
+                <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
                 elseif($item->state==0){?>
                 <div class="col-md-12">
-                <span class="label badge bg-success text-whites label-info">APPROVED</span>
-                </div>
-                <?php }
-                elseif($item->status==5){?>
+                <span class="label badge bg-info text-whites label-info">APPROVED</span></div><?php }
+                elseif($item->state==3){?>
                 <div class="col-md-12">
-                <span class="label label-danger">DISAPPROVED</span></div><?php }  ?>
+                <span class="label badge bg-danger text-white">DENIED</span></div><?php } ?>
           </div>
             </td>
             <td>

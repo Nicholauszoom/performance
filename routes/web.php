@@ -830,6 +830,8 @@ Route::middleware('auth')->group(function () {
 
         // start of selfservices routes
         Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
+        // end of self services
 
 
 

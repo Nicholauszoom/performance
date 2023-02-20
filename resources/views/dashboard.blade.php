@@ -76,7 +76,7 @@
                 <div class="col-md-3 col-6">
                    
                     <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
-                        <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to here view your Overtimes">
                         <h1 class="text-main"><i class="ph-clock panel-text"></i></h1>
                         <h4 class="panel-footer">My Overtimes <i class="ph-arrow-circle-right"></i></h4>
                     </a>
@@ -86,7 +86,7 @@
 
                 <div class="col-md-3 col-6">
                     <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
-                        <a href="{{ route('flex.my-leaves') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <a href="{{ route('flex.my-leaves') }}" style="text-decoration:none;"  title="Click to here view your Leaves">
                         <h1 class="text-main"><i class="ph-calendar-check panel-text"></i></h1>
                         <h4 class="panel-footer">My Leaves <i class="ph-arrow-circle-right"></i></h4>
                     </a>
@@ -95,7 +95,7 @@
 
                 <div class="col-md-3 col-6">
                     <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main  ">
-                        <a href="{{ route('flex.my-loans') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <a href="{{ route('flex.my-loans') }}" style="text-decoration:none;"  title="Click here to view your Loans">
                         <h1 class="text-main"> <i class="ph-bank panel-text"></i></h1>
                             <h4 class="panel-footer">My Loans <i class="ph-arrow-circle-right"></i></h4>
                     
@@ -106,9 +106,9 @@
 
                 <div class="col-md-3 col-6">
                     <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
-                        <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to view your Overtimes">
+                        <a href="{{ route('flex.my-pensions') }}" style="text-decoration:none;"  title="Click here to view your Pension History">
                         <h1 class="text-main"><i class="ph-scales panel-text"></i></h1>
-                        <h4 class="panel-footer">My Complains <i class="ph-arrow-circle-right"></i></h4>
+                        <h4 class="panel-footer">My Pensions <i class="ph-arrow-circle-right"></i></h4>
                     </a>
                     </div>
                 </div>

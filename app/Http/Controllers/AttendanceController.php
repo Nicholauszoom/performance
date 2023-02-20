@@ -209,7 +209,7 @@ class AttendanceController extends Controller
      // For My Leaves
      public function myLeaves()
      {
-           $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
+           $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
 
         
             $data['leave_types'] =LeaveType::all();
@@ -300,7 +300,7 @@ class AttendanceController extends Controller
       }
   
 
-   public  function check_leave_balance(Request $request){
+  public  function check_leave_balance(Request $request){
     $today = date('Y-m-d');
     $arryear = explode('-',$today);
     $year = $arryear[0];
@@ -310,33 +310,31 @@ class AttendanceController extends Controller
    if($nature == 1){
 
    }elseif($nature == 2)
-{
+          {
 
-}
-elseif($nature == 3)
-{
+          }
+          elseif($nature == 3)
+          {
 
-}
-elseif($nature == 4)
-{
+          }
+          elseif($nature == 4)
+          {
 
-}
-//sick leave
-elseif($nature == 5)
-{
- $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+          }
+          elseif($nature == 5)
+          {
+          $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
-}
-elseif($nature == 6)
-{
- $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+          }
+          elseif($nature == 6)
+          {
+          $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
-}
-elseif($nature == 7)
-{
-//  $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
+          }
+          elseif($nature == 7)
+          {
 
-}
+    }
 
 
 
@@ -394,7 +392,7 @@ elseif($nature == 7)
         // $working_month=$interval->format('%months');
 
         // For Redirection Url
-        $url = redirect('flex/attendance/leave');
+        $url = redirect('flex/attendance/my-leaves');
 
         // For Employees with less than 12 months of employement
         if($day <= 365)
@@ -419,12 +417,6 @@ elseif($nature == 7)
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
-                // For Maternity
-                // if ($request->nature==4) 
-                // {
-                //   dd('Iam Maternity');
-                // }
-
 
            
                 // For Study Leave
@@ -445,7 +437,6 @@ elseif($nature == 7)
 
               $newImageName = $request->image->hashName();
               $request->image->move(public_path('storage/leaves'), $newImageName);
-              // $employee->photo = $newImageName;
               $leaves->attachment =  $newImageName;
               }
              
@@ -500,7 +491,6 @@ elseif($nature == 7)
                   {
                     $leaves->days=$different_days;
                     $remaining=$annualleaveBalance-$different_days;
-                    // dd($remaining);
 
                   }
                   else
@@ -566,7 +556,7 @@ elseif($nature == 7)
                         if($different_days<$max_days)
                         {
                           $leaves->days = $different_days;
-                          dd('less than 4 months');
+                          // dd('less than 4 months');
                         }
                         else
                         {
@@ -879,6 +869,14 @@ elseif($nature == 7)
   
       }
 
+
+    // For Cancel Leave
+
+    // public function cancelLeave($id)
+    // {
+
+    // }
+
     public function apply_leave(Request $request) {
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
 
@@ -957,16 +955,10 @@ elseif($nature == 7)
 
         $leave->delete();
 
-        // $result = $this->attendance_model->deleteLeave($leaveID);
-        // if($result ==true){
-        //   echo "<p class='alert alert-warning text-center'>Leave Cancelled Successifully</p>";
-        // } else {
-        //   echo "<p class='alert alert-danger text-center'>Leave Not Deleted, Please Try Again</p>";
-        // }
 
         $msg="Leave Was Deleted Successfully !";
     
-        return redirect('flex/attendance/leave')->with('msg', $msg);
+        return redirect('flex/attendance/my-leaves')->with('msg', $msg);
       }
    }
 

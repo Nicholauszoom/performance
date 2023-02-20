@@ -39,13 +39,13 @@
                 </li>
 
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) || request()->routeIs('flex.my-pensions')|| request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-user"></i>
                         <span>My Services</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
                         {{-- start of active employee link --}}
                         @can('view-employee')
                         <li class="nav-item">
@@ -80,17 +80,17 @@
                         {{--  start of overtime link --}}
 
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"
-                                href="{{ route('flex.overtime') }}"> Pensions </a>
+                            <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
+                                href="{{ route('flex.my-pensions') }}"> Pensions </a>
                         </li>
 
                         {{-- / --}}
 
-                        {{--  start of overtime link --}}
+                        {{--  start of biodata link --}}
 
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"
-                                href="{{ route('flex.overtime') }}">Compains and Grievances </a>
+                            <a class="nav-link {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) ? 'active' : null }}"
+                                href="{{ route('flex.userdata', base64_encode(Auth()->user()->emp_id)) }}"> Biodata </a>
                         </li>
 
                         {{-- / --}}
@@ -182,11 +182,11 @@
                         @endcan
                         {{-- / --}}
 
-                        {{-- start of grievance and displinary link --}}
+                        {{-- start of displinary  actions link --}}
                         @can('view-grivance')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.grievancesCompain') ? 'active' : null }}"
-                                href="{{ route('flex.grievancesCompain') }}">Grievances and Disciplinary</a>
+                                href="{{ route('flex.grievancesCompain') }}">Disciplinary Actions</a>
                         </li>
                         @endcan
                         {{-- / --}}
