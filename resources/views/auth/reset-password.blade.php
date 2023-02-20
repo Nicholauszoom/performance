@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    @include('layouts.shared.title-meta', ['title' => 'Log In'])
+    @include('layouts.shared.title-meta', ['title' => 'Reset Password'])
 
     <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">

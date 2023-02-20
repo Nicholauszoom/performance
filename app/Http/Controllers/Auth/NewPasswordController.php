@@ -75,6 +75,7 @@ class NewPasswordController extends Controller
             $new_arr= array_merge(['empID'=>$empID->emp_id],$userPass);
             // return ;
             DB::table('user_passwords')->insert($new_arr);
+            // DB::table('user_passwords')->where('empID',$empID->emp_id)->update($new_arr);
             
             return 1;
             // RECORD AUDIT TRAIL
