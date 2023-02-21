@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Grievances/Complains'])
+@extends('layouts.vertical', ['title' => ' Disciplinary Actions'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -21,7 +21,7 @@
         <div class="">
             <div class="row">
                 <div class="col-md-9">
-                    <h5 class="mb-0 text-muted text-warning">Grievances | Disciplinary Action</h5>
+                    <h5 class="mb-0 text-muted text-warning"> Disciplinary Actions</h5>
                 </div>
                 <div class="col-md-3">
                     {{-- start of add disciplinary action button --}}

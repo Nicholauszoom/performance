@@ -94,8 +94,8 @@
   $delimeter = "|";
 ?>
 
-<div class="">
-    <div class="row mb-2" style="border-bottom: 8px solid #00204e !important; " >
+<div class=" mx-auto">
+    <div class="row bg-white mx-auto mb-2" style="border-bottom: 8px solid #00204e !important; " >
         <div class="col-4"></div>
         <div class="col-md-4 col-4">
                 <div class="row">
