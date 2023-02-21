@@ -100,12 +100,16 @@ class AuthController extends Controller
             }
 
             $user = User::where('emp_id', $request->emp_id)->first();
+            if ($user->tokens()->count() > 0) {
+                $user->tokens()->delete();
+            }
             $data['employee'] = $this->flexperformance_model->userprofile($request->emp_id);
+            $token = $user->createToken("API TOKEN");
             return response()->json([
                 'employee'=>$data['employee'],
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'token' => $user->createToken("API TOKEN")->plainTextToken
+                'token' => $token->plainTextToken
             ], 200);
 
         } catch (\Throwable $th) {
