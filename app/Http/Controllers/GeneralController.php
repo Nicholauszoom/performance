@@ -9456,7 +9456,7 @@ class GeneralController extends Controller
         // end of self services
 
 
-  public function my_biodata(Request $request, $id)
+  public function my_biodata(Request $request)
 {
     $id = auth()->user()->emp_id;
 
