@@ -231,7 +231,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             DB::insert(DB::raw($query));
             //INSERT OVERTIME
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
-	    SELECT o.empID AS empID, 'Overtime' AS description,
+	    SELECT o.empID AS empID,
+         IF(o.overtime_category = 1,'N-Overtime','S-Overtime') AS description,
 
 	    'Fixed Amount' AS policy,
 
@@ -239,7 +240,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID";
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.id";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
             /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
@@ -1314,7 +1315,8 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
             DB::insert(DB::raw($query));
             //INSERT OVERTIME
             $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
-	    SELECT o.empID AS empID, 'Overtime' AS description,
+	    SELECT o.empID AS empID,
+        IF(o.overtime_category = 1,'N-Overtime','S-Overtime') AS description,
 
 	    'Fixed Amount' AS policy,
 
@@ -1322,7 +1324,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID";
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.id";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
             /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),

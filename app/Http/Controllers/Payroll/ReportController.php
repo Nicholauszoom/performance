@@ -1948,6 +1948,9 @@ class ReportController extends Controller
         $data['current_increase'] = $this->reports_model->basic_increase($current_payroll_month);
 
 
+        $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
+
+
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
         // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
@@ -2724,6 +2727,7 @@ EOD;
 
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
+        $data['termination'] = $this->reports_model->get_termination($date);
 
         $payrollMonth = $date;
         $pensionFund = 2;

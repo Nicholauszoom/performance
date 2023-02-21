@@ -219,6 +219,7 @@ class PayrollController extends Controller
     public function temp_payroll_info(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
+
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_month_info'] = $this->payroll_model->payroll_month_info($payrollMonth);
         // $data['payroll_list'] =  $this->payroll_model->employeePayrollList("temp_payroll_logs",$payrollMonth);
@@ -240,7 +241,9 @@ class PayrollController extends Controller
         $data['payroll_state'] = 0;
         $data['title'] = "Payroll Info";
 
-        return view('payroll.payroll_info', compact('data'));
+       // dd($data);
+
+        return view('payroll.payroll_info',$data);
     }
 
     public function get_reconsiliation_summary(Request $request)

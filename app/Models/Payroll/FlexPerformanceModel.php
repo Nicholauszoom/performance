@@ -380,9 +380,9 @@ class FlexPerformanceModel extends Model
 	function lineOvertimes($id){
 		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
-		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE   eo.linemanager = '".$id."' and e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
+		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id and reason = 'test'  ORDER BY eo.id DESC";
 
-		//$query = "SELECT *  FROM employee_overtime WHERE linemanager = '".$id."'";
+		//$query = "SELECT *  FROM employee_overtime";
 		return DB::select(DB::raw($query));
 	}
 
