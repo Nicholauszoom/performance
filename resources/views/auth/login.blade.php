@@ -135,13 +135,15 @@
                                                   </div>
                                               </div>
           
-                                               <div class="d-flex align-items-center mb-3">
-                                                  <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
-                                              </div>
+                                           
           
                                               <div class="mb-1 mt-3">
                                                   <button type="submit" class="btn btn-main  w-100 border-0" style="background: #00204e">Log In</button>
                                               </div>
+
+                                              <div class="text-center mt-2">
+                                                <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
+                                            </div>
           
                                             </div>
                                       </div>

@@ -9456,6 +9456,64 @@ class GeneralController extends Controller
         // end of self services
 
 
+  public function my_biodata(Request $request)
+{
+    $id = auth()->user()->emp_id;
 
+
+    $extra = $request->input('extra');
+    $data['employee'] = $this->flexperformance_model->userprofile($id);
+
+    // dd($data['employee'] );
+    $data['kin'] = $this->flexperformance_model->getkin($id);
+    $data['property'] = $this->flexperformance_model->getproperty($id);
+    $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+    $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+    $data['allrole'] = $this->flexperformance_model->role($id);
+    $data['role'] = $this->flexperformance_model->getuserrole($id);
+    $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+    $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+    $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+    $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+    $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+
+    $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+
+    $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+    $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+    $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+    $data['title'] = "Profile";
+    $empID = $id;
+    $details = EmployeeDetail::where('employeeID', $empID)->first();
+
+    $emergency = EmergencyContact::where('employeeID', $empID)->first();
+
+    $children = EmployeeDependant::where('employeeID', $empID)->get();
+
+
+    $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+
+    $parents = EmployeeParent::where('employeeID', $empID)->get();
+
+    $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+
+
+    $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+
+    $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+    $data['profile'] = EMPL::where('emp_id', $empID)->first();
+
+    $childs = EmployeeDependant::where('employeeID', $empID)->count();
+    $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+
+    $data['photo'] = "";
+
+    $data['child'] = "Biodata";
+    $data['parent'] = "My-Services";
+
+    // return view('employee.userprofile', $data);
+
+    return view('my-services.biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+}
 
 }

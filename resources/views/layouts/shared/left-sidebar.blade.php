@@ -39,13 +39,13 @@
                 </li>
 
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) || request()->routeIs('flex.my-pensions')|| request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions')|| request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-user"></i>
                         <span>My Services</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
                         {{-- start of active employee link --}}
                      
                         <li class="nav-item">
@@ -89,8 +89,8 @@
                         {{--  start of biodata link --}}
 
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('flex.userdata', base64_encode(Auth()->user()->emp_id)) ? 'active' : null }}"
-                                href="{{ route('flex.userdata', base64_encode(Auth()->user()->emp_id)) }}" > Biodata </a>
+                            <a class="nav-link {{ request()->routeIs('flex.biodata') ? 'active' : null }}"
+                                href="{{ route('flex.biodata') }}" > Biodata </a>
                         </li>
 
                         {{-- / --}}

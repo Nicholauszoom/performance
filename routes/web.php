@@ -612,7 +612,7 @@ Route::middleware('auth')->group(function () {
 
 
         // Download biodata
-        Route::any('/biodata','viewBiodata')->name('flex.biodata');
+        Route::any('/biodata','my_biodata')->name('flex.biodata');
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
@@ -831,6 +831,7 @@ Route::middleware('auth')->group(function () {
         // start of selfservices routes
         Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
         Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
+        Route::any('/my-biodata','my-biodata')->name('flex.my-biodata');
         // end of self services
 
 
