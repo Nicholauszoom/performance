@@ -336,7 +336,7 @@ class ReportController extends Controller
     }
     function get_payroll_temp_summary(Request $request)
     {
-
+       // $data['payroll_state'] = 1;
         $date = $request->date;
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
 
@@ -1937,7 +1937,7 @@ class ReportController extends Controller
         $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
-        
+
         $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 

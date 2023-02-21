@@ -11,7 +11,7 @@
 @endpush
 
 @section('content')
- 
+
         <div class="card border-top  border-top-width-3 border-top-main rounded-0 ">
 
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
@@ -159,7 +159,7 @@
                             <tr>
                                 <th>S/N</th>
                                 <th>Name</th>
-                                <th>Amount</th>
+
                                 <th>Taxable</th>
                                 <th>pensionable</th>
                                 <th>Recursive</th>
@@ -177,13 +177,7 @@
                                 <td width="1px"><?php echo $row->SNo; ?></td>
                                 <td><?php echo $row->name; ?></td>
 
-                                <td>
-                                    <?php if($row->mode==1){ ?>
-                                    <span class="badge bg-success">Fixed Amount</span><br>
-                                    <?php echo number_format($row->amount, 2); } else { ?>
-                                    <span class="badge bg-success">Salary dependent</span><br>
-                                    <?php echo 100*($row->percent)."%"; } ?>
-                                </td>
+                              
 
                                 <td><?php echo $row->taxable; ?></td>
                                 <td><?php echo $row->pensionable; ?></td>

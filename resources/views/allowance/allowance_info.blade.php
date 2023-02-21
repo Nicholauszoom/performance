@@ -82,17 +82,7 @@
                         <th>Name :</th>
                         <td>{{ $name }}</td>
                     </tr>
-                    @if ($mode == 1)
-                    <tr>
-                        <th>Amount :</th>
-                        <td>{{ number_format($amount, 2) .' Tsh' }}</td>
-                    </tr>
-                    @else
-                    <tr>
-                        <th>Amount :</th>
-                        <td>{{ 100 * $percent .'% of Salary'}}</td>
-                    </tr>
-                    @endif
+
                     <tr>
                         <th>Total Beneficiaries :</th>
                         <td>{{ $membersCount .' Employees' }}</td>
@@ -106,7 +96,7 @@
                 <hr class="my-5">
 
                 <div class="card-body">
-                    <h4 class="text-muted">Add Members ( Group )</h4>
+                    <h4 class="text-muted">Add Employees ( Group )</h4>
 
                     <form autocomplete="off" id="assignGroup"  data-parsley-validate class="form-horizontal form-label-left">
 
@@ -208,7 +198,7 @@
 
                 <div class="card-body">
                     <div id ="feedBackSubmission"></div>
-                    <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
+                    {{-- <form autocomplete="off" id="updateName" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
                             <label  for="first-name" for="stream" >Allowance Name</label>
@@ -217,7 +207,7 @@
                                 <button  class="btn btn-main">Update Name</button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
 
                     @isset($taxable)
                     <form autocomplete="off" id="updateTaxable" class="form-horizontal form-label-left">
@@ -226,11 +216,10 @@
 
                             <label  for="first-name" for="stream" >Taxable</label>
                             <div class="input-group">
-                                <select name="taxable" class="select_type form-control" required tabindex="-1" id="policy">
+                                <select name="Isrecursive" class="select_type form-control" required tabindex="-1" id="Isrecursive">
                                     <option> Select</option>
-                                    <option value="0" <?php if($taxable == '0') echo "selected";   ?>>PERMANENT</option>
-                                    <option value="2" <?php if($taxable == '2') echo "selected";   ?>>TEMPORARY</option>
-                                    <option value="1" <?php if($taxable == '1') echo "selected";   ?>>ONCE OFF</option>
+                                    <option value="YES" <?php if($taxable == 'YES') echo "selected";   ?>>YES</option>
+                                    <option value="NO" <?php if($taxable == 'NO') echo "selected";   ?>>NO</option>
                                 </select>
                                 <button  class="btn btn-main">Update Taxable</button>
                             </div>
@@ -261,11 +250,13 @@
 
                             <label  for="first-name" for="stream" >Nature</label>
                             <div class="input-group">
-                                <select name="Isrecursive" class="select_type form-control" required tabindex="-1" id="Isrecursive">
+                                <select name="taxable" class="select_type form-control" required tabindex="-1" id="policy">
                                     <option> Select</option>
-                                    <option value="YES" <?php if($Isrecursive == 'YES') echo "selected";   ?>>YES</option>
-                                    <option value="NO" <?php if($Isrecursive == 'NO') echo "selected";   ?>>NO</option>
+                                    <option value="0" <?php if($Isrecursive == '0') echo "selected";   ?>>PERMANENT</option>
+                                    <option value="2" <?php if($Isrecursive == '2') echo "selected";   ?>>TEMPORARY</option>
+                                    <option value="1" <?php if($Isrecursive == '1') echo "selected";   ?>>ONCE OFF</option>
                                 </select>
+
                                 <button  class="btn btn-main">Update</button>
                             </div>
                         </div>
@@ -336,7 +327,7 @@
                 </div>
 
                 <div class="card-body">
-                    <h4 class="text-muted">Add Members</h4>
+                    <h4 class="text-muted">Add Employees</h4>
 
                     <form autocomplete="off" id="assignIndividual" enctype="multipart/form-data"   method="post"  data-parsley-validate class="form-horizontal form-label-left">
                         <div class="mb-2">
