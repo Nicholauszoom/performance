@@ -51,7 +51,7 @@
                                     <label class="form-label">Your email</label>
                                     <div class="form-control-feedback form-control-feedback-start">
                                         <input type="email" name="email" class="form-control"
-                                            placeholder="john@doe.com">
+                                            placeholder="Enter Your email">
                                         <div class="form-control-feedback-icon">
                                             <i class="ph-at text-muted"></i>
                                         </div>
