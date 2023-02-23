@@ -1093,6 +1093,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
         Route::any('/payrollReconciliationSummary','payrollReconciliationSummary')->name('reports.payrollReconciliationSummary');
+        Route::any('/payrollReconciliationDetails','payrollReconciliationDetails')->name('reports.payrollReconciliationDetails');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
         Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
