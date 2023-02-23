@@ -435,7 +435,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
     });
-    //start of organization access permission  routes
+    //end of organization access permission  routes
 
 
     // start of report access permissions routes
