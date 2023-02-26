@@ -242,9 +242,10 @@ class GeneralController extends Controller
 
         $split_start = explode("  at  ", $start);
         $split_finish = explode("  at  ", $finish);
-
+        dd($split_finish);
         $start_date = $split_start[0];
         $start_time = $split_start[1];
+       
 
         $finish_date = $split_finish[0];
         $finish_time = $split_finish[1];

@@ -219,7 +219,7 @@ class LeaveController extends Controller
                     
     
                     // For Paternity
-                    if($request->nature != 5)
+                    if($request->nature != 5 && $request->nature != 1)
                     {
                      
                       $leaves->days = $different_days;

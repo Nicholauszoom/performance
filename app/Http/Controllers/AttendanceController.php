@@ -681,11 +681,35 @@ class AttendanceController extends Controller
             $leaves->leave_address=$request->address;
             $leaves->mobile = $request->mobile;
             $leaves->nature = $request->nature;
-            if($request->nature != 5)
+
+                    // for annual leave
+                    if ($request->nature==1) {
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+    
+                      // checking annual leave balance
+                      if($different_days < $annualleaveBalance)
+                      {
+                        $leaves->days=$different_days;
+                        $remaining=$annualleaveBalance-$different_days;
+                        // dd($remaining);
+    
+                      }
+                      else
+                      {
+                        // $leaves->days=$annualleaveBalance;  
+                        $msg='You Have Finished Your Annual  Accrued Days';
+                        return response( [ 'msg'=>$msg ],202 );
+                      }
+                             
+                    }
+                    
+            if($request->nature != 5 && $request->nature != 1)
             {
              
               $leaves->days = $different_days;
             }
+
+
             else
             {
 
@@ -720,7 +744,8 @@ class AttendanceController extends Controller
 
                           $excess=$total_leave_days-$max_days;
                           // dd($excess);
-                          dd('You requested for '.$excess.' extra days!');
+                          $msg='You requested for '.$excess.' extra days!';
+                          return $url->with('msg', $msg);
                         }
                         
                       }
@@ -746,7 +771,9 @@ class AttendanceController extends Controller
 
                         $excess=$total_leave_days-$max_days;
                         // dd($excess);
-                        dd('You requested for '.$excess.' extra days!');
+                        $msg='You requested for '.$excess.' extra days!';
+
+                        return $url->with('msg', $msg);
                       }
                     }
                   }
@@ -754,7 +781,7 @@ class AttendanceController extends Controller
                   {
                     // $max_days=10;
                     $leaves->days = $different_days;
-                    dd('wait');
+                    // dd('wait');
                   }
                 }
            
@@ -812,8 +839,6 @@ class AttendanceController extends Controller
         // chacking level 1
         if ($approval->level1==$approver) {
   
-
-          // dd($position->name);
      
      
           if ($approval->level2 != null) 

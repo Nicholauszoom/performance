@@ -1905,6 +1905,8 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
+        dd();
+
 
 
         $split_start = explode("  at  ", $start);
