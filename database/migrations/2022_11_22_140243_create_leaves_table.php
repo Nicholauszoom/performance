@@ -25,6 +25,9 @@ class CreateLeavesTable extends Migration
             $table->string('nature', 50)->default('');
             $table->text('reason')->default('');
             $table->string('state', 1)->default('1')->comment("0-completed, 1-on progress");
+            $table->string('approved_by')->nullable();
+            $table->string('recomended_by', 10)->nullable();
+            //new fields
             $table->string('position')->nullable();
             $table->string('level1', 10)->nullable();
             $table->string('level2', 10)->nullable();

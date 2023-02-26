@@ -42,7 +42,7 @@
 
                 <tbody>
                     <?php foreach ($line_overtime as $row) { ?>
-                    <?php if ($row->status == 2) {
+                    <?php if ($row->status != 2) {
                         continue;
                     } ?>
                     <tr>

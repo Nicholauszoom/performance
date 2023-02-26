@@ -1,15 +1,36 @@
-!DOCTYPE html>
+<!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Terminal Benefits</title>
+    <title>Payroll Reconciliation-Summary</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}"> --}}
+
+
+
+
+
 
 </head>
+<style type="text/css">
+    @media print {
+        #printbtn {
+            display: none;
+        }
+    }
+</style>
+
+<style media="print">
+    @page {
+        size: auto;
+        margin: 0;
+    }
+</style>
 
 <body>
 
@@ -18,153 +39,294 @@
 
             <div class="col-md-10 mx-auto">
 
-                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
-                    <div class="col-md-5 col-5">
-                        <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="30%">
-                        <br>
-                        <p>AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
+                <div class="row">
+                    <div class="col-md-7 col-7">
+                        <div class="row">
+                            <div class="col-md-3 col-3">
+                                <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here"
+                                    width="100%">
+
+                            </div>
+                            <div class="col-md-9 col-9">
+                                {{-- <br> --}}
+                                <p>AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
+                                <button id="printbtn" onclick="window.print()">Print this page</button>
+
+                            </div>
+                        </div>
 
                     </div>
-                    <div class="col-md-7 col-7">
+                    <div class="col-md-5 col-5">
 
-                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll Detail_By Number
-                        </h5>
+                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll
+                            Reconciliation-Summary
+                        </h5><br>
+                        <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">For the month:
+                            {{ date('F, Y', strtotime($payroll_date)) }}
+                        </p>
 
                     </div>
 
 
 
                 </div>
+                @php
+                    $total_previous = 0;
+                    $total_current = 0;
+                    $total_amount = 0;
 
+                @endphp
 
-                <div class="row" style="border-bottom: 10px solid rgb(23, 57, 137) !important; ">
+                <div class="row mt-4 mb-5">
+                    <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
                     <div class="col-md-12 col-12">
-                        <table class="table datatable-button-html5-columns" style="font-size:9px;">
+
+                        <table class="table table-stripped " style="font-size:14px;">
                             <thead>
-                                <tr>
-                                    <th><b>Pay No</b></th>
-
-                                    <th><b>Name</b></th>
-                                    <th><b>Monthly Basic Salary</b></th>
-                                    <th><b>Overtime</b></th>
-                                    <th><b>Allowance</b></th>
-                                    <th><b>Cost OF Living</b></th>
-                                    <th><b>Utility</b></th>
-                                    <th><b>House Allowance</b></th>
-                                    <th><b>Areas</b></th>
-                                    <th><b>Other Payments</b></th>
-                                    <th><b>Gross Salary</b></th>
-                                    <th><b>Tax Benefit</b></th>
-                                    <th><b>Taxable Gross</b></th>
-                                    <th><b>Tax</b></th>
-                                    <th><b>NSSF</b></th>
-                                    <th><b>Total Deduction</b></th>
-                                    <th><b>Ammount Payable</b></th>
-
+                                <tr class="bg-light">
+                                    <th><b>RefNo</b></th>
+                                    <th><b>Desc</b></th>
+                                    <th class="text-end"><b>Last Month</b></th>
+                                    <th class="text-end"><b>This Month</b></th>
+                                    <th class="text-end"><b>Amount</b></th>
+                                    <th class="text-end"><b>Count</b></th>
 
                                 </tr>
                             </thead>
+
                             <tbody>
-                                <?php
-                                if(!empty($summary)){
-                                foreach ($summary as $row){
-
-                                    $start = $row->payroll_date;
-            //For redirecting Purpose
-            $date_separate = explode("-", $start);
-
-            $mm = $date_separate[1];
-            $yyyy = $date_separate[0];
-            $dd = $date_separate[2];
-            $one_year_back = $date_separate[0] - 1;
-
-            $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
-            $payroll_month_end = $yyyy . "-" . $mm . "-31";
-            $payroll_month = $yyyy . "-" . $mm;
-                                        $report_model =new \App\Models\Payroll\ReportModel();
-                               $total_allowances = $report_model->total_allowances($row->empID, $payroll_month);
-                               $total_pensions = $report_model->total_pensions($row->empID, $payroll_date);
-                               $total_deductions = $report_model->total_deductions($row->empID, $payroll_month);
-                               //$loans = $$report_model->loans($$row->empID, $payroll_month);
-                               $amount_takehome = ($total_allowances+$row->salary) - ($row->pension_employee+$row->taxdue+$total_deductions);
-
-                                ?>
-
+                                @php
+                                    $total_previous += 0;
+                                    $total_current += 0;
+                                    $total_amount += $total_previous_gross;
+                                @endphp
                                 <tr>
-                                    <td><b>{{ $row->emp_id }}</b></td>
-
-                                    <td><b>{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}</b></td>
-                                    <td><b>{{ $row->salary }}</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>{{ $row->allowances }}</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>0<b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>{{ $row->salary + $row->allowances }}</b></td>
-                                    <td><b>0</b></td>
-                                    <td><b>Taxable Gross</b></td>
-                                    <td><b>{{ $row->taxdue }}</b></td>
-                                    <td><b>{{ $row->pension_employer + $row->pension_employee }}</b></td>
-                                    <td><b>{{ $row->pension_employer + $row->pension_employee + $row->taxdue }}</b></td>
-                                    <td><b>{{ $amount_takehome }}</b></td>
-
-
+                                    <td class="text-start">00001</td>
+                                    <td class="text-start">Last Month Gross Salary</td>
+                                    <td class="text-end">
+                                        {{ number_format(0, 2) }}</td>
+                                    <td class="text-end">
+                                        {{ number_format(0, 2) }}</td>
+                                    <td class="text-end">{{ number_format($total_previous_gross, 0) }}</td>
+                                    <td class="text-end">{{ $count_previous_month }}</td>
                                 </tr>
-                                <?php }} ?>
+                                @if ($count_current_month - $count_previous_month != 0)
+                                    @if ($count_current_month > $count_previous_month)
+                                        <tr>
+                                            <td class="text-start">00002</td>
+                                            <td class="text-start">Add New Employee</td>
+                                            <td class="text-end">
+                                                {{ number_format(0, 2) }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($total_current_basic - $total_previous_basic, 2) }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($total_current_basic - $total_previous_basic, 2) }}
+                                            </td>
+                                            <td class="text-end">{{ $count_current_month - $count_previous_month }}</td>
+                                        </tr>
+                                        @php
+                                            $total_previous += 0;
+                                            $total_current += $total_current_basic - $total_previous_basic;
+                                            $total_amount += $total_current_basic - $total_previous_basic;
+                                        @endphp
+                                    @elseif($count_previous_month > $count_current_month)
+                                        <tr>
+                                            <td class="text-start">00002</td>
+                                            <td class="text-start">Less Terminated Employee</td>
+                                            <td class="text-end">
+                                                {{ number_format(0, 2) }}</td>
+                                            <td class="text-end">
+                                                {{ number_format($total_previous_basic - $total_current_basic, 2) }}
+                                            </td>
+                                            <td class="text-end">
+                                                {{ number_format($total_previous_basic - $total_current_basic, 2) }}
+                                            </td>
+                                            <td class="text-end">{{ $count_previous_month - $count_current_month }}
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $total_previous += 0;
+                                            $total_current += $total_current_basic - $total_previous_basic;
+                                            $total_amount += $total_current_basic - $total_previous_basic;
+                                        @endphp
+                                    @endif
+                                @endif
+                                @if ($current_increase['basic_increase'] > 0)
+                                    <tr>
+                                        <td class="text-start">00004</td>
+                                        <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
+                                        <td class="text-end">
+                                            {{ number_format($current_increase['actual_amount'] - $previous_increase['actual_amount'], 2) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ number_format($current_increase['basic_increase'] - $previous_increase['basic_increase'], 2) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ number_format($current_increase['basic_increase'] - $current_increase['actual_amount'], 2) }}
+                                        </td>
+                                        <td class="text-end"></td>
+                                    </tr>
+                                    @php
+                                        $total_previous += $current_increase['actual_amount'] - $previous_increase['actual_amount'];
+                                        $total_current += $current_increase['basic_increase'] - $previous_increase['basic_increase'];
+                                        $total_amount += $current_increase['basic_increase'] - $current_increase['actual_amount'];
+                                    @endphp
+                                @endif
+                                @if ($current_decrease['basic_decrease'] > 0)
+                                    <tr>
+                                        <td class="text-start">00004</td>
+                                        <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
+                                        <td class="text-end">
+                                            {{ number_format($current_decrease['actual_amount'] - $previous_decrease['actual_amount'], 2) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'], 2) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ number_format($previous_decrease['basic_decrease'] - $current_decrease['basic_decrease'], 2) }}
+                                        </td>
+
+                                        <td class="text-end"></td>
+                                    </tr>
+                                    @php
+                                        $total_previous += $current_decrease['actual_amount'] - $previous_decrease['actual_amount'];
+                                        $total_current += $current_decrease['actual_amount'] - $current_decrease['basic_decrease'];
+                                        $total_amount += $previous_decrease['basic_decrease'] - $current_decrease['basic_decrease'];
+                                    @endphp
+                                @endif
+                                @php $i = 1;  @endphp
+                                @if (count($total_allowances) > 0)
+                                    @foreach ($total_allowances as $row)
+                                        @php $i++;  @endphp
+                                        @if ($row->current_amount - $row->previous_amount != 0)
+                                            <tr>
+                                                <td class="text-start">{{ '000' . $i + 4 }}</td>
+                                                <td class="text-start">
+                                                    @if ($row->description == 'Add/Les S-Overtime')
+                                                        Add/Less Sunday Overtime Hours
+                                                    @elseif($row->description == 'Add/Les N-Overtime')
+                                                        Add/Less Normal Day Overtime Hours
+                                                    @else
+                                                        {{ $row->description }}
+                                                    @endif
+                                                </td>
+                                                <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
+                                                <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                                <td class="text-end">{{ number_format($row->difference, 2) }}</td>
+                                                <td class="text-end"></td>
+                                            </tr>
+                                            @php
+                                                $total_previous += $row->previous_amount;
+                                                $total_current += $row->current_amount;
+                                                $total_amount = $total_amount + $row->difference;
+
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                @endif
+                                @php
+                                    $total_amount += 6600 + 186986;
+                                    $total_current += 6600 + 186986;
+                                @endphp
+                                <tr>
+                                    <td class="text-start">{{ '000' . 32 }}</td>
+                                    <td class="text-start">Add/Less LieuOfLeave </td>
+                                    <td class="text-end">{{ number_format(0, 2) }}</td>
+                                    <td class="text-end">{{ number_format(6600, 2) }}</td>
+                                    <td class="text-end">{{ number_format(6600, 2) }}</td>
+                                    <td class="text-end"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start">{{ '000' . 32 }}</td>
+                                    <td class="text-start">Add/Less Leave Allowance </td>
+                                    <td class="text-end">{{ number_format(0, 2) }}</td>
+                                    <td class="text-end">{{ number_format(186986, 2) }}</td>
+                                    <td class="text-end">{{ number_format(186986, 2) }}</td>
+                                    <td class="text-end"></td>
+                                </tr>
+
+
+                                {{-- </tbody>
+                            <tbody> --}}
+                                <tr style="border-top: 2px solid rgb(18, 93, 54) !important; ">
+                                    <td class="text-start"></td>
+                                    <td class="text-start"><b>This Month</b> </td>
+                                    <td class="text-end">
+                                        <b>{{ number_format(!empty($total_previous) ? $total_previous : 0, 2) }}</b>
+                                    </td>
+                                    <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
+                                    <td class="text-end">
+                                        <b>{{ number_format($total_amount, 2) }}</b>
+                                    </td>
+                                    <td class="text-end"><b>{{ $count_current_month }}</b></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
 
                 </div>
 
-                <div class="row" style="border-bottom: 10px solid rgb(242, 183, 75) !important; ">
+                <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+
+                <div class="row mt-4">
 
 
-                    <div class="col-md-12">
-                        <table class="table datatable-button-html5-columns" style="font-size:9px;">
+                    <div class="col-md-12 col-12 col-lg">
 
-                            <thead>
-                                <tr>
-                                    <th>Initiated By:</th>
-                                    <th>name..........................................</th>
-                                    <th>position......................................</th>
-                                    <th>signature.....................................</th>
-                                    <th>date..........................................</th>
-                                </tr>
-                                <tr>
-                                    <th>Checked & Approved By:</th>
-                                    <th>name...........................................</th>
-                                    <th>position.......................................</th>
-                                    <th>signature......................................</th>
-                                    <th>date..........................................</th>
-                                </tr>
-                                <tr>
-                                    <th>Checked & Approved By:</th>
-                                    <th>name............................................</th>
-                                    <th>position.........................................</th>
-                                    <th>signature.......................................</th>
-                                    <th>date.............................................</th>
-                                </tr>
-                                <tr>
-                                    <th>Approved By:</th>
-                                    <th>name.............................................</th>
-                                    <th>position..........................................</th>
-                                    <th>signature.........................................</th>
-                                    <th>date................................................</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
 
+                        {{-- <h5>FINANCE DEPARTMENT</h5> --}}
+                        <div class="col-md-12 col-sm-12 col-12 p-2 mt-4" style=" ">
+                            <p class="mt-2"><small><b>Prepared By</b></small></p>
+
+
+                            <div class="row p-1">
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
+                            </div>
+                            <br>
+                            <p><small><b>Checked and Approved By</b></small></p>
+                            <div class="row p-1">
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
+                            </div>
+
+                            <p><small><b>Checked and Approved By</b></small></p>
+
+                            <div class="row p-1">
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
+                            </div>
+
+                            <p><small><b>Approved By</b></small></p>
+
+                            <div class="row p-1">
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
+                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
+                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
+                            </div>
+                        </div>
                     </div>
-
-
                 </div>
-
             </div>
+
+
+        </div>
         </div>
     </main>
+
+
+
+
+    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -176,7 +338,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
-
 </body>
 
 </html>

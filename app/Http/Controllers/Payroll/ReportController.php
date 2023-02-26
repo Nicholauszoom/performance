@@ -1898,6 +1898,51 @@ class ReportController extends Controller
         }
     }
 
+    public function payrollReconciliationDetails(Request $request){
+        $calendar = $request->payrolldate;
+        $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
+
+
+        $datewell = explode("-", $calendar);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $termination_date = $yyyy . "-" . $mm . "-" . $dd;
+        $j_mm = "01";
+        $j_dd = "01";
+        $january_date = $yyyy . "-" . $j_mm . "-" . $j_dd;
+        $termination_month = $yyyy . "-" . $mm;
+        $today = date('Y-m-d');
+
+        $current_payroll_month = $request->input('payrolldate');
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        $data['summary'] = $this->reports_model->allowance_by_employee($current_payroll_month, $previous_payroll_month);
+        $raw_name = [];
+        $required_allowance = [];
+
+        foreach($data['summary'] as $row){
+
+         if($row->previous_amount + $row->current_amount != 0 ){
+            array_push($raw_name,$row->description);
+            array_push($required_allowance,$row);
+         }
+        }
+        $names = array_unique($raw_name);
+
+        $data['names'] = $names;
+        $data['allowances'] = $required_allowance;
+
+
+        $data['payroll_date'] = $calendar;
+
+        $pdf = Pdf::loadView('reports.payroll_reconciliation_details',$data)->setPaper('a4', 'potrait');
+
+        return $pdf->download('payroll_reconciliation_details.pdf');
+
+    }
+
     public function payrollReconciliationSummary(Request $request)
     {
 
@@ -1948,19 +1993,21 @@ class ReportController extends Controller
         $data['current_increase'] = $this->reports_model->basic_increase($current_payroll_month);
 
 
+        $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
+
+
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
         // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
 
 
         //return $pdf->download('sam.pdf');
-        // $pdf = Pdf::loadView('reports.samplepdf')->setPaper('a4', 'potrait');
-        //return $pdf->download('CARGO SALES NO # ' .  $purchases->pacel_number . ".pdf");
+         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
 
-        // return $pdf->download('payroll_reconciliation_summary.pdf');
-        return view('reports.payroll_reconciliation_summary1', $data);
+         return $pdf->download('payroll_reconciliation_summary.pdf');
+        //return view('reports.payroll_reconciliation_summary1', $data);
 
-        return view('reports.samplepdf', $data);
+       // return view('reports.samplepdf', $data);
     }
 
     #################################END PROJECT REPORTS##############################
@@ -2724,6 +2771,7 @@ EOD;
 
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
+        $data['termination'] = $this->reports_model->get_termination($date);
 
         $payrollMonth = $date;
         $pensionFund = 2;
@@ -2743,15 +2791,15 @@ EOD;
 
         //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
 
-        // $pdf = Pdf::loadView('reports.terminalbenefit',$data)->setPaper('a4', 'landscape');
+         $pdf = Pdf::loadView('reports.payroll_details',$data)->setPaper('a4', 'landscape');
 
 
 
-        // return $pdf->download('itsolutionstuff.pdf');
-         if($request->type != 1)
-         return view('reports.payrolldetails_datatable',$data);
-         else
-        return view('reports.payroll_details', $data);
+         return $pdf->download('payrolldetails.pdf');
+        //  if($request->type != 1)
+        //  return view('reports.payrolldetails_datatable',$data);
+        //  else
+        // return view('reports.payroll_details', $data);
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
