@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
+use DateTime;
 use App\Models\Leaves;
+use App\Models\LeaveType;
+use App\Models\LeaveSubType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
 {
+
+  
     /**
      * Display a listing of all leaves.
      *
@@ -56,8 +62,8 @@ class LeaveController extends Controller
     
             // Annual leave accurated days
     
-            $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
-    
+            // $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+            $annualleaveBalance =10;
             // dd($annualleaveBalance);
            
             // For  Requested days
@@ -124,7 +130,6 @@ class LeaveController extends Controller
     
                   $newImageName = $request->image->hashName();
                   $request->image->move(public_path('storage/leaves'), $newImageName);
-                  // $employee->photo = $newImageName;
                   $leaves->attachment =  $newImageName;
                   }
                  
@@ -134,8 +139,8 @@ class LeaveController extends Controller
                     $type_name=$leave_type->type;
     
                     $msg=$type_name." Leave Request  Has been Requested Successfully!";
-                    return $url->with('msg', $msg);
-    
+
+                    return response( [ 'msg'=>$msg ],202 );
                   }
                   //  Case has used up all days
                   else
@@ -145,7 +150,7 @@ class LeaveController extends Controller
                     $type_name=$leave_type->type;
                     $msg="Sorry, You have finished Your ".$type_name." Leave Days";
     
-                    return $url->with('msg', $msg);
+                    return response( [ 'msg'=>$msg ],202 );
                   }
           
     
@@ -186,7 +191,7 @@ class LeaveController extends Controller
                       {
                         // $leaves->days=$annualleaveBalance;  
                         $msg='You Have Finished Your Annual  Accrued Days';
-                        return $url->with('msg',$msg);
+                        return response( [ 'msg'=>$msg ],202 );
                       }
                              
                     }
@@ -232,7 +237,7 @@ class LeaveController extends Controller
                               $leave_type=LeaveType::where('id',$nature)->first();
                               $type_name=$leave_type->type;
                               $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                              return $url->with('msg', $msg);
+                              return response( [ 'msg'=>$msg ],202 );
                           
                             
                             }
@@ -245,7 +250,7 @@ class LeaveController extends Controller
                             if($different_days<$max_days)
                             {
                               $leaves->days = $different_days;
-                              dd('less than 4 months');
+                              // dd('less than 4 months');
                             }
                             else
                             {
@@ -281,7 +286,7 @@ class LeaveController extends Controller
                               $leave_type=LeaveType::where('id',$nature)->first();
                               $type_name=$leave_type->type;
                               $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                              return $url->with('msg', $msg);
+                              return response( [ 'msg'=>$msg ],202 );
                           
                             
                             }
@@ -325,7 +330,7 @@ class LeaveController extends Controller
                   $leave_type=LeaveType::where('id',$nature)->first();
                   $type_name=$leave_type->type;
                   $msg=$type_name." Leave Request is submitted successfully!";
-                  return $url->with('msg', $msg);
+                  return response( [ 'msg'=>$msg ],202 );
                   }
                   else
                   {
@@ -333,7 +338,7 @@ class LeaveController extends Controller
                     $leave_type=LeaveType::where('id',$nature)->first();
                     $type_name=$leave_type->type;
                     $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                  return $url->with('msg', $msg);
+                    return response( [ 'msg'=>$msg ],202 );
     
                   }
     
@@ -398,7 +403,7 @@ class LeaveController extends Controller
     
                               $excess=$total_leave_days-$max_days;
                               // dd($excess);
-                              dd('You requested for '.$excess.' extra days!');
+                              // dd('You requested for '.$excess.' extra days!');
                             }
                             
                           }
@@ -424,7 +429,7 @@ class LeaveController extends Controller
     
                             $excess=$total_leave_days-$max_days;
                             // dd($excess);
-                            dd('You requested for '.$excess.' extra days!');
+                            // dd('You requested for '.$excess.' extra days!');
                           }
                         }
                       }
@@ -432,7 +437,7 @@ class LeaveController extends Controller
                       {
                         // $max_days=10;
                         $leaves->days = $different_days;
-                        dd('wait');
+                        // dd('wait');
                       }
                     }
                
@@ -448,7 +453,6 @@ class LeaveController extends Controller
     
                   $newImageName = $request->image->hashName();
                   $request->image->move(public_path('storage/leaves'), $newImageName);
-                  // $employee->photo = $newImageName;
                   $leaves->attachment =  $newImageName;
                 }
                  
@@ -459,14 +463,14 @@ class LeaveController extends Controller
                 $type_name=$leave_type->type;
     
               $msg=$type_name." Leave Request is submitted successfully!";
-              return $url->with('msg', $msg);
+              return response( [ 'msg'=>$msg ],202 );
               }
               else
               {
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
                 $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-              return $url->with('msg', $msg);
+                return response( [ 'msg'=>$msg ],202 );
     
               }
      
