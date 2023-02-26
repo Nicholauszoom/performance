@@ -187,7 +187,7 @@
                 $yyyye = $datewelle[0];
                 $datee = $dde."-".$mme."-".$yyyye;
               //
-              echo $final."<br>From <b>".$dates."</b><br>To <b>".$datee."</b>";?></td>
+              echo $row->days .' Days'."<br>From <b>".$dates."</b><br>To <b>".$datee."</b>";?></td>
 
               <td>
                 <p>Nature :<b> <?php echo $row->type->type; ?> Leave</b><br>
@@ -436,18 +436,17 @@ Swal.fire({
              let subs=response;
 
            
-            //  $("#first").remove();
+             $("#sub").hide();
            
             for (var i = 0; i < response.length; i++) {
               
               var id=subs[i].id;
               var name=subs[i].name;
               var option = "<option value='"+id+"'>"+name+"</option>";
-              // console.log(id);
-              // console.log(name);
-              // console.log(option);
+           
              
               $("#subs_cat").append(option);
+              
               $("#sub").show(); 
               
               
