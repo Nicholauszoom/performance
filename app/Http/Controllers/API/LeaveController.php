@@ -20,7 +20,7 @@ class LeaveController extends Controller
 
         $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
 
-        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->get();
+        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
         return response(
             [
                 'pending_leaves'=>$pending_leaves,
