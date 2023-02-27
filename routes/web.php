@@ -435,7 +435,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
     });
-    //start of organization access permission  routes
+    //end of organization access permission  routes
 
 
     // start of report access permissions routes
@@ -1093,6 +1093,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
         Route::any('/payrollReconciliationSummary','payrollReconciliationSummary')->name('reports.payrollReconciliationSummary');
+        Route::any('/payrollReconciliationDetails','payrollReconciliationDetails')->name('reports.payrollReconciliationDetails');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
         Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');

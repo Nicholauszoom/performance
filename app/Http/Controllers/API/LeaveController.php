@@ -2,13 +2,39 @@
 
 namespace App\Http\Controllers\API;
 
+use DateTime;
+use Carbon\Carbon;
 use App\Models\Leaves;
+use App\Models\LeaveType;
+use App\Models\LeaveSubType;
+// use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use App\Models\AttendanceModel;
+use App\Models\Payroll\Payroll;
+use App\Models\PerformanceModel;
+use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
+use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Payroll\FlexPerformanceModel;
 
 class LeaveController extends Controller
 {
+
+  protected $flexperformance_model;
+  protected $attendance_model;
+
+
+
+    public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
+    {
+      $this->flexperformance_model = new FlexPerformanceModel();
+   
+      $this->attendance_model = new AttendanceModel();
+   
+
+    }
+
     /**
      * Display a listing of all leaves.
      *
@@ -38,14 +64,14 @@ class LeaveController extends Controller
     {
      
             //For Gender 
-            $gender=Auth::user()->gender;
+            $gender=auth()->user()->gender;
             if($gender=="Male"){$gender=1; }else { $gender=2;  }
             // for checking balance
             $today = date('Y-m-d');
             $arryear = explode('-',$today);
             $year = $arryear[0];
             $nature  = $request->nature;
-            $empID  = Auth::user()->emp_id;
+            $empID  =auth()->user()->emp_id;
     
             // Checking used leave days based on leave type and sub type
             $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->sum('days');
@@ -56,8 +82,8 @@ class LeaveController extends Controller
     
             // Annual leave accurated days
     
-            $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
-    
+            $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+            // $annualleaveBalance =10;
             // dd($annualleaveBalance);
            
             // For  Requested days
@@ -70,7 +96,7 @@ class LeaveController extends Controller
             $end_date = Carbon::createFromFormat('d-m-Y', $date2);
             $different_days = $start_date->diffInDays($end_date);
     
-    
+    // dd( $different_days);
            
             // For Total Leave days
              $total_remaining=$leaves+$different_days;
@@ -81,9 +107,9 @@ class LeaveController extends Controller
             $interval = $d2->diff($d1);
             $day=$interval->days;
             
-    
+  
             // For Employees with less than 12 months of employement
-            if($day = 365)
+            if($day <= 365)
             {
     
                 //  For Leaves with sub Category
@@ -98,7 +124,7 @@ class LeaveController extends Controller
                   // Case hasnt used all days
                   if ($total_leave_days < $maximum) {
                     $leaves=new Leaves();
-                    $empID=Auth::user()->emp_id;
+                    $empID=auth()->user()->emp_id;
                     $leaves->empID = $empID;
                     $leaves->start = $request->start;
                     $leaves->end=$request->end;
@@ -124,7 +150,6 @@ class LeaveController extends Controller
     
                   $newImageName = $request->image->hashName();
                   $request->image->move(public_path('storage/leaves'), $newImageName);
-                  // $employee->photo = $newImageName;
                   $leaves->attachment =  $newImageName;
                   }
                  
@@ -134,8 +159,8 @@ class LeaveController extends Controller
                     $type_name=$leave_type->type;
     
                     $msg=$type_name." Leave Request  Has been Requested Successfully!";
-                    return $url->with('msg', $msg);
-    
+
+                    return response( [ 'msg'=>$msg ],202 );
                   }
                   //  Case has used up all days
                   else
@@ -145,7 +170,7 @@ class LeaveController extends Controller
                     $type_name=$leave_type->type;
                     $msg="Sorry, You have finished Your ".$type_name." Leave Days";
     
-                    return $url->with('msg', $msg);
+                    return response( [ 'msg'=>$msg ],202 );
                   }
           
     
@@ -164,7 +189,7 @@ class LeaveController extends Controller
     
                     // dd($leave_balance);
                     $leaves=new Leaves();
-                    $empID=Auth::user()->emp_id;
+                    $empID=auth()->user()->emp_id;
                     $leaves->empID = $empID;
                     $leaves->start = $request->start;
                     $leaves->end=$request->end;
@@ -173,9 +198,10 @@ class LeaveController extends Controller
                     $leaves->nature = $request->nature;
                     // for annual leave
                     if ($request->nature==1) {
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
     
                       // checking annual leave balance
-                      if($different_days<$annualleaveBalance)
+                      if($different_days < $annualleaveBalance)
                       {
                         $leaves->days=$different_days;
                         $remaining=$annualleaveBalance-$different_days;
@@ -186,14 +212,14 @@ class LeaveController extends Controller
                       {
                         // $leaves->days=$annualleaveBalance;  
                         $msg='You Have Finished Your Annual  Accrued Days';
-                        return $url->with('msg',$msg);
+                        return response( [ 'msg'=>$msg ],202 );
                       }
                              
                     }
                     
     
                     // For Paternity
-                    if($request->nature != 5)
+                    if($request->nature != 5 && $request->nature != 1)
                     {
                      
                       $leaves->days = $different_days;
@@ -232,7 +258,7 @@ class LeaveController extends Controller
                               $leave_type=LeaveType::where('id',$nature)->first();
                               $type_name=$leave_type->type;
                               $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                              return $url->with('msg', $msg);
+                              return response( [ 'msg'=>$msg ],202 );
                           
                             
                             }
@@ -245,7 +271,7 @@ class LeaveController extends Controller
                             if($different_days<$max_days)
                             {
                               $leaves->days = $different_days;
-                              dd('less than 4 months');
+                              // dd('less than 4 months');
                             }
                             else
                             {
@@ -281,7 +307,7 @@ class LeaveController extends Controller
                               $leave_type=LeaveType::where('id',$nature)->first();
                               $type_name=$leave_type->type;
                               $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                              return $url->with('msg', $msg);
+                              return response( [ 'msg'=>$msg ],202 );
                           
                             
                             }
@@ -325,7 +351,7 @@ class LeaveController extends Controller
                   $leave_type=LeaveType::where('id',$nature)->first();
                   $type_name=$leave_type->type;
                   $msg=$type_name." Leave Request is submitted successfully!";
-                  return $url->with('msg', $msg);
+                  return response( [ 'msg'=>$msg ],202 );
                   }
                   else
                   {
@@ -333,15 +359,13 @@ class LeaveController extends Controller
                     $leave_type=LeaveType::where('id',$nature)->first();
                     $type_name=$leave_type->type;
                     $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-                  return $url->with('msg', $msg);
+                    return response( [ 'msg'=>$msg ],202 );
     
                   }
     
                 }
     
-            }
-    
-    
+            }  
             // For Employee with more than 12 Month
             else 
             {
@@ -352,16 +376,38 @@ class LeaveController extends Controller
               {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
                 $leaves=new Leaves();
-                $empID=Auth::user()->emp_id;
+                $empID=auth()->user()->emp_id;
                 $leaves->empID = $empID;
                 $leaves->start = $request->start;
                 $leaves->end=$request->end;
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
-                if($request->nature != 5)
+                $leaves->sub_category = $request->sub_cat;
+
+                     // for annual leave
+                     if ($request->nature==1) {
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                      // checking annual leave balance
+                      if($different_days < $annualleaveBalance)
+                      {
+                        $leaves->days=$different_days;
+                        $remaining=$annualleaveBalance-$different_days;
+                        // dd($remaining);
+    
+                      }
+                      else
+                      {
+                        // $leaves->days=$annualleaveBalance;  
+                        $msg='You Have Finished Your Annual  Accrued Days';
+                        return response( [ 'msg'=>$msg ],202 );
+                      }
+                             
+                    }
+                if($request->nature != 5 && $request->nature != 1)
                 {
                  
+                  
                   $leaves->days = $different_days;
                 }
                 else
@@ -398,7 +444,7 @@ class LeaveController extends Controller
     
                               $excess=$total_leave_days-$max_days;
                               // dd($excess);
-                              dd('You requested for '.$excess.' extra days!');
+                              // dd('You requested for '.$excess.' extra days!');
                             }
                             
                           }
@@ -424,7 +470,7 @@ class LeaveController extends Controller
     
                             $excess=$total_leave_days-$max_days;
                             // dd($excess);
-                            dd('You requested for '.$excess.' extra days!');
+                            // dd('You requested for '.$excess.' extra days!');
                           }
                         }
                       }
@@ -432,7 +478,7 @@ class LeaveController extends Controller
                       {
                         // $max_days=10;
                         $leaves->days = $different_days;
-                        dd('wait');
+                        // dd('wait');
                       }
                     }
                
@@ -448,7 +494,6 @@ class LeaveController extends Controller
     
                   $newImageName = $request->image->hashName();
                   $request->image->move(public_path('storage/leaves'), $newImageName);
-                  // $employee->photo = $newImageName;
                   $leaves->attachment =  $newImageName;
                 }
                  
@@ -459,14 +504,14 @@ class LeaveController extends Controller
                 $type_name=$leave_type->type;
     
               $msg=$type_name." Leave Request is submitted successfully!";
-              return $url->with('msg', $msg);
+              return response( [ 'msg'=>$msg ],202 );
               }
               else
               {
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
                 $msg="Sorry, You have finished Your ".$type_name." Leave Days";
-              return $url->with('msg', $msg);
+                return response( [ 'msg'=>$msg ],202 );
     
               }
      

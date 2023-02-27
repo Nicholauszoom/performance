@@ -1905,6 +1905,8 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
+        dd();
+
 
 
         $split_start = explode("  at  ", $start);
@@ -3823,7 +3825,7 @@ class GeneralController extends Controller
 
         if (!empty($request->input("bank"))) {
             $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
-
+            dd($request->input("bank"));
             foreach ($queryBranch as $rows) {
                 echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
             }
@@ -6533,12 +6535,12 @@ class GeneralController extends Controller
                     'emp_id' => $request->emp_id,
                     'account' => 1,
                 );
-
+                dd(   $newEmp);
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
 
                 $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
 
-
+                    $id= $request->emp_id;
                 if ($recordID > 0) {
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');

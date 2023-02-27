@@ -20,6 +20,14 @@ use App\Models\ProjectModel;
 class AttendanceController extends Controller
 {
 
+  protected $flexperformance_model;
+  protected $imprest_model;
+  protected $reports_model;
+  protected $attendance_model;
+  protected $project_model;
+  protected $performanceModel;
+  protected $payroll_model;
+
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
     {
@@ -132,7 +140,7 @@ class AttendanceController extends Controller
 
    }
 
-   public  function check_leave_balance(Request $request){
+public  function check_leave_balance(Request $request){
     $today = date('Y-m-d');
     $arryear = explode('-',$today);
     $year = $arryear[0];
@@ -142,33 +150,29 @@ class AttendanceController extends Controller
    if($nature == 1){
 
    }elseif($nature == 2)
-{
+    {
 
-}
-elseif($nature == 3)
-{
+    }
+    elseif($nature == 3)
+    {
 
-}
-elseif($nature == 4)
-{
+    }
+    elseif($nature == 4)
+    {
 
-}
-//sick leave
-elseif($nature == 5)
-{
- $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+    }
+    //sick leave
+    elseif($nature == 5)
+    {
+    $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
-}
-elseif($nature == 6)
-{
- $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+    }
+    elseif($nature == 6)
+    {
+    $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
-}
-elseif($nature == 7)
-{
- $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
+    }
 
-}
 
 
 
@@ -231,7 +235,7 @@ elseif($nature == 7)
                     'attachment'=>$newImageName
                 );
 
-                dd($data);
+                // dd($data);
                 $result = $this->attendance_model->applyleave($data);
                 if($result ==true){
                     echo "<p class='alert alert-success text-center'>Application Sent Added Successifully</p>";
@@ -242,6 +246,8 @@ elseif($nature == 7)
 
         }
    }
+
+
 
    ################## START LEAVE OPERATIONS ###########################
     public function cancelLeave($id)  {
