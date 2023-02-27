@@ -490,7 +490,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $row  =  DB::select(DB::raw($query));
 
         $data['employee']  =  $row[0];
-        
+
 
         $query = "SELECT al.name as NAME,al.Isrecursive as nature,al.pensionable,al.taxable,(IF((SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '" . $empID . "') > 0,(SELECT tl.amount from temp_allowance_logs tl where tl.description = al.name and tl.empID = '" . $empID . "'),0)) as amount from allowances al";
         $data['allowances']  =  DB::select(DB::raw($query));
@@ -2234,7 +2234,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function s_grossMonthly($payroll_date)
     {
         $calender = explode('-', $payroll_date);
-        $date = $calender[0] . '-' . $calender[1];
+        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
 
         $query = "SELECT SUM(pl.salary+pl.allowances)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
         WHERE e.emp_id = pl.empID and e.contract_type != 2 and pl.payroll_date = '" . $payroll_date . "'";
