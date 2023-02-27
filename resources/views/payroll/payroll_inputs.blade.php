@@ -50,6 +50,7 @@
                                         @endforeach
                                     @endif
                                 </select>
+                                <input type="hidden" value="{{ $nature }}" id="nature">
                             </div>
                         </div>
                         {{--  <div class="px-4">
@@ -413,6 +414,7 @@
         $('#emp_id').change(function(e) {
 
             var empID = document.getElementById("emp_id").value;
+            var nature = document.getElementById("nature").value;
 
             //e.preventDefault();
             $.ajax({
@@ -424,6 +426,7 @@
                     data: {
 
                         "empID": empID,
+                        "nature":nature
                     },
 
                 })

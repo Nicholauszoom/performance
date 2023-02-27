@@ -310,6 +310,8 @@ class ReportController extends Controller
         $dd = $datewell[2];
         $yyyy = $datewell[0];
         $date = $yyyy . "-" . $mm;
+        $data['nature'] = $request->nature;
+        $data['payrollState'] = 1;
 
         if ($reportType == 1) {
             $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
@@ -336,9 +338,10 @@ class ReportController extends Controller
     }
     function get_payroll_temp_summary(Request $request)
     {
-       // $data['payroll_state'] = 1;
+       $data['payroll_state'] = 1;
         $date = $request->date;
         $data['summary'] = $this->reports_model->get_payroll_temp_summary($date);
+        $data['termination'] = $this->reports_model->get_termination($date);
 
         $payrollMonth = $request->date;
         $pensionFund = 2;
@@ -372,10 +375,13 @@ class ReportController extends Controller
         $summary = $data['summary'];
 
         if($request->type == 1)
-
         return view('payroll.payroll_details', $data);
+        else{
+            $pdf = Pdf::loadView('reports.payroll_details',$data)->setPaper('a4', 'landscape');
+            return $pdf->download('payrolldetails.pdf');
+        }
 
-        return view('reports.payroll_details', $data);
+
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
