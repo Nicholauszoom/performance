@@ -45,8 +45,9 @@ Route::middleware('auth:sanctum')->group( function () {
 
 
       // For Saving Overtimes
-      Route::post('/apply-overtime',[GeneralController::class,'apply-overtime']);
+      Route::post('/apply-overtime',[GeneralController::class,'apply_overtime']);
       // For Saving Leaves
+      Route::post('/apply-leave',[LeaveController::class,'store']);
 
 
 });

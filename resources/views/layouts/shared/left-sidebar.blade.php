@@ -109,7 +109,7 @@
                 </li>  --}}
 
                 {{-- start of workforce management dropdown --}}
-                @can('view-workforce')
+                @can('view-workforce')  
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') ||request()->routeIs('flex.addTermination') || request()->routeIs('flex.addEmployee')||request()->routeIs('flex.employee') || request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination')  || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">

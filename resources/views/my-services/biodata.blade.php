@@ -408,15 +408,15 @@
                    
     
                                 <div class="row">
-
+                                    @if($spouse || $children->count() >0)
                                     <h5 style="border-bottom:4px solid #00204e !important;">FAMILY DETAILS</h5>
-
+                                    @endif
                                     {{-- start of spouse details --}}
                                     @if($spouse)
                                     <div class="col-md-12">
                                         
-                                        <h5 class="">Spouse Details:</h5>
-                                        <br>
+                                        <small class=""> <h6>Spouse Details:</h6></small>
+                                        <hr>
                                         <div class="row mb-1">
                                         <div class="col-6 col-md-6 col-6 col-lg-6">
                                             <h6 class="text-main">  Name as per NIDA/Passport</h6>

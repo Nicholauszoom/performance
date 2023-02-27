@@ -8,27 +8,37 @@ use DateTime;
 use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Leaves;
+use App\Models\Position;
 use App\Models\LeaveType;
 use App\Helpers\SysHelpers;
 use App\Models\LeaveSubType;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\LeaveApproval;
 use App\Http\Middleware\Leave;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
 use App\CustomModels\PayrollModel;
 use App\CustomModels\ReportsModel;
+use Illuminate\Routing\Controller;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use App\CustomModels\flexFerformanceModel;
-use App\Models\LeaveApproval;
 use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Position;
 
 class AttendanceController extends Controller
 {
+
+  protected $flexperformance_model;
+  protected $imprest_model;
+  protected $reports_model;
+  protected $attendance_model;
+  protected $project_model;
+  protected $performanceModel;
+  protected $payroll_model;
+
 
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
@@ -199,7 +209,7 @@ class AttendanceController extends Controller
       $interval = $d2->diff($d1);
       $data['days']=$interval->days;
       $data['title'] = 'Leave';
-      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
       $data['leave_type'] = $this->attendance_model->leave_type();
       return view('app.leave', $data);
 
@@ -278,7 +288,9 @@ class AttendanceController extends Controller
             $interval = $d2->diff($d1);
             $data['days']=$interval->days;
             $data['title'] = 'Leave';
-            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+
+            // dd($data['leaveBalance']);
             $data['leave_type'] = $this->attendance_model->leave_type();
           
 
@@ -486,21 +498,21 @@ class AttendanceController extends Controller
                 $leaves->nature = $request->nature;
                 // for annual leave
                 if ($request->nature==1) {
+                    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                    // checking annual leave balance
+                    if($different_days<$annualleaveBalance)
+                    {
+                      
+                      $leaves->days=$different_days;
+                      $remaining=$annualleaveBalance-$different_days;
 
-                  // checking annual leave balance
-                  if($different_days<$annualleaveBalance)
-                  {
-                    $leaves->days=$different_days;
-                    $remaining=$annualleaveBalance-$different_days;
-
-                  }
-                  else
-                  {
-                    // $leaves->days=$annualleaveBalance;  
-                    $msg='You Have Finished Your Annual  Accrued Days';
-                    return $url->with('msg',$msg);
-                  }
-                         
+                    }
+                    else
+                    {
+                      // $leaves->days=$annualleaveBalance;  
+                      $msg='You Have Finished Your Annual  Accrued Days';
+                      return $url->with('msg',$msg);
+                    }                        
                 }
                 
 
@@ -669,11 +681,35 @@ class AttendanceController extends Controller
             $leaves->leave_address=$request->address;
             $leaves->mobile = $request->mobile;
             $leaves->nature = $request->nature;
-            if($request->nature != 5)
+
+                    // for annual leave
+                    if ($request->nature==1) {
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+    
+                      // checking annual leave balance
+                      if($different_days < $annualleaveBalance)
+                      {
+                        $leaves->days=$different_days;
+                        $remaining=$annualleaveBalance-$different_days;
+                        // dd($remaining);
+    
+                      }
+                      else
+                      {
+                        // $leaves->days=$annualleaveBalance;  
+                        $msg='You Have Finished Your Annual  Accrued Days';
+                        return response( [ 'msg'=>$msg ],202 );
+                      }
+                             
+                    }
+                    
+            if($request->nature != 5 && $request->nature != 1)
             {
              
               $leaves->days = $different_days;
             }
+
+
             else
             {
 
@@ -708,7 +744,8 @@ class AttendanceController extends Controller
 
                           $excess=$total_leave_days-$max_days;
                           // dd($excess);
-                          dd('You requested for '.$excess.' extra days!');
+                          $msg='You requested for '.$excess.' extra days!';
+                          return $url->with('msg', $msg);
                         }
                         
                       }
@@ -734,7 +771,9 @@ class AttendanceController extends Controller
 
                         $excess=$total_leave_days-$max_days;
                         // dd($excess);
-                        dd('You requested for '.$excess.' extra days!');
+                        $msg='You requested for '.$excess.' extra days!';
+
+                        return $url->with('msg', $msg);
                       }
                     }
                   }
@@ -742,7 +781,7 @@ class AttendanceController extends Controller
                   {
                     // $max_days=10;
                     $leaves->days = $different_days;
-                    dd('wait');
+                    // dd('wait');
                   }
                 }
            
@@ -800,8 +839,6 @@ class AttendanceController extends Controller
         // chacking level 1
         if ($approval->level1==$approver) {
   
-
-          // dd($position->name);
      
      
           if ($approval->level2 != null) 
