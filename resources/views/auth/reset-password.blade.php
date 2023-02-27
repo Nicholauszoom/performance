@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    @include('layouts.shared.title-meta', ['title' => 'Log In'])
+    @include('layouts.shared.title-meta', ['title' => 'Reset Password'])
 
     <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
@@ -12,8 +12,15 @@
 
     <script src="{{ asset('assets/js/app.js') }}"></script>
 </head>
+<style>
+    body {
+ background-image: url('{{ asset('img/bg.png') }}');
+ background-color: #cccccc;
+ 
+}
+ </style>
 
-<body style="background: #3b465a;">
+    <body class="bg-white" >
     <div class="page-content">
 
         <!-- Main content -->
@@ -33,8 +40,9 @@
                             <div class="card-body">
                                 <div class="text-center mb-3">
                                     <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
-                                        <img src="../../../assets/images/logo_icon.svg" class="h-48px" alt="">
+                                        <img src="{{ asset('assets/images/logo.png') }}" class="img-fluid" style="height: 10em" alt="logo">
                                     </div>
+
                                 </div>
 
                                 <div class="text-center text-muted content-divider mb-3">
@@ -53,19 +61,18 @@
                                 <input type="hidden" name="token" value="{{ $request->route('token') }}">
                                 <div class="mb-3">
                                     <label class="form-label">Email</label>
-                                    <div class="form-control-feedback form-control-feedback-start">
-                                        <input type="text" name="email" class="form-control"
-                                            placeholder="john@doe.com">
-                                        <div class="form-control-feedback-icon">
-                                            <i class="ph-at text-muted"></i>
-                                        </div>
+                                    <div class="form-control-feedback form-control-start">
+                                        <input type="email" name="email" class="form-control"
+                                            placeholder="">
                                     </div>
                                 </div>
                                 @error('email')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+
+
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
+                                    <label class="form-label">New Password</label>
                                     <div class="form-control-feedback form-control-feedback-start">
                                         <input type="password" name="password" class="form-control"
                                             placeholder="•••••••••••">
@@ -93,7 +100,7 @@
                                 @if (Session::has('notMatch'))
                                     <p class="text-danger">{{ Session::get('notMatch') }}</p>
                                 @endif
-                                <button type="submit" class="btn btn-teal w-100">Reset Password</button>
+                                <button type="submit" class="btn btn-perfrom w-100">Reset Password</button>
                             </div>
                         </div>
                     </form>
@@ -113,11 +120,6 @@
     @endif --}}
 </body>
 
-<script>
-    // $.get('{{route('register.store')}}',function(data) {
-    //     var x =data;
-    //     console.log(x)
-    // })
-</script>
+
 
 </html>

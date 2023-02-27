@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payroll Reconciliation-Summary</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        {{-- <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}"> --}}
 
 
 
@@ -17,263 +17,330 @@
 
 
 </head>
-<style type="text/css">
-    @media print {
-        #printbtn {
-            display :  none;
-        }
-    }
-    </style>
 
-<style media="print">
-@page {
-size: auto;
-margin: 0;
-  }
-</style>
+
 <body>
 
     <main>
         <div class="row my-4">
 
-            <div class="col-md-10 mx-auto">
+            <div class="col-md-12">
 
-                <div class="row">
-                    <div class="col-md-7 col-7">
-                        <div class="row">
-                            <div class="col-md-3 col-3">
-                                <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here"
-                                    width="100%">
+                <table class="table">
+                    <tfoot>
 
-                            </div>
-                            <div class="col-md-9 col-9">
-                                {{-- <br> --}}
-                                <p>AFRICAN BANKING CORPORATION <br>P.O. BOX 31<br>DAR ES SALAAM</p>
-                                <button id="printbtn" onclick="window.print()">Print this page</button>
+                        <tr>
+                            <td class="">
+                                <div class="box-text">
+                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here"
+                                        class="image-fluid"> <br>
 
-                            </div>
-                        </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-text text-center">
+                                    <p style="font-weight:700" class="">
+                                        AFRICAN BANKING CORPORATION<br>
+                                        P.O. BOX 31 ,DAR ES SALAAM
 
-                    </div>
-                    <div class="col-md-5 col-5">
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-text"> </div>
+                            </td>
 
-                        <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll
-                            Reconciliation-Summary
-                        </h5><br>
-                        <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">For the month:
-                            {{ date('F, Y', strtotime($payroll_date)) }}
-                        </p>
+                            <td colspan="4" class="w-50" style="">
+                                <div class="" style="text-align: right; padding-right:20px">
 
-                    </div>
+                                    <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll
+                                        Detail_By Number</h5>
+                                    <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">
+                                        Date:
+                                        {{ $payroll_date }}
 
+                                </div>
+                            </td>
+                        </tr>
 
+                    </tfoot>
+                </table>
 
-                </div>
+                <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
                 @php
-                  $total_previous = 0;
-                  $total_current = 0;
-                  $total_amount = 0;
+                    $total_previous = 0;
+                    $total_current = 0;
+                    $total_amount = 0;
 
                 @endphp
 
-                <div class="row mt-4 mb-5">
-                    <hr style="border-bottom: 10px solid rgb(215, 154, 41); ">
-                    <div class="col-md-12 col-12">
+                <table class="table" style="font-size:14px;">
+                    <thead>
+                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                            <th><b>RefNo</b></th>
+                            <th><b>Desc</b></th>
+                            <th class="text-end"><b>Last Month</b></th>
+                            <th class="text-end"><b>This Month</b></th>
+                            <th class="text-end"><b>Amount</b></th>
+                            <th class="text-end"><b>Count</b></th>
 
-                        <table class="table table-stripped " style="font-size:14px;">
-                            <thead>
-                                <tr class="bg-light">
-                                    <th><b>RefNo</b></th>
-                                    <th><b>Desc</b></th>
-                                    <th class="text-end"><b>Last Month</b></th>
-                                    <th class="text-end"><b>This Month</b></th>
-                                    <th class="text-end"><b>Amount</b></th>
-                                    <th class="text-end"><b>Count</b></th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        @php
+                            $total_previous += 0;
+                            $total_current += 0;
+                            $total_amount += $total_previous_gross;
+                        @endphp
+                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <td class="text-start">00001</td>
+                            <td class="text-start">Last Month Gross Salary</td>
+                            <td class="text-end">
+                                {{ number_format(0, 2) }}</td>
+                            <td class="text-end">
+                                {{ number_format(0, 2) }}</td>
+                            <td class="text-end">{{ number_format($total_previous_gross, 0) }}</td>
+                            <td class="text-end">{{ $count_previous_month }}</td>
+                        </tr>
+                        @if ($count_current_month - $count_previous_month != 0)
+                            @if ($count_current_month > $count_previous_month)
+                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                    <td class="text-start">00002</td>
+                                    <td class="text-start">Add New Employee</td>
+                                    <td class="text-end">
+                                        {{ number_format(0, 2) }}</td>
+                                    <td class="text-end">
+                                        {{ number_format($total_current_basic - $total_previous_basic, 2) }}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ number_format($total_current_basic - $total_previous_basic, 2) }}
+                                    </td>
+                                    <td class="text-end">{{ $count_current_month - $count_previous_month }}</td>
                                 </tr>
-                            </thead>
-
-                            <tbody>
                                 @php
                                     $total_previous += 0;
-                                    $total_current += 0;
-                                    $total_amount += $total_previous_gross;
+                                    $total_current += $total_current_basic - $total_previous_basic;
+                                    $total_amount += $total_current_basic - $total_previous_basic;
                                 @endphp
-                                <tr>
-                                    <td class="text-start">00001</td>
-                                    <td class="text-start">Last Month Gross Salary</td>
+                            @elseif($count_previous_month > $count_current_month)
+                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                    <td class="text-start">00002</td>
+                                    <td class="text-start">Less Terminated Employee</td>
                                     <td class="text-end">
                                         {{ number_format(0, 2) }}</td>
                                     <td class="text-end">
-                                        {{ number_format(0, 2) }}</td>
-                                    <td class="text-end">{{ number_format($total_previous_gross, 2) }}</td>
-                                    <td class="text-end">{{ $count_previous_month }}</td>
+                                        {{ number_format($total_previous_basic - $total_current_basic, 2) }}
+                                    </td>
+                                    <td class="text-end">
+                                        {{ number_format($total_previous_basic - $total_current_basic, 2) }}
+                                    </td>
+                                    <td class="text-end">{{ $count_previous_month - $count_current_month }}
+                                    </td>
                                 </tr>
-                                @if ($total_current_basic - $total_previous_basic != 0)
-                                    @if ($total_current_basic > $total_previous_basic != 0)
-                                        <tr>
-                                            <td class="text-start">00002</td>
-                                            <td class="text-start">Add New Employee</td>
-                                            <td class="text-end">
-                                                {{ number_format(0, 2) }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($total_current_basic - $total_previous_basic, 2) }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($total_current_basic - $total_previous_basic, 2) }}</td>
-                                            <td class="text-end">{{ $count_current_month - $count_previous_month }}</td>
-                                        </tr>
-                                        @php
-                                            $total_previous += 0;
-                                            $total_current += $total_current_basic - $total_previous_basic;
-                                            $total_amount += $total_current_basic - $total_previous_basic;
-                                        @endphp
-                                    @else
-                                        <tr>
-                                            <td class="text-start">00002</td>
-                                            <td class="text-start">Less Terminated Employee</td>
-                                            <td class="text-end">
-                                                {{ number_format(0, 2) }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($total_previous_basic - $total_current_basic, 2) }}</td>
-                                            <td class="text-end">
-                                                {{ number_format($total_previous_basic - $total_current_basic, 2) }}</td>
-                                            <td class="text-end">{{ $count_previous_month - $count_current_month }}</td>
-                                        </tr>
-                                        @php
-                                            $total_previous += 0;
-                                            $total_current += $total_current_basic - $total_previous_basic;
-                                            $total_amount += $total_current_basic - $total_previous_basic;
-                                        @endphp
-                                    @endif
-                                @endif
-                                @if ($current_increase - $previous_increase != 0)
-                                    <tr>
-                                        <td class="text-start">00004</td>
-                                        <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
-                                        <td class="text-end">
-                                            {{ number_format($previous_increase, 2) }}</td>
-                                        <td class="text-end">
-                                            {{ number_format($current_increase, 2) }}</td>
-                                        <td class="text-end">
-                                            {{ number_format($current_increase - $previous_increase, 2) }}</td>
+                                @php
+                                    $total_previous += 0;
+                                    $total_current += $total_current_basic - $total_previous_basic;
+                                    $total_amount += $total_current_basic - $total_previous_basic;
+                                @endphp
+                            @endif
+                        @endif
+                        @if($count_previous_month != 0)
+                        @if ($current_increase['basic_increase'] > 0)
+                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                <td class="text-start">00004</td>
+                                <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
+                                <td class="text-end">
+                                    {{ number_format($current_increase['actual_amount'], 2) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format($current_increase['actual_amount'] - $current_increase['basic_increase'], 2) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format(($current_increase['actual_amount'] - $current_increase['basic_increase'])-$current_increase['actual_amount'], 2) }}
+                                </td>
+                                <td class="text-end"></td>
+                            </tr>
+                            @php
+                                $total_previous += number_format($current_increase['actual_amount'], 2);
+                                $total_current += number_format($current_increase['actual_amount'] - $current_increase['basic_increase'], 2);
+                                $total_amount += number_format(($current_increase['actual_amount'] - $current_increase['basic_increase'])-$current_increase['actual_amount'], 2);
+                            @endphp
+                        @endif
+                        @if ($current_decrease['basic_decrease'] > 0)
+                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                <td class="text-start">00004</td>
+                                <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
+                                <td class="text-end">
+                                    {{ number_format($current_decrease['actual_amount'], 2) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'], 2) }}
+                                </td>
+                                <td class="text-end">
+                                    {{ number_format(($current_decrease['actual_amount'] - $current_decrease['basic_decrease'])-$current_decrease['actual_amount'], 2) }}
+                                </td>
+
+                                <td class="text-end"></td>
+                            </tr>
+                            @php
+                                $total_previous += $current_decrease['actual_amount'];
+                                $total_current += $current_decrease['actual_amount'] - $current_decrease['basic_decrease'];
+                                $total_amount += ($current_decrease['actual_amount'] - $current_decrease['basic_decrease'])-$current_decrease['actual_amount'];
+                            @endphp
+                        @endif
+                        @endif
+                        @php $i = 1;  @endphp
+                        @if (count($total_allowances) > 0)
+                            @foreach ($total_allowances as $row)
+                                @php $i++;  @endphp
+                                @if ($row->current_amount - $row->previous_amount != 0)
+                                    <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                        <td class="text-start">{{ '000' . $i + 4 }}</td>
+                                        <td class="text-start">
+                                            @if ($row->description == 'Add/Les S-Overtime')
+                                                Add/Less Sunday Overtime Hours
+                                            @elseif($row->description == 'Add/Les N-Overtime')
+                                                Add/Less Normal Day Overtime Hours
+                                            @else
+                                                {{ $row->description }}
+                                            @endif
+                                        </td>
+                                        <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format($row->difference, 2) }}</td>
                                         <td class="text-end"></td>
                                     </tr>
                                     @php
-                                        $total_previous += $previous_increase;
-                                        $total_current += $current_increase;
-                                        $total_amount += $current_increase - $previous_increase;
+                                        $total_previous += $row->previous_amount;
+                                        $total_current += $row->current_amount;
+                                        $total_amount = $total_amount + $row->difference;
+
                                     @endphp
                                 @endif
-                                @if ($current_decrease - $previous_decrease != 0)
-                                    <tr>
-                                        <td class="text-start">00004</td>
-                                        <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
-                                        <td class="text-end">
-                                            {{ number_format($previous_decrease, 2) }}</td>
-                                        <td class="text-end">
-                                            {{ number_format($current_decrease, 2) }}</td>
-                                        <td class="text-end">
-                                            {{ number_format($current_decrease - $previous_decrease, 2) }}</td>
-                                        <td class="text-end"></td>
-                                    </tr>
-                                    @php
-                                        $total_previous -= $previous_decrease;
-                                        $total_current -= $current_decrease;
-                                        $total_amount -= $current_decrease - $previous_decrease;
-                                    @endphp
-                                @endif
-                                @php $i = 1;  @endphp
-                                @if (count($total_allowances) > 0)
-                                    @foreach ($total_allowances as $row)
-                                        @php $i++;  @endphp
-                                        @if ($row->current_amount - $row->previous_amount != 0)
-                                            <tr>
-                                                <td class="text-start">{{ '000' . $i + 4 }}</td>
-                                                <td class="text-start">{{ $row->description }} </td>
-                                                <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
-                                                <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
-                                                <td class="text-end">{{ number_format($row->difference, 2) }}</td>
-                                                <td class="text-end"></td>
-                                            </tr>
-                                            @php
-                                                $total_previous += $row->previous_amount;
-                                                $total_current += $row->current_amount;
-                                                $total_amount = $total_amount + $row->difference;
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                @endif
+                            @endforeach
+                        @endif
 
 
-                                {{-- </tbody>
+
+
+
+                        {{-- </tbody>
                             <tbody> --}}
-                                <tr style="border-top: 2px solid rgb(18, 93, 54) !important; ">
-                                    <td class="text-start"></td>
-                                    <td class="text-start"><b>This Month</b> </td>
-                                    <td class="text-end">
-                                        <b>{{ number_format(!empty($total_previous) ? $total_previous : 0, 2) }}</b>
-                                    </td>
-                                    <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
-                                    <td class="text-end">
-                                        <b>{{ number_format($total_amount, 2) }}</b>
-                                    </td>
-                                    <td class="text-end"><b>{{ $count_current_month }}</b></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
-                <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
-
-                <div class="row mt-4">
-
-
-                    <div class="col-md-12 col-12 col-lg" >
-
-
-                        {{-- <h5>FINANCE DEPARTMENT</h5> --}}
-                        <div class="col-md-12 col-sm-12 col-12 p-2 mt-4" style="border:solid 1px gray ;border-bottom:none !important; ">
-                            <p class="mt-2"><small><b>Prepared By</b></small></p>
+                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <td class="text-start"></td>
+                            <td class="text-start"><b>This Month</b> </td>
+                            <td class="text-end">
+                                <b>{{ number_format(!empty($total_previous) ? $total_previous : 0, 2) }}</b>
+                            </td>
+                            <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
+                            <td class="text-end">
+                                <b>{{ number_format($total_amount, 0) }}</b>
+                            </td>
+                            <td class="text-end"><b>{{ $count_current_month }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
+                <table class="table">
+                    <tfoot>
+                        <tr>
+                            <td collspan="4">
+                                <p class="text-start"><small><b>Prepared By</b></small></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="">
 
 
-                            <div class="row p-1">
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
-                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
-                            </div>
-                            <br>
-                            <p><small><b>Checked and Approved By</b></small></p>
-                            <div class="row p-1">
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
-                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
-                            </div>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
 
-                            <p><small><b>Checked and Approved By</b></small></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td collspan="4">
+                                <p><small><b>Checked and Approved By</b></small></p>
+                            </td>
+                        </tr>
 
-                            <div class="row p-1">
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
-                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
-                            </div>
+                        <tr>
+                            <td class="">
 
-                            <p><small><b>Approved By</b></small></p>
 
-                            <div class="row p-1">
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Name:______________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Position:__________________________</div>
-                                <div class="col-md-4  col-4 col-lg-4 mb-3">Signature:__________________________</div>
-                                <div class="col-md-6  col-6 col-lg-6 mb-3">Date_________________________</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td collspan="4">
+                                <b>Checked and Approved By</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="">
+
+
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td collspan="4">
+                                <p><small><b>Approved By</b></small></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="">
+
+
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
+                            </td>
+                            <td>
+                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
+
+                            </td>
+                        </tr>
+
+
+                    </tfoot>
+                </table>
             </div>
+
+
+        </div>
 
 
         </div>
@@ -287,15 +354,8 @@ margin: 0;
     <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
-    </script>
+    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
 </body>
 
 </html>

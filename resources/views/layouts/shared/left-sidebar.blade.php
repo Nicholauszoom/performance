@@ -29,7 +29,7 @@
 
 
             <ul class="nav nav-sidebar main-link" data-nav-type="accordion">
-                @can('view-dashboard')
+                {{-- @can('view-dashboard')/ --}}
                 <li class="nav-item">
                     <a href="{{ route('dashboard.index') }}"
                         class="nav-link {{ request()->routeIs('dashboard.index') ? 'active' : null }}">
@@ -37,7 +37,68 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                @endcan
+
+                <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions')|| request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-user"></i>
+                        <span>My Services</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
+                        {{-- start of active employee link --}}
+                     
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
+                                    href="{{ route('flex.my-overtimes') }}">
+                                    Overtimes
+                            </a>
+                            </li>
+                      
+                        {{--  / --}}
+
+                        {{--  start of suspend employee link --}}
+                    
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
+                                    href="{{ route('flex.my-leaves') }}">Leaves</a>
+                            </li>
+                     
+                        {{-- / --}}
+
+                        {{--  start of employee termination link --}}
+                      
+
+                            <li class="nav-item ">
+                                <a class="nav-link {{ request()->routeIs('flex.my-loans')  ? 'active' : null }}"
+                                    href="{{ route('flex.my-loans') }}">Loans</a>
+                            </li>
+                   
+                        {{-- / --}}
+
+                    
+                        {{--  start of overtime link --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
+                                href="{{ route('flex.my-pensions') }}"> Pensions </a>
+                        </li>
+
+                        {{-- / --}}
+
+                        {{--  start of biodata link --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.biodata') ? 'active' : null }}"
+                                href="{{ route('flex.biodata') }}" > Biodata </a>
+                        </li>
+
+                        {{-- / --}}
+
+                        
+                    </ul>
+                </li>
+                {{-- @endcan --}}
 
                 {{--
                     <li class="nav-item">
@@ -48,7 +109,7 @@
                 </li>  --}}
 
                 {{-- start of workforce management dropdown --}}
-                @can('view-workforce')
+                @can('view-workforce')  
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') ||request()->routeIs('flex.addTermination') || request()->routeIs('flex.addEmployee')||request()->routeIs('flex.employee') || request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination')  || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -121,11 +182,11 @@
                         @endcan
                         {{-- / --}}
 
-                        {{-- start of grievance and displinary link --}}
+                        {{-- start of displinary  actions link --}}
                         @can('view-grivance')
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.grievancesCompain') ? 'active' : null }}"
-                                href="{{ route('flex.grievancesCompain') }}">Grievances and Disciplinary</a>
+                                href="{{ route('flex.grievancesCompain') }}">Disciplinary Actions</a>
                         </li>
                         @endcan
                         {{-- / --}}

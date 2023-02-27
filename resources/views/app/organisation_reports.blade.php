@@ -62,6 +62,46 @@
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
+                    <h5 class="text-warning">Payroll Reconciliation Details</h5>
+                </div>
+
+                <form id="demo-form2" enctype="multipart/form-data" method="post"
+                    action="{{ route('reports.payrollReconciliationDetails') }}" data-parsley-validate
+                    class="form-horizontal form-label-left">
+                    @csrf
+
+                    <div class="card-body">
+                        <div class="input-group">
+                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                                data-width="1%">
+                                <option selected disabled>Select Month</option>
+                                <?php foreach ($month_list as $row) { ?>
+                                <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                <?php } ?>
+                            </select>
+                            <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Report Format:</label>
+                            <div class="">
+                                <div class="d-inline-flex align-items-center me-3">
+                                    <input type="radio" name="type" value="1" id="p9">
+                                    <label class="ms-2" for="p9">PDF</label>
+                                </div>
+                                <div class="d-inline-flex align-items-center">
+                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <label class="ms-2" for="p9a">Data table</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                <div class="card-header">
                     <h5 class="text-warning">Payroll Input Changes Approval Report </h5>
                 </div>
 
@@ -535,8 +575,8 @@
                             <label class="col-form-label col-md-2">Employee</label>
                             <div class="col-md-10">
                                 <div class="input-group">
-                                    <select required name="emp_id"
-                                        class="select_payroll_month form-control select" data-width="1%">
+                                    <select required name="emp_id" class="select_payroll_month form-control select"
+                                        data-width="1%">
                                         <option selected disabled>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>

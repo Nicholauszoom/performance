@@ -33,54 +33,7 @@
             <div class="clearfix"></div>
 
             <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                        <div class="card-head px-2">
-                            <h5 class="text-main mt-2"> My Approved Loans </h5>
-
-                            <div class="clearfix"></div>
-                        </div>
-
-                        <div id="feedBack"></div>
-                        <div id="loanList" class="card-body">
-
-                            <table id="datatable" class="table datatable-basic table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>S/N</th>
-                                        <th>Type</th>
-                                        <th>Amount(Debt)</th>
-                                        <th>Paid</th>
-                                        <th>Remained</th>
-                                        <th>Last Paid</th>
-                                    </tr>
-                                </thead>
-
-
-                                <tbody>
-                                    <?php
-                          foreach ($my_loans as $row) { ?>
-                                    <tr>
-                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->description; ?></td>
-                                        <td><?php echo number_format($row->amount, 2); ?></td>
-                                        <td><?php echo number_format($row->paid, 2); ?></td>
-                                        <td><?php echo number_format($row->amount - $row->paid, 2); ?></td>
-                                        <td><?php echo number_format($row->amount_last_paid, 2); ?>
-                                            <?php if($row->state==1){ ?> <div class="col-md-12"><span
-                                                    class="label label-danger">ACTIVE</span></div><?php } elseif($row->state==0){ ?><div
-                                                class="col-md-12"><span class="label label-success">COMPLETED</span></div>
-                                            <?php } elseif($row->state==2){ ?><div class="col-md-12"><span
-                                                    class="label label-warning">PAUSED</span></div><?php } ?>
-                                        </td>
-                                    </tr>
-                                    <?php }  ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
+             
                 <?php if(session('appr_loan')!=''){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">

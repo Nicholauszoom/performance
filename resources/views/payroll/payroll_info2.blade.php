@@ -8,24 +8,55 @@
 
 @section('content')
     @php
+        $payroll_details = $data['payroll_details'];
+        $payroll_month_info = $data['payroll_month_info'];
+        $payroll_list = $data['payroll_list'];
+        $payroll_date = $data['payroll_date'];
+        $payroll_totals = $data['payroll_totals'];
 
-$payrollMonth = 0;
-$payrollState = 0;
+        $total_allowances = $data['total_allowances'];
+        $total_bonuses = $data['total_bonuses'];
+        $total_loans = $data['total_loans'];
+        $total_overtimes = $data['total_overtimes'];
+        $total_deductions = $data['total_deductions'];
+        $payroll_state = $data['payroll_state'];
 
-        // $payrollMonth = $payroll_date;
-        // $payrollState = $payroll_state;
+        $payrollMonth = $payroll_date;
+        $payrollState = $payroll_state;
 
+        foreach ($payroll_totals as $row) {
+            $salary = $row->salary;
+            $pension_employee = $row->pension_employee;
+            $pension_employer = $row->pension_employer;
+            $medical_employee = $row->medical_employee;
+            $medical_employer = $row->medical_employer;
+            $sdl = $row->sdl;
+            $wcf = $row->wcf;
+            $allowances = $row->allowances;
+            $taxdue = $row->taxdue;
+            $meals = $row->meals;
+        }
 
+        $paid_heslb = null;
+        $remained_heslb = null;
+        $paid = null;
+        $remained = null;
 
+        foreach ($total_loans as $key) {
+            if ($key->description == 'HESLB') {
+                $paid_heslb = $key->paid;
+                $remained_heslb = $key->remained;
+            } else {
+                $paid = $key->paid;
+                $remained = $key->remained;
+            }
+        }
 
-
-
-
-
-
-        $total_previous = 0;
-        $total_current = 0;
-        $total_amount = 0;
+        foreach ($payroll_month_info as $key) {
+            // $paid = $key->payroll_date;
+            $cheklist = $key->pay_checklist;
+            $state = $key->state;
+        }
 
     @endphp
 
@@ -38,11 +69,78 @@ $payrollState = 0;
 
         <div class="card-body">
             <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div
+                        class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+                        <div class="mb-2 ms-auto">
+                            <h4 class="text-muted">Payloll Details:</h4>
+                            <div class="d-flex flex-wrap wmin-lg-400">
+                                <ul class="list list-unstyled mb-0">
+                                    <li>
+                                        <h5 class="my-2">Salaries:</h5>
+                                    </li>
+                                    <li>Total Allowances:</li>
+                                    <li>Pension(Employer):</li>
+                                    <li>Pension (Employee):</li>
 
-                  
+                                    <li>Taxdue (PAYE):</li>
+                                    <li>WCF:</li>
+                                    <li>SDL:</li>
+                                </ul>
+
+                                <ul class="list list-unstyled text-end mb-0 ms-auto">
+                                    <li>
+                                        <h5 class="my-2">{{ number_format($salary, 2) }}</h5>
+                                    </li>
+                                    <li><span class="fw-semibold">{{ number_format($allowances, 2) }}</span></li>
+                                    <li>{{ number_format($pension_employer, 2) }}</li>
+                                    <li>{{ number_format($pension_employee, 2) }}</li>
+
+                                    <li>{{ number_format($taxdue, 2) }}</li>
+                                    <li><span class="fw-semibold">{{ number_format($wcf, 2) }}</span></li>
+                                    <li><span class="fw-semibold">{{ number_format($sdl, 2) }}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div
+                        class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+                        <div class="mb-2 ms-auto">
+                            <h4 class="text-muted">Payloll Details:</h4>
+                            <div class="d-flex flex-wrap wmin-lg-400">
+                                <ul class="list list-unstyled mb-0">
+                                    <li>
+                                        <h5 class="my-2">Salaries:</h5>
+                                    </li>
+                                    <li>Total Allowances:</li>
+                                    <li>Pension(Employer):</li>
+                                    <li>Pension (Employee):</li>
 
+                                    <li>Taxdue (PAYE):</li>
+                                    <li>WCF:</li>
+                                    <li>SDL:</li>
+                                </ul>
+
+                                <ul class="list list-unstyled text-end mb-0 ms-auto">
+                                    <li>
+                                        <h5 class="my-2">{{ number_format($salary, 2) }}</h5>
+                                    </li>
+                                    <li><span class="fw-semibold">{{ number_format($allowances, 2) }}</span></li>
+                                    <li>{{ number_format($pension_employer, 2) }}</li>
+                                    <li>{{ number_format($pension_employee, 2) }}</li>
+
+                                    <li>{{ number_format($taxdue, 2) }}</li>
+                                    <li><span class="fw-semibold">{{ number_format($wcf, 2) }}</span></li>
+                                    <li><span class="fw-semibold">{{ number_format($sdl, 2) }}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <hr>
 

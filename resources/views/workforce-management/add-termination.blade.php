@@ -91,6 +91,8 @@
                                         <div class="col-md-3 form-group">
                                             <label for="">Salary Enrollments</label>
                                             <input type="text" value="0" name="salaryEnrollment"  class="form-control" id="salaryEnrollment">
+                                            <input type="hidden" value="0" name="actual_salary"  class="form-control" id="actual_salary">
+
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Overtime Normal Days</label>
@@ -225,7 +227,7 @@
             var data =  JSON.parse(data);
 
             //alert(data.leave_allowance);
-
+            
              document.getElementById("leaveAllowance").value  =  data.leave_allowance;
              document.getElementById("salaryEnrollment").value = data.employee_salary;
              document.getElementById("employee_actual_salary").value = data.employee_actual_salary;

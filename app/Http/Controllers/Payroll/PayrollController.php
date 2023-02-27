@@ -52,7 +52,7 @@ class PayrollController extends Controller
 
                 $check = $this->payroll_model->payrollcheck($payroll_month);
                 if ($check == 0) {
-                    $result = $this->payroll_model->initPayroll($today, $payroll_date,$payroll_month, $empID);
+                    $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
                     //notify the finance
 
 
@@ -219,6 +219,7 @@ class PayrollController extends Controller
     public function temp_payroll_info(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
+
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_month_info'] = $this->payroll_model->payroll_month_info($payrollMonth);
         // $data['payroll_list'] =  $this->payroll_model->employeePayrollList("temp_payroll_logs",$payrollMonth);
@@ -240,20 +241,17 @@ class PayrollController extends Controller
         $data['payroll_state'] = 0;
         $data['title'] = "Payroll Info";
 
-        return view('payroll.payroll_info', compact('data'));
+       // dd($data);
+
+        return view('payroll.payroll_info',$data);
     }
 
     public function get_reconsiliation_summary(Request $request)
     {
 
-        //$row = DB::table('payroll_months')->select('payroll_date')->last();
-
         $calendar = $request->payrolldate;
 
-
-        $data['payrollMonth'] = $calendar;
         $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
-        //dd($data['payrollMonth']);
 
 
         $datewell = explode("-", $calendar);
@@ -269,36 +267,111 @@ class PayrollController extends Controller
         $empID = auth()->user()->emp_id;
         $today = date('Y-m-d');
 
-        $current_payroll_month = $calendar;
+        $current_payroll_month = $request->input('payrolldate');
         $reportType = 1;  //Staff = 1, temporary = 2
         $reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         // dd($previous_payroll_month_raw);
-        $data['payroll_date'] = $calendar;
+        $data['payroll_date'] = $request->payrolldate;
         $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
-        $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
-        $data['count_previous_month'] = $this->reports_model->s_count($previous_payroll_month);
+        $data['total_current_gross'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
+        $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month):0;
         $data['count_current_month'] = $this->reports_model->s_count1($current_payroll_month);
+        $data['total_previous_overtime'] = $this->reports_model->s_overtime1($previous_payroll_month);
+        $data['total_current_overtime'] = $this->reports_model->s_overtime1($current_payroll_month);
+
+        $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
+        $descriptions = [];
+         foreach($total_allowances as $row){
+            if($row->allowance == "N-Overtime"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }elseif($row->allowance == "S-Overtime"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+            elseif($row->allowance == "House Rent"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Leave Allowance"){
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Teller Allowance"){
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Arrears"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+            elseif($row->allowance == "Long Serving allowance"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+
+         }
+
+         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
+
+         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+
+         foreach($result as $row){
+
+           array_push($total_allowances,(object)['description'=>$row['description'],
+                                        'allowance'=>$row['description'],
+                                        'current_amount'=>$row['current_amount'],
+                                       'previous_amount'=>$row['previous_amount'],
+                                       'difference'=>$row['current_amount']-$row['previous_amount']]);
+         }
 
 
-        $data['total_allowances'] = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
 
-        $data['allowance_by_employee'] = $this->reports_model->allowance_by_employee($current_payroll_month, $previous_payroll_month);
+
+
+         $data['total_allowances'] = $total_allowances;
+        // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+
+
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic1($current_payroll_month) : 0;
+//dd($data['total_current_basic'],$data['total_previous_basic']);
+        $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_net'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
 
-        //$data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
-       // $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+        $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month,$current_payroll_month);
+       // dd($data['previous_decrease']);
+       // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
-        $data['previous_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month);
-        $data['current_decrease'] = $this->reports_model->basic_decrease1($current_payroll_month);
+       // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase1($previous_payroll_month,$current_payroll_month);
 
-        $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
-        $data['current_increase'] = $this->reports_model->basic_increase1($current_payroll_month);
+
+        $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
@@ -307,14 +380,32 @@ class PayrollController extends Controller
 
 
         //return $pdf->download('sam.pdf');
-        // $pdf = Pdf::loadView('reports.samplepdf')->setPaper('a4', 'potrait');
-        //return $pdf->download('CARGO SALES NO # ' .  $purchases->pacel_number . ".pdf");
+         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
 
-        // return $pdf->download('payroll_reconciliation_summary.pdf');
+         //return $pdf->download('payroll_reconciliation_summary.pdf');
+        //return view('reports.payroll_reconciliation_summary1', $data);
+
+       // return view('reports.samplepdf', $data);
         return view('payroll.reconsiliation_summary', $data);
-
-
     }
+
+
+    function arrayRecursiveDiff($aArray1, $aArray2) {
+        $aReturn = array();
+;
+//bool in_array( $val, $array_name, $mode );
+      for($i = 0;$i<count($aArray1); $i++){
+        if(in_array($aArray1[$i]['description'], $aArray2)){
+            Unset($aArray1[$i]);
+           // dd($row['description']);
+        }else{
+           // array_push($aRetur)
+        }
+      }
+
+        return $aArray1;
+    }
+
 
 
     public function get_reconsiliation_summary1(Request $request)
@@ -362,7 +453,7 @@ class PayrollController extends Controller
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
 
         //$data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
-       // $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+        // $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
 
         $data['previous_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month);
         $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
@@ -382,8 +473,6 @@ class PayrollController extends Controller
 
         // return $pdf->download('payroll_reconciliation_summary.pdf');
         return view('payroll.reconsiliation_summary', $data);
-
-
     }
 
     public function payroll_info(Request $request)
@@ -402,17 +491,129 @@ class PayrollController extends Controller
         $data['payroll_month_info'] = $this->payroll_model->payroll_month_info($payrollMonth);
 
         $data['payroll_date'] = $payrollMonth;
+        $data['payrollMonth'] = $payrollMonth;
+       // dd($data['payrollMonth']);
         $data['payroll_state'] = 1;
         $data['title'] = "Payroll Info";
 
         $data['title'] = "Payroll Info";
 
 
+        $calendar = $payrollMonth;
+        $datewell = explode("-", $calendar);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+
+        $termination_date = $yyyy . "-" . $mm . "-" . $dd;
+        $j_mm = "01";
+        $j_dd = "01";
+        $january_date = $yyyy . "-" . $j_mm . "-" . $j_dd;
+        $termination_month = $yyyy . "-" . $mm;
+        $empID = auth()->user()->emp_id;
+        $today = date('Y-m-d');
+
+        $current_payroll_month = $calendar;
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        // dd($previous_payroll_month_raw);
+        $data['payroll_date'] = $request->payrolldate;
+        $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+
+        $data['count_previous_month'] = $this->reports_model->s_count($previous_payroll_month);
+        $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
 
 
-        return view('payroll.payroll_info', compact('data'));
+        $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+
+        $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
+        $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
+
+        //$data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        // $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+
+        $data['previous_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month);
+        $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
+
+        $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase($current_payroll_month);
+
+
+
+
+
+        return view('payroll.payroll_info',$data);
     }
 
+    public function payroll_info1(Request $request)
+    {
+        $data['payroll_state'] = 1;
+        $calendar = base64_decode($request->pdate);
+
+        $data['payroll_date'] = $calendar;
+        $data['payrollMonth'] = $calendar;
+
+
+
+        $datewell = explode("-", $calendar);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+
+        $termination_date = $yyyy . "-" . $mm . "-" . $dd;
+        $j_mm = "01";
+        $j_dd = "01";
+        $january_date = $yyyy . "-" . $j_mm . "-" . $j_dd;
+        $termination_month = $yyyy . "-" . $mm;
+        $empID = auth()->user()->emp_id;
+        $today = date('Y-m-d');
+
+        $current_payroll_month = $calendar;
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        // dd($previous_payroll_month_raw);
+        $data['payroll_date'] = $request->payrolldate;
+        $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+
+        $data['count_previous_month'] = $this->reports_model->s_count($previous_payroll_month);
+        $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
+
+
+        $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+
+        $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
+        $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
+
+        //$data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        // $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+
+        $data['previous_decrease'] = $this->reports_model->basic_decrease($previous_payroll_month);
+        $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
+
+        $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase($current_payroll_month);
+
+
+        //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data);
+        // $pdf = Pdf::loadView('reports.payroll_details',$data);
+
+
+
+        //return $pdf->download('sam.pdf');
+        // $pdf = Pdf::loadView('reports.samplepdf')->setPaper('a4', 'potrait');
+        //return $pdf->download('CARGO SALES NO # ' .  $purchases->pacel_number . ".pdf");
+
+        // return $pdf->download('payroll_reconciliation_summary.pdf');
+        return view('payroll.reconsiliation_summary', $data);
+    }
     // public function temp_less_payments(Request $request)  {
     //   $payrollMonth = base64_decode($request->input('pdate'));
     //   $data['payroll_list'] =  $this->payroll_model->employeePayrollList($payrollMonth, "temp_allowance_logs", "temp_deduction_logs", "temp_loan_logs", "temp_payroll_logs");

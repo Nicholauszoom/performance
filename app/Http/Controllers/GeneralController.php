@@ -1905,6 +1905,8 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
+        dd();
+
 
 
         $split_start = explode("  at  ", $start);
@@ -3758,6 +3760,14 @@ class GeneralController extends Controller
         $data['s_staff_p'] = $this->reports_model->s_payrollEmployee($previous_payroll_month, '');
         $data['net_total'] = $this->netTotalSummation($payrollMonth);
 
+        // start of overtime
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        $data['employees'] = EMPL::all();
+
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        // end of overtime
+
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
@@ -3815,7 +3825,7 @@ class GeneralController extends Controller
 
         if (!empty($request->input("bank"))) {
             $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
-
+            dd($request->input("bank"));
             foreach ($queryBranch as $rows) {
                 echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
             }
@@ -4985,7 +4995,7 @@ class GeneralController extends Controller
 
             $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+            SysHelpers::FinancialLogs($data['empID'], 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
 
 
             if ($result == true) {
@@ -6525,12 +6535,12 @@ class GeneralController extends Controller
                     'emp_id' => $request->emp_id,
                     'account' => 1,
                 );
-
+                dd(   $newEmp);
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
 
                 $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
 
-
+                    $id= $request->emp_id;
                 if ($recordID > 0) {
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
@@ -7710,6 +7720,7 @@ class GeneralController extends Controller
         $termination->arrears = $request->arrears;
         $termination->exgracia = $request->exgracia;
         $termination->bonus = $request->bonus;
+        $termination->actual_salary = $employee_actual_salary;
         $termination->longServing = $request->longServing;
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
@@ -9309,7 +9320,7 @@ class GeneralController extends Controller
         // For Saving Leave Approvals
         public function saveLeaveApproval(Request $request)
         {
-            
+
             request()->validate(
                 [
                     'empID' => 'required',
@@ -9339,7 +9350,7 @@ class GeneralController extends Controller
 
         public function editLeaveApproval(Request $request, $id)
         {
-            
+
     // dd($id);
             $data['approval'] = LeaveApproval::where('id', $id)->first();
             $data['employees'] = EMPL::get();
@@ -9357,7 +9368,7 @@ class GeneralController extends Controller
                 $approval = LeaveApproval::find($id);
 
                 $approval->delete();
-                
+
                 return redirect('flex/leave-approvals');
             }
 
@@ -9379,5 +9390,133 @@ class GeneralController extends Controller
         // End of Leave Approvals
 
 
+
+
+
+        // Start of self services
+
+
+        // For MyOvertime
+
+        public function myOvertimes()
+        {
+            $data['title'] = "Overtime";
+            $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+            $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+            $data['employees'] = $this->flexperformance_model->Employee();
+
+            $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Overtimes';
+
+            // return view('overtime.overtime', $data);
+            return view('my-services.overtimes',$data);
+        }
+
+
+
+        // For My Loans
+        public function myLoans(Request $request)
+        {
+
+
+            $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
+            $empID = session('emp_id');
+
+            $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
+
+            $data['employee'] = $this->flexperformance_model->customemployee();
+            $data['max_amount'] = $this->flexperformance_model->get_max_salary_advance(session('emp_id'));
+            $data['title'] = "Loans and Salaries";
+            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Loans';
+            return view('my-services/loans', $data);
+
+        }
+
+        // For My Complains
+        public function myPensions()
+        {
+            $id = auth()->user()->emp_id;
+
+            $data['employee_pension'] = $this->reports_model->employee_pension($id);
+
+            $data['child'] = "Employee Profile";
+            $data['parent'] = "My Services";
+
+            return view('my-services/pensions',$data);
+        }
+        // For My Complains
+        // public function myComplains()
+        // {
+        //     return view('my-services/complains');
+        // }
+
+        // end of self services
+
+
+  public function my_biodata(Request $request)
+{
+    $id = auth()->user()->emp_id;
+
+
+    $extra = $request->input('extra');
+    $data['employee'] = $this->flexperformance_model->userprofile($id);
+
+    // dd($data['employee'] );
+    $data['kin'] = $this->flexperformance_model->getkin($id);
+    $data['property'] = $this->flexperformance_model->getproperty($id);
+    $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
+    $data['active_properties'] = $this->flexperformance_model->getactive_properties($id);
+    $data['allrole'] = $this->flexperformance_model->role($id);
+    $data['role'] = $this->flexperformance_model->getuserrole($id);
+    $data['rolecount'] = $this->flexperformance_model->rolecount($id);
+    $data['task_duration'] = $this->performanceModel->total_task_duration($id);
+    $data['task_actual_duration'] = $this->performanceModel->total_task_actual_duration($id);
+    $data['task_monetary_value'] = $this->performanceModel->all_task_monetary_value($id);
+    $data['allTaskcompleted'] = $this->performanceModel->allTaskcompleted($id);
+
+    $data['skills_missing'] = $this->flexperformance_model->skills_missing($id);
+
+    $data['requested_skills'] = $this->flexperformance_model->requested_skills($id);
+    $data['skills_have'] = $this->flexperformance_model->skills_have($id);
+    $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+    $data['title'] = "Profile";
+    $empID = $id;
+    $details = EmployeeDetail::where('employeeID', $empID)->first();
+
+    $emergency = EmergencyContact::where('employeeID', $empID)->first();
+
+    $children = EmployeeDependant::where('employeeID', $empID)->get();
+
+
+    $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+
+    $parents = EmployeeParent::where('employeeID', $empID)->get();
+
+    $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
+
+
+    $data['certifications'] = ProfessionalCertification::where('employeeID', $empID)->orderBy('cert_end', 'desc')->get();
+
+    $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
+    $data['profile'] = EMPL::where('emp_id', $empID)->first();
+
+    $childs = EmployeeDependant::where('employeeID', $empID)->count();
+    $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
+
+    $data['photo'] = "";
+
+    $data['child'] = "Biodata";
+    $data['parent'] = "My-Services";
+
+    // return view('employee.userprofile', $data);
+
+    return view('my-services.biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+}
 
 }

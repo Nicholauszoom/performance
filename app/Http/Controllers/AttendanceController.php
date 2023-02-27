@@ -8,27 +8,37 @@ use DateTime;
 use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Leaves;
+use App\Models\Position;
 use App\Models\LeaveType;
 use App\Helpers\SysHelpers;
 use App\Models\LeaveSubType;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
+use App\Models\LeaveApproval;
 use App\Http\Middleware\Leave;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
 use App\CustomModels\PayrollModel;
 use App\CustomModels\ReportsModel;
+use Illuminate\Routing\Controller;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use App\CustomModels\flexFerformanceModel;
-use App\Models\LeaveApproval;
 use App\Models\Payroll\FlexPerformanceModel;
-use App\Models\Position;
 
 class AttendanceController extends Controller
 {
+
+  protected $flexperformance_model;
+  protected $imprest_model;
+  protected $reports_model;
+  protected $attendance_model;
+  protected $project_model;
+  protected $performanceModel;
+  protected $payroll_model;
+
 
 
     public function __construct(Payroll $payroll_model, FlexPerformanceModel $flexperformance_model, ReportModel $reports_model, ImprestModel $imprest_model, PerformanceModel $performanceModel)
@@ -126,7 +136,8 @@ class AttendanceController extends Controller
 
    }
 
-  public function leave() {
+  public function leave()
+   {
       $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
 
       if(session('appr_leave')){
@@ -150,50 +161,41 @@ class AttendanceController extends Controller
             $diff= $today->diff($applied);
             $range=$diff->days;
             $approval=LeaveApproval::where('empID',$item->empID)->first();
-            if ($range>$approval->escallation_time) {
-              $leave=Leaves::where('id' ,$item->id)->first();
-              $status=$leave->status;
-              
-              if ($status == 0) {
-                if ($approval->level2 != null) {
-                  $leave->status=1;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 2');
+            if ($approval) {
+              if ($range>$approval->escallation_time) {
+                $leave=Leaves::where('id' ,$item->id)->first();
+                $status=$leave->status;
+                
+                if ($status == 0) {
+                  if ($approval->level2 != null) {
+                    $leave->status=1;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                
+                  }
                
                 }
-                else
+                elseif ($status == 1)
                 {
-                  dd('Do nothing');
+                  if ($approval->level3 != null) {
+                    $leave->status=2;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
+                  else
+                  {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
                 }
-              }
-              elseif ($status == 1)
-              {
-                if ($approval->level3 != null) {
-                  $leave->status=2;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 3');
-                }
-                else
+                elseif ($status == 2)
                 {
-                  $leave->status=0;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 1');
-                }
-              }
-              elseif ($status == 2)
-              {
-                if ($approval->level1 != null) {
-                  $leave->status=0;
-                  $leave->updated_at=$today;
-                  $leave->update();
-                  dd('Go Level 1');
-                }
-                else
-                {
-                  dd('Wait');
+                  if ($approval->level1 != null) {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
                 }
               }
             }
@@ -207,14 +209,97 @@ class AttendanceController extends Controller
       $interval = $d2->diff($d1);
       $data['days']=$interval->days;
       $data['title'] = 'Leave';
-      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
       $data['leave_type'] = $this->attendance_model->leave_type();
       return view('app.leave', $data);
 
    }
 
-  //  for fetching sub categories of leave
-      // fetching employee department's positions
+  
+     // For My Leaves
+     public function myLeaves()
+     {
+           $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
+
+        
+            $data['leave_types'] =LeaveType::all();
+            $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+            $data['leaves'] =Leaves::get();
+
+
+            // Start of Escallation
+            $leaves=Leaves::get();
+            if ($leaves) {
+
+              foreach($leaves as $item)
+              {
+                  $today= new DateTime();
+                  $applied =$item->updated_at;
+                  $diff= $today->diff($applied);
+                  $range=$diff->days;
+                  $approval=LeaveApproval::where('empID',$item->empID)->first();
+
+                  if ($approval) {
+                    if ($range>$approval->escallation_time) {
+                      $leave=Leaves::where('id' ,$item->id)->first();
+                      $status=$leave->status;
+                      
+                      if ($status == 0) {
+                        if ($approval->level2 != null) {
+                          $leave->status=1;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                      
+                        }
+                     
+                      }
+                      elseif ($status == 1)
+                      {
+                        if ($approval->level3 != null) {
+                          $leave->status=2;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                        }
+                        else
+                        {
+                          $leave->status=0;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                        }
+                      }
+                      elseif ($status == 2)
+                      {
+                        if ($approval->level1 != null) {
+                          $leave->status=0;
+                          $leave->updated_at=$today;
+                          $leave->update();
+                        }
+                      }
+                    }
+                  }
+            
+              }
+            }
+            // End of Escallation
+
+            // For Working days
+            $d1 = new DateTime (Auth::user()->hire_date);
+            $d2 = new DateTime();
+            $interval = $d2->diff($d1);
+            $data['days']=$interval->days;
+            $data['title'] = 'Leave';
+            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+
+            // dd($data['leaveBalance']);
+            $data['leave_type'] = $this->attendance_model->leave_type();
+          
+
+            $data['parent'] = 'My Services';
+            $data['child'] = 'Leaves';
+         return view('my-services/leaves', $data);
+     }
+  
+   //  for fetching sub categories of leave
       public function getDetails($id = 0)
       {
 
@@ -227,7 +312,7 @@ class AttendanceController extends Controller
       }
   
 
-   public  function check_leave_balance(Request $request){
+  public  function check_leave_balance(Request $request){
     $today = date('Y-m-d');
     $arryear = explode('-',$today);
     $year = $arryear[0];
@@ -237,33 +322,32 @@ class AttendanceController extends Controller
    if($nature == 1){
 
    }elseif($nature == 2)
-{
+          {
+
+          }
+          elseif($nature == 3)
+          {
+
+          }
+          elseif($nature == 4)
+          {
+
+          }
+          elseif($nature == 5)
+          {
+          $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
+
+          }
+          elseif($nature == 6)
+          {
+          $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
 
 }
-elseif($nature == 3)
-{
-
-}
-elseif($nature == 4)
-{
-
-}
-//sick leave
-elseif($nature == 5)
-{
- $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
-
-}
-elseif($nature == 6)
-{
- $leave_balance =   $this->attendance_model->get_sick_leave_balance($empID,$nature,$year);
-
-}
-elseif($nature == 7)
-{
+// elseif($nature == 7)
+// {
 //  $leave_balance =   $this->attendance_model-> ($empID,$nature,$year,$today);
 
-}
+// }
 
 
 
@@ -321,7 +405,7 @@ elseif($nature == 7)
         // $working_month=$interval->format('%months');
 
         // For Redirection Url
-        $url = redirect('flex/attendance/leave');
+        $url = redirect('flex/attendance/my-leaves');
 
         // For Employees with less than 12 months of employement
         if($day <= 365)
@@ -346,12 +430,6 @@ elseif($nature == 7)
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
-                // For Maternity
-                // if ($request->nature==4) 
-                // {
-                //   dd('Iam Maternity');
-                // }
-
 
            
                 // For Study Leave
@@ -372,7 +450,6 @@ elseif($nature == 7)
 
               $newImageName = $request->image->hashName();
               $request->image->move(public_path('storage/leaves'), $newImageName);
-              // $employee->photo = $newImageName;
               $leaves->attachment =  $newImageName;
               }
              
@@ -421,22 +498,21 @@ elseif($nature == 7)
                 $leaves->nature = $request->nature;
                 // for annual leave
                 if ($request->nature==1) {
+                    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+                    // checking annual leave balance
+                    if($different_days<$annualleaveBalance)
+                    {
+                      
+                      $leaves->days=$different_days;
+                      $remaining=$annualleaveBalance-$different_days;
 
-                  // checking annual leave balance
-                  if($different_days<$annualleaveBalance)
-                  {
-                    $leaves->days=$different_days;
-                    $remaining=$annualleaveBalance-$different_days;
-                    // dd($remaining);
-
-                  }
-                  else
-                  {
-                    // $leaves->days=$annualleaveBalance;  
-                    $msg='You Have Finished Your Annual  Accrued Days';
-                    return $url->with('msg',$msg);
-                  }
-                         
+                    }
+                    else
+                    {
+                      // $leaves->days=$annualleaveBalance;  
+                      $msg='You Have Finished Your Annual  Accrued Days';
+                      return $url->with('msg',$msg);
+                    }                        
                 }
                 
 
@@ -493,7 +569,7 @@ elseif($nature == 7)
                         if($different_days<$max_days)
                         {
                           $leaves->days = $different_days;
-                          dd('less than 4 months');
+                          // dd('less than 4 months');
                         }
                         else
                         {
@@ -605,11 +681,35 @@ elseif($nature == 7)
             $leaves->leave_address=$request->address;
             $leaves->mobile = $request->mobile;
             $leaves->nature = $request->nature;
-            if($request->nature != 5)
+
+                    // for annual leave
+                    if ($request->nature==1) {
+                      $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+    
+                      // checking annual leave balance
+                      if($different_days < $annualleaveBalance)
+                      {
+                        $leaves->days=$different_days;
+                        $remaining=$annualleaveBalance-$different_days;
+                        // dd($remaining);
+    
+                      }
+                      else
+                      {
+                        // $leaves->days=$annualleaveBalance;  
+                        $msg='You Have Finished Your Annual  Accrued Days';
+                        return response( [ 'msg'=>$msg ],202 );
+                      }
+                             
+                    }
+                    
+            if($request->nature != 5 && $request->nature != 1)
             {
              
               $leaves->days = $different_days;
             }
+
+
             else
             {
 
@@ -644,7 +744,8 @@ elseif($nature == 7)
 
                           $excess=$total_leave_days-$max_days;
                           // dd($excess);
-                          dd('You requested for '.$excess.' extra days!');
+                          $msg='You requested for '.$excess.' extra days!';
+                          return $url->with('msg', $msg);
                         }
                         
                       }
@@ -670,7 +771,9 @@ elseif($nature == 7)
 
                         $excess=$total_leave_days-$max_days;
                         // dd($excess);
-                        dd('You requested for '.$excess.' extra days!');
+                        $msg='You requested for '.$excess.' extra days!';
+
+                        return $url->with('msg', $msg);
                       }
                     }
                   }
@@ -678,7 +781,7 @@ elseif($nature == 7)
                   {
                     // $max_days=10;
                     $leaves->days = $different_days;
-                    dd('wait');
+                    // dd('wait');
                   }
                 }
            
@@ -729,38 +832,71 @@ elseif($nature == 7)
         $empID=$leave->empID;
         $approval=LeaveApproval::where('empID',$empID)->first();
         $approver=Auth()->user()->emp_id;
+        $employee=Auth()->user()->position;
+
+        $position=Position::where('id',$employee)->first();
 
         // chacking level 1
         if ($approval->level1==$approver) {
-          $employee=Auth()->user()->position;
-
-          $position=Position::where('id',$employee)->first();
-
-          // dd($position->name);
-          $leave->status=1;
-          $leave->position=$position->name;
-          $leave->updated_at= new DateTime();
-          $leave->update();
+  
      
+     
+          if ($approval->level2 != null) 
+          {
+            $leave->status=1;
+            $leave->position='Recommended by '.$position->name;
+            $leave->level1=Auth()->user()->emp_id;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+          else
+          {
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level1=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
 
         }
         elseif($approval->level2==$approver)
         {
-          dd('Level 2');
+          if ($approval->level3 != null) 
+          {
+            $leave->status=2;
+            $leave->level2=Auth()->user()->emp_id;
+            $leave->position='Recommended by '.$position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+          else
+          {
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level2=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+        
         }
         elseif($approval->level3==$approver)
         {
-          dd('Final');
+          $leave->status=3;
+          $leave->state=0;
+          $leave->level3=Auth()->user()->emp_id;
+          $leave->position=$position->name;
+          $leave->updated_at= new DateTime();
+          $leave->update();
         }
         else
         {
-            dd('Not Authorized');
+            $msg='Sorry, You are Not Authorized';
+
+            return redirect('flex/attendance/leave')->with('msg', $msg);
         }
 
-
-        // $leave->status = 1;
-        // $leave->state = 2;
-        // $leave->update();
 
 
 
@@ -770,6 +906,14 @@ elseif($nature == 7)
 
   
       }
+
+
+    // For Cancel Leave
+
+    // public function cancelLeave($id)
+    // {
+
+    // }
 
     public function apply_leave(Request $request) {
         // echo "<p class='alert alert-success text-center'>Record Added Successifully</p>";
@@ -849,16 +993,10 @@ elseif($nature == 7)
 
         $leave->delete();
 
-        // $result = $this->attendance_model->deleteLeave($leaveID);
-        // if($result ==true){
-        //   echo "<p class='alert alert-warning text-center'>Leave Cancelled Successifully</p>";
-        // } else {
-        //   echo "<p class='alert alert-danger text-center'>Leave Not Deleted, Please Try Again</p>";
-        // }
 
         $msg="Leave Was Deleted Successfully !";
     
-        return redirect('flex/attendance/leave')->with('msg', $msg);
+        return redirect('flex/attendance/my-leaves')->with('msg', $msg);
       }
    }
 

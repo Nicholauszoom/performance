@@ -301,8 +301,10 @@ Route::middleware('auth')->group(function () {
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
         Route::any('/leave' ,'leave')->name('attendance.leave');
-         // for fetching sub leave type
-         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
+        // for my leaves routes
+        Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
+        // for fetching sub leave type
+        Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
         Route::post('/save_leave' ,'savelLeave')->name('attendance.saveLeave');
@@ -329,6 +331,8 @@ Route::middleware('auth')->group(function () {
 
     // start of  loans access permission routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+
+        Route::any('/my-loans','myLoans')->name('flex.my-loans');
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
@@ -431,7 +435,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
     });
-    //start of organization access permission  routes
+    //end of organization access permission  routes
 
 
     // start of report access permissions routes
@@ -608,7 +612,7 @@ Route::middleware('auth')->group(function () {
 
 
         // Download biodata
-        Route::any('/biodata','viewBiodata')->name('flex.biodata');
+        Route::any('/biodata','my_biodata')->name('flex.biodata');
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
@@ -822,6 +826,14 @@ Route::middleware('auth')->group(function () {
         Route::any('/updateContractEnd','updateContractEnd')->name('flex.updateContractEnd');
         Route::any('/approveRegistration/{id}','approveRegistration')->name('flex.approveRegistration');
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
+
+
+        // start of selfservices routes
+        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
+        Route::any('/my-biodata','my-biodata')->name('flex.my-biodata');
+        // end of self services
+
 
 
 
@@ -1081,6 +1093,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollInputJournalExportTime','payrollInputJournalExportTime')->name('reports.payrollInputJournalExportTime');
         Route::any('/staffPayrollBankExport','staffPayrollBankExport')->name('reports.staffPayrollBankExport');
         Route::any('/payrollReconciliationSummary','payrollReconciliationSummary')->name('reports.payrollReconciliationSummary');
+        Route::any('/payrollReconciliationDetails','payrollReconciliationDetails')->name('reports.payrollReconciliationDetails');
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
         Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
@@ -1140,5 +1153,5 @@ Route::middleware('auth')->group(function () {
 
 
 
-// Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
+Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';
