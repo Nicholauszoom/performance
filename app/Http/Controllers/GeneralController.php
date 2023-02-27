@@ -2062,7 +2062,7 @@ class GeneralController extends Controller
 
     public function overtime()
     {
-        
+
         $data['title'] = "Overtime";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
@@ -7718,6 +7718,7 @@ class GeneralController extends Controller
         $termination->arrears = $request->arrears;
         $termination->exgracia = $request->exgracia;
         $termination->bonus = $request->bonus;
+        $termination->actual_salary = $employee_actual_salary;
         $termination->longServing = $request->longServing;
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
@@ -9401,24 +9402,24 @@ class GeneralController extends Controller
             $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
             $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
             $data['employees'] = $this->flexperformance_model->Employee();
-    
+
             $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
-    
+
             $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
             $data['parent'] = 'My Services';
             $data['child'] = 'Overtimes';
-    
+
             // return view('overtime.overtime', $data);
             return view('my-services.overtimes',$data);
         }
 
-     
+
 
         // For My Loans
         public function myLoans(Request $request)
         {
-         
-     
+
+
             $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
             $empID = session('emp_id');
 
@@ -9432,7 +9433,7 @@ class GeneralController extends Controller
             $data['parent'] = 'My Services';
             $data['child'] = 'Loans';
             return view('my-services/loans', $data);
-    
+
         }
 
         // For My Complains
@@ -9441,10 +9442,10 @@ class GeneralController extends Controller
             $id = auth()->user()->emp_id;
 
             $data['employee_pension'] = $this->reports_model->employee_pension($id);
-    
+
             $data['child'] = "Employee Profile";
             $data['parent'] = "My Services";
-    
+
             return view('my-services/pensions',$data);
         }
         // For My Complains

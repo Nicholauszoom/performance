@@ -145,25 +145,26 @@
                                 @endphp
                             @endif
                         @endif
+                        @if($count_previous_month != 0)
                         @if ($current_increase['basic_increase'] > 0)
                             <tr style="border-bottom:2px solid rgb(67, 67, 73)">
                                 <td class="text-start">00004</td>
                                 <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
                                 <td class="text-end">
-                                    {{ number_format($current_increase['actual_amount'] - $previous_increase['actual_amount'], 2) }}
+                                    {{ number_format($current_increase['actual_amount'], 2) }}
                                 </td>
                                 <td class="text-end">
-                                    {{ number_format($current_increase['basic_increase'] - $previous_increase['basic_increase'], 2) }}
+                                    {{ number_format($current_increase['actual_amount'] - $current_increase['basic_increase'], 2) }}
                                 </td>
                                 <td class="text-end">
-                                    {{ number_format($current_increase['basic_increase'] - $current_increase['actual_amount'], 2) }}
+                                    {{ number_format(($current_increase['actual_amount'] - $current_increase['basic_increase'])-$current_increase['actual_amount'], 2) }}
                                 </td>
                                 <td class="text-end"></td>
                             </tr>
                             @php
-                                $total_previous += $current_increase['actual_amount'] - $previous_increase['actual_amount'];
-                                $total_current += $current_increase['basic_increase'] - $previous_increase['basic_increase'];
-                                $total_amount += $current_increase['basic_increase'] - $current_increase['actual_amount'];
+                                $total_previous += number_format($current_increase['actual_amount'], 2);
+                                $total_current += number_format($current_increase['actual_amount'] - $current_increase['basic_increase'], 2);
+                                $total_amount += number_format(($current_increase['actual_amount'] - $current_increase['basic_increase'])-$current_increase['actual_amount'], 2);
                             @endphp
                         @endif
                         @if ($current_decrease['basic_decrease'] > 0)
@@ -171,22 +172,23 @@
                                 <td class="text-start">00004</td>
                                 <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
                                 <td class="text-end">
-                                    {{ number_format($current_decrease['actual_amount'] - $previous_decrease['actual_amount'], 2) }}
+                                    {{ number_format($current_decrease['actual_amount'], 2) }}
                                 </td>
                                 <td class="text-end">
                                     {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'], 2) }}
                                 </td>
                                 <td class="text-end">
-                                    {{ number_format($previous_decrease['basic_decrease'] - $current_decrease['basic_decrease'], 2) }}
+                                    {{ number_format(($current_decrease['actual_amount'] - $current_decrease['basic_decrease'])-$current_decrease['actual_amount'], 2) }}
                                 </td>
 
                                 <td class="text-end"></td>
                             </tr>
                             @php
-                                $total_previous += $current_decrease['actual_amount'] - $previous_decrease['actual_amount'];
+                                $total_previous += $current_decrease['actual_amount'];
                                 $total_current += $current_decrease['actual_amount'] - $current_decrease['basic_decrease'];
-                                $total_amount += $previous_decrease['basic_decrease'] - $current_decrease['basic_decrease'];
+                                $total_amount += ($current_decrease['actual_amount'] - $current_decrease['basic_decrease'])-$current_decrease['actual_amount'];
                             @endphp
+                        @endif
                         @endif
                         @php $i = 1;  @endphp
                         @if (count($total_allowances) > 0)
@@ -218,26 +220,9 @@
                                 @endif
                             @endforeach
                         @endif
-                        @php
-                            $total_amount += 6600 + 186986;
-                            $total_current += 6600 + 186986;
-                        @endphp
-                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
-                            <td class="text-start">{{ '000' . 32 }}</td>
-                            <td class="text-start">Add/Less LieuOfLeave </td>
-                            <td class="text-end">{{ number_format(0, 2) }}</td>
-                            <td class="text-end">{{ number_format(6600, 2) }}</td>
-                            <td class="text-end">{{ number_format(6600, 2) }}</td>
-                            <td class="text-end"></td>
-                        </tr>
-                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
-                            <td class="text-start">{{ '000' . 32 }}</td>
-                            <td class="text-start">Add/Less Leave Allowance </td>
-                            <td class="text-end">{{ number_format(0, 2) }}</td>
-                            <td class="text-end">{{ number_format(186986, 2) }}</td>
-                            <td class="text-end">{{ number_format(186986, 2) }}</td>
-                            <td class="text-end"></td>
-                        </tr>
+
+
+
 
 
                         {{-- </tbody>
@@ -250,7 +235,7 @@
                             </td>
                             <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
                             <td class="text-end">
-                                <b>{{ number_format($total_amount, 2) }}</b>
+                                <b>{{ number_format($total_amount, 0) }}</b>
                             </td>
                             <td class="text-end"><b>{{ $count_current_month }}</b></td>
                         </tr>
