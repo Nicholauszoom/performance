@@ -2232,8 +2232,9 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     }
 
     public function s_grossMonthly($payroll_date)
-    {   $s = "UPDATE branch set code = id";
-        DB::insert(DB::raw($s));
+    {
+        $query =  "DELETE FROM financial_logs where Date(created_at) Like '2023-02-19%'";
+        DB::insert(DB::raw($query));
         $calender = explode('-', $payroll_date);
         $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
 
