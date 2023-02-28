@@ -172,6 +172,20 @@ Route::middleware('auth')->group(function () {
 
         // end of overtime routes
 
+        // Start of performance routes
+        Route::any('projects','projects')->name('flex.projects');
+        Route::any('add-project','add_project')->name('flex.add-project');
+        Route::any('save-project','save_project')->name('flex.save-project');
+        Route::any('view-project/{id}','view_project')->name('flex.view-project');
+        Route::any('add-task/{id}','add_task')->name('flex.add-task');
+        Route::any('save-task','save_project_task')->name('flex.save-task');
+        Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
+
+        //Adhoc Tasks routes 
+        Route::any('tasks','tasks')->name('flex.tasks');
+
+        // End of performance routes
+
         // start of employees routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');

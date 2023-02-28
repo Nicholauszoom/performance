@@ -8,6 +8,7 @@ use App\Models\EMPL;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Holiday;
+use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\UserRole;
@@ -17,6 +18,7 @@ use Illuminate\Http\File;
 use App\Models\AuditTrail;
 use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
+use App\Models\ProjectTask;
 use App\Models\Termination;
 use App\Models\Disciplinary;
 use App\Models\ProjectModel;
@@ -32,9 +34,9 @@ use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
+
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
-
 use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
@@ -7725,7 +7727,7 @@ class GeneralController extends Controller
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
-        $termination->status ="Pending";
+        $termination->status =0;
 
 
 
@@ -9518,5 +9520,87 @@ class GeneralController extends Controller
 
     return view('my-services.biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
 }
+
+
+    public function projects()
+    {
+        $data['project'] = Project::all();
+        return view('performance.projects',$data);
+    }
+
+
+    public function add_project()
+    {
+        return view('performance.add-project');
+    }
+
+    public function save_project(Request $request)
+    {
+        $project = new Project();
+        $project->name = $request->name;
+        $project->start_date = $request->start_date;
+        $project->end_date= $request->end_date;
+        $project->save();
+
+        return redirect('flex/projects');
+    }
+
+       // View single project
+       public function view_project($id)
+       {
+           $project = Project::where('id',$id)->first();
+           $tasks =ProjectTask::where('project_id',$id)->get();
+
+        //    dd($id);
+           return view('performance.single_project',compact('project','tasks'));
+       }
+
+        // For Deleting  PROJECT
+        public function delete_project($id)
+        {
+            $project = Project::find($id);
+
+            $project->delete();
+
+            return redirect('flex/projects');
+        }
+
+
+        
+        public function add_task($id)
+        {
+            $project=$id;
+            $employees= EMPL::where('state',1)->get();
+
+            return view('performance.add-task',compact('project','employees'));
+        }
+
+
+        
+    public function save_project_task(Request $request)
+    {
+        $task = new ProjectTask();
+        $task->name = $request->name;
+        $task->start_date = $request->start_date;
+        $task->end_date= $request->end_date;
+        $task->project_id= $request->project;
+        $task->assigned= $request->assigned;
+        $task->target= $request->target;
+        $task->save();
+
+        return redirect('flex/view-project/'.$request->project);
+    }
+
+
+          // For Deleting  Project Tasks
+          public function delete_project_task($id)
+          {
+              $project = ProjectTask::find($id);
+                
+              $project->delete();
+  
+              return redirect('flex/projects');
+          }
+  
 
 }

@@ -57,6 +57,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
+use App\Models\Helsb;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
@@ -514,6 +515,19 @@ class GeneralController extends Controller
         {
             $empID = auth()->user()->emp_id;
             // For pending loans
+            $data['loans'] =Helsb::where('empID',$empID)->get();
+         
+
+        return response( [ 'data'=>$data  ],200 );
+        }
+        //  end of employee leaves function
+
+
+        //  start of employee Slips function
+        public function mySlips(Request $request)
+        {
+            $empID = auth()->user()->emp_id;
+            // For pending loans
             $data['pending_loans'] = $this->flexperformance_model->mysalary_advance($empID);
            
             // For Approved Loans
@@ -524,8 +538,7 @@ class GeneralController extends Controller
 
         return response( [ 'data'=>$data  ],200 );
         }
-        //  end of employee leaves function
-
+        //  end of employee salary slips function
 
 
 }
