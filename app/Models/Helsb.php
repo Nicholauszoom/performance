@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Helsb extends Model
 {
     use HasFactory;
-    protected $table= 'loans';
+    protected $table= 'loan';
 }
