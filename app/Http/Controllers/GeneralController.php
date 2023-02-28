@@ -3827,7 +3827,7 @@ class GeneralController extends Controller
 
         if (!empty($request->input("bank"))) {
             $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
-            dd($request->input("bank"));
+            // dd($request->input("bank"));
             foreach ($queryBranch as $rows) {
                 echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
             }
@@ -6537,7 +6537,7 @@ class GeneralController extends Controller
                     'emp_id' => $request->emp_id,
                     'account' => 1,
                 );
-                dd(   $newEmp);
+                // dd(   $newEmp);
                 $empName = $request->input("fname") . ' ' . $request->input("mname") . ' ' . $request->input("lname");
 
                 $recordID = $this->flexperformance_model->employeeAdd($employee, $newEmp);
@@ -9596,11 +9596,32 @@ class GeneralController extends Controller
           public function delete_project_task($id)
           {
               $project = ProjectTask::find($id);
-                
+
               $project->delete();
   
               return redirect('flex/projects');
           }
+
+          public function tasks()
+          {
+              $data['project'] = Project::all();
+              return view('performance.tasks',$data);
+          }
+
+          public function add_adhoctask(Request $request)
+          {
+            $task = new AdhocTask();
+            $task->name = $request->name;
+            $task->start_date = $request->start_date;
+            $task->end_date= $request->end_date;
+            $task->project_id= $request->project;
+            $task->assigned= $request->assigned;
+            $task->target= $request->target;
+            $task->save();
+    
+            return redirect('flex/view-project/'.$request->project);
+          }
+      
   
 
 }

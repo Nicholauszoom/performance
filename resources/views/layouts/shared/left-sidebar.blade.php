@@ -375,7 +375,7 @@
                     <i class="ph-folder"></i>
                     <span>Performance Management</span>
                 </a>
-                <ul class="nav-group-sub collapse">
+                <ul class="nav-group-sub collapse {{ request()->routeIs('flex.tasks') || request()->routeIs('flex.projects')  ? 'show' : null }}">
                     <li class="nav-item">
                         <a href="{{ route('flex.projects') }}" class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
                             Projects
@@ -384,6 +384,11 @@
                     <li class="nav-item">
                         <a href="{{ route('flex.tasks') }}" class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
                            Adhoc Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('flex.tasks') }}" class="nav-link ">
+                            Performance Ratios
                         </a>
                     </li>
                 </ul>

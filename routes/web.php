@@ -183,6 +183,7 @@ Route::middleware('auth')->group(function () {
 
         //Adhoc Tasks routes 
         Route::any('tasks','tasks')->name('flex.tasks');
+        Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhoctask');
 
         // End of performance routes
 
