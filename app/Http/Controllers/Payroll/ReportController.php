@@ -2945,8 +2945,12 @@ EOD;
 
     public function payrollReportLogs(Request $request)
     {
+
         $date = explode('-',$request->payrolldate);
         $month = $date[0].'-'.$date[1];
+
+        $data['payrollState'] = $request->payrollState;
+        //dd($data['payrollState']);
         $data['payroll_date'] = $request->payrolldate;
         $data['payrollMonth'] = $request->payrolldate;
 
