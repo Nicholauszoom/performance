@@ -19,6 +19,7 @@ use App\Models\AuditTrail;
 use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
 use App\Models\ProjectTask;
+use App\Models\TargetRatio;
 use App\Models\Termination;
 use App\Models\Disciplinary;
 use App\Models\ProjectModel;
@@ -33,8 +34,8 @@ use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
-use App\Models\EmergencyContact;
 
+use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
 use App\Models\EmailNotification;
@@ -9621,7 +9622,22 @@ class GeneralController extends Controller
     
             return redirect('flex/view-project/'.$request->project);
           }
+
+          public function performance_ratios()
+          {
+            return view('performance.target_ratios');
+          }
       
+          public function save_target_ratio(Request $request)
+          {
+            $ratio = new TargetRatio();
+            $ratio->name = $request->name;
+            $ratio->min = $request->min_value;
+            $ratio->max= $request->max_value;
+            $ratio->save();
+    
+            return redirect('flex/performance-ratios');
+          }
   
 
 }

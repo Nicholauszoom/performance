@@ -370,7 +370,7 @@
 
 
               {{-- routes Pending Model --}}
-              <li class="nav-item nav-item-submenu">
+              <li class="nav-item nav-item-submenu {{ request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                 <a href="#" class="nav-link">
                     <i class="ph-folder"></i>
                     <span>Performance Management</span>
@@ -387,7 +387,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.tasks') }}" class="nav-link ">
+                        <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
                             Performance Ratios
                         </a>
                     </li>

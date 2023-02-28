@@ -41,12 +41,10 @@
                       </li>
                     </ul>
 
-                    <div class="clearfix"></div>
+                    {{-- <div class="clearfix"></div> --}}
                   </div>
                   <div class="card-body">
-                      <div id="resultfeed"></div>
-                      <div id="resultfeedCancel"></div> 
-                    <table id="datatable" class="table table-striped table-bordered">
+                    <table id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
                           <th>S/N</th>

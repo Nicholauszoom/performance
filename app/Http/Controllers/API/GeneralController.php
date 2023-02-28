@@ -526,15 +526,10 @@ class GeneralController extends Controller
         //  start of employee Slips function
         public function mySlips(Request $request)
         {
-            $empID = auth()->user()->emp_id;
-            // For pending loans
-            $data['pending_loans'] = $this->flexperformance_model->mysalary_advance($empID);
-           
-            // For Approved Loans
-            $data['approved_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
+            // $empID = auth()->user()->emp_id;
 
+            $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         
-            $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
 
         return response( [ 'data'=>$data  ],200 );
         }

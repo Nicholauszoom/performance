@@ -180,10 +180,16 @@ Route::middleware('auth')->group(function () {
         Route::any('add-task/{id}','add_task')->name('flex.add-task');
         Route::any('save-task','save_project_task')->name('flex.save-task');
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
+        Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
 
         //Adhoc Tasks routes 
         Route::any('tasks','tasks')->name('flex.tasks');
         Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhoctask');
+        Route::any('delete-task/{id}','delete_task')->name('flex.delete-task');
+
+        // Performance Ratios routes
+        Route::any('performance-ratios','performance_ratios')->name('flex.performance-ratios');
+        Route::any('save-targrt-ratio','save_target_ratio')->name('flex.save_target_ratio');
 
         // End of performance routes
 

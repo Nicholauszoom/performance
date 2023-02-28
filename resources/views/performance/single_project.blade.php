@@ -44,12 +44,12 @@
                       </li>
                     </ul>
 
-                    <div class="clearfix"></div>
+                    {{-- <div class="clearfix"></div> --}}
                   </div>
                   <div class="card-body">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div> 
-                    <table id="datatable" class="table table-striped table-bordered">
+                    <table id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
                           <th>S/N</th>
@@ -86,10 +86,10 @@
                                 <a href="" class="btn btn-sm bg-main">
                                     <i class="ph-pen"></i>
                                 </a>
-                                <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                <a href="{{ url('flex/delete-project-task/'.$item->id); }}" class="btn btn-sm btn-danger">
                                     <i class="ph-trash"></i>
                                 </a>
-                                @if ($item->employee->line_manager == Auth()->user()->id)
+                                @if ($item->employee->line_manager == Auth()->user()->emp_id)
                                 <hr>   
                                 <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
                                   Task Assessment
