@@ -11,5 +11,6 @@
 <meta content="A fully featured fléx performance system" name="description" />
 <meta content="CITS" name="author" />
 
+
 {{-- App favicon --}}
 <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}}">

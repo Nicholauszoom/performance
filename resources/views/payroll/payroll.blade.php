@@ -73,7 +73,7 @@
             <div class="col-lg-12 col-md-12 col-sm-6" id="hideList">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                     <div class="card-header">
-                        <h5 class="card-title text-warning">Payslip Mail Delivery List</h5>
+                        <h5 class="card-title text-warning">Payroll List</h5>
                     </div>
 
                     <div class="card-body">
@@ -83,7 +83,7 @@
                                     <th>S/N</th>
                                     <th>Payroll Month</th>
                                     <th>Status</th>
-                                    <th>Mail status</th>
+                                    {{-- <th>Mail status</th> --}}
                                     <th>Option</th>
                                     <th></th>
                                 </tr>
@@ -117,7 +117,7 @@
                                         <br>
                                         <?php  } ?>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         <?php if($row->email_status==0){ ?>
                                         <span class="badge bg-warning bg-opacity-10 bg-pending">NOT SENT</span>
                                         <br>
@@ -125,7 +125,7 @@
                                         <span class="badge bg-success bg-opacity-20 text-success">SENT</span>
 
                                         <?php  } ?>
-                                    </td>
+                                    </td> --}}
 
                                     <td class="options-width">
                                         <?php if($row->state==1 || $row->state==2){ ?>
@@ -188,11 +188,11 @@
 
                                         {{-- start of send payslip mail button --}}
                                         @can('mail-payroll')
-                                        <a href="javascript:void(0)"
+                                        {{-- <a href="javascript:void(0)"
                                             onclick="sendEmail('<?php echo $row->payroll_date; ?>')"
                                             title="Send Pay Slip as Email" class="icon-2 info-tooltip"><button type="button"
                                                 class="btn btn-success btn-xs"><i class="ph-envelope"></i></button>
-                                        </a>
+                                        </a> --}}
                                         @endcan
                                         {{-- / --}}
 
@@ -243,9 +243,11 @@
                 processData: false,
                 contentType: false,
                 cache: false,
-                async: false
-            })
-            .done(function(data) {
+                async: false,
+                beforeSend: function () {
+                    $('.request__spinner').show() }
+
+            }).done(function(data) {
                 $('#payrollFeedback').fadeOut('fast', function() {
                     $('#payrollFeedback').fadeIn('fast').html(data);
                 });

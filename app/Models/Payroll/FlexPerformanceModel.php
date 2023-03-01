@@ -32,7 +32,9 @@ class FlexPerformanceModel extends Model
 
     public function financialLogs($date)
     {
-        $query = "SELECT fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id AND Date(fn.created_at) Like '".$date."%' ORDER BY fn.created_at DESC";
+
+        $query = "SELECT Date(fn.created_at),fn.*, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,''),' ', e.lname) as empName, CONCAT(au.fname,' ', au.mname,' ', au.lname) as authName FROM financial_logs fn, employee e, employee au  WHERE Date(fn.created_at) Like '%".$date."%' and fn.payrollno = e.emp_id AND fn.changed_by = au.emp_id  ORDER BY fn.created_at DESC";
+
 
         return DB::select(DB::raw($query));
     }
@@ -286,9 +288,16 @@ class FlexPerformanceModel extends Model
     	return $row->logo;
 	}
 
+    function get_lastPayrollNo(){
+        $query = "SELECT emp_id from employee ORDER BY emp_id DESC LIMIT 1";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->emp_id;
+    }
+
 	function contractdrop()
 	{
-		$query = "SELECT c.* FROM contract c WHERE NOT c.id = 1";
+		$query = "SELECT c.* FROM contract c WHERE NOT c.id = 23";
 
 		return DB::select(DB::raw($query));
 	}
@@ -538,9 +547,17 @@ class FlexPerformanceModel extends Model
 	}
 
     function get_employee_overtime($overtimeID){
-        $query  = "Select  (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";
+        $query  = "Select eo.empID, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";
          $data = DB::select(DB::raw($query));
       return  $data[0]->amount;
+
+
+    }
+
+    function get_employee_overtimeID($overtimeID){
+        $query  = "Select eo.empID, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";
+         $data = DB::select(DB::raw($query));
+      return  $data[0]->empID;
 
 
     }

@@ -17,7 +17,7 @@
         // $payroll_date = $data['payroll_date'];
 
         $payrollMonth = $payroll_date;
-        $payrollState = 0;
+        $payrollState = $payroll_state;
 
     @endphp
 

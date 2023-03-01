@@ -17,7 +17,7 @@
 
 
     $payrollMonth = $payroll_date;
-    $payrollState = 0;
+    $payrollState = $payroll_state;
 
 
 
@@ -38,9 +38,15 @@
         <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <hr>
-             <a href="{{route('reports.get_payroll_temp_summary',['date'=>$payrollMonth,'type'=>2])}}" target="blank">
+            @if($payrollState != 0)
+        <a href="{{route('reports.get_payroll_temp_summary',['date'=>$payrollMonth,'type'=>2,'payrollState'=>$payrollState])}}" target="blank">
          <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
      </a>
+@else
+     <a href="{{route('reports.get_payroll_temp_summary1',['payrolldate'=>$payrollMonth,'type'=>2,'payrollState'=>$payrollState])}}" target="blank">
+        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+    </a>
+    @endif
             <table class="table datatable-excel-filter">
                 <thead>
                     <tr>

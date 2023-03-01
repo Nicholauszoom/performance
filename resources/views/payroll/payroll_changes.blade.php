@@ -17,7 +17,7 @@
 
 
     $payrollMonth = $payroll_date;
-    $payrollState = 0;
+    $payrollState = $payroll_state;
 
 
 
@@ -37,7 +37,7 @@
         <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <hr>
-            <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>1]) }}" target="blank">
+            <a class="ms-3" href="{{ route('reports.payrollReportLogs',['payrolldate'=>$payrollMonth,'type'=>3,'payrollState'=>$payrollState]) }}" target="blank">
                 <button type="button" name="print" value="print" class="btn btn-main btn-sm">
                     PDF
                 </button>

@@ -127,13 +127,13 @@
 
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-4 col-lg-4">
+                    {{-- <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">Employee ID:</label>
                             <input type="text" maxlength="30" name="emp_id" value="{{ old('emp_id') }}"
                                 class="form-control @error('emp_id') is-invalid @enderror" placeholder="ID : 78609">
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="col-md-4 col-lg-4">
@@ -200,6 +200,36 @@
                             <div id="salaryField"></div>
                         </div>
                     </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label class="form-label">Currency:</label>
+                            <div class="input-group">
+                                <select required name="currency" class="select_group form-control select" data-width="1%">
+                                    <option selected disabled>Select Currency</option>
+                                    <?php foreach ($currencies as $row) { ?>
+                                        <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
+                                        <?php } ?>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label class="form-label">Cost Center:</label>
+                            <div class="input-group">
+                                <select required name="cost_center" class="select_group form-control select" data-width="1%">
+                                    <option selected disabled>Select Cost Center</option>
+
+                                        <option value="Management">Management</option>
+                                        <option value="Non Management">Non Management</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
@@ -223,6 +253,19 @@
                                 <input type="text"
                                     class="form-control daterange-single @error('contract_end') is-invalid @enderror"
                                     name="contract_end" id="contract_end">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label class="form-label">Leave Days Etitled:</label>
+
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="number"
+                                    class="form-control daterange-single @error('contract_end') is-invalid @enderror"
+                                    name="leave_day" id="">
                             </div>
                         </div>
                     </div>
@@ -598,9 +641,9 @@
                             $('#feedBackSubmission').fadeIn('fast').html(data.message);
                         });
                         setTimeout(function() { // wait for 5 secs(2)
-                            window.location.href =
-                                "<?php echo url('flex/userprofile/'); ?>" + data
-                                .empID; // then reload the page.(3)
+                            // window.location.href =
+                            //     "<?php echo url('flex/userprofile/'); ?>" + data
+                            //     .empID; // then reload the page.(3)
                         }, 2000);
                         $('#addEmployee').trigger("reset");
                     } else {

@@ -6,22 +6,60 @@
     @include('layouts.shared.head-css')
     <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
-</head>
-<style>
-    body {
- background-image: url('{{ asset('img/bg.png') }}');
- /* background-color: #f1f1f1; */
- background-color: #ffff;
- background: cover;
- background-repeat: none;
 
- 
+    @laravelPWA
+
+    <style>
+        .request__spinner {
+
+/* background: red; */
+position: absolute;
+z-index: 99999;
+left: 50%;
+top: 50%;
+display: none;
+width: 50px;
+height: 50px;
+margin: 20px auto;
+border: 5px solid rgba(0, 0, 0, 0.1);
+border-left: 5px solid #003366;
+border-right: 5px solid #003366;
+animation: request__spinner 1s linear infinite forwards;
+-webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+-o-border-radius: 50%;
+-ms-border-radius: 50%;
+border-radius: 50%;
 }
- </style>
+
+@keyframes request__spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+        body {
+     background-image: url('{{ asset('img/bg.png') }}');
+     /* background-color: #f1f1f1; */
+     background-color: #ffff;
+     background: cover;
+     background-repeat: none;
+
+
+    }
+     </style>
+</head>
+
+
 
 {{-- for hidding source codes --}}
 {{-- oncontextmenu="return false" --}}
 <body >
+    <div class="request__spinner"></div>
     @include('layouts.shared.topbar')
 
     <!-- Page content -->
@@ -45,6 +83,7 @@
 
                 <!-- Content area -->
                 <div class="content">
+
                     @yield('content')
                 </div>
                 <!-- /content area -->

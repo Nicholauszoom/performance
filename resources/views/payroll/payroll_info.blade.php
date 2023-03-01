@@ -9,8 +9,8 @@
 @section('content')
     @php
 
-$payrollMonth = 0;
-$payrollState = 0;
+//$payrollMonth = 0;
+$payrollState = $payroll_state;
 
         // $payrollMonth = $payroll_date;
         // $payrollState = $payroll_state;
@@ -40,7 +40,7 @@ $payrollState = 0;
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
 
-                  
+
                 </div>
 
             </div>

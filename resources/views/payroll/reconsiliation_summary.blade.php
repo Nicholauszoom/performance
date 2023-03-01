@@ -10,7 +10,7 @@
     @php
 
         $payrollMonth = $payroll_date;
-        $payrollState = 0;
+        $payrollState = $payroll_state;
 
         $total_previous = 0;
                     $total_current = 0;
@@ -30,6 +30,16 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <h5 class="text-center">Payroll Reconsiliation Summary</h5>
+                    @if ($payrollState == 0)
+                    <a href="{{ route('reports.get_reconsiliation_summary1', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                    </a>
+                    @else
+                    <a href="{{ route('reports.get_reconsiliation_summary', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
+                        <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
+                    </a>
+                    @endif
+
                     <table class="table" style="font-size:14px;">
                         <thead>
                             <tr style="border-bottom:2px solid rgb(9, 5, 64);">

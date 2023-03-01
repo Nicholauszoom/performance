@@ -194,13 +194,13 @@
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('reports.pay_checklist') }}" data-parsley-validate
+                    action="{{ route('reports.payroll_report1') }}" data-parsley-validate
                     class="form-horizontal form-label-left">
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                            <select required name="pdate" class="select_payroll_month form-control select"
                                 data-width="1%">
                                 <option selected disabled>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>

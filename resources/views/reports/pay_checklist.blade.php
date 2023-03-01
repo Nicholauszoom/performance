@@ -43,11 +43,11 @@
                             <td colspan="4" class="w-50" style="">
                                 <div class="" style="text-align: right; padding-right:20px">
 
-                                    <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Input Changes
-                                        Approval Report</h5>
+                                    <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payment List
+                                         Report</h5>
                                     <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">
-                                        Date:
-                                        {{ $payroll_date }}
+                                        For The Payroll Month:
+                                        {{ date('M-y',strtotime($payroll_date)) }}
                                     </p>
 
                                 </div>
@@ -61,43 +61,48 @@
                         <table class="table" style="font-size:12px;">
                             <thead style="border-bottom:2px solid rgb(9, 5, 64);">
                                 <tr>
-                                    <th>Payrollno</th>
-                                    <th>Name</th>
-                                    <th>Time Stamp</th>
-                                    <th>Change Made By</th>
-                                    <th>FieldName</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>InputScreen</th>
+                                    <tr style="background-color:#9a8138;color:#FFFFFF;">
+                                        <th ><b>S/N</b></th>
+                                        <th ><b>Payroll No</b></th>
+                                        <th><b>Name</b></th>
+
+                                        <th ><b>Bank</b></th>
+
+                                        <th><b>BranchCode</b></th>
+                                        <th ><b>Account No</b></th>
+                                        <th ><b>Currency</b></th>
+                                        <th ><b>Net Pay</b></th>
+                                      </tr>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($logs as $row)
-                                    <tr style="border-bottom:2px solid rgb(67, 67, 73);" id="{{ 'domain' . $row->id }}">
-                                        <td>{{ $row->payrollno }}</td>
+                               <?php foreach($employee_list as $row){
+                                    $sno = $row->SNo;
+                                    $empID =  $row->empID;
+                                    $name = $row->name;
+                                    $bank = $row->bank;
+                                    $branch = $row->branch;
+                                    $swiftcode = $row->swiftcode;
+                                    $less_takehome = $row->less_takehome;
+                                    $account_no = $row->account_no;
+                                    if($less_takehome==0){
+                                    $amount = $row->salary + $row->allowances-$row->pension-$row->loans-$row->deductions-$row->meals-$row->taxdue; } else $amount = $less_takehome;
+                                    if  ($sno % 2 == 0) { $background = "#d3d3d3;"; } else { $background = "#FFFFFF;"; }
+                                    ?>
+                                    <tr nobr="true" style="border-bottom:2px solid rgb(67, 67, 73)">
+                                        <td>{{ $sno }}</td>
+                                        <td>&nbsp;{{ $empID }}</td>
+                                        <td>&nbsp;{{ $name }}</td>
 
-                                        <td> {{ $row->empName }} </td>
+                                        <td>&nbsp;{{ $bank }}</td>
 
-                                        <td>
-                                            @php
-                                                $temp = explode(' ', $row->created_at);
-                                            @endphp
-
-                                            <p style="margin-bottom:0;"> <strong>Date </strong> : {{ $temp[0] }} </p>
-                                            <p style="margin : 0; padding-top:0;"> <strong>Time </strong> : {{ $temp[1] }} </p>
-                                        </td>
-
-                                        <td> {{ $row->authName }} </td>
-
-                                        <td>{{ $row->field_name }}</td>
-
-                                        <td>{{ $row->action_from }}</td>
-
-                                        <td>{{ $row->action_to }}</td>
-
-                                        <td>{{ $row->input_screen }}</td>
-                                    </tr>
-                                @endforeach
+                                        <td>&nbsp;{{ $swiftcode }}</td>
+                                        <td>&nbsp;{{ $account_no }}</td>
+                                        <td>&nbsp;{{ $row->currency }}</td>
+                                        <td>&nbsp;{{ number_format($amount/$row->rate,2) }}</td>
+                                </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                         <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">

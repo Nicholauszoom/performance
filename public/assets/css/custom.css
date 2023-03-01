@@ -45,7 +45,7 @@
 
 .bg-warning {
     background: #f0ab00 !important;
-  
+
 }
 
 .border-top-warnin {
@@ -60,7 +60,7 @@
 
 .border-warning {
     border-bottom: 3px solid #f0ab00 !important;
-    
+
 }
 
 button.swal2-confirm{
@@ -74,7 +74,7 @@ button.swal2-confirm{
 /* .swal2-confirm:hover{
     background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
     background-size: cover;
-    color:#c20430!important; 
+    color:#c20430!important;
     border: none !important;
     border-radius: 2% !important;
     font-size: 15px !important;
@@ -87,13 +87,13 @@ button.swal2-cancel{
     border-radius: 2% !important;
     font-size: 15px !important;
     padding: auto;
-    
+
 }
 
 /* button.swal2-cancel:hover{
     background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
     background-size: cover;
-    color:#fff!important; 
+    color:#fff!important;
     border: none !important;
     border-radius: 2% !important;
     font-size: 15px !important;
@@ -105,7 +105,7 @@ button.swal2-cancel{
 }
 
 thead{
-    background-color:#00204e !important; 
+    background-color:#00204e !important;
     border: none !important;
     color: #fff;
 }
@@ -197,7 +197,7 @@ h2 {
 
 .active>.page-link
 {
-    background-color:#00204e !important; 
+    background-color:#00204e !important;
     border: none !important;
 
 }
@@ -212,13 +212,13 @@ h2 {
 .nav-link:hover{
     background-image: linear-gradient(180deg, #f0ab00 10%, #f7c341 100%);
     background-size: cover;
-    color:#c20430!important; 
+    color:#c20430!important;
 }
 
 
 .btn:hover{
     background-color: #f0ab00 !important;
-    color:#00204e !important; 
+    color:#00204e !important;
 }
 .nav-tabs-highlight,
 .nav-tabs-overline,
@@ -282,3 +282,8 @@ bg-extra {
     background-color: #00204e;
     color: #fff;
 }
+
+
+
+
+  
