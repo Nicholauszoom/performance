@@ -8,6 +8,7 @@ use App\Models\EMPL;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Holiday;
+use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\UserRole;
@@ -17,6 +18,8 @@ use Illuminate\Http\File;
 use App\Models\AuditTrail;
 use App\Models\BankBranch;
 use App\Helpers\SysHelpers;
+use App\Models\ProjectTask;
+use App\Models\TargetRatio;
 use App\Models\Termination;
 use App\Models\Disciplinary;
 use App\Models\ProjectModel;
@@ -31,10 +34,10 @@ use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
+
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
-
 use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
@@ -3830,7 +3833,6 @@ class GeneralController extends Controller
 
         if (!empty($request->input("bank"))) {
             $queryBranch = $this->flexperformance_model->bankBranchFetcher($request->input("bank"));
-
             foreach ($queryBranch as $rows) {
                 echo "<option value='" . $rows->id . "'>" . $rows->name . "</option>";
             }
@@ -7743,7 +7745,7 @@ class GeneralController extends Controller
         $termination->salaryAdvance = $request->salaryAdvance;
         $termination->otherDeductions = $request->otherDeductions;
         $termination->otherPayments = $request->otherPayments;
-        $termination->status = "Pending";
+
 
 
 
@@ -9514,8 +9516,5 @@ class GeneralController extends Controller
         $data['child'] = "Biodata";
         $data['parent'] = "My-Services";
 
-        // return view('employee.userprofile', $data);
 
-        return view('my-services.biodata', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
-    }
 }

@@ -366,6 +366,35 @@
                 </li>
 @endcan
 
+
+
+
+              {{-- routes Pending Model --}}
+              <li class="nav-item nav-item-submenu {{ request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                <a href="#" class="nav-link">
+                    <i class="ph-folder"></i>
+                    <span>Performance Management</span>
+                </a>
+                <ul class="nav-group-sub collapse {{ request()->routeIs('flex.tasks') || request()->routeIs('flex.projects')  ? 'show' : null }}">
+                    <li class="nav-item">
+                        <a href="{{ route('flex.projects') }}" class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
+                            Projects
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('flex.tasks') }}" class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
+                           Adhoc Tasks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
+                            Performance Ratios
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+        {{-- / --}}
 @can('view-report')
                 <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.financial_reports') || request()->routeIs('flex.organisation_reports') ? 'nav-item-expand nav-item-open' : null }}">
@@ -470,12 +499,6 @@
                         <span>Payroll Logs</span>
                     </a>
                 </li> --}}
-
-
-
-
-
-
 
 
 

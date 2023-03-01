@@ -2677,7 +2677,7 @@ function allLevels()
 	function bankBranchFetcher($id)
 	{
 		$query = "SELECT * FROM bank_branch where bank = ".$id."";
-
+		// dd($query);
 		return DB::select(DB::raw($query));
 	}
 

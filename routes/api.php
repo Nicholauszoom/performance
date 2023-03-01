@@ -42,6 +42,8 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::get('/my-loans',[GeneralController::class,'myLoans']);
       // For Salary slips 
       Route::get('/my-slips',[GeneralController::class,'mySlips']);
+      // For Salary slips details
+      Route::get('/my-slips/{date}',[GeneralController::class,'SlipDetail']);
 
 
       // For Saving Overtimes
