@@ -9489,16 +9489,16 @@ class GeneralController extends Controller
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
         $empID = $id;
-        $details = EmployeeDetail::where('employeeID', $empID)->first();
+        $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
 
-        $emergency = EmergencyContact::where('employeeID', $empID)->first();
+        $data['emergency'] = EmergencyContact::where('employeeID', $empID)->first();
 
-        $children = EmployeeDependant::where('employeeID', $empID)->get();
+        $data['children']= EmployeeDependant::where('employeeID', $empID)->get();
 
 
-        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+        $data['spouse'] = EmployeeSpouse::where('employeeID', $empID)->first();
 
-        $parents = EmployeeParent::where('employeeID', $empID)->get();
+        $data['parents'] = EmployeeParent::where('employeeID', $empID)->get();
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
@@ -9516,6 +9516,6 @@ class GeneralController extends Controller
         $data['child'] = "Biodata";
         $data['parent'] = "My-Services";
 
-
+        return view('my-services/biodata', $data);
 }
 }
