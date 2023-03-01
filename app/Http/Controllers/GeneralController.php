@@ -9400,7 +9400,6 @@ class GeneralController extends Controller
 
     // Start of self services
 
-
     // For MyOvertime
 
     public function myOvertimes()
@@ -9415,8 +9414,6 @@ class GeneralController extends Controller
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';
         $data['child'] = 'Overtimes';
-
-        // return view('overtime.overtime', $data);
         return view('my-services.overtimes', $data);
     }
 
@@ -9442,7 +9439,7 @@ class GeneralController extends Controller
         return view('my-services/loans', $data);
     }
 
-    // For My Complains
+    // For My Pensions
     public function myPensions()
     {
         $id = auth()->user()->emp_id;
@@ -9454,15 +9451,9 @@ class GeneralController extends Controller
 
         return view('my-services/pensions', $data);
     }
-    // For My Complains
-    // public function myComplains()
-    // {
-    //     return view('my-services/complains');
-    // }
-
-    // end of self services
 
 
+    // For My Biodata
     public function my_biodata(Request $request)
     {
         $id = auth()->user()->emp_id;
@@ -9470,8 +9461,6 @@ class GeneralController extends Controller
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
-
-        // dd($data['employee'] );
         $data['kin'] = $this->flexperformance_model->getkin($id);
         $data['property'] = $this->flexperformance_model->getproperty($id);
         $data['propertyexit'] = $this->flexperformance_model->getpropertyexit($id);
@@ -9519,21 +9508,23 @@ class GeneralController extends Controller
         $data['parent'] = "My-Services";
 
         return view('my-services/biodata', $data);
-}
+    }
+    // end of self services
 
 
-public function projects()
+    // For All Projects
+    public function projects()
     {
         $data['project'] = Project::all();
         return view('performance.projects',$data);
     }
 
-
+    // For Add New Project Page
     public function add_project()
     {
         return view('performance.add-project');
     }
-
+    // For Saving New Project
     public function save_project(Request $request)
     {
         $project = new Project();
@@ -9550,12 +9541,10 @@ public function projects()
        {
            $project = Project::where('id',$id)->first();
            $tasks =ProjectTask::where('project_id',$id)->get();
-
-        //    dd($id);
            return view('performance.single_project',compact('project','tasks'));
        }
 
-        // For Deleting  PROJECT
+        // For Deleting  Project
         public function delete_project($id)
         {
             $project = Project::find($id);
@@ -9565,8 +9554,7 @@ public function projects()
             return redirect('flex/projects');
         }
 
-
-        
+        // For Adding Task      
         public function add_task($id)
         {
             $project=$id;
@@ -9576,7 +9564,7 @@ public function projects()
         }
 
 
-        
+    //For Saving Project Ratio 
     public function save_project_task(Request $request)
     {
         $task = new ProjectTask();
@@ -9592,7 +9580,7 @@ public function projects()
     }
 
 
-          // For Deleting  Project Tasks
+        // For Deleting  Project Tasks
           public function delete_project_task($id)
           {
               $project = ProjectTask::find($id);
@@ -9601,7 +9589,7 @@ public function projects()
   
               return redirect('flex/projects');
           }
-
+        // For Viewing all Adhoc Tasks
           public function tasks()
           {
               $data['project'] = Project::all();
@@ -9666,5 +9654,32 @@ public function projects()
             return redirect('flex/performance-ratios');
           }
   
+            // For Deleting  Target Ratios
+            public function delete_target_ratio($id)
+            {
+                $target = TargetRatio::find($id);
+  
+                $target->delete();
+    
+                return redirect('flex/performance-ratios');
+            }
+            // For Deleting  Time Ratios
+            public function delete_time_ratio($id)
+            {
+                $time = TimeRatio::find($id);
+  
+                $time->delete();
+    
+                return redirect('flex/performance-ratios');
+            }
+            // For Deleting  Behaviour Ratios
+            public function delete_behaviour_ratio($id)
+            {
+                $behaviour = BehaviourRatio::find($id);
+  
+                $behaviour->delete();
+    
+                return redirect('flex/performance-ratios');
+            }
 
 }

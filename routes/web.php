@@ -192,6 +192,9 @@ Route::middleware('auth')->group(function () {
         Route::any('save-target-ratio','save_target_ratio')->name('flex.save_target_ratio');
         Route::any('save-time-ratio','save_time_ratio')->name('flex.save_time_ratio');
         Route::any('save-behaviour-ratio','save_behaviour_ratio')->name('flex.save_behaviour_ratio');
+        Route::any('delete-target-ratio/{id}','delete_target_ratio')->name('flex.delete-target-ratio');
+        Route::any('delete-time-ratio/{id}','delete_time_ratio')->name('flex.delete-time-ratio');
+        Route::any('delete-behaviour-ratio/{id}','delete_behaviour_ratio')->name('flex.delete-behaviour-ratio');
         // End of performance routes
 
         // start of employees routes
