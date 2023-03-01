@@ -90,7 +90,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.biodata') ? 'active' : null }}"
-                                href="{{ route('flex.biodata') }}" > Biodata </a>
+                                href="{{ route('flex.my-biodata') }}" > Biodata </a>
                         </li>
 
                         {{-- / --}}

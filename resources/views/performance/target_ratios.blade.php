@@ -59,6 +59,17 @@
                 </thead>
 
                 <tbody>
+                    @foreach ($target_ratio as $item)
+                    <tr>
+                        <td>{{ $item->id}}</td>
+                        <td>{{ $item->name}}</td>
+                        <td>{{ $item->max}}</td>
+                        <td> {{ $item->min}}</td>
+                        <td>{{ $item->status}}</td>
+                        <td>Option</td>
+                    </tr>
+
+                    @endforeach
       
                 </tbody>
             </table>
@@ -70,7 +81,7 @@
         <div role="tabpanel" class="tab-pane  " id="register-approve" aria-labelledby="approve-tab">
 
             <h6 class="text-warning mb-3 mx-3">Behaviour Ratios</h6>
-
+          
             <div id="resultFeedback"></div>
 
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
@@ -96,7 +107,7 @@
         <div role="tabpanel" class="tab-pane  " id="time-ratios" aria-labelledby="approve-tab">
 
             <h6 class="text-warning mb-3 mx-3">Time Ratios</h6>
-
+            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#time-ratio">   <i class="ph-plus"></i>  Add Time Ratio</button>
             <div id="resultFeedback"></div>
 
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
@@ -122,59 +133,110 @@
         {{-- </[object Object]> --}}
 
         {{-- start of add Target Ratio modal --}}
+        <div id="approval" class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Target Ratio Form</h5>
+                        <button type="button" class="btn-close " data-bs-dismiss="modal">
 
-<div id="approval" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Target Ratio Form</h5>
-                <button type="button" class="btn-close " data-bs-dismiss="modal">
+                        </button>
+                    </div>
 
-                </button>
+                    <form
+                        action="{{ route('flex.save_target_ratio') }}"
+                        method="POST"
+                        class="form-horizontal"
+                    >
+                        @csrf
+
+                        <div class="modal-body">
+                            <div class="row mb-3">
+
+                            <div class="form-group">
+                                <label class="col-form-label col-sm-3">Range Name: </label>
+                                    <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
+
+                                    @error('process_name')
+                                        <p class="text-danger mt-1"> Field Process Name has an error </p>
+                                    @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label col-sm-3"> Minimum Value</label>
+                                    <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+
+                            
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label col-sm-3"> Maximum Value</label>
+                                    <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <form
-                action="{{ route('flex.save_target_ratio') }}"
-                method="POST"
-                class="form-horizontal"
-            >
-                @csrf
-
-                <div class="modal-body">
-                    <div class="row mb-3">
-
-                    <div class="form-group">
-                        <label class="col-form-label col-sm-3">Range Name: </label>
-                            <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
-
-                            @error('process_name')
-                                <p class="text-danger mt-1"> Field Process Name has an error </p>
-                            @enderror
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label col-sm-3"> Minimum Value</label>
-                            <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
-
-                       
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label col-sm-3"> Maximum Value</label>
-                            <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
-
-                    </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
-                </div>
-            </form>
         </div>
-    </div>
-</div>
-
         {{-- end of Target Ratio modal --}}
+
+              {{-- start of add Target Ratio modal --}}
+              <div id="time-ratio" class="modal fade" tabindex="-1">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Time Ratio Form</h5>
+                            <button type="button" class="btn-close " data-bs-dismiss="modal">
+    
+                            </button>
+                        </div>
+    
+                        <form
+                            action="{{ route('flex.save_time_ratio') }}"
+                            method="POST"
+                            class="form-horizontal"
+                        >
+                            @csrf
+    
+                            <div class="modal-body">
+                                <div class="row mb-3">
+    
+                                <div class="form-group">
+                                    <label class="col-form-label col-sm-3">Range Name: </label>
+                                        <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
+    
+                                        @error('process_name')
+                                            <p class="text-danger mt-1"> Field Process Name has an error </p>
+                                        @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label col-sm-3"> Minimum Value</label>
+                                        <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+    
+                                
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label col-sm-3"> Maximum Value</label>
+                                        <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+    
+                                </div>
+                                </div>
+                            </div>
+    
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{-- end of Target Ratio modal --}}
 <script>
 
 jQuery(document).ready(function($){
