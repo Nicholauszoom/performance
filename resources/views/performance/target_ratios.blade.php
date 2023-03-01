@@ -66,7 +66,14 @@
                         <td>{{ $item->max}}</td>
                         <td> {{ $item->min}}</td>
                         <td>{{ $item->status}}</td>
-                        <td>Option</td>
+                        <td>
+                            <a href="" class="btn btn-sm bg-main">
+                                <i class="ph-pen"></i>
+                            </a>
+                            <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                <i class="ph-trash"></i>
+                            </a>
+                        </td>
                     </tr>
 
                     @endforeach
@@ -77,11 +84,11 @@
         </div>
         {{-- / --}}
 
-        {{-- Approve registered employee --}}
+        {{-- Behaviour Ratios --}}
         <div role="tabpanel" class="tab-pane  " id="register-approve" aria-labelledby="approve-tab">
 
             <h6 class="text-warning mb-3 mx-3">Behaviour Ratios</h6>
-          
+            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#behaviour-ratio">   <i class="ph-plus"></i>  Add Behaviour Ratio</button>
             <div id="resultFeedback"></div>
 
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
@@ -96,14 +103,31 @@
                     </tr>
                 </thead>
                 <tbody>
-            
+                    @foreach ($behaviour_ratio as $item)
+                    <tr>
+                        <td>{{ $item->id}}</td>
+                        <td>{{ $item->name}}</td>
+                        <td>{{ $item->max}}</td>
+                        <td> {{ $item->min}}</td>
+                        <td>{{ $item->status}}</td>
+                        <td>
+                            <a href="" class="btn btn-sm bg-main">
+                                <i class="ph-pen"></i>
+                            </a>
+                            <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                <i class="ph-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    @endforeach
                 </tbody>
             </table>
 
         </div>
         {{-- / --}}
 
-        {{-- Approve registered employee --}}
+        {{-- Time ratios employee --}}
         <div role="tabpanel" class="tab-pane  " id="time-ratios" aria-labelledby="approve-tab">
 
             <h6 class="text-warning mb-3 mx-3">Time Ratios</h6>
@@ -122,7 +146,24 @@
                     </tr>
                 </thead>
                 <tbody>
-            
+                    @foreach ($time_ratio as $item)
+                    <tr>
+                        <td>{{ $item->id}}</td>
+                        <td>{{ $item->name}}</td>
+                        <td>{{ $item->max}}</td>
+                        <td> {{ $item->min}}</td>
+                        <td>{{ $item->status}}</td>
+                        <td>
+                            <a href="" class="btn btn-sm bg-main">
+                                <i class="ph-pen"></i>
+                            </a>
+                            <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                <i class="ph-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+
+                    @endforeach
                 </tbody>
             </table>
 
@@ -185,7 +226,60 @@
         </div>
         {{-- end of Target Ratio modal --}}
 
-              {{-- start of add Target Ratio modal --}}
+        {{-- start of add Behaviour Ratio modal --}}
+        <div id="behaviour-ratio" class="modal fade" tabindex="-1">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add Behaviour Ratio Form</h5>
+                            <button type="button" class="btn-close " data-bs-dismiss="modal">
+    
+                            </button>
+                        </div>
+    
+                        <form
+                            action="{{ route('flex.save_behaviour_ratio') }}"
+                            method="POST"
+                            class="form-horizontal"
+                        >
+                            @csrf
+    
+                            <div class="modal-body">
+                                <div class="row mb-3">
+    
+                                <div class="form-group">
+                                    <label class="col-form-label col-sm-3">Range Name: </label>
+                                        <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
+    
+                                        @error('process_name')
+                                            <p class="text-danger mt-1"> Field Process Name has an error </p>
+                                        @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label col-sm-3"> Minimum Value</label>
+                                        <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+    
+                                
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-form-label col-sm-3"> Maximum Value</label>
+                                        <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+    
+                                </div>
+                                </div>
+                            </div>
+    
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+        {{-- end of Behaviour Ratio modal --}}
+
+              {{-- start of add Time Ratio modal --}}
               <div id="time-ratio" class="modal fade" tabindex="-1">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">

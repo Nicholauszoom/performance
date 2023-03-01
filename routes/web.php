@@ -191,7 +191,7 @@ Route::middleware('auth')->group(function () {
         Route::any('performance-ratios','performance_ratios')->name('flex.performance-ratios');
         Route::any('save-target-ratio','save_target_ratio')->name('flex.save_target_ratio');
         Route::any('save-time-ratio','save_time_ratio')->name('flex.save_time_ratio');
-
+        Route::any('save-behaviour-ratio','save_behaviour_ratio')->name('flex.save_behaviour_ratio');
         // End of performance routes
 
         // start of employees routes

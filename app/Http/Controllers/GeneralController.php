@@ -28,13 +28,14 @@ use Illuminate\Http\Request;
 use App\Models\ApprovalLevel;
 use App\Models\FinancialLogs;
 use App\Models\LeaveApproval;
+use App\Models\BehaviourRatio;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSpouse;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
-use Barryvdh\DomPDF\Facade\Pdf;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
@@ -9606,7 +9607,7 @@ public function projects()
               $data['project'] = Project::all();
               return view('performance.tasks',$data);
           }
-
+        // For Saving Adhoc Task
           public function add_adhoctask(Request $request)
           {
             $task = new AdhocTask();
@@ -9621,13 +9622,17 @@ public function projects()
             return redirect('flex/view-project/'.$request->project);
           }
 
+        //   For Viewing All Performance ratios
           public function performance_ratios()
           {
 
             $data['target_ratio'] = TargetRatio::all();
+            $data['time_ratio'] =TimeRatio::all();
+            $data['behaviour_ratio'] =BehaviourRatio::all();
             return view('performance.target_ratios',$data);
           }
-      
+
+        // For Saving Target Ratios
           public function save_target_ratio(Request $request)
           {
             $ratio = new TargetRatio();
@@ -9638,10 +9643,21 @@ public function projects()
     
             return redirect('flex/performance-ratios');
           }
-
+        // For Saving Time Ratios
           public function save_time_ratio(Request $request)
           {
             $ratio = new TimeRatio();
+            $ratio->name = $request->name;
+            $ratio->min = $request->min_value;
+            $ratio->max= $request->max_value;
+            $ratio->save();
+    
+            return redirect('flex/performance-ratios');
+          }
+        // For Saving Behaviour Ratios
+          public function save_behaviour_ratio(Request $request)
+          {
+            $ratio = new BehaviourRatio();
             $ratio->name = $request->name;
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;

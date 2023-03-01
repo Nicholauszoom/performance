@@ -106,7 +106,7 @@
         <div class="col-md-4 col-4">
                 <div class="row">
                 <div class="col-6 mx-auto">
-                    {{-- <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%"> --}}
+                    <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="150px" height="150px">
 
                 </div>
                 <div class="col-12">
@@ -122,7 +122,7 @@
 
             <div class="card-img-actions d-inline-block float-end my-3">
                 {{-- rounded-circle --}}
-                  {{-- <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150px" height="150px" alt=""> --}}
+                  <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt="">
               </div>
 
         </div>
@@ -697,7 +697,7 @@
         <table style="border:none;">
             <tr>
                 <td width="50%" style="width:50%">
-                    <div class="col-12 col-md-12 col-12 col-lg-12 text-danger">
+                    <div class="col-12 col-md-12 col-12 col-lg-12 text-danger" style="font-size:10px;">
                         <i>
                             H i g h l y C o n f i d e n t i a l
                         </i>
@@ -705,7 +705,7 @@
                 </td>
                 <td width="50%" style="width:50%">
     
-                    <div class="col-12 col-md-12 col-12 col-lg-12 text-secondary">
+                    <div class="col-12 col-md-12 col-12 col-lg-12 text-secondary" style="font-size:10px;">
                         <i>
                             E m p l o y e e s I n i t i a l : _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
                         </i>
