@@ -14,6 +14,7 @@ use App\Models\Position;
 use App\Models\UserRole;
 use App\Models\Approvals;
 use App\Models\Promotion;
+use App\Models\TimeRatio;
 use Illuminate\Http\File;
 use App\Models\AuditTrail;
 use App\Models\BankBranch;
@@ -33,8 +34,8 @@ use App\Models\EmployeeSpouse;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Elibyy\TCPDF\Facades\TCPDF;
 
+use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
@@ -9300,10 +9301,10 @@ class GeneralController extends Controller
         $data['parent'] = "Employee Profile";
 
         // return view('employee.userprofile', $data);
-        // $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
-        // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
-        // return $pdf->download('employee_biodata.pdf');
-        return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
+        $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents','childs'));
+        $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+        return $pdf->download('employee_biodata.pdf');
+        // return view('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
     }
 
 
@@ -9492,16 +9493,16 @@ class GeneralController extends Controller
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['title'] = "Profile";
         $empID = $id;
-        $details = EmployeeDetail::where('employeeID', $empID)->first();
+        $data['details'] = EmployeeDetail::where('employeeID', $empID)->first();
 
-        $emergency = EmergencyContact::where('employeeID', $empID)->first();
+        $data['emergency'] = EmergencyContact::where('employeeID', $empID)->first();
 
-        $children = EmployeeDependant::where('employeeID', $empID)->get();
+        $data['children']= EmployeeDependant::where('employeeID', $empID)->get();
 
 
-        $spouse = EmployeeSpouse::where('employeeID', $empID)->first();
+        $data['spouse'] = EmployeeSpouse::where('employeeID', $empID)->first();
 
-        $parents = EmployeeParent::where('employeeID', $empID)->get();
+        $data['parents'] = EmployeeParent::where('employeeID', $empID)->get();
 
         $data['qualifications'] = EducationQualification::where('employeeID', $empID)->orderBy('end_year', 'desc')->get();
 
@@ -9511,7 +9512,7 @@ class GeneralController extends Controller
         $data['histories'] = EmploymentHistory::where('employeeID', $empID)->orderBy('hist_end', 'desc')->get();
         $data['profile'] = EMPL::where('emp_id', $empID)->first();
 
-        $childs = EmployeeDependant::where('employeeID', $empID)->count();
+        $data['childs'] = EmployeeDependant::where('employeeID', $empID)->count();
         $data['qualifications'] = EducationQualification::where('employeeID', $id)->get();
 
         $data['photo'] = "";
@@ -9519,6 +9520,138 @@ class GeneralController extends Controller
         $data['child'] = "Biodata";
         $data['parent'] = "My-Services";
 
-
+        return view('my-services/biodata', $data);
 }
+
+
+public function projects()
+    {
+        $data['project'] = Project::all();
+        return view('performance.projects',$data);
+    }
+
+
+    public function add_project()
+    {
+        return view('performance.add-project');
+    }
+
+    public function save_project(Request $request)
+    {
+        $project = new Project();
+        $project->name = $request->name;
+        $project->start_date = $request->start_date;
+        $project->end_date= $request->end_date;
+        $project->save();
+
+        return redirect('flex/projects');
+    }
+
+       // View single project
+       public function view_project($id)
+       {
+           $project = Project::where('id',$id)->first();
+           $tasks =ProjectTask::where('project_id',$id)->get();
+
+        //    dd($id);
+           return view('performance.single_project',compact('project','tasks'));
+       }
+
+        // For Deleting  PROJECT
+        public function delete_project($id)
+        {
+            $project = Project::find($id);
+
+            $project->delete();
+
+            return redirect('flex/projects');
+        }
+
+
+        
+        public function add_task($id)
+        {
+            $project=$id;
+            $employees= EMPL::where('state',1)->get();
+
+            return view('performance.add-task',compact('project','employees'));
+        }
+
+
+        
+    public function save_project_task(Request $request)
+    {
+        $task = new ProjectTask();
+        $task->name = $request->name;
+        $task->start_date = $request->start_date;
+        $task->end_date= $request->end_date;
+        $task->project_id= $request->project;
+        $task->assigned= $request->assigned;
+        $task->target= $request->target;
+        $task->save();
+
+        return redirect('flex/view-project/'.$request->project);
+    }
+
+
+          // For Deleting  Project Tasks
+          public function delete_project_task($id)
+          {
+              $project = ProjectTask::find($id);
+
+              $project->delete();
+  
+              return redirect('flex/projects');
+          }
+
+          public function tasks()
+          {
+              $data['project'] = Project::all();
+              return view('performance.tasks',$data);
+          }
+
+          public function add_adhoctask(Request $request)
+          {
+            $task = new AdhocTask();
+            $task->name = $request->name;
+            $task->start_date = $request->start_date;
+            $task->end_date= $request->end_date;
+            $task->project_id= $request->project;
+            $task->assigned= $request->assigned;
+            $task->target= $request->target;
+            $task->save();
+    
+            return redirect('flex/view-project/'.$request->project);
+          }
+
+          public function performance_ratios()
+          {
+
+            $data['target_ratio'] = TargetRatio::all();
+            return view('performance.target_ratios',$data);
+          }
+      
+          public function save_target_ratio(Request $request)
+          {
+            $ratio = new TargetRatio();
+            $ratio->name = $request->name;
+            $ratio->min = $request->min_value;
+            $ratio->max= $request->max_value;
+            $ratio->save();
+    
+            return redirect('flex/performance-ratios');
+          }
+
+          public function save_time_ratio(Request $request)
+          {
+            $ratio = new TimeRatio();
+            $ratio->name = $request->name;
+            $ratio->min = $request->min_value;
+            $ratio->max= $request->max_value;
+            $ratio->save();
+    
+            return redirect('flex/performance-ratios');
+          }
+  
+
 }

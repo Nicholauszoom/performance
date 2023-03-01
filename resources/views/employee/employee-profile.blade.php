@@ -909,6 +909,9 @@
                                             <td class="text-center">{{ $item->study_location }} </td>
                                             <td class="text-center">{{ $item->final_score }} </td>
                                             <td class="text-center">
+                                            <a href="{{asset('storage/certificates/' . $item->certificate) }}" download="{{$item->institute.'-Certificate'}}" class="text-main btn btn-sm" title="Download Attachment">
+                                                    <i class="ph ph-download"></i> &nbsp;
+                                            </a>
                                             <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>
                                                 </a>
@@ -989,6 +992,10 @@
                                             <td class="text-center">{{ $item->cert_number }}</td>
                                             <td class="text-center">{{ $item->cert_status }} </td>
                                             <td>
+                                                <a href="{{asset('storage/certifications/' . $item->certificate) }}" download="{{ $item->cert_name.'-certificate' }}" class="text-main btn btn-sm" title="Download Attachment">
+                                                    <i class="ph ph-download"></i> &nbsp;
+                                                    
+                                                  </a>
                                                  <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>
                                                 </a>

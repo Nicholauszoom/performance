@@ -189,7 +189,8 @@ Route::middleware('auth')->group(function () {
 
         // Performance Ratios routes
         Route::any('performance-ratios','performance_ratios')->name('flex.performance-ratios');
-        Route::any('save-targrt-ratio','save_target_ratio')->name('flex.save_target_ratio');
+        Route::any('save-target-ratio','save_target_ratio')->name('flex.save_target_ratio');
+        Route::any('save-time-ratio','save_time_ratio')->name('flex.save_time_ratio');
 
         // End of performance routes
 
@@ -633,7 +634,7 @@ Route::middleware('auth')->group(function () {
 
 
         // Download biodata
-        Route::any('/biodata','my_biodata')->name('flex.biodata');
+        Route::any('/biodata','viewBiodata')->name('flex.biodata');
           // update profile image
         Route::any('user-image', 'updateImg')->name('flex.userimage');
 
@@ -852,7 +853,7 @@ Route::middleware('auth')->group(function () {
         // start of selfservices routes
         Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
         Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
-        Route::any('/my-biodata','my-biodata')->name('flex.my-biodata');
+        Route::any('/my-biodata','my_biodata')->name('flex.my-biodata');
         // end of self services
 
 

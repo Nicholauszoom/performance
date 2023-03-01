@@ -262,7 +262,7 @@
                                              <h6 class="text-main">TIN Number : </h6>
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
-                                             <p class="text-muted">  @if($profile) {{$profile->tin}} @endif</p>
+                                             <p class="text-muted">  @if($profile) {{$profile->tin}} @endif</p>s
                                          </div>
                                          <div class="col-6 col-md-6 col-6 col-lg-6">
                                              <h6 class="text-main"> NIDA Number </h6>
