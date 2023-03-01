@@ -4,8 +4,11 @@ namespace App\Models\Payroll;
 
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Termination;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\SysHelpers;
+
 
 class FlexPerformanceModel extends Model
 {
@@ -1916,6 +1919,59 @@ function contract_expire_list() {
 	$query = "SELECT e.emp_id as IDs  from employee e, contract c where (DATEDIFF(CURRENT_DATE(), e.contract_renewal_date)) > (c.duration*365) and e.contract_type = c.id ";
 
 		return DB::select(DB::raw($query));
+}
+
+function update_employee_termination($id){
+$termination = Termination::where('id', $id)->first();
+//termination date
+SysHelpers::FinancialLogs($termination->employeeID,'Termination Date', '0' ,$termination->terminationDate, 'Termination');
+//reason for termination
+SysHelpers::FinancialLogs($termination->employeeID,'Reason For Termination', '0' ,$termination->reason, 'Termination');
+//salary
+SysHelpers::FinancialLogs($termination->employeeID,'Salary', $termination->actual_salary ,$termination->salaryEnrollment, 'Termination');
+//overtimes
+if($termination->normalDays != 0){
+    SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime', 0 ,$termination->normalDays, 'Termination');
+    SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime Amount', 0 ,$termination->normal_days_overtime_amount, 'Termination');
+
+}
+if($termination->publicDays != 0){
+    SysHelpers::FinancialLogs($termination->employeeID,'S-Overtime', 0 ,$termination->publicDays, 'Termination');
+    SysHelpers::FinancialLogs($termination->publicDays,'S-Overtime Amount', 0 ,$termination->public_overtime_amount, 'Termination');
+}
+if($termination->noticePay != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Notice Pay', 0 ,$termination->noticePay, 'Termination');
+if($termination->leavePay != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Leave Pay', 0 ,$termination->leavePay, 'Termination');
+if($termination->houseAllowance != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'House Allowance', 0 ,$termination->houseAllowance, 'Termination');
+if($termination->utilityAllowance != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Utility Allowance', 0 ,$termination->utilityAllowance, 'Termination');
+if($termination->leaveAllowance != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Leave Allowance', 0 ,$termination->leaveAllowance, 'Termination');
+
+if($termination->tellerAllowance != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Teler Allowance', 0 ,$termination->tellerAllowance, 'Termination');
+if($termination->leaveStand != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Leave Stand', 0 ,$termination->leaveStand, 'Termination');
+if($termination->arrears != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Arrears', 0 ,$termination->arrears, 'Termination');
+if($termination->longServing != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Long Serving', 0 ,$termination->longServing, 'Termination');
+if($termination->loanBalance != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Loan Balance', 0 ,$termination->loanBalance, 'Termination');
+if($termination->otherPayments != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Other Payments', 0 ,$termination->otherPayments, 'Termination');
+if($termination->otherDeductions != 0)
+SysHelpers::FinancialLogs($termination->employeeID,'Other Deductions', 0 ,$termination->otherDeductions, 'Termination');
+
+DB::table('employee')->where('emp_id',$termination->employeeID)->update(['state'=>4]);
+
+
+return true;
+
+
+
 }
 
 function terminate_contract($id) {
