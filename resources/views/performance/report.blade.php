@@ -18,16 +18,76 @@
     }
 </style>
 
+<div class="">
+
+    <h6>Average Performance Per Person : {{ $average_performance}} </h6>
+    <h6>Average Behaviour Per Person : {{ $average_behaviour}} </h6>
+
+    @php
+        if ($average_performance==$average_behaviour) {
+            $value=$average_behaviour;
+            $retVal = ($value<20) ?  $need_improvement=$value : $need_improvement=0;
+            $retVal = ($value>20 && $value <40 ) ?  $good=$value :$good=0 ;
+            $retVal = ($value>40 && $value <60 ) ?  $strong=$value :$strong=0 ;
+            $retVal = ($value>60 && $value <80 ) ?  $very_strong=$value :$very_strong=0 ;
+            $retVal = ($value>80 ) ?  $outstanding=$value :$outstanding=0 ;
+           
+        }
+        else {
+
+            // For Diagonal
+            $retVal = ($average_behaviour<20 && $average_performance <20) ?  $need_improvement=$value : $need_improvement=0;
+            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>20 && $average_performance <40  ) ?  $good=$average_behaviour+$average_performance/2 : $good=0;
+            $retVal = ($average_behaviour>40 && $average_behaviour <60 && $average_performance>40 && $average_performance <60  ) ?  $strong=$average_behaviour+$average_performance/2 : $strong=0;
+            $retVal = ($average_behaviour>60 && $average_behaviour <80 && $average_performance>60 && $average_performance <80  ) ?  $very_strong=$average_behaviour+$average_performance/2 : $very_strong=0;
+            $retVal = ($average_behaviour>80  && $average_performance>80  ) ?  $outstanding=$average_behaviour+$average_performance/2 : $outstanding=0;
+
+            // For Behaviour at need improvement
+            $retVal = ($average_behaviour<20  && $average_performance>20 && $average_performance <40  ) ?  $improvement_good=$average_behaviour+$average_performance/2 : $improvement_good=0;
+            $retVal = ($average_behaviour<20  && $average_performance>40 && $average_performance <60  ) ?  $improvement_strong=$average_behaviour+$average_performance/2 : $improvement_strong=0;
+            $retVal = ($average_behaviour<20  && $average_performance>60 && $average_performance <80  ) ?  $improvement_very_strong=$average_behaviour+$average_performance/2 :  $improvement_very_strong=0;
+            $retVal = ($average_behaviour<20  && $average_performance>80  ) ?  $improvement_outstanding=$average_behaviour+$average_performance/2 : $improvement_outstanding=0;
+
+            // For Behaviour Good
+            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>80  ) ?  $good_outstanding=$average_behaviour+$average_performance/2 : $good_outstanding=0;
+            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>60 && $average_performance <80  ) ?  $good_very_strong=$average_behaviour+$average_performance/2 : $good_very_strong=0;
+            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>40 && $average_performance <60  ) ?  $good_strong=($average_behaviour+$average_performance)/2 : $good_strong=0;
+            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_behaviour<20   ) ?  $good_improvement=$average_behaviour+$average_performance/2 : $good_improvement=0;
+
+            // For  Behaviour Strong
+            $retVal = ($average_behaviour>40 && $average_behaviour <60 && $average_performance>80  ) ?  $strong_outstanding=$average_behaviour+$average_performance/2 : $strong_outstanding=0;
+            $retVal = ($average_behaviour>40 && $average_behaviour <60 && $average_performance>60 && $average_performance <80  ) ?  $strong_very_strong=$average_behaviour+$average_performance/2 : $strong_very_strong=0;
+            $retVal = ($average_behaviour>40 && $average_behaviour <60 && $average_performance>20 && $average_performance <40  ) ?  $strong_good=$average_behaviour+$average_performance/2 : $strong_good=0;
+            $retVal = ($average_behaviour>40 && $average_behaviour <60 && $average_behaviour<20   ) ?  $strong_improvement=$average_behaviour+$average_performance/2 : $strong_improvement=0;
+
+
+            // For Very Strong Behaviour
+            $retVal = ($average_behaviour>60 && $average_behaviour <80 && $average_performance>80  ) ?  $very_strong_outstanding=$average_behaviour+$average_performance/2 : $very_strong_outstanding=0;
+            $retVal = ($average_behaviour>60 && $average_behaviour <80 && $average_performance>40 && $average_performance <60  ) ?  $very_strong__strong=$average_behaviour+$average_performance/2 : $very_strong_strong=0;
+            $retVal = ($average_behaviour>60 && $average_behaviour <80 && $average_performance>20 && $average_performance <40  ) ?  $very_strong_good=$average_behaviour+$average_performance/2 : $very_strong_good=0;
+            $retVal = ($average_behaviour>60 && $average_behaviour <80 && $average_behaviour<20   ) ?  $very_strong_improvement=$average_behaviour+$average_performance/2 : $very_strong_improvement=0;
+
+            // For Outstanding Behaviour
+            $retVal = ($average_behaviour>80 && $average_performance>80 && $average_performance <80  ) ?  $outstanding_very_strong=$average_behaviour+$average_performance/2 : $outstanding_very_strong=0;
+            $retVal = ($average_behaviour>80  && $average_performance>40 && $average_performance <60  ) ?  $outstandiing_strong=$average_behaviour+$average_performance/2 : $outstanding_strong=0;
+            $retVal = ($average_behaviour>80  && $average_performance>20 && $average_performance <40  ) ?  $outstanding_good=$average_behaviour+$average_performance/2 : $outstanding_good=0;
+            $retVal = ($average_behaviour>80 && $average_behaviour<20   ) ?  $outstanding_improvement=$average_behaviour+$average_performance/2 : $outstanding_improvement=0;
+
+            
+
+        }
+    @endphp
+</div>
 <div class="row">
     {{-- <col class="" ></div>/ --}}
     <div class="col-11">
         <div class="container" style="height:600px" id="container"></div>
     </div>
-    <div class="col-1 p-1 " style="background:red;width:50px;">
-    <p class="text-center" style="writing-mode: vertical-rl;text-orientation: mixed;color:white;"> Test</p>
+    <div class="col-1 p-1 bg-danger " style="width:50px;border:2px solid black;">
+    <p class="text-center float-end" style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The "what" - delivery against objectives</p>
     </div>
-    <div class="col-8 mx-auto p-1" style="background:red;height:50px;">
-        <p class="text-center text-white"> The "how"</p>
+    <div class="col-8 mx-auto p-1 bg-danger" style="height:50px;border:2px solid black;">
+        <p class="text-center text-white"> The "how" - Values in Action</p>
     </div>
 </div>
 
@@ -40,40 +100,40 @@
   var data = [
 
     // First Column  
-    { x: "Improvement Needed ", y: " outstanding", heat: 10 },
-    { x: "Improvement Needed ", y: "very Strong ", heat: 30 },
-    { x: "Improvement Needed ", y: "Strong ", heat: 50 },
-    { x: "Improvement Needed ", y: "Good ", heat: 20 },
-    { x: "Improvement Needed ", y: "Improvement Needed", heat: 60 },
+    { x: "Improvement Needed ", y: " Outstanding", heat: {{ $improvement_outstanding }}},
+    { x: "Improvement Needed ", y: "very Strong ", heat:{{ $improvement_very_strong }} },
+    { x: "Improvement Needed ", y: "Strong ", heat: {{ $improvement_strong }}},
+    { x: "Improvement Needed ", y: "Good ", heat: {{ $improvement_good }} },
+    { x: "Improvement Needed ", y: "Improvement Needed", heat: {{ $need_improvement }} },
 
     // Second Column
-    { x: "Good ", y: " outstanding", heat: 10 },
-    { x: "Good ", y: "very Strong ", heat: 30 },
-    { x: "Good ", y: "Strong ", heat: 50 },
-    { x: "Good ", y: "Good ", heat: 20 },
-    { x: "Good ", y: "Improvement Needed", heat: 60 },
+    { x: "Good ", y: " Outstanding", heat: {{ $good_outstanding }} },
+    { x: "Good ", y: "very Strong ", heat: {{ $good_very_strong }}  },
+    { x: "Good ", y: "Strong ", heat: {{ $good_strong }} },
+    { x: "Good ", y: "Good ", heat: {{ $good }}  },
+    { x: "Good ", y: "Improvement Needed", heat: {{ $good_improvement }} },
 
     // Third Column
-    { x: "Strong ", y: " outstanding", heat: 10 },
-    { x: "Strong ", y: "very Strong ", heat: 30 },
-    { x: "Strong ", y: "Strong ", heat: 50 },
-    { x: "Strong ", y: "Good ", heat: 20 },
-    { x: "Strong ", y: "Improvement Needed", heat: 60 },
+    { x: "Strong ", y: " Outstanding", heat: {{ $strong_outstanding }} },
+    { x: "Strong ", y: "very Strong ", heat: {{$strong_very_strong }} },
+    { x: "Strong ", y: "Strong ", heat: {{ $strong }} },
+    { x: "Strong ", y: "Good ", heat: {{$strong_good }} },
+    { x: "Strong ", y: "Improvement Needed", heat: {{$strong_improvement }} },
 
     // Fourth Column
 
-    { x: "Very Strong ", y: " outstanding", heat: 78 },
-    { x: "Very Strong ", y: "very Strong ", heat: 50 },
-    { x: "Very Strong ", y: "Strong ", heat: 80 },
-    { x: "Very Strong ", y: "Good ", heat: 80 },
-    { x: "Very Strong ", y: "Improvement Needed", heat: 10 },
+    { x: "Very Strong ", y: " Outstanding", heat: {{ $very_strong_outstanding }}  },
+    { x: "Very Strong ", y: "very Strong ", heat: {{ $very_strong }} },
+    { x: "Very Strong ", y: "Strong ", heat:  {{ $very_strong_strong }} },
+    { x: "Very Strong ", y: "Good ", heat: {{ $very_strong_good }}  },
+    { x: "Very Strong ", y: "Improvement Needed", heat: {{ $very_strong_improvement }} },
 
     // Fifth Column
-    { x: "Outstanding ", y: " outstanding", heat: 82 },
-    { x: "Outstanding ", y: "very Strong ", heat: 78 },
-    { x: "Outstanding ", y: "Strong ", heat: 89 },
-    { x: "Outstanding ", y: "Good ", heat: 78 },
-    { x: "Outstanding ", y: "Improvement Needed", heat: 21 },
+    { x: "Outstanding ", y: " Outstanding", heat: {{ $outstanding }} },
+    { x: "Outstanding ", y: "very Strong ", heat: {{ $outstanding_very_strong}} },
+    { x: "Outstanding ", y: "Strong ", heat: {{ $outstanding_strong}} },
+    { x: "Outstanding ", y: "Good ", heat: {{ $outstanding_good}} },
+    { x: "Outstanding ", y: "Improvement Needed", heat: {{ $outstanding_improvement }} },
    
    
 
@@ -91,8 +151,8 @@
   var customColorScale = anychart.scales.ordinalColor();
   customColorScale.ranges([
     { less: 20 },
-    { from: 21, to: 39 },
-    { from: 40, to: 69 },
+    { from: 21, to: 40 },
+    { from: 40, to: 60 },
     { from: 70, to: 80 },
     { greater: 80 }
   ]);

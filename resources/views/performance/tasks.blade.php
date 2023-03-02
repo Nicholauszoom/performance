@@ -31,8 +31,8 @@
                   <div class="card-head px-3 py-1">
                     <h2>Adhoc Tasks
                     </h2>
-                    <a href="{{ url('/flex/add-adhock_task') }}" class="btn btn-main float-end">
-                        <i class="ph-plus me-2"></i> Add Task
+                    <a href="{{ route('flex.add-adhock_task') }}" class="btn btn-main float-end">
+                        <i class="ph-plus me-2"></i> Add Adhoc Task
                       </a>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -78,15 +78,35 @@
                                 
                                 </td>
                                 <td>
-                                    <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
-                                        <i class="ph-info"></i>
-                                    </a>
-                                    <a href="" class="btn btn-sm bg-main">
-                                        <i class="ph-pen"></i>
-                                    </a>
-                                    <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">
-                                        <i class="ph-trash"></i>
-                                    </a>
+                             {{-- for completion initiation --}}
+                             @if ($item->status==0)
+
+                             <a href="{{ url('flex/completed_adhoctask/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                               <i class="ph-check"></i>
+                           </a>
+                           @endif
+                           {{-- For Task Editing and deletion --}}
+                           {{-- @if ($item->created_by==Auth::user()->emp_id) --}}
+                                         <a href="" class="btn btn-sm bg-main">
+                                 <i class="ph-pen"></i>
+                             </a>
+                             <a href="{{ url('flex/delete-task/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                 <i class="ph-trash"></i>
+                             </a> 
+                           {{-- @endif --}}
+                  
+                             {{-- For Task Assessment --}}
+                             @if ($item->status==1)
+                               {{-- @if ($item->employee->line_manager == Auth()->user()->emp_id) --}}
+                               <hr>   
+                               <a href="{{ url('flex/assess-adhoctask/'.$item->id); }}" class="btn btn-sm bg-main">
+                                 Task Assessment
+                               </a> 
+                               {{-- @endif --}}
+                             @endif
+                             {{-- , --}}
+                        
+                         
                                 </td>
                             </tr>
                         @endforeach

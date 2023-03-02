@@ -185,7 +185,12 @@ Route::middleware('auth')->group(function () {
         
 
         // For Perfomance report
-        Route::any('performance','performance')->name('flex.performance');
+        Route::any('performance-report','performance')->name('flex.performance-report');
+
+         // For Perfomance ratios
+         Route::any('performance','performance_ratio')->name('flex.performance');
+         Route::any('save_performance_ratio','save_performance_ratio')->name('flex.save_performance_ratio');
+         
         // Task Assessment Routes
         Route::any('assess-task/{id}','assess_task')->name('flex.assess-task');
         Route::any('save-task-assessment','save_task_assessment')->name('flex.save_task_assessment');
@@ -193,8 +198,16 @@ Route::middleware('auth')->group(function () {
 
         //Adhoc Tasks routes 
         Route::any('tasks','tasks')->name('flex.tasks');
-        Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhoctask');
+        Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhock_task');
+        Route::any('save-adhoc-task','save_adhoc_task')->name('flex.save-adhoc-task');
         Route::any('delete-task/{id}','delete_task')->name('flex.delete-task');
+        Route::any('completed_adhoctask/{id}','completed_adhoctask')->name('flex.completed_adhoctask');
+        Route::any('delete-task/{id}','delete_task')->name('flex.delete-task');
+
+        // Adhoc Task Assessment Routes
+        Route::any('assess-adhoctask/{id}','assess_adhoctask')->name('flex.assess-adhoctask');
+        Route::any('save-adhoctask-assessment','save_adhoctask_assessment')->name('flex.save_adhoctask_assessment');
+       
 
         // Performance Ratios routes
         Route::any('performance-ratios','performance_ratios')->name('flex.performance-ratios');

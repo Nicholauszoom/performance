@@ -300,7 +300,7 @@
                     id="demo-form2"
                     enctype="multipart/form-data"
                     method="post"
-                    action="{{ route('flex.performance')}}"
+                    action="{{ route('flex.performance-report')}}"
                     target="_blank"
                     data-parsley-validate
                 >

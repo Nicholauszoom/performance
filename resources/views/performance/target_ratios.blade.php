@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Performance Ratios'])
+@extends('layouts.vertical', ['title' => 'Performance Ranges'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
@@ -18,17 +18,17 @@
         <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
             <li class="nav-item" role="presentation">
                 <a href="#employee-transfer" class="nav-link active show" data-bs-toggle="tab" aria-selected="true" role="tab" tabindex="-1">
-                    Target Ratio
+                    Target Ranges
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a href="#register-approve" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                    Behaviour Ratio
+                    Behaviour Ranges
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a href="#time-ratios" class="nav-link" data-bs-toggle="tab" aria-selected="false" role="tab" tabindex="-1">
-                    Time Ratio
+                    Time Ranges
                 </a>
             </li>
         </ul>
@@ -38,12 +38,12 @@
         {{-- transfered employee --}}
         <div role="tabpanel" class="tab-pane fade  active show " id="employee-transfer" aria-labelledby="transfer-tab">
 
-            <h6 class="mb-3 mx-3 text-warning">Target Ratios</h6>
+            <h6 class="mb-3 mx-3 text-warning">Target Ranges</h6>
             {{-- <a href="" class="btn btn-sm bg-main  mx-1 float-end mb-2">
                 <i class="ph-plus"></i>
-                Add Target Ratio
+                Add Target Ranges
             </a> --}}
-            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#approval">   <i class="ph-plus"></i>  Add Target Ratio</button>
+            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#approval">   <i class="ph-plus"></i>  Add Target Ranges</button>
             <div id="resultFeedback" class="my-3"></div>
 
             <table id="datatable" class="table table-striped table-bordered datatable-basic">
@@ -87,8 +87,8 @@
         {{-- Behaviour Ratios --}}
         <div role="tabpanel" class="tab-pane  " id="register-approve" aria-labelledby="approve-tab">
 
-            <h6 class="text-warning mb-3 mx-3">Behaviour Ratios</h6>
-            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#behaviour-ratio">   <i class="ph-plus"></i>  Add Behaviour Ratio</button>
+            <h6 class="text-warning mb-3 mx-3">Behaviour Ranges</h6>
+            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#behaviour-ratio">   <i class="ph-plus"></i>  Add Behaviour Ranges</button>
             <div id="resultFeedback"></div>
 
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
@@ -130,8 +130,8 @@
         {{-- Time ratios employee --}}
         <div role="tabpanel" class="tab-pane  " id="time-ratios" aria-labelledby="approve-tab">
 
-            <h6 class="text-warning mb-3 mx-3">Time Ratios</h6>
-            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#time-ratio">   <i class="ph-plus"></i>  Add Time Ratio</button>
+            <h6 class="text-warning mb-3 mx-3">Time Ranges</h6>
+            <button class="float-end btn btn-main mb-2 mx-1"  data-bs-toggle="modal" data-bs-target="#time-ratio">   <i class="ph-plus"></i>  Add Time Ranges</button>
             <div id="resultFeedback"></div>
 
             <table id="datatable1" class="table table-striped table-bordered datatable-basic">
@@ -173,12 +173,12 @@
 </div>
         {{-- </[object Object]> --}}
 
-        {{-- start of add Target Ratio modal --}}
+        {{-- start of add Target Ranges modal --}}
         <div id="approval" class="modal fade" tabindex="-1">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Target Ratio Form</h5>
+                        <h5 class="modal-title">Add Target Ranges Form</h5>
                         <button type="button" class="btn-close " data-bs-dismiss="modal">
 
                         </button>
@@ -218,20 +218,20 @@
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
+                            <button type="submit" class="btn btn-perfrom">Save Target Ranges</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        {{-- end of Target Ratio modal --}}
+        {{-- end of Target Ranges modal --}}
 
-        {{-- start of add Behaviour Ratio modal --}}
+        {{-- start of add Behaviour Ranges modal --}}
         <div id="behaviour-ratio" class="modal fade" tabindex="-1">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Add Behaviour Ratio Form</h5>
+                            <h5 class="modal-title">Add Behaviour Ranges Form</h5>
                             <button type="button" class="btn-close " data-bs-dismiss="modal">
     
                             </button>
@@ -271,20 +271,20 @@
     
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-perfrom">Save Target Ratio</button>
+                                <button type="submit" class="btn btn-perfrom">Save Target Ranges</button>
                             </div>
                         </form>
                     </div>
                 </div>
         </div>
-        {{-- end of Behaviour Ratio modal --}}
+        {{-- end of Behaviour Ranges modal --}}
 
-              {{-- start of add Time Ratio modal --}}
+              {{-- start of add Time Ranges modal --}}
               <div id="time-ratio" class="modal fade" tabindex="-1">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Add Time Ratio Form</h5>
+                            <h5 class="modal-title">Add Time Ranges Form</h5>
                             <button type="button" class="btn-close " data-bs-dismiss="modal">
     
                             </button>

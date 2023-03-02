@@ -56,7 +56,7 @@
                           <th>Task Name</th>
                           <th>Assigned To</th>
                           <th>Start Date</th>
-                          <th>End Date</th>
+                          <th>Deadline</th>
                           <th>Target</th>
                           <th>Achieved</th>
                           <th>Status</th>
@@ -71,8 +71,8 @@
                             <td>S/N</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}  </td>
-                            <td>{{ $item->start_date }}</td>
-                            <td>{{ $item->end_date }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->start_date)) }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->end_date)) }}</td>
                             <td>{{ $item->target}}</td>
                             <td>{{ $item->achieved}}</td>
                             <td>

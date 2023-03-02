@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('performance_ratios', function (Blueprint $table) {
             $table->id();
+            $table->double('target');
+            $table->double('time');
+            $table->double('behaviour');
             $table->timestamps();
         });
     }

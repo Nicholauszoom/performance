@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use DateTime;
+use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Role;
 use App\Models\User;
@@ -12,6 +14,7 @@ use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\UserRole;
+use App\Models\AdhocTask;
 use App\Models\Approvals;
 use App\Models\Promotion;
 use App\Models\TimeRatio;
@@ -31,15 +34,16 @@ use App\Models\LeaveApproval;
 use App\Models\BehaviourRatio;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
+
 use App\Models\EmployeeSpouse;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
-
 use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
+use App\Models\PerformanceRatio;
 use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
@@ -9569,6 +9573,7 @@ class GeneralController extends Controller
            $task =ProjectTask::where('id',$id)->first();
 
            $task->status = 1;
+           $task->complete_date = Carbon::now();;
 
            $task->update();
 
@@ -9576,8 +9581,6 @@ class GeneralController extends Controller
            $tasks =ProjectTask::where('project_id',$task->project_id)->get();
           
            $project = Project::where('id',$task->project_id)->first();
-        //    dd($project);
-        //    $name=$project->name;
            return view('performance.single_project',compact('project','tasks',));
        }
 
@@ -9587,6 +9590,14 @@ class GeneralController extends Controller
            $task =ProjectTask::where('id',$id)->first();
            return view('performance.asses_task',compact('task'));
        }
+
+    // For single Adhoctask Assessment Page
+       public function assess_adhoctask($id)
+       {
+           $task =AdhocTask::where('id',$id)->first();
+           return view('performance.asses_adhoctask',compact('task'));
+       }
+
 
     // For saving task Assessment 
        public function save_task_assessment(Request $request)
@@ -9598,7 +9609,26 @@ class GeneralController extends Controller
            $task->behaviour= $request->behaviour;
            $task->remark= $request->remark;
            $task->time= $request->time;
+            //For Task Performance'    
+            //For Ratio Variables 
+            $ratios=PerformanceRatio::first();
+            $target_ratio=$ratios->target;
+            $time_ratio=$ratios->time;
+            $behaviour_ratio=$ratios->behaviour;
+            // For Targets
+            $target_reached=$task->achieved;
+            $target_required=$task->target;
+            // For Behaviour
+            $behaviour=$task->behaviour;
+            // For Time
+            $d1 = new Carbon($task->start_date) ;
+            $d2 = new Carbon($task->complete_date);
+            $time_taken=$d2->diffInMinutes($d1);
+            $d3 = new Carbon($task->end_date);
+            $time_required=$d2->diffInMinutes($d1);
 
+            $performance=(($target_reached/$target_required)*$target_ratio)+(($time_taken/$time_required)*$time_ratio)+(($behaviour/100)*$behaviour_ratio);
+           $task->performance= number_format($performance, 2);
            $task->update();
 
            return view('performance.asses_task',compact('task'));
@@ -9632,26 +9662,57 @@ class GeneralController extends Controller
   
               return redirect('flex/projects');
           }
+
+        // For Deleting  Adhoc Tasks
+          public function delete_task($id)
+          {
+              $task = AdhocTask::find($id);
+
+              $task->delete();
+  
+              return redirect('flex/tasks');
+          }
         // For Viewing all Adhoc Tasks
           public function tasks()
           {
-              $data['project'] = Project::all();
+              $data['project'] = AdhocTask::all();
               return view('performance.tasks',$data);
           }
+        // For Add Adhoc Task Page
+          public function add_adhoctask()
+          {
+            $employees= EMPL::where('state',1)->get();
+
+            return view('performance.add_adhoc',compact('employees'));
+          }
         // For Saving Adhoc Task
-          public function add_adhoctask(Request $request)
+          public function save_adhoc_task(Request $request)
           {
             $task = new AdhocTask();
             $task->name = $request->name;
             $task->start_date = $request->start_date;
             $task->end_date= $request->end_date;
-            $task->project_id= $request->project;
             $task->assigned= $request->assigned;
             $task->target= $request->target;
             $task->save();
     
-            return redirect('flex/view-project/'.$request->project);
+            return redirect('flex/tasks');
           }
+
+         // For Updating completed Task Status 
+       public function completed_adhoctask($id)
+       {
+           $task =AdhocTask::where('id',$id)->first();
+
+           $task->status = 1;
+           $task->complete_date = Carbon::now();;
+
+           $task->update();
+
+        
+           $project =AdhocTask::all();
+           return view('performance.tasks',compact('project',));
+       }
 
         //   For Viewing All Performance ratios
           public function performance_ratios()
@@ -9727,6 +9788,44 @@ class GeneralController extends Controller
 
         public function performance()
         {
-            return view('performance.report');
+            $total_performance=ProjectTask::where('assigned',Auth::user()->emp_id)->sum('performance');
+            $total_behaviour=ProjectTask::where('assigned',Auth::user()->emp_id)->sum('behaviour');
+            $total_tasks=ProjectTask::where('assigned',Auth::user()->emp_id)->count();
+            // dd( $total_tasks);
+            if($total_performance>0){
+                $data['average_performance']=$total_performance/$total_tasks;
+            }
+            else
+            {
+                $data['average_performance']=0;
+            }
+            if($total_behaviour>0){
+                $data['average_behaviour']=$total_behaviour/$total_tasks;
+            }
+            else
+            {
+                $data['average_behaviour']=0;
+            }
+           
+           
+           
+            return view('performance.report',$data);
         }
+
+        public function performance_ratio()
+        {
+            return view('performance.performance-ratios');
+        }
+
+        // For Saving Performance Ratios
+          public function save_performance_ratio(Request $request)
+          {
+            $ratio = new PerformanceRatio();
+            $ratio->behaviour = $request->behaviour;
+            $ratio->target = $request->achievement;
+            $ratio->time= $request->time;
+            $ratio->save();
+    
+            return redirect('flex/performance');
+          }
 }

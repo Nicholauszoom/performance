@@ -387,7 +387,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
+                        <a href="{{ route('flex.performance') }}" class="nav-link ">
                             Performance Ratios
                         </a>
                     </li>
