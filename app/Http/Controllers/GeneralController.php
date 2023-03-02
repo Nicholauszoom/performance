@@ -9563,6 +9563,18 @@ class GeneralController extends Controller
             return view('performance.add-task',compact('project','employees'));
         }
 
+    // For Updating completed Task Status 
+       public function completed_task($id)
+       {
+           $tasks =ProjectTask::where('id',$id)->first();
+
+           $tasks->status = 1;
+
+           $tasks->update();
+           $project = Project::where('id',$tasks->project_id)->first();
+           return view('performance.single_project',compact('project','tasks'));
+       }
+
     // For single task Assessment Page
        public function assess_task($id)
        {
