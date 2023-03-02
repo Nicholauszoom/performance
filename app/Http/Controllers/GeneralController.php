@@ -9616,6 +9616,7 @@ class GeneralController extends Controller
         $task->project_id= $request->project;
         $task->assigned= $request->assigned;
         $task->target= $request->target;
+        $task->created_by= Auth::user()->emp_id;
         $task->save();
 
         return redirect('flex/view-project/'.$request->project);
@@ -9724,4 +9725,8 @@ class GeneralController extends Controller
                 return redirect('flex/performance-ratios');
             }
 
+        public function performance()
+        {
+            return view('performance.report');
+        }
 }

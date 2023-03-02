@@ -82,21 +82,36 @@
                                 </span>
                             </td>
                             <td>
+                         
+                            
+                              {{-- for completion initiation --}}
+                              @if ($item->status==0)
+
                                 <a href="{{ url('flex/completed_task/'.$item->id); }}" class="btn btn-sm bg-success text-light">
-                                    <i class="ph-check"></i>
-                                </a>
-                                <a href="" class="btn btn-sm bg-main">
+                                  <i class="ph-check"></i>
+                              </a>
+                              @endif
+                              {{-- For Task Editing and deletion --}}
+                              @if ($item->created_by==Auth::user()->emp_id)
+                                            <a href="" class="btn btn-sm bg-main">
                                     <i class="ph-pen"></i>
                                 </a>
                                 <a href="{{ url('flex/delete-project-task/'.$item->id); }}" class="btn btn-sm btn-danger">
                                     <i class="ph-trash"></i>
-                                </a>
-                                @if ($item->employee->line_manager == Auth()->user()->emp_id)
-                                <hr>   
-                                <a href="{{ url('flex/assess-task/'.$item->id); }}" class="btn btn-sm bg-main">
-                                  Task Assessment
                                 </a> 
+                              @endif
+                     
+                                {{-- For Task Assessment --}}
+                                @if ($item->status==1)
+                                  @if ($item->employee->line_manager == Auth()->user()->emp_id)
+                                  <hr>   
+                                  <a href="{{ url('flex/assess-task/'.$item->id); }}" class="btn btn-sm bg-main">
+                                    Task Assessment
+                                  </a> 
+                                  @endif
                                 @endif
+                                {{-- , --}}
+                           
                             
                             </td>
                           </tr>

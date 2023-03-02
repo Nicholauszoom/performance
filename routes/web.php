@@ -184,6 +184,8 @@ Route::middleware('auth')->group(function () {
         Route::any('completed_task/{id}','completed_task')->name('flex.completed_task');
         
 
+        // For Perfomance report
+        Route::any('performance','performance')->name('flex.performance');
         // Task Assessment Routes
         Route::any('assess-task/{id}','assess_task')->name('flex.assess-task');
         Route::any('save-task-assessment','save_task_assessment')->name('flex.save_task_assessment');
