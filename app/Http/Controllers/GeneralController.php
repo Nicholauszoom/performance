@@ -9635,7 +9635,40 @@ class GeneralController extends Controller
        }
 
 
+    // For saving task Assessment 
+    public function save_adhoctask_assessment(Request $request)
+    {
+        $task =AdhocTask::where('id',$request->id)->first();
 
+        $task->remark = $request->remark;
+        $task->achieved = $request->achievement;
+        $task->behaviour= $request->behaviour;
+        $task->remark= $request->remark;
+        $task->time= $request->time;
+         //For Task Performance'    
+         //For Ratio Variables 
+         $ratios=PerformanceRatio::first();
+         $target_ratio=$ratios->target;
+         $time_ratio=$ratios->time;
+         $behaviour_ratio=$ratios->behaviour;
+         // For Targets
+         $target_reached=$task->achieved;
+         $target_required=$task->target;
+         // For Behaviour
+         $behaviour=$task->behaviour;
+         // For Time
+         $d1 = new Carbon($task->start_date) ;
+         $d2 = new Carbon($task->complete_date);
+         $time_taken=$d2->diffInMinutes($d1);
+         $d3 = new Carbon($task->end_date);
+         $time_required=$d2->diffInMinutes($d1);
+
+         $performance=(($target_reached/$target_required)*$target_ratio)+(($time_taken/$time_required)*$time_ratio)+(($behaviour/100)*$behaviour_ratio);
+        $task->performance= number_format($performance, 2);
+        $task->update();
+
+        return view('performance.asses_adhoctask',compact('task'));
+    }
     //For Saving Project Ratio 
     public function save_project_task(Request $request)
     {
@@ -9788,9 +9821,12 @@ class GeneralController extends Controller
 
         public function performance()
         {
-            $total_performance=ProjectTask::where('assigned',Auth::user()->emp_id)->sum('performance');
+            $total_performance=(ProjectTask::where('assigned',Auth::user()->emp_id)->sum('performance'))+(AdhocTask::where('assigned',Auth::user()->emp_id)->sum('performance'));
+            $total_adhocPerformance=AdhocTask::where('assigned',Auth::user()->emp_id)->sum('performance');
+
+            $total= $total_performance+ $total_adhocPerformance;
             $total_behaviour=ProjectTask::where('assigned',Auth::user()->emp_id)->sum('behaviour');
-            $total_tasks=ProjectTask::where('assigned',Auth::user()->emp_id)->count();
+            $total_tasks=(ProjectTask::where('assigned',Auth::user()->emp_id)->count())+(AdhocTask::where('assigned',Auth::user()->emp_id)->count());
             // dd( $total_tasks);
             if($total_performance>0){
                 $data['average_performance']=$total_performance/$total_tasks;

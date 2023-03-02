@@ -124,7 +124,7 @@
 
     { x: "Very Strong ", y: " Outstanding", heat: {{ $very_strong_outstanding }}  },
     { x: "Very Strong ", y: "very Strong ", heat: {{ $very_strong }} },
-    { x: "Very Strong ", y: "Strong ", heat:  {{ $very_strong_strong }} },
+    { x: "Very Strong ", y: "Strong ", heat:  {{ $very_strong_strong }} ,value :67},
     { x: "Very Strong ", y: "Good ", heat: {{ $very_strong_good }}  },
     { x: "Very Strong ", y: "Improvement Needed", heat: {{ $very_strong_improvement }} },
 

@@ -47,7 +47,7 @@
                         @endif
 
                         <form
-                            action="{{ route('flex.save_task_assessment') }}"
+                            action="{{ route('flex.save_adhoctask_assessment') }}"
                             method="POST"
                             class="form-horizontal"
                         >
