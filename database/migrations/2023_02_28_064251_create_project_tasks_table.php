@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->double('target')->default(0);
             $table->double('achieved')->default(0);
+            $table->double('time')->default(0);
+            $table->double('behaviour')->default(0);
             $table->text('remark')->nullable();
             $table->timestamps();
         });

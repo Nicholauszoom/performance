@@ -58,6 +58,7 @@
                           <th>Start Date</th>
                           <th>End Date</th>
                           <th>Target</th>
+                          <th>Achieved</th>
                           <th>Status</th>
                           <th>Option</th>
                         </tr>
@@ -73,6 +74,7 @@
                             <td>{{ $item->start_date }}</td>
                             <td>{{ $item->end_date }}</td>
                             <td>{{ $item->target}}</td>
+                            <td>{{ $item->achieved}}</td>
                             <td>
                                 {{-- {{ $item->status }} --}}
                                 <span class="badge {{ $item->status == '1' ? 'bg-secondary':'bg-pending' }} disabled">
@@ -80,9 +82,9 @@
                                 </span>
                             </td>
                             <td>
-                                {{-- <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
-                                    <i class="ph-info"></i>
-                                </a> --}}
+                                <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                                    <i class="ph-check"></i>
+                                </a>
                                 <a href="" class="btn btn-sm bg-main">
                                     <i class="ph-pen"></i>
                                 </a>
@@ -91,7 +93,7 @@
                                 </a>
                                 @if ($item->employee->line_manager == Auth()->user()->emp_id)
                                 <hr>   
-                                <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
+                                <a href="{{ url('flex/assess-task/'.$item->id); }}" class="btn btn-sm bg-main">
                                   Task Assessment
                                 </a> 
                                 @endif

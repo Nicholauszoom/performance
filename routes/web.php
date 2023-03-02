@@ -182,6 +182,11 @@ Route::middleware('auth')->group(function () {
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
 
+        // Task Assessment Routes
+        Route::any('assess-task/{id}','assess_task')->name('flex.assess-task');
+        Route::any('save-task-assessment','save_task_assessment')->name('flex.save_task_assessment');
+      
+
         //Adhoc Tasks routes 
         Route::any('tasks','tasks')->name('flex.tasks');
         Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhoctask');

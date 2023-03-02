@@ -9563,6 +9563,30 @@ class GeneralController extends Controller
             return view('performance.add-task',compact('project','employees'));
         }
 
+    // For single task Assessment Page
+       public function assess_task($id)
+       {
+           $task =ProjectTask::where('id',$id)->first();
+           return view('performance.asses_task',compact('task'));
+       }
+
+    // For saving task Assessment 
+       public function save_task_assessment(Request $request)
+       {
+           $task =ProjectTask::where('id',$request->id)->first();
+
+           $task->remark = $request->remark;
+           $task->achieved = $request->achievement;
+           $task->behaviour= $request->behaviour;
+           $task->remark= $request->remark;
+           $task->time= $request->time;
+
+           $task->update();
+
+           return view('performance.asses_task',compact('task'));
+       }
+
+
 
     //For Saving Project Ratio 
     public function save_project_task(Request $request)
