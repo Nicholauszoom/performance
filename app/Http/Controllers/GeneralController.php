@@ -9850,17 +9850,37 @@ class GeneralController extends Controller
 
         public function performance_ratio()
         {
-            return view('performance.performance-ratios');
+
+            $ratio = PerformanceRatio::first();
+            return view('performance.performance-ratios',compact('ratio'));
         }
 
         // For Saving Performance Ratios
           public function save_performance_ratio(Request $request)
           {
-            $ratio = new PerformanceRatio();
-            $ratio->behaviour = $request->behaviour;
-            $ratio->target = $request->achievement;
-            $ratio->time= $request->time;
-            $ratio->save();
+
+            $ratio = PerformanceRatio::first();
+
+            if(($request->behaviour+$request->achievement+$request->time)!=100)
+            {
+                return redirect('flex/performance')->with('msg','Total of Performance should be equal to 100');
+            }
+            if($ratio)
+            {
+               
+                $ratio->behaviour = $request->behaviour;
+                $ratio->target = $request->achievement;
+                $ratio->time= $request->time;
+                $ratio->update();
+            }
+            else {
+                $ratio = new PerformanceRatio();
+                $ratio->behaviour = $request->behaviour;
+                $ratio->target = $request->achievement;
+                $ratio->time= $request->time;
+                $ratio->save();
+            }
+        
     
             return redirect('flex/performance');
           }
