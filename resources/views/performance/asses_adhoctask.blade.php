@@ -63,21 +63,21 @@
                                     <input type="hidden" name="oldSalary"  class="form-control"  id="oldsalary">
                                     <div class="col-4 col-lg-4">
                                         <div class="mb-3">
-                                            <label class="form-label">Task Achievemnt :</label>
-                                            <input type="text" name="achievement" id="oldLevel"   value="{{ old('emp_level') }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Task Achievement">
+                                            <label class="form-label">Task Achievement :</label>
+                                            <input type="text" name="achievement" id="oldLevel"   value="@if($task->achieved) {{ $task->achieved}} @endif" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Task Achievement">
                                             <input type="hidden" name="id" id="oldLevel"   value="{{ $task->id }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Task Achievement">
                                         </div>
                                     </div>
                                     <div class="col-4 col-lg-4">
                                         <div class="mb-3">
                                             <label class="form-label">Behaviour Ratio <small class="text-main">(0-100)</small> :</label>
-                                            <input type="text" name="behaviour" id="oldLevel"   value="{{ old('emp_level') }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Behaviour Ratio">
+                                            <input type="text" name="behaviour" id="oldLevel"   value="@if($task->behaviour) {{ $task->behaviour}} @endif" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Behaviour Ratio">
                                         </div>
                                     </div>
                                     <div class="col-4 col-lg-4">
                                         <div class="mb-3">
                                             <label class="form-label">Time Ratio <small class="text-main">(0-100)</small> :</label>
-                                            <input type="text" name="time" id="oldLevel"   value="{{ old('emp_level') }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Time Ratio">
+                                            <input type="text" name="time" id="oldLevel"   value="@if($task->time) {{ $task->time}} @endif" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Time Ratio">
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-lg-12">
