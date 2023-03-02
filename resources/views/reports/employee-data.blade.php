@@ -106,7 +106,7 @@
         <div class="col-md-4 col-4">
                 <div class="row">
                 <div class="col-6 mx-auto">
-                    <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="150px" height="150px">
+                    {{-- <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="150px" height="150px"> --}}
 
                 </div>
                 <div class="col-12">
@@ -122,7 +122,7 @@
 
             <div class="card-img-actions d-inline-block float-end my-3">
                 {{-- rounded-circle --}}
-                  <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt="">
+                  {{-- <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt=""> --}}
               </div>
 
         </div>
@@ -250,7 +250,7 @@
                     {{-- end of name information --}}
                                     </td>
             
-                                    <td style="width:50%">
+                    <td style="width:50%;height:300px;">
                     {{-- start of biography information --}}
                     <div class="col-md-12 col-md-12 col-lg-12 col-12">
                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;font-size:14px;">Identification Information</h5>

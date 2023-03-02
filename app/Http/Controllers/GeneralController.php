@@ -1934,15 +1934,15 @@ class GeneralController extends Controller
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
         //fetch Line manager data from employee table and send email
-        $linemanager_data = SysHelpers::employeeData($linemanager);
-        $fullname = $linemanager_data['full_name'];
-        $email_data = array(
-            'subject' => 'Employee Overtime Approval',
-            'view' => 'emails.linemanager.overtime-approval',
-            'email' => $linemanager_data['email'],
-            'full_name' => $fullname,
-        );
-        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+        // $linemanager_data = SysHelpers::employeeData($linemanager);
+        // $fullname = $linemanager_data['full_name'];
+        // $email_data = array(
+        //     'subject' => 'Employee Overtime Approval',
+        //     'view' => 'emails.linemanager.overtime-approval',
+        //     'email' => $linemanager_data['email'],
+        //     'full_name' => $fullname,
+        // );
+        // Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
         // dd('Email Sent Successfully');
         //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
 

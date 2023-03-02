@@ -391,6 +391,11 @@
                             Performance Ratios
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
+                            Performance Ranges
+                        </a>
+                    </li>
                 </ul>
             </li>
 

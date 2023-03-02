@@ -1,26 +1,37 @@
-<!doctype html>
-<html lang="en">
- <head>
-  <meta charset="UTF-8">
-  <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>Basic JavaScript Heat Map Chart with Custom Color Scale</title>
-  <link href="https://playground.anychart.com/MJw05U3Q/iframe" rel="canonical">
-  <meta content="HeatMap Chart" name="keywords">
-  <meta content="AnyChart - JavaScript Charts designed to be embedded and integrated" name="description">
-  <!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
-  <style>html, body, #container {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}</style>
- </head>
- <body>
-  <div id="container"></div>
+@extends('layouts.vertical', ['title' => 'All Projects'])
+
+@push('head-script')
+<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+@endpush
+
+@push('head-scriptTwo')
+<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+@endpush
+
+@section('content')
+
+<style>
+    p{
+        color:#de6866;
+    }
+</style>
+
+<div class="row">
+    {{-- <col class="" ></div>/ --}}
+    <div class="col-11">
+        <div class="container" style="height:600px" id="container"></div>
+    </div>
+    <div class="col-1 p-1 " style="background:red;width:50px;">
+    <p class="text-center" style="writing-mode: vertical-rl;text-orientation: mixed;color:white;"> Test</p>
+    </div>
+    <div class="col-8 mx-auto p-1" style="background:red;height:50px;">
+        <p class="text-center text-white"> The "how"</p>
+    </div>
+</div>
+
+
   <script src="{{ asset('js/anychart-core.min.js') }}"></script>
   <script src="{{ asset('js/anychart-heatmap.min.js') }}"></script>
   <script type="text/javascript">anychart.onDocumentReady(function () {
@@ -28,17 +39,44 @@
   // create the data 
   var data = [
 
-    { x: "High Performer", y: "High Potential", heat: 10 },
-    { x: "Medium Performer", y: "Medium Potential", heat: 20 },
-    { x: "Low Performer", y: "Low Potential", heat: 40 },
-   
-    { x: "High Performer", y: "Medium Potential", heat: 5 },
-    { x: "Medium Performer", y: "High Potential", heat: 8 },
-    { x: "Low Performer", y: "Medium Potential", heat: 9 },
-    { x: "Low Performer", y: "High Potential", heat: 9 },
+    // First Column  
+    { x: "Improvement Needed ", y: " outstanding", heat: 10 },
+    { x: "Improvement Needed ", y: "very Strong ", heat: 30 },
+    { x: "Improvement Needed ", y: "Strong ", heat: 50 },
+    { x: "Improvement Needed ", y: "Good ", heat: 20 },
+    { x: "Improvement Needed ", y: "Improvement Needed", heat: 60 },
 
-    { x: "High Performer", y: "Low Potential", heat: 5 },
-    { x: "Medium Performer", y: "Low Potential", heat: 7 },
+    // Second Column
+    { x: "Good ", y: " outstanding", heat: 10 },
+    { x: "Good ", y: "very Strong ", heat: 30 },
+    { x: "Good ", y: "Strong ", heat: 50 },
+    { x: "Good ", y: "Good ", heat: 20 },
+    { x: "Good ", y: "Improvement Needed", heat: 60 },
+
+    // Third Column
+    { x: "Strong ", y: " outstanding", heat: 10 },
+    { x: "Strong ", y: "very Strong ", heat: 30 },
+    { x: "Strong ", y: "Strong ", heat: 50 },
+    { x: "Strong ", y: "Good ", heat: 20 },
+    { x: "Strong ", y: "Improvement Needed", heat: 60 },
+
+    // Fourth Column
+
+    { x: "Very Strong ", y: " outstanding", heat: 78 },
+    { x: "Very Strong ", y: "very Strong ", heat: 50 },
+    { x: "Very Strong ", y: "Strong ", heat: 80 },
+    { x: "Very Strong ", y: "Good ", heat: 80 },
+    { x: "Very Strong ", y: "Improvement Needed", heat: 10 },
+
+    // Fifth Column
+    { x: "Outstanding ", y: " outstanding", heat: 82 },
+    { x: "Outstanding ", y: "very Strong ", heat: 78 },
+    { x: "Outstanding ", y: "Strong ", heat: 89 },
+    { x: "Outstanding ", y: "Good ", heat: 78 },
+    { x: "Outstanding ", y: "Improvement Needed", heat: 21 },
+   
+   
+
     
 
   ];        
@@ -47,19 +85,20 @@
   chart = anychart.heatMap(data);
         
   // set the chart title
-  chart.title("Human Development Index by region (2010-2018)");
+  chart.title("Performance Development Index by Region");
         
   // create and configure the color scale
   var customColorScale = anychart.scales.ordinalColor();
   customColorScale.ranges([
-    { less: 5 },
-    { from: 6, to: 10 },
-    { from: 11, to: 15 },
-    { greater: 16 }
+    { less: 20 },
+    { from: 21, to: 39 },
+    { from: 40, to: 69 },
+    { from: 70, to: 80 },
+    { greater: 80 }
   ]);
   
   // set the colors for each range, from smaller to bigger
-  customColorScale.colors(["#CF7A78", "#E69645", "#69A231", "#4D7623"]);
+  customColorScale.colors(["#736c6c", "#db9190", "#de6866", "#790f0d", "#5b0403"]);
         
   // set the color scale as the color scale of the chart
   chart.colorScale(customColorScale);
@@ -156,5 +195,61 @@ else if(index==8){
   chart.draw();
         
 });</script>
- </body>
-</html>
+
+
+        </div>
+
+        {{-- </[object Object]> --}}
+<script>
+
+jQuery(document).ready(function($){
+  
+    $('#advance_type').change(function () {
+        
+    $("#advance_type option:selected").each(function () {
+        var value = $(this).val();
+        if(value == "1") {
+            $('#amount_mid').show();
+            $("#amount_midf").removeAttr("disabled");
+            $('#monthly_deduction').hide();
+            $("#monthly_deductionf").attr("disabled", "disabled");
+           
+        } else if(value == "2") {
+            $('#amount').show();
+            $('#monthly_deduction').show();
+            $("#amountf").removeAttr("disabled");
+            $("#monthly_deductionf").removeAttr("disabled");
+            $('#amount_mid').hide();
+            $("#amount_midf").attr("disabled", "disabled");
+           
+        }
+
+    });
+  }); 
+
+  
+    $('#type').change(function () {
+        
+    $("#type option:selected").each(function () {
+        var value = $(this).val();
+        if(value == "1") {
+            $('#deduction').show();
+            $('#index_no').hide();
+            $("#index_nof").attr("disabled", "disabled");
+            $("#deductionf").removeAttr("disabled");
+           
+        } else if(value == "2") {
+            $('#index_no').show();
+            $('#deduction').hide();
+            $("#deductionf").attr("disabled", "disabled");
+            $("#index_nof").removeAttr("disabled");
+           
+        }
+
+    });
+  }); 
+
+
+});
+</script>
+ @endsection
