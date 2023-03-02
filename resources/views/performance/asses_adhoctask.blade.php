@@ -83,7 +83,7 @@
                                     <div class="col-md-12 col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Remark :</label>
-                                           <textarea name="" id="" class="form-control" rows="5" placeholder="Enter Task Remark"></textarea>
+                                           <textarea name="remark" value="@if($task->remark) {{ $task->remark}} @endif" id="" class="form-control" rows="5" placeholder="Enter Task Remark">@if($task->remark) {{ $task->remark}} @endif</textarea>
                                         </div>
                                     </div>
 
