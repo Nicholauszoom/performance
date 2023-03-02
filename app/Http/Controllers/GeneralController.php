@@ -9566,13 +9566,19 @@ class GeneralController extends Controller
     // For Updating completed Task Status 
        public function completed_task($id)
        {
-           $tasks =ProjectTask::where('id',$id)->first();
+           $task =ProjectTask::where('id',$id)->first();
 
-           $tasks->status = 1;
+           $task->status = 1;
 
-           $tasks->update();
-           $project = Project::where('id',$tasks->project_id)->first();
-           return view('performance.single_project',compact('project','tasks'));
+           $task->update();
+
+        
+           $tasks =ProjectTask::where('project_id',$task->project_id)->get();
+          
+           $project = Project::where('id',$task->project_id)->first();
+        //    dd($project);
+        //    $name=$project->name;
+           return view('performance.single_project',compact('project','tasks',));
        }
 
     // For single task Assessment Page

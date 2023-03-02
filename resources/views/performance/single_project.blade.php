@@ -82,7 +82,7 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                                <a href="{{ url('flex/completed_task/'.$item->id); }}" class="btn btn-sm bg-success text-light">
                                     <i class="ph-check"></i>
                                 </a>
                                 <a href="" class="btn btn-sm bg-main">
