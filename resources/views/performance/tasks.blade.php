@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'All Projects'])
+@extends('layouts.vertical', ['title' => 'All Adhoc Tasks'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
