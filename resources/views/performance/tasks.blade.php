@@ -66,9 +66,9 @@
                             <tr>
                                 <td>S/N</td>
                                 <td>{{ $item->name }}</td>
-                                <td>{{ $item->start_date }}</td>
-                                <td>{{ $item->end_date }}</td>
-                                <td>{{ $item->end_date }}</td>
+                                <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
+                                <td>{{  date('d-m-Y', strtotime($item->start_date)) }}</td>
+                                <td>{{  date('d-m-Y', strtotime($item->end_date))}}</td>
                                   <td>{{ $item->target }}</td>
                                 <td>
                                     {{-- {{ $item->status }}     --}}
