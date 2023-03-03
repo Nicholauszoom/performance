@@ -219,6 +219,10 @@ Route::middleware('auth')->group(function () {
         Route::any('delete-behaviour-ratio/{id}','delete_behaviour_ratio')->name('flex.delete-behaviour-ratio');
         // End of performance routes
 
+
+
+        // Start of Talent Management
+
         // start of employees routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
         Route::any('/unconfirmOvertimePayment','unconfirmOvertimePayment')->name('flex.unconfirmOvertimePayment');
