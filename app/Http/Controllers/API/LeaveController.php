@@ -45,12 +45,17 @@ class LeaveController extends Controller
         $id=auth()->user()->emp_id;
 
         $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
+        
+        $sub_category=LeaveSubType::all();
+        // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+        // $data['leaves'] =Leaves::get();
 
         $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
         return response(
             [
                 'pending_leaves'=>$pending_leaves,
-                'active_leaves'=>$active_leaves
+                'active_leaves'=>$active_leaves,
+                'sub_category'=>$sub_category
             ],200 );
     }
 

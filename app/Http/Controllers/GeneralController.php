@@ -9829,6 +9829,7 @@ class GeneralController extends Controller
             $sum_perf=0;
             $sum_behav=0;
             $e=0;
+            $val=0;
             foreach ($employee as $item) {
 
                 $total_tasks=(ProjectTask::where('assigned',$item->emp_id)->count())+(AdhocTask::where('assigned',$item->emp_id)->count());
@@ -9863,15 +9864,22 @@ class GeneralController extends Controller
                     $average_behaviour=0;
                 }
 
-            // For Improvement Needed
+            // For Behaviour Improvement Needed
+            
+
+            $data['improvement'] =+ (($average_behaviour<20 ) && ($average_performance< 20))  ? $val1=($average_behaviour+$average_performance)/2: $val1=$average_performance ;          
+            $data['improvement_good'] =+ (($average_behaviour<20 ) && ($average_performance>=20 && $average_performance <=40))  ? $val=($average_behaviour+$average_performance)/2: $val=0 ;
+            $data['improvement_strong'] =+ (($average_behaviour<20 ) && ($average_performance<20))  ? $val1=($average_behaviour+$average_performance)/2: $val1=0 ;
+
              $data['good_strong'] =+ ($average_behaviour>20 && $average_behaviour<40 && $average_performance>40 && $average_performance <60 )  ? $val=($average_behaviour+$average_performance)/2: $val=0 ;
              
+
                 //  $i=$good_strong;
                  $i++;
 
             }
             }
-            // return $data['good_strong']  ;
+            // return $data['improvement_good']  ;
 
            
             $total_performance=(ProjectTask::where('assigned',Auth::user()->emp_id)->sum('performance'))+(AdhocTask::where('assigned',Auth::user()->emp_id)->sum('performance'));

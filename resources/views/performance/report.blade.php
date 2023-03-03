@@ -43,7 +43,7 @@
             $retVal = ($average_behaviour>80  && $average_performance>80  ) ?  $outstanding=$average_behaviour+$average_performance/2 : $outstanding=0;
 
             // For Behaviour at need improvement
-            $retVal = ($average_behaviour<20  && $average_performance>20 && $average_performance <40  ) ?  $improvement_good=$average_behaviour+$average_performance/2 : $improvement_good=0;
+            // $retVal = ($average_behaviour<20  && $average_performance>20 && $average_performance <40  ) ?  $improvement_good=$average_behaviour+$average_performance/2 : $improvement_good=0;
             $retVal = ($average_behaviour<20  && $average_performance>40 && $average_performance <60  ) ?  $improvement_strong=$average_behaviour+$average_performance/2 : $improvement_strong=0;
             $retVal = ($average_behaviour<20  && $average_performance>60 && $average_performance <80  ) ?  $improvement_very_strong=$average_behaviour+$average_performance/2 :  $improvement_very_strong=0;
             $retVal = ($average_behaviour<20  && $average_performance>80  ) ?  $improvement_outstanding=$average_behaviour+$average_performance/2 : $improvement_outstanding=0;
