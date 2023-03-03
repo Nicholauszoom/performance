@@ -51,7 +51,7 @@
             // For Behaviour Good
             $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>80  ) ?  $good_outstanding=$average_behaviour+$average_performance/2 : $good_outstanding=0;
             $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>60 && $average_performance <80  ) ?  $good_very_strong=$average_behaviour+$average_performance/2 : $good_very_strong=0;
-            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>40 && $average_performance <60  ) ?  $good_strong=($average_behaviour+$average_performance)/2 : $good_strong=0;
+            // $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>40 && $average_performance <60  ) ?  $good_strong=($average_behaviour+$average_performance)/2 : $good_strong=0;
             $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_behaviour<20   ) ?  $good_improvement=$average_behaviour+$average_performance/2 : $good_improvement=0;
 
             // For  Behaviour Strong
