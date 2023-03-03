@@ -9821,6 +9821,55 @@ class GeneralController extends Controller
 
         public function performance()
         {
+
+            $employee=EMPL::all();
+            $i=0;
+            $no_task=0;
+            $sum_perf=0;
+            $sum_behav=0;
+            foreach ($employee as $item) {
+
+                $total_tasks=(ProjectTask::where('assigned',$item->emp_id)->count())+(AdhocTask::where('assigned',$item->emp_id)->count());
+                $total_performance=(ProjectTask::where('assigned',$item->emp_id)->sum('performance'))+(AdhocTask::where('assigned',$item->emp_id)->sum('performance'));
+                $total_behaviour=(ProjectTask::where('assigned',$item->emp_id)->sum('behaviour'))+(AdhocTask::where('assigned',$item->emp_id)->sum('behaviour'));
+
+                $no_task+=$total_tasks;
+                $sum_perf+=$total_performance;
+                $sum_behav+=$total_behaviour;
+                if($total_performance>0)
+                {
+                    $average_performance=$total_performance/$total_tasks;
+                    // $check = (condition) ? a : b ;
+                }
+                else
+                {
+                    $average_performance=0;
+                }
+
+                if($total_behaviour>0)
+                {
+                    $average_behaviour=$total_behaviour/$total_tasks;
+                    // $check = (condition) ? a : b ;
+                }
+                else
+                {
+                    $average_behaviour=0;
+                }
+
+                // $retVal = ( $Av_behaviour < $Av_performance) ? $outstanding=+$Av_behaviour :  $outstanding=0;
+                // $retVal = ( $Av_behaviour < 20 && $Av_performance <20) ? $improvement=+$Av_behaviour :  $improvement=0;
+                
+                    // For Diagonal
+            $retVal = ($average_behaviour<20 && $average_performance <20) ?  $need_improvement=$average_behaviour : $need_improvement=0;
+            $retVal = ($average_behaviour>20 && $average_behaviour <40 && $average_performance>20 && $average_performance <40  ) ?  $good=$average_behaviour+$average_performance/2 : $good=0;
+            $retVal = ($average_behaviour>40 && $average_behaviour <60 && $average_performance>40 && $average_performance <60  ) ?  $strong=$average_behaviour+$average_performance/2 : $strong=0;
+            $retVal = ($average_behaviour>60 && $average_behaviour <80 && $average_performance>60 && $average_performance <80  ) ?  $very_strong=$average_behaviour+$average_performance/2 : $very_strong=0;
+            $retVal = ($average_behaviour>80  && $average_performance>80  ) ?  $outstanding=$average_behaviour+$average_performance/2 : $outstanding=0;
+               
+                $i++;
+            }
+            return  $retVal;
+           
             $total_performance=(ProjectTask::where('assigned',Auth::user()->emp_id)->sum('performance'))+(AdhocTask::where('assigned',Auth::user()->emp_id)->sum('performance'));
             $total_adhocPerformance=AdhocTask::where('assigned',Auth::user()->emp_id)->sum('performance');
 
