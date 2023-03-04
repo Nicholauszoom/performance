@@ -32,7 +32,7 @@
     </div>
     {{-- id="applyLeave" --}}
     <div class="card-body">
-        <form  autocomplete="off" action="{{ url('flex/attendance/save_leave') }}"  method="post"  enctype="multipart/form-data">
+        <form  autocomplete="off" action="{{ route('flex.test') }}"  method="post"  enctype="multipart/form-data">
           @csrf
             <!-- START -->
             <div class="row">

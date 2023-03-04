@@ -222,6 +222,10 @@ Route::middleware('auth')->group(function () {
 
 
         // Start of Talent Management
+        Route::any('employee_profiles','employee_profiles')->name('flex.employee-profiles');
+        Route::any('talent-ratios','talent_ratios')->name('flex.talent-ratios');
+        Route::any('talent-ranges','talent_ranges')->name('flex.talent-range');
+
 
         // start of employees routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
@@ -354,6 +358,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/leave' ,'leave')->name('attendance.leave');
         // for my leaves routes
         Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
+        Route::any('/test','countWorkingDays')->name('flex.test');
+
         // for fetching sub leave type
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');

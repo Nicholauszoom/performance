@@ -393,7 +393,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
-                            Performance Ranges
+                            Performance Report
                         </a>
                     </li>
                 </ul>
@@ -401,26 +401,26 @@
 
             {{-- / --}}
 
-            {{-- For Performance Management --}}
-            <li class="nav-item nav-item-submenu {{ request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+            {{-- For Talent Management --}}
+            <li class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') ? 'nav-item-expand nav-item-open' : null }}">
                 <a href="#" class="nav-link">
-                    <i class="ph-folder"></i>
+                    <i class="ph-presentation-chart"></i>
                     <span>Talent Management</span>
                 </a>
-                <ul class="nav-group-sub collapse {{ request()->routeIs('flex.tasks') || request()->routeIs('flex.projects')  ? 'show' : null }}">
+                <ul class="nav-group-sub collapse {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') || request()->routeIs('flex.talent-range')   ? 'show' : null }}">
                     <li class="nav-item">
-                        <a href="{{ route('flex.projects') }}" class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
+                        <a href="{{ route('flex.employee-profiles') }}" class="nav-link {{ request()->routeIs('flex.employee-profiles') ? 'active' : null }}">
                             Employees Profiles
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.tasks') }}" class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
-                           Adhoc Tasks
+                        <a href="{{ route('flex.talent-range') }}" class="nav-link {{ request()->routeIs('flex.talent-range') ? 'active' : null }} ">
+                            Talent Ranges
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.performance') }}" class="nav-link ">
-                            Talent Ratios
+                        <a href="{{ route('flex.talent-ratios') }}" class="nav-link {{ request()->routeIs('flex.talent-ratios') ? 'active' : null }} ">
+                            Ratio Configuration
                         </a>
                     </li>
                     <li class="nav-item">

@@ -9766,7 +9766,7 @@ class GeneralController extends Controller
             $ratio->max= $request->max_value;
             $ratio->save();
     
-            return redirect('flex/performance-ratios');
+            return redirect('flex/talent-ratios');
           }
         // For Saving Time Ratios
           public function save_time_ratio(Request $request)
@@ -9777,7 +9777,7 @@ class GeneralController extends Controller
             $ratio->max= $request->max_value;
             $ratio->save();
     
-            return redirect('flex/performance-ratios');
+            return redirect('flex/talent-ratios');
           }
         // For Saving Behaviour Ratios
           public function save_behaviour_ratio(Request $request)
@@ -9788,7 +9788,7 @@ class GeneralController extends Controller
             $ratio->max= $request->max_value;
             $ratio->save();
     
-            return redirect('flex/performance-ratios');
+            return redirect('flex/talent-ratios');
           }
   
             // For Deleting  Target Ratios
@@ -9798,7 +9798,7 @@ class GeneralController extends Controller
   
                 $target->delete();
     
-                return redirect('flex/performance-ratios');
+                return redirect('flex/talent-ratios');
             }
             // For Deleting  Time Ratios
             public function delete_time_ratio($id)
@@ -9807,7 +9807,7 @@ class GeneralController extends Controller
   
                 $time->delete();
     
-                return redirect('flex/performance-ratios');
+                return redirect('flex/talent-ratios');
             }
             // For Deleting  Behaviour Ratios
             public function delete_behaviour_ratio($id)
@@ -9912,7 +9912,6 @@ class GeneralController extends Controller
 
         public function performance_ratio()
         {
-
             $ratio = PerformanceRatio::first();
             return view('performance.performance-ratios',compact('ratio'));
         }
@@ -9946,4 +9945,62 @@ class GeneralController extends Controller
     
             return redirect('flex/performance');
           }
+
+
+          public function employee_profiles()
+          {
+
+            $data['employees'] = EMPL::where('state','1')->get();
+            return view('talent.profiling',$data);
+          }
+
+         //   For Viewing All Talent ranges
+          public function talent_ranges()
+          {
+
+            $data['target_ratio'] = TargetRatio::all();
+            $data['time_ratio'] =TimeRatio::all();
+            $data['behaviour_ratio'] =BehaviourRatio::all();
+            return view('talent.talent_range',$data);
+          }
+
+          public function talent_ratios()
+          {
+              $ratio = PerformanceRatio::first();
+              return view('talent.talent-ratios',compact('ratio'));
+          }
+
+           // For Saving Talent Ratio
+           public function save_talent_ratio(Request $request)
+           {
+ 
+             $ratio = PerformanceRatio::first();
+ 
+             if(($request->behaviour+$request->achievement+$request->time)!=100)
+             {
+                 return redirect('flex/talent-ratio')->with('msg','Total of Talent Ratio should be equal to 100');
+             }
+             if($ratio)
+             {
+                
+                 $ratio->behaviour = $request->behaviour;
+                 $ratio->target = $request->achievement;
+                 $ratio->time= $request->time;
+                 $ratio->update();
+             }
+             else {
+                 $ratio = new PerformanceRatio();
+                 $ratio->behaviour = $request->behaviour;
+                 $ratio->target = $request->achievement;
+                 $ratio->time= $request->time;
+                 $ratio->save();
+             }
+         
+     
+             return redirect('flex/performance');
+           }
+ 
+
+          
+
 }
