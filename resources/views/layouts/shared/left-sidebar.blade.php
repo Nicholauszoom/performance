@@ -200,6 +200,15 @@
                         @endcan
                         {{-- / --}}
 
+                        {{-- start of  Grievances link --}}
+                        @can('view-grivance')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.grievancesCompain') ? 'active' : null }}"
+                                href="{{ route('flex.grievancesCompain') }}"> Employees Grievances</a>
+                        </li>
+                        @endcan
+                        {{-- / --}}
+
                     </ul>
                 </li>
                 {{-- / --}}

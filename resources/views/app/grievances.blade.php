@@ -37,7 +37,8 @@
                   <div class="card-body">
                 @if(Session::has('note'))      {{ session('note') }}  @endif  
 
-                    <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/grievances/" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="{{ route('flex.save-grievances') }}" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                      @csrf
                       <div class="row">
                       
                       <div class="form-group">
@@ -60,7 +61,7 @@
                         <label class="" for="first-name"> Proof  If Any<br> ( eg. Document, Picture etc..) 
                         </label>
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                        <input type='file' name='userfile'  class="form-control" />
+                        <input type='file' name='attachment'  class="form-control" />
                         </div>
                       </div> 
                       
@@ -76,14 +77,15 @@
                       </div> 
                       <hr>
                       <div class="form-group">
-                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="col-md-12 col-sm-12 col-xs-12 mb-1 ">
                           <button type="submit" name="submit" class="btn btn-main float-end">Submit Grievance</button>
                         </div>
                       </div>
+                      <hr class="mt-2">
                     </div>
                       
                       </form><br><br> 
-                  <hr>
+                 
                       <!-- Whole View -->
                <div class="col-md-12 col-sm-4 col-xs-12">
                 <div class="card">
@@ -119,7 +121,7 @@
                         // if ($department->num_rows() > 0){
                           foreach ($my_grievances as $row) {  ?>
                           <tr id="domain<?php echo $row->id;?>">
-                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."'>"."<div class='col-md-12'>
+                            <td><?php if($row->attachment != NULL) echo "<a download= 'attachment' href ='". asset('storage/grievances-attachment').$row->attachment."'>"."<div class='col-md-12'>
                                 <span class='btn btn-sm bg-main'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
                             <td><?php echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
@@ -130,7 +132,7 @@
                             
                             <?php if( $row->status==0 ) 
                             echo '<div class="col-md-12">
-                                <span class="label label-danger">ON PROGRESS</span></div>'; 
+                                <span class="badge bg-pending">ON PROGRESS</span></div>'; 
                                 else
                                 echo '<div class="col-md-12">
                                 <span class="label label-success">SOLVED</span></div>'; ?></td>
@@ -151,7 +153,7 @@
                     
                     <!--Table Grievances Board-->
                     
-              <?php if(session('griev_board')!='' || session('griev_hr')!='') { ?>
+              {{-- <?php if(session('griev_board')!='' || session('griev_hr')!='') { ?> --}}
 
               <div class="col-md-12 col-sm-4 col-xs-12">
                 <div class="card">
@@ -203,24 +205,24 @@
                             
                             <?php if( $row->status==0 ){ 
                             echo '<div class="col-md-12">
-                                <span class="label label-danger">ON PROGRESS</span></div>'; }
+                                <span class="badge bg-pending">ON PROGRESS</span></div>'; }
                                 else {
                                 echo '<div class="col-md-12">
                                 <span class="label label-success">SOLVED</span></div>'; } ?></td>
                             
                             <td class="options-width">
-                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/".$row->id; ?>">
-                                  <button  class="btn btn-info btn-xs">INFO</button></a>&nbsp;&nbsp;
+                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/<?php $row->id; ?>">
+                                  <button  class="btn btn-info btn-sm">INFO</button></a>&nbsp;&nbsp;
                                 
                               <?php if( $row->status==0 ){ ?>
                               <a href="javascript:void(0)" onclick="markSolved(<?php echo $row->id;?>)" title="Mark as Resolved" >
-                                  <button  class="btn btn-success btn-xs">MARK SOLVED</button></a>
+                                  <button  class="btn btn-success btn-sm">MARK SOLVED</button></a>
 
                             <?php }  else { ?>
 
 
                               <a href="javascript:void(0)" onclick="markUnsolved(<?php echo $row->id;?>)" title="Mark as Not Resolved" >
-                                  <button  class="btn btn-danger btn-xs">MARK UNSOLVED</button></a>
+                                  <button  class="btn btn-danger btn-sm">MARK UNSOLVED</button></a>
                             <?php } ?> 
                             
                             </td> 
@@ -234,7 +236,7 @@
                     
                   </div>
                 </div>
-              </div> <?php } ?>
+              {{-- </div> <?php } ?> --}}
               <!-- Whole View -->
 
                   </div>

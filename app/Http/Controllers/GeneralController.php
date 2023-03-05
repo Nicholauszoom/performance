@@ -8999,9 +8999,8 @@ class GeneralController extends Controller
         $holiday = new Holiday();
         $holiday->name = $request->name;
         $holiday->date = $request->date;
-        $holiday->recurring = $request->recurring == true ? '1' : '0';;
+        $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->save();
-
 
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
@@ -9398,7 +9397,14 @@ class GeneralController extends Controller
     // End of Leave Approvals
 
 
+   // For All Grievances
 
+   public function all_grievances()
+   {   
+       $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
+       $data['other_grievances']=Grievance::all();
+       return view('app/grievances',$data); 
+   }
 
 
     // Start of self services
@@ -9459,9 +9465,28 @@ class GeneralController extends Controller
 
     public function my_grievances()
     {   
-        $data['my_grievances']=Grievance::all();
-        return view('app/grievances',$data); 
+        $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
+        $data['other_grievances']=Grievance::all();
+        return view('my-services.grievances',$data); 
     }
+
+        // For Saving New Grievances
+        public function save_grievance(Request $request)
+        {
+            $grievance = new Grievance();
+            $grievance->title = $request->title;
+            $grievance->description = $request->description;
+            $grievance->empID= Auth::user()->emp_id;
+            if ($request->hasfile('attachment')) {
+                $newAttachmentName = $request->attachment->hashName();
+                $request->attachment->move(public_path('storage\grieavences-attachments'), $newAttachmentName);
+                $grievance->attachment = $newAttachmentName;
+            }
+            $grievance->anonymous = $request->anonymous == true ? '1' : '0';
+            $grievance->save();
+    
+            return redirect('flex/my-grievences');
+        }
     // For My Biodata
     public function my_biodata(Request $request)
     {

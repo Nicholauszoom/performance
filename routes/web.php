@@ -137,8 +137,9 @@ Route::middleware('auth')->group(function () {
 
         // start of grievances routes
         Route::any('/my-grievences','my_grievances')->name('flex.my-grievances');
+        Route::any('/grievences','grievances')->name('flex.grievances');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
-        Route::any('/save-complain','saveComplain')->name('flex.saveComplain');
+        Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
 
         // end of grievances routes
 
