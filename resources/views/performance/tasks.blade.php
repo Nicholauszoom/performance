@@ -1,15 +1,12 @@
 @extends('layouts.vertical', ['title' => 'All Adhoc Tasks'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
-
 @section('content')
 
 
@@ -43,10 +40,10 @@
 
                     <div class="clearfix"></div>
                   </div>
-                  <div class="card-body">
+                  <div class="">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div> 
-                    <table id="datatable" class="table table-striped table-bordered">
+                    <table id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
                           <th>S/N</th>
@@ -62,9 +59,11 @@
 
 
                       <tbody>
+                        <?php $i=1; ?>
                         @foreach($project as $item)
                             <tr>
-                                <td>S/N</td>
+                             
+                                <td>{{ $i++; }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
                                 <td>{{  date('d-m-Y', strtotime($item->start_date)) }}</td>

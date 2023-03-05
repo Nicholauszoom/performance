@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('employee_performances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('empID');
-            $table->double('performance');
-            $table->double('behaviour');
+            $table->double('performance')->nullable();
+            $table->double('behaviour')->nullable();
             $table->foreignId('task_id');
             $table->string('type');
             $table->timestamps();

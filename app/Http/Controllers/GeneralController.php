@@ -9682,8 +9682,24 @@ public function cancel_grievance($id)
            $task->performance= number_format($performance, 2);
            $task->update();
 
-
-           
+           $perf=EmployeePerformance::where('task_id',$task->id)->first();   
+           if ($perf) {
+            $perf->performance= $task->performance;
+           $perf->behaviour= $task->behaviour;
+           $perf->update();
+           }
+           else {
+            $perf=new EmployeePerformance();   
+            $perf->empID= $task->assigned;
+            $perf->performance= $task->performance;
+            $perf->behaviour= $task->behaviour;
+            $perf->task_id= $task->id;
+            $perf->type='project';
+            $perf->save();
+ 
+           }
+         
+       
 
            return view('performance.asses_task',compact('task'));
        }
@@ -9721,6 +9737,24 @@ public function cancel_grievance($id)
         $task->performance= number_format($performance, 2);
         $task->update();
 
+        $perf=EmployeePerformance::where('task_id',$task->id)->first();   
+        if ($perf) {
+         $perf->performance= $task->performance;
+        $perf->behaviour= $task->behaviour;
+        $perf->update();
+        }
+        else {
+         $perf=new EmployeePerformance();   
+         $perf->empID= $task->assigned;
+         $perf->performance= $task->performance;
+         $perf->behaviour= $task->behaviour;
+         $perf->task_id= $task->id;
+         $perf->type='Adhoc';
+         $perf->save();
+
+        }
+      
+
         return view('performance.asses_adhoctask',compact('task'));
     }
     //For Saving Project Ratio 
@@ -9743,18 +9777,23 @@ public function cancel_grievance($id)
         // For Deleting  Project Tasks
           public function delete_project_task($id)
           {
-              $project = ProjectTask::find($id);
-
-              $project->delete();
+              $task = ProjectTask::find($id);
+              $performance=EmployeePerformance::where('task_id',$task->id)->first();
+              //For Employee Performance Deletion 
+              if ($performance) {$performance->delete();}
+              $id=$task->project_id;
+              $task->delete();
   
-              return redirect('flex/projects');
+              return redirect('flex/view-project/'.$id)->with('msg','Project Task Was Deleted Successfully!');
           }
 
         // For Deleting  Adhoc Tasks
           public function delete_task($id)
           {
               $task = AdhocTask::find($id);
-
+              $performance=EmployeePerformance::where('task_id',$task->id)->first();
+              //For Employee Performance Deletion 
+              if ($performance) {$performance->delete();}
               $task->delete();
   
               return redirect('flex/tasks');
@@ -9796,7 +9835,23 @@ public function cancel_grievance($id)
 
            $task->update();
 
-        
+           $perf=EmployeePerformance::where('task_id',$task->id)->first();   
+           if ($perf) {
+            $perf->performance= $task->performance;
+           $perf->behaviour= $task->behaviour;
+           $perf->update();
+           }
+           else {
+            $perf=new EmployeePerformance();   
+            $perf->empID= $task->assigned;
+            $perf->performance= $task->performance;
+            $perf->behaviour= $task->behaviour;
+            $perf->task_id= $task->id;
+            $perf->type='Adhoc';
+            $perf->save();
+ 
+           }
+         
            $project =AdhocTask::all();
            return view('performance.tasks',compact('project',));
        }
@@ -9878,65 +9933,7 @@ public function cancel_grievance($id)
 
             // $employee=EMPL::where('emp_id',Auth::user()->emp_id)->get();
             $employee=EMPL::all();
-            $i=0;
-            $no_task=0;
-            $sum_perf=0;
-            $sum_behav=0;
-            $e=0;
-            $val=0;
-            foreach ($employee as $item) {
-
-                $total_tasks=(ProjectTask::where('assigned',$item->emp_id)->count())+(AdhocTask::where('assigned',$item->emp_id)->count());
-                $total_performance=(ProjectTask::where('assigned',$item->emp_id)->sum('performance'))+(AdhocTask::where('assigned',$item->emp_id)->sum('performance'));
-                $total_behaviour=(ProjectTask::where('assigned',$item->emp_id)->sum('behaviour'))+(AdhocTask::where('assigned',$item->emp_id)->sum('behaviour'));
-
-                if ($total_performance>0 &&$total_behaviour>0 ) {
-                    // $total_tasks=+0;
-                //    $e++;
-            
-                
-                $no_task+=$total_tasks;
-                $sum_perf+=$total_performance;
-                $sum_behav+=$total_behaviour;
-                if($total_performance>0)
-                {
-                    $average_performance=$total_performance/$total_tasks;
-                    // $check = (condition) ? a : b ;
-                }
-                else
-                {
-                    $average_performance=0;
-                }
-
-                if($total_behaviour>0)
-                {
-                    $average_behaviour=$total_behaviour/$total_tasks;
-                    // $check = (condition) ? a : b ;
-                }
-                else
-                {
-                    $average_behaviour=0;
-                }
-
-            // For Behaviour Improvement Needed
-            
-
-            $data['improvement'] =+ (($average_behaviour<20 ) && ($average_performance< 20))  ? $val1=($average_behaviour+$average_performance)/2: $val1=$average_performance ;          
-            $data['improvement_good'] =+ (($average_behaviour<20 ) && ($average_performance>=20 && $average_performance <=40))  ? $val=($average_behaviour+$average_performance)/2: $val=0 ;
-            $data['improvement_strong'] =+ (($average_behaviour<20 ) && ($average_performance<20))  ? $val1=($average_behaviour+$average_performance)/2: $val1=0 ;
-
-             $data['good_strong'] =+ ($average_behaviour>20 && $average_behaviour<40 && $average_performance>40 && $average_performance <60 )  ? $val=($average_behaviour+$average_performance)/2: $val=0 ;
-             
-
-                //  $i=$good_strong;
-                 $i++;
-
-            }
-            }
-            // return $data['improvement_good']  ;
-
            
-         
             $item1=0;
             $item1_count=0;
 
@@ -10018,24 +10015,21 @@ public function cancel_grievance($id)
 
             {
                 $performance = DB::table('employee')
-                ->join('project_tasks', 'employee.emp_id', '=', 'project_tasks.assigned')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id',$item->emp_id)
-                ->whereNotNull('project_tasks.performance')
+                ->whereNotNull('employee_performances.performance')
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
-                ->avg('project_tasks.performance')
+                ->avg('employee_performances.performance')
                 // ->get()
                 ;
 
                 $behaviour = DB::table('employee')
-                ->join('project_tasks', 'employee.emp_id', '=', 'project_tasks.assigned')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id',$item->emp_id)
-                ->whereNotNull('project_tasks.behaviour')
+                ->whereNotNull('employee_performances.behaviour')
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
-                ->avg('project_tasks.behaviour')
+                ->avg('employee_performances.behaviour')
                 ;
-              
-                // var_dump($behaviour);
-                // var_dump($performance);
                 
                
                 // For Behaviour Needs Improvement
@@ -10116,7 +10110,7 @@ public function cancel_grievance($id)
 
             // For Colum 1
             $data['improvement'] = ($item1>0) ? $item1/$item1_count : 0 ;
-            $data['improvement_good ']= ($item2>0) ? $item2/$item2_count : 0 ;
+            $data['improvement_good']= ($item2>0) ? $item2/$item2_count : 0 ;
             $data['improvement_strong']= ($item3>0) ? $item3/$item3_count : 0 ;
             $data['improvement_very_strong'] = ($item4>0) ? $item4/$item4_count : 0 ;
             $data['improvement_outstanding'] = ($item5>0) ? $item5/$item5_count : 0 ;

@@ -1,15 +1,12 @@
 @extends('layouts.vertical', ['title' => 'View Project'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
-
 @section('content')
 
 
@@ -33,7 +30,10 @@
                         <small>Start Date: {{ $project->start_date}}</small>
                         <br>
                         <small>End Date: {{ $project->end_date}}</small>
-             
+                       
+                      <a href="{{ route('flex.projects') }}" class="btn btn-perfrom float-end mx-1">
+                          <i class="ph-list me-2"></i> All Projects
+                      </a>
                     <a href="{{ url('/flex/add-task/'.$project->id) }}" class="btn btn-main float-end">
                         <i class="ph-plus me-2"></i> Add Task
                       </a>
@@ -46,7 +46,7 @@
 
                     {{-- <div class="clearfix"></div> --}}
                   </div>
-                  <div class="card-body">
+                  <div class="">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div> 
                     <table id="datatable" class="table table-striped table-bordered datatable-basic">
@@ -106,7 +106,7 @@
                                   @if ($item->employee->line_manager == Auth()->user()->emp_id)
                                   <hr>   
                                   <a href="{{ url('flex/assess-task/'.$item->id); }}" class="btn btn-sm bg-main">
-                                    Task Assessment
+                                    Assessment
                                   </a> 
                                   @endif
                                 @endif
