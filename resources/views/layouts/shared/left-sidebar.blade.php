@@ -39,13 +39,13 @@
                 </li>
 
                 <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions')|| request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.my-grievances') || request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions')|| request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-user"></i>
                         <span>My Services</span>
                     </a>
 
-                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
+                    <ul class="nav-group-sub collapse {{ request()->routeIs('flex.my-grievances')|| request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
                         {{-- start of active employee link --}}
                      
                         <li class="nav-item">
@@ -82,6 +82,15 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
                                 href="{{ route('flex.my-pensions') }}"> Pensions </a>
+                        </li>
+
+                        {{-- / --}}
+
+                        {{--  start of Grievances link --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.my-grievances') ? 'active' : null }}"
+                                href="{{ route('flex.my-grievances') }}" > Grievances </a>
                         </li>
 
                         {{-- / --}}

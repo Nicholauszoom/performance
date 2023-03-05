@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Dashboard'])
+@extends('layouts.vertical', ['title' => 'Grievances'])
 
 @push('head-script')
 <script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
@@ -23,7 +23,8 @@
               <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="card">
                   <div class="card-head">
-                    <h2><i class="fa fa-user"></i> Complaints </h2>
+                    <h2 class="m-2"><i class="fa fa-user"></i> Grievance </h2>
+                    <hr>
                     <!--<h2><i class="fa fa-user"></i> Grievances and Discplinary </h2>-->
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -34,37 +35,37 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="card-body">
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                @if(Session::has('note'))      {{ session('note') }}  @endif  
 
                     <form id="demo-form2" autocomplete="off" enctype="multipart/form-data" action="<?php echo  url(''); ?>/flex/grievances/" method="post" data-parsley-validate class="form-horizontal form-label-left">
-
+                      <div class="row">
                       
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Title
                         </label>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
-                        <textarea placeholder="Title" cols="10" required="" class="form-control col-md-7 col-xs-12"  name="title"  rows="2"></textarea>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <input type="text" name="title" placeholder="Title" required class="form-control">
                         </div>
                       </div> <br>
                       
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Description(Body)
+                      <div class="form-group col-12">
+                        <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name">Description(Body)
                         </label>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
                         <textarea placeholder="Description" cols="10" class="form-control col-md-7 col-xs-12"  name="description" required="" rows="5"></textarea>
                         </div>
-                      </div> <br>
+                      </div> 
                       
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"> Proof  If Any<br> ( eg. Document, Picture etc..) 
+                      <div class="form-group col-6 mb-2">
+                        <label class="" for="first-name"> Proof  If Any<br> ( eg. Document, Picture etc..) 
                         </label>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
-                        <input type='file' name='userfile'  />
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                        <input type='file' name='userfile'  class="form-control" />
                         </div>
-                      </div> <br>
+                      </div> 
                       
-                        <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                        <div class="form-group col-6 mb-2">
+                        <label class="mb-4" for="first-name">
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                            <label class="containercheckbox">Report as Ananymous
@@ -73,22 +74,22 @@
                           </label>
                         </div>
                       </div> 
-                      
+                      <hr>
                       <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button type="submit" name="submit" class="btn btn-warning">SUBMIT</button>
+                        <div class="col-md-12 col-sm-12 col-xs-12 ">
+                          <button type="submit" name="submit" class="btn btn-main float-end">Submit Grievance</button>
                         </div>
                       </div>
-                      
+                    </div>
                       
                       </form><br><br> 
-
+                  <hr>
                       <!-- Whole View -->
                <div class="col-md-12 col-sm-4 col-xs-12">
                 <div class="card">
                   <div class="card-head">
                     <!--<h2>All Grievances </h2>-->
-                    <h2>My  Complaints </h2>
+                    <h2 class="m-2">My  Grievances </h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -104,7 +105,6 @@
                     <table  class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>S/N</th>
                           <th>Evidence</th> 
                           <th>Title</th> 
                           <th>Description</th>
@@ -114,15 +114,13 @@
                         </tr>
                       </thead>
 
-
                       <tbody>
                         <?php
                         // if ($department->num_rows() > 0){
                           foreach ($my_grievances as $row) {  ?>
                           <tr id="domain<?php echo $row->id;?>">
-                            <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."'>"."<div class='col-md-12'>
-                                <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
+                                <span class='btn btn-sm bg-main'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
                             <td><?php echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
                             <td><?php $datesValue = str_replace('-', '/', $row->DATED);
@@ -138,8 +136,8 @@
                                 <span class="label label-success">SOLVED</span></div>'; ?></td>
                             
                             <td class="options-width">
-                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/".$row->id; ?>">
-                                  <button  class="btn btn-info btn-xs">INFO</button></a>
+                            <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/<?php echo $row->id; ?>">
+                                  <button  class="btn btn-info btn-sm">INFO</button></a>
                                
                             </td> 
                             </tr>
@@ -245,9 +243,9 @@
           </div>
         </div>
         <!-- /page content -->
-
+{{-- 
        @include("app/includes/customtask")
-        ?>
+        ?> --}}
 
 <script type="text/javascript">
 

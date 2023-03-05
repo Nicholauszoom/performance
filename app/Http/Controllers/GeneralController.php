@@ -63,6 +63,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
+use App\Models\Grievance;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
@@ -9454,7 +9455,13 @@ class GeneralController extends Controller
         return view('my-services/pensions', $data);
     }
 
+    // For My Grievances
 
+    public function my_grievances()
+    {   
+        $data['my_grievances']=Grievance::all();
+        return view('app/grievances',$data); 
+    }
     // For My Biodata
     public function my_biodata(Request $request)
     {
