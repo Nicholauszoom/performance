@@ -70,7 +70,7 @@
     ]);
     
     // set the colors for each range, from smaller to bigger
-    customColorScale.colors(["#CF7A78", "#E69645", "#69A231", "#4D7623"]);
+    customColorScale.colors(["#CF7A78", "#E69645", "#6dd25c", "#2f9c41"]);
           
     // set the color scale as the color scale of the chart
     chart.colorScale(customColorScale);

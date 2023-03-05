@@ -388,12 +388,12 @@
 
 
         {{-- For Performance Management --}}
-              <li class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+              <li class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance')  ||  request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                 <a href="#" class="nav-link">
                     <i class="ph-folder"></i>
                     <span>Performance Management</span>
                 </a>
-                <ul class="nav-group-sub collapse {{ request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects')  ? 'show' : null }}">
+                <ul class="nav-group-sub collapse {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects')  ? 'show' : null }}">
                     <li class="nav-item">
                         <a href="{{ route('flex.projects') }}" class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
                             Projects
@@ -405,7 +405,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.performance') }}" class="nav-link ">
+                        <a href="{{ route('flex.performance') }}" class="nav-link {{ request()->routeIs('flex.performance') ? 'active' : null }}">
                             Performance Ratios
                         </a>
                     </li>

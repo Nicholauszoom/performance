@@ -9625,6 +9625,8 @@ public function cancel_grievance($id)
            $performance->performance= $task->performance;
            $performance->behaviour= $task->behaviour;
            $performance->task_id= $task->id;
+           $performance->target= $task->target;
+           $performance->achieved= $task->achieved;
            $performance->type='project';
            $performance->save();
 
@@ -9686,6 +9688,8 @@ public function cancel_grievance($id)
            if ($perf) {
             $perf->performance= $task->performance;
            $perf->behaviour= $task->behaviour;
+           $perf->target= $task->target;
+           $perf->achieved= $task->achieved;
            $perf->update();
            }
            else {
@@ -9693,6 +9697,8 @@ public function cancel_grievance($id)
             $perf->empID= $task->assigned;
             $perf->performance= $task->performance;
             $perf->behaviour= $task->behaviour;
+            $perf->achieved= $task->achieved;
+            $perf->target= $task->target;
             $perf->task_id= $task->id;
             $perf->type='project';
             $perf->save();
@@ -9741,6 +9747,9 @@ public function cancel_grievance($id)
         if ($perf) {
          $perf->performance= $task->performance;
         $perf->behaviour= $task->behaviour;
+        $perf->target= $task->target;
+        $perf->achieved= $task->achieved;
+        
         $perf->update();
         }
         else {
@@ -9749,6 +9758,8 @@ public function cancel_grievance($id)
          $perf->performance= $task->performance;
          $perf->behaviour= $task->behaviour;
          $perf->task_id= $task->id;
+         $perf->target= $task->target;
+         $perf->achieved= $task->achieved;
          $perf->type='Adhoc';
          $perf->save();
 
@@ -9839,6 +9850,8 @@ public function cancel_grievance($id)
            if ($perf) {
             $perf->performance= $task->performance;
            $perf->behaviour= $task->behaviour;
+           $perf->target= $task->target;
+           $perf->achieved= $task->achieved;
            $perf->update();
            }
            else {
@@ -9847,6 +9860,8 @@ public function cancel_grievance($id)
             $perf->performance= $task->performance;
             $perf->behaviour= $task->behaviour;
             $perf->task_id= $task->id;
+            $perf->target= $task->target;
+            $perf->achieved= $task->achieved;
             $perf->type='Adhoc';
             $perf->save();
  

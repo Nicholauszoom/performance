@@ -23,7 +23,7 @@
         <tr>
           <th>Emp_ID</th>
           <th>Employee Name</th>
-          <th>Academic Qualification</th>
+          <th>Skills Qualification</th>
           <th>Performance Results</th>
           <th>Productivity Rate</th>
           <th hidden></th>
@@ -38,8 +38,29 @@
             <td>{{ $item->emp_id }}</td>
             <td>{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</td>
             <td>Academic Qualification</td>
-            <td> performance-report </td>
-            <td>Productivity Rate</td>
+            <td> 
+                @php
+                $performance= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('performance');
+                @endphp
+
+                @if ($performance)
+                {{ $performance }}
+                @else
+                    N/L
+                @endif
+              
+            </td>
+            <td>
+                @php
+                $achieved= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
+                $target= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('target');
+                @endphp
+                @if ($achieved>0)
+                {{   number_format( $achieved/$target, 2)  }}
+                @else
+                    N/L
+                @endif
+            </td>
            <td hidden></td>
           </tr>
         @endforeach

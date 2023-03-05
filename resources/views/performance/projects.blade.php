@@ -68,7 +68,7 @@
                                 <td>
                                   @php
                                   $tasks= App\Models\ProjectTask::where('project_id',$item->id)->count();
-                                   @endphp
+                                  @endphp
 
                                    {{ $tasks  }}
                                 </td>

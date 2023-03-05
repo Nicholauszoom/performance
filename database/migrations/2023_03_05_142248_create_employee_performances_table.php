@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('empID');
             $table->double('performance')->nullable();
             $table->double('behaviour')->nullable();
+            $table->double('target')->nullable();
+            $table->double('achieved')->nullable();
             $table->foreignId('task_id');
             $table->string('type');
             $table->timestamps();
