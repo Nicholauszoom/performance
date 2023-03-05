@@ -140,6 +140,9 @@ Route::middleware('auth')->group(function () {
         Route::any('/grievences','grievances')->name('flex.grievances');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
         Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
+        Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
+        
+        Route::any('/grievance_details/{id}','grievance_details')->name('flex.grievance_details');
 
         // end of grievances routes
 
@@ -429,7 +432,8 @@ Route::middleware('auth')->group(function () {
 
     //bank loans routes
     Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
-        Route::get('/all-loans', 'index')->name('bank-loans');;
+        Route::get('/all-loans', 'index')->name('bank-loans');
+        Route::get('/delete-loan/{id}', 'delete_loan')->name('flex.delete-loans');;
         Route::get('/loans-export', 'export')->name('loans.export');
         Route::post('/loans-import', 'import')->name('loans.import');
         Route::get('/loans-template', 'template')->name('loans.template');
@@ -497,7 +501,6 @@ Route::middleware('auth')->group(function () {
         Route::any('/department_structure','department_structure')->name('flex.department_structure');
         Route::any('/Oldorganization_structure','Oldorganization_structure')->name('flex.Oldorganization_structure');
         Route::any('/grievances','grievances')->name('flex.grievances');
-        Route::any('/grievance_details','grievance_details')->name('flex.grievance_details');
         Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
     });

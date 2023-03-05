@@ -63,6 +63,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
+use App\Models\EmployeePerformance;
 use App\Models\Grievance;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
@@ -6904,103 +6905,7 @@ class GeneralController extends Controller
         }
     }
 
-    public function grievance_details(Request $request)
-    {
-        $id = $request->input('id');
-
-        $data['title'] = 'Grievances and Disciplinary';
-        $data['details'] = $this->flexperformance_model->grievance_details($id);
-
-        return view('app.grievance_details', $data);
-
-        if (isset($_POST["submit"])) {
-
-            $id = $request->input('id');
-
-            $config = array(
-                'upload_path' => "./uploads/grievances/",
-                'file_name' => "FILE" . date("Ymd-His"),
-                'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
-                'overwrite' => true,
-            );
-            $path = "/uploads/grievances/";
-
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload()) {
-                // echo "skip"; exit();
-
-                $uploadData = $this->upload->data();
-
-                $updates = array(
-                    'remarks' => $request->input("remarks"),
-                    'support_document' => $path . $uploadData["file_name"],
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                );
-
-                $this->flexperformance_model->forward_grievance($updates, $id);
-                session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-                return redirect('/flex/grievances');
-            } else {
-
-                $data = array(
-                    'remarks' => $request->input("remarks"),
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                );
-            }
-
-            $this->flexperformance_model->forward_grievance($data, $id);
-            session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-            return redirect('/flex/grievances');
-        }
-
-        //   SOLVE
-
-        if (isset($_POST["solve"])) {
-
-            $id = $request->input('id');
-
-            $config = array(
-                'upload_path' => "./uploads/grievances/",
-                'file_name' => "FILE" . date("Ymd-His"),
-                'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
-                'overwrite' => true,
-            );
-            $path = "/uploads/grievances/";
-
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload()) {
-                // echo "skip"; exit();
-
-                $uploadData = $this->upload->data();
-
-                $updates = array(
-                    'remarks' => $request->input("remarks"),
-                    'support_document' => $path . $uploadData["file_name"],
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                    'status' => 1,
-                );
-
-                $this->flexperformance_model->forward_grievance($updates, $id);
-                session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
-                return redirect('/flex/grievances');
-            } else {
-
-                $data = array(
-                    'remarks' => $request->input("remarks"),
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                    'status' => 1,
-                );
-            }
-
-            $this->flexperformance_model->forward_grievance($data, $id);
-            session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
-            return redirect('/flex/grievances');
-        }
-    }
+  
     public function resolve_grievance(Request $request)
     {
 
@@ -9406,6 +9311,114 @@ class GeneralController extends Controller
        return view('app/grievances',$data); 
    }
 
+// For Single Grievance
+   public function grievance_details($id)
+   {
+    //    $id = ;
+
+       $data['title'] = 'Grievances Details';
+       $data['details'] = $this->flexperformance_model->grievance_details($id);
+
+       return view('app.grievance_details', $data);
+
+    //    if (isset($_POST["submit"])) {
+
+    //        $id = $request->input('id');
+
+    //        $config = array(
+    //            'upload_path' => "./uploads/grievances/",
+    //            'file_name' => "FILE" . date("Ymd-His"),
+    //            'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
+    //            'overwrite' => true,
+    //        );
+    //        $path = "/uploads/grievances/";
+
+    //        $this->load->library('upload', $config);
+    //        if ($this->upload->do_upload()) {
+    //            // echo "skip"; exit();
+
+    //            $uploadData = $this->upload->data();
+
+    //            $updates = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'support_document' => $path . $uploadData["file_name"],
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //            );
+
+    //            $this->flexperformance_model->forward_grievance($updates, $id);
+    //            session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
+    //            return redirect('/flex/grievances');
+    //        } else {
+
+    //            $data = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //            );
+    //        }
+
+    //        $this->flexperformance_model->forward_grievance($data, $id);
+    //        session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
+    //        return redirect('/flex/grievances');
+    //    }
+
+    //    //   SOLVE
+
+    //    if (isset($_POST["solve"])) {
+
+    //        $id = $request->input('id');
+
+    //        $config = array(
+    //            'upload_path' => "./uploads/grievances/",
+    //            'file_name' => "FILE" . date("Ymd-His"),
+    //            'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
+    //            'overwrite' => true,
+    //        );
+    //        $path = "/uploads/grievances/";
+
+    //        $this->load->library('upload', $config);
+    //        if ($this->upload->do_upload()) {
+    //            // echo "skip"; exit();
+
+    //            $uploadData = $this->upload->data();
+
+    //            $updates = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'support_document' => $path . $uploadData["file_name"],
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //                'status' => 1,
+    //            );
+
+    //            $this->flexperformance_model->forward_grievance($updates, $id);
+    //            session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
+    //            return redirect('/flex/grievances');
+    //        } else {
+
+    //            $data = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //                'status' => 1,
+    //            );
+    //        }
+
+    //        $this->flexperformance_model->forward_grievance($data, $id);
+    //        session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
+    //        return redirect('/flex/grievances');
+    //    }
+   }
+
+//    For Cancel  Grievances
+public function cancel_grievance($id)
+{
+    $project = Grievance::where('id',$id)->first();
+
+    $project->delete();
+
+    return redirect('flex/my-grievances');
+}
 
     // Start of self services
 
@@ -9607,7 +9620,15 @@ class GeneralController extends Controller
 
            $task->update();
 
-        
+           $performance=new EmployeePerformance();   
+           $performance->empID= $task->assigned;
+           $performance->performance= $task->performance;
+           $performance->behaviour= $task->behaviour;
+           $performance->task_id= $task->id;
+           $performance->type='project';
+           $performance->save();
+
+
            $tasks =ProjectTask::where('project_id',$task->project_id)->get();
           
            $project = Project::where('id',$task->project_id)->first();
@@ -9660,6 +9681,9 @@ class GeneralController extends Controller
             $performance=(($target_reached/$target_required)*$target_ratio)+(($time_taken/$time_required)*$time_ratio)+(($behaviour/100)*$behaviour_ratio);
            $task->performance= number_format($performance, 2);
            $task->update();
+
+
+           
 
            return view('performance.asses_task',compact('task'));
        }

@@ -139,7 +139,14 @@
                             
                             <td class="options-width">
                             <a title="Info and Details" href="<?php echo  url(''); ?>/flex/grievance_details/<?php echo $row->id; ?>">
-                                  <button  class="btn btn-info btn-sm">INFO</button></a>
+                                  <button  class="btn btn-info btn-sm">INFO</button>
+                            </a>
+
+                            {{-- <a href="" title="Cancel" class="icon-2 info-tooltip btn btn-sm btn-danger"
+                            onclick="cancelGrievance(<?php echo $row->id; ?>)"  > --}}
+                            <a title="Cancel" href="<?php echo  url(''); ?>/flex/cancel-grievance/<?php echo $row->id; ?>" class="btn btn-sm btn-danger">
+                                <i class="ph ph-trash"></i>
+                            </a>
                                
                             </td> 
                             </tr>
@@ -218,3 +225,132 @@
 
 
  @endsection
+
+ @push('footer-script')
+    <script>
+      
+        function approvePromotion(id) {
+
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Promote This Employee?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Confirm it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var overtimeid = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/approve-promotion') }}/" + overtimeid
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+                        /*$('#status'+id).fadeOut('fast', function(){
+                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                           });
+                        $('#record'+id).fadeOut('fast', function(){
+                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                           });*/
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    })
+                    .fail(function() {
+                        alert('Promotion Approval Failed!! ...');
+                    });
+                }
+            });
+
+        }
+
+
+
+        function cancelGrievance(id) {
+
+            Swal.fire({
+                title: 'Are You Sure You Want to Cancel This Grievance ?',
+                // text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = id;
+
+                    $.ajax({
+                        url: "{{ url('flex/cancel-grievance') }}/" + id
+                    })
+                    .done(function(data) {
+                        $('#resultfeedOvertime').fadeOut('fast', function() {
+                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                        });
+
+                        $('#status' + id).fadeOut('fast', function() {
+                            $('#status' + id).fadeIn('fast').html(
+                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                                );
+                        });
+
+                        // alert('Request Cancelled Successifully!! ...');
+
+                        Swal.fire(
+                            'Cancelled!',
+                            'Grievance was  Cancelled Successifully!!.',
+                            'success'
+                        )
+
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    })
+                    .fail(function() {
+                        Swal.fire(
+                            'Failed!',
+                            'Grievance Cancellation Failed!! ....',
+                            'success'
+                        )
+
+                        alert('Grievance Cancellation Failed!! ...');
+                    });
+                }
+            });
+
+            // if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
+
+            //     var overtimeid = id;
+
+            //     $.ajax({
+            //             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+            //         })
+            //         .done(function(data) {
+            //             $('#resultfeedOvertime').fadeOut('fast', function() {
+            //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
+            //             });
+
+            //             $('#status' + id).fadeOut('fast', function() {
+            //                 $('#status' + id).fadeIn('fast').html(
+            //                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+            //                     );
+            //             });
+
+            //             alert('Request Cancelled Successifully!! ...');
+
+            //             setTimeout(function() {
+            //                 location.reload();
+            //             }, 1000);
+            //         })
+            //         .fail(function() {
+            //             alert('Overtime Cancellation Failed!! ...');
+            //         });
+            // }
+        }
+    </script>
+@endpush
