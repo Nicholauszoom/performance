@@ -91,10 +91,10 @@
                                             <textarea name="hearing_description" id="hearing" class="form-control" placeholder="Enter Hearing details here.." rows="6"></textarea>
                                         </div>
                                     </div>
-                                <div class="col-md-12 col-lg-12 mb-3">
-                                    <label class="form-label ">Findings</label>
+                                <div type="hidden" class="col-md-12 col-lg-12 mb-3">
+                                    {{-- <label class="form-label ">Findings</label> --}}
 
-                                    <textarea name="findings" id="content"  class="form-control" placeholder="Enter Case Findings Here.." rows="4"></textarea>
+                                    {{-- <textarea name="findings" type="hidden" id="content"  class="form-control" placeholder="Enter Case Findings Here.." rows="4"></textarea> --}}
                                         @error('findings')
                                             <p class="text-danger mt-1"> Input field Error </p>
                                         @enderror

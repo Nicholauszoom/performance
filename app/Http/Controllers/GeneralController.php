@@ -8411,7 +8411,7 @@ class GeneralController extends Controller
         $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
         $data['countrydrop'] = $this->flexperformance_model->nationality();
         $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
-        // $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
         $data['pension'] = $this->flexperformance_model->pension_fund();
 
         $details = EmployeeDetail::where('employeeID', $empID)->first();
@@ -8440,11 +8440,9 @@ class GeneralController extends Controller
 
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
         $data['employees'] = $this->flexperformance_model->Employee();
-        // $data['bankdrop'] = $this->flexperformance_model->bank();
         $data['parent'] = 'Employee';
         $data['child'] = 'Update employee';
         $data['employees'] = $this->flexperformance_model->Employee();
-        // dd($data);
 
         // return view('employee.updateEmployee', $data);
         return view('employee.employee-profile', $data, compact('details', 'emergency', 'spouse', 'children', 'parents'));
