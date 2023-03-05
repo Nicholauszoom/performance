@@ -105,7 +105,8 @@
         <div class="col-4"></div>
         <div class="col-md-4 col-4">
                 <div class="row">
-                <div class="col-6 mx-auto">
+                <div class="col-6 mx-auto" style="width:10%;margin:auto">
+                    <img src="" alt="Img Here">
                     {{-- <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="150px" height="150px"> --}}
 
                 </div>
@@ -121,6 +122,7 @@
         <div class="col-md-4 col-4">
 
             <div class="card-img-actions d-inline-block float-end my-3">
+                <img src="" alt="passport">
                 {{-- rounded-circle --}}
                   {{-- <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt=""> --}}
               </div>

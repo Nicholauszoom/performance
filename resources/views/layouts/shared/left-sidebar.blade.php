@@ -392,7 +392,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
+                        <a href="{{ route('flex.performance-report') }}" class="nav-link ">
                             Performance Report
                         </a>
                     </li>
@@ -424,7 +424,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('flex.performance-ratios') }}" class="nav-link ">
+                        <a href="{{ route('flex.talent-matrix') }}" class="nav-link ">
                             Talent Matrix
                         </a>
                     </li>

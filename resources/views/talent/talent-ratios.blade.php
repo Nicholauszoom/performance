@@ -60,7 +60,7 @@
                                     <div class="col-12 col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Skill  <small class="text-main">(0-100)</small> :</label>
-                                            <input type="text" name="behaviour" id="oldLevel"   value="@if($ratio->behaviour) {{ $ratio->behaviour}} @endif" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Behaviour Ratio">
+                                            <input type="text" name="behaviour" id="oldLevel"   value="@if($ratio->skill) {{ $ratio->skill}} @endif" class="form-control emp_level @error('emp_level') is-invalid @enderror" placeholder="Behaviour Ratio">
                                         </div>
                                     </div>
                             

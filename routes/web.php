@@ -226,6 +226,8 @@ Route::middleware('auth')->group(function () {
         Route::any('talent-ratios','talent_ratios')->name('flex.talent-ratios');
         Route::any('talent-ranges','talent_ranges')->name('flex.talent-range');
 
+        Route::any('talent-matrix','talent_matrix')->name('flex.talent-matrix');
+
 
         // start of employees routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');

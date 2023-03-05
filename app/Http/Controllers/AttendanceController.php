@@ -356,7 +356,7 @@ class AttendanceController extends Controller
 
 
 // start of save leave Function
-public function countWorkingDays(Request $request) {
+function countWorkingDays(Request $request) {
 
   // Convert start and end dates to Carbon instances
   $startDate = \Carbon\Carbon::parse($request->start );
