@@ -27,11 +27,11 @@
     <div class="col-11">
         <div class="container" style="height:600px" id="container"></div>
     </div>
-    <div class="col-1 p-1 bg-danger " style="width:50px;border:2px solid black;">
-    <p class="text-center float-end" style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The "what" - delivery against objectives</p>
+    <div class="col-1 p-1 bg-danger " style="width:50px;border:2px solid black;writing-mode: vertical-rl;text-orientation: mixed;">
+    <p class="text-center " style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center"> <i class="ph-arrow-fat-up"></i> The "what" - delivery against objectives</p>
     </div>
     <div class="col-8 mx-auto p-1 bg-danger" style="height:50px;border:2px solid black;">
-        <p class="text-center text-white"> The "how" - Values in Action</p>
+        <p class="text-center text-white"> <i class="ph-arrow-fat-right"></i> The "how" - Values in Action</p>
     </div>
 </div>
 

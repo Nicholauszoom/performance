@@ -9890,7 +9890,7 @@ public function cancel_grievance($id)
             $ratio->max= $request->max_value;
             $ratio->save();
     
-            return redirect('flex/talent-ratios');
+            return redirect('flex/talent-ranges');
           }
         // For Saving Time Ratios
           public function save_time_ratio(Request $request)
@@ -9901,7 +9901,7 @@ public function cancel_grievance($id)
             $ratio->max= $request->max_value;
             $ratio->save();
     
-            return redirect('flex/talent-ratios');
+            return redirect('flex/talent-ranges');
           }
         // For Saving Behaviour Ratios
           public function save_behaviour_ratio(Request $request)
@@ -9912,7 +9912,7 @@ public function cancel_grievance($id)
             $ratio->max= $request->max_value;
             $ratio->save();
     
-            return redirect('flex/talent-ratios');
+            return redirect('flex/talent-ranges');
           }
   
             // For Deleting  Target Ratios
@@ -9922,7 +9922,7 @@ public function cancel_grievance($id)
   
                 $target->delete();
     
-                return redirect('flex/talent-ratios');
+                return redirect('flex/talent-ranges');
             }
             // For Deleting  Time Ratios
             public function delete_time_ratio($id)
@@ -9931,7 +9931,7 @@ public function cancel_grievance($id)
   
                 $time->delete();
     
-                return redirect('flex/talent-ratios');
+                return redirect('flex/talent-ranges');
             }
             // For Deleting  Behaviour Ratios
             public function delete_behaviour_ratio($id)
@@ -9940,13 +9940,11 @@ public function cancel_grievance($id)
   
                 $behaviour->delete();
     
-                return redirect('flex/performance-ratios');
+                return redirect('flex/talent-ranges');
             }
 
         public function performance()
         {
-
-            // $employee=EMPL::where('emp_id',Auth::user()->emp_id)->get();
             $employee=EMPL::all();
            
             $item1=0;
@@ -10260,9 +10258,172 @@ public function cancel_grievance($id)
 
            public function talent_matrix()
            {
+            $employee=EMPL::all();
+           
+            $item1=0;
+            $item1_count=0;
+
+            $item2=0;
+            $item2_count=0;
+
+            $item3=0;
+            $item3_count=0;
+
+            $item4=0;
+            $item4_count=0;
+
+            $item5=0;
+            $item5_count=0;
+
+            $item6=0;
+            $item6_count=0;
+
+            $item7=0;
+            $item7_count=0;
+
+            $item8=0;
+            $item8_count=0;
+
+            $item9=0;
+            $item9_count=0;
+
+            $item10=0;
+            $item10_count=0;
+
+            $item11=0;
+            $item11_count=0;
+            
+            $item12=0;
+            $item12_count=0;
+
+            $item13=0;
+            $item13_count=0;
+
+            
+            $item14=0;
+            $item14_count=0;
+
+            
+            $item15=0;
+            $item15_count=0;
+            
+            $item16=0;
+            $item16_count=0;
+                        
+            $item17=0;
+            $item17_count=0;
+                        
+            $item18=0;
+            $item18_count=0;
+                        
+            $item19=0;
+            $item19_count=0;
+                        
+            $item20=0;
+            $item20_count=0;
+                        
+            $item21=0;
+            $item21_count=0;
+                        
+            $item22=0;
+            $item22_count=0;
+                        
+            $item23=0;
+            $item23_count=0;
+                        
+            $item24=0;
+            $item24_count=0;
+                        
+            $item25=0;
+            $item25_count=0;
+
+            foreach($employee as $item)
+
+            {
+                $performance = DB::table('employee')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->where('employee.emp_id',$item->emp_id)
+                ->whereNotNull('employee_performances.performance')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                ->avg('employee_performances.performance')
+                // ->get()
+                ;
+
+                $behaviour = DB::table('employee')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->where('employee.emp_id',$item->emp_id)
+                ->whereNotNull('employee_performances.behaviour')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                ->avg('employee_performances.behaviour')
+                ;
+                
+                $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
+                $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');
+
+                if ($achieved>0)
+                { $potential=  number_format( $achieved/$target, 2);  }
+                else{ $potential= 0;}
+               
+                // For Low Potential
+                if ($potential >0 && $potential <20 ) {
+                //For Low performer
+                if ($performance > 0 && $performance <20 ) { $item1=$item1+$performance; $item1_count++;}
+                // For Medium Performer
+                if ($performance >= 20 && $performance <40 ) { $item2=$item2+$performance; $item2_count++;}
+                // For High Performer
+                if ($performance >= 40 && $performance <60 ) { $item3=$item3+$performance; $item3_count++;}
+                }
+
+                  // For Medium Potential
+                if ($potential >= 20 && $potential < 40) {
+                //For Low Performer 
+                if ($performance > 0 && $performance <20 ) { $item4=$item4+$performance; $item4_count++;}
+                // For Medium Performer
+                if ($performance >= 20 && $performance <40 ) { $item5=$item5+$performance; $item5_count++;}
+                // For High Performer
+                if ($performance >= 40 && $performance <60 ) { $item6=$item6+$performance; $item6_count++;}
+                  }
+
+                    // For High Potential
+                if ($potential >= 40 && $potential < 60) {
+                    //For Improvement 
+                    if ($performance > 0 && $performance <20 ) { $item7=$item7+$performance; $item8_count++;}
+                    // For Improvement Good
+                    if ($performance >= 20 && $performance <40 ) { $item8=$item8+$performance; $item8_count++;}
+                    // For Improvement Strong
+                    if ($performance >= 40 && $performance <60 ) { $item9=$item9+$performance; $item9_count++;}
+                 }
+
+           
+                 
+                // var_dump($performance);
+            }
+
+            // For Colum 1
+            $data['high_performer_potential'] = ($item1>0) ? $item1/$item1_count : 0 ;
+            $data['high_performer_medium_potential']= ($item2>0) ? $item2/$item2_count : 0 ;
+            $data['high_performer_low_potential']= ($item3>0) ? $item3/$item3_count : 0 ;
+
+    
+            // For Column 2
+            $data['medium_performer_high_potential'] = ($item4>0) ? $item4/$item6_count : 0 ;
+            $data['medium_performer_potential']= ($item5>0) ? $item5/$item5_count : 0 ;
+            $data['medium_performer_low_potential']= ($item6>0) ? $item6/$item6_count : 0 ;
+
+            // For Column 3
+            $data['low_performer_high_potential'] = ($item7>0) ? $item7/$item7_count : 0 ;
+            $data['low_performer_medium_potential']= ($item8>0) ? $item8/$item8_count : 0 ;
+            $data['low_performer_potential']= ($item9>0) ? $item9/$item9_count : 0 ;
+
+        
 
 
-            return view('talent.talent_matrix');
+            // return  $data;
+
+ 
+           
+
+            return view('talent.talent_matrix',$data);
            }
  
 

@@ -23,11 +23,11 @@
     <div class="col-11">
         <div class="container" style="height:600px" id="container"></div>
     </div>
-    <div class="col-1 p-1 bg-danger " style="width:50px;border:2px solid black;">
-    <p class="text-center float-end" style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The "what" - delivery against objectives</p>
+    <div class="col-1 p-1 bg-main text-center" style="width:50px;border:2px solid black;writing-mode: vertical-rl;text-orientation: mixed;">
+    <p class="text-center " style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center">&nbsp; POTENTIAL AXIS</p>
     </div>
-    <div class="col-8 mx-auto p-1 bg-danger" style="height:50px;border:2px solid black;">
-        <p class="text-center text-white"> The "how" - Values in Action</p>
+    <div class="col-8 mx-auto p-1 bg-main" style="height:50px;border:2px solid black;">
+        <p class="text-center text-white">PERFORMANCE AXIS</p>
     </div>
 </div>
 
@@ -39,17 +39,20 @@
     // create the data 
     var data = [
   
-      { x: "High Performer", y: "High Potential", heat: 10 },
-      { x: "Medium Performer", y: "Medium Potential", heat: 20 },
-      { x: "Low Performer", y: "Low Potential", heat: 40 },
-     
-      { x: "High Performer", y: "Medium Potential", heat: 5 },
-      { x: "Medium Performer", y: "High Potential", heat: 8 },
-      { x: "Low Performer", y: "Medium Potential", heat: 9 },
-      { x: "Low Performer", y: "High Potential", heat: 9 },
+      { x: "High Performer", y: "High Potential", heat: {{ $high_performer_potential }} },
+      { x: "High Performer", y: "Medium Potential", heat: {{ $high_performer_medium_potential }} },
+      { x: "High Performer", y: "Low Potential", heat: {{ $high_performer_low_potential}} },
+
+      { x: "Medium Performer", y: "Medium Potential", heat: {{ $medium_performer_potential}} },
+      { x: "Medium Performer", y: "Low Potential", heat: {{ $medium_performer_low_potential}} },
+      { x: "Medium Performer", y: "High Potential", heat: {{ $medium_performer_high_potential}} },
+
+      { x: "Low Performer", y: "Low Potential", heat: {{ $low_performer_potential}} },
+      { x: "Low Performer", y: "Medium Potential", heat: {{ $low_performer_medium_potential}} },
+      { x: "Low Performer", y: "High Potential", heat: {{ $low_performer_high_potential}} },
   
-      { x: "High Performer", y: "Low Potential", heat: 5 },
-      { x: "Medium Performer", y: "Low Potential", heat: 7 },
+
+
       
   
     ];        
@@ -58,7 +61,7 @@
     chart = anychart.heatMap(data);
           
     // set the chart title
-    chart.title("Human Development Index by region (2010-2018)");
+    chart.title("PERFORMANCE/POTENTIAL GRID");
           
     // create and configure the color scale
     var customColorScale = anychart.scales.ordinalColor();
@@ -70,7 +73,7 @@
     ]);
     
     // set the colors for each range, from smaller to bigger
-    customColorScale.colors(["#CF7A78", "#E69645", "#6dd25c", "#2f9c41"]);
+    customColorScale.colors(["#e31c20", "#E69645", "#6dd25c", "#2f9c41"]);
           
     // set the color scale as the color scale of the chart
     chart.colorScale(customColorScale);
