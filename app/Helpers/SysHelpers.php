@@ -2,13 +2,14 @@
 
 namespace App\Helpers;
 
-use App\Models\AuditTrail;
+use Carbon\Carbon;
 use App\Models\EMPL;
-use App\Models\FinancialLogs;
 use App\Models\Position;
+use App\Models\AuditTrail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\FinancialLogs;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SysHelpers
 {
@@ -89,11 +90,11 @@ class SysHelpers
 
     // For Working Days
 
-    function countWorkingDays(Request $request) {
+   public static function countWorkingDays($start, $end) {
 
         // Convert start and end dates to Carbon instances
-        $startDate = \Carbon\Carbon::parse($request->start );
-        $endDate = \Carbon\Carbon::parse($request->end);
+        $startDate = \Carbon\Carbon::parse($start );
+        $endDate = Carbon::parse($end);
         
         // Count the number of days between start and end date
         $days = $endDate->diffInDays($startDate);

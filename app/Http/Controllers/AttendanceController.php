@@ -394,6 +394,9 @@ function countWorkingDays(Request $request) {
 
       public function savelLeave(Request $request) {
      
+
+   
+     
         //For Gender 
         $gender=Auth::user()->gender;
         if($gender=="Male"){$gender=1; }else { $gender=2;  }
@@ -421,12 +424,7 @@ function countWorkingDays(Request $request) {
         $start = $request->start;
         $end = $request->end;
 
-        $date1=date('d-m-Y', strtotime($start));
-        $date2=date('d-m-Y', strtotime($end));
-        $start_date = Carbon::createFromFormat('d-m-Y', $date1);
-        $end_date = Carbon::createFromFormat('d-m-Y', $date2);
-        $different_days = $start_date->diffInDays($end_date);
-
+        $different_days = SysHelpers::countWorkingDays($start,$end);
 
        
         // For Total Leave days
@@ -436,8 +434,7 @@ function countWorkingDays(Request $request) {
         $d1 = new DateTime (Auth::user()->hire_date);
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
-        $day=$interval->days;
-        // $working_month=$interval->format('%months');
+        $day= SysHelpers::countWorkingDays($d1,$d2);
 
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
@@ -514,7 +511,6 @@ function countWorkingDays(Request $request) {
            // For Leaves with no sub Category 
             else
             {
-              // $days=$different_days;
 
               $total_leave_days=$leaves+$different_days;
 
