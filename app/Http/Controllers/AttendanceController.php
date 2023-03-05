@@ -418,8 +418,6 @@ function countWorkingDays(Request $request) {
 
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
 
-        // dd($annualleaveBalance);
-       
         // For  Requested days
         $start = $request->start;
         $end = $request->end;
