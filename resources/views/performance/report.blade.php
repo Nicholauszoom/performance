@@ -44,7 +44,7 @@
   var data = [
 
     // First Column  
-    { x: "Improvement Needed ", y: " Outstanding", heat: {{ $improvement_outstanding }}},
+    { x: "Improvement Needed ", y: " Outstanding", heat: {{ $improvement_outstanding  }} },
     { x: "Improvement Needed ", y: "very Strong ", heat:{{ $improvement_very_strong }} },
     { x: "Improvement Needed ", y: "Strong ", heat: {{ $improvement_strong }}},
     { x: "Improvement Needed ", y: "Good ", heat: {{ $improvement_good }} },

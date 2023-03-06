@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Carbon\Carbon;
 use App\Models\EMPL;
+use App\Models\Holiday;
 use App\Models\Position;
 use App\Models\AuditTrail;
 use Illuminate\Http\Request;
@@ -90,7 +91,8 @@ class SysHelpers
 
     // For Working Days
 
-   public static function countWorkingDays($start, $end) {
+   public static function countWorkingDays($start, $end) 
+   {
 
         // Convert start and end dates to Carbon instances
         $startDate = \Carbon\Carbon::parse($start );
@@ -125,4 +127,22 @@ class SysHelpers
         // Return the number of working days
         return $workingDays;
       }
+
+
+    //   For Holidays Counting
+
+    public static function countHolidays($start, $end) 
+    {
+ 
+         // Convert start and end dates to Carbon instances
+         $startDate = Carbon::parse($start );
+         $endDate = Carbon::parse($end);
+ 
+         // Create an array of holidays
+        $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->count();
+
+     
+
+         return $holidays;
+       }
 }

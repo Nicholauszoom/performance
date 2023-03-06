@@ -8950,6 +8950,23 @@ class GeneralController extends Controller
     }
     // end of update holiday function
 
+
+    // For Updating Holiday Year
+    public function updateHolidayYear()
+    {
+        $holiday=Holiday::where('recurring','1')->get();
+
+        foreach($holiday as $value){
+            $new_date = Carbon::parse($value->date)->setYear(date('Y'));
+
+            $holid = Holiday::find($value->id);
+            $holid->date =$new_date;
+            $holid->update();
+        }
+        return redirect('flex/holidays/')->with('msg', 'Holiday was Updated successfully !');
+        
+    }
+
     // start of delete holiday function
     public function deleteHoliday($id)
     {
@@ -9596,9 +9613,18 @@ public function cancel_grievance($id)
         {
             $project = Project::find($id);
 
-            $project->delete();
+            $tasks=ProjectTask::where('project_id',$project->id)->get();
+            foreach($tasks as $item)
+            {
+                $performance=EmployeePerformance::where('task_id',$item->id)->first();                
+                //For Employee Performance Deletion 
+                    if ($performance) {$performance->delete();}
+                    $item->delete();
+                }
+                
+                $project->delete();
 
-            return redirect('flex/projects');
+                return redirect('flex/projects');
         }
 
         // For Adding Task      
@@ -10122,39 +10148,39 @@ public function cancel_grievance($id)
             }
 
             // For Colum 1
-            $data['improvement'] = ($item1>0) ? $item1/$item1_count : 0 ;
-            $data['improvement_good']= ($item2>0) ? $item2/$item2_count : 0 ;
-            $data['improvement_strong']= ($item3>0) ? $item3/$item3_count : 0 ;
-            $data['improvement_very_strong'] = ($item4>0) ? $item4/$item4_count : 0 ;
-            $data['improvement_outstanding'] = ($item5>0) ? $item5/$item5_count : 0 ;
+            $data['improvement'] = ($item1>0) ? $item1_count : 0 ;
+            $data['improvement_good']= ($item2>0) ? $item2_count : 0 ;
+            $data['improvement_strong']= ($item3>0) ? $item3_count : 0 ;
+            $data['improvement_very_strong'] = ($item4>0) ? $item4_count : 0 ;
+            $data['improvement_outstanding'] = ($item5>0) ? $item5_count : 0 ;
 
             // For Column 2
-            $data['good_improvement'] = ($item6>0) ? $item6/$item6_count : 0 ;
-            $data['good']= ($item7>0) ? $item7/$item7_count : 0 ;
-            $data['good_strong']= ($item8>0) ? $item8/$item8_count : 0 ;
-            $data['good_very_strong'] = ($item9>0) ? $item9/$item9_count : 0 ;
-            $data['good_outstanding'] = ($item10>0) ? $item10/$item10_count : 0 ;
+            $data['good_improvement'] = ($item6>0) ? $item6_count : 0 ;
+            $data['good']= ($item7>0) ? $item7_count : 0 ;
+            $data['good_strong']= ($item8>0) ? $item8_count : 0 ;
+            $data['good_very_strong'] = ($item9>0) ? $item9_count : 0 ;
+            $data['good_outstanding'] = ($item10>0) ? $item10_count : 0 ;
 
             // For Column 3
-            $data['strong_improvement'] = ($item11>0) ? $item11/$item11_count : 0 ;
-            $data['strong_good']= ($item12>0) ? $item12/$item12_count : 0 ;
-            $data['strong']= ($item13>0) ? $item13/$item13_count : 0 ;
-            $data['strong_very_strong'] = ($item14>0) ? $item14/$item14_count : 0 ;
-            $data['strong_outstanding'] = ($item15>0) ? $item10/$item15_count : 0 ;
+            $data['strong_improvement'] = ($item11>0) ? $item11_count : 0 ;
+            $data['strong_good']= ($item12>0) ? $item12_count : 0 ;
+            $data['strong']= ($item13>0) ? $item13_count : 0 ;
+            $data['strong_very_strong'] = ($item14>0) ? $item14_count : 0 ;
+            $data['strong_outstanding'] = ($item15>0) ? $item15_count : 0 ;
 
             // For Column 4
-            $data['very_strong_improvement'] = ($item16>0) ? $item16/$item16_count : 0 ;
-            $data['very_strong_good']= ($item17>0) ? $item17/$item17_count : 0 ;
-            $data['very_strong_strong']= ($item18>0) ? $item18/$item18_count : 0 ;
-            $data['very_strong'] = ($item19>0) ? $item19/$item19_count : 0 ;
-            $data['very_strong_outstanding'] = ($item20>0) ? $item20/$item20_count : 0 ;
+            $data['very_strong_improvement'] = ($item16>0) ? $item16_count : 0 ;
+            $data['very_strong_good']= ($item17>0) ? $item17_count : 0 ;
+            $data['very_strong_strong']= ($item18>0) ? $item18_count : 0 ;
+            $data['very_strong'] = ($item19>0) ? $item19_count : 0 ;
+            $data['very_strong_outstanding'] = ($item20>0) ? $item20_count : 0 ;
 
             // For Column 5
-            $data['outstanding_improvement'] = ($item21>0) ? $item21/$item21_count : 0 ;
-            $data['outstanding_good']= ($item22>0) ? $item22/$item22_count : 0 ;
-            $data['outstanding_strong']= ($item23>0) ? $item23/$item23_count : 0 ;
-            $data['outstanding_very_strong'] = ($item24>0) ? $item24/$item24_count : 0 ;
-            $data['outstanding'] = ($item25>0) ? $item25/$item25_count : 0 ;
+            $data['outstanding_improvement'] = ($item21>0) ? $item21_count : 0 ;
+            $data['outstanding_good']= ($item22>0) ? $item22_count : 0 ;
+            $data['outstanding_strong']= ($item23>0) ? $item23_count : 0 ;
+            $data['outstanding_very_strong'] = ($item24>0) ? $item24_count : 0 ;
+            $data['outstanding'] = ($item25>0) ? $item25_count : 0 ;
 
 
             // return  $data;
@@ -10287,56 +10313,7 @@ public function cancel_grievance($id)
             $item9=0;
             $item9_count=0;
 
-            $item10=0;
-            $item10_count=0;
-
-            $item11=0;
-            $item11_count=0;
-            
-            $item12=0;
-            $item12_count=0;
-
-            $item13=0;
-            $item13_count=0;
-
-            
-            $item14=0;
-            $item14_count=0;
-
-            
-            $item15=0;
-            $item15_count=0;
-            
-            $item16=0;
-            $item16_count=0;
-                        
-            $item17=0;
-            $item17_count=0;
-                        
-            $item18=0;
-            $item18_count=0;
-                        
-            $item19=0;
-            $item19_count=0;
-                        
-            $item20=0;
-            $item20_count=0;
-                        
-            $item21=0;
-            $item21_count=0;
-                        
-            $item22=0;
-            $item22_count=0;
-                        
-            $item23=0;
-            $item23_count=0;
-                        
-            $item24=0;
-            $item24_count=0;
-                        
-            $item25=0;
-            $item25_count=0;
-
+           
             foreach($employee as $item)
 
             {
@@ -10394,34 +10371,24 @@ public function cancel_grievance($id)
                     if ($performance >= 40 && $performance <60 ) { $item9=$item9+$performance; $item9_count++;}
                  }
 
-           
-                 
-                // var_dump($performance);
             }
 
             // For Colum 1
-            $data['high_performer_potential'] = ($item1>0) ? $item1/$item1_count : 0 ;
-            $data['high_performer_medium_potential']= ($item2>0) ? $item2/$item2_count : 0 ;
-            $data['high_performer_low_potential']= ($item3>0) ? $item3/$item3_count : 0 ;
+            $data['high_performer_potential'] = ($item1>0) ? $item1_count : 0 ;
+            $data['high_performer_medium_potential']= ($item2>0) ? $item2_count : 0 ;
+            $data['high_performer_low_potential']= ($item3>0) ? $item3_count : 0 ;
 
     
             // For Column 2
-            $data['medium_performer_high_potential'] = ($item4>0) ? $item4/$item6_count : 0 ;
-            $data['medium_performer_potential']= ($item5>0) ? $item5/$item5_count : 0 ;
-            $data['medium_performer_low_potential']= ($item6>0) ? $item6/$item6_count : 0 ;
+            $data['medium_performer_high_potential'] = ($item4>0) ? $item6_count : 0 ;
+            $data['medium_performer_potential']= ($item5>0) ? $item5_count : 0 ;
+            $data['medium_performer_low_potential']= ($item6>0) ? $item6_count : 0 ;
 
             // For Column 3
-            $data['low_performer_high_potential'] = ($item7>0) ? $item7/$item7_count : 0 ;
-            $data['low_performer_medium_potential']= ($item8>0) ? $item8/$item8_count : 0 ;
-            $data['low_performer_potential']= ($item9>0) ? $item9/$item9_count : 0 ;
+            $data['low_performer_high_potential'] = ($item7>0) ? $item7_count : 0 ;
+            $data['low_performer_medium_potential']= ($item8>0) ? $item8_count : 0 ;
+            $data['low_performer_potential']= ($item9>0) ? $item9_count : 0 ;
 
-        
-
-
-            // return  $data;
-
- 
-           
 
             return view('talent.talent_matrix',$data);
            }

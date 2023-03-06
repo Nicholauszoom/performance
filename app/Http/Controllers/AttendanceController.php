@@ -356,41 +356,7 @@ class AttendanceController extends Controller
 
 
 // start of save leave Function
-function countWorkingDays(Request $request) {
 
-  // Convert start and end dates to Carbon instances
-  $startDate = \Carbon\Carbon::parse($request->start );
-  $endDate = \Carbon\Carbon::parse($request->end);
-  
-  // Count the number of days between start and end date
-  $days = $endDate->diffInDays($startDate);
-  
-  // Initialize a counter for working days
-  $workingDays = 0;
-
-  // Loop through each day between start and end date
-  for ($i = 0; $i <= $days; $i++) {
-      
-      // Get the current date
-      $currentDate = $startDate->copy()->addDays($i);
-      
-      // Check if the current day is a weekend (Saturday or Sunday)
-      if ($currentDate->isWeekend()) {
-          continue;
-      }
-      
-      // Check if the current day is a holiday (you can customize this to your needs)
-      if ($currentDate->isSameDay(\Carbon\Carbon::parse('2023-04-02'))) {
-          continue;
-      }
-
-      // If it's a working day, increment the counter
-      $workingDays++;
-  }
-
-  // Return the number of working days
-  return $workingDays;
-}
 
       public function savelLeave(Request $request) {
      
@@ -422,7 +388,10 @@ function countWorkingDays(Request $request) {
         $start = $request->start;
         $end = $request->end;
 
-        $different_days = SysHelpers::countWorkingDays($start,$end);
+
+        $holidays=SysHelpers::countHolidays($start,$end);
+        $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+        // dd($different_days);
 
        
         // For Total Leave days
@@ -515,8 +484,6 @@ function countWorkingDays(Request $request) {
               if($total_leave_days<$max_leave_days || $request->nature==1)
               {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
-
-                // dd($leave_balance);
                 $leaves=new Leaves();
                 $empID=Auth::user()->emp_id;
                 $leaves->empID = $empID;

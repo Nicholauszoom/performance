@@ -24,10 +24,10 @@
         <div class="container" style="height:600px" id="container"></div>
     </div>
     <div class="col-1 p-1 bg-main text-center" style="width:50px;border:2px solid black;writing-mode: vertical-rl;text-orientation: mixed;">
-    <p class="text-center " style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center">&nbsp; POTENTIAL AXIS</p>
+    <p class="text-center " style="writing-mode: vertical-rl;text-orientation: mixed;color:white;text-align-center"><i class="ph-arrow-fat-up"></i> POTENTIAL AXIS</p>
     </div>
     <div class="col-8 mx-auto p-1 bg-main" style="height:50px;border:2px solid black;">
-        <p class="text-center text-white">PERFORMANCE AXIS</p>
+        <p class="text-center text-white"><i class="ph-arrow-fat-right"></i> PERFORMANCE AXIS</p>
     </div>
 </div>
 
