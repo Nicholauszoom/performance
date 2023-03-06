@@ -3777,6 +3777,136 @@ class GeneralController extends Controller
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
         // end of overtime
 
+        //start payroll reconciliation summary
+
+        $calendar = $payrollMonth;
+        //dd($calendar);
+
+        $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
+
+
+        $datewell = explode("-", $calendar);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+
+        $termination_date = $yyyy . "-" . $mm . "-" . $dd;
+        $j_mm = "01";
+        $j_dd = "01";
+        $january_date = $yyyy . "-" . $j_mm . "-" . $j_dd;
+        $termination_month = $yyyy . "-" . $mm;
+        $empID = auth()->user()->emp_id;
+        $today = date('Y-m-d');
+
+        $current_payroll_month = $payrollMonth;
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        // dd($previous_payroll_month_raw);
+        $data['payroll_date'] = $request->payrolldate;
+        $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+        $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month):0;
+        $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
+        $data['total_previous_overtime'] = $this->reports_model->s_overtime($previous_payroll_month);
+        $data['total_current_overtime'] = $this->reports_model->s_overtime($current_payroll_month);
+
+        $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+        $descriptions = [];
+         foreach($total_allowances as $row){
+            if($row->allowance == "N-Overtime"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }elseif($row->allowance == "S-Overtime"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+            elseif($row->allowance == "House Rent"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Leave Allowance"){
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Teller Allowance"){
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Arrears"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+            elseif($row->allowance == "Long Serving allowance"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+
+         }
+
+         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
+
+         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+
+         foreach($result as $row){
+
+           array_push($total_allowances,(object)['description'=>$row['description'],
+                                        'allowance'=>$row['description'],
+                                        'current_amount'=>$row['current_amount'],
+                                       'previous_amount'=>$row['previous_amount'],
+                                       'difference'=>$row['current_amount']-$row['previous_amount']]);
+         }
+
+
+
+
+
+         $data['total_allowances'] = $total_allowances;
+        // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+
+
+
+        $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
+        $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
+
+        $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+
+        $data['current_decrease'] =  $this->reports_model->basic_decrease($previous_payroll_month,$current_payroll_month);
+       // dd($data['previous_decrease']);
+       // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
+
+       // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month,$current_payroll_month);
+
+
+        $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
+
+
+
+        //end payroll reconciliation summary
+
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
@@ -3789,6 +3919,22 @@ class GeneralController extends Controller
 
             return view('dashboard', $data);
         }
+    }
+
+    function arrayRecursiveDiff($aArray1, $aArray2)
+    {
+        $aReturn = array();;
+        //bool in_array( $val, $array_name, $mode );
+        for ($i = 0; $i < count($aArray1); $i++) {
+            if (in_array($aArray1[$i]['description'], $aArray2)) {
+                unset($aArray1[$i]);
+                // dd($row['description']);
+            } else {
+                // array_push($aRetur)
+            }
+        }
+
+        return $aArray1;
     }
 
     public function subdropFetcher()
@@ -7816,12 +7962,15 @@ class GeneralController extends Controller
 
             $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
 
-
+           $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 
             $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
             $take_home = $taxable -  $paye;
 
             $termination->total_gross = $total_gross;
+            //wcf and sdl
+            $termination->wcf = $total_gross * $deduction_rate['wcf'];
+            $termination->sdl = $total_gross * $deduction_rate['sdl'];
 
             $termination->loan_balance = $loan_balance;
 
@@ -9568,7 +9717,7 @@ public function projects()
         }
 
 
-        
+
         public function add_task($id)
         {
             $project=$id;
@@ -9578,7 +9727,7 @@ public function projects()
         }
 
 
-        
+
     public function save_project_task(Request $request)
     {
         $task = new ProjectTask();
@@ -9600,7 +9749,7 @@ public function projects()
               $project = ProjectTask::find($id);
 
               $project->delete();
-  
+
               return redirect('flex/projects');
           }
 
@@ -9620,7 +9769,7 @@ public function projects()
             $task->assigned= $request->assigned;
             $task->target= $request->target;
             $task->save();
-    
+
             return redirect('flex/view-project/'.$request->project);
           }
 
@@ -9630,7 +9779,7 @@ public function projects()
             $data['target_ratio'] = TargetRatio::all();
             return view('performance.target_ratios',$data);
           }
-      
+
           public function save_target_ratio(Request $request)
           {
             $ratio = new TargetRatio();
@@ -9638,7 +9787,7 @@ public function projects()
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
+
             return redirect('flex/performance-ratios');
           }
 
@@ -9649,9 +9798,9 @@ public function projects()
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
+
             return redirect('flex/performance-ratios');
           }
-  
+
 
 }

@@ -26,7 +26,8 @@
 									<th>FULL NAME</th>
 									<th hidden>MIDDLE NAME</th>
 									<th hidden>SURNAME</th>
-                                    <th>WAGE</th>
+                                    <th>GROS PAY</th>
+                                    <th>CONTRIBUTION</th>
 
 
 								</tr>
@@ -42,10 +43,10 @@
 
                                     //if($salary == 0)dd($row->emp_id);
                                     $rate1= ($row->pension_employee/$salary);
-                                    $rate2= ($row->pension_employer/$salary);
+                                    $rate2= ($row->pension_employee/$salary);
                                     $amount1= $row->pension_employee;
-                                    $amount2= $row->pension_employer;
-                                    $total_contribution= ($row->pension_employer+$row->pension_employee);
+                                    $amount2= $row->pension_employee;
+                                    $total_contribution= (2*$row->pension_employee);
 
                                 ?>
 
@@ -55,6 +56,38 @@
 									<td>{{ $row->name }}</td>
 									<td hidden>{{ $row->mname }}</td>
                                     <td hidden>{{ $row->lname }}</td>
+                                    <td hidden>{{ $salary }}</td>
+									<td>{{ $total_contribution }}</td>
+
+
+								</tr>
+                                <?php }}} ?>
+
+
+                                <?php
+                                if(!empty($pension_termination)){
+                                foreach ($pension_termination as $row){
+                                    $salary= $row->total_gross;
+                                    if($salary != 0){
+                                    $name = $row->name;
+                                    $member_no = $row->pf_membership_no;
+
+                                    //if($salary == 0)dd($row->emp_id);
+                                    $rate1= ($row->pension_employee/$salary);
+                                    $rate2= ($row->pension_employee/$salary);
+                                    $amount1= $row->pension_employee;
+                                    $amount2= $row->pension_employee;
+                                    $total_contribution= ($row->pension_employee*2);
+
+                                ?>
+
+                                <tr>
+                                    <td>{{ $row->SNo }}</td>
+									<td>{{ !empty($member_no)? $member_no : "unknown" }}</td>
+									<td>{{ $row->name }}</td>
+									<td hidden>{{ $row->mname }}</td>
+                                    <td hidden>{{ $row->lname }}</td>
+                                    <td>{{ $salary }}</td>
 									<td>{{ $total_contribution }}</td>
 
 

@@ -314,11 +314,26 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
     {
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '" . $date . "'";
+    FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 AND pl.payroll_date = '" . $date . "'
+    ";
 
 
         return DB::select(DB::raw($query));
     }
+
+    function s_p9_termination($date){
+        $raw_date = explode('-',$date);
+        $terminationDate = $raw_date[0].'-'.$raw_date[1];
+        //dd($terminationDate);
+
+        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
+        FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%'
+     ";
+
+
+     return DB::select(DB::raw($query));
+    }
+
 
     function v_p9($date)
     {
@@ -339,10 +354,33 @@ FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_
     }
     function s_p91($period_start, $period_end)
     {
+        $raw1  = explode('-',$period_start);
+        $raw2  = explode('-',$period_end);
+        $termination_start = $raw1[0].'-'.$raw1[1].'-01';
+        $termination_end = $raw2[0].'-'.$raw2[1].'-01';
 
         $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, pl.*
-FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 and pl.payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "'";
+        FROM employee AS e, (SELECT @s:=0) AS s, payroll_logs pl WHERE pl.empID = e.emp_id AND e.state = 1 and e.contract_type != 2 and pl.payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "'";
 
+        return DB::select(DB::raw($query));
+    }
+
+    function s_p91_terminated($period_start, $period_end)
+    {
+        $raw1  = explode('-',$period_start);
+        $raw2  = explode('-',$period_end);
+        $termination_start = $raw1[0].'-'.$raw1[1].'-01';
+        $termination_end = $raw2[0].'-'.$raw2[1].'-01';
+        $termination_date =  $raw2[0].'-'.$raw2[1];
+if($termination_start != $termination_end){
+
+        $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
+        FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 and tm.terminationDate BETWEEN   '" . $termination_start . "' AND '" . $termination_end . "'";
+}else{
+
+    $query = "SELECT @s:=@s+1 sNo, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id, e.postal_address as postal_address, e.postal_city as postal_city, tm.*
+    FROM employee AS e, (SELECT @s:=0) AS s, terminations tm WHERE tm.employeeID = e.emp_id AND e.state = 4 and e.contract_type != 2 and tm.terminationDate LIKE   '%" . $termination_date . "%'";
+}
         return DB::select(DB::raw($query));
     }
 
@@ -409,10 +447,13 @@ SUM(pl.taxdue) as sum_taxdue FROM payroll_logs pl, employee e WHERE e.emp_id = p
 
     function s_p10($period_start, $period_end)
     {
+
         $query = "SELECT payroll_date, SUM(pl.salary) as sum_salary, SUM(pl.salary+pl.allowances) as sum_gross, SUM(pl.sdl) as sum_sdl
 FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type != 2 and payroll_date BETWEEN   '" . $period_start . "' AND '" . $period_end . "' GROUP BY payroll_date ORDER BY payroll_date ASC";
         return DB::select(DB::raw($query));
     }
+
+
 
     function v_p10($period_start, $period_end)
     {
@@ -627,6 +668,17 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return DB::select(DB::raw($query));
     }
 
+    function s_pension_termination($date, $pensionFund)
+    {
+        $raw_date = explode('-',$date);
+        $terminationDate = $raw_date[0].'-'.$raw_date[1];
+        $query = "SELECT @s:=@s+1 as SNo, e.pf_membership_no ,e.fname,e.mname,e.lname, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name,e.emp_id, tm.salaryEnrollment as salary,tm.pension_employee,tm.total_gross
+        FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND e.salary != 0.00  AND tm.terminationDate LIKE '%" . $terminationDate . "%'";
+
+
+        return DB::select(DB::raw($query));
+    }
+
     function get_pension_years($empID)
     {
         $query = "SELECT DISTINCT years from payroll_logs where empID = '" . $empID . "'";
@@ -723,6 +775,15 @@ SUM(ll.taxdue) as TAXDUE FROM payroll_logs ll, employee e WHERE e.emp_id = ll.em
         $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,pl.wcf as wcf, pl.salary as salary, pl.allowances
 FROM employee e, payroll_logs pl, (SELECT @s:=0) s WHERE pl.empID = e.emp_id and e.contract_type != 2 AND pl.payroll_date LIKE '%" . $date . "%'";
         return DB::select(DB::raw($query));
+    }
+    function s_wcf_termination($date)
+    {
+        $raw_date = explode('-',$date);
+        $terminationDate = $raw_date[0].'-'.$raw_date[1];
+        $query = "SELECT @s:=@s+1 as SNo, e.emp_id , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, e.tin as tin, e.national_id as national_id,tm.wcf as wcf, tm.salaryEnrollment as salary,tm.total_gross as total_gross
+FROM employee e, terminations tm, (SELECT @s:=0) s WHERE tm.employeeID = e.emp_id and e.contract_type != 2 AND tm.terminationDate LIKE '%" . $terminationDate . "%'";
+   //   dd(DB::select(DB::raw($query)));
+      return DB::select(DB::raw($query));
     }
 
     function s_totalwcf($date)
@@ -2249,6 +2310,38 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         } else {
             return null;
         }
+    }
+
+    public function gross_management($payroll_date)
+    {
+        // $query =  "DELETE FROM financial_logs where Date(created_at) Like '2023-02-19%'";
+        // DB::insert(DB::raw($query));
+        $calender = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+
+        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID /* and e.cost_center = 'Management' */ and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+
+        $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
+        WHERE  al.empID = e.emp_id /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
+
+        $query3 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,allowances a,employee e
+        WHERE al.description = a.name and  al.empID = e.emp_id and a.Isbik = 'YES' and al.description like '%Overtime%' /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
+
+        $row = DB::select(DB::raw($query));
+
+        $row2 = DB::select(DB::raw($query2));
+
+        $row3 = DB::select(DB::raw($query3));
+
+dd($row3);
+        $data = 0;
+
+        if($row)$data = $row[0]->total_gross;
+        if($row2)$data = $data + $row2[0]->total_gross;
+        //if($row3)$data = $data + $row3[0]->total_gross;
+
+        return $data;
     }
 
     public function s_grossMonthly1($payroll_date)

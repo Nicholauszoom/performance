@@ -182,7 +182,7 @@ Route::middleware('auth')->group(function () {
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
 
-        //Adhoc Tasks routes 
+        //Adhoc Tasks routes
         Route::any('tasks','tasks')->name('flex.tasks');
         Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhoctask');
         Route::any('delete-task/{id}','delete_task')->name('flex.delete-task');
@@ -1080,6 +1080,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
+        Route::any('/journalEntryReport','journalEntryReport')->name('reports.journalEntryReport');
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
         Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');

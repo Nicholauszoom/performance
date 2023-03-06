@@ -1974,6 +1974,17 @@ return true;
 
 }
 
+function get_deduction_rate(){
+    $row = DB::table('deduction')->select('rate_employer')->where('id',2)->get();
+
+    $row2 = DB::table('deduction')->select('rate_employer')->where('id',4)->get();
+
+    $data['wcf'] = $row[0]->rate_employer;
+    $data['sdl'] = $row2[0]->rate_employer;
+
+    return $data;
+}
+
 function terminate_contract($id) {
 	$query = "UPDATE employee SET state = 0 WHERE emp_id ='".$id."'";
     DB::insert(DB::raw($query));
