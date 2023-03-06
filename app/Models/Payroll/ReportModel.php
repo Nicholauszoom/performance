@@ -2323,10 +2323,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         WHERE e.emp_id = pl.empID /* and e.cost_center = 'Management' */ and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
 
         $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
-        WHERE  al.empID = e.emp_id /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
+        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'  /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
 
-        $query3 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,allowances a,employee e
-        WHERE al.description = a.name and  al.empID = e.emp_id and a.Isbik = 'YES' and al.description like '%Overtime%' /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
+        $query3 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
+        WHERE   al.empID = e.emp_id and al.benefit_in_kind = 'YES'  /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
 
         $row = DB::select(DB::raw($query));
 

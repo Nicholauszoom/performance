@@ -1925,13 +1925,13 @@ dd($data['paye_terminated']);
 
         $query  = "UPDATE allowance_logs set benefit_in_kind = 'NO' ";
         DB::insert(DB::raw($query));
-        $query1  = "UPDATE allowance_logs set benefit_in_kind = 'NO' where description = 'Vehicle Benefit' ";
+        $query1  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'Vehicle Benefit' ";
         DB::insert(DB::raw($query1));
-        $query2  = "UPDATE allowance_logs set benefit_in_kind = 'NO' where description = 'Transport Allowance' ";
+        $query2  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'Transport Allowance' ";
         DB::insert(DB::raw($query2));
-        $query3  = "UPDATE allowance_logs set benefit_in_kind = 'NO' where description = 'Air Ticket Allowance' ";
+        $query3  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'Air Ticket Allowance' ";
         DB::insert(DB::raw($query3));
-        $query4  = "UPDATE allowance_logs set benefit_in_kind = 'NO' where description = 'House Rent' ";
+        $query4  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'House Rent' ";
         DB::insert(DB::raw($query4));
 
 
