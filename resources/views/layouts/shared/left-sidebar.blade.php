@@ -446,11 +446,11 @@
                             Talent Matrix
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('flex.performance') }}" class="nav-link ">
                             Talent Settings
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
                  </li>
 
