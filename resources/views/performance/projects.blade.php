@@ -1,15 +1,12 @@
 @extends('layouts.vertical', ['title' => 'All Projects'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
-
 @section('content')
 
 
@@ -43,16 +40,20 @@
 
                     {{-- <div class="clearfix"></div> --}}
                   </div>
-                  <div class="card-body">
+                  {{-- <div class="card-body"> --}}
+
                     <table id="datatable" class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
-                          <th>S/N</th>
+                          <?php $i=1; ?>
+                          <th>SN</th>
                           <th>Project Name</th>
                           <th>Start Date</th>
                           <th>End Date</th>
+                          <th>Tasks</th>
                           <th>Status</th>
                           <th>Option</th>
+                        
                         </tr>
                       </thead>
 
@@ -60,10 +61,17 @@
                       <tbody>
                         @foreach($project as $item)
                             <tr>
-                                <td>S/N</td>
+                                <td>{{ $i++ }}</td>
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->start_date }}</td>
                                 <td>{{ $item->end_date }}</td>
+                                <td>
+                                  @php
+                                  $tasks= App\Models\ProjectTask::where('project_id',$item->id)->count();
+                                  @endphp
+
+                                   {{ $tasks  }}
+                                </td>
                                 <td>
                                     {{-- {{ $item->status }}     --}}
                                 <span class="badge {{ $item->status == '1' ? 'bg-secondary':'bg-pending' }} disabled">
@@ -82,11 +90,12 @@
                                         <i class="ph-trash"></i>
                                     </a>
                                 </td>
+
                             </tr>
                         @endforeach
                       </tbody>
                     </table>
-                  </div>
+                  {{-- </div> --}}
                 </div>
               </div>
               

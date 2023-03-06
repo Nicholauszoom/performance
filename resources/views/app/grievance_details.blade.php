@@ -51,14 +51,14 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                   <div class="card-head">
-                    <h2>Grievance Info</h2>
+                    {{-- <h2>Grievance Info</h2> --}}
 
 
                     <div class="clearfix"></div>
                   </div>
                   <div class="card-body">
                   
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  ?>
+                   @if(Session::has('note'))      {{ session('note') }}  @endif  
                   
                     <!-- <table id="datatable" class="table table-striped table-bordered"> -->
                     
@@ -66,7 +66,7 @@
                   
                   
               <div class="col-md-12 col-sm-6 col-xs-12">
-                <div class="card">
+             
                   <div class="card-head">
                     <h2><i class="fa fa-info-circle"></i>&nbsp;&nbsp;<b>Details and Description</b></h2>
                     <div class="clearfix"></div>
@@ -74,24 +74,25 @@
                   <div class="card-body"> 
 
 
-                    <h5> Author:
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h5>
-                    <h5> Department:
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $dpt; ?></b></h5>
-                    <h5> Position:
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $position; ?></b></h5>
-                    <h5> Submitted On:
-                    &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $timed; ?></b></h5>
-                    <h5> Title:<b> <?php echo $title; ?> </b></h5><br><br>
-                    <h5> <b> Description </b>:<br></h5>
+                    <h6>Author:
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $name; ?></b></h6>
+                    <h6> Department:
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $dpt; ?></b></h6>
+                    <h6> Position:
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $position; ?></b></h6>
+                    <h6> Submitted On:
+                    &nbsp;&nbsp;&nbsp;&nbsp;<b><?php echo $timed; ?></b></h6>
+                    <h6> Title:<b> <?php echo $title; ?> </b></h6>
+                    <hr>
+                    <h6> <b> Description </b>:</h6>
                     <p> <?php echo $description; ?> </p>
                     <?php if($attachment != "N/A"){ ?>
-                    <br><br>
-                    <h5> <b> ATTACHMENT </b>:<br></h5>
-                    <p>
-                      <a download= '' href ='<?php echo  url('').$attachment; ?>'><div class='col-md-12'>
-                                <span class='label label-info'>DOWNLOAD Attached Evidence File</span></div></a>
-                    </p><br> <?php } ?>
+                    <br>
+                    <h6> <b> Attachment </b>: &nbsp;  <a download= '' href ='<?php echo  url('').$attachment; ?>'>
+                      <span class='btn btn-sm btn-main '>DOWNLOAD Attached Evidence File</span></a>
+         <?php } ?></h6>
+                   
+                     
                     
                     <?php if($support_document != "N/A") { ?>
                     
@@ -99,12 +100,12 @@
                     <p>
 
                       <a download= '' href ='<?php echo  url('').$support_document; ?>'><div class='col-md-12'>
-                                <span class='label label-info'>DOWNLOAD Attached Evidence File</span></div></a>
+                                <span class='btn bg-main'>DOWNLOAD Attached Evidence File</span></div></a>
                     </p> <?php } ?>
                     
 
                   </div>
-              </div>
+          
               </div>
               <?php if( session('griev_hr')!='' || session('griev_board')!='') { ?> 
               <?php if($status == 0){  ?>

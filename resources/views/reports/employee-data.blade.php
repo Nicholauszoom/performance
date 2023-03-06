@@ -105,8 +105,9 @@
         <div class="col-4"></div>
         <div class="col-md-4 col-4">
                 <div class="row">
-                <div class="col-6 mx-auto">
-                    <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="100%">
+                <div class="col-6 mx-auto" style="width:10%;margin:auto">
+                    <img src="" alt="Img Here">
+                    {{-- <img src="https://www.bancabc.co.tz/images/banc_abc_logo.png" alt="logo here" width="150px" height="150px"> --}}
 
                 </div>
                 <div class="col-12">
@@ -122,7 +123,7 @@
 
             <div class="card-img-actions d-inline-block float-end my-3">
                 {{-- rounded-circle --}}
-                  <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150px" height="150px" alt="">
+                  {{-- <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt=""> --}}
               </div>
 
         </div>
@@ -249,8 +250,8 @@
                     </div>
                     {{-- end of name information --}}
                                     </td>
-
-                                    <td style="width:50%">
+            
+                    <td style="width:50%;height:300px;">
                     {{-- start of biography information --}}
                     <div class="col-md-12 col-md-12 col-lg-12 col-12">
                         <h5 class="text-center bg-secondary" style="border: 1px solid black !important;font-size:14px;">Identification Information</h5>
@@ -697,15 +698,15 @@
         <table style="border:none;">
             <tr>
                 <td width="50%" style="width:50%">
-                    <div class="col-12 col-md-12 col-12 col-lg-12 text-danger">
+                    <div class="col-12 col-md-12 col-12 col-lg-12 text-danger" style="font-size:10px;">
                         <i>
                             H i g h l y C o n f i d e n t i a l
                         </i>
                     </div>
                 </td>
                 <td width="50%" style="width:50%">
-
-                    <div class="col-12 col-md-12 col-12 col-lg-12 text-secondary">
+    
+                    <div class="col-12 col-md-12 col-12 col-lg-12 text-secondary" style="font-size:10px;">
                         <i>
                             E m p l o y e e s I n i t i a l : _ _ _ _ _ _ _ _ _ _ _ _ _ _
                         </i>

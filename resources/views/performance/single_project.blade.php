@@ -1,15 +1,12 @@
 @extends('layouts.vertical', ['title' => 'View Project'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
-
 @section('content')
 
 
@@ -33,7 +30,10 @@
                         <small>Start Date: {{ $project->start_date}}</small>
                         <br>
                         <small>End Date: {{ $project->end_date}}</small>
-             
+                       
+                      <a href="{{ route('flex.projects') }}" class="btn btn-perfrom float-end mx-1">
+                          <i class="ph-list me-2"></i> All Projects
+                      </a>
                     <a href="{{ url('/flex/add-task/'.$project->id) }}" class="btn btn-main float-end">
                         <i class="ph-plus me-2"></i> Add Task
                       </a>
@@ -46,7 +46,7 @@
 
                     {{-- <div class="clearfix"></div> --}}
                   </div>
-                  <div class="card-body">
+                  <div class="">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div> 
                     <table id="datatable" class="table table-striped table-bordered datatable-basic">
@@ -56,8 +56,9 @@
                           <th>Task Name</th>
                           <th>Assigned To</th>
                           <th>Start Date</th>
-                          <th>End Date</th>
+                          <th>Deadline</th>
                           <th>Target</th>
+                          <th>Achieved</th>
                           <th>Status</th>
                           <th>Option</th>
                         </tr>
@@ -70,9 +71,10 @@
                             <td>S/N</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}  </td>
-                            <td>{{ $item->start_date }}</td>
-                            <td>{{ $item->end_date }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->start_date)) }}</td>
+                            <td>{{ date('d-M-Y', strtotime($item->end_date)) }}</td>
                             <td>{{ $item->target}}</td>
+                            <td>{{ $item->achieved}}</td>
                             <td>
                                 {{-- {{ $item->status }} --}}
                                 <span class="badge {{ $item->status == '1' ? 'bg-secondary':'bg-pending' }} disabled">
@@ -80,21 +82,36 @@
                                 </span>
                             </td>
                             <td>
-                                {{-- <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
-                                    <i class="ph-info"></i>
-                                </a> --}}
-                                <a href="" class="btn btn-sm bg-main">
+                         
+                            
+                              {{-- for completion initiation --}}
+                              @if ($item->status==0)
+
+                                <a href="{{ url('flex/completed_task/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                                  <i class="ph-check"></i>
+                              </a>
+                              @endif
+                              {{-- For Task Editing and deletion --}}
+                              @if ($item->created_by==Auth::user()->emp_id)
+                                            <a href="" class="btn btn-sm bg-main">
                                     <i class="ph-pen"></i>
                                 </a>
                                 <a href="{{ url('flex/delete-project-task/'.$item->id); }}" class="btn btn-sm btn-danger">
                                     <i class="ph-trash"></i>
-                                </a>
-                                @if ($item->employee->line_manager == Auth()->user()->emp_id)
-                                <hr>   
-                                <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
-                                  Task Assessment
                                 </a> 
+                              @endif
+                     
+                                {{-- For Task Assessment --}}
+                                @if ($item->status==1)
+                                  @if ($item->employee->line_manager == Auth()->user()->emp_id)
+                                  <hr>   
+                                  <a href="{{ url('flex/assess-task/'.$item->id); }}" class="btn btn-sm bg-main">
+                                    Assessment
+                                  </a> 
+                                  @endif
                                 @endif
+                                {{-- , --}}
+                           
                             
                             </td>
                           </tr>

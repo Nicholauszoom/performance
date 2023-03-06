@@ -124,17 +124,27 @@ Route::middleware('auth')->group(function () {
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
         // end of complains
 
-        //start of grievances and disciplinary actions routes
+        //start of disciplinary actions routes
         Route::any('/grievancesCompain','grievancesComplains')->name('flex.grievancesCompain');
-        Route::any('/add-complain','addComplain')->name('flex.addComplain');
-        Route::any('/save-complain','saveComplain')->name('flex.saveComplain');
         Route::any('/add-action','addDisciplinary')->name('flex.addDisciplinary');
         Route::any('/save-action','saveDisciplinary')->name('flex.saveDisciplinary');
         Route::any('/view-action/{id}','viewDisciplinary')->name('flex.viewDisciplinary');
         Route::any('/edit-action/{id}','editDisciplinary')->name('flex.editDisciplinary');
         Route::any('/update-action/{id}','updateDisciplinary')->name('flex.updateDisciplinary');
         Route::any('/delete-disciplinary/{id}','deleteAction')->name('flex.deleteDisciplinary');
-        // end of grievances and disciplinary actions routes
+        // end of disciplinary actions routes
+
+
+        // start of grievances routes
+        Route::any('/my-grievences','my_grievances')->name('flex.my-grievances');
+        Route::any('/grievences','grievances')->name('flex.grievances');
+        Route::any('/add-complain','addComplain')->name('flex.addComplain');
+        Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
+        Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
+        
+        Route::any('/grievance_details/{id}','grievance_details')->name('flex.grievance_details');
+
+        // end of grievances routes
 
 
 
@@ -181,18 +191,53 @@ Route::middleware('auth')->group(function () {
         Route::any('save-task','save_project_task')->name('flex.save-task');
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
+        Route::any('completed_task/{id}','completed_task')->name('flex.completed_task');
+        
+
+        // For Perfomance report
+        Route::any('performance-report','performance')->name('flex.performance-report');
+
+         // For Perfomance ratios
+         Route::any('performance','performance_ratio')->name('flex.performance');
+         Route::any('save_performance_ratio','save_performance_ratio')->name('flex.save_performance_ratio');
+         
+        // Task Assessment Routes
+        Route::any('assess-task/{id}','assess_task')->name('flex.assess-task');
+        Route::any('save-task-assessment','save_task_assessment')->name('flex.save_task_assessment');
+      
 
         //Adhoc Tasks routes
         Route::any('tasks','tasks')->name('flex.tasks');
-        Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhoctask');
+        Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhock_task');
+        Route::any('save-adhoc-task','save_adhoc_task')->name('flex.save-adhoc-task');
         Route::any('delete-task/{id}','delete_task')->name('flex.delete-task');
+        Route::any('completed_adhoctask/{id}','completed_adhoctask')->name('flex.completed_adhoctask');
+        Route::any('delete-task/{id}','delete_task')->name('flex.delete-task');
+
+        // Adhoc Task Assessment Routes
+        Route::any('assess-adhoctask/{id}','assess_adhoctask')->name('flex.assess-adhoctask');
+        Route::any('save-adhoctask-assessment','save_adhoctask_assessment')->name('flex.save_adhoctask_assessment');
+       
 
         // Performance Ratios routes
         Route::any('performance-ratios','performance_ratios')->name('flex.performance-ratios');
         Route::any('save-target-ratio','save_target_ratio')->name('flex.save_target_ratio');
         Route::any('save-time-ratio','save_time_ratio')->name('flex.save_time_ratio');
-
+        Route::any('save-behaviour-ratio','save_behaviour_ratio')->name('flex.save_behaviour_ratio');
+        Route::any('delete-target-ratio/{id}','delete_target_ratio')->name('flex.delete-target-ratio');
+        Route::any('delete-time-ratio/{id}','delete_time_ratio')->name('flex.delete-time-ratio');
+        Route::any('delete-behaviour-ratio/{id}','delete_behaviour_ratio')->name('flex.delete-behaviour-ratio');
         // End of performance routes
+
+
+
+        // Start of Talent Management
+        Route::any('employee_profiles','employee_profiles')->name('flex.employee-profiles');
+        Route::any('talent-ratios','talent_ratios')->name('flex.talent-ratios');
+        Route::any('talent-ranges','talent_ranges')->name('flex.talent-range');
+
+        Route::any('talent-matrix','talent_matrix')->name('flex.talent-matrix');
+
 
         // start of employees routes
         Route::any('/confirmOvertimePayment','confirmOvertimePayment')->name('flex.confirmOvertimePayment');
@@ -325,6 +370,8 @@ Route::middleware('auth')->group(function () {
         Route::any('/leave' ,'leave')->name('attendance.leave');
         // for my leaves routes
         Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
+        Route::any('/test','countWorkingDays')->name('flex.test');
+
         // for fetching sub leave type
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
@@ -385,7 +432,8 @@ Route::middleware('auth')->group(function () {
 
     //bank loans routes
     Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
-        Route::get('/all-loans', 'index')->name('bank-loans');;
+        Route::get('/all-loans', 'index')->name('bank-loans');
+        Route::get('/delete-loan/{id}', 'delete_loan')->name('flex.delete-loans');;
         Route::get('/loans-export', 'export')->name('loans.export');
         Route::post('/loans-import', 'import')->name('loans.import');
         Route::get('/loans-template', 'template')->name('loans.template');
@@ -453,7 +501,6 @@ Route::middleware('auth')->group(function () {
         Route::any('/department_structure','department_structure')->name('flex.department_structure');
         Route::any('/Oldorganization_structure','Oldorganization_structure')->name('flex.Oldorganization_structure');
         Route::any('/grievances','grievances')->name('flex.grievances');
-        Route::any('/grievance_details','grievance_details')->name('flex.grievance_details');
         Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
     });
@@ -491,6 +538,7 @@ Route::middleware('auth')->group(function () {
           Route::put('/update-holiday','updateHoliday')->name('flex.updateHoliday');
           Route::any('/edit-holiday/{id}','editHoliday')->name('flex.editholiday');
           Route::any('/delete-holiday/{id}','deleteHoliday')->name('flex.deleteholiday');
+          Route::any('/update-all-holidays','updateHolidayYear')->name('flex.updateHolidayYear');
           // end of holidays routes
 
 

@@ -99,8 +99,8 @@
                                         <td>{{ $loan->amount }}</td>
                                         <td>{{ $loan->created_at->toDayDateTimeString()}}</td>
                                         <td>
-                                            <a  href=""  title="Edit Loan">
-                                                <button type="button" class="btn btn-danger btn-xs" disabled><i class="ph-trash"></i></button>
+                                            <a  href="{{ url('flex/bank-loans/delete-loan/'.$loan->id )}}"  title="Edit Loan">
+                                                <button type="button" class="btn btn-danger btn-sm"><i class="ph-trash"></i></button>
                                             </a>
 
 

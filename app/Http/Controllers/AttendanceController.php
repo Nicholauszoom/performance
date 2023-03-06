@@ -357,7 +357,11 @@ class AttendanceController extends Controller
 
 // start of save leave Function
 
+
       public function savelLeave(Request $request) {
+     
+
+   
      
         //For Gender 
         $gender=Auth::user()->gender;
@@ -380,18 +384,14 @@ class AttendanceController extends Controller
 
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
 
-        // dd($annualleaveBalance);
-       
         // For  Requested days
         $start = $request->start;
         $end = $request->end;
 
-        $date1=date('d-m-Y', strtotime($start));
-        $date2=date('d-m-Y', strtotime($end));
-        $start_date = Carbon::createFromFormat('d-m-Y', $date1);
-        $end_date = Carbon::createFromFormat('d-m-Y', $date2);
-        $different_days = $start_date->diffInDays($end_date);
 
+        $holidays=SysHelpers::countHolidays($start,$end);
+        $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+        // dd($different_days);
 
        
         // For Total Leave days
@@ -401,8 +401,7 @@ class AttendanceController extends Controller
         $d1 = new DateTime (Auth::user()->hire_date);
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
-        $day=$interval->days;
-        // $working_month=$interval->format('%months');
+        $day= SysHelpers::countWorkingDays($d1,$d2);
 
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
@@ -479,15 +478,12 @@ class AttendanceController extends Controller
            // For Leaves with no sub Category 
             else
             {
-              // $days=$different_days;
 
               $total_leave_days=$leaves+$different_days;
 
               if($total_leave_days<$max_leave_days || $request->nature==1)
               {
                 $remaining=$max_leave_days-($leave_balance+$different_days);
-
-                // dd($leave_balance);
                 $leaves=new Leaves();
                 $empID=Auth::user()->emp_id;
                 $leaves->empID = $empID;
