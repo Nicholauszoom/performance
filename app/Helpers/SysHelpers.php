@@ -115,6 +115,8 @@ class SysHelpers
                 continue;
             }
             
+
+            
             // Check if the current day is a holiday (you can customize this to your needs)
             if ($currentDate->isSameDay(\Carbon\Carbon::parse('2023-04-02'))) {
                 continue;
@@ -129,7 +131,7 @@ class SysHelpers
       }
 
 
-    //   For Holidays Counting
+    //   For Holidays in Weekdays Counting
 
     public static function countHolidays($start, $end) 
     {
@@ -137,12 +139,116 @@ class SysHelpers
          // Convert start and end dates to Carbon instances
          $startDate = Carbon::parse($start );
          $endDate = Carbon::parse($end);
- 
-         // Create an array of holidays
-        $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->count();
+
+
+        $year1 = $startDate->format('Y'); 
+        $year2 = $endDate->format('Y'); 
+        $workingDays = 0;
+        if ($year1 == $year2) {
+           // Create an array of holidays
+             $holidays = Holiday::whereBetween('date', [$startDate, $endDate])->count();
+
+             $week_day = Holiday::whereBetween('date', [$startDate, $endDate])->get();
+             $days = $endDate->diffInDays($startDate);
+        
+             // Loop through each day between start and end date
+             for ($i = 0; $i <= $days; $i++) 
+             {
+                 
+                 // Get the current date
+                 $currentDate = $startDate->copy()->addDays($i);
+                 foreach($week_day as $item)
+                 {
+                 // Check if the current day is a holiday (you can customize this to your needs)
+                 if ($currentDate->isSameDay(\Carbon\Carbon::parse($item->date))) {
+                    if (Carbon::parse($item->date)->isWeekend()) {
+                        continue;
+                    }
+                    $workingDays++;
+                     }
+              
+                 }
+                  
+             }
+    }
+        else {
+            // For Current Year
+            $date1 = Carbon::parse('2022-12-31');
+            $new_date = Carbon::parse($date1)->setYear(date('Y'));
+            $this_year=Holiday::whereBetween('date', [$startDate, $new_date])->count();
+            $week_day = Holiday::whereBetween('date', [$startDate, $new_date])->get();
+            $days = $new_date->diffInDays($startDate);
+       
+            // Loop through each day between start and end date
+            for ($i = 0; $i <= $days; $i++) 
+            {
+                
+                // Get the current date
+                $currentDate = $startDate->copy()->addDays($i);
+                foreach($week_day as $item)
+                {
+                // Check if the current day is a holiday (you can customize this to your needs)
+                if ($currentDate->isSameDay(\Carbon\Carbon::parse($item->date))) {
+                   if (Carbon::parse($item->date)->isWeekend()) {
+                       continue;
+                   }
+                   $workingDays++;
+                    }
+             
+                }
+                 
+            }
+
+
+            // For The Following Year
+            $date2 = Carbon::parse('2022-01-01');
+            $new_date1 = Carbon::parse($date2)->setYear($year2);
+            $holiday=Holiday::where('recurring','1')->get();
+
+            foreach($holiday as $value){
+                $new_dat = Carbon::parse($value->date)->setYear($year2);
+    
+                $holid = Holiday::find($value->id);
+                $holid->date =$new_dat;
+                $holid->update();
+            }
+            // $next_year=Holiday::whereBetween('date', [$new_date1, $endDate])->where('recurring','1')->count();
+            $week_day = Holiday::whereBetween('date', [$new_date1, $endDate])->where('recurring','1')->get();
+            $days = $new_date->diffInDays($startDate);
+       
+            // Loop through each day between start and end date
+            for ($i = 0; $i <= $days; $i++) 
+            {
+                
+                // Get the current date
+                $currentDate = $new_date1->copy()->addDays($i);
+                foreach($week_day as $item)
+                {
+                // Check if the current day is a holiday (you can customize this to your needs)
+                if ($currentDate->isSameDay(\Carbon\Carbon::parse($item->date))) {
+                   if (Carbon::parse($item->date)->isWeekend()) {
+                       continue;
+                   }
+                   $workingDays++;
+                    }
+             
+                }
+                 
+            }
+            $holiday=Holiday::where('recurring','1')->get();
+
+            foreach($holiday as $value){
+                $new_dat = Carbon::parse($value->date)->setYear(date('Y'));
+    
+                $holid = Holiday::find($value->id);
+                $holid->date =$new_dat;
+                $holid->update();
+            }
+        }
+         
 
      
 
-         return $holidays;
+         return $workingDays;
        }
 }

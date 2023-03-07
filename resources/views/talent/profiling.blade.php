@@ -37,7 +37,18 @@
         <tr>
             <td>{{ $item->emp_id }}</td>
             <td>{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</td>
-            <td>Academic Qualification</td>
+            <td>
+                @php
+                $position= App\Models\PositionSkills::where('position_ref',$item->position)->count();
+                $skills= App\Models\EmployeeSkills::where('empID',$item->emp_id)->count();
+                @endphp
+
+                @if ($skills>0 && $position)
+                {{   number_format( $skills/$position, 2) * 100  }} %
+                @else
+                    N/L
+                @endif
+            </td>
             <td> 
                 @php
                 $performance= App\Models\EmployeePerformance::where('empID',$item->emp_id)->avg('performance');
