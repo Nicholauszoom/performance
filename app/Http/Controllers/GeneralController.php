@@ -1918,7 +1918,7 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
-        dd();
+        
 
 
 
@@ -7051,7 +7051,7 @@ class GeneralController extends Controller
         }
     }
 
-  
+
     public function resolve_grievance(Request $request)
     {
 
@@ -9116,7 +9116,7 @@ class GeneralController extends Controller
             $holid->update();
         }
         return redirect('flex/holidays/')->with('msg', 'Holiday was Updated successfully !');
-        
+
     }
 
     // start of delete holiday function
@@ -9474,10 +9474,10 @@ class GeneralController extends Controller
    // For All Grievances
 
    public function all_grievances()
-   {   
+   {
        $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
        $data['other_grievances']=Grievance::all();
-       return view('app/grievances',$data); 
+       return view('app/grievances',$data);
    }
 
 // For Single Grievance
@@ -9646,10 +9646,10 @@ public function cancel_grievance($id)
     // For My Grievances
 
     public function my_grievances()
-    {   
+    {
         $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
         $data['other_grievances']=Grievance::all();
-        return view('my-services.grievances',$data); 
+        return view('my-services.grievances',$data);
     }
 
         // For Saving New Grievances
@@ -9666,7 +9666,7 @@ public function cancel_grievance($id)
             }
             $grievance->anonymous = $request->anonymous == true ? '1' : '0';
             $grievance->save();
-    
+
             return redirect('flex/my-grievences');
         }
     // For My Biodata
@@ -9768,18 +9768,18 @@ public function cancel_grievance($id)
             $tasks=ProjectTask::where('project_id',$project->id)->get();
             foreach($tasks as $item)
             {
-                $performance=EmployeePerformance::where('task_id',$item->id)->first();                
-                //For Employee Performance Deletion 
+                $performance=EmployeePerformance::where('task_id',$item->id)->first();
+                //For Employee Performance Deletion
                     if ($performance) {$performance->delete();}
                     $item->delete();
                 }
-                
+
                 $project->delete();
 
                 return redirect('flex/projects');
         }
 
-        // For Adding Task      
+        // For Adding Task
         public function add_task($id)
         {
             $project=$id;
@@ -9788,7 +9788,7 @@ public function cancel_grievance($id)
             return view('performance.add-task',compact('project','employees'));
         }
 
-    // For Updating completed Task Status 
+    // For Updating completed Task Status
        public function completed_task($id)
        {
            $task =ProjectTask::where('id',$id)->first();
@@ -9798,7 +9798,7 @@ public function cancel_grievance($id)
 
            $task->update();
 
-           $performance=new EmployeePerformance();   
+           $performance=new EmployeePerformance();
            $performance->empID= $task->assigned;
            $performance->performance= $task->performance;
            $performance->behaviour= $task->behaviour;
@@ -9810,7 +9810,7 @@ public function cancel_grievance($id)
 
 
            $tasks =ProjectTask::where('project_id',$task->project_id)->get();
-          
+
            $project = Project::where('id',$task->project_id)->first();
            return view('performance.single_project',compact('project','tasks',));
        }
@@ -9830,7 +9830,7 @@ public function cancel_grievance($id)
        }
 
 
-    // For saving task Assessment 
+    // For saving task Assessment
        public function save_task_assessment(Request $request)
        {
            $task =ProjectTask::where('id',$request->id)->first();
@@ -9840,8 +9840,8 @@ public function cancel_grievance($id)
            $task->behaviour= $request->behaviour;
            $task->remark= $request->remark;
            $task->time= $request->time;
-            //For Task Performance'    
-            //For Ratio Variables 
+            //For Task Performance'
+            //For Ratio Variables
             $ratios=PerformanceRatio::first();
             $target_ratio=$ratios->target;
             $time_ratio=$ratios->time;
@@ -9862,7 +9862,7 @@ public function cancel_grievance($id)
            $task->performance= number_format($performance, 2);
            $task->update();
 
-           $perf=EmployeePerformance::where('task_id',$task->id)->first();   
+           $perf=EmployeePerformance::where('task_id',$task->id)->first();
            if ($perf) {
             $perf->performance= $task->performance;
            $perf->behaviour= $task->behaviour;
@@ -9871,7 +9871,7 @@ public function cancel_grievance($id)
            $perf->update();
            }
            else {
-            $perf=new EmployeePerformance();   
+            $perf=new EmployeePerformance();
             $perf->empID= $task->assigned;
             $perf->performance= $task->performance;
             $perf->behaviour= $task->behaviour;
@@ -9880,16 +9880,16 @@ public function cancel_grievance($id)
             $perf->task_id= $task->id;
             $perf->type='project';
             $perf->save();
- 
+
            }
-         
-       
+
+
 
            return view('performance.asses_task',compact('task'));
        }
 
 
-    // For saving task Assessment 
+    // For saving task Assessment
     public function save_adhoctask_assessment(Request $request)
     {
         $task =AdhocTask::where('id',$request->id)->first();
@@ -9899,8 +9899,8 @@ public function cancel_grievance($id)
         $task->behaviour= $request->behaviour;
         $task->remark= $request->remark;
         $task->time= $request->time;
-         //For Task Performance'    
-         //For Ratio Variables 
+         //For Task Performance'
+         //For Ratio Variables
          $ratios=PerformanceRatio::first();
          $target_ratio=$ratios->target;
          $time_ratio=$ratios->time;
@@ -9921,17 +9921,17 @@ public function cancel_grievance($id)
         $task->performance= number_format($performance, 2);
         $task->update();
 
-        $perf=EmployeePerformance::where('task_id',$task->id)->first();   
+        $perf=EmployeePerformance::where('task_id',$task->id)->first();
         if ($perf) {
          $perf->performance= $task->performance;
         $perf->behaviour= $task->behaviour;
         $perf->target= $task->target;
         $perf->achieved= $task->achieved;
-        
+
         $perf->update();
         }
         else {
-         $perf=new EmployeePerformance();   
+         $perf=new EmployeePerformance();
          $perf->empID= $task->assigned;
          $perf->performance= $task->performance;
          $perf->behaviour= $task->behaviour;
@@ -9942,11 +9942,11 @@ public function cancel_grievance($id)
          $perf->save();
 
         }
-      
+
 
         return view('performance.asses_adhoctask',compact('task'));
     }
-    //For Saving Project Ratio 
+    //For Saving Project Ratio
     public function save_project_task(Request $request)
     {
         $task = new ProjectTask();
@@ -9968,11 +9968,11 @@ public function cancel_grievance($id)
           {
               $task = ProjectTask::find($id);
               $performance=EmployeePerformance::where('task_id',$task->id)->first();
-              //For Employee Performance Deletion 
+              //For Employee Performance Deletion
               if ($performance) {$performance->delete();}
               $id=$task->project_id;
               $task->delete();
-  
+
               return redirect('flex/view-project/'.$id)->with('msg','Project Task Was Deleted Successfully!');
           }
 
@@ -9981,10 +9981,10 @@ public function cancel_grievance($id)
           {
               $task = AdhocTask::find($id);
               $performance=EmployeePerformance::where('task_id',$task->id)->first();
-              //For Employee Performance Deletion 
+              //For Employee Performance Deletion
               if ($performance) {$performance->delete();}
               $task->delete();
-  
+
               return redirect('flex/tasks');
           }
         // For Viewing all Adhoc Tasks
@@ -10010,11 +10010,11 @@ public function cancel_grievance($id)
             $task->assigned= $request->assigned;
             $task->target= $request->target;
             $task->save();
-    
+
             return redirect('flex/tasks');
           }
 
-         // For Updating completed Task Status 
+         // For Updating completed Task Status
        public function completed_adhoctask($id)
        {
            $task =AdhocTask::where('id',$id)->first();
@@ -10024,7 +10024,7 @@ public function cancel_grievance($id)
 
            $task->update();
 
-           $perf=EmployeePerformance::where('task_id',$task->id)->first();   
+           $perf=EmployeePerformance::where('task_id',$task->id)->first();
            if ($perf) {
             $perf->performance= $task->performance;
            $perf->behaviour= $task->behaviour;
@@ -10033,7 +10033,7 @@ public function cancel_grievance($id)
            $perf->update();
            }
            else {
-            $perf=new EmployeePerformance();   
+            $perf=new EmployeePerformance();
             $perf->empID= $task->assigned;
             $perf->performance= $task->performance;
             $perf->behaviour= $task->behaviour;
@@ -10042,9 +10042,9 @@ public function cancel_grievance($id)
             $perf->achieved= $task->achieved;
             $perf->type='Adhoc';
             $perf->save();
- 
+
            }
-         
+
            $project =AdhocTask::all();
            return view('performance.tasks',compact('project',));
        }
@@ -10067,7 +10067,7 @@ public function cancel_grievance($id)
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
+
             return redirect('flex/talent-ranges');
           }
         // For Saving Time Ratios
@@ -10078,7 +10078,7 @@ public function cancel_grievance($id)
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
+
             return redirect('flex/talent-ranges');
           }
         // For Saving Behaviour Ratios
@@ -10089,42 +10089,42 @@ public function cancel_grievance($id)
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
+
             return redirect('flex/talent-ranges');
           }
-  
+
             // For Deleting  Target Ratios
             public function delete_target_ratio($id)
             {
                 $target = TargetRatio::find($id);
-  
+
                 $target->delete();
-    
+
                 return redirect('flex/talent-ranges');
             }
             // For Deleting  Time Ratios
             public function delete_time_ratio($id)
             {
                 $time = TimeRatio::find($id);
-  
+
                 $time->delete();
-    
+
                 return redirect('flex/talent-ranges');
             }
             // For Deleting  Behaviour Ratios
             public function delete_behaviour_ratio($id)
             {
                 $behaviour = BehaviourRatio::find($id);
-  
+
                 $behaviour->delete();
-    
+
                 return redirect('flex/talent-ranges');
             }
 
         public function performance()
         {
             $employee=EMPL::all();
-           
+
             $item1=0;
             $item1_count=0;
 
@@ -10157,48 +10157,48 @@ public function cancel_grievance($id)
 
             $item11=0;
             $item11_count=0;
-            
+
             $item12=0;
             $item12_count=0;
 
             $item13=0;
             $item13_count=0;
 
-            
+
             $item14=0;
             $item14_count=0;
 
-            
+
             $item15=0;
             $item15_count=0;
-            
+
             $item16=0;
             $item16_count=0;
-                        
+
             $item17=0;
             $item17_count=0;
-                        
+
             $item18=0;
             $item18_count=0;
-                        
+
             $item19=0;
             $item19_count=0;
-                        
+
             $item20=0;
             $item20_count=0;
-                        
+
             $item21=0;
             $item21_count=0;
-                        
+
             $item22=0;
             $item22_count=0;
-                        
+
             $item23=0;
             $item23_count=0;
-                        
+
             $item24=0;
             $item24_count=0;
-                        
+
             $item25=0;
             $item25_count=0;
 
@@ -10221,11 +10221,11 @@ public function cancel_grievance($id)
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour')
                 ;
-                
-               
+
+
                 // For Behaviour Needs Improvement
                 if ($behaviour >0 && $behaviour <20 ) {
-                //For Improvement 
+                //For Improvement
                 if ($performance > 0 && $performance <20 ) { $item1=$item1+$performance; $item1_count++;}
                 // For Improvement Good
                 if ($performance >= 20 && $performance <40 ) { $item2=$item2+$performance; $item2_count++;}
@@ -10239,7 +10239,7 @@ public function cancel_grievance($id)
 
                   // For Behaviour Good
                 if ($behaviour >= 20 && $behaviour < 40) {
-                //For Improvement 
+                //For Improvement
                 if ($performance > 0 && $performance <20 ) { $item6=$item6+$performance; $item6_count++;}
                 // For Improvement Good
                 if ($performance >= 20 && $performance <40 ) { $item7=$item7+$performance; $item7_count++;}
@@ -10253,7 +10253,7 @@ public function cancel_grievance($id)
 
                     // For Behaviour Strong
                 if ($behaviour >= 40 && $behaviour < 60) {
-                    //For Improvement 
+                    //For Improvement
                     if ($performance > 0 && $performance <20 ) { $item11=$item11+$performance; $item11_count++;}
                     // For Improvement Good
                     if ($performance >= 20 && $performance <40 ) { $item12=$item12+$performance; $item12_count++;}
@@ -10265,10 +10265,10 @@ public function cancel_grievance($id)
                      if ($performance >= 80 && $performance <100 ) { $item15=$item15+$performance; $item15_count++;}
                  }
 
-                 
+
                     // For Behaviour Very Strong
                 if ($behaviour >= 60 && $behaviour < 80) {
-                    //For Improvement 
+                    //For Improvement
                     if ($performance > 0 && $performance <20 ) { $item16=$item16+$performance; $item16_count++;}
                     // For Improvement Good
                     if ($performance >= 20 && $performance <40 ) { $item17=$item17+$performance; $item17_count++;}
@@ -10279,11 +10279,11 @@ public function cancel_grievance($id)
                     // For Improvement Outstanding
                      if ($performance >= 80 && $performance <100 ) { $item20=$item20+$performance; $item20_count++;}
                  }
-             
+
 
                 // For Behaviour Outstanding
                 if ($behaviour >= 80 && $behaviour < 100) {
-                    //For Improvement 
+                    //For Improvement
                     if ($performance > 0 && $performance <20 ) { $item21=$item21+$performance; $item21_count++;}
                     // For Improvement Good
                     if ($performance >= 20 && $performance <40 ) { $item22=$item22+$performance; $item22_count++;}
@@ -10295,7 +10295,7 @@ public function cancel_grievance($id)
                      if ($performance >= 80 && $performance <100 ) { $item25=$item25+$performance; $item25_count++;}
                  }
 
-                 
+
                 // var_dump($performance);
             }
 
@@ -10337,9 +10337,9 @@ public function cancel_grievance($id)
 
             // return  $data;
 
- 
-           
-           
+
+
+
             return view('performance.report',$data);
         }
 
@@ -10361,7 +10361,7 @@ public function cancel_grievance($id)
             }
             if($ratio)
             {
-               
+
                 $ratio->behaviour = $request->behaviour;
                 $ratio->target = $request->achievement;
                 $ratio->time= $request->time;
@@ -10374,8 +10374,8 @@ public function cancel_grievance($id)
                 $ratio->time= $request->time;
                 $ratio->save();
             }
-        
-    
+
+
             return redirect('flex/performance');
           }
 
@@ -10406,16 +10406,16 @@ public function cancel_grievance($id)
            // For Saving Talent Ratio
            public function save_talent_ratio(Request $request)
            {
- 
+
              $ratio = PerformanceRatio::first();
- 
+
              if(($request->behaviour+$request->achievement+$request->time)!=100)
              {
                  return redirect('flex/talent-ratio')->with('msg','Total of Talent Ratio should be equal to 100');
              }
              if($ratio)
              {
-                
+
                  $ratio->behaviour = $request->behaviour;
                  $ratio->target = $request->achievement;
                  $ratio->time= $request->time;
@@ -10428,8 +10428,8 @@ public function cancel_grievance($id)
                  $ratio->time= $request->time;
                  $ratio->save();
              }
-         
-     
+
+
              return redirect('flex/performance');
            }
 
@@ -10437,7 +10437,7 @@ public function cancel_grievance($id)
            public function talent_matrix()
            {
             $employee=EMPL::all();
-           
+
             $item1=0;
             $item1_count=0;
 
@@ -10465,7 +10465,7 @@ public function cancel_grievance($id)
             $item9=0;
             $item9_count=0;
 
-           
+
             foreach($employee as $item)
 
             {
@@ -10485,14 +10485,14 @@ public function cancel_grievance($id)
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour')
                 ;
-                
+
                 $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
                 $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');
 
                 if ($achieved>0)
                 { $potential=  number_format( $achieved/$target, 2);  }
                 else{ $potential= 0;}
-               
+
                 // For Low Potential
                 if ($potential >0 && $potential <20 ) {
                 //For Low performer
@@ -10505,7 +10505,7 @@ public function cancel_grievance($id)
 
                   // For Medium Potential
                 if ($potential >= 20 && $potential < 40) {
-                //For Low Performer 
+                //For Low Performer
                 if ($performance > 0 && $performance <20 ) { $item4=$item4+$performance; $item4_count++;}
                 // For Medium Performer
                 if ($performance >= 20 && $performance <40 ) { $item5=$item5+$performance; $item5_count++;}
@@ -10515,7 +10515,7 @@ public function cancel_grievance($id)
 
                     // For High Potential
                 if ($potential >= 40 && $potential < 60) {
-                    //For Improvement 
+                    //For Improvement
                     if ($performance > 0 && $performance <20 ) { $item7=$item7+$performance; $item8_count++;}
                     // For Improvement Good
                     if ($performance >= 20 && $performance <40 ) { $item8=$item8+$performance; $item8_count++;}
@@ -10530,7 +10530,7 @@ public function cancel_grievance($id)
             $data['high_performer_medium_potential']= ($item2>0) ? $item2_count : 0 ;
             $data['high_performer_low_potential']= ($item3>0) ? $item3_count : 0 ;
 
-    
+
             // For Column 2
             $data['medium_performer_high_potential'] = ($item4>0) ? $item6_count : 0 ;
             $data['medium_performer_potential']= ($item5>0) ? $item5_count : 0 ;
@@ -10544,9 +10544,9 @@ public function cancel_grievance($id)
 
             return view('talent.talent_matrix',$data);
            }
- 
 
-          
+
+
 
 
 }

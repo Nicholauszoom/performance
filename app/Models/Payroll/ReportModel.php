@@ -2314,32 +2314,181 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function gross_management($payroll_date)
     {
-        // $query =  "DELETE FROM financial_logs where Date(created_at) Like '2023-02-19%'";
-        // DB::insert(DB::raw($query));
+
         $calender = explode('-', $payroll_date);
         $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
 
-        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
-        WHERE e.emp_id = pl.empID /* and e.cost_center = 'Management' */ and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm,employee e2 where e2.emp_id = tm.employeeID and e2.cost_center = 'Management' and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm,employee e2 where tm.employeeID = e2.emp_id and e.cost_center = 'Management' and terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID  and e.cost_center = 'Management'  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
 
         $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
-        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'  /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
+        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Management'  and  al.payment_date = '" . $payroll_date . "'";
 
         $query3 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
-        WHERE   al.empID = e.emp_id and al.benefit_in_kind = 'YES'  /* and e.cost_center = 'Management' */ and  al.payment_date = '" . $payroll_date . "'";
+        WHERE   al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Management'  and  al.payment_date = '" . $payroll_date . "'";
 
         $row = DB::select(DB::raw($query));
 
         $row2 = DB::select(DB::raw($query2));
 
-        $row3 = DB::select(DB::raw($query3));
-
-dd($row3);
         $data = 0;
 
         if($row)$data = $row[0]->total_gross;
         if($row2)$data = $data + $row2[0]->total_gross;
-        //if($row3)$data = $data + $row3[0]->total_gross;
+
+
+        return $data;
+    }
+    public function gross($payroll_date){
+
+        $calender = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+
+        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm  where tm.terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm where  tm.terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID   and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+
+        $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
+        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'  and  al.payment_date = '" . $payroll_date . "'";
+
+
+        $row = DB::select(DB::raw($query));
+
+        $row2 = DB::select(DB::raw($query2));
+
+        $data = 0;
+
+        if($row)$data = $row[0]->total_gross;
+        if($row2)$data = $data + $row2[0]->total_gross;
+
+
+        return $data;
+    }
+
+    public function benefit_allowance($payroll_date){
+
+       $query = "SELECT SUM(al.amount) as amount,al.description as description,e.cost_center as account_name FROM allowance_logs al,employee e
+        WHERE   al.empID = e.emp_id and al.benefit_in_kind = 'YES'  and  al.payment_date = '" . $payroll_date . "' group by al.description";
+
+       $row = DB::select(DB::raw($query));
+
+
+       return $row;
+
+
+    }
+
+    public function contributions($payroll_date){
+        $calender = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        //paye
+        $query = "SELECT SUM(pl.taxdue)+(IF((SELECT SUM(tm.paye) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.paye) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as paye FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $paye = DB::select(DB::raw($query));
+
+         //sdl
+         $query = "SELECT SUM(pl.sdl)+(IF((SELECT SUM(tm.sdl) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.sdl) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as sdl FROM payroll_logs pl, employee e
+         WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+         $sdl = DB::select(DB::raw($query));
+
+          //wcf
+        $query = "SELECT SUM(pl.wcf)+(IF((SELECT SUM(tm.wcf) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.wcf) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as wcf FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $wcf = DB::select(DB::raw($query));
+
+
+
+        //nssf
+        $query = "SELECT SUM(pl.pension_employee)+(IF((SELECT SUM(tm.pension_employee) from terminations tm,employee e2 where e2.emp_id = tm.employeeID  and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.pension_employee) from terminations tm,employee e2 where tm.employeeID = e2.emp_id  and terminationDate like '%" . $date . "%'),0)) as pension_employee FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+        $nssf = DB::select(DB::raw($query));
+        $data['paye'] = ' '; $data['wcf'] = ' '; $data['wcf'] = ' '; $data['wcf'] = ' ';
+
+        if($paye)$data['paye'] = $paye[0]->paye;
+        if($wcf)$data['wcf'] = $wcf[0]->wcf;
+        if($sdl)$data['sdl'] = $sdl[0]->sdl;
+        if($nssf)$data['nssf'] = $nssf[0]->pension_employee;
+
+
+       return $data;
+
+
+     }
+
+     public function net_terminal_benefit($payroll_date){
+        $calender = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+        $query = "SELECT tm.take_home as amount,'Terminal Benefit' as Description,e.fname as name from terminations tm,employee e where e.emp_id = tm.employeeID and tm.terminationDate like '%".$date."%'";
+
+        $row = DB::select(DB::raw($query));
+
+        return $row;
+
+     }
+
+     public function net_pay($payroll_date){
+        $data = $this->get_payroll_summary($payroll_date);
+        $net_salary = 0;
+        foreach($data as $row){
+
+            $net_salary += $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
+
+        }
+
+        //dd($net_salary);
+
+        return $net_salary;
+     }
+
+     public function journal_heslb($payroll_date){
+        $query = "SELECT SUM(paid) as amount from loan_logs where payment_date = '".$payroll_date."' limit 1";
+
+        $row = DB::select(DB::raw($query));
+
+
+
+
+        $amount = 0;
+        if($row)
+        $amount = $row[0]->amount;
+
+        return $amount;
+
+
+     }
+
+     public function journal_deductions($payroll_date){
+        $query = "SELECT SUM(dl.paid) as amount,dl.description as description,CONCAT(dl.description,'-',e.fname,' ',e.lname) as naration FROM deduction_logs dl,employee e
+        WHERE   dl.empID = e.emp_id   and  dl.payment_date = '" . $payroll_date . "' group by dl.description";
+
+       $row = DB::select(DB::raw($query));
+
+
+       return $row;
+     }
+
+    public function gross_non_management($payroll_date)
+    {
+
+        $calender = explode('-', $payroll_date);
+        $date = !empty($payroll_date)?$calender[0] . '-' . $calender[1]:null;
+
+        $query = "SELECT SUM(pl.salary)+(IF((SELECT SUM(tm.total_gross) from terminations tm,employee e2 where e2.emp_id = tm.employeeID and e2.cost_center = 'Non Management' and terminationDate like '%" . $date . "%') > 0,(SELECT SUM(tm.total_gross) from terminations tm,employee e2 where tm.employeeID = e2.emp_id and e.cost_center = 'Non Management' and terminationDate like '%" . $date . "%'),0)) as total_gross FROM payroll_logs pl, employee e
+        WHERE e.emp_id = pl.empID  and e.cost_center = 'Non Management'  and e.contract_type != 2  and pl.payroll_date = '" . $payroll_date . "'";
+
+        $query2 = "SELECT SUM(al.amount) as total_gross FROM allowance_logs al,employee e
+        WHERE  al.empID = e.emp_id and al.benefit_in_kind = 'NO'   and e.cost_center = 'Non Management'  and  al.payment_date = '" . $payroll_date . "'";
+
+
+
+        $row = DB::select(DB::raw($query));
+
+        $row2 = DB::select(DB::raw($query2));
+
+        $data = 0;
+
+        if($row)$data = $row[0]->total_gross;
+        if($row2)$data = $data + $row2[0]->total_gross;
+
 
         return $data;
     }
