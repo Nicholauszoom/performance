@@ -107,12 +107,13 @@
                   </div>
           
               </div>
-              <?php if( session('griev_hr')!='' || session('griev_board')!='') { ?> 
+              @can('confirm-transfer')
               <?php if($status == 0){  ?>
               <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="card">
-                  <div class="card-head">
+                  <div class="card-head p-2">
                     <h2><i class="fa fa-edit"></i>&nbsp;&nbsp;<b>Grievance Conclusion</b></h2>
+                    <hr>
                     <div class="clearfix"></div>
                   </div>
                   <div class="card-body">
@@ -120,39 +121,42 @@
 
                     <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url('').'flex/grievance_details/'.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
 
-                     
-                      <div class="form-group">
+                     <div class="row">
+                      <div class="form-group col-12">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Remarks
                         </label>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
                         <textarea placeholder="Remarks" required="" cols="15" class="form-control col-md-7 col-xs-12"  name="remarks"  rows="5"></textarea>
                         </div>
                       </div> <br>
                       
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"> Support Document  If Any<br> ( eg. pdf, Picture etc..) 
+                      <div class="form-group mb-2">
+                        <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"> Support Document  If Any <small class="text-danger">( eg. pdf, Picture etc..)</small>  
                         </label>
-                        <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
                         <input type='file' name='userfile'  />
                         </div>
                       </div> <br>
-                      
+                      <hr>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                           <button type="submit" name="solve" class="btn btn-success">MARK AS SOLVED</button>
                           
-                          <?php if(session('griev_hr')!='') { ?>
-                          <button type="submit" name="submit" class="btn btn-warning">SUBMIT TO THE BOARD</button>
-                          <?php } ?>
+                          {{-- <?php if(session('griev_hr')!='') { ?>
+                          <button type="submit" name="submit" class="btn btn-warning brn">SUBMIT TO THE BOARD</button>
+                          <?php } ?> --}}
                         </div>
                       </div>
                       
                       
+                     </div>
+                   
                       </form><br><br> 
                   </div>
               </div>
-              </div> <?php } } ?>
+              </div> <?php }  ?>
                   
+              @endcan
                   <!-- /.col-lg-6 (nested) -->
                    <!-- /.col-lg-6 (nested) -->
 

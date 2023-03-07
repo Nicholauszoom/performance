@@ -9647,7 +9647,7 @@ public function cancel_grievance($id)
 
     public function my_grievances()
     {   
-        $data['other_grievances']=Grievance::all();
+        $data['my_grievances']=Grievance::latest()->where('empID',Auth::user()->emp_id)->get();
         return view('my-services.grievances',$data); 
     }
 

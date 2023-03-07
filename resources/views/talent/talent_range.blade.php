@@ -196,7 +196,7 @@
 
                             <div class="form-group">
                                 <label class="col-form-label col-sm-3">Range Name: </label>
-                                    <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
+                                    <input type="text"  name="name" required  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
 
                                     @error('process_name')
                                         <p class="text-danger mt-1"> Field Process Name has an error </p>
@@ -204,13 +204,13 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label col-sm-3"> Minimum Value</label>
-                                    <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                                    <input type="number" name="min_value" required  placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
 
                             
                             </div>
                             <div class="form-group">
                                 <label class="col-form-label col-sm-3"> Maximum Value</label>
-                                    <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                                    <input type="number" name="max_value" required  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
 
                             </div>
                             </div>
@@ -249,7 +249,7 @@
     
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3">Range Name: </label>
-                                        <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
+                                        <input type="text" required name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
     
                                         @error('process_name')
                                             <p class="text-danger mt-1"> Field Process Name has an error </p>
@@ -257,13 +257,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Minimum Value</label>
-                                        <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                                        <input type="number" required name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
     
                                 
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Maximum Value</label>
-                                        <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                                        <input type="number" name="max_value"  required placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
     
                                 </div>
                                 </div>
@@ -302,7 +302,7 @@
     
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3">Range Name: </label>
-                                        <input type="text"  name="name"  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
+                                        <input type="text"  name="name" required  value="{{ old('process_name') }}" placeholder="Enter Range Name" class="form-control @error('process_name') is-invalid @enderror">
     
                                         @error('process_name')
                                             <p class="text-danger mt-1"> Field Process Name has an error </p>
@@ -310,13 +310,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Minimum Value</label>
-                                        <input type="number" name="min_value" placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                                        <input type="number" name="min_value" required placeholder="Minimum Value"   value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
     
                                 
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label col-sm-3"> Maximum Value</label>
-                                        <input type="number" name="max_value"  placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                                        <input type="number" name="max_value" required placeholder="Maximum Value"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
     
                                 </div>
                                 </div>

@@ -31,7 +31,9 @@
     </div>
 </div>
 
-
+@php
+$position= App\Models\PositionSkills::all();
+@endphp
   <script src="{{ asset('js/anychart-core.min.js') }}"></script>
   <script src="{{ asset('js/anychart-heatmap.min.js') }}"></script>
   <script type="text/javascript">anychart.onDocumentReady(function () {
@@ -109,7 +111,8 @@
   // alert(index)
   
   if(index==0){
-         alert("High Performer"+"High Potential",)
+
+       alert("High Performer"+"High Potential",)
   
   
   
@@ -158,7 +161,12 @@
   
   
   else if(index==7){
-         alert("High Performer"+"Low Potential")
+         alert("High Performer"+"Low Potential 1 "
+         
+         <?php  foreach($position as $item)
+              $item->i;
+         ?>
+         )
   
   }
   

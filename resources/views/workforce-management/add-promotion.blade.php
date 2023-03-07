@@ -8,6 +8,14 @@
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
     <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+
+    
+	<!-- Theme JS files -->
+	<script src="{{ asset('assets/js/vendor/notifications/noty.min.js') }}"></script>
+
+	<script src="{{ asset('assets/js/app.js') }}"></script>
+	<script src="{{ asset('assets/demo/pages/extra_noty.js') }}"></script>
+	<!-- /theme JS files -->
 @endpush
 
 @section('page-header')
@@ -67,7 +75,7 @@
                                     <div class="col-md-6 col-lg-6">
                                         <div class="mb-3">
                                             <label class="form-label">New Position Position:</label>
-                                            <select class="form-control select1_single select @error('newPosition') is-invalid @enderror" id="newPosition" name="newPosition">
+                                            <select required     class="form-control select1_single  select @error('newPosition') is-invalid @enderror" id="newPosition" name="newPosition">
                                                 <option value=""> Select New Position </option>
                                                 @foreach ($pdrop as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }} </option>
@@ -89,7 +97,7 @@
 
                                             <div class="mb-3">
                                                 <label class="form-label">New Job Level:</label>
-                                                <select name="newLevel" id="newLevel" class="form-select select">
+                                                <select name="newLevel" id="newLevel" required class="form-select select">
                                                     <option value="1">1</option>
                                                     <option value="2">2</option>
                                                     <option value="3">3</option>
