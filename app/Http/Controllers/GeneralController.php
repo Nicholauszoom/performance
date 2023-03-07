@@ -9586,7 +9586,7 @@ public function cancel_grievance($id)
 
     $project->delete();
 
-    return redirect('flex/my-grievances');
+    return redirect('flex/my-grievences');
 }
 
     // Start of self services

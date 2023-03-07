@@ -71,12 +71,28 @@
       { from: 11, to: 15 },
       { greater: 16 }
     ]);
+
+//     chart.getSeries(0).fill([
+//   "#FFC107", // Sales
+//   "#03A9F4", // Marketing
+//   "#4CAF50",  // Engineering
+//   "#FFC107", // Sales
+//   "#03A9F4", // Marketing
+//   "#4CAF50",  // Engineering
+//   "#FFC107", // Sales
+//   "#03A9F4", // Marketing
+//   "#4CAF50",  // Engineering
+// ]);
+
+// "#FFC107", // Sales
+//   "#03A9F4", // Marketing
+//   "#4CAF50",  // Engineering
     
     // set the colors for each range, from smaller to bigger
     customColorScale.colors(["#e31c20", "#E69645", "#6dd25c", "#2f9c41"]);
           
     // set the color scale as the color scale of the chart
-    chart.colorScale(customColorScale);
+//     chart.colorScale(customColorScale);
           
     // set the container id
     chart.container("container");
