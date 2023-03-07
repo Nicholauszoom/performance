@@ -9434,7 +9434,7 @@ public function cancel_grievance($id)
 
     $project->delete();
 
-    return redirect('flex/my-grievances');
+    return redirect('flex/my-grievences');
 }
 
     // Start of self services
@@ -9495,7 +9495,6 @@ public function cancel_grievance($id)
 
     public function my_grievances()
     {   
-        $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
         $data['other_grievances']=Grievance::all();
         return view('my-services.grievances',$data); 
     }
