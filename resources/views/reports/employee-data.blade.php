@@ -122,7 +122,6 @@
         <div class="col-md-4 col-4">
 
             <div class="card-img-actions d-inline-block float-end my-3">
-                <img src="" alt="passport">
                 {{-- rounded-circle --}}
                   {{-- <img class=" " src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : public_path('storage/profile/' . $photo) }}" width="150px" height="150px" alt=""> --}}
               </div>
@@ -130,17 +129,17 @@
         </div>
 
 
-  
+
 
     </div>
 
- 
+
         {{-- Start of employee Bio data --}}
         <div class="row " style="border-bottom: 8px solid black !important; ">
             <div class="col-md-12 ">
                 <div class="card border-top border-top-width-3 p-2 border-top-main  rounded-0 border-0 shadow-none">
-                   
-    
+
+
         <table style="border:none" width="100%;border-bottom:5px;">
                     <tr>
                         <td style="width:50%">
@@ -167,12 +166,12 @@
                     <h6 style="font-size:12px;font-weight:normal;color:white;">   Maiden Name
                         <span class="text-muted float-end float-right"> @if($details) {{$details->maide_name}} @endif</span>
                     </h6>
-                    
-                    
-                    
+
+
+
             </div>
-     
-           
+
+
            </div>
         </div>
         {{-- end of name information --}}
@@ -202,20 +201,20 @@
                 <h6 style="font-size:12px;font-weight:normal">   Religion:
                     <span class="text-muted float-end float-right">  @if($details) {{$details->religion}} @endif  </span>
                 </h6>
-                
+
             </div>
-     
-           
+
+
            </div>
         </div>
         {{-- end of biography information --}}
                         </td>
                     </tr>
-                
+
                     </table>
-                 
+
                         {{-- start of address and identification details --}}
-                
+
                     <div class="row">
                             <table style="border:none" width="100%;border-bottom:5px;">
                                 <tr>
@@ -241,12 +240,12 @@
                                 <h6 style="font-size:12px;font-weight:normal;color:white;">   Maiden Name
                                     {{-- <span class="text-muted float-end float-right"> @if($details) {{$details->maide_name}} @endif</span> --}}
                                 </h6>
-                       
-                                
-                                
+
+
+
                         </div>
-                 
-                       
+
+
                        </div>
                     </div>
                     {{-- end of name information --}}
@@ -277,21 +276,21 @@
                                 <br>
                                 {{-- <span class="text-muted float-end float-right"> @if($details) {{$details->maide_name}} @endif</span> --}}
                             </h6>
-                   
-                            
+
+
                         </div>
-                 
-                       
+
+
                        </div>
                     </div>
                     {{-- end of biography information --}}
                                     </td>
                                 </tr>
-                            
+
                                 </table>
-                             
+
                         </div>
-    
+
 
                         {{-- start of employee details --}}
 
@@ -307,7 +306,7 @@
                                 <h6 style="font-size:12px;font-weight:normal">   First Name
                                     <span class="text-muted float-end float-right">  @if($emergency) {{ $emergency->em_fname}} @endif</span>
                                 </h6>
-                                <h6 style="font-size:12px;font-weight:normal"> Middle Name 
+                                <h6 style="font-size:12px;font-weight:normal"> Middle Name
                                     <span class="text-muted float-end float-right "> @if($emergency) {{ $emergency->em_mname}} @endif@endif</span>
                                 </h6>
                                 <h6 style="font-size:12px;font-weight:normal;">  Surname
@@ -319,19 +318,19 @@
                                 <h6 style="font-size:12px;font-weight:normal;">   Occupation
                                     <span class="text-muted float-end float-right">  @if($emergency) {{ $emergency->em_occupation}} @endif </span>
                                 </h6>
-                                <h6 style="font-size:12px;font-weight:normal;">    Cellphone Number 
+                                <h6 style="font-size:12px;font-weight:normal;">    Cellphone Number
                                     <span class="text-muted float-end float-right"> @if($emergency) {{ $emergency->em_phone}} @endif </span>
                                 </h6>
-                                
-                                
+
+
                         </div>
-                 
-                       
+
+
                        </div>
                     </div>
                     {{-- end of name information --}}
                                     </td>
-            
+
                                     <td style="width:50%">
                     {{-- start of biography information --}}
                     <div class="col-md-12 col-md-12 col-lg-12 col-12">
@@ -357,28 +356,28 @@
                                 <br>
                                 {{-- <span class="text-muted float-end float-right"> @if($details) {{$details->maide_name}} @endif</span> --}}
                             </h6>
-                   
-                            
+
+
                         </div>
-                 
-                       
+
+
                        </div>
                     </div>
                     {{-- end of biography information --}}
                                     </td>
                                 </tr>
-                            
+
                                 </table>
-                             
+
                         </div>
                         {{-- / --}}
                                 <div class="row">
-                          
-    
-        
+
+
+
                         {{-- Start of Family Informations --}}
-                   
-    
+
+
                                 <div class="row">
 
                                     <h5 style="border-bottom:4px solid black !important;font-size:14px;">FAMILY DETAILS</h5>
@@ -386,7 +385,7 @@
                                     {{-- start of spouse details --}}
                                     @if($spouse)
                                     <div class="col-md-12">
-                                        
+
                                         <h5 style="font-size:13px">Spouse Details:</h5>
                                         <div class="row mb-1">
                                         <table style="border:none" width="100%">
@@ -394,43 +393,43 @@
                                            <td width="50%" style="width: 50%">
                                                 <h6 style="font-size:12px;font-weight:normal">   Names
                                                     <span class="text-muted float-end float-right"> <small> @if($spouse) {{ $spouse->spouse_fname}} @endif</small></span>
-                                                </h6> 
+                                                </h6>
                                                 <h6 style="font-size:12px;font-weight:normal">  Country of Birth
                                                     <span class="text-muted float-end float-right"> <small> @if($spouse) {{ $spouse->spouse_birthcountry}} @endif</small></span>
-                                                </h6> 
+                                                </h6>
                                                 <h6 style="font-size:12px;font-weight:normal">  NIDA Number
                                                     <span class="text-muted float-end float-right"> <small> @if($spouse) {{ $spouse->spouse_nida}} @endif </small></span>
-                                                </h6> 
+                                                </h6>
                                                 <h6 style="font-size:12px;font-weight:normal">  Employer:
                                                     <span class="text-muted float-end float-right"> <small>@if($spouse) {{ $spouse->spouse_employer}} @endif </small></span>
-                                                </h6> 
+                                                </h6>
                                             </td>
                                             <td width="50%" style="width:50%">
                                                 <h6 style="font-size:12px;font-weight:normal">  Place of Birth (City/Region):
                                                     <span class="text-muted float-end float-right"> <small>  @if($spouse) {{ $spouse->spouse_birthplace}} @endif</small></span>
                                                 </h6>
-                                                <h6 style="font-size:12px;font-weight:normal">  Nationality 
+                                                <h6 style="font-size:12px;font-weight:normal">  Nationality
                                                     <span class="text-muted float-end float-right"> <small>@if($spouse) {{ $spouse->spouse_nationality}} @endif</small></span>
-                                                </h6> 
+                                                </h6>
                                                 <h6 style="font-size:12px;font-weight:normal">  Passport Number:
                                                     <span class="text-muted float-end float-right"> <small> @if($spouse) {{ $spouse->spouse_passport}} @endif</small></span>
-                                                </h6> 
+                                                </h6>
                                                 <h6 style="font-size:12px;font-weight:normal">  Job Title:
                                                     <span class="text-muted float-end float-right"> <small> @if($spouse) {{ $spouse->spouse_job_title}} @endif</small></span>
-                                                </h6> 
+                                                </h6>
                                             </td>
 
                                         </tr>
-                                
+
                                         </table>
                                         </div>
-                                       
-    
-    
+
+
+
                                     </div>
                                     @endif
                                     {{-- end of spouse details --}}
-    
+
                                     {{-- start of children details --}}
                                     @if($children->count() >0)
                                     <div class="col-md-12">
@@ -443,7 +442,7 @@
                                             </h6>
                                          </div>
                                          <div class="col-12">
-    
+
                                             @if($childs)
                                             <small><i>* (Birth Certificate/Adoption certificate stating you are the legal guardian must be attached)</i></small>
                                             <table class=""  style="font-size: 10px;border:0.5px solid black;" width="100%" >
@@ -458,15 +457,15 @@
                                                 <tr>
                                                 @foreach ( $children as $item )
                                               <tr>
-    
+
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->dep_name}} </td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->dep_surname }} </td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->dep_birthdate }}</td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->dep_gender }}</td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->dep_certificate }} </td>
-    
+
                                               </tr>
-    
+
                                              @endforeach
                                             </table>
                                              @endif
@@ -474,13 +473,13 @@
                                         </div>
                                     </div>
                                          @endif
-                                       
+
                                          {{-- start of Parents details --}}
 
                                          @if($parents->count() >0)
                                          <hr>
                                         <h5 style="font-size:14px;"> Parent's Details :</h5>
-    
+
                                          <div class="col-12">
                                            <table class="table table-responsive productsTable "  style="font-size: 10px;border:0.5px solid black;" width="100%" >
                                               <tr style="border:1px solid black;">
@@ -492,47 +491,47 @@
                                               </tr>
                                               @foreach ( $parents as $item )
                                               <tr>
-    
+
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->parent_names}} </td>
                                                 <td style="font-size: 10px;border:0.5px solid black;">{{ $item->parent_relation }} </td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->parent_birthdate }}</td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->parent_residence }}</td>
                                                 <td  style="font-size: 10px;border:0.5px solid black;">{{ $item->parent_living_status }} </td>
-    
+
                                               </tr>
                                               @endforeach
-    
-    
+
+
                                               </table>
-    
+
                                          </div>
                                          @endif
                                         {{-- end of parents details --}}
-                                         
-    
-    
+
+
+
                                     {{-- end of children details --}}
-    
+
                                 </div>
 
-                 
-                                
+
+
                         {{-- / --}}
-    
+
                         {{-- Start of Education --}}
- 
+
                         @if($qualifications->count() > 0 || $certifications->count() > 0)
                                 <div class="row">
-    
-    
+
+
                                     {{-- start of Academic Qualifications details --}}
                                     <div class="col-md-12">
-                                      
+
                                         <h5 class="" style="border-bottom:4px solid black !important; font-size:14px;">EDUCATIONAL BACKGROUND: </h5>
-                                     
+
                                         <div class="row mb-1">
                                          <div class="col-12">
-    
+
                                             <table class="table table-responsive table-bordered" id="dynamicAddRemove"  style="font-size: 10px;border:0.5px solid black;">
                                                 <tr>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">From /To(Month & Year)</td>
@@ -541,31 +540,31 @@
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">Disciplinary of Study </td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">Location </td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">Final Score & Grades</td>
-    
+
                                                 </tr>
                                                 @forelse ( $qualifications as $item )
                                               <tr>
-    
+
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">{{ $item->start_year}} - {{ $item->end_year}} </td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">{{ $item->institute }} </td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">{{ $item->level }}</td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">{{ $item->course }}</td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">{{ $item->study_location }} </td>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">{{ $item->final_score }} </td>
-    
+
                                               </tr>
-    
+
                                               @empty
-    
+
                                               @endforelse
-                                            </table>                                     
-                                       
-    
-    
+                                            </table>
+
+
+
                                          </div>
                                         {{-- start of Proffessional Certification details --}}
                                         <h6 class=""> Professional Certification/License</h6>
-    
+
                                          <div class="col-12">
                                             <table class="table table-responsive table-bordered" width="100%"  style="font-size: 10px;border:0.5px solid black;">
                                                 <tr>
@@ -574,52 +573,52 @@
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">Qualification Obtained </td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">Membership Number</td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">Status Active/ Inactive</td>
-    
+
                                                 </tr>
                                                 @forelse ( $certifications as $item )
                                                 <tr>
-    
+
                                                   <td class="text-center" style="font-size: 10px;border:0.5px solid black;" >{{ $item->cert_start}} - {{ $item->cert_end }}</td>
                                                   <td class="text-center" style="font-size: 10px;border:0.5px solid black;" >{{ $item->cert_name }} </td>
                                                   <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->cert_qualification }}</td>
                                                   <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->cert_number }}</td>
                                                   <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->cert_status }} </td>
-    
+
                                                 </tr>
                                                 @empty
-    
+
                                                 @endforelse
-    
-    
+
+
                                                 </table>
-    
-    
-    
+
+
+
                                          </div>
-    
+
                                         {{-- end of parents details --}}
                                          </div>
-    
-    
-    
+
+
+
                                         </div>
                                     {{-- end of children details --}}
-    
+
                                 </div>
                         @endif
                         {{-- / --}}
-    
+
                         {{-- start of Employment History --}}
                         @if($histories->count() >0)
                                 <div class="row">
-    
-    
+
+
                                     {{-- start of previous employment details --}}
                                     <div class="col-md-12">
                                         <h5 style="font-size:14px;"> EMPLOYMENT HISTORY:</h5>
                                         <div class="row mb-1">
                                          <div class="col-12">
-    
+
                                             <table class="table table-response table-bordered cell-border" id="dynamicAddRemove" width="100%" style="font-size:10px; border:0.5 px solid black;">
                                                 <tr>
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">From /To(Month & Year)</td>
@@ -630,39 +629,39 @@
                                                 <td class="text-center"  style="font-size: 10px;border:0.5px solid black;">Reason for Leaving</td>
                                                 @forelse ( $histories as $item )
                                               <tr>
-    
+
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->hist_start}} - {{ $item->hist_end}} </td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->hist_employer }} </td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->hist_industry }} </td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->hist_position }}</td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->hist_status }}</td>
                                                 <td class="text-center" style="font-size: 10px;border:0.5px solid black;">{{ $item->hist_reason }} </td>
-    
+
                                               </tr>
-    
+
                                               @empty
-    
+
                                               @endforelse
-    
+
                                                 </table>
-    
-    
-    
+
+
+
                                          </div>
-    
-    
+
+
                                         {{-- end of parents details --}}
                                          </div>
-    
-    
-    
+
+
+
                                         </div>
                                     {{-- end of children details --}}
-    
+
                                 </div>
                         @endif
                         {{-- / --}}
-    
+
                     </div>
                 </div>
             </div>
@@ -671,11 +670,11 @@
             <h5 style="border-bottom:4px solid black !important;font-size:14px;">DISCLOSURE STATEMENT</h5>
             <p style="font-size:10px">
                 I declare that all information furnished is true. I authorise and consent the bank to obtain anu other information form any
-                other sources and by whatever means considered appropriate. 
+                other sources and by whatever means considered appropriate.
             </p>
             <p style="font-size:10px">
                 I understand that any misrepresentation/ false declaration and omission of facts made in this form will be sufficient cause
-                for my termination at any time during my employment with African Banking Corporation Tanzania Limited also trading as BancABC. 
+                for my termination at any time during my employment with African Banking Corporation Tanzania Limited also trading as BancABC.
             </p>
 
             <p style="font-size:10px">
@@ -689,11 +688,11 @@
 
         {{-- / --}}
           </div>
-    
-    
+
+
         {{-- end of employee bio data --}}
 
- 
+
 
         <div class="row p-2" style="border-top:1px solid black !important;margin-top:2px !important; ">
         <table style="border:none;">
@@ -709,17 +708,17 @@
     
                     <div class="col-12 col-md-12 col-12 col-lg-12 text-secondary" style="font-size:10px;">
                         <i>
-                            E m p l o y e e s I n i t i a l : _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+                            E m p l o y e e s I n i t i a l : _ _ _ _ _ _ _ _ _ _ _ _ _ _
                         </i>
-                       
+
                     </div>
                 </td>
-                
+
             </tr>
         </table>
 
         </div>
-    
+
       </div>
 </div>
 

@@ -185,7 +185,7 @@ class Payroll extends Model {
         ('" . $payroll_date . "', 2, '" . $empID . "', '', '" . $dateToday . "', '" . $payroll_date . "', (SELECT rate_employer from deduction where id=4 ), (SELECT rate_employer from deduction where id=2 ) )";
             DB::insert(DB::raw($query));
             //INSERT ALLOWANCES
-            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
+            $query = "INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
 
 SELECT ea.empID AS empID, a.name AS description,
 
@@ -212,7 +212,8 @@ IF((e.unpaid_leave = 0)
 
 
 
- '" . $payroll_date . "' AS payment_date
+ '" . $payroll_date . "' AS payment_date,
+ a.Isbik as benefit_in_kind
 
 FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
             DB::insert(DB::raw($query));
@@ -1269,7 +1270,7 @@ IF(
             $query = "UPDATE allowances SET state = IF(month('" . $payroll_date . "') = 12,1,0) WHERE type = 1";
             DB::insert(DB::raw($query));
             //INSERT ALLOWANCES
-            $query = "INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
+            $query = "INSERT INTO allowance_logs(empID, description, policy, amount, payment_date,benefit_in_kind)
 
 SELECT ea.empID AS empID, a.name AS description,
 
@@ -1296,7 +1297,8 @@ IF((e.unpaid_leave = 0)
 
 
 
- '" . $payroll_date . "' AS payment_date
+ '" . $payroll_date . "' AS payment_date,
+ a.Isbik as benefit_in_kind
 
 FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
             DB::insert(DB::raw($query));

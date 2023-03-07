@@ -14,6 +14,13 @@
 @endpush
 
 @section('content')
+@php
+$total_salary = 0;
+$total_gross = 0;
+$total_deductions = 0;
+$total_taxable = 0;
+$total_taxdue = 0;
+@endphp
 <!-- Column selectors -->
 					<div class="card">
 						<div class="card-header">
@@ -41,33 +48,64 @@
                                     $taxable = $key->salary + $key->allowances - $key->pension_employee;
                                     $taxdue = $key->taxdue;
 
+                                    $total_salary +=$salary;
+                                    $total_gross +=$gross;
+                                    $total_deductions +=$deductions;
+                                    $total_taxable +=$taxable;
+                                    $total_taxdue +=$taxdue;
+
                                     ?>
                                     <tr>
                                         <td width="50">{{ $key->sNo }}</td>
                                         <td align="left" width="180">{{ $name }}</td>
-                                        <td width="140" align="right">{{ number_format($salary,2) }}</td>
-                                        <td width="140" align="right">{{ number_format($gross,2) }}</td>
-                                        <td width="140" align="right">{{ number_format($deductions,2) }}</td>
-                                        <td width="140" align="right">{{ number_format($taxable,2) }}</td>
-                                        <td width="140" align="right">{{ number_format($taxdue,2) }}</td>
+                                        <td width="140" style="text-align: right;">{{ number_format($salary,2) }}</td>
+                                        <td width="140" style="text-align: right;">{{ number_format($gross,2) }}</td>
+                                        <td width="140" style="text-align: right;">{{ number_format($deductions,2) }}</td>
+                                        <td width="140" style="text-align: right;">{{ number_format($taxable,2) }}</td>
+                                        <td width="140" style="text-align: right;">{{ number_format($taxdue,2) }}</td>
                                      </tr>
                                      <?php } ?>
-                                     {{-- <?php foreach($total as $key){
-                                        $salary = $key->sum_salary;
-                                        $gross = $key->sum_gross;
-                                        $deductions = $key->sum_deductions;
-                                        $taxable = $key->sum_taxable;
-                                        $taxdue = $key->sum_taxdue;
-                                        ?>
-                                       <tr>
-                                          <td colspan ="2" style="background-color:#FFFF00;">TOTAL</td>
-                                          <td align="right">{{ number_format($salary,2) }}</td>
-                                          <td align="right">{{ number_format($gross,2) }}</td>
-                                          <td align="right">{{ number_format($deductions,2) }}</td>
-                                          <td align="right">{{ number_format($taxable,2) }}</td>
-                                          <td align="right">{{ number_format($taxdue,2) }}</td>
-                                          </tr>
-                                     <?php } ?> --}}
+
+                                     @if(!empty($paye_termination))
+                                    @foreach($paye_termination as $key)
+                                    @php
+
+                                        $salary = $key->salaryEnrollment;
+                                        $gross = $key->total_gross;
+                                        $name = $key->name;
+                                        $deductions = $key->pension_employee;
+                                        $taxable = $key->taxable;
+                                        $taxdue = $key->paye;
+
+                                        $total_salary +=$salary;
+                                    $total_gross +=$gross;
+                                    $total_deductions +=$deductions;
+                                    $total_taxable +=$taxable;
+                                    $total_taxdue +=$taxdue;
+                                    @endphp
+                                        <tr>
+                                            <td width="50">{{ $key->sNo }}</td>
+                                            <td align="left" width="180">{{ $name }}</td>
+                                            <td width="140" style="text-align: right;">{{ number_format($salary,2) }}</td>
+                                            <td width="140" style="text-align: right;">{{ number_format($gross,2) }}</td>
+                                            <td width="140" style="text-align: right;">{{ number_format($deductions,2) }}</td>
+                                            <td width="140" style="text-align: right;">{{ number_format($taxable,2) }}</td>
+                                            <td width="140" style="text-align: right;">{{ number_format($taxdue,2) }}</td>
+                                         </tr>
+                                         @endforeach
+                                         @endif
+
+                                         <tfoot>
+                                            <tr>
+                                                <td colspan="2">TOTAL</td>
+
+                                                <td width="140" style="text-align: right;">{{ number_format($total_salary,2) }}</td>
+                                                <td width="140" style="text-align: right;">{{ number_format($total_gross,2) }}</td>
+                                                <td width="140" style="text-align: right;">{{ number_format($total_deductions,2) }}</td>
+                                                <td width="140" style="text-align: right;">{{ number_format($total_taxable,2) }}</td>
+                                                <td width="140" style="text-align: right;">{{ number_format($total_taxdue,2) }}</td>
+                                             </tr>
+                                         </tfoot>
                             </tbody>
 						</table>
 					</div>

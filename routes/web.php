@@ -206,7 +206,7 @@ Route::middleware('auth')->group(function () {
         Route::any('save-task-assessment','save_task_assessment')->name('flex.save_task_assessment');
       
 
-        //Adhoc Tasks routes 
+        //Adhoc Tasks routes
         Route::any('tasks','tasks')->name('flex.tasks');
         Route::any('add-adhoctask','add_adhoctask')->name('flex.add-adhock_task');
         Route::any('save-adhoc-task','save_adhoc_task')->name('flex.save-adhoc-task');
@@ -1128,6 +1128,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
 
+        Route::any('/journalEntryReport','journalEntryReport')->name('reports.journalEntryReport');
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
         Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');
