@@ -21,8 +21,8 @@
                             <h3 class="text-uppercase">{{ $role->slug }} ( Role ) - Permissions</h3>
 
                             <div class="card-header header-elements-sm-inline">
-                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-sm px-4"><i
-                                        class="ph-left"></i> Back </a>
+                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-sm px-4"><i class="ph-left"></i>
+                                    Back </a>
 
                                 <div class="header-elements">
                                     {{-- <button type="button" class="btn btn-outline-info btn-xs px-4" data-toggle="modal"
@@ -84,36 +84,36 @@
                                                                 @foreach ($permissions as $permission)
                                                                     <?php $p = $permission->slug; ?>
                                                                     {{-- @if (Gate::check($p) || auth()->user()->id == 1) --}}
-                                                                        @if ($permission->sys_module_id == $module->id)
-                                                                            @if ($role->hasAccess($permission->slug))
-                                                                                <div class="col-md-3 col-sm-6">
-                                                                                    <label
-                                                                                        class="custom-control custom-control-secondary custom-checkbox mb-2">
-                                                                                        <input type="checkbox"
-                                                                                            value="{{ $permission->id }}"
-                                                                                            name="permissions[]"
-                                                                                            class="custom-control-input"
-                                                                                            checked>
-                                                                                        <span
-                                                                                            class="custom-control-label">{{ $permission->slug }}</span>
-                                                                                    </label>
+                                                                    @if ($permission->sys_module_id == $module->id)
+                                                                        @if ($role->hasAccess($permission->slug))
+                                                                            <div class="col-md-3 col-sm-6">
+                                                                                <label
+                                                                                    class="custom-control custom-control-secondary custom-checkbox mb-2">
+                                                                                    <input type="checkbox"
+                                                                                        value="{{ $permission->id }}"
+                                                                                        name="permissions[]"
+                                                                                        class="custom-control-input"
+                                                                                        checked>
+                                                                                    <span
+                                                                                        class="custom-control-label">{{ $permission->slug }}</span>
+                                                                                </label>
 
-                                                                                </div>
-                                                                            @else
-                                                                                <div class="col-md-3 col-sm-6">
-                                                                                    <label
-                                                                                        class="custom-control custom-control-secondary custom-checkbox mb-2">
-                                                                                        <input type="checkbox"
-                                                                                            value="{{ $permission->id }}"
-                                                                                            name="permissions[]"
-                                                                                            class="custom-control-input">
-                                                                                        <span
-                                                                                            class="custom-control-label">{{ $permission->slug }}</span>
-                                                                                    </label>
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="col-md-3 col-sm-6">
+                                                                                <label
+                                                                                    class="custom-control custom-control-secondary custom-checkbox mb-2">
+                                                                                    <input type="checkbox"
+                                                                                        value="{{ $permission->id }}"
+                                                                                        name="permissions[]"
+                                                                                        class="custom-control-input">
+                                                                                    <span
+                                                                                        class="custom-control-label">{{ $permission->slug }}</span>
+                                                                                </label>
 
-                                                                                </div>
-                                                                            @endif
+                                                                            </div>
                                                                         @endif
+                                                                    @endif
                                                                     {{-- @endif --}}
                                                                 @endforeach
                                                             </div>
@@ -125,13 +125,14 @@
                                         <input type="hidden" name="role_id" value="{{ $role->id }}">
                                         <div class="row justify-content-end p-0 mr-1">
                                             <div class="p-2 ">
-                                                <a href="{{ route('roles.index') }}"
-                                                    class="btn btn-main btn-sm px-6"><i
+                                                <a href="{{ route('roles.index') }}" class="btn btn-main btn-sm px-6"><i
                                                         class="fa fa-arrow-circle-left"></i> Back </a>
-                                                {!! Form::submit('Assign', [
-                                                    'class' => 'btn btn-secondary btn-sm
-                                                                                            px-4',
-                                                ]) !!}
+                                                @can('view-Roles')
+                                                    {!! Form::submit('Assign', [
+                                                        'class' => 'btn btn-secondary btn-sm
+                                                                                                                                                px-4',
+                                                    ]) !!}
+                                                @endcan
                                             </div>
                                         </div>
                                         {!! Form::close() !!}
