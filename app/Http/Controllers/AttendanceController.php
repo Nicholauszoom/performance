@@ -148,7 +148,7 @@ class AttendanceController extends Controller
       $data['leave_types'] =LeaveType::all();
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
       $data['leaves'] =Leaves::get();
-
+      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       // Start of Escallation
       $leaves=Leaves::get();
@@ -202,6 +202,13 @@ class AttendanceController extends Controller
         }
       }
       // End of Escallation
+      
+
+      // Start of Auto apply leave
+
+
+
+      // End of auto apply leave
 
       // For Working days
       $d1 = new DateTime (Auth::user()->hire_date);
@@ -209,7 +216,7 @@ class AttendanceController extends Controller
       $interval = $d2->diff($d1);
       $data['days']=$interval->days;
       $data['title'] = 'Leave';
-      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+  
       $data['leave_type'] = $this->attendance_model->leave_type();
       return view('app.leave', $data);
 

@@ -9851,6 +9851,16 @@ public function update_grievance(Request $request)
            return view('performance.single_project',compact('project','tasks',));
        }
 
+       public function edit_project_task($id)
+       {
+
+            $task =ProjectTask::where('id',$id)->first();
+            $project = Project::where('id',$task->project_id)->first();
+            $employees= EMPL::where('state',1)->get();
+            return view('performance.edit_project_task',compact('task','project','employees'));
+
+       }
+
     // For single task Assessment Page
        public function assess_task($id)
        {

@@ -195,6 +195,7 @@ Route::middleware('auth')->group(function () {
         Route::any('update-project','update_project')->name('flex.update-project');
         Route::any('add-task/{id}','add_task')->name('flex.add-task');
         Route::any('save-task','save_project_task')->name('flex.save-task');
+        Route::any('edit-project-task/{id}','edit_project_task')->name('flex.edit-project-task');
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
         Route::any('completed_task/{id}','completed_task')->name('flex.completed_task');

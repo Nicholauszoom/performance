@@ -93,9 +93,9 @@
                               @endif
                               {{-- For Task Editing and deletion --}}
                               @if ($item->created_by==Auth::user()->emp_id)
-                                            <a href="" class="btn btn-sm bg-main">
+                                {{-- <a href="{{ url('flex/edit-project-task/'.$item->id); }}" class="btn btn-sm bg-main">
                                     <i class="ph-pen"></i>
-                                </a>
+                                </a> --}}
                                 <a href="{{ url('flex/delete-project-task/'.$item->id); }}" class="btn btn-sm btn-danger">
                                     <i class="ph-trash"></i>
                                 </a> 
