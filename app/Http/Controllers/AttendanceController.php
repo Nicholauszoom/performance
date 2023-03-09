@@ -230,6 +230,7 @@ class AttendanceController extends Controller
                 $leaves->nature = 1;
                 $leaves->remaining=6.99;
                 $leaves->days=$remaining;
+                $leaves->reason="Did not go for Annual leave !";
                 $leaves->position="Unused Annual";
                 $leaves->status=4;
                 $leaves->save();
