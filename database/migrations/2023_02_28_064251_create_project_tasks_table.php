@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('project_tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
+            $table->dateTime('complete_date');
             $table->foreignId('project_id');
             $table->foreignId('assigned')->nullable();
             $table->integer('status')->default(0);
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->double('behaviour')->default(0);
             $table->double('progress')->default(0);
             $table->text('remark')->nullable();
+            $table->double('performance')->nullable();
             $table->integer('created_by');
             $table->timestamps();
         });

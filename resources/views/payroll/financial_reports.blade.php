@@ -289,60 +289,7 @@
             </div>
         </div>
 
-        {{-- For Performance Report --}}
-        <div class="col-md-6">
-            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-                <div class="card-header">
-                    <h5 class="text-warning">Performance Report</h5>
-                </div>
-
-                <form
-                    id="demo-form2"
-                    enctype="multipart/form-data"
-                    method="post"
-                    action="{{ route('flex.performance')}}"
-                    target="_blank"
-                    data-parsley-validate
-                >
-                    @csrf
-
-                    <div class="card-body">
-
-                        <div class="row mb-2">
-                            <div class=" col-6">
-                            <label for="">Start Date</label>
-                           <input type="date" name="start_date" id="" class="form-control">
-                                
-                            </div>
-                                <div class=" col-6">
-                            <label for="">End Date</label>
-                           <input type="date" name="start_date" id="" class="form-control">
-                                
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-main float-end float-right" type="button"><i class="ph-printer me-2"></i> Print</button>
-
-                        <div class="mt-2">
-                            <label class="form-label font-w-semibold">Report Format:</label>
-
-                            <div class="">
-                                <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
-                                    <label class="ms-2" for="p9">PDF </label>
-                                </div>
-
-                                <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data Table </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
+    
     </div>
 
 

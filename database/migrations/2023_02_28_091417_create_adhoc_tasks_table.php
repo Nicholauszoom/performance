@@ -16,13 +16,19 @@ return new class extends Migration
         Schema::create('adhoc_tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('start_date');
-            $table->foreignId('project_id');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
+            $table->dateTime('complete_date');
             $table->foreignId('assigned')->nullable();
             $table->integer('status')->default(0);
             $table->double('target')->default(0);
             $table->double('achieved')->default(0);
+            $table->double('time')->default(0);
+            $table->double('behaviour')->default(0);
+            $table->double('progress')->default(0);
             $table->text('remark')->nullable();
+            $table->double('performance')->nullable();
+            $table->integer('created_by');
             $table->timestamps();
         });
     }

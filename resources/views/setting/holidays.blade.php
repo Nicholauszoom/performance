@@ -76,7 +76,9 @@
                 <div class="card-header border-0">
                     <div class="">
                         <h6 class="mb-0 text-warning">Holidays</h6>
-            
+
+                        <a href="{{ route('flex.updateHolidayYear') }}" class="btn btn-main btn-sm float-end">Update All Holidays</a>
+            <br>
             
                     </div>
                 <hr>

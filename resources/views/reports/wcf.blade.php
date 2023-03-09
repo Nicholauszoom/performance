@@ -26,22 +26,32 @@
 									<th width="60"><b>Employee ID</b></th>
 									<th width="150"><b>Employee Name</b></th>
 									<th><b>Tin</b></th>
-									<th><b>National ID</b></th>	
+									<th><b>National ID</b></th>
 									<th><b>Employee Basic Salary</b></th>
 									<th><b>Employee Gross Salary</b></th>
 									<th><b>WCF Contribution </b></th>
 									</tr>
 							</thead>
 							<tbody>
-								<?php
-								foreach ($wcf as $row){
+                                @php
+                                    $total_salary = 0;
+                                    $total_gross = 0;
+                                    $total_wcf = 0;
+                                @endphp
+								@foreach ($wcf as $row)
+                                @php
 									$emp_id= $row->emp_id;
 									$name= $row->name;
 									$salary= $row->salary;
 									$gross= ($row->allowances+$row->salary);
 									$tin = $row->tin;
 									$national_id = $row->national_id;
-								  ?>
+
+                                    $total_salary += $salary;
+                                    $total_gross += $gross;
+                                    $total_wcf += $row->wcf;
+                                @endphp
+
 								  <tr align="right">
 									<td width="50" align="center">{{$row->SNo}}</td>
 									<td width="60" align="center">{{$emp_id}}</td>
@@ -52,9 +62,46 @@
 									<td align="right">{{number_format($gross,2)}}</td>
 									<td align="right">{{number_format($row->wcf,2)}}</td>
 									</tr>
-									<?php } ?>
-								
+									@endforeach
+
+                                    @if(!empty($wcf_termination))
+                                    @foreach ($wcf_termination as $row)
+                                @php
+									$emp_id= $row->emp_id;
+									$name= $row->name;
+									$salary= $row->salary;
+									$gross= ($row->total_gross);
+									$tin = $row->tin;
+									$national_id = $row->national_id;
+
+                                    $total_salary += $salary;
+                                    $total_gross += $gross;
+                                    $total_wcf += $row->wcf;
+                                @endphp
+
+								  <tr align="right">
+									<td width="50" align="center">{{$row->SNo}}</td>
+									<td width="60" align="center">{{$emp_id}}</td>
+									<td width="150" align ="left">{{$name}}</td>
+									 <td align="left">{{$tin}}</td>
+									 <td align="left">{{$national_id}}</td>
+									<td align="right">{{number_format($salary,2)}}</td>
+									<td align="right">{{number_format($gross,2)}}</td>
+									<td align="right">{{number_format($row->wcf,2)}}</td>
+									</tr>
+									@endforeach
+                                    @endif
+
 							</tbody>
+                            <tfoot>
+                                <tr align="right">
+									<td width="50" style="text-align:center;" colspan="5" align="center">TOTAL</td>
+
+									<td align="right">{{number_format($total_salary,2)}}</td>
+									<td align="right">{{number_format($total_gross,2)}}</td>
+									<td align="right">{{number_format($total_wcf,2)}}</td>
+									</tr>
+                            </tfoot>
 						</table>
 					</div>
 					<!-- /column selectors -->

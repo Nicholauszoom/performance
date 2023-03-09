@@ -26,6 +26,16 @@ class BankLoanController extends Controller
         return view('loans.loans', compact('loans'));
     }
 
+    //    For Delete  Grievances
+    public function delete_loan($id)
+    {
+        $project = BankLoan::where('id',$id)->first();
+
+        $project->delete();
+
+        return redirect('flex/bank-loans/all-loans');
+    }
+
 
     /**
      * Store a newly created resource in storage.

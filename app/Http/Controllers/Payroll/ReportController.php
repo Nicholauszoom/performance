@@ -182,6 +182,9 @@ class ReportController extends Controller
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
                 $data['total'] = $this->reports_model->s_totalp9($payrolldate);
+                $data['paye_termination'] = $this->reports_model->s_p9_termination($payrolldate);
+
+
             } else {
 
                 $data['paye'] = $this->reports_model->v_p9($payrolldate);
@@ -222,15 +225,21 @@ class ReportController extends Controller
 
         $checkup1 = $this->reports_model->p10check($year, $year);
         $checkup2 = $this->reports_model->p10check($year, $year);
+
         if ($period == 1 && $checkup1 >= 1) {
             // exit($date1start."<br>".$date1end);
             $data['info'] = $this->reports_model->company_info();
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p91($year, $year);
+                $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
+dd($data['paye_terminated']);
                 $data['sdl'] = $this->reports_model->s_p10($year, $year);
                 $data['total'] = $this->reports_model->s_totalp10($year, $year);
+                dd($data['paye']);
+
             } else {
                 $data['paye'] = $this->reports_model->v_p91($year, $year);
+                $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
                 $data['sdl'] = $this->reports_model->v_p10($year, $year);
                 $data['total'] = $this->reports_model->v_totalp10($year, $year);
             }
@@ -250,8 +259,12 @@ class ReportController extends Controller
                 $data['paye'] = $this->reports_model->s_p91($year, $year);
                 $data['sdl'] = $this->reports_model->s_p10($year, $year);
                 $data['total'] = $this->reports_model->s_totalp10($year, $year);
+                $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
+
+
             } else {
                 $data['paye'] = $this->reports_model->v_p91($year, $year);
+                $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
                 $data['sdl'] = $this->reports_model->v_p10($year, $year);
                 $data['total'] = $this->reports_model->v_totalp10($year, $year);
             }
@@ -458,6 +471,7 @@ class ReportController extends Controller
 
         if ($reportType == 1) {
             $data['pension'] = $this->reports_model->s_pension($date, $pensionFund);
+            $data['pension_termination'] = $this->reports_model->s_pension_termination($date, $pensionFund);
             $data['total'] = $this->reports_model->s_totalpension($date, $pensionFund);
         } else {
             $data['pension'] = $this->reports_model->v_pension($date, $pensionFund);
@@ -498,16 +512,20 @@ class ReportController extends Controller
 
             if ($reportType == 1) {
                 $data['wcf'] = $this->reports_model->s_wcf($date);
+                $data['wcf_termination'] = $this->reports_model->s_wcf_termination($date);
                 $data['totalwcf'] = $this->reports_model->s_totalwcf($date);
+
             } else {
                 $data['wcf'] = $this->reports_model->v_wcf($date);
                 $data['totalwcf'] = $this->reports_model->v_totalwcf($date);
+
             }
 
             $data['info'] = $this->reports_model->company_info();
             $data['payroll_month'] = $yyyy . "-" . $mm . "-" . $dd;
 
             $wcf = $data['wcf'];
+
             $totalwcf = $data['totalwcf'];
             $info = $data['info'];
             $payroll_month = $data['payroll_month'];
@@ -1903,6 +1921,58 @@ class ReportController extends Controller
             exit("Invalid Resource Access");
         }
     }
+    public function journalEntryReport(Request $request){
+
+        // $query  = "UPDATE allowance_logs set benefit_in_kind = 'NO' ";
+        // DB::insert(DB::raw($query));
+        // $query1  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'Vehicle Benefit' ";
+        // DB::insert(DB::raw($query1));
+        // $query2  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'Transport Allowance' ";
+        // DB::insert(DB::raw($query2));
+        // $query3  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'Air Ticket Allowance' ";
+        // DB::insert(DB::raw($query3));
+        // $query4  = "UPDATE allowance_logs set benefit_in_kind = 'YES' where description = 'House Rent' ";
+        // DB::insert(DB::raw($query4));
+
+
+
+
+        $data['gross_managent'] = $this->reports_model->gross_management($request->payrolldate);
+
+        $data['gross_non_managent'] = $this->reports_model->gross_non_management($request->payrolldate);
+
+        // nssf,wcf,sdl,paye
+        $data['contributions'] = $this->reports_model->contributions($request->payrolldate);
+
+        $data['deductions'] = $this->reports_model->journal_deductions($request->payrolldate);
+
+        $data['net_terminal_benefit'] = $this->reports_model->net_terminal_benefit($request->payrolldate);
+
+        $data['net_pay'] = $this->reports_model->net_pay($request->payrolldate);
+
+
+        $data['heslb'] = $this->reports_model->journal_heslb($request->payrolldate);
+
+
+        $data['benefits_allowances'] = $this->reports_model->benefit_allowance($request->payrolldate);
+
+        $data['payroll_date'] = $request->payrolldate;
+
+
+
+       if($request->type == 2){
+           return view('reports.journal_entry_datatable',$data);
+       }else{
+
+        $pdf = Pdf::loadView('reports.journal_entry', $data)->setPaper('a4', 'potrait');
+
+        return $pdf->download('journal_entry_report.pdf');
+       }
+
+
+    }
+
+
 
     public function payrollReconciliationDetails(Request $request)
     {
@@ -2917,7 +2987,6 @@ EOD;
 
         //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
 
-        return view('reports.payrolldetails_datatable', $data);
 
 
 
@@ -2926,7 +2995,7 @@ EOD;
         else {
             $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
             return $pdf->download('payrolldetails.pdf');
-        }
+       }
 
         // include(app_path() . '/reports/temp_payroll.php');
     }

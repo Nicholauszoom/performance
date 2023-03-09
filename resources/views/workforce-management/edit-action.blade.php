@@ -107,14 +107,14 @@
                                             <textarea id="description" name="hearing_description" value="{{ $item->detail_of_hearing}}" class="form-control" placeholder="Enter Hearing details here.." rows="6">{{ $item->detail_of_hearing }}</textarea>
                                         </div>
                                     </div>
-                                <div class="col-md-12 col-lg-12 mb-3">
+                                {{-- <div class="col-md-12 col-lg-12 mb-3">
                                     <label class="form-label ">Findings</label>
 
                                     <textarea name="findings" id="findings" class="form-control" value="{{ $item->findings}}" placeholder="Enter Case Findings Here.." rows="4">{{ $item->findings }}</textarea>
                                         @error('findings')
                                             <p class="text-danger mt-1"> Input field Error </p>
                                         @enderror
-                                </div>
+                                </div> --}}
                                 <div class="col-12 col-lg-12">
                                     <div class="mb-3">
                                         <label class="form-label">Recommended Sanction:</label>

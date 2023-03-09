@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 //use App\Http\Controllers\Controller;
 
+use DateTime;
+use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Role;
 use App\Models\User;
@@ -12,6 +14,7 @@ use App\Models\Project;
 use App\Models\Employee;
 use App\Models\Position;
 use App\Models\UserRole;
+use App\Models\AdhocTask;
 use App\Models\Approvals;
 use App\Models\Promotion;
 use App\Models\TimeRatio;
@@ -31,15 +34,16 @@ use App\Models\LeaveApproval;
 use App\Models\BehaviourRatio;
 use App\Models\EmployeeDetail;
 use App\Models\EmployeeParent;
+
 use App\Models\EmployeeSpouse;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
-
 use Barryvdh\DomPDF\Facade\Pdf;
 use Elibyy\TCPDF\Facades\TCPDF;
 use App\Models\EmergencyContact;
 use App\Models\EmployeeComplain;
 use App\Models\PerformanceModel;
+use App\Models\PerformanceRatio;
 use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
@@ -59,6 +63,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
+use App\Models\EmployeePerformance;
+use App\Models\Grievance;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
@@ -1912,7 +1918,7 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
-        dd();
+        
 
 
 
@@ -1934,15 +1940,15 @@ class GeneralController extends Controller
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
         //fetch Line manager data from employee table and send email
-        $linemanager_data = SysHelpers::employeeData($linemanager);
-        $fullname = $linemanager_data['full_name'];
-        $email_data = array(
-            'subject' => 'Employee Overtime Approval',
-            'view' => 'emails.linemanager.overtime-approval',
-            'email' => $linemanager_data['email'],
-            'full_name' => $fullname,
-        );
-        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+        // $linemanager_data = SysHelpers::employeeData($linemanager);
+        // $fullname = $linemanager_data['full_name'];
+        // $email_data = array(
+        //     'subject' => 'Employee Overtime Approval',
+        //     'view' => 'emails.linemanager.overtime-approval',
+        //     'email' => $linemanager_data['email'],
+        //     'full_name' => $fullname,
+        // );
+        // Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
         // dd('Email Sent Successfully');
         //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
 
@@ -3778,6 +3784,136 @@ class GeneralController extends Controller
         $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
         // end of overtime
 
+        //start payroll reconciliation summary
+
+        $calendar = $payrollMonth;
+        //dd($calendar);
+
+        $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
+
+
+        $datewell = explode("-", $calendar);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+
+        $termination_date = $yyyy . "-" . $mm . "-" . $dd;
+        $j_mm = "01";
+        $j_dd = "01";
+        $january_date = $yyyy . "-" . $j_mm . "-" . $j_dd;
+        $termination_month = $yyyy . "-" . $mm;
+        $empID = auth()->user()->emp_id;
+        $today = date('Y-m-d');
+
+        $current_payroll_month = $payrollMonth;
+        $reportType = 1;  //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+        $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
+        $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
+
+        // dd($previous_payroll_month_raw);
+        $data['payroll_date'] = $request->payrolldate;
+        $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+        $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month):0;
+        $data['count_current_month'] = $this->reports_model->s_count($current_payroll_month);
+        $data['total_previous_overtime'] = $this->reports_model->s_overtime($previous_payroll_month);
+        $data['total_current_overtime'] = $this->reports_model->s_overtime($current_payroll_month);
+
+        $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+        $descriptions = [];
+         foreach($total_allowances as $row){
+            if($row->allowance == "N-Overtime"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }elseif($row->allowance == "S-Overtime"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+            elseif($row->allowance == "House Rent"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Leave Allowance"){
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Teller Allowance"){
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+
+            }
+            elseif($row->allowance == "Arrears"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+            elseif($row->allowance == "Long Serving allowance"){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
+                $row->current_amount +=$allowance[0]->current_amount;
+                $row->current_amount +=$allowance[0]->current_amount;
+                array_push($descriptions,$row->description);
+            }
+
+         }
+
+         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
+
+         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+
+         foreach($result as $row){
+
+           array_push($total_allowances,(object)['description'=>$row['description'],
+                                        'allowance'=>$row['description'],
+                                        'current_amount'=>$row['current_amount'],
+                                       'previous_amount'=>$row['previous_amount'],
+                                       'difference'=>$row['current_amount']-$row['previous_amount']]);
+         }
+
+
+
+
+
+         $data['total_allowances'] = $total_allowances;
+        // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+
+
+
+        $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
+        $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic($current_payroll_month) : 0;
+
+        $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
+        $data['total_current_net'] = $this->reports_model->s_grossMonthly($current_payroll_month);
+
+        $data['current_decrease'] =  $this->reports_model->basic_decrease($previous_payroll_month,$current_payroll_month);
+       // dd($data['previous_decrease']);
+       // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
+
+       // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month,$current_payroll_month);
+
+
+        $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
+
+
+
+        //end payroll reconciliation summary
+
         if (session('password_set') == "1") {
             return view('auth.password-change');
         } else {
@@ -3790,6 +3926,22 @@ class GeneralController extends Controller
 
             return view('dashboard', $data);
         }
+    }
+
+    function arrayRecursiveDiff($aArray1, $aArray2)
+    {
+        $aReturn = array();;
+        //bool in_array( $val, $array_name, $mode );
+        for ($i = 0; $i < count($aArray1); $i++) {
+            if (in_array($aArray1[$i]['description'], $aArray2)) {
+                unset($aArray1[$i]);
+                // dd($row['description']);
+            } else {
+                // array_push($aRetur)
+            }
+        }
+
+        return $aArray1;
     }
 
     public function subdropFetcher()
@@ -6899,139 +7051,8 @@ class GeneralController extends Controller
         }
     }
 
-    public function grievance_details(Request $request)
-    {
-        $id = $request->input('id');
 
-        $data['title'] = 'Grievances and Disciplinary';
-        $data['details'] = $this->flexperformance_model->grievance_details($id);
-
-        return view('app.grievance_details', $data);
-
-        if (isset($_POST["submit"])) {
-
-            $id = $request->input('id');
-
-            $config = array(
-                'upload_path' => "./uploads/grievances/",
-                'file_name' => "FILE" . date("Ymd-His"),
-                'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
-                'overwrite' => true,
-            );
-            $path = "/uploads/grievances/";
-
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload()) {
-                // echo "skip"; exit();
-
-                $uploadData = $this->upload->data();
-
-                $updates = array(
-                    'remarks' => $request->input("remarks"),
-                    'support_document' => $path . $uploadData["file_name"],
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                );
-
-                $this->flexperformance_model->forward_grievance($updates, $id);
-                session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-                return redirect('/flex/grievances');
-            } else {
-
-                $data = array(
-                    'remarks' => $request->input("remarks"),
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                );
-            }
-
-            $this->flexperformance_model->forward_grievance($data, $id);
-            session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
-            return redirect('/flex/grievances');
-        }
-
-        //   SOLVE
-
-        if (isset($_POST["solve"])) {
-
-            $id = $request->input('id');
-
-            $config = array(
-                'upload_path' => "./uploads/grievances/",
-                'file_name' => "FILE" . date("Ymd-His"),
-                'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
-                'overwrite' => true,
-            );
-            $path = "/uploads/grievances/";
-
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload()) {
-                // echo "skip"; exit();
-
-                $uploadData = $this->upload->data();
-
-                $updates = array(
-                    'remarks' => $request->input("remarks"),
-                    'support_document' => $path . $uploadData["file_name"],
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                    'status' => 1,
-                );
-
-                $this->flexperformance_model->forward_grievance($updates, $id);
-                session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
-                return redirect('/flex/grievances');
-            } else {
-
-                $data = array(
-                    'remarks' => $request->input("remarks"),
-                    'forwarded_by' => session('emp_id'),
-                    'forwarded' => 1,
-                    'status' => 1,
-                );
-            }
-
-            $this->flexperformance_model->forward_grievance($data, $id);
-            session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
-            return redirect('/flex/grievances');
-        }
-    }
-    public function resolve_grievance(Request $request)
-    {
-
-        if ($this->uri->segment(3) != '') {
-            $refID = $this->uri->segment(3);
-            $datalog = array(
-                'status' => 1,
-            );
-
-            $result = $this->flexperformance_model->updategrievances($datalog, $refID);
-
-            if ($result == true) {
-                echo "<p class='alert alert-warning text-center'>Marked As Resolved</p>";
-            } else {
-                echo "<p class='alert alert-danger text-center'>FAILED: Try again</p>";
-            }
-        }
-    }
-    public function unresolve_grievance(Request $request)
-    {
-
-        if ($this->uri->segment(3) != '') {
-            $refID = $this->uri->segment(3);
-            $datalog = array(
-                'status' => 0,
-            );
-
-            $result = $this->flexperformance_model->updategrievances($datalog, $refID);
-
-            if ($result == true) {
-                echo "<p class='alert alert-warning text-center'>Marked As Unresolved</p>";
-            } else {
-                echo "<p class='alert alert-danger text-center'>FAILED Try again</p>";
-            }
-        }
-    }
+   
 
     public function audit_logs(Request $request)
     {
@@ -7817,12 +7838,15 @@ class GeneralController extends Controller
 
             $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
 
-
+           $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 
             $paye = $paye1->excess_added + $paye1->rate * ($taxable - $paye1->minimum);
             $take_home = $taxable -  $paye;
 
             $termination->total_gross = $total_gross;
+            //wcf and sdl
+            $termination->wcf = $total_gross * $deduction_rate['wcf'];
+            $termination->sdl = $total_gross * $deduction_rate['sdl'];
 
             $termination->loan_balance = $loan_balance;
 
@@ -7865,6 +7889,9 @@ class GeneralController extends Controller
                 $termination = Termination::where('id', $id)->first();
                 $termination->status = 1;
                 $termination->update();
+
+                $this->flexperformance_model->update_employee_termination($id);
+
                 $msg = 'Employee is Terminated Successfully !';
                 return redirect('flex/termination')->with('msg', $msg);
             } else {
@@ -8407,7 +8434,7 @@ class GeneralController extends Controller
         $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
         $data['countrydrop'] = $this->flexperformance_model->nationality();
         $data['branchdrop'] = $this->flexperformance_model->branchdropdown();
-        // $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+
         $data['pension'] = $this->flexperformance_model->pension_fund();
 
         $details = EmployeeDetail::where('employeeID', $empID)->first();
@@ -8436,11 +8463,9 @@ class GeneralController extends Controller
 
         $data['branchTransfer'] = $this->flexperformance_model->pendingBranchTranferCheck($empID);
         $data['employees'] = $this->flexperformance_model->Employee();
-        // $data['bankdrop'] = $this->flexperformance_model->bank();
         $data['parent'] = 'Employee';
         $data['child'] = 'Update employee';
         $data['employees'] = $this->flexperformance_model->Employee();
-        // dd($data);
 
         // return view('employee.updateEmployee', $data);
         return view('employee.employee-profile', $data, compact('details', 'emergency', 'spouse', 'children', 'parents'));
@@ -8996,9 +9021,8 @@ class GeneralController extends Controller
         $holiday = new Holiday();
         $holiday->name = $request->name;
         $holiday->date = $request->date;
-        $holiday->recurring = $request->recurring == true ? '1' : '0';;
+        $holiday->recurring = $request->recurring == true ? '1' : '0';
         $holiday->save();
-
 
         $msg = "Holiday has been save Successfully !";
         return redirect('flex/holidays')->with('msg', $msg);
@@ -9042,6 +9066,23 @@ class GeneralController extends Controller
         return redirect('flex/holidays')->with('msg', $msg);
     }
     // end of update holiday function
+
+
+    // For Updating Holiday Year
+    public function updateHolidayYear()
+    {
+        $holiday=Holiday::where('recurring','1')->get();
+
+        foreach($holiday as $value){
+            $new_date = Carbon::parse($value->date)->setYear(date('Y'));
+
+            $holid = Holiday::find($value->id);
+            $holid->date =$new_date;
+            $holid->update();
+        }
+        return redirect('flex/holidays/')->with('msg', 'Holiday was Updated successfully !');
+
+    }
 
     // start of delete holiday function
     public function deleteHoliday($id)
@@ -9395,8 +9436,176 @@ class GeneralController extends Controller
     // End of Leave Approvals
 
 
+   // For All Grievances
+
+   public function all_grievances()
+   {
+       $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
+       $data['other_grievances']=Grievance::all();
+       return view('app/grievances',$data);
+   }
+
+// For Single Grievance
+   public function grievance_details($id)
+   {
+    //    $id = ;
+
+       $data['title'] = 'Grievances Details';
+       $data['details'] = $this->flexperformance_model->grievance_details($id);
+
+       return view('app.grievance_details', $data);
+
+    //    if (isset($_POST["submit"])) {
+
+    //        $id = $request->input('id');
+
+    //        $config = array(
+    //            'upload_path' => "./uploads/grievances/",
+    //            'file_name' => "FILE" . date("Ymd-His"),
+    //            'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
+    //            'overwrite' => true,
+    //        );
+    //        $path = "/uploads/grievances/";
+
+    //        $this->load->library('upload', $config);
+    //        if ($this->upload->do_upload()) {
+    //            // echo "skip"; exit();
+
+    //            $uploadData = $this->upload->data();
+
+    //            $updates = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'support_document' => $path . $uploadData["file_name"],
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //            );
+
+    //            $this->flexperformance_model->forward_grievance($updates, $id);
+    //            session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
+    //            return redirect('/flex/grievances');
+    //        } else {
+
+    //            $data = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //            );
+    //        }
+
+    //        $this->flexperformance_model->forward_grievance($data, $id);
+    //        session('note', "<p class='alert alert-success text-center'>Your Grievance has been Submitted Successifully</p>");
+    //        return redirect('/flex/grievances');
+    //    }
+
+    //    //   SOLVE
+
+    //    if (isset($_POST["solve"])) {
+
+    //        $id = $request->input('id');
+
+    //        $config = array(
+    //            'upload_path' => "./uploads/grievances/",
+    //            'file_name' => "FILE" . date("Ymd-His"),
+    //            'allowed_types' => "img|jpg|jpeg|png|pdf|xlsx|xls|doc|ppt|docx",
+    //            'overwrite' => true,
+    //        );
+    //        $path = "/uploads/grievances/";
+
+    //        $this->load->library('upload', $config);
+    //        if ($this->upload->do_upload()) {
+    //            // echo "skip"; exit();
+
+    //            $uploadData = $this->upload->data();
+
+    //            $updates = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'support_document' => $path . $uploadData["file_name"],
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //                'status' => 1,
+    //            );
+
+    //            $this->flexperformance_model->forward_grievance($updates, $id);
+    //            session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
+    //            return redirect('/flex/grievances');
+    //        } else {
+
+    //            $data = array(
+    //                'remarks' => $request->input("remarks"),
+    //                'forwarded_by' => session('emp_id'),
+    //                'forwarded' => 1,
+    //                'status' => 1,
+    //            );
+    //        }
+
+    //        $this->flexperformance_model->forward_grievance($data, $id);
+    //        session('note', "<p class='alert alert-success text-center'>Grievance has Solved Successifully</p>");
+    //        return redirect('/flex/grievances');
+    //    }
+   }
+
+//    For Cancel  Grievances
+public function cancel_grievance($id)
+{
+    $project = Grievance::where('id',$id)->first();
+
+    $project->delete();
+
+    return redirect('flex/my-grievences');
+}
+// For Resolve Grievances
+public function resolve_grievance($id)
+{
+
+    $grievance=Grievance::find($id);
 
 
+    $grievance->status=1;
+    $grievance->update();
+
+    $msg="Grievance is resolved successfully!";
+
+    return back()->with('msg',$msg);
+
+}
+// For unresolve Grievance
+public function unresolve_grievance($id)
+{
+
+    $grievance=Grievance::find($id);
+
+
+    $grievance->status=0;
+    $grievance->update();
+
+    $msg="Grievance is un-resolved successfully!";
+
+    return back()->with('msg',$msg);
+}
+
+
+// For Grievance Feedback
+
+public function update_grievance(Request $request)
+{
+
+    $grievance=Grievance::find($request->id);
+
+    $grievance->remarks = $request->remarks;
+    $grievance->forwarded_by= Auth::user()->emp_id;
+    if ($request->hasfile('attachment')) {
+        $newAttachmentName = $request->attachment->hashName();
+        $request->attachment->move(public_path('storage\grieavences-supports'), $newAttachmentName);
+        $grievance->support_document = $newAttachmentName;
+    }
+    $grievance->status=1;
+    $grievance->update();
+
+    $msg="Grievance Feedback was Added successfully!";
+
+    return back()->with('msg',$msg);
+
+    }
 
     // Start of self services
 
@@ -9452,7 +9661,31 @@ class GeneralController extends Controller
         return view('my-services/pensions', $data);
     }
 
+    // For My Grievances
 
+    public function my_grievances()
+    {   
+        $data['my_grievances']=Grievance::latest()->where('empID',Auth::user()->emp_id)->get();
+        return view('my-services.grievances',$data); 
+    }
+
+        // For Saving New Grievances
+        public function save_grievance(Request $request)
+        {
+            $grievance = new Grievance();
+            $grievance->title = $request->title;
+            $grievance->description = $request->description;
+            $grievance->empID= Auth::user()->emp_id;
+            if ($request->hasfile('attachment')) {
+                $newAttachmentName = $request->attachment->hashName();
+                $request->attachment->move(public_path('storage\grieavences-attachments'), $newAttachmentName);
+                $grievance->attachment = $newAttachmentName;
+            }
+            $grievance->anonymous = $request->anonymous == true ? '1' : '0';
+            $grievance->save();
+
+            return redirect('flex/my-grievences');
+        }
     // For My Biodata
     public function my_biodata(Request $request)
     {
@@ -9536,6 +9769,25 @@ class GeneralController extends Controller
         return redirect('flex/projects');
     }
 
+        // For Saving New Project
+        public function edit_project( $id)
+        {
+            $project = Project::where('id',$id)->first();
+            return view('performance.edit_project',compact('project'));
+        }
+    
+
+        // For Saving New Project
+        public function update_project( Request $request)
+        {
+            $project = Project::where('id',$request->id)->first();
+            $project->name = $request->name;
+            $project->start_date = $request->start_date;
+            $project->end_date= $request->end_date;
+            $project->update();
+            return redirect('flex/projects')->with('msg','Project was updated Successfully !');
+        }
+
        // View single project
        public function view_project($id)
        {
@@ -9549,12 +9801,21 @@ class GeneralController extends Controller
         {
             $project = Project::find($id);
 
-            $project->delete();
+            $tasks=ProjectTask::where('project_id',$project->id)->get();
+            foreach($tasks as $item)
+            {
+                $performance=EmployeePerformance::where('task_id',$item->id)->first();
+                //For Employee Performance Deletion
+                    if ($performance) {$performance->delete();}
+                    $item->delete();
+                }
 
-            return redirect('flex/projects');
+                $project->delete();
+
+                return redirect('flex/projects');
         }
 
-        // For Adding Task      
+        // For Adding Task
         public function add_task($id)
         {
             $project=$id;
@@ -9563,21 +9824,30 @@ class GeneralController extends Controller
             return view('performance.add-task',compact('project','employees'));
         }
 
-    // For Updating completed Task Status 
+    // For Updating completed Task Status
        public function completed_task($id)
        {
            $task =ProjectTask::where('id',$id)->first();
 
            $task->status = 1;
+           $task->complete_date = Carbon::now();;
 
            $task->update();
 
-        
+           $performance=new EmployeePerformance();
+           $performance->empID= $task->assigned;
+           $performance->performance= $task->performance;
+           $performance->behaviour= $task->behaviour;
+           $performance->task_id= $task->id;
+           $performance->target= $task->target;
+           $performance->achieved= $task->achieved;
+           $performance->type='project';
+           $performance->save();
+
+
            $tasks =ProjectTask::where('project_id',$task->project_id)->get();
-          
+
            $project = Project::where('id',$task->project_id)->first();
-        //    dd($project);
-        //    $name=$project->name;
            return view('performance.single_project',compact('project','tasks',));
        }
 
@@ -9588,7 +9858,15 @@ class GeneralController extends Controller
            return view('performance.asses_task',compact('task'));
        }
 
-    // For saving task Assessment 
+    // For single Adhoctask Assessment Page
+       public function assess_adhoctask($id)
+       {
+           $task =AdhocTask::where('id',$id)->first();
+           return view('performance.asses_adhoctask',compact('task'));
+       }
+
+
+    // For saving task Assessment
        public function save_task_assessment(Request $request)
        {
            $task =ProjectTask::where('id',$request->id)->first();
@@ -9598,15 +9876,113 @@ class GeneralController extends Controller
            $task->behaviour= $request->behaviour;
            $task->remark= $request->remark;
            $task->time= $request->time;
+            //For Task Performance'
+            //For Ratio Variables
+            $ratios=PerformanceRatio::first();
+            $target_ratio=$ratios->target;
+            $time_ratio=$ratios->time;
+            $behaviour_ratio=$ratios->behaviour;
+            // For Targets
+            $target_reached=$task->achieved;
+            $target_required=$task->target;
+            // For Behaviour
+            $behaviour=$task->behaviour;
+            // For Time
+            $d1 = new Carbon($task->start_date) ;
+            $d2 = new Carbon($task->complete_date);
+            $time_taken=$d2->diffInMinutes($d1);
+            $d3 = new Carbon($task->end_date);
+            $time_required=$d2->diffInMinutes($d1);
 
+            $performance=(($target_reached/$target_required)*$target_ratio)+(($time_taken/$time_required)*$time_ratio)+(($behaviour/100)*$behaviour_ratio);
+           $task->performance= number_format($performance, 2);
            $task->update();
+
+           $perf=EmployeePerformance::where('task_id',$task->id)->first();
+           if ($perf) {
+            $perf->performance= $task->performance;
+           $perf->behaviour= $task->behaviour;
+           $perf->target= $task->target;
+           $perf->achieved= $task->achieved;
+           $perf->update();
+           }
+           else {
+            $perf=new EmployeePerformance();
+            $perf->empID= $task->assigned;
+            $perf->performance= $task->performance;
+            $perf->behaviour= $task->behaviour;
+            $perf->achieved= $task->achieved;
+            $perf->target= $task->target;
+            $perf->task_id= $task->id;
+            $perf->type='project';
+            $perf->save();
+
+           }
+
+
 
            return view('performance.asses_task',compact('task'));
        }
 
 
+    // For saving task Assessment
+    public function save_adhoctask_assessment(Request $request)
+    {
+        $task =AdhocTask::where('id',$request->id)->first();
 
-    //For Saving Project Ratio 
+        $task->remark = $request->remark;
+        $task->achieved = $request->achievement;
+        $task->behaviour= $request->behaviour;
+        $task->remark= $request->remark;
+        $task->time= $request->time;
+         //For Task Performance'
+         //For Ratio Variables
+         $ratios=PerformanceRatio::first();
+         $target_ratio=$ratios->target;
+         $time_ratio=$ratios->time;
+         $behaviour_ratio=$ratios->behaviour;
+         // For Targets
+         $target_reached=$task->achieved;
+         $target_required=$task->target;
+         // For Behaviour
+         $behaviour=$task->behaviour;
+         // For Time
+         $d1 = new Carbon($task->start_date) ;
+         $d2 = new Carbon($task->complete_date);
+         $time_taken=$d2->diffInMinutes($d1);
+         $d3 = new Carbon($task->end_date);
+         $time_required=$d2->diffInMinutes($d1);
+
+         $performance=(($target_reached/$target_required)*$target_ratio)+(($time_taken/$time_required)*$time_ratio)+(($behaviour/100)*$behaviour_ratio);
+        $task->performance= number_format($performance, 2);
+        $task->update();
+
+        $perf=EmployeePerformance::where('task_id',$task->id)->first();
+        if ($perf) {
+         $perf->performance= $task->performance;
+        $perf->behaviour= $task->behaviour;
+        $perf->target= $task->target;
+        $perf->achieved= $task->achieved;
+
+        $perf->update();
+        }
+        else {
+         $perf=new EmployeePerformance();
+         $perf->empID= $task->assigned;
+         $perf->performance= $task->performance;
+         $perf->behaviour= $task->behaviour;
+         $perf->task_id= $task->id;
+         $perf->target= $task->target;
+         $perf->achieved= $task->achieved;
+         $perf->type='Adhoc';
+         $perf->save();
+
+        }
+
+
+        return view('performance.asses_adhoctask',compact('task'));
+    }
+    //For Saving Project Ratio
     public function save_project_task(Request $request)
     {
         $task = new ProjectTask();
@@ -9626,32 +10002,88 @@ class GeneralController extends Controller
         // For Deleting  Project Tasks
           public function delete_project_task($id)
           {
-              $project = ProjectTask::find($id);
+              $task = ProjectTask::find($id);
+              $performance=EmployeePerformance::where('task_id',$task->id)->first();
+              //For Employee Performance Deletion
+              if ($performance) {$performance->delete();}
+              $id=$task->project_id;
+              $task->delete();
 
-              $project->delete();
-  
-              return redirect('flex/projects');
+              return redirect('flex/view-project/'.$id)->with('msg','Project Task Was Deleted Successfully!');
+          }
+
+        // For Deleting  Adhoc Tasks
+          public function delete_task($id)
+          {
+              $task = AdhocTask::find($id);
+              $performance=EmployeePerformance::where('task_id',$task->id)->first();
+              //For Employee Performance Deletion
+              if ($performance) {$performance->delete();}
+              $task->delete();
+
+              return redirect('flex/tasks');
           }
         // For Viewing all Adhoc Tasks
           public function tasks()
           {
-              $data['project'] = Project::all();
+              $data['project'] = AdhocTask::all();
               return view('performance.tasks',$data);
           }
+        // For Add Adhoc Task Page
+          public function add_adhoctask()
+          {
+            $employees= EMPL::where('state',1)->get();
+
+            return view('performance.add_adhoc',compact('employees'));
+          }
         // For Saving Adhoc Task
-          public function add_adhoctask(Request $request)
+          public function save_adhoc_task(Request $request)
           {
             $task = new AdhocTask();
             $task->name = $request->name;
             $task->start_date = $request->start_date;
             $task->end_date= $request->end_date;
-            $task->project_id= $request->project;
             $task->assigned= $request->assigned;
             $task->target= $request->target;
             $task->save();
-    
-            return redirect('flex/view-project/'.$request->project);
+
+            return redirect('flex/tasks');
           }
+
+         // For Updating completed Task Status
+       public function completed_adhoctask($id)
+       {
+           $task =AdhocTask::where('id',$id)->first();
+
+           $task->status = 1;
+           $task->complete_date = Carbon::now();;
+
+           $task->update();
+
+           $perf=EmployeePerformance::where('task_id',$task->id)->first();
+           if ($perf) {
+            $perf->performance= $task->performance;
+           $perf->behaviour= $task->behaviour;
+           $perf->target= $task->target;
+           $perf->achieved= $task->achieved;
+           $perf->update();
+           }
+           else {
+            $perf=new EmployeePerformance();
+            $perf->empID= $task->assigned;
+            $perf->performance= $task->performance;
+            $perf->behaviour= $task->behaviour;
+            $perf->task_id= $task->id;
+            $perf->target= $task->target;
+            $perf->achieved= $task->achieved;
+            $perf->type='Adhoc';
+            $perf->save();
+
+           }
+
+           $project =AdhocTask::all();
+           return view('performance.tasks',compact('project',));
+       }
 
         //   For Viewing All Performance ratios
           public function performance_ratios()
@@ -9671,8 +10103,8 @@ class GeneralController extends Controller
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
-            return redirect('flex/performance-ratios');
+
+            return redirect('flex/talent-ranges');
           }
         // For Saving Time Ratios
           public function save_time_ratio(Request $request)
@@ -9682,8 +10114,8 @@ class GeneralController extends Controller
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
-            return redirect('flex/performance-ratios');
+
+            return redirect('flex/talent-ranges');
           }
         // For Saving Behaviour Ratios
           public function save_behaviour_ratio(Request $request)
@@ -9693,40 +10125,464 @@ class GeneralController extends Controller
             $ratio->min = $request->min_value;
             $ratio->max= $request->max_value;
             $ratio->save();
-    
-            return redirect('flex/performance-ratios');
+
+            return redirect('flex/talent-ranges');
           }
-  
+
             // For Deleting  Target Ratios
             public function delete_target_ratio($id)
             {
                 $target = TargetRatio::find($id);
-  
+
                 $target->delete();
-    
-                return redirect('flex/performance-ratios');
+
+                return redirect('flex/talent-ranges');
             }
             // For Deleting  Time Ratios
             public function delete_time_ratio($id)
             {
                 $time = TimeRatio::find($id);
-  
+
                 $time->delete();
-    
-                return redirect('flex/performance-ratios');
+
+                return redirect('flex/talent-ranges');
             }
             // For Deleting  Behaviour Ratios
             public function delete_behaviour_ratio($id)
             {
                 $behaviour = BehaviourRatio::find($id);
-  
+
                 $behaviour->delete();
-    
-                return redirect('flex/performance-ratios');
+
+                return redirect('flex/talent-ranges');
             }
 
         public function performance()
         {
-            return view('performance.report');
+            $employee=EMPL::all();
+
+            $item1=0;
+            $item1_count=0;
+
+            $item2=0;
+            $item2_count=0;
+
+            $item3=0;
+            $item3_count=0;
+
+            $item4=0;
+            $item4_count=0;
+
+            $item5=0;
+            $item5_count=0;
+
+            $item6=0;
+            $item6_count=0;
+
+            $item7=0;
+            $item7_count=0;
+
+            $item8=0;
+            $item8_count=0;
+
+            $item9=0;
+            $item9_count=0;
+
+            $item10=0;
+            $item10_count=0;
+
+            $item11=0;
+            $item11_count=0;
+
+            $item12=0;
+            $item12_count=0;
+
+            $item13=0;
+            $item13_count=0;
+
+
+            $item14=0;
+            $item14_count=0;
+
+
+            $item15=0;
+            $item15_count=0;
+
+            $item16=0;
+            $item16_count=0;
+
+            $item17=0;
+            $item17_count=0;
+
+            $item18=0;
+            $item18_count=0;
+
+            $item19=0;
+            $item19_count=0;
+
+            $item20=0;
+            $item20_count=0;
+
+            $item21=0;
+            $item21_count=0;
+
+            $item22=0;
+            $item22_count=0;
+
+            $item23=0;
+            $item23_count=0;
+
+            $item24=0;
+            $item24_count=0;
+
+            $item25=0;
+            $item25_count=0;
+
+            foreach($employee as $item)
+
+            {
+                $performance = DB::table('employee')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->where('employee.emp_id',$item->emp_id)
+                ->whereNotNull('employee_performances.performance')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                ->avg('employee_performances.performance')
+                // ->get()
+                ;
+
+                $behaviour = DB::table('employee')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->where('employee.emp_id',$item->emp_id)
+                ->whereNotNull('employee_performances.behaviour')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                ->avg('employee_performances.behaviour')
+                ;
+
+
+                // For Behaviour Needs Improvement
+                if ($behaviour >0 && $behaviour <20 ) {
+                //For Improvement
+                if ($performance > 0 && $performance <20 ) { $item1=$item1+$performance; $item1_count++;}
+                // For Improvement Good
+                if ($performance >= 20 && $performance <40 ) { $item2=$item2+$performance; $item2_count++;}
+                // For Improvement Strong
+                if ($performance >= 40 && $performance <60 ) { $item3=$item3+$performance; $item3_count++;}
+                // For Improvement very Strong
+                 if ($performance >= 60 && $performance <80 ) { $item4=$item4+$performance; $item4_count++;}
+                // For Improvement Outstanding
+                 if ($performance >= 80 && $performance <100 ) { $item5=$item5+$performance; $item5_count++;}
+                }
+
+                  // For Behaviour Good
+                if ($behaviour >= 20 && $behaviour < 40) {
+                //For Improvement
+                if ($performance > 0 && $performance <20 ) { $item6=$item6+$performance; $item6_count++;}
+                // For Improvement Good
+                if ($performance >= 20 && $performance <40 ) { $item7=$item7+$performance; $item7_count++;}
+                // For Improvement Strong
+                if ($performance >= 40 && $performance <60 ) { $item8=$item8+$performance; $item8_count++;}
+                // For Improvement very Strong
+                 if ($performance >= 60 && $performance <80 ) { $item9=$item9+$performance; $item9_count++;}
+                // For Improvement Outstanding
+                 if ($performance >= 80 && $performance <100 ) { $item10=$item10+$performance; $item10_count++;}
+                  }
+
+                    // For Behaviour Strong
+                if ($behaviour >= 40 && $behaviour < 60) {
+                    //For Improvement
+                    if ($performance > 0 && $performance <20 ) { $item11=$item11+$performance; $item11_count++;}
+                    // For Improvement Good
+                    if ($performance >= 20 && $performance <40 ) { $item12=$item12+$performance; $item12_count++;}
+                    // For Improvement Strong
+                    if ($performance >= 40 && $performance <60 ) { $item13=$item13+$performance; $item13_count++;}
+                    // For Improvement very Strong
+                     if ($performance >= 60 && $performance <80 ) { $item14=$item14+$performance; $item14_count++;}
+                    // For Improvement Outstanding
+                     if ($performance >= 80 && $performance <100 ) { $item15=$item15+$performance; $item15_count++;}
+                 }
+
+
+                    // For Behaviour Very Strong
+                if ($behaviour >= 60 && $behaviour < 80) {
+                    //For Improvement
+                    if ($performance > 0 && $performance <20 ) { $item16=$item16+$performance; $item16_count++;}
+                    // For Improvement Good
+                    if ($performance >= 20 && $performance <40 ) { $item17=$item17+$performance; $item17_count++;}
+                    // For Improvement Strong
+                    if ($performance >= 40 && $performance <60 ) { $item18=$item18+$performance; $item18_count++;}
+                    // For Improvement very Strong
+                     if ($performance >= 60 && $performance <80 ) { $item19=$item19+$performance; $item19_count++;}
+                    // For Improvement Outstanding
+                     if ($performance >= 80 && $performance <100 ) { $item20=$item20+$performance; $item20_count++;}
+                 }
+
+
+                // For Behaviour Outstanding
+                if ($behaviour >= 80 && $behaviour < 100) {
+                    //For Improvement
+                    if ($performance > 0 && $performance <20 ) { $item21=$item21+$performance; $item21_count++;}
+                    // For Improvement Good
+                    if ($performance >= 20 && $performance <40 ) { $item22=$item22+$performance; $item22_count++;}
+                    // For Improvement Strong
+                    if ($performance >= 40 && $performance <60 ) { $item23=$item23+$performance; $item23_count++;}
+                    // For Improvement very Strong
+                     if ($performance >= 60 && $performance <80 ) { $item24=$item24+$performance; $item24_count++;}
+                    // For Improvement Outstanding
+                     if ($performance >= 80 && $performance <100 ) { $item25=$item25+$performance; $item25_count++;}
+                 }
+
+
+                // var_dump($performance);
+            }
+
+            // For Colum 1
+            $data['improvement'] = ($item1>0) ? $item1_count : 0 ;
+            $data['improvement_good']= ($item2>0) ? $item2_count : 0 ;
+            $data['improvement_strong']= ($item3>0) ? $item3_count : 0 ;
+            $data['improvement_very_strong'] = ($item4>0) ? $item4_count : 0 ;
+            $data['improvement_outstanding'] = ($item5>0) ? $item5_count : 0 ;
+
+            // For Column 2
+            $data['good_improvement'] = ($item6>0) ? $item6_count : 0 ;
+            $data['good']= ($item7>0) ? $item7_count : 0 ;
+            $data['good_strong']= ($item8>0) ? $item8_count : 0 ;
+            $data['good_very_strong'] = ($item9>0) ? $item9_count : 0 ;
+            $data['good_outstanding'] = ($item10>0) ? $item10_count : 0 ;
+
+            // For Column 3
+            $data['strong_improvement'] = ($item11>0) ? $item11_count : 0 ;
+            $data['strong_good']= ($item12>0) ? $item12_count : 0 ;
+            $data['strong']= ($item13>0) ? $item13_count : 0 ;
+            $data['strong_very_strong'] = ($item14>0) ? $item14_count : 0 ;
+            $data['strong_outstanding'] = ($item15>0) ? $item15_count : 0 ;
+
+            // For Column 4
+            $data['very_strong_improvement'] = ($item16>0) ? $item16_count : 0 ;
+            $data['very_strong_good']= ($item17>0) ? $item17_count : 0 ;
+            $data['very_strong_strong']= ($item18>0) ? $item18_count : 0 ;
+            $data['very_strong'] = ($item19>0) ? $item19_count : 0 ;
+            $data['very_strong_outstanding'] = ($item20>0) ? $item20_count : 0 ;
+
+            // For Column 5
+            $data['outstanding_improvement'] = ($item21>0) ? $item21_count : 0 ;
+            $data['outstanding_good']= ($item22>0) ? $item22_count : 0 ;
+            $data['outstanding_strong']= ($item23>0) ? $item23_count : 0 ;
+            $data['outstanding_very_strong'] = ($item24>0) ? $item24_count : 0 ;
+            $data['outstanding'] = ($item25>0) ? $item25_count : 0 ;
+
+
+            // return  $data;
+
+
+
+
+            return view('performance.report',$data);
         }
+
+        public function performance_ratio()
+        {
+            $ratio = PerformanceRatio::first();
+            return view('performance.performance-ratios',compact('ratio'));
+        }
+
+        // For Saving Performance Ratios
+          public function save_performance_ratio(Request $request)
+          {
+
+            $ratio = PerformanceRatio::first();
+
+            if(($request->behaviour+$request->achievement+$request->time)!=100)
+            {
+                return redirect('flex/performance')->with('msg','Total of Performance should be equal to 100');
+            }
+            if($ratio)
+            {
+
+                $ratio->behaviour = $request->behaviour;
+                $ratio->target = $request->achievement;
+                $ratio->time= $request->time;
+                $ratio->update();
+            }
+            else {
+                $ratio = new PerformanceRatio();
+                $ratio->behaviour = $request->behaviour;
+                $ratio->target = $request->achievement;
+                $ratio->time= $request->time;
+                $ratio->save();
+            }
+
+
+            return redirect('flex/performance');
+          }
+
+
+          public function employee_profiles()
+          {
+
+            $data['employees'] = EMPL::where('state','1')->get();
+            return view('talent.profiling',$data);
+          }
+
+         //   For Viewing All Talent ranges
+          public function talent_ranges()
+          {
+
+            $data['target_ratio'] = TargetRatio::all();
+            $data['time_ratio'] =TimeRatio::all();
+            $data['behaviour_ratio'] =BehaviourRatio::all();
+            return view('talent.talent_range',$data);
+          }
+
+          public function talent_ratios()
+          {
+              $ratio = PerformanceRatio::first();
+              return view('talent.talent-ratios',compact('ratio'));
+          }
+
+           // For Saving Talent Ratio
+           public function save_talent_ratio(Request $request)
+           {
+
+             $ratio = PerformanceRatio::first();
+
+             if(($request->behaviour+$request->achievement+$request->time)!=100)
+             {
+                 return redirect('flex/talent-ratio')->with('msg','Total of Talent Ratio should be equal to 100');
+             }
+             if($ratio)
+             {
+
+                 $ratio->behaviour = $request->behaviour;
+                 $ratio->target = $request->achievement;
+                 $ratio->time= $request->time;
+                 $ratio->update();
+             }
+             else {
+                 $ratio = new PerformanceRatio();
+                 $ratio->behaviour = $request->behaviour;
+                 $ratio->target = $request->achievement;
+                 $ratio->time= $request->time;
+                 $ratio->save();
+             }
+
+
+             return redirect('flex/performance');
+           }
+
+
+           public function talent_matrix()
+           {
+            $employee=EMPL::all();
+
+            $item1=0;
+            $item1_count=0;
+
+            $item2=0;
+            $item2_count=0;
+
+            $item3=0;
+            $item3_count=0;
+
+            $item4=0;
+            $item4_count=0;
+
+            $item5=0;
+            $item5_count=0;
+
+            $item6=0;
+            $item6_count=0;
+
+            $item7=0;
+            $item7_count=0;
+
+            $item8=0;
+            $item8_count=0;
+
+            $item9=0;
+            $item9_count=0;
+
+
+            foreach($employee as $item)
+
+            {
+                $performance = DB::table('employee')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->where('employee.emp_id',$item->emp_id)
+                ->whereNotNull('employee_performances.performance')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                ->avg('employee_performances.performance')
+                // ->get()
+                ;
+
+                $behaviour = DB::table('employee')
+                ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                ->where('employee.emp_id',$item->emp_id)
+                ->whereNotNull('employee_performances.behaviour')
+                // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                ->avg('employee_performances.behaviour')
+                ;
+
+                $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
+                $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');
+
+                if ($achieved>0)
+                { $potential=  number_format( $achieved/$target, 2);  }
+                else{ $potential= 0;}
+
+                // For Low Potential
+                if ($potential >0 && $potential <20 ) {
+                //For Low performer
+                if ($performance > 0 && $performance <20 ) { $item1=$item1+$performance; $item1_count++;}
+                // For Medium Performer
+                if ($performance >= 20 && $performance <40 ) { $item2=$item2+$performance; $item2_count++;}
+                // For High Performer
+                if ($performance >= 40 && $performance <60 ) { $item3=$item3+$performance; $item3_count++;}
+                }
+
+                  // For Medium Potential
+                if ($potential >= 20 && $potential < 40) {
+                //For Low Performer
+                if ($performance > 0 && $performance <20 ) { $item4=$item4+$performance; $item4_count++;}
+                // For Medium Performer
+                if ($performance >= 20 && $performance <40 ) { $item5=$item5+$performance; $item5_count++;}
+                // For High Performer
+                if ($performance >= 40 && $performance <60 ) { $item6=$item6+$performance; $item6_count++;}
+                  }
+
+                    // For High Potential
+                if ($potential >= 40 && $potential < 60) {
+                    //For Improvement
+                    if ($performance > 0 && $performance <20 ) { $item7=$item7+$performance; $item8_count++;}
+                    // For Improvement Good
+                    if ($performance >= 20 && $performance <40 ) { $item8=$item8+$performance; $item8_count++;}
+                    // For Improvement Strong
+                    if ($performance >= 40 && $performance <60 ) { $item9=$item9+$performance; $item9_count++;}
+                 }
+
+            }
+
+            // For Colum 1
+            $data['high_performer_potential'] = ($item1>0) ? $item1_count : 0 ;
+            $data['high_performer_medium_potential']= ($item2>0) ? $item2_count : 0 ;
+            $data['high_performer_low_potential']= ($item3>0) ? $item3_count : 0 ;
+
+
+            // For Column 2
+            $data['medium_performer_high_potential'] = ($item4>0) ? $item6_count : 0 ;
+            $data['medium_performer_potential']= ($item5>0) ? $item5_count : 0 ;
+            $data['medium_performer_low_potential']= ($item6>0) ? $item6_count : 0 ;
+
+            // For Column 3
+            $data['low_performer_high_potential'] = ($item7>0) ? $item7_count : 0 ;
+            $data['low_performer_medium_potential']= ($item8>0) ? $item8_count : 0 ;
+            $data['low_performer_potential']= ($item9>0) ? $item9_count : 0 ;
+
+
+            return view('talent.talent_matrix',$data);
+           }
+
+
+
+
+
 }
