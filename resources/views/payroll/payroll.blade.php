@@ -261,9 +261,9 @@
                 $('#payrollFeedback').fadeOut('fast', function() {
                     $('#payrollFeedback').fadeIn('fast').html(data);
                 });
-                setTimeout(function() {
-                    location.reload();
-                }, 5000)
+                // setTimeout(function() {
+                //     location.reload();
+                // }, 5000)
             })
             .fail(function() {
                 // alert('Payroll Failed!! ...');
