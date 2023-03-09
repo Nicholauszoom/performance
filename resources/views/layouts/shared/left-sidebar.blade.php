@@ -436,11 +436,11 @@
                             Talent Ranges
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('flex.talent-ratios') }}" class="nav-link {{ request()->routeIs('flex.talent-ratios') ? 'active' : null }} ">
                             Ratio Configuration
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a href="{{ route('flex.talent-matrix') }}" class="nav-link ">
                             Talent Matrix

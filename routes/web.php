@@ -140,7 +140,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/grievences','grievances')->name('flex.grievances');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
         Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
+        Route::any('/edit-complain/{id}','edit_complain')->name('flex.edit-complain');
+        Route::any('/update-grievance','update_grievance')->name('flex.update-grievances');
         Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
+        Route::any('/resolve_grievance/{id}','resolve_grievance')->name('flex.resolve_grievance');
+        Route::any('/unresolve_grievance/{id}','unresolve_grievance')->name('flex.unresolve_grievance');
         
         Route::any('/grievance_details/{id}','grievance_details')->name('flex.grievance_details');
 
@@ -187,6 +191,8 @@ Route::middleware('auth')->group(function () {
         Route::any('add-project','add_project')->name('flex.add-project');
         Route::any('save-project','save_project')->name('flex.save-project');
         Route::any('view-project/{id}','view_project')->name('flex.view-project');
+        Route::any('edit-project/{id}','edit_project')->name('flex.edit-project');
+        Route::any('update-project','update_project')->name('flex.update-project');
         Route::any('add-task/{id}','add_task')->name('flex.add-task');
         Route::any('save-task','save_project_task')->name('flex.save-task');
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
@@ -501,8 +507,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/department_structure','department_structure')->name('flex.department_structure');
         Route::any('/Oldorganization_structure','Oldorganization_structure')->name('flex.Oldorganization_structure');
         Route::any('/grievances','grievances')->name('flex.grievances');
-        Route::any('/resolve_grievance','resolve_grievance')->name('flex.resolve_grievance');
-        Route::any('/unresolve_grievance','unresolve_grievance')->name('flex.unresolve_grievance');
+   
     });
     //end of organization access permission  routes
 

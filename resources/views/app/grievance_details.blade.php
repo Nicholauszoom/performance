@@ -28,6 +28,7 @@
                 $support_document = $row->support_document;
                 $status = $row->status;
                 $gID = $row->id;
+                $remarks = $row->remarks;
                   
               } 
     }
@@ -91,8 +92,11 @@
                     <h6> <b> Attachment </b>: &nbsp;  <a download= '' href ='<?php echo  url('').$attachment; ?>'>
                       <span class='btn btn-sm btn-main '>DOWNLOAD Attached Evidence File</span></a>
          <?php } ?></h6>
-                   
-                     
+                 <?php if($remarks!= null) { ?>
+                    <h6> <b> Remarks </b>:</h6>
+                    <p> <?php echo $remarks; ?> </p>
+
+                  <?php } ?>
                     
                     <?php if($support_document != "N/A") { ?>
                     
@@ -119,10 +123,12 @@
                   <div class="card-body">
                       <p>Additional Details</p>
 
-                    <form id="demo-form2" enctype="multipart/form-data" action="<?php echo  url('').'flex/grievance_details/'.$gID; ?>" method="post" data-parsley-validate class="form-horizontal form-label-left">
-
+                    <form  enctype="multipart/form-data" action="{{ route('flex.update-grievances') }}" method="post" data-parsley-validate class="form-horizontal form-label-left">
+                      @csrf
+                      @method('PUT')
                      <div class="row">
                       <div class="form-group col-12">
+                        <input  name="id" value="<?php echo $gID ?>" type="hidden">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Remarks
                         </label>
                         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -134,7 +140,7 @@
                         <label class="control-label col-md-12 col-sm-12 col-xs-12" for="first-name"> Support Document  If Any <small class="text-danger">( eg. pdf, Picture etc..)</small>  
                         </label>
                         <div class="col-md-12 col-sm-12 col-xs-12">
-                        <input type='file' name='userfile'  />
+                        <input type='file' name='attachment'  />
                         </div>
                       </div> <br>
                       <hr>
