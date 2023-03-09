@@ -1540,7 +1540,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
          $number = $row[0]->number;
         }
 
-        
+
         return $number;
 
     }
