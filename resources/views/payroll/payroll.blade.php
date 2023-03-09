@@ -18,6 +18,7 @@
         $payroll = $data['payroll'];
         $payrollList = $data['payrollList'];
         $pendingPayroll = $data['pendingPayroll'];
+        $pending_overtime = $data['pending_overtime'];
     @endphp
             {{-- start of run payroll --}}
             @can('add-payroll')
@@ -37,6 +38,7 @@
                                 <div class="col-md-12">
                                     <form autocomplete="off" id="initPayroll" method="POST">
                                         <div class="mb-3 row">
+                                            @if($pending_overtime == 0)
                                             <div class="col-7 row">
                                                 <label class="form-label col-md-3 text-center font-bold">
                                                     <h6>Payroll Month:</h6>
@@ -51,6 +53,11 @@
                                             <div class="col-3">
                                                 <button name="init" type="submit" class="btn btn-main">Change Payroll Period</button>
                                             </div>
+                                            @else
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <p class='alert alert-warning text-center'>Note! There is Pending Overtimes which Needs To be Confirmed Before Another Payroll is Run</p>
+                                        </div>
+                                            @endif
 
                                         </div>
                                         <div class="d-flex justify-content-end align-items-center">
@@ -243,9 +250,12 @@
                 processData: false,
                 contentType: false,
                 cache: false,
-                async: false,
+                async: true,
                 beforeSend: function () {
-                    $('.request__spinner').show() }
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
 
             }).done(function(data) {
                 $('#payrollFeedback').fadeOut('fast', function() {
@@ -253,7 +263,7 @@
                 });
                 setTimeout(function() {
                     location.reload();
-                }, 1000)
+                }, 5000)
             })
             .fail(function() {
                 // alert('Payroll Failed!! ...');
@@ -263,6 +273,7 @@
                     type: 'error'
                 }).show();
             });
+
         });
     </script>
 
@@ -326,6 +337,12 @@
 
                     $.ajax({
                         url: "{{route('payroll.runpayroll',$pendingPayroll_month)}}",
+                        async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
                         success: function(data) {
                             if (data.status == 'OK') {
                                 alert("Payroll Approved Successifully");
@@ -360,6 +377,8 @@
                         }
 
                     });
+
+
 
                 }
             });
@@ -477,39 +496,6 @@
 
     <script>
         function sendEmail(payrollDate) {
-
-            // if (confirm(
-            //         "Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??"
-            //     ) == true) {
-
-            //     $.ajax({
-            //         url: "{{route('payroll.send_payslips',['payrollDate'=>" + payrollDate + "])}}",
-            //         success: function(data) {
-            //             let jq_json_obj = $.parseJSON(data);
-            //             let jq_obj = eval(jq_json_obj);
-            //             if (jq_obj.status === 'SENT') {
-            //                 $('#feedBackMail').fadeOut('fast', function() {
-            //                     $('#feedBackMail').fadeIn('fast').html(
-            //                         "<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>"
-            //                     );
-            //                 });
-            //                 setTimeout(function() { // wait for 2 secs(2)
-            //                     location.reload(); // then reload the div to clear the success notification
-            //                 }, 1500);
-            //             } else {
-            //                 $('#feedBackMail').fadeOut('fast', function() {
-            //                     $('#feedBackMail').fadeIn('fast').html(
-            //                         "<p class='alert alert-danger text-center'>Emails sent error</p>");
-            //                 });
-            //                 setTimeout(function() { // wait for 2 secs(2)
-            //                     location.reload(); // then reload the div to clear the success notification
-            //                 }, 1500);
-            //             }
-            //         }
-            //     });
-            // }
-
-
             Swal.fire({
                 title: 'Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??',
                 icon: 'warning',

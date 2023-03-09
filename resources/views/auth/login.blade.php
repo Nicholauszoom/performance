@@ -17,7 +17,7 @@
     body {
  background-image: url('{{ asset('img/bg.png') }}');
  background-color: #cccccc;
- 
+
 }
  </style>
 
@@ -32,12 +32,12 @@
             <div class="content-wrapper">
                 <div class="content-inner">
                     <div class="content d-flex justify-content-center align-items-center">
-                        
+
                             <div class="col-md-7 col-12" >
                                 <div class=" rounded-0 mb-0">
                                     <div class="">
                                           <div class="row "  style="height:43.4em;">
-                   
+
                                 <div class="col-md-6  d-none d-md-block col-12 ">
                                     <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
                                         <div class="carousel-inner">
@@ -60,25 +60,25 @@
                                       </div>
                                 </div>
                                 <div class="col-md-6  col-sm-11 col-11 mx-auto bg-white border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0">
-                                 
+
                                     <form action="{{ route('login') }}" method="POST" class="mb-4 py-4" autocomplete="off">
                                       @csrf
-          
+
                                       <div class=" border-bottom-main mb-0">
-          
+
                                           <div class="">
                                               <div class="text-center mb-2 mt-5">
                                                   <div class="d-inline-flex align-items-center justify-content-center mb-4 mt-2">
                                                       <img src="{{ asset('img/performance.png') }}" class="img-fluid" style="height: 13.2em" alt="logo">
                                                   </div>
-                                                  
-          
+
+
                                               </div>
-          
+
                                               @if (session()->has('status'))
                                                   <div class="alert alert-danger border-0 alert-dismissible fade show mb-3">
                                                       <span class="fw-semibold">Oh snap!</span> {{ session('status') }}.
-          
+
                                                       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                                   </div>
                                               @else
@@ -89,15 +89,15 @@
                                                               <li> {{ $error }}</li>
                                                           @endforeach
                                                       </ul>
-          
+
                                                       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                                   </div>
                                                   @endif
                                               @endif
-          
+
                                               <div class="mb-3">
                                                   <label class="form-label text-main">Username</label>
-          
+
                                                   <div class="form-control-feedback form-control-feedback-start">
                                                       <input
                                                           class="form-control @if($errors->has('emp_id')) is-invalid @endif"
@@ -108,16 +108,16 @@
                                                           placeholder="username"
                                                           autocomplete="off"
                                                       >
-          
+
                                                       <div class="form-control-feedback-icon">
                                                           <i class="ph-user-circle text-muted"></i>
                                                       </div>
                                                   </div>
                                               </div>
-          
+
                                               <div class="mb-3">
                                                   <label class="form-label text-main">Password</label>
-          
+
                                                   <div class="form-control-feedback form-control-feedback-start">
                                                       <input
                                                           type="password"
@@ -128,38 +128,38 @@
                                                           required
                                                           autocomplete="off"
                                                       >
-          
+
                                                       <div class="form-control-feedback-icon">
                                                           <i class="ph-lock text-muted"></i>
                                                       </div>
                                                   </div>
                                               </div>
-          
-                                           
-          
+
+
+
                                               <div class="mb-1 mt-3">
                                                   <button type="submit" class="btn btn-main  w-100 border-0" style="background: #00204e">Log In</button>
                                               </div>
 
                                               <div class="text-center mt-2">
-                                                <a href="/forgot-password" class="ms-auto text-main">Forgot password?</a>
+                                                <a href="{{ url('forgot-password') }}" class="ms-auto text-main">Forgot password?</a>
                                             </div>
-          
+
                                             </div>
                                       </div>
                                   </form>
                                   {{-- /login card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
 
                                       </div>
-                            
-                                      
+
+
                             </div>
                                     </div>
                                 </div>
                             </div>
-                       
 
-                
+
+
                     </div>
                 </div>
             </div>

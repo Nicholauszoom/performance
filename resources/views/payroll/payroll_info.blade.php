@@ -114,12 +114,12 @@ $payrollState = $payroll_state;
 
             // Advanced initialization
             Swal.fire({
-                title: 'Are you sure? you whant to confirm payroll',
+                title: 'Are you sure? you whant to Perform Calculation',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, confirm it!'
+                confirmButtonText: 'Yes!'
             }).then((result) => {
                 if (result.isConfirmed) {
 
@@ -127,9 +127,19 @@ $payrollState = $payroll_state;
 
                     $.ajax({
                         url: "{{ route('payroll.generate_checklist', ['pdate' => base64_encode($payroll_date)]) }}",
+                        async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                         success: function(data) {
                             if (data.status == 1) {
-                                alert("Pay CheckList Generated Successiful!");
+
+                                new Noty({
+                                    text: 'Pay CheckList Generated Successifu!',
+                                    type: 'success'
+                                }).show();
 
                                 $('#resultConfirmation').fadeOut('fast', function() {
                                     $('#resultConfirmation').fadeIn('fast').html(data.message);
@@ -142,6 +152,10 @@ $payrollState = $payroll_state;
                                 alert(
                                     "FAILED to Generate Pay Checklist, Try again, If the Error persists Contact Your System Admin."
                                 );
+                                new Noty({
+                                    text: 'FAILED to Generate Pay Checklist, Try again, If the Error persists Contact Your System Admin.!',
+                                    type: 'error'
+                                }).show();
 
                                 $('#resultConfirmation').fadeOut('fast', function() {
                                     $('#resultConfirmation').fadeIn('fast').html(data.message);

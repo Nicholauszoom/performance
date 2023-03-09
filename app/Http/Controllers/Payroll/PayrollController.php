@@ -172,6 +172,8 @@ class PayrollController extends Controller
         $data['pendingPayroll_month'] = $this->payroll_model->pendingPayroll_month();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['payroll'] = $this->payroll_model->pendingPayroll();
+        $data['pending_overtime'] = $this->flexperformance_model->pending_overtime();
+
         $data['payrollList'] = $this->payroll_model->payrollMonthList();
         $data['title'] = "Payroll";
 
@@ -285,7 +287,14 @@ class PayrollController extends Controller
         $data['count_current_month'] = $this->reports_model->s_count1($current_payroll_month);
         $data['total_previous_overtime'] = $this->reports_model->s_overtime1($previous_payroll_month);
         $data['total_current_overtime'] = $this->reports_model->s_overtime1($current_payroll_month);
+        $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
+        if($data['terminated_employee'] > 0){
+
+            $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
+
+
+        }
         $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
          foreach($total_allowances as $row){

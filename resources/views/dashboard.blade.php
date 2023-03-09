@@ -225,7 +225,7 @@
         <div class="col-md-12">
             <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
                 <div class="card-header bg-main text-center">
-                    <h5 class="">Payroll Reconciliation Summary (Current & Previous)</h5>
+                    <h5 class="">Payroll Reconciliation Summary (Current & Previous) for the month {{ date('F, Y', strtotime($payroll_date)) }}</h5>
                 </div>
 
                 @php

@@ -42,9 +42,9 @@
 
                 <tbody>
                     <?php foreach ($line_overtime as $row) { ?>
-                    <?php if ($row->status != 2) {
-                        continue;
-                    } ?>
+                    @if ($row->status != 2) 
+
+
                     <tr>
                         <td width="1px"><?php echo $row->SNo; ?></td>
                         <td><?php echo $row->name; ?></td>
@@ -117,6 +117,7 @@
                         @endcan
                         {{-- / --}}
                     </tr>
+                    @endif
                     <?php }  ?>
                 </tbody>
             </table>
