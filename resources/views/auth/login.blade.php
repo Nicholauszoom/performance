@@ -166,7 +166,7 @@
                                                         </div>
 
                                                         <div class="text-center mt-2">
-                                                            <a href="/forgot-password"
+                                                            <a href="{{url('/forgot-password')}}"
                                                                 class="ms-auto text-main">Forgot password?</a>
                                                         </div>
 
