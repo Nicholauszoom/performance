@@ -89,7 +89,7 @@ class NewPasswordController extends Controller
             
             // dd('ok');
             // $request->session()->flush();
-            return redirect()->route('login')->with('password_set', 'Password resetted');
+            return redirect()->route('login')->with('password_set', 'Password Changed');
         }
         else{
             return back()->with('status', 'password not resetted');

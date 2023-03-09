@@ -93,7 +93,7 @@
                                                     @if (session()->has('password_set'))
                                                             <div
                                                                 class="alert alert-success border-0 alert-dismissible fade show mb-3">
-                                                                <span class="fw-semibold">Congrats!!!</span>
+                                                                <span class="fw-semibold">Success!!!</span>
                                                                 {{ session('password_set') }}.
 
                                                                 <button type="button" class="btn-close"
