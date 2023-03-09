@@ -32,7 +32,7 @@ class PayrollController extends Controller
 
     public function initPayroll(Request $request)
     {
-        dd(12);
+       
         if ($request->post()) {
 
             $pendingPayroll = $this->payroll_model->pendingPayrollCheck();
