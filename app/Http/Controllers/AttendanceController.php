@@ -206,6 +206,41 @@ class AttendanceController extends Controller
 
       // Start of Auto apply leave
 
+      $employ=EMPL::whereNot('state',4)->get();
+
+      foreach($employ as $item)
+      {
+            $balance= $this->attendance_model->getLeaveBalance($item->emp_id, $item->hire_date, date('Y-m-d'));
+            $total_leave=Leaves::where('empID',$item->emp_id)->where('nature',1)->sum('days');
+
+            $remaining=$balance-$total_leave-6.99;
+            $date="03-01";
+            if($date==Date('m-d'))
+            {
+              if ($balance>6.99) {
+
+                // For Saving Leave
+                $leaves=new Leaves();
+                $empID=$item->emp_id;
+                $leaves->empID = $empID;
+                $leaves->start =Date('Y-m-d') ;
+                $leaves->end=Date('Y-m-d') ;
+                $leaves->leave_address="auto";
+                $leaves->mobile = $item->phone;
+                $leaves->nature = 1;
+                $leaves->remaining=6.99;
+                $leaves->days=$remaining;
+                $leaves->position="Unused Annual";
+                $leaves->status=4;
+                $leaves->save();
+
+            
+              }
+        
+
+            }
+          
+      }
 
 
       // End of auto apply leave
