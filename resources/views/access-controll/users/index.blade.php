@@ -37,7 +37,7 @@
         <tbody>
             @if(isset($users))
                 @foreach($users as $user)
-                @if($user->id != auth()->user()->id)
+               
                     {{-- @php $role = ";  @endphp --}}
 
                     @foreach($user->roles as $value2)
@@ -71,7 +71,7 @@
                             </div>
                         </td>
                     </tr>
-                    @endif
+
                 @endforeach
             @endif
         </tbody>
