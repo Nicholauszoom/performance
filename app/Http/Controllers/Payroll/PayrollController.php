@@ -32,7 +32,7 @@ class PayrollController extends Controller
 
     public function initPayroll(Request $request)
     {
-       
+
         if ($request->post()) {
 
             $pendingPayroll = $this->payroll_model->pendingPayrollCheck();
@@ -126,7 +126,7 @@ class PayrollController extends Controller
                         // dd('Payroll Run and Email has been sent');
                         //$result = SysHelpers::auditLog(1,$description,$request);
 
-                        echo "<p class='alert alert-info text-center'>Payroll was Successifully Run,(Loans and Salaries Updated!)</p>";
+                        echo "<p class='alert alert-info text-center'>Period Changed Successfull</p>";
                     } else {
                         echo "<p class='alert alert-danger text-center'>Failed To run the Payroll, Please Try again, If the Error persists Contact Your System Admin</p>";
                     }
