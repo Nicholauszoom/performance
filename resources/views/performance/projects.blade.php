@@ -83,7 +83,7 @@
                                     <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
                                         <i class="ph-info"></i>
                                     </a>
-                                    <a href="" class="btn btn-sm bg-main">
+                                    <a href="{{ url('flex/edit-project/'.$item->id); }}" class="btn btn-sm bg-main">
                                         <i class="ph-pen"></i>
                                     </a>
                                     <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">

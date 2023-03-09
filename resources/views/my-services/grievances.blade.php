@@ -1,11 +1,14 @@
 @extends('layouts.vertical', ['title' => 'Grievances'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
+<script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -104,7 +107,7 @@
                     
                     <!--Table Grievances HR-->
                     
-                    <table  class="table table-striped table-bordered">
+                    <table  class="table table-striped table-bordered datatable-basic">
                       <thead>
                         <tr>
                           <th>Evidence</th> 

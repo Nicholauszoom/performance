@@ -148,7 +148,7 @@ class AttendanceController extends Controller
       $data['leave_types'] =LeaveType::all();
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
       $data['leaves'] =Leaves::get();
-
+      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       // Start of Escallation
       $leaves=Leaves::get();
@@ -202,6 +202,49 @@ class AttendanceController extends Controller
         }
       }
       // End of Escallation
+      
+
+      // Start of Auto apply leave
+
+      $employ=EMPL::whereNot('state',4)->get();
+
+      foreach($employ as $item)
+      {
+            $balance= $this->attendance_model->getLeaveBalance($item->emp_id, $item->hire_date, date('Y-m-d'));
+            $total_leave=Leaves::where('empID',$item->emp_id)->where('nature',1)->sum('days');
+
+            $remaining=$balance-$total_leave-6.99;
+            $date="03-01";
+            if($date==Date('m-d'))
+            {
+              if ($balance>6.99) {
+
+                // For Saving Leave
+                $leaves=new Leaves();
+                $empID=$item->emp_id;
+                $leaves->empID = $empID;
+                $leaves->start =Date('Y-m-d') ;
+                $leaves->end=Date('Y-m-d') ;
+                $leaves->leave_address="auto";
+                $leaves->mobile = $item->phone;
+                $leaves->nature = 1;
+                $leaves->remaining=6.99;
+                $leaves->days=$remaining;
+                $leaves->reason="Did not go for Annual leave !";
+                $leaves->position="Unused Annual";
+                $leaves->status=4;
+                $leaves->save();
+
+            
+              }
+        
+
+            }
+          
+      }
+
+
+      // End of auto apply leave
 
       // For Working days
       $d1 = new DateTime (Auth::user()->hire_date);
@@ -209,7 +252,7 @@ class AttendanceController extends Controller
       $interval = $d2->diff($d1);
       $data['days']=$interval->days;
       $data['title'] = 'Leave';
-      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+  
       $data['leave_type'] = $this->attendance_model->leave_type();
       return view('app.leave', $data);
 

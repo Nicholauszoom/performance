@@ -1,11 +1,14 @@
 @extends('layouts.vertical', ['title' => 'Grievances'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
+<script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -49,7 +52,7 @@
                           <th>S/N</th>
                           <th>Name</th>
                           <th>Department</th>
-                          <th>Evidence</th> 
+                          {{-- <th>Evidence</th>  --}}
                           <th>Title</th> 
                           <th>Description</th>
                           <th>Date</th>
@@ -67,8 +70,8 @@
                             <td width="1px"><?php echo $row->SNo; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->NAME; ?></td>
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else  echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>
-                            <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."'>"."<div class='col-md-12'>
-                                <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td>
+                            {{-- <td><?php if($row->attachment != NULL) echo "<a download= '' href ='". url('').$row->attachment."' class='btn btn-sm btn-main'>"."<div class='col-md-12'>
+                                <span class='label label-info'>DOWNLOAD</span></div>"."</a>"; else echo "NIL"; ?></td> --}}
                             <td><?php if($row->anonymous == 1) echo "ANONYMOUS"; else echo $row->title; ?></td>
                             <td><?php echo $row->description; ?></td>
                             <td><?php $datesValue = str_replace('-', '/', $row->DATED);
@@ -85,7 +88,7 @@
                             
                             <td class="options-width">
                             <a title="Info and Details" href="{{ url('flex/grievance_details/'.$row->id)}}">
-                                  <button  class="btn btn-info btn-sm">INFO</button></a>&nbsp;&nbsp;
+                                  <button  class="btn btn-info btn-sm"><i class="ph-info"></i></button></a>&nbsp;&nbsp;
                                 
                               <?php if( $row->status==0 ){ ?>
                               <a href="javascript:void(0)" onclick="markSolved(<?php echo $row->id;?>)" title="Mark as Resolved" >

@@ -7056,42 +7056,7 @@ class GeneralController extends Controller
     }
 
 
-    public function resolve_grievance(Request $request)
-    {
-
-        if ($this->uri->segment(3) != '') {
-            $refID = $this->uri->segment(3);
-            $datalog = array(
-                'status' => 1,
-            );
-
-            $result = $this->flexperformance_model->updategrievances($datalog, $refID);
-
-            if ($result == true) {
-                echo "<p class='alert alert-warning text-center'>Marked As Resolved</p>";
-            } else {
-                echo "<p class='alert alert-danger text-center'>FAILED: Try again</p>";
-            }
-        }
-    }
-    public function unresolve_grievance(Request $request)
-    {
-
-        if ($this->uri->segment(3) != '') {
-            $refID = $this->uri->segment(3);
-            $datalog = array(
-                'status' => 0,
-            );
-
-            $result = $this->flexperformance_model->updategrievances($datalog, $refID);
-
-            if ($result == true) {
-                echo "<p class='alert alert-warning text-center'>Marked As Unresolved</p>";
-            } else {
-                echo "<p class='alert alert-danger text-center'>FAILED Try again</p>";
-            }
-        }
-    }
+   
 
     public function audit_logs(Request $request)
     {
@@ -9592,6 +9557,59 @@ public function cancel_grievance($id)
 
     return redirect('flex/my-grievences');
 }
+// For Resolve Grievances
+public function resolve_grievance($id)
+{
+
+    $grievance=Grievance::find($id);
+
+
+    $grievance->status=1;
+    $grievance->update();
+
+    $msg="Grievance is resolved successfully!";
+
+    return back()->with('msg',$msg);
+
+}
+// For unresolve Grievance
+public function unresolve_grievance($id)
+{
+
+    $grievance=Grievance::find($id);
+
+
+    $grievance->status=0;
+    $grievance->update();
+
+    $msg="Grievance is un-resolved successfully!";
+
+    return back()->with('msg',$msg);
+}
+
+
+// For Grievance Feedback
+
+public function update_grievance(Request $request)
+{
+
+    $grievance=Grievance::find($request->id);
+
+    $grievance->remarks = $request->remarks;
+    $grievance->forwarded_by= Auth::user()->emp_id;
+    if ($request->hasfile('attachment')) {
+        $newAttachmentName = $request->attachment->hashName();
+        $request->attachment->move(public_path('storage\grieavences-supports'), $newAttachmentName);
+        $grievance->support_document = $newAttachmentName;
+    }
+    $grievance->status=1;
+    $grievance->update();
+
+    $msg="Grievance Feedback was Added successfully!";
+
+    return back()->with('msg',$msg);
+
+    }
 
     // Start of self services
 
@@ -9650,10 +9668,9 @@ public function cancel_grievance($id)
     // For My Grievances
 
     public function my_grievances()
-    {
-        $data['my_grievances']=Grievance::where('empID',Auth::user()->emp_id)->get();
-        $data['other_grievances']=Grievance::all();
-        return view('my-services.grievances',$data);
+    {   
+        $data['my_grievances']=Grievance::latest()->where('empID',Auth::user()->emp_id)->get();
+        return view('my-services.grievances',$data); 
     }
 
         // For Saving New Grievances
@@ -9756,6 +9773,25 @@ public function cancel_grievance($id)
         return redirect('flex/projects');
     }
 
+        // For Saving New Project
+        public function edit_project( $id)
+        {
+            $project = Project::where('id',$id)->first();
+            return view('performance.edit_project',compact('project'));
+        }
+    
+
+        // For Saving New Project
+        public function update_project( Request $request)
+        {
+            $project = Project::where('id',$request->id)->first();
+            $project->name = $request->name;
+            $project->start_date = $request->start_date;
+            $project->end_date= $request->end_date;
+            $project->update();
+            return redirect('flex/projects')->with('msg','Project was updated Successfully !');
+        }
+
        // View single project
        public function view_project($id)
        {
@@ -9817,6 +9853,16 @@ public function cancel_grievance($id)
 
            $project = Project::where('id',$task->project_id)->first();
            return view('performance.single_project',compact('project','tasks',));
+       }
+
+       public function edit_project_task($id)
+       {
+
+            $task =ProjectTask::where('id',$id)->first();
+            $project = Project::where('id',$task->project_id)->first();
+            $employees= EMPL::where('state',1)->get();
+            return view('performance.edit_project_task',compact('task','project','employees'));
+
        }
 
     // For single task Assessment Page
