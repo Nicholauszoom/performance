@@ -89,7 +89,7 @@ function confirmBonus(id)
                 url:"<?php echo url('flex/confirmBonus');?>/"+id,
                 success:function(data)
                 {
-                    var data = JSON.parse(data);
+
                     alert(data.status);
                     if(data.status == 'OK'){
                         alert("Bonus Confirmed Successifully");
@@ -117,7 +117,7 @@ function confirmBonus(id)
     // $.ajax({
     //     url:"<?php echo url('flex/confirmBonus');?>/"+id,
     //     success:function(data)
-    //     {   var data = JSON.parse(data);
+    //     {
     //         alert(data.status);
     //         if(data.status == 'OK'){
     //         alert("Bonus Confirmed Successifully");
@@ -161,7 +161,7 @@ function recommendBonus(id)
                 url:"<?php echo url('flex/recommendBonus');?>/"+id,
                 success:function(data)
                 {
-                    var data = JSON.parse(data);
+
                     if(data.status == 'OK'){
                     alert("Bonus Confirmed Successifully");
                     $('#feedBack').fadeOut('fast', function(){
@@ -187,7 +187,7 @@ function recommendBonus(id)
     //         url:"<?php echo url('flex/recommendBonus');?>/"+id,
     //         success:function(data)
     //         {
-    //           var data = JSON.parse(data);
+    //
     //           if(data.status == 'OK'){
     //           alert("Bonus Confirmed Successifully");
     //            $('#feedBack').fadeOut('fast', function(){
@@ -228,7 +228,7 @@ function deleteBonus(id)
                 url:"<?php echo url('flex/deleteBonus');?>/"+id,
                 success:function(data)
                 {
-                    var data = JSON.parse(data);
+
                 if(data.status == 'OK'){
                 alert("Bonus Deleted Successifully");
                 $('#feedBack').fadeOut('fast', function(){
@@ -258,7 +258,7 @@ function deleteBonus(id)
         //         url:"<?php echo url('flex/deleteBonus');?>/"+id,
         //         success:function(data)
         //         {
-        //             var data = JSON.parse(data);
+        //
         //         if(data.status == 'OK'){
         //         alert("Bonus Deleted Successifully");
         //         $('#feedBack').fadeOut('fast', function(){
@@ -300,7 +300,7 @@ function deleteBonus(id)
                  async:false
              })
         .done(function(data){
-            var data = JSON.parse(data);
+
          $('#feedBackSubmission').fadeOut('fast', function(){
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
@@ -328,7 +328,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -341,6 +341,7 @@ function deleteBonus(id)
 
     $('#updaterecursive').submit(function(e){
         e.preventDefault();
+
              $.ajax({
                  url:"<?php echo  url(''); ?>/flex/updateRecursive",
                  headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -354,7 +355,8 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+           //
+
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -380,7 +382,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-           // var data = JSON.parse(data);
+           //
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -405,7 +407,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -434,7 +436,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -460,7 +462,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -487,7 +489,7 @@ function deleteBonus(id)
              })
         .done(function(data){
          $('#feedBackSubmission').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackSubmission').fadeIn('fast').html(data);
             });
 
@@ -512,11 +514,16 @@ function deleteBonus(id)
                  processData:false,
                  contentType:false,
                  cache:false,
-                 async:false
+                 async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
              })
         .done(function(data){
          $('#feedBackAssignment').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackAssignment').fadeIn('fast').html(data);
             });
 
@@ -542,11 +549,16 @@ function deleteBonus(id)
                  processData:false,
                  contentType:false,
                  cache:false,
-                 async:false
+                 async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
              })
         .done(function(data){
          $('#feedBackAssignment').fadeOut('fast', function(){
-            var data = JSON.parse(data);
+
               $('#feedBackAssignment').fadeIn('fast').html(data);
             });
      setTimeout(function(){// wait for 5 secs(2)
@@ -581,11 +593,16 @@ function deleteBonus(id)
                     processData:false,
                     contentType:false,
                     cache:false,
-                    async:false
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
                 })
                 .done(function(data){
                     $('#feedBackRemove').fadeOut('fast', function(){
-                    var data = JSON.parse(data);
+
                         $('#feedBackRemove').fadeIn('fast').html(data);
                     });
 
@@ -610,11 +627,16 @@ function deleteBonus(id)
                  processData:false,
                  contentType:false,
                  cache:false,
-                 async:false
+                 async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
             })
             .done(function(data){
                 $('#feedBackRemove').fadeOut('fast', function(){
-                    var data = JSON.parse(data);
+
                     $('#feedBackRemove').fadeIn('fast').html(data);
                 });
 
@@ -669,7 +691,7 @@ function deleteBonus(id)
         //     }
         // });
 
-        if (confirm("Are You Sure You Want To Delete The selected Employee(s) from Receiving This Allowance?") == true) {
+        if (confirm("Are You Sure You?") == true) {
             e.preventDefault();
 
             $.ajax({
@@ -680,7 +702,12 @@ function deleteBonus(id)
                 processData:false,
                 contentType:false,
                 cache:false,
-                async:false
+                async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    }
             })
             .done(function(data){
                 $('#feedBackRemoveGroup').fadeOut('fast', function(){
@@ -777,6 +804,12 @@ function deleteAllowance(id)
 
                 $.ajax({
                     url:"<?php echo url('flex/activateAllowance');?>/"+id,
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                     success:function(data)
                     {
                         var data  = JSON.parse(data);

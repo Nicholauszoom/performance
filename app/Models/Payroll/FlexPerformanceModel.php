@@ -389,6 +389,12 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+    function pending_overtime(){
+        $query = "SELECT count(id) as total from employee_overtime where status=0";
+        $row = DB::select(DB::raw($query));
+		return $row[0]->total;
+    }
+
 	function lineOvertimes($id){
 		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS

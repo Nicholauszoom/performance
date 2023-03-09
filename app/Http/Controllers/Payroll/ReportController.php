@@ -2090,6 +2090,14 @@ dd($data['paye_terminated']);
         $data['total_previous_overtime'] = $this->reports_model->s_overtime($previous_payroll_month);
         $data['total_current_overtime'] = $this->reports_model->s_overtime($current_payroll_month);
 
+        $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
+
+        if($data['terminated_employee'] > 0){
+
+            $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
+
+
+        }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
         foreach ($total_allowances as $row) {
