@@ -51,6 +51,10 @@ Route::middleware('auth:sanctum')->group( function () {
       // For Saving Leaves
       Route::post('/apply-leave',[LeaveController::class,'store']);
 
+      // For Updating profile image
+      Route::post('/update-image',[LeaveController::class,'updateImg']);
+   
+
 
 });
 
