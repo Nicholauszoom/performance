@@ -41,23 +41,43 @@ class LeaveController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $id=auth()->user()->emp_id;
+{
+    // Print the value of auth()->check()
+    
 
-        $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
+    $id=auth()->user()->emp_id;
+
+    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
+
+    $sub_category=LeaveSubType::all();
+
+    $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+    return response(
+        [
+            'pending_leaves'=>$pending_leaves,
+            'active_leaves'=>$active_leaves,
+            'sub_category'=>$sub_category
+        ],200 );
+}
+
+    // public function index()
+    // {
+    //     $id=auth()->user()->emp_id;
+
+    //     $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
         
-        $sub_category=LeaveSubType::all();
-        // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
-        // $data['leaves'] =Leaves::get();
+    //     $sub_category=LeaveSubType::all();
+    //     // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+    //     // $data['leaves'] =Leaves::get();
 
-        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
-        return response(
-            [
-                'pending_leaves'=>$pending_leaves,
-                'active_leaves'=>$active_leaves,
-                'sub_category'=>$sub_category
-            ],200 );
-    }
+    //     $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+    //     return response(
+    //         [
+    //             'pending_leaves'=>$pending_leaves,
+    //             'active_leaves'=>$active_leaves,
+    //             'sub_category'=>$sub_category
+    //         ],200 );
+    // }
 
     /**
      * Store a newly created resource in storage.

@@ -697,10 +697,11 @@ class GeneralController extends Controller
     public function updateImg(Request $request)
     {
 
+      
+        $user = auth()->user()->emp_id;
         request()->validate([
             'image' => 'required'
         ]);
-        $user = auth()->user()->emp_id;
 
         $employee = EMPL::where('emp_id', $user)->first();
         if ($request->hasfile('image')) {
