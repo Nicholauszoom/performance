@@ -16,6 +16,7 @@ use App\Models\Position;
 use App\Models\UserRole;
 use App\Models\AdhocTask;
 use App\Models\Approvals;
+use App\Models\Grievance;
 use App\Models\Promotion;
 use App\Models\TimeRatio;
 use Illuminate\Http\File;
@@ -33,9 +34,11 @@ use App\Models\FinancialLogs;
 use App\Models\LeaveApproval;
 use App\Models\BehaviourRatio;
 use App\Models\EmployeeDetail;
-use App\Models\EmployeeParent;
 
+use App\Models\EmployeeParent;
+use App\Models\EmployeeSkills;
 use App\Models\EmployeeSpouse;
+use App\Models\PositionSkills;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -48,6 +51,7 @@ use App\Models\EmailNotification;
 use App\Models\EmployeeDependant;
 use App\Models\EmploymentHistory;
 use Illuminate\Support\Facades\DB;
+use App\Models\EmployeePerformance;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
@@ -63,8 +67,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Models\ProfessionalCertification;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
-use App\Models\EmployeePerformance;
-use App\Models\Grievance;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
@@ -10536,12 +10538,23 @@ public function update_grievance(Request $request)
                 ->avg('employee_performances.behaviour')
                 ;
 
-                $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
-                $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');
+                $position= PositionSkills::where('position_ref',$item->position)->count();
+                $skills= EmployeeSkills::where('empID',$item->emp_id)->count();
+           
 
-                if ($achieved>0)
-                { $potential=  number_format( $achieved/$target, 2);  }
-                else{ $potential= 0;}
+                if ($skills>0 && $position)
+                {
+                    $potential=   number_format( $skills/$position, 2) * 100 ;
+                }
+                else{ $potential= 0;}  
+              
+
+                // $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
+                // $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');
+
+                // if ($achieved>0)
+                // { $potential=  number_format( $achieved/$target, 2);  }
+                // else{ $potential= 0;}
 
                 // For Low Potential
                 if ($potential >0 && $potential <20 ) {
