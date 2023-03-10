@@ -6,10 +6,17 @@ use App\Helpers\SysHelpers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PasswordChange;
 use App\Http\Requests\PasswordValidationRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing;
 use App\Providers\RouteServiceProvider;
+use App\Rules\CheckOldPassword;
+use App\Rules\CurrentPassword;
+use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password;
 
 class PasswordController extends Controller
 {
@@ -59,25 +66,79 @@ class PasswordController extends Controller
         }
     }
 
-    public function updatePassword(PasswordValidationRequest $request)
+    public function updatePassword(Request $request)
     {
-        // return response()->json('Hello', 200);
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'current_password' => ['required', new CurrentPassword],
+            'new_password' => ['required', 'string', 'min:8', new CheckOldPassword],
+            // 'string', 'min:8', 'confirmed'
+            'password_confirmation' => ['required', 'string', 'min:8', 'same:new_password'],
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+               'message'=>'validations fails',
+               'errors' =>$validator->errors()
+            ],422);
+         }
+         else
+         {
+            // $user = Auth::user()->emp_id;
+            // return response()->json('success', 200);
 
-        $validated = $request->validated();
+            $employee = array(
+                    'password' => Hash::make($request->new_password),
+                );
+            $userPass = array(
+                        'empID' => $request->user()->emp_id,
+                        'password' => Hash::make($request->new_password),
+                        'time' => date('Y-m-d'),
+                    );
+            
+            $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
+            if ($result == 1) {
+                return response()->json([
+                    'message' => 'Password Updated',
+                    'username' => $request->user()->emp_id,
+                ], 200);
+            } else {
+                return response()->json('password not updated', 500);
+            }
+        }
+        // if (Hash::check($request->old_password,$user->password)) {
+        
+        // $curr = $request->input('current_password');
+        // $new_password = $request->input('new_password');
 
-        $employee = array(
-            'password' => Hash::make($validated['password']),
-        );
+        // if($curr == $new_password){
+        //     return response()->json([
+        //         'message' => 'Password Updated',
+        //         'data' => $curr,
+        //         'userPass' => $new_password,
+        //     ], 200);
+        // }
+        // else{
+        //     return response()->json('Not Equal', 500);
+        // }
 
-        $userPass = array(
-            'empID' => $request->user()->emp_id,
-            'password' => Hash::make($validated['password']),
-            'time' => date('Y-m-d'),
-        );
+
+        // $input ='Hello';
+        // return response()->json($input, 200);
+        // $validated = $request->validated();
+
+        // $employee = array(
+        //     'password' => Hash::make($input),
+        // );
+
+        // $userPass = array(
+        //     'empID' => $request->user()->emp_id,
+        //     'password' => Hash::make($new_password),
+        //     'time' => date('Y-m-d'),
+        // );
 
         // $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
 
-        return response()->json($employee, 200);
+        // return response()->json($inputs, 200);
         // return back()->with('status', 'updated');
 
     }
@@ -97,4 +158,5 @@ class PasswordController extends Controller
 
         return $query;
     }
+
 }

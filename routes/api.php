@@ -60,7 +60,7 @@ Route::middleware('auth:sanctum')->group( function () {
    
 
 
-      Route::get('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
+      Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 });
 
 
