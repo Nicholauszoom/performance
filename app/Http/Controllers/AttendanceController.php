@@ -147,60 +147,60 @@ class AttendanceController extends Controller
       }
       $data['leave_types'] =LeaveType::all();
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
-      $data['leaves'] =Leaves::get();
+      $data['leaves'] =Leaves::latest()->get();
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       // Start of Escallation
-      $leaves=Leaves::get();
-      if ($leaves) {
+      // $leaves=Leaves::get();
+      // if ($leaves) {
 
-        foreach($leaves as $item)
-        {
-            $today= new DateTime();
-            $applied =$item->updated_at;
-            $diff= $today->diff($applied);
-            $range=$diff->days;
-            $approval=LeaveApproval::where('empID',$item->empID)->first();
-            if ($approval) {
-              if ($range>$approval->escallation_time) {
-                $leave=Leaves::where('id' ,$item->id)->first();
-                $status=$leave->status;
+      //   foreach($leaves as $item)
+      //   {
+      //       $today= new DateTime();
+      //       $applied =$item->updated_at;
+      //       $diff= $today->diff($applied);
+      //       $range=$diff->days;
+      //       $approval=LeaveApproval::where('empID',$item->empID)->first();
+      //       if ($approval) {
+      //         if ($range>$approval->escallation_time) {
+      //           $leave=Leaves::where('id' ,$item->id)->first();
+      //           $status=$leave->status;
                 
-                if ($status == 0) {
-                  if ($approval->level2 != null) {
-                    $leave->status=1;
-                    $leave->updated_at=$today;
-                    $leave->update();
+      //           if ($status == 0) {
+      //             if ($approval->level2 != null) {
+      //               $leave->status=1;
+      //               $leave->updated_at=$today;
+      //               $leave->update();
                 
-                  }
+      //             }
                
-                }
-                elseif ($status == 1)
-                {
-                  if ($approval->level3 != null) {
-                    $leave->status=2;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-                  else
-                  {
-                    $leave->status=0;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-                }
-                elseif ($status == 2)
-                {
-                  if ($approval->level1 != null) {
-                    $leave->status=0;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-                }
-              }
-            }
-        }
-      }
+      //           }
+      //           elseif ($status == 1)
+      //           {
+      //             if ($approval->level3 != null) {
+      //               $leave->status=2;
+      //               $leave->updated_at=$today;
+      //               $leave->update();
+      //             }
+      //             else
+      //             {
+      //               $leave->status=0;
+      //               $leave->updated_at=$today;
+      //               $leave->update();
+      //             }
+      //           }
+      //           elseif ($status == 2)
+      //           {
+      //             if ($approval->level1 != null) {
+      //               $leave->status=0;
+      //               $leave->updated_at=$today;
+      //               $leave->update();
+      //             }
+      //           }
+      //         }
+      //       }
+      //   }
+      // }
       // End of Escallation
       
 
@@ -232,7 +232,7 @@ class AttendanceController extends Controller
                 $leaves->days=$remaining;
                 $leaves->reason="Did not go for Annual leave !";
                 $leaves->position="Unused Annual";
-                $leaves->status=4;
+                $leaves->status=3;
                 $leaves->save();
 
             

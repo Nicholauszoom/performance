@@ -49,11 +49,16 @@ Route::middleware('auth:sanctum')->group( function () {
 
 
       // For Saving Overtimes
-      Route::post('/apply-overtime',[GeneralController::class,'apply_overtime']);
+      Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);
       // For Saving Leaves
       Route::post('/apply-leave',[LeaveController::class,'store']);
 
-      Route::post('/forgot-password',[LeaveController::class,'store']);
+      // For Updating profile image
+      Route::patch('/update-image',[GeneralController::class,'updateImg']);
+
+
+   
+
 
       Route::get('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 });

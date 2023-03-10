@@ -229,7 +229,7 @@ class GeneralController extends Controller
     //  end of employee overtimes function
 
     //  start of apply overtimes function
-    public function apply_overtime(Request $request)
+    public function applyOvertime(Request $request)
     {
 
         $start = $request->input('time_start');
@@ -241,12 +241,13 @@ class GeneralController extends Controller
         $empID = auth()->user()->emp_id;
 
 
+
+
         $split_start = explode("  at  ", $start);
         $split_finish = explode("  at  ", $finish);
-        dd($split_finish);
+
         $start_date = $split_start[0];
         $start_time = $split_start[1];
-       
 
         $finish_date = $split_finish[0];
         $finish_time = $split_finish[1];
@@ -259,28 +260,11 @@ class GeneralController extends Controller
 
         $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
-        //fetch Line manager data from employee table and send email
-        $linemanager_data = SysHelpers::employeeData($linemanager);
-        $fullname = $linemanager_data['full_name'];
-        $email_data = array(
-            'subject'=> 'Employee Overtime Approval',
-            'view' => 'emails.linemanager.overtime-approval',
-            'email' => $linemanager_data['email'],
-            'full_name' => $fullname,
-        );
-        Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
-        // dd('Email Sent Successfully');
-        //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
-
-        // foreach ($line as $row) {
-        //     $linemanager = $row->line_manager;
-        // }
-        //Overtime Should range between 24 Hrs;
 
         if ($maxRange > 24) {
 
             $msg='Overtime Should Range between 0 to 24 Hours';
-            return response( [ 'msg'=>$msg ],201 );
+            return response( [ 'msg'=>$msg ],401);
         } else {
 
             $end_night_shift = "6:00";
@@ -289,11 +273,8 @@ class GeneralController extends Controller
             if ($start_date == $finish_date) {
 
                 if (strtotime($start_time) >= strtotime($finish_time)) {
-
-                    // echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
-
                     $msg='Invalid Time Selection, Please Choose the correct time and Try Again!';
-                    return response( [ 'msg'=>$msg ],202 );
+                    return response( [ 'msg'=>$msg ],401);
                 } else {
 
                     if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
@@ -316,14 +297,12 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
-                            // echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                                                     
-                            $msg='Overtime Request Sent Successifully';
-                            return response( [ 'msg'=>$msg ],203 );
+
+                            $msg='Overtime Request Sent Successifully!';
+                            return response( [ 'msg'=>$msg ],200);
                         } else {
-                            // echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
                             $msg='Overtime Request Not Sent, Please Try Again!';
-                            return response( [ 'msg'=>$msg ],203 );
+                            return response( [ 'msg'=>$msg ],401);
                         }
                     } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
 
@@ -345,27 +324,24 @@ class GeneralController extends Controller
                         $result = $this->flexperformance_model->apply_overtime($data);
 
                         if ($result == true) {
-                            // echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
 
-                            $msg='Overtime Request Sent Successifully';
-                            return response( [ 'msg'=>$msg ],203 );
+                            $msg='Overtime Request Sent Successifully !';
+                            return response( [ 'msg'=>$msg ],200);
                         } else {
-                            // echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-
+                           
                             $msg='Overtime Request Not Sent, Please Try Again!';
-                            return response( [ 'msg'=>$msg ],202 );
+                            return response( [ 'msg'=>$msg ],401);
                         }
                     } else {
-                        // echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
 
                         $msg='Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!';
-                        return response( [ 'msg'=>$msg ],201 );
+                        return response( [ 'msg'=>$msg ],401);
                     }
                 }
             } else if ($start_date > $finish_date) {
-                // echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
+
                 $msg='Invalid Date, Please Choose the correct Date and Try Again!';
-                return response( [ 'msg'=>$msg ],202 );
+                return response( [ 'msg'=>$msg ],401);
             } else {
                 // echo "CORRECT DATE - <BR>";
                 if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
@@ -384,15 +360,13 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
-                        // echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                  
                         $msg='Overtime Request Sent Successifully!';
-                        return response( [ 'msg'=>$msg ],203 );
+                        return response( [ 'msg'=>$msg ],200);
                     } else {
-                        
-                        // echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-
+                 
                         $msg='Overtime Request Not Sent, Please Try Again!';
-                        return response( [ 'msg'=>$msg ],202 );
+                        return response( [ 'msg'=>$msg ],401);
                     }
                 } else {
                     $type = 0; // echo "DAY OVERTIME";
@@ -410,19 +384,19 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
-                        // echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-
-                        $msg='Overtime Request Sent Successifully';
-                        return response( [ 'msg'=>$msg ],203 );
+                    
+                        $msg='Overtime Request Sent Successifully!';
+                        return response( [ 'msg'=>$msg ],200);
                     } else {
-                        // echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+
                         $msg='Overtime Request Not Sent, Please Try Again!';
-                        return response( [ 'msg'=>$msg ],202 );
+                        return response( [ 'msg'=>$msg ],401);
                     }
                 }
             }
         }
     }
+
     //  end of apply overtimes function
 
 
@@ -719,6 +693,30 @@ class GeneralController extends Controller
         // End of single payslip
 
 
+            // For updating profile image
+    public function updateImg(Request $request)
+    {
+
+        request()->validate([
+            'image' => 'required'
+        ]);
+        $user = auth()->user()->emp_id;
+
+        $employee = EMPL::where('emp_id', $user)->first();
+        if ($request->hasfile('image')) {
+
+            $newImageName = $request->image->hashName();
+            $request->image->move(public_path('storage/profile'), $newImageName);
+            $employee->photo = $newImageName;
+        }
+
+        $employee->update();
+
+        $msg='Your Profile Image is updated Successfully !';
+        return response( [ 'msg'=>$msg  ],200 );
+
+
+    }
 
 
 }
