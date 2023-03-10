@@ -52,7 +52,7 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::post('/apply-leave',[LeaveController::class,'store']);
 
       // For Updating profile image
-      Route::post('/update-image',[LeaveController::class,'updateImg']);
+      Route::post('/update-image',[GeneralController::class,'updateImg']);
    
 
 
