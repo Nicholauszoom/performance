@@ -8,6 +8,7 @@ use App\Imports\ImportAllowances;
 use App\Imports\ImportBranches;
 use App\Imports\ImportDepartment;
 use App\Imports\ImportEmployee;
+use App\Imports\ImportPension;
 use App\Imports\ImportPosition;
 use App\Imports\ImportHeslb;
 use Illuminate\Http\Request;
@@ -26,7 +27,13 @@ class ImportEmployeeController extends Controller
         //$data2 = Excel::import(new ImportDepartment, $request->file('file')->store('files'));
          //$data1 = Excel::import(new ImportPosition, $request->file('file')->store('files'));
 
-         $data1 = Excel::import(new ImportBranches, $request->file('file')->store('files'));
+        // $data1 = Excel::import(new ImportBranches, $request->file('file')->store('files'));
+
+
+         $data1 = Excel::import(new ImportPension, $request->file('file')->store('files'));
+
+
+
 
        // $data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));
 
