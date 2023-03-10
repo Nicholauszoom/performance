@@ -49,7 +49,7 @@
           @foreach($leaves as $item)
 
 
-          @if ( $item->employee->line_manager  ==  Auth::user()->emp_id)
+          {{-- @if ( $item->employee->line_manager  ==  Auth::user()->emp_id) --}}
           <tr>
             <td>{{ $item->id }}</td>
             <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
@@ -140,7 +140,7 @@
               </td>
 
           </tr>
-          @endif
+          {{-- @endif --}}
 
 
 
