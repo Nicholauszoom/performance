@@ -3693,7 +3693,7 @@ class GeneralController extends Controller
             $data['employee'] = Employee::where('state', '=', 1)->get();
 
             $data['title'] = "Organisation Reports";
-            $data['employee'] = Employee::where('state', '=', 1)->get();
+            $data['employee'] = Employee::all();
             return view('app.organisation_reports', $data);
         } else {
             echo 'Unauthorized Access';
@@ -7056,7 +7056,7 @@ class GeneralController extends Controller
     }
 
 
-   
+
 
     public function audit_logs(Request $request)
     {
@@ -9668,9 +9668,9 @@ public function update_grievance(Request $request)
     // For My Grievances
 
     public function my_grievances()
-    {   
+    {
         $data['my_grievances']=Grievance::latest()->where('empID',Auth::user()->emp_id)->get();
-        return view('my-services.grievances',$data); 
+        return view('my-services.grievances',$data);
     }
 
         // For Saving New Grievances
@@ -9779,7 +9779,7 @@ public function update_grievance(Request $request)
             $project = Project::where('id',$id)->first();
             return view('performance.edit_project',compact('project'));
         }
-    
+
 
         // For Saving New Project
         public function update_project( Request $request)

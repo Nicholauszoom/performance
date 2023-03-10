@@ -44,7 +44,7 @@ class ImportPension implements ToCollection,WithHeadingRow
             'wcf'=>0,
             'rate'=>1,
             'currency'=>'TZS',
-            'membership_no'=>$row['year'],
+            'years'=>$row['year'],
             'receipt_no'=>$row['receipt_no'],
             'receipt_date'=>$row['receipt_date'],
             'actual_salary'=>$row['salary'],
