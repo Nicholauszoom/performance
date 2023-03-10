@@ -209,14 +209,14 @@
                         </div>
                     </form> --}}
 
-                    @isset($taxable)
+
                     <form autocomplete="off" id="updateTaxable" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
                             <label  for="first-name" for="stream" >Taxable</label>
                             <div class="input-group">
-                                <select name="Isrecursive" class="select_type form-control" required tabindex="-1" id="Isrecursive">
+                                <select name="taxable" class="select_type form-control" required tabindex="-1" id="Isrecursive">
                                     <option> Select</option>
                                     <option value="YES" <?php if($taxable == 'YES') echo "selected";   ?>>YES</option>
                                     <option value="NO" <?php if($taxable == 'NO') echo "selected";   ?>>NO</option>
@@ -225,7 +225,7 @@
                             </div>
                         </div>
                     </form>
-                    @endisset
+
 
                     @isset($pensionable)
                     <form autocomplete="off" id="updatepensionable" class="form-horizontal form-label-left">
@@ -250,11 +250,11 @@
 
                             <label  for="first-name" for="stream" >Nature</label>
                             <div class="input-group">
-                                <select name="taxable" class="select_type form-control" required tabindex="-1" id="policy">
+                                <select name="Isrecursive" class="select_type form-control" required tabindex="-1" id="policy">
                                     <option> Select</option>
-                                    <option value="0" <?php if($Isrecursive == '0') echo "selected";   ?>>PERMANENT</option>
-                                    <option value="2" <?php if($Isrecursive == '2') echo "selected";   ?>>TEMPORARY</option>
-                                    <option value="1" <?php if($Isrecursive == '1') echo "selected";   ?>>ONCE OFF</option>
+                                    <option value="PERMANENT" <?php if($Isrecursive == 'PERMANENT') echo "selected";   ?>>PERMANENT</option>
+                                    <option value="TEMPORARY" <?php if($Isrecursive == 'TEMPORARY') echo "selected";   ?>>TEMPORARY</option>
+                                    <option value="ONCE OFF" <?php if($Isrecursive == 'ONCE OFF') echo "selected";   ?>>ONCE OFF</option>
                                 </select>
 
                                 <button  class="btn btn-main">Update</button>
@@ -279,7 +279,7 @@
 
 
                     @if ($mode == 1)
-                    <form autocomplete="off"  id="updateAmount" class="form-horizontal form-label-left">
+                    {{-- <form autocomplete="off"  id="updateAmount" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
@@ -289,9 +289,9 @@
                                 <button  class="btn btn-main">Update Amount</button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
                     @elseif ($mode ==2)
-                    <form autocomplete="off" id="updatePercent" class="form-horizontal form-label-left">
+                    {{-- <form autocomplete="off" id="updatePercent" class="form-horizontal form-label-left">
                         <div class="mb-3">
                             <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
 
@@ -301,10 +301,10 @@
                                 <button  class="btn btn-main">Update Amount</button>
                             </div>
                         </div>
-                    </form>
+                    </form> --}}
                     @endif
 
-                    <form autocomplete="off" id="updatePolicy" method = "post" class="form-horizontal form-label-left">
+                    {{-- <form autocomplete="off" id="updatePolicy" method = "post" class="form-horizontal form-label-left">
                         <div class="mb-3">
                              <label class="form-label" for="first-name"> Change Policy </label>
                              <input hidden name ="allowanceID" value="<?php echo $allowanceID; ?>">
@@ -323,7 +323,7 @@
 
                             <button  name="updatename" class="btn btn-main mt-3">Update</button>
                         </div>
-                    </form>
+                    </form> --}}
                 </div>
 
                 <div class="card-body">

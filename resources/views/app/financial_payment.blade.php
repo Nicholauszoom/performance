@@ -423,7 +423,7 @@
                                                         <?php if ($row->status == 1 && $pendingPayroll == 0) {
                                                         ?>
 
-                                                        <a href="javascript:void(0)" title="Approve"
+                                                        {{-- <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="hrapproveOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-main btn-xs"><i
@@ -435,12 +435,12 @@
                                                             onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-danger btn-xs"><i
                                                                     class="ph-x"></i></button>
-                                                        </a>
+                                                        </a> --}}
 
 
                                                         <?php }
                                                                       if ($row->status == 3) { ?>
-                                                        <a href="javascript:void(0)" title="Recommend"
+                                                        {{-- <a href="javascript:void(0)" title="Recommend"
                                                             class="icon-2 info-tooltip"
                                                             onclick="fin_approveOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-main btn-xs"><i
@@ -451,11 +451,11 @@
                                                             class="icon-2 info-tooltip"
                                                             onclick="cancelOvertime(<?php echo $row->eoid; ?>)">
                                                             <button class="btn btn-danger btn-xs"><i
-                                                                    class="ph-x"></i></button>
+                                                                    class="ph-x"></i></button> --}}
                                                         </a>
 
                                                         <?php  }
-                                                         if ($row->status == 4) { ?>
+                                                        // if ($row->status == 4) { ?>
                                                         <a href="javascript:void(0)" title="Approve"
                                                             class="icon-2 info-tooltip"
                                                             onclick="approveOvertime(<?php echo $row->eoid; ?>)">
@@ -469,7 +469,7 @@
                                                             <button class="btn btn-danger btn-xs"><i
                                                                     class="ph-x"></i></button>
                                                         </a>
-                                                        <?php } ?>
+                                                        <?php// } ?>
 
 
                                                     </td>
@@ -1276,6 +1276,12 @@
                 // $('#recordRequirement'+id).show();
                 $.ajax({
                     url: "<?php echo url('flex/confirmOvertimePayment'); ?>/" + id,
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                     success: function(data) {
                         alert("Sussess!");
                         $('#resultfeedOvertime').fadeOut('fast', function() {
@@ -1298,6 +1304,12 @@
                 // $('#recordRequirement'+id).show();
                 $.ajax({
                     url: "<?php echo url('flex/unconfirmOvertimePayment'); ?>/" + id,
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                     success: function(data) {
                         alert("Sussess!");
                         $('#resultfeedOvertime').fadeOut('fast', function() {
@@ -1418,6 +1430,12 @@
                 $('#hideList').hide();
                 $.ajax({
                     url: "<?php echo url('flex/payroll/runpayroll'); ?>/<?php echo $pendingPayroll_month; ?>",
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                     success: function(data) {
                         var data = JSON.parse(data);
                         if (data.status == 'OK') {
@@ -1467,6 +1485,12 @@
                 if (message != "") {
                     $.ajax({
                         url: url,
+                        async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                         success: function(data) {
                             var data = JSON.parse(data);
                             if (data.status == 'OK') {
@@ -1508,6 +1532,12 @@
             url = url.replace(':date', date);
             $.ajax({
                 url: url,
+                async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                 success: function(data) {
                     var data = JSON.parse(data);
 
@@ -1540,6 +1570,12 @@
                 if (message != "") {
                     $.ajax({
                         url: url,
+                        async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                         success: function(data) {
                             var data = JSON.parse(data);
                             if (data.status == 'OK') {
@@ -1591,6 +1627,12 @@
                 $('#hideList').hide();
                 $.ajax({
                     url: "<?php echo url('flex/payroll/cancelpayroll'); ?>/" + +type,
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                     success: function(data) {
                         var data = JSON.parse(data);
                         if (data.status == 'OK') {
@@ -1627,6 +1669,12 @@
 
                 $.ajax({
                     url: "<?php echo url('flex/payroll/send_payslips'); ?>/" + payrollDate,
+                    async: true,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                     success: function(data) {}
 
 

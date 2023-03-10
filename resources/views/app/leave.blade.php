@@ -62,12 +62,12 @@
             </td>
             <td>
               <p>
-                {{ $item->reason }} 
+                {{ $item->reason }}
               </p>
             </td>
             <td>
               <div >
-                  
+
                 <?php if ($item->state==1){ ?>
                 <div class="col-md-12">
                 <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
@@ -98,13 +98,13 @@
                   <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
                     <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
                   </a>
-  
+
                 <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
                     <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
-                </div> 
-                
+                </div>
+
                 @endif
-                
+
                 <?php }
                 elseif($item->status==1 && $item->state==1){?>
                 @if ( Auth()->user()->emp_id == $approval->level2)
@@ -112,11 +112,11 @@
                   <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
                     <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
                   </a>
-    
+
                   <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
                       <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
                   </a>
-                </div> 
+                </div>
                 @endif
                 <?php }
                 elseif($item->status==2){  ?>
@@ -125,11 +125,11 @@
                     <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
                       <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
                     </a>
-      
+
                     <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
                         <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
                     </a>
-                  </div> 
+                  </div>
                   @endif
                 <?php }
                 elseif ($item->status==4) {?>
@@ -138,14 +138,14 @@
                 <?php } ?>
                 @endif
               </td>
-        
+
           </tr>
           @endif
-     
+
 
 
           @endforeach
-      
+
         </tbody>
       </table>
 </div>
@@ -242,7 +242,7 @@ Swal.fire({
 //         });
 // }
 }
-      
+
 
         function cancelRequest(id) {
 
@@ -329,7 +329,7 @@ Swal.fire({
 
 
 
- 
+
 
 
 @include('app.includes.leave_operations')
@@ -342,7 +342,7 @@ Swal.fire({
       url = url.replace(':id', id);
 
       $('#subs_cat').find('option').not(':first').remove();
-  
+
       $.ajax({
           url: url,
           type: 'get',
@@ -350,31 +350,31 @@ Swal.fire({
           success: function(response){
              let subs=response;
 
-           
+
             //  $("#first").remove();
-           
+
             for (var i = 0; i < response.length; i++) {
-              
+
               var id=subs[i].id;
               var name=subs[i].name;
               var option = "<option value='"+id+"'>"+name+"</option>";
               // console.log(id);
               // console.log(name);
               // console.log(option);
-             
+
               $("#subs_cat").append(option);
-              $("#sub").show(); 
-              
-              
+              $("#sub").show();
+
+
             }
-        
+
           }
       });
   });
-  
-  
+
+
   </script>
-  
+
 <script>
     $(function() {
       var today = new Date();

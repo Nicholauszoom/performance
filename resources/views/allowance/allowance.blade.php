@@ -65,20 +65,22 @@
 
                         <form id="addAllowance" method="post" autocomplete="off" class="form-horizontal form-label-left">
                             <div class="form-group row">
-                                <div class=" col-md-3 mb-3">
+                                <div class=" col-md-6 mb-6">
                                     <label class="form-label">Allowance Name:</label>
                                     <input type="text"  name="name" class="form-control">
                                 </div>
 
-                                <div class=" col-md-3 mb-3">
+
+
+                                {{-- <div class=" col-md-3 mb-3">
                                     <label class="form-label">Payment Policy:</label>
                                     <select class="form-control select_type select" name="policy" id="policy">
                                         <option selected disabled> Select </option>
                                         <option value=1>Fixed Amount</option>
                                         <option value=2>Percent From Basic Salary</option>
                                     </select>
-                                </div>
-                                <div class=" col-md-3 mb-3">
+                                </div> --}}
+                                <div class=" col-md-6 mb-6">
                                     <label class="form-label">Taxable</label>
                                     <select class="form-control select_type select" name="taxable" id="policy">
                                         <option selected disabled> Select </option>
@@ -87,7 +89,13 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-3 mb-3">
+                            </div>
+
+
+
+                            <div class="form-group row">
+
+                                <div class="col-md-4 mb-4">
                                     <label class="form-label">Pensionable</label>
                                     <select class="form-control select_type select" name="pensionable" id="policy">
                                         <option selected disabled> Select </option>
@@ -95,43 +103,40 @@
                                         <option value="NO">NO</option>
                                     </select>
                                 </div>
-                            </div>
-
-
-
-                            <div class="form-group row">
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-4">
                                     <label class="form-label">Nature</label>
-                                    <select class="form-control select_type select" name="recursive" id="policy">
+                                    <select class="form-control select_type select" name="Isrecursive" id="Isrecursive">
                                         <option selected disabled> Select </option>
-                                        <option value="0">Permanent</option>
-                                        <option value="2">Temporaly</option>
-                                        <option value="1">Once Off</option>
+                                        <option value="PERMANENT">PERMANENT</option>
+                                    <option value="TEMPORARY">TEMPORARY</option>
+                                    <option value="ONCE OFF">ONCE OFF</option>
 
                                     </select>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-4">
                                     <label class="form-label">Benefit In kind</label>
-                                    <select class="form-control select_type select" name="bik" id="policy">
+                                    <select class="form-control select_type select" name="Isbik" id="policy">
                                         <option selected disabled> Select </option>
                                         <option value="YES">YES</option>
                                         <option value="NO">NO</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-3 mb-3">
+                                {{-- <div class="col-md-3 mb-3">
                                     <label class="form-label select_type allName">Percent:</label>
                                     <input required id="percentf" type="number" name="rate" min="0"
                                         max="99" step="0.1" placeholder="Percent (Less Than 100)"
                                         class="form-control">
-                                </div>
+                                </div> --}}
 
-                                <div class="col-md-3 mb-3">
+                                {{-- <div class="col-md-3 mb-3">
                                     <label class="allName select_type form-label">Amount:</label>
                                     <input required id="amountf" type="number" step="1"
                                         placeholder="Fixed Amount" name="amount" class="form-control">
-                                </div>
-
+                                </div> --}}
+                                <input type="hidden" value="1" name="policy">
+                                <input type="hidden" value="0" name="amount">
+                                <input type="hidden" value="0" name="rate">
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-main">Submit</button>
@@ -162,7 +167,7 @@
 
                                 <th>Taxable</th>
                                 <th>pensionable</th>
-                                <th>Recursive</th>
+                                <th>Nature</th>
                                 <th>Benefit In Kind</th>
                                 <!-- <th>Apply To</th> -->
                                 @if ($pendingPayroll == 0)
@@ -177,7 +182,7 @@
                                 <td width="1px"><?php echo $row->SNo; ?></td>
                                 <td><?php echo $row->name; ?></td>
 
-                              
+
 
                                 <td><?php echo $row->taxable; ?></td>
                                 <td><?php echo $row->pensionable; ?></td>
@@ -296,14 +301,15 @@
                 })
                 .done(function(data) {
 
-                    // $('#resultSubmission').fadeOut('fast', function() {
-                    //     $('#resultSubmission').fadeIn('fast').html(data);
-                    // });
+                    new Noty({
+                                    text: 'Alloance Added successfully!',
+                                    type: 'success'
+                                }).show();
 
                     // $('#addAllowance')[0].reset();
                     setTimeout(function() { // wait for 5 secs(2)
                         location.reload(); // then reload the page.(3)
-                    }, 1000);
+                    }, 2000);
                 })
                 .fail(function() {
                     alert('FAILED, Check Your Network Connection and Try Again! ...');

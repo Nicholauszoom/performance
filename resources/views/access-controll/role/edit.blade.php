@@ -1,7 +1,12 @@
-<div class="modal fade" role="dialog" id="editRoleModal" aria-labelledby="editRoleModal"
-     data-backdrop="static">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="modal-content">
+
+<div id="editRoleModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ADD ROLE</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
             {{ Form::open(['route' => ['roles.update', 1]])}}
             @method('PUT')
             <div class="modal-header p-2 px-2">

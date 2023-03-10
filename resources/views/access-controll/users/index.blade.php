@@ -37,6 +37,7 @@
         <tbody>
             @if(isset($users))
                 @foreach($users as $user)
+               
                     {{-- @php $role = ";  @endphp --}}
 
                     @foreach($user->roles as $value2)
@@ -70,6 +71,7 @@
                             </div>
                         </td>
                     </tr>
+
                 @endforeach
             @endif
         </tbody>

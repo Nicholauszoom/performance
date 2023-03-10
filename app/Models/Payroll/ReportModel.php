@@ -1506,6 +1506,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function s_count1($date)
     {
 
+       // $query = "SELECT * from temp_payroll_logs where payroll_date = '".$date."' and empID NOT IN (SELECT empID from payroll_logs where payroll_date = '2023-02-17')";
+        //$row = DB::select(DB::raw($query));
         $row = DB::table('temp_payroll_logs')->where('payroll_date', $date)->select('id')->count();
 
         $calender = explode('-', $date);
@@ -1514,6 +1516,32 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
         return $row + $row2;
+
+    }
+
+    function terminated_salary($previous_payroll_month){
+      $calender = explode('-', $previous_payroll_month);
+      $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+      $query = "SELECT SUM(salaryEnrollment) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
+      $row = DB::select(DB::raw($query));
+
+      return $row[0]->amount;
+
+    }
+
+    function terminated_employee($date){
+        $calender = explode('-', $date);
+        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+
+        $query = "SELECT COUNT(id) as number from terminations where terminationDate LIKE '".$terminationDate."'";
+        $row = DB::select(DB::raw($query));
+        $number = 0;
+        if(count($row) > 0){
+         $number = $row[0]->number;
+        }
+
+
+        return $number;
 
     }
 

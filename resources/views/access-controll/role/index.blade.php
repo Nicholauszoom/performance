@@ -22,8 +22,8 @@
                             <h4 class="card-title text-warning">Roles</h4>
 
                             <div class="header-elements">
-                                <button type="button" class="btn btn-main btn-xs px-4 float-end" data-toggle="modal" data-target="#addRoleModal">
-                                    <i class="fa fa-plus-circle"></i> Add Role
+                                <button type="button" class="btn btn-main float-end" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                                    <i class="ph-plus me-2"></i>Add Role
                                 </button>
                             </div>
                         </div>
@@ -53,12 +53,13 @@
                                                         </td>
                                                         <td >
                                                             {!! Form::open(['route' => ['roles.destroy', $role->id], 'method' => 'delete']) !!}
+                                                           
                                                             <button type="button" class="btn btn-main btn-sm edit_role_btn mr-1"
-                                                                    data-toggle="modal"
+                                                                    data-bs-toggle="modal"
                                                                     data-id="{{$role->id}}"
                                                                     data-name="{{$role->name}}"
                                                                     data-slug="{{$role->slug}}">
-                                                                <i class="ph-note-pencil"></i> 
+                                                                <i class="ph-note-pencil"></i>
                                                             </button>
                                                             {{ Form::button('<i class="ph-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-sm', 'onclick' => "return confirm('Are you sure?')"]) }}
                                                             {{ Form::close() }}
@@ -85,6 +86,8 @@
     @include('access-controll.role.add')
 
     @include('access-controll.role.edit')
+
+
 @endsection
 
 @section('scripts')

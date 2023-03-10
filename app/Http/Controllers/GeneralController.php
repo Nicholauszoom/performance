@@ -1918,7 +1918,7 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
-        
+
 
 
 
@@ -2279,7 +2279,7 @@ class GeneralController extends Controller
         if ($result == true) {
 
 
-            SysHelpers::FinancialLogs($emp_id->empID, 'Assigned Overtime', '0', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0', number_format($overtime, 2), 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
@@ -3812,7 +3812,7 @@ class GeneralController extends Controller
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
         // dd($previous_payroll_month_raw);
-        $data['payroll_date'] = $request->payrolldate;
+
         $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_gross'] = $this->reports_model->s_grossMonthly($current_payroll_month);
         $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month):0;
@@ -5030,8 +5030,8 @@ class GeneralController extends Controller
             'mode' => $request->policy,
             'taxable' => $request->taxable,
             'pensionable' => $request->pensionable,
-            'Isrecursive' => $request->pensionable,
-            'Isbik' => $request->pensionable,
+            'Isrecursive' => $request->Isrecursive,
+            'Isbik' => $request->Isbik,
             'state' => 1,
             'percent' => $percent,
         );
@@ -5394,6 +5394,7 @@ class GeneralController extends Controller
     {
         $ID = $request->input('allowanceID');
         if ($request->method() == "POST" && $ID != '') {
+
             $updates = array(
                 'Isrecursive' => $request->input('Isrecursive'),
             );
@@ -5878,7 +5879,7 @@ class GeneralController extends Controller
 
         if ($method == "POST") {
 
-            $arr = $request->input('option');
+            $arr = explode(',',$request->input('option'));
 
             $groupID = $request->input('groupID');
 
@@ -5948,6 +5949,7 @@ class GeneralController extends Controller
         if ($method == "POST") {
 
             $arr = $request->input('option');
+
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
 
@@ -6021,7 +6023,8 @@ class GeneralController extends Controller
 
         if ($method == "POST") {
 
-            $arr = $request->input('option');
+            $arr = explode(',',$request->input('option'));
+
             $groupID = $request->input('groupID');
             $group_roles = $this->flexperformance_model->get_group_roles($groupID);
             $group_allowances = $this->flexperformance_model->get_group_allowances($groupID);
@@ -6033,6 +6036,7 @@ class GeneralController extends Controller
 
                 foreach ($arr as $value) {
                     $empID = $value;
+
                     if (!empty($group_allowances)) {
                         foreach ($group_allowances as $key) {
                             $allowance = $key->allowance;

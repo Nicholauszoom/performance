@@ -45,7 +45,7 @@
                                         </select>
                                     </div>
                                 </div>
-                               
+
                                 <div class="col-6 col-md-3 mb-2">
                                     <label class="col-form-label ">Select Aprover <span
                                             class="text-danger">*</span> :</label>
@@ -53,9 +53,11 @@
                                         <select class="form-control select" name="linemanager" id="linemanager">
                                             <option selected disabled> Select Approver</option>
                                             @foreach ($employees as $employee)
+                                            @if($employee->emp_id != auth()->user()->emp_id)
                                                 <option value="{{ $employee->emp_id }}">{{ $employee->fname }}
                                                     {{ $employee->mname }} {{ $employee->lname }}</option>
-                                            @endforeach
+                                            @endif
+                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -91,12 +93,12 @@
                                         <textarea rows="3" cols="3" required class="form-control" name="reason" placeholder='Reason'></textarea>
                                     </div>
                                 </div>
-                    
+
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-perfrom float-end">Send Request</button>
                                 </div>
-                                
-                          
+
+
                         </form>
                     </div>
                 </div>
@@ -140,7 +142,7 @@
 
             <tbody>
                 <?php foreach ($my_overtimes as $row) { ?>
-              
+
                 <tr id="domain<?php //echo $row->id;
                 ?>">
                     <td width="1px"><?php echo $row->SNo; ?></td>
@@ -169,7 +171,7 @@
                     </td>
                 </tr>
                 <?php }  ?>
-              
+
             </tbody>
         </table>
     </div>

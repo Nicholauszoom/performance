@@ -47,36 +47,36 @@
 
                     <ul class="nav-group-sub collapse {{ request()->routeIs('flex.my-grievances')|| request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
                         {{-- start of active employee link --}}
-                     
+
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
                                     href="{{ route('flex.my-overtimes') }}">
                                     Overtimes
                             </a>
                             </li>
-                      
+
                         {{--  / --}}
 
                         {{--  start of suspend employee link --}}
-                    
+
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
                                     href="{{ route('flex.my-leaves') }}">Leaves</a>
                             </li>
-                     
+
                         {{-- / --}}
 
                         {{--  start of employee termination link --}}
-                      
+
 
                             <li class="nav-item ">
                                 <a class="nav-link {{ request()->routeIs('flex.my-loans')  ? 'active' : null }}"
                                     href="{{ route('flex.my-loans') }}">Loans</a>
                             </li>
-                   
+
                         {{-- / --}}
 
-                    
+
                         {{--  start of overtime link --}}
 
                         <li class="nav-item">
@@ -104,7 +104,7 @@
 
                         {{-- / --}}
 
-                        
+
                     </ul>
                 </li>
                 {{-- @endcan --}}
@@ -118,7 +118,7 @@
                 </li>  --}}
 
                 {{-- start of workforce management dropdown --}}
-                @can('view-workforce')  
+                @can('view-workforce')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.addDisciplinary') || request()->routeIs('flex.addPromotion') || request()->routeIs('flex.addIncrement') ||request()->routeIs('flex.addTermination') || request()->routeIs('flex.addEmployee')||request()->routeIs('flex.employee') || request()->routeIs('flex.grievancesCompain') || request()->routeIs('flex.promotion') || request()->routeIs('flex.termination')  || request()->routeIs('flex.inactive_employee') || request()->routeIs('flex.overtime') || request()->routeIs('flex.termination') || request()->routeIs('imprest.imprest') || request()->routeIs('flex.transfers') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -506,6 +506,7 @@
                                 href="{{ url('roles') }}">
                                 Roles</a>
                         </li>
+                        
 
 
                         <li class=" nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }} "><a
@@ -533,7 +534,7 @@
                             class="nav-link {{ request()->routeIs('flex.approvals') ? 'active' : null }}"
                             href="{{ route('flex.approvals') }}">Approvals</a>
                         </li>
-                        
+
                         <li class="nav-item"><a
                             class="nav-link {{ request()->routeIs('flex.leave-approval') ? 'active' : null }}"
                             href="{{ route('flex.leave-approval') }}">Leave Approvals</a>
