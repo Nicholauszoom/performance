@@ -219,33 +219,34 @@
     <div class="table-section bill-tbl w-100 mt-10">
         @foreach($years as $year)
         <h5><b>YEAR: {{ $year->years }}</b></h5>
-        <table class="table w-100 mt-10" style="font-size: 8px;">
+        <table class="table w-100 mt-10" style="font-size: 6px;">
             <thead>
                 <tr>
-                    <th class="col-sm-1 w-50">No</th>
-                    <th class=" col-sm-2 w-50">Month</th>
-                    <th class="col-sm-1 w-50">NSSF Number</th>
-                    <th class="w-50">Income</th>
-                    <th class="w-50">Employee Contrib</th>
-                    <th class="w-50">Employer Contrib</th>
-                    <th class=" col-sm-2 w-50">Total</th>
-                    <th class=" col-sm-2 w-50">Receipt No</th>
-                    <th class=" col-sm-2 w-50">Receipt Date</th>
+                    <th>No</th>
+                    <th>Month</th>
+                    <th>NSSF Number</th>
+                    <th>Income</th>
+                    <th>Employee Contrib</th>
+                    <th>Employer Contrib</th>
+                    <th>Total</th>
+                    <th>Receipt No</th>
+                    <th>Receipt Date</th>
                 </tr>
             </thead>
             <tbody>
+
                 @foreach($employee_pension as $row)
                 @if($row->years == $year->years)
                 <tr>
-                    <td class=" w-50">No</td>
-                    <td class="  w-50">{{ date('M',strtotime($row->payment_date)) }}</td>
-                    <td class=" w-50">{{ $row->pf_membership_no }}</td>
-                    <td class="w-50">{{ number_format($row->salary,2) }}</td>
-                    <td class="w-50">{{ number_format($row->pension_employer,2) }}</td>
-                    <td class="w-50">{{ number_format($row->pension_employer,2) }}</td>
-                    <td class="  w-50">{{ number_format($row->pension_employer*2,2) }}</td>
-                    <td class="  w-50">{{ $row->receipt_no }}</td>
-                    <td class="  w-50">{{ $row->receipt_date }}</td>
+                    <td>No</td>
+                    <td >{{ date('M',strtotime($row->payment_date)) }}</td>
+                    <td >{{ $row->pf_membership_no }}</td>
+                    <td >{{ number_format($row->salary,2) }}</td>
+                    <td >{{ number_format($row->pension_employer,2) }}</td>
+                    <td >{{ number_format($row->pension_employer,2) }}</td>
+                    <td >{{ number_format($row->pension_employer*2,2) }}</td>
+                    <td >{{ $row->receipt_no }}</td>
+                    <td >{{ $row->receipt_date }}</td>
                 </tr>
                 @endif
                 @endforeach
@@ -253,14 +254,14 @@
 
                  ?>
                 <tr>
-                    <td class=" w-50" colspan="3">TOTAL</td>
+                    <td colspan="3">TOTAL</td>
 
-                    <td class="w-50">{{ number_format($total_salary,2) }}</td>
-                    <td class="w-50">{{ number_format($total_pension,2) }}</td>
-                    <td class="w-50">{{ number_format($total_pension,2) }}</td>
-                    <td class="  w-50">{{ number_format($total_pension*2,2) }}</td>
-                    <td class="  w-50"></td>
-                    <td class="  w-50"></td>
+                    <td>{{ number_format($total_salary,2) }}</td>
+                    <td>{{ number_format($total_pension,2) }}</td>
+                    <td>{{ number_format($total_pension,2) }}</td>
+                    <td class="  ">{{ number_format($total_pension*2,2) }}</td>
+                    <td class="  "></td>
+                    <td class="  "></td>
                 </tr>
             </tbody>
 
@@ -270,14 +271,14 @@
         <hr>
         <table class="table w-100 mt-10" style="font-size: 8px;">
             <tbody>
-                    <td class=" w-50" colspan="3">GRAND TOTAL</td>
+                    <td colspan="3">GRAND TOTAL</td>
 
-                    <td class="w-50">SALARY::{{ number_format($gland_total_salary,2) }}</td>
-                    <td class="w-50">PENSION EMPLOYEE: {{ number_format($gland_total_pension,2) }}</td>
-                    <td class="w-50">PENSION EMPLOYER: {{ number_format($gland_total_pension,2) }}</td>
-                    <td class="  w-50">TOTAL CONTRIBUTION: {{ number_format($gland_total_pension*2,2) }}</td>
-                    <td class="  w-50"></td>
-                    <td class="  w-50"></td>
+                    <td>SALARY::{{ number_format($gland_total_salary,2) }}</td>
+                    <td>PENSION EMPLOYEE: {{ number_format($gland_total_pension,2) }}</td>
+                    <td>PENSION EMPLOYER: {{ number_format($gland_total_pension,2) }}</td>
+                    <td>TOTAL CONTRIBUTION: {{ number_format($gland_total_pension*2,2) }}</td>
+                    <td></td>
+                    <td></td>
                 </tbody></table>
         <table class="table w-100 mt-10">
             <tr>
