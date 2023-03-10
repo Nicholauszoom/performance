@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\API;
 
 use App\Helpers\SysHelpers;
 use Illuminate\Http\Request;
@@ -35,7 +35,6 @@ class PasswordController extends Controller
      */
     public function update(PasswordValidationRequest $request)
     {
-        
         $validated = $request->validated();
 
         $employee = array(
@@ -62,6 +61,7 @@ class PasswordController extends Controller
 
     public function updatePassword(PasswordValidationRequest $request)
     {
+        // return response()->json('Hello', 200);
 
         $validated = $request->validated();
 
@@ -75,9 +75,10 @@ class PasswordController extends Controller
             'time' => date('Y-m-d'),
         );
 
-        $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
+        // $result = $this->passSave($request->user()->emp_id, $employee, $userPass, $request);
 
-        return back()->with('status', 'updated');
+        return response()->json($employee, 200);
+        // return back()->with('status', 'updated');
 
     }
 
