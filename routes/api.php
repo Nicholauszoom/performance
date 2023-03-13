@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LeaveController;
 use App\Http\Controllers\API\GeneralController;
+use App\Http\Controllers\API\PasswordController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,7 @@ Route::middleware('auth:sanctum')->group( function () {
    
 
 
+      Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 });
 
 

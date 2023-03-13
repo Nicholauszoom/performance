@@ -709,6 +709,7 @@ class GeneralController extends Controller
             $newImageName = $request->image->hashName();
             $request->image->move(public_path('storage/profile'), $newImageName);
             $employee->photo = $newImageName;
+            
             $employee->update();
 
             $msg='Your Profile Image is updated Successfully !';

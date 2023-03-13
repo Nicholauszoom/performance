@@ -35,6 +35,7 @@ class PasswordController extends Controller
      */
     public function update(PasswordValidationRequest $request)
     {
+        
         $validated = $request->validated();
 
         $employee = array(
