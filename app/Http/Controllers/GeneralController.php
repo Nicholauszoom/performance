@@ -3717,7 +3717,7 @@ class GeneralController extends Controller
     {
 
 
-       // $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
+        $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
 
         $payrollMonth = $this->payroll_model->recent_payroll_month(date('Y-m-d'));
 
@@ -3727,26 +3727,26 @@ class GeneralController extends Controller
 
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
-        // foreach ($strategyStatistics as $key) {
-        //     $strategyID = $key->id;
-        //     $strategyTitle = $key->title;
-        //     $start = date_create($key->start);
-        // }
+        foreach ($strategyStatistics as $key) {
+            $strategyID = $key->id;
+            $strategyTitle = $key->title;
+            $start = date_create($key->start);
+        }
 
-        // $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
+        $strategyProgress = $this->performanceModel->strategyProgress($strategyID);
 
-        // $current = date_create(date('Y-m-d'));
-        // $diff = date_diff($start, $current);
-        // $required = $diff->format("%a");
-        // $months = number_format(($required / 30.5), 4);
-        // $rate_per_month = number_format(($strategyProgress / $months), 1);
+        $current = date_create(date('Y-m-d'));
+        $diff = date_diff($start, $current);
+        $required = $diff->format("%a");
+        $months = number_format(($required / 30.5), 4);
+        $rate_per_month = number_format(($strategyProgress / $months), 1);
 
         $data['appreciated'] = $this->flexperformance_model->appreciated_employee();
 
         // $data['employee_count'] =  $this->flexperformance_model->count_employees();
         $data['overview'] = $this->flexperformance_model->employees_info();
-        //$data["strategyProgress"] = $strategyProgress;
-      //  $data["monthly"] = $rate_per_month;
+        $data["strategyProgress"] = $strategyProgress;
+        $data["monthly"] = $rate_per_month;
 
         $data['taskline'] = $this->performanceModel->total_taskline(session('emp_id'));
         $data['taskstaff'] = $this->performanceModel->total_taskstaff(session('emp_id'));
