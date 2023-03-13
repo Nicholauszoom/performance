@@ -561,7 +561,7 @@ class GeneralController extends Controller
 
             $data = array(
                 'name' => $request->input('name'),
-                'department_id' => $request->input('department_id'),
+                //'department_id' => $request->input('department_id'),
                 'street' => $request->input('street'),
                 'region' => $request->input('region'),
                 'code' => "0",
@@ -575,7 +575,8 @@ class GeneralController extends Controller
                 );
                 $result = $this->flexperformance_model->updateCompanyBranch($updates, $branchID);
                 if ($result == true) {
-                    echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
+                    return redirect()->back();
+                  //  echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
                 } else {
                     echo "<p class='alert alert-danger text-center'>FAILED, Branch Not Added. Please Try Again</p>";
                 }
@@ -591,23 +592,16 @@ class GeneralController extends Controller
 
             $data = array(
                 'name' => $request->input('name'),
-                'street' => $request->input('street'),
-                'region' => $request->input('region'),
-                'code' => "0",
-                'country' => $request->input('country'),
+
+                'region' =>'-',
+
+                'country' => '-',
             );
             $branchID = $this->flexperformance_model->addCostCenter($data);
             if ($branchID > 0) {
-                $code = sprintf("%03d", $branchID);
-                $updates = array(
-                    'code' => $code,
-                );
-                $result = $this->flexperformance_model->updateCompanyBranch($updates, $branchID);
-                if ($result == true) {
+
                     echo "<p class='alert alert-success text-center'>Cost Center Added Successifully!</p>";
-                } else {
-                    echo "<p class='alert alert-danger text-center'>FAILED, Branch Not Added. Please Try Again</p>";
-                }
+
             } else {
                 echo "<p class='alert alert-danger text-center'>Branch Code: FAILED, Branch Not Added. Please Try Again</p>";
             }
@@ -640,12 +634,10 @@ class GeneralController extends Controller
     public function updateCostCenter(Request $request)
     {
 
-        if (isset($_POST['update']) && $request->input('costCenterID') != '') {
+
             $branchID = $request->input('costCenterID');
             $updates = array(
                 'name' => $request->input('name'),
-                'region' => $request->input('region'),
-                'street' => $request->input('street'),
             );
 
             $result = $this->flexperformance_model->updateCostCenter($updates, $branchID);
@@ -654,9 +646,9 @@ class GeneralController extends Controller
                 return redirect('/flex/costCenter/');
             } else {
                 session('note', "<p class='alert alert-success text-danger'>FAILED to Update</p>");
-                return redirect('/flex/branch/');
+                return redirect()->back();
             }
-        }
+
     }
 
     //   public function addBank(Request $request) {
@@ -1800,6 +1792,7 @@ class GeneralController extends Controller
                 'level' => $level + 1,
 
             );
+            dd($data);
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
                 $response_array['status'] = "OK";
@@ -2474,33 +2467,37 @@ class GeneralController extends Controller
     {
         $id = $request->input('id');
 
-        if (isset($_POST['updatename'])) {
+
+        if ($request->type == 'updatename') {
 
             $data = array(
                 'name' => $request->input("name"),
+
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
-        } elseif (isset($_POST['updatecenter'])) {
+        } elseif ($request->type == 'updatecenter') {
             $data = array(
                 'cost_center_id' => $request->input("cost_center_id"),
+
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
             session('note', "<p class='alert alert-success text-center'>Cost Center Updated Successifully</p>");
             return redirect('/flex/department');
-        } elseif (isset($_POST['updatehod'])) {
+        } elseif ($request->type == 'updatehod') {
 
             $data = array(
                 'hod' => $request->input("hod"),
+
             );
 
             $this->flexperformance_model->updatedepartment($data, $id);
             session('note', "<p class='alert alert-success text-center'>Department Updated Successifully</p>");
             return redirect('/flex/department');
-        } elseif (isset($_POST['updateparent'])) {
+        } elseif ($request->type == 'updateparent') {
 
             $data = array(
                 'reports_to' => $request->input("parent"),
@@ -10540,14 +10537,14 @@ public function update_grievance(Request $request)
 
                 $position= PositionSkills::where('position_ref',$item->position)->count();
                 $skills= EmployeeSkills::where('empID',$item->emp_id)->count();
-           
+
 
                 if ($skills>0 && $position)
                 {
                     $potential=   number_format( $skills/$position, 2) * 100 ;
                 }
-                else{ $potential= 0;}  
-              
+                else{ $potential= 0;}
+
 
                 // $achieved= EmployeePerformance::where('empID',$item->emp_id)->avg('achieved');
                 // $target= EmployeePerformance::where('empID',$item->emp_id)->avg('target');

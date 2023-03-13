@@ -2,10 +2,13 @@
 
 @push('head-script')
 <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+
 @endpush
 
 @push('head-scriptTwo')
     <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
 
 @section('content')
@@ -23,7 +26,7 @@
                 <div id="feedBackTable"></div>
             </div>
 
-            <table id="datatable" class="table table-striped table-bordered datatable-basic">
+            <table id="datatable" class="table datatable-basic table-bordered">
                 <thead>
                     {{-- <tr> --}}
                         <th>S/N</th>
@@ -128,13 +131,16 @@
         <div id="feedBackTable2"></div>
     </div>
 
-    <table id="datatable" class="table table-striped table-bordered">
+    <table id="datatable" class="table datatable-basic table-bordered">
         <thead>
             <tr>
                 <th>S/N</th>
+                <th hidden></th>
+                <th>Reports To</th>
                 <th>Name</th>
                 <th>Head Of department</th>
-                <th>Reports To</th>
+
+
                 <?php if(session('mng_org')){ ?>
                 <th>Option</th>
                 <?php } ?>
@@ -145,6 +151,7 @@
         <?php foreach ($inactive_department as $row) { ?>
             <tr id="domain<?php echo $row->id;?>">
                 <td width="1px"><?php echo $row->SNo; ?></td>
+                <th hidden></th>
                 <td><?php echo $row->name; ?></td>
                 <td><a title="More Details"  href=""><?php echo $row->HOD; ?></a></td>
                 <td><?php echo $row->parentdept; ?></td>
@@ -177,8 +184,8 @@
                 <div class="col-sm-4"></div>
 
                 <div class="col-sm-6">
-                    <button type="button" class="btn btn-main btn-sm" data-dismiss="modal">No</button>
-                    <button type="button" id="yes_delete" class="btn btn-danger btn-sm">Yes</button>
+                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">No</button>
+                    <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
                 </div>
 
                 <div class="col-sm-2"></div>
@@ -282,7 +289,7 @@
 
       function deleteDepartment(id)
       {
-        const message = "Are you sure you want to delete this department?";
+        const message = "Are you sure you want to Deactivate this department?";
         $('#delete').modal('show');
         $('#delete').find('.modal-body #message').text(message);
 
@@ -296,7 +303,7 @@
                 {
                     // success :function(result){
                     // $('#alert').show();
-
+                  var data = JSON.parse(data);
                     if(data.status == 'OK'){
                         // alert("Record Deleted Sussessifully!");
                         $('#domain'+id).hide();
@@ -351,7 +358,7 @@
               {
                 // success :function(result){
                 // $('#alert').show();
-
+                var data = JSON.parse(data);
                 if(data.status == 'OK'){
                     // alert("Record Deleted Sussessifully!");
 

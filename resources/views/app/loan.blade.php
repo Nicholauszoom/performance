@@ -18,30 +18,29 @@
                 </div>
 
                 <!-- <div class="title_right">
-                    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                      <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
-                        <span class="input-group-btn">
-                          <button class="btn btn-default" type="button">Go!</button>
-                        </span>
-                      </div>
-                    </div>
-                  </div> -->
+                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                          <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+                              <button class="btn btn-default" type="button">Go!</button>
+                            </span>
+                          </div>
+                        </div>
+                      </div> -->
 
             </div>
 
             <div class="clearfix"></div>
 
             <div class="row">
-             
+
                 <?php if(session('appr_loan')!=''){ ?>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-head px-3">
                             <h2 class="text-warning mt-2"> Approved Loans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#loanModal"
-                                    class="btn btn-main float-end">Print Report</button></a>
+
                             </h2>
 
                         </div>
@@ -49,65 +48,66 @@
                         <div id="feedBack"></div>
                         <div id="loanList" class="card-body">
 
-                            <table id="datatable" class="table datatable-basic table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>S/N</th>
-                                        <th>Employeee ID</th>
-                                        <th>Name</th>
-                                        <th>Department</th>
-                                        <th>Type</th>
-                                        <th>Amount(Debt)</th>
-                                        <th>Paid</th>
-                                        <th>Remained</th>
-                                        <th>Last Paid</th>
-                                        <th>Option</th>
-                                    </tr>
-                                </thead>
 
-
-                                <tbody>
-                                    <?php
-                            foreach ($other_loans as $row) { ?>
-                                    <tr>
-                                        <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->empID; ?></td>
-                                        <td><?php echo $row->name; ?></td>
-                                        <td><b>Department: </b><?php echo $row->department; ?><br><b>Position: </b><?php echo $row->position; ?>
-                                        </td>
-                                        <td><?php echo $row->description; ?></td>
-                                        <td><?php echo number_format($row->amount, 2); ?></td>
-                                        <td><?php echo number_format($row->paid, 2); ?></td>
-                                        <td><?php echo number_format($row->amount - $row->paid, 2); ?></td>
-                                        <td><?php echo number_format($row->amount_last_paid, 2); ?>
-                                            <?php if($row->state==1){ ?> <div class="col-md-12"><span
-                                                    class="label label-danger">ACTIVE</span></div><?php } elseif($row->state==0){ ?><div
-                                                class="col-md-12"><span class="label label-success">COMPLETED</span></div>
-                                            <?php } elseif($row->state==2){ ?><div class="col-md-12"><span
-                                                    class="label label-warning">PAUSED</span></div><?php } ?>
-                                        </td>
-                                        <td>
-                                            <?php if($row->state==1){ ?>
-
-                                            <a href="javascript:void(0)" onclick="pauseLoan(<?php echo $row->id; ?>)">
-                                                <button class="btn btn-warning btn-sm m-1">PAUSE</button></a>
-
-                                            <a href="<?php echo url(''); ?>/flex/loan_advanced_payments/?key=<?php echo base64_encode($row->id); ?>"
-                                                title="Advanced Loan Payment">
-                                                <button class="btn btn-success btn-sm m-1">ADV PAYMENT</button></a>
-                                            <?php }
-                               if($row->state==2){ ?>
-
-                                            <a href="javascript:void(0)" onclick="resumeLoan(<?php echo $row->id; ?>)">
-                                                <button class="btn btn-info btn-sm m-1">RESUME</button></a>
-                                            <?php } ?>
-
-                                        </td>
-                                    </tr>
-                                    <?php }  ?>
-                                </tbody>
-                            </table>
                         </div>
+                        <table id="datatable" class="table datatable-basic table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Employeee ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Type</th>
+                                    <th>Amount(Debt)</th>
+                                    <th>Paid</th>
+                                    <th>Remained</th>
+                                    <th>Last Paid</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                <?php
+                                 foreach ($other_loans as $row) { ?>
+                                <tr>
+                                    <td width="1px"><?php echo $row->SNo; ?></td>
+                                    <td><?php echo $row->empID; ?></td>
+                                    <td><?php echo $row->name; ?></td>
+                                    <td><b>Department: </b><?php echo $row->department; ?><br><b>Position: </b><?php echo $row->position; ?>
+                                    </td>
+                                    <td><?php echo $row->description; ?></td>
+                                    <td><?php echo number_format($row->amount, 2); ?></td>
+                                    <td><?php echo number_format($row->paid, 2); ?></td>
+                                    <td><?php echo number_format($row->amount - $row->paid, 2); ?></td>
+                                    <td><?php echo number_format($row->amount_last_paid, 2); ?>
+                                        <?php if($row->state==1){ ?> <div class="col-md-12"><span
+                                                class="label label-danger">ACTIVE</span></div><?php } elseif($row->state==0){ ?><div
+                                            class="col-md-12"><span class="label label-success">COMPLETED</span></div>
+                                        <?php } elseif($row->state==2){ ?><div class="col-md-12"><span
+                                                class="label label-warning">PAUSED</span></div><?php } ?>
+                                    </td>
+                                    <td>
+                                        <?php if($row->state==1){ ?>
+
+                                        <a href="javascript:void(0)" onclick="pauseLoan(<?php echo $row->id; ?>)">
+                                            <button class="btn btn-warning btn-sm m-1">PAUSE</button></a>
+
+                                        <a href="<?php echo url(''); ?>/flex/loan_advanced_payments/?key=<?php echo base64_encode($row->id); ?>"
+                                            title="Advanced Loan Payment">
+                                            <button class="btn btn-main btn-sm m-1">ADV PAYMENT</button></a>
+                                        <?php }
+                           if($row->state==2){ ?>
+
+                                        <a href="javascript:void(0)" onclick="resumeLoan(<?php echo $row->id; ?>)">
+                                            <button class="btn btn-info btn-sm m-1">RESUME</button></a>
+                                        <?php } ?>
+
+                                    </td>
+                                </tr>
+                                <?php }  ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <?php } ?>
@@ -127,7 +127,7 @@
                                 <form id="demo-form2" enctype="multipart/form-data" target="_blank" method="post"
                                     action="<?php echo url(''); ?>/flex/reports/loanreport" data-parsley-validate
                                     class="form-horizontal form-label-left">
-@csrf
+                                    @csrf
                                     <div class="form-group">
                                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"
                                             for="stream">Type</label>
@@ -169,8 +169,7 @@
 
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default"
-                                            data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 
                                         <input type="submit" value="PRINT" name="print" class="btn btn-success" />
                                     </div>
