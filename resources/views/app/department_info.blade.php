@@ -29,7 +29,7 @@
                     </div>
                     <div class="card-body">
 
-                        @if(Session::has('note'))      {{ session('note') }}  @endif  
+                        @if(Session::has('note'))      {{ session('note') }}  @endif
                    <?php
                       foreach ($data as $row) {
                         $id=$row->id;
@@ -37,14 +37,14 @@
                         $hod = $row->hod;
                         $cost_center_id = $row->cost_center_id;
                         $parent = $row->reports_to;
-                        
+
                         } ?>
                         <div class="col-lg-12">
                             <!--<form id="upload_form" align="center" enctype="multipart/form-data" method="post" action="<?php echo  url(''); ?>/flex/editdepartment/<?php echo $id; ?>"  data-parsley-validate class="form-horizontal form-label-left">-->
 
                             <form autocomplete="off" id="upload_form" align="center" enctype="multipart/form-data"
                                 method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/<?php echo $id; ?>">
+                                action="{{ route('flex.editdepartment',['id'=>$id]) }}">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Department
@@ -54,6 +54,7 @@
                                         <div class="input-group">
                                             <input required="" type="text" value="<?php echo $name; ?>" name="name"
                                                 class="form-control">
+                                                <input type="hidden" name="type" value="updatename" id="">
                                             <span class="input-group-btn">
                                                 <button type="submit" name="updatename" class="btn btn-main">Update
                                                     Name</button>
@@ -65,7 +66,7 @@
 
 
                             <form id="upload_form" align="center" enctype="multipart/form-data" method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/<?php echo $id; ?>">
+                            action="{{ route('flex.editdepartment',['id'=>$id]) }}">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Cost Center
@@ -81,6 +82,7 @@
                                                     value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
                                                 <?php } ?>
                                             </select>
+                                            <input type="hidden" name="type" value="updatecenter" id="">
                                             <span class="input-group-btn">
                                                 <button type="submit" name="updatecenter" class="btn btn-main">Update
                                                     Name</button>
@@ -92,7 +94,7 @@
 
 
                             <form id="upload_form" align="center" enctype="multipart/form-data" method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/<?php echo $id; ?>">
+                            action="{{ route('flex.editdepartment',['id'=>$id]) }}">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Head of
@@ -109,6 +111,7 @@
                                                     value="<?php echo $employee->empID; ?>">
                                                     <?php echo $employee->NAME; ?></option> <?php } ?>
                                             </select>
+                                            <input type="hidden" name="type" value="updatehod" id="">
                                             <span class="input-group-btn">
                                                 <button type="submit" name="updatehod" class="btn btn-main">Update
                                                     Name</button>
@@ -121,7 +124,7 @@
                             <?php  if($id!=3){ ?>
                             <!-- If The Department is Not Top Department Allow Updating -->
                             <form id="upload_form" align="center" enctype="multipart/form-data" method="post"
-                                action="<?php echo  url(''); ?>/flex/editdepartment/<?php echo $id; ?>">
+                            action="{{ route('flex.editdepartment',['id'=>$id]) }}">
                                 @csrf
                                 <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reports To
@@ -137,6 +140,7 @@
                                                     value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
                                                 <?php } ?>
                                             </select>
+                                            <input type="hidden" name="type" value="updateparent" id="">
                                             <span class="input-group-btn">
                                                 <button type="submit" name="updateparent" class="btn btn-main">Update
                                                     Name</button>

@@ -365,20 +365,20 @@
                                 class="nav-link {{ request()->routeIs('flex.position') ? 'active' : null }}"
                                 href="{{ route('flex.position') }}">Positions</a></li>
                         @if (session('mng_emp'))
-                            <li class="nav-item"><a
+                            {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.contract') ? 'active' : null }}"
-                                    href="{{ route('flex.contract') }}">Employee Contracts</a></li>
+                                    href="{{ route('flex.contract') }}">Employee Contracts</a></li> --}}
                         @endif
                         {{-- <li  class="nav-item"><a class="nav-link"  href="{{ route('flex.accountCoding') }}">Account Coding</a></li> --}}
-                        <li class="nav-item"><a
+                        {{-- <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.organization_level') ? 'active' : null }}"
-                                href="{{ route('flex.organization_level') }}">Organisation Levels </a></li>
-                        <li class="nav-item"><a
+                                href="{{ route('flex.organization_level') }}">Organisation Levels </a></li> --}}
+                        {{-- <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.organization_structure') ? 'active' : null }}"
-                                href="{{ route('flex.organization_structure') }}">Organisation Structure</a></li>
-                        <li class="nav-item"><a
+                                href="{{ route('flex.organization_structure') }}">Organisation Structure</a></li> --}}
+                        {{-- <li class="nav-item"><a
                                 class="nav-link {{ request()->routeIs('flex.accounting_coding') ? 'active' : null }}"
-                                href="{{ route('flex.accounting_coding') }}">Accounting Coding</a></li>
+                                href="{{ route('flex.accounting_coding') }}">Accounting Coding</a></li> --}}
 
                     </ul>
                 </li>
@@ -506,7 +506,7 @@
                                 href="{{ url('roles') }}">
                                 Roles</a>
                         </li>
-                        
+
 
 
                         <li class=" nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }} "><a

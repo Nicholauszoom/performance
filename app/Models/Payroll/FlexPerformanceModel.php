@@ -178,26 +178,20 @@ class FlexPerformanceModel extends Model
 
         DB::table('branch')->insert($data);
 
-        $query = " id ORDER BY id DESC LIMIT 1";
-        $row =  DB::table('branch')
-        ->select(DB::raw($query))
-        ->first();
-
-
-
-    	return $row->id;
+        $query = "SELECT id from branch ORDER BY id DESC LIMIT 1";
+        $row =  DB::select(DB::raw($query));
+        
+    	return $row[0]->id;
 	}
 
 	function addCostCenter($data)
 	{
 
 		DB::table('cost_center')->insert($data);
-		$query = "id  ORDER BY id DESC LIMIT 1";
+		$query = "SELECT id from cost_center  ORDER BY id DESC LIMIT 1";
 
-		$row = DB::table('cost_center')
-		->select(DB::raw($query))
-		->first();
-    	return $row->id;
+		$row = DB::select(DB::raw($query));
+    	return $row[0]->id;
 	}
 
 

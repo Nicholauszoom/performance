@@ -2,7 +2,7 @@
      data-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content" id="modal-content">
-            {{ Form::open(['route' => 'designations.store']) }}
+            {{ Form::open(['route' => 'flex.addCompanyBranch']) }}
             @method('POST')
             <div class="modal-header p-2 px-2">
                 <h4 class="modal-title">Add Company Branch</h6>
@@ -13,7 +13,7 @@
                     <input type="text" class="form-control" name="name" required>
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label class="">Country</label>
                     <select name="department_id" class="form-control m-b"  required>
                    <option value="">Select Country</option>
@@ -23,7 +23,7 @@
                      @endforeach
                      @endif
                     </select>
-                </div>
+                </div> --}}
                 <div class="form-group">
                     <label class="">Region</label>
                     <input type="text" class="form-control" name="name" required>

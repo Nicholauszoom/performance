@@ -18,7 +18,7 @@
           <div class="col-md-12 col-sm-6 col-xs-12">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0">
               <!-- <div class="card-head">
-                  
+
                   <h3 class="green"></h3>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -38,14 +38,120 @@
                 <div class="clearfix"></div>
               </div> -->
               <div class="card-body">
-                  
-                
+
+
     <div class="col-md-12 col-sm-12 col-xs-12">
+        <?php if(session('mng_org')){ ?>
+            <div  class="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
+
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                  <div class="card-head">
+                    <h2 class="text-warning"><i class="fa fa-tasks"></i> Add Position</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="card-body">
+                <div id="positionAddFeedBack"></div>
+
+                    <form id="addPosition" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                       @csrf
+                      <!-- START -->
+                      <div class="row">
+                      <div class="form-group col-6 mb-3">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Name</label>
+                        </label>
+                        <input type="text" required="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Name" >
+
+
+                      </div>
+                      <div class="form-group col-6 mb-3">
+                        <label class="control-label col-md-3  col-xs-6" >Organization Level</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                <select required="" id='org' name="organization_level" class="select_level form-control">
+
+                                   <?php foreach ($levels as $row){ ?>
+                                  <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option> <?php } ?>
+                                </select>
+                        </div>
+                      </div>
+                      <div class="form-group col-6 mb-3">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Code</label>
+                        </label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <input type="text" maxlength="10" class="form-control col-md-7 col-xs-12" name="code" placeholder="Position Code"/>
+                        </div>
+                      </div>
+                      <div class="form-group col-6 mb-3">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Minimum Qualification</label>
+                        </label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <input type="text" class="form-control col-md-7 col-xs-12" name="qualification" placeholder="Minimum Qualification">
+                        </div>
+                      </div>
+                      <div class="form-group col-6 mb-3">
+                        <label class="control-label col-md-3  col-xs-6" >Department</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                                <select required="" id='dept' name="department" class="select3_single form-control">
+                                <option></option>
+                                   <?php foreach ($ddrop as $row){ ?>
+                                  <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option> <?php } ?>
+                                </select>
+                        </div>
+                      </div>
+                      <div class="form-group col-6 mb-3">
+                        <label class="control-label col-md-3  col-xs-6">Reports To</label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="input-group">
+                            <select required="" id="pos" name="parent" class="select1_single form-control" tabindex="-1">
+                            <option></option>
+
+                                   <?php foreach ($all_position as $row){
+                                  // if ($row->name == $parent) continue;?>
+                                <option value="<?php echo $row->position_code."|".$row->level; ?>"><?php echo $row->name; ?></option> <?php } ?>
+                            </select>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="form-group col-12 mb-3">
+                        <label class="control-label" for="last-name">Purpose of This Position</label>
+                        </label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <textarea class="form-control col-md-7 col-xs-12" name="purpose" placeholder="Purpose" rows="3"></textarea>
+                        </div>
+                      </div> <br>
+                        <div class="form-group col-8 mb-3">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
+                        </label>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                           <label class="containercheckbox"> Need a Driving Licence (Tick if True)
+                           <input type="checkbox" name="driving_licence" value="1">
+                            <span class="checkmark"></span>
+                          </label>
+                        </div>
+                      </div>  <br>
+                      <!-- END -->
+                      <div class="form-group col-4">
+                        <div class="">
+                          <input type="submit" class="btn btn-main form-control"/>
+                        </div>
+                      </div>
+                      </div>
+                      </form>
+
+                  </div>
+                </div>
+            </div>
+            <?php } ?>
         <div class="card border-top   rounded-0 ">
           <div class="card-head p-2">
             <h2 class="text-warning">List of Positions   </h2> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php if(session('mng_org')){ ?>
-            <a  href="#bottom"><button type="button"  class="btn btn-main float-end">ADD POSITION</button></a>
+            {{-- <a  href="#bottom"><button type="button"  class="btn btn-main float-end">ADD POSITION</button></a> --}}
             <?php } ?>
             <div class="clearfix"></div>
           </div>
@@ -59,8 +165,8 @@
                   <th>Name</th>
                   <th>Reports To</th>
                   <th>Department</th>
-                  <!--<th>Created By</th>-->
-                  <!--<th>Date Created</th>-->
+                  <th hidden>Created By</th>
+                  <th hidden>Date Created</th>
                   <?php if(session('mng_org')){ ?>
                   <th>Options</th>
                   <?php } ?>
@@ -78,6 +184,8 @@
                     <td>
                         <?php if($row->id == 6) echo "Top Position"; else echo $row->parent; ?>
                     </td>
+                    <td hidden></td>
+                    <td hidden></td>
                     <td><b> <?php echo $row->department; ?></b></td>
 
                     <?php if(session('mng_org')){ ?>
@@ -94,117 +202,12 @@
             </table>
           </div>
         </div>
-      </div> 
-      
-    
-      <?php if(session('mng_org')){ ?>
-                <div  class="col-md-12 col-lg-12 col-sm-12 col-xs-12 ">
-                            
-                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-                      <div class="card-head">
-                        <h2 class="text-warning"><i class="fa fa-tasks"></i> Add Position</h2>
-                        <ul class="nav navbar-right panel_toolbox">
-                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                          </li>
-                          <li><a class="close-link"><i class="fa fa-close"></i></a>
-                          </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                      </div>
-                      <div class="card-body">
-                    <div id="positionAddFeedBack"></div>
-            
-                        <form id="addPosition" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
-                           @csrf
-                          <!-- START -->
-                          <div class="row">
-                          <div class="form-group col-6 mb-3">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Name</label>
-                            </label>
-                            <input type="text" required="" class="form-control col-md-7 col-xs-12" name="name" placeholder="Name" >
-                            
-                         
-                          </div>
-                          <div class="form-group col-6 mb-3">
-                            <label class="control-label col-md-3  col-xs-6" >Organization Level</label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <select required="" id='org' name="organization_level" class="select_level form-control">
-                                
-                                       <?php foreach ($levels as $row){ ?>
-                                      <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option> <?php } ?>
-                                    </select>
-                            </div>
-                          </div>
-                          <div class="form-group col-6 mb-3">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Code</label>
-                            </label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                              <input type="text" maxlength="10" class="form-control col-md-7 col-xs-12" name="code" placeholder="Position Code"/>
-                            </div>
-                          </div>
-                          <div class="form-group col-6 mb-3">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Minimum Qualification</label>
-                            </label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                              <input type="text" class="form-control col-md-7 col-xs-12" name="qualification" placeholder="Minimum Qualification">
-                            </div>
-                          </div>
-                          <div class="form-group col-6 mb-3">
-                            <label class="control-label col-md-3  col-xs-6" >Department</label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                    <select required="" id='dept' name="department" class="select3_single form-control">
-                                    <option></option>
-                                       <?php foreach ($ddrop as $row){ ?>
-                                      <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option> <?php } ?>
-                                    </select>
-                            </div>
-                          </div>
-                          <div class="form-group col-6 mb-3">
-                            <label class="control-label col-md-3  col-xs-6">Reports To</label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="input-group">
-                                <select required="" id="pos" name="parent" class="select1_single form-control" tabindex="-1">
-                                <option></option>
-                                                
-                                       <?php foreach ($all_position as $row){ 
-                                      // if ($row->name == $parent) continue;?>
-                                    <option value="<?php echo $row->position_code."|".$row->level; ?>"><?php echo $row->name; ?></option> <?php } ?>
-                                </select>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="form-group col-12 mb-3">
-                            <label class="control-label" for="last-name">Purpose of This Position</label>
-                            </label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                              <textarea class="form-control col-md-7 col-xs-12" name="purpose" placeholder="Purpose" rows="3"></textarea> 
-                            </div>
-                          </div> <br>
-                            <div class="form-group col-8 mb-3">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
-                            </label>
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                               <label class="containercheckbox"> Need a Driving Licence (Tick if True) 
-                               <input type="checkbox" name="driving_licence" value="1">
-                                <span class="checkmark"></span>
-                              </label>
-                            </div>
-                          </div>  <br>
-                          <!-- END -->
-                          <div class="form-group col-4">
-                            <div class="">
-                              <input type="submit" class="btn btn-main form-control"/>
-                            </div>
-                          </div> 
-                          </div>
-                          </form>
-            
-                      </div>
-                    </div>
-                </div>
-                <?php } ?>
-    <!--END EDIT TAB-->      
-                    
+      </div>
+
+
+
+    <!--END EDIT TAB-->
+
               </div>
             </div>
 
@@ -212,11 +215,11 @@
         </div>
     </div>
 
-    
+
 
 
   </div>
-</div> 
+</div>
 
 
 @endsection
@@ -251,16 +254,16 @@
                 });
               setTimeout(function(){// wait for 2 secs(2)
                     location.reload(); // then reload the page.(3)
-                }, 2000); 
+                }, 2000);
             })
             .fail(function(){
-              alert('Request Failed!! ...'); 
+              alert('Request Failed!! ...');
             });
         }
-    }); 
+    });
 </script>
 <script> //For Deleting records without Page Refreshing
-      
+
     function deletePosition(id)
     {
         if (confirm("Are You Sure You Want To Delete This Position") == true) {
@@ -275,7 +278,7 @@
 
               if(data.status == 'OK'){
               alert("Deleted Sussessifully!");
-              $('#domain'+id).hide();              
+              $('#domain'+id).hide();
               $('#feedBackTable').fadeOut('fast', function(){
               $('#feedBackTable').fadeIn('fast').html(data.message);
             });
@@ -285,16 +288,16 @@
               }else if(data.status != 'SUCCESS'){
               alert("Position Not Deleted, Error In Deleting");
                }
-           
-            
+
+
             // document.location.reload();
-               
+
             }
-               
+
             });
         }
-    } 
-      
+    }
+
     function activatePosition(id)
     {
         if (confirm("Are You Sure You Want To Activate This Department") == true) {
@@ -319,14 +322,14 @@
               }else if(data.status != 'SUCCESS'){
               alert("Property Not Activated, Error In Activation");
                }
-           
-               
+
+
             }
-               
+
             });
         }
-    }        
-</script> 
+    }
+</script>
 
 @endpush
 
