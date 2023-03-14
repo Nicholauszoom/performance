@@ -56,6 +56,9 @@ Route::middleware('auth:sanctum')->group( function () {
       // For Updating profile image
       Route::post('/update-image',[GeneralController::class,'updateImg']);
 
+      // For Test
+      Route::get('/test/{id}',[GeneralController::class,'viewTermination']);
+
 
    
 

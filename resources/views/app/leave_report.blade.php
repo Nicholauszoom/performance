@@ -2,58 +2,146 @@
 @extends('layouts.vertical', ['title' => 'Dashboard'])
 
 @push('head-script')
-<script src="{{ asset('assets/js/vendor/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
+<script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
 @endpush
+
 
 @section('content')
 
 
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-header">
-        <h3 class="text-main">Leaves </h3>
+        <h5 class="text-main">Leaves History </h5>
     </div>
 
     <div class="card-body">
-        My Leave History Already Accepted
+        
     </div>
 
-    <table  class="table table-striped table-bordered">
-        <thead>
-          <tr>
-            <th>S/N</th>
-            <th>Name</th>
-            <th>Department</th>
-            <th>Nature</th>
-            <th>Duration(Days)</th>
-            <th>From</th>
-            <th>To</th>
+    <table  class="table table-striped table-bordered datatable-basic">
+      <thead>
+        <tr>
+          <th>S/N</th>
+          <th>Name</th>
+          <th>Duration</th>
+          <th>Nature</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Remaining</th>
+          <th>Action</th>
+        </tr>
+      </thead>
 
-          </tr>
-        </thead>
+
+      <tbody>
+        @foreach($leaves as $item)
 
 
-        <tbody>
-          <?php
-            foreach ($my_leave as $row) { ?>
-            <tr>
-              <td width="1px"><?php echo $row->SNo; ?></td>
-              <td><?php  echo $row->NAME; ?></td>
-              <td><?php echo "<b>DEPARTMENT:</b> ".$row->DEPARTMENT."<br><b>POSITION: </b>".$row->POSITION; ?></td>
-              <td><?php echo $row->TYPE; ?></td>
-              <td><?php echo $row->days; ?></td>
-              <td><?php  echo date('d-m-Y', strtotime($row->start));  ?></td>
-              <td <?php if($row->state==0){ ?> bgcolor="#F5B7B1" <?php } ?>>
-              <?php  echo date('d-m-Y', strtotime($row->end))."<br>"; ?>  </td>
-              </td>
+        {{-- @if ( $item->employee->line_manager  ==  Auth::user()->emp_id) --}}
+        <tr>
+          <td>{{ $item->id }}</td>
+          <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
+          <td>
+            {{ $item->days }} Days
+            <br>From <b>{{ $item->start }}</b><br>To <b>{{ $item->end }}</b>
+          </td>
+          <td>
+            Nature: <b>{{ $item->type->type}}</b>
+          </td>
+          <td>
+            <p>
+              {{ $item->reason }}
+            </p>
+          </td>
+          <td>
+            <div >
 
-              </tr>
+              <?php if ($item->state==1){ ?>
+              <div class="col-md-12">
+              <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
+              elseif($item->state==0){?>
+              <div class="col-md-12">
+              <span class="label badge bg-info text-whites label-info">APPROVED</span></div><?php }
+              elseif($item->state==3){?>
+              <div class="col-md-12">
+              <span class="label badge bg-danger text-white">DENIED</span></div><?php } ?>
+        </div>
+          </td>
+          <td>
+            {{ $item->remaining}} Days
+          </td>
+          <td class="text-center">
 
-            <?php }  ?>
-        </tbody>
+            @php
+              $approval=App\Models\LeaveApproval::where('empID',$item->empID)->first();
+            @endphp
+            <a href="{{asset('storage/leaves/' . $item->attachment) }}" download="attachment" class="btn bg-main btn-sm" title="Download Attachment">
+              <i class="ph ph-download"></i> &nbsp;
+              Attachment
+            </a>
+            @if($approval)
+            <?php if ($item->status==0 && $item->state==1 ){ ?>
+              @if ( Auth()->user()->emp_id == $approval->level1)
+              <div class="col-md-12 text-center mt-1">
+                <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
+                  <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
+                </a>
+
+              <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                  <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button></a>
+              </div>
+
+              @endif
+
+              <?php }
+              elseif($item->status==1 && $item->state==1){?>
+              @if ( Auth()->user()->emp_id == $approval->level2)
+              <div class="col-md-12 text-center mt-1">
+                <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
+                  <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
+                </a>
+
+                <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                    <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
+                </a>
+              </div>
+              @endif
+              <?php }
+              elseif($item->status==2){  ?>
+                @if ( Auth()->user()->emp_id == $approval->level3)
+                <div class="col-md-12 text-center mt-1">
+                  <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
+                    <button  class="btn btn-success btn-sm" ><i class="ph-check"></i></button>
+                  </a>
+
+                  <a href="javascript:void(0)" onclick="holdLeave(<?php echo $item->id;?>)" title="Hold">
+                      <button  class="btn btn-warning btn-sm"><i class="ph-x"></i></button>
+                  </a>
+                </div>
+                @endif
+              <?php }
+              elseif ($item->status==4) {?>
+              <div class="col-md-12 mt-1">
+              <span class="label bg-danger text-white">Denied</span></div>
+              <?php } ?>
+              @endif
+            </td>
+
+        </tr>
+        {{-- @endif --}}
+
+
+
+        @endforeach
+
+      </tbody>
     </table>
 </div>
 

@@ -727,4 +727,27 @@ class GeneralController extends Controller
     }
 
 
+
+    // Termination test
+        //For Viewing Termination
+    public function viewTermination($id)
+    {
+        $termination = Termination::where('id', $id)->first();
+
+        $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
+
+
+        $pdf = Pdf::loadView('reports.terminalbenefit', compact('termination', 'employee_info'));
+        $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+
+        $newImageName= $pdf->download('terminal-benefit-slip.pdf');
+
+        // return(  $newImageName);
+       $test= $newImageName->move(public_path('storage/tests'), $newImageName);
+
+      return response( [ 'test'=> $test ],200 );
+        
+    }
+
+
 }

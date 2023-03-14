@@ -147,7 +147,7 @@ class AttendanceController extends Controller
       }
       $data['leave_types'] =LeaveType::all();
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
-      $data['leaves'] =Leaves::latest()->get();
+      $data['leaves'] =Leaves::where('state',1)->latest()->get();
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       // Start of Escallation
@@ -1171,7 +1171,9 @@ class AttendanceController extends Controller
 
    public function leavereport() {
       $empID = session('emp_id');
-      $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
+      // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
+      $data['leaves'] =Leaves::where('state',0)->latest()->get();
+      
 
       if(session('conf_leave')!='' && session('line')!='' ){
         $data['other_leave'] =  $this->attendance_model->leavereport_hr();
