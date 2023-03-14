@@ -147,7 +147,7 @@ class AttendanceController extends Controller
       }
       $data['leave_types'] =LeaveType::all();
       $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
-      $data['leaves'] =Leaves::latest()->get();
+      $data['leaves'] =Leaves::where('state',1)->latest()->get();
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       // Start of Escallation
@@ -921,37 +921,19 @@ class AttendanceController extends Controller
   
      
      
-          if ($approval->level2 != null) 
-          {
-            $leave->status=1;
-            $leave->position='Recommended by '.$position->name;
-            $leave->level1=Auth()->user()->emp_id;
-            $leave->updated_at= new DateTime();
-            $leave->update();
-          }
-          else
-          {
+      
             $leave->status=3;
             $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
-          }
+          
 
         }
         elseif($approval->level2==$approver)
         {
-          if ($approval->level3 != null) 
-          {
-            $leave->status=2;
-            $leave->level2=Auth()->user()->emp_id;
-            $leave->position='Recommended by '.$position->name;
-            $leave->updated_at= new DateTime();
-            $leave->update();
-          }
-          else
-          {
+       
             $leave->status=3;
             $leave->state=0;
             $leave->level2=Auth()->user()->emp_id;
@@ -960,7 +942,6 @@ class AttendanceController extends Controller
             $leave->update();
           }
         
-        }
         elseif($approval->level3==$approver)
         {
           $leave->status=3;
@@ -1171,7 +1152,9 @@ class AttendanceController extends Controller
 
    public function leavereport() {
       $empID = session('emp_id');
-      $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
+      // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
+      $data['leaves'] =Leaves::where('state',0)->latest()->get();
+      
 
       if(session('conf_leave')!='' && session('line')!='' ){
         $data['other_leave'] =  $this->attendance_model->leavereport_hr();

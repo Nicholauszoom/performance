@@ -194,9 +194,9 @@
                 <tr>
                     <td class="w-50">
                         <div class="box-text">
-                            <img class="pl-lg" style="width: 133px;height:120px;"
+                            {{-- <img class="pl-lg" style="width: 133px;height:120px;"
                                 src="{{ ('assets/images/logo-dif2.png') }}">
-                                <br>
+                                <br> --}}
 
                         </div>
                     </td>
