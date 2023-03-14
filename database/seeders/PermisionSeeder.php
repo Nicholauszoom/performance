@@ -195,7 +195,15 @@ class PermisionSeeder extends Seeder
                ['slug' => 'view-financial-setting','sys_module_id'=>7],
                ['slug' => 'view-Banking-information','sys_module_id'=>7],
                ['slug' => 'view-Roles','sys_module_id'=>7],
+               ['slug' => 'view-roles','sys_module_id'=>7],
+               ['slug' => 'add-roles','sys_module_id'=>7],
+               ['slug' => 'edit-roles','sys_module_id'=>7],
+               ['slug' => 'delete-roles','sys_module_id'=>7],
+
                ['slug' => 'view-Permission','sys_module_id'=>7],
+               ['slug' => 'add-Permission','sys_module_id'=>7],
+               ['slug' => 'edit-Permission','sys_module_id'=>7], 
+               ['slug' => 'delete-Permission','sys_module_id'=>7],
                ['slug' => 'view-audit-trail','sys_module_id'=>7],
                ['slug' => 'view-mail-configuration','sys_module_id'=>7],
 
