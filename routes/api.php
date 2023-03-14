@@ -55,7 +55,7 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::post('/apply-leave',[LeaveController::class,'store']);
 
       // For Updating profile image
-      Route::patch('/update-image',[GeneralController::class,'updateImg']);
+      Route::post('/update-image',[GeneralController::class,'updateImg']);
 
       //for geting payslip
       Route::prefix('flex')->controller(ReportController::class)->group(function (){
