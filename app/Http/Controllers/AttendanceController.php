@@ -921,37 +921,19 @@ class AttendanceController extends Controller
   
      
      
-          if ($approval->level2 != null) 
-          {
-            $leave->status=1;
-            $leave->position='Recommended by '.$position->name;
-            $leave->level1=Auth()->user()->emp_id;
-            $leave->updated_at= new DateTime();
-            $leave->update();
-          }
-          else
-          {
+      
             $leave->status=3;
             $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
-          }
+          
 
         }
         elseif($approval->level2==$approver)
         {
-          if ($approval->level3 != null) 
-          {
-            $leave->status=2;
-            $leave->level2=Auth()->user()->emp_id;
-            $leave->position='Recommended by '.$position->name;
-            $leave->updated_at= new DateTime();
-            $leave->update();
-          }
-          else
-          {
+       
             $leave->status=3;
             $leave->state=0;
             $leave->level2=Auth()->user()->emp_id;
@@ -960,7 +942,6 @@ class AttendanceController extends Controller
             $leave->update();
           }
         
-        }
         elseif($approval->level3==$approver)
         {
           $leave->status=3;
