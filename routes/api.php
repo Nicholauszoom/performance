@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LeaveController;
 use App\Http\Controllers\API\GeneralController;
+use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\API\PasswordController;
 
 
@@ -34,7 +35,7 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::post('/logout',[AuthController::class,'logout']);
       //  For Leaves
       Route::get('/leaves',[LeaveController::class,'index']);
-     //  For Pensions 
+     //  For Pensions
       Route::get('/my-pension',[GeneralController::class,'pension']);
       // For Overtime
       Route::get('/my-overtime',[GeneralController::class,'myOvetimes']);
@@ -42,7 +43,7 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::get('/my-leaves',[GeneralController::class,'myLeaves']);
       //For Loans
       Route::get('/my-loans',[GeneralController::class,'myLoans']);
-      // For Salary slips 
+      // For Salary slips
       Route::get('/my-slips',[GeneralController::class,'mySlips']);
       // For Salary slips details
       Route::get('/my-slips/{date}',[GeneralController::class,'SlipDetail']);
@@ -56,8 +57,13 @@ Route::middleware('auth:sanctum')->group( function () {
       // For Updating profile image
       Route::patch('/update-image',[GeneralController::class,'updateImg']);
 
+      //for geting payslip
+      Route::prefix('flex')->controller(ReportController::class)->group(function (){
+      Route::any('/reports/payslip','payslip')->name('flex.employee_payslip');
+      });
 
-   
+
+
 
 
       Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
