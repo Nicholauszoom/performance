@@ -106,7 +106,7 @@
                 @endif
 
                 <?php }
-                elseif($item->status==1 && $item->state==1){?>
+                elseif($item->status==0 && $item->state==1){?>
                 @if ( Auth()->user()->emp_id == $approval->level2)
                 <div class="col-md-12 text-center mt-1">
                   <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
@@ -119,7 +119,7 @@
                 </div>
                 @endif
                 <?php }
-                elseif($item->status==2){  ?>
+                elseif($item->status==0){  ?>
                   @if ( Auth()->user()->emp_id == $approval->level3)
                   <div class="col-md-12 text-center mt-1">
                     <a href="{{ url('flex/attendance/approveLeave/'.$item->id) }}" title="Recommend">
