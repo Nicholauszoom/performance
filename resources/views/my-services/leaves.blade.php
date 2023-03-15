@@ -1,15 +1,15 @@
 
 @extends('layouts.vertical', ['title' => 'Leave'])
 
+
 @push('head-script')
-<script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
-<script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
-<script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
-<script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
 
 @section('content')
@@ -70,10 +70,11 @@
             <span class="text-danger"><?php// echo form_error("fname");?></span>
           </div>
         </div>
+
         <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave <span  class="text-danger">*</span></label>
                   <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature">
-                    <option value=""></option>
+                    <option value="">&nbsp;</option>
                       <?php  $sex = Auth::user()->gender;
                       if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
                       foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
@@ -113,7 +114,7 @@
               <span class="text-danger"><?php// echo form_error("mname");?></span>
             </div>
           </div>
-        <div class="form-group col-12">
+        <div class="form-group col-12 mb-2">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave <span  class="text-danger">*</span>
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -121,12 +122,25 @@
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
+        @if($deligate>0)
+        <div class="form-group col-6">
+          <label class="control-label " for="first-name" for="stream" >Deligate Position To <span  class="text-danger">*</span></label>
+           
+          <select name="deligate" @if($deligate>0) required  @endif class="form-control form-select select" id="">
+            <option value="">&nbsp;</option>
+            @foreach( $employees as $item)
+            <option value=" {{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
+            @endforeach
+          </select>
+      
+        </div>
+        @endif
 
       
             <!-- END -->
             <div class="form-group py-2">
               <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
-                <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
+                <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
                
               </div>
             </div>

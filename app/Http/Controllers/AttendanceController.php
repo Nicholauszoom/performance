@@ -22,6 +22,7 @@ use App\Models\PerformanceModel;
 use App\CustomModels\PayrollModel;
 use App\CustomModels\ReportsModel;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
@@ -264,66 +265,66 @@ class AttendanceController extends Controller
      public function myLeaves()
      {
            $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
-
-        
+            $id = Auth::user()->emp_id;
+            $data['deligate']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->count();
             $data['leave_types'] =LeaveType::all();
-            $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+            $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->whereNot('state',4)->get();
             $data['leaves'] =Leaves::get();
 
 
             // Start of Escallation
-            $leaves=Leaves::get();
-            if ($leaves) {
+            // $leaves=Leaves::get();
+            // if ($leaves) {
 
-              foreach($leaves as $item)
-              {
-                  $today= new DateTime();
-                  $applied =$item->updated_at;
-                  $diff= $today->diff($applied);
-                  $range=$diff->days;
-                  $approval=LeaveApproval::where('empID',$item->empID)->first();
+            //   foreach($leaves as $item)
+            //   {
+            //       $today= new DateTime();
+            //       $applied =$item->updated_at;
+            //       $diff= $today->diff($applied);
+            //       $range=$diff->days;
+            //       $approval=LeaveApproval::where('empID',$item->empID)->first();
 
-                  if ($approval) {
-                    if ($range>$approval->escallation_time) {
-                      $leave=Leaves::where('id' ,$item->id)->first();
-                      $status=$leave->status;
+            //       if ($approval) {
+            //         if ($range>$approval->escallation_time) {
+            //           $leave=Leaves::where('id' ,$item->id)->first();
+            //           $status=$leave->status;
                       
-                      if ($status == 0) {
-                        if ($approval->level2 != null) {
-                          $leave->status=1;
-                          $leave->updated_at=$today;
-                          $leave->update();
+            //           if ($status == 0) {
+            //             if ($approval->level2 != null) {
+            //               $leave->status=1;
+            //               $leave->updated_at=$today;
+            //               $leave->update();
                       
-                        }
+            //             }
                      
-                      }
-                      elseif ($status == 1)
-                      {
-                        if ($approval->level3 != null) {
-                          $leave->status=2;
-                          $leave->updated_at=$today;
-                          $leave->update();
-                        }
-                        else
-                        {
-                          $leave->status=0;
-                          $leave->updated_at=$today;
-                          $leave->update();
-                        }
-                      }
-                      elseif ($status == 2)
-                      {
-                        if ($approval->level1 != null) {
-                          $leave->status=0;
-                          $leave->updated_at=$today;
-                          $leave->update();
-                        }
-                      }
-                    }
-                  }
+            //           }
+            //           elseif ($status == 1)
+            //           {
+            //             if ($approval->level3 != null) {
+            //               $leave->status=2;
+            //               $leave->updated_at=$today;
+            //               $leave->update();
+            //             }
+            //             else
+            //             {
+            //               $leave->status=0;
+            //               $leave->updated_at=$today;
+            //               $leave->update();
+            //             }
+            //           }
+            //           elseif ($status == 2)
+            //           {
+            //             if ($approval->level1 != null) {
+            //               $leave->status=0;
+            //               $leave->updated_at=$today;
+            //               $leave->update();
+            //             }
+            //           }
+            //         }
+            //       }
             
-              }
-            }
+            //   }
+            // }
             // End of Escallation
 
             // For Working days
@@ -462,8 +463,6 @@ class AttendanceController extends Controller
         // For  Requested days
         $start = $request->start;
         $end = $request->end;
-
-
         $holidays=SysHelpers::countHolidays($start,$end);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
        
@@ -475,6 +474,8 @@ class AttendanceController extends Controller
         $d2 = new DateTime();
         $interval = $d2->diff($d1);
         $day= SysHelpers::countWorkingDays($d1,$d2);
+
+
 
         // For Redirection Url
         $url = redirect('flex/attendance/my-leaves');
@@ -563,6 +564,11 @@ class AttendanceController extends Controller
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
+
+
+                // For Deligation
+
+
                 // for annual leave
                 if ($request->nature==1) {
                     $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
@@ -748,6 +754,10 @@ class AttendanceController extends Controller
             $leaves->leave_address=$request->address;
             $leaves->mobile = $request->mobile;
             $leaves->nature = $request->nature;
+            $leaves->deligated=$request->deligate;
+
+
+            dd($request->deligate);
             // for annual leave
             if ($request->nature==1) 
             {
@@ -938,10 +948,21 @@ class AttendanceController extends Controller
 
         $position=Position::where('id',$employee)->first();
 
+
         // chacking level 1
         if ($approval->level1==$approver) {
   
-     
+                // For Deligation
+            if($leave->deligated!=null){
+
+              $id=Auth::user()->emp_id;
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$request->deligate]);
+              // dd($request->deligate);
+
+
+            }
+       
+            
      
       
             $leave->status=3;
