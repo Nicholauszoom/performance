@@ -49,7 +49,7 @@
 
                     <div class="form-group col-6">
                         <label class="col-form-label ">Escallation Time ( <small class="text-danger">*days</small> ) </label>
-                            <input type="number" name="escallation_time" placeholder="Enter Escallation Time"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
+                            <input type="number" required name="escallation_time" placeholder="Enter Escallation Time"  value="{{ old('escallation_time') }}" class="form-control @error('escallation_time') is-invalid @enderror">
 
                             @error('escallation_time')
                                 <p class="text-danger mt-1"> Field Escallation Time has an error </p>
