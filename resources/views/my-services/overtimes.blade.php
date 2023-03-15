@@ -94,7 +94,7 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-perfrom float-end">Send Request</button>
+                                    <button type="submit" class="btn btn-perfrom float-end">Send</button>
                                 </div>
 
 
@@ -1733,37 +1733,7 @@ $('#docNo').change(function(){
         });
     </script>
 
-    <script type="text/javascript">
-        $('#applyOvertime').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                    url: "{{ url('/flex/applyOvertime') }}",
-                    type: "post",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: new FormData(this),
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    async: false
-                })
-                .done(function(data) {
-                    $('#resultfeedSubmission').fadeOut('slow', function() {
-                        $('#resultfeedSubmission').fadeIn('slow').html(data);
-                    });
 
-                    setTimeout(function() { // wait for 5 secs(2)
-                        location.reload(); // then reload the page.(3)
-                    }, 1000);
-
-                    //   $('#updateName')[0].reset();
-                })
-                .fail(function() {
-                    alert('Request Failed!! ...');
-                });
-        });
-    </script>
 
 
 <script>
