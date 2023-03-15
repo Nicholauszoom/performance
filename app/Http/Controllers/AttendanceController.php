@@ -147,7 +147,7 @@ class AttendanceController extends Controller
         $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
       $data['leave_types'] =LeaveType::all();
-      $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+      // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
       $data['leaves'] =Leaves::where('state',1)->latest()->get();
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
@@ -564,6 +564,8 @@ class AttendanceController extends Controller
                 $leaves->leave_address=$request->address;
                 $leaves->mobile = $request->mobile;
                 $leaves->nature = $request->nature;
+                $leaves->deligated=$request->deligate;
+
 
 
                 // For Deligation
@@ -757,7 +759,6 @@ class AttendanceController extends Controller
             $leaves->deligated=$request->deligate;
 
 
-            dd($request->deligate);
             // for annual leave
             if ($request->nature==1) 
             {
@@ -956,9 +957,10 @@ class AttendanceController extends Controller
             if($leave->deligated!=null){
 
               $id=Auth::user()->emp_id;
-              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$request->deligate]);
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
               // dd($request->deligate);
-
 
             }
        
@@ -976,7 +978,16 @@ class AttendanceController extends Controller
         }
         elseif($approval->level2==$approver)
         {
-       
+              // For Deligation
+            if($leave->deligated!=null){
+
+              $id=Auth::user()->emp_id;
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+
+            }
             $leave->status=3;
             $leave->state=0;
             $leave->level2=Auth()->user()->emp_id;
@@ -987,6 +998,16 @@ class AttendanceController extends Controller
         
         elseif($approval->level3==$approver)
         {
+            // For Deligation
+            if($leave->deligated!=null){
+
+              $id=Auth::user()->emp_id;
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+
+            }
           $leave->status=3;
           $leave->state=0;
           $leave->level3=Auth()->user()->emp_id;
