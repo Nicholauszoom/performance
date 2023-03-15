@@ -348,9 +348,9 @@ Swal.fire({
           type: 'get',
           dataType: 'json',
           success: function(response){
-             let subs=response;
+            //  let subs=response.data;
 
-
+console.log(response);
             //  $("#first").remove();
 
             for (var i = 0; i < response.length; i++) {
@@ -358,9 +358,6 @@ Swal.fire({
               var id=subs[i].id;
               var name=subs[i].name;
               var option = "<option value='"+id+"'>"+name+"</option>";
-              // console.log(id);
-              // console.log(name);
-              // console.log(option);
 
               $("#subs_cat").append(option);
               $("#sub").show();
