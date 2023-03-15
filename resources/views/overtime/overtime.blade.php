@@ -17,8 +17,8 @@
 
 
     {{--  start of others overtime --}}
-    @can('view-others-overtime')
-    @if (count($line_overtime) > 0)
+
+    {{-- @if (count($line_overtime) > 0) --}}
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-warning">Overtime Requests</h4>
@@ -42,7 +42,7 @@
 
                 <tbody>
                     <?php foreach ($line_overtime as $row) { ?>
-                    @if ($row->status != 2) 
+                    @if ($row->status != 2)
 
 
                     <tr>
@@ -122,8 +122,8 @@
                 </tbody>
             </table>
         </div>
-    @endif
-    @endcan
+    {{-- @endif --}}
+
     {{-- / --}}
 @endsection
 

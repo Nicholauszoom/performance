@@ -16,8 +16,14 @@ class ModuleSeeder extends Seeder
     {
         //
         $data = [
-            ['slug' => 'manage-access-control'], 
-            ['slug' => 'manage-payroll'],
+            ['slug' => 'Work Force Management'],
+            ['slug' => 'Payroll Management'],
+            ['slug' => 'Leave Management'],
+            ['slug' => 'Loan Management'],
+            ['slug' => 'Organization'],
+            ['slug' => 'Reports'],
+            ['slug' => 'Settings'],
+            ['slug' => 'Dashboard'],
         ];
 foreach ($data as $row) {
     SystemModule::updateOrCreate($row);
