@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('terminations', function (Blueprint $table) {
+        Schema::table('leaves', function (Blueprint $table) {
             //
-          //  $table->double('actual_salary');
+               //new fields
+               $table->string('position')->nullable();
+               $table->string('level1', 10)->nullable();
+               $table->string('level2', 10)->nullable();
+               $table->string('level3', 10)->nullable();
         });
     }
 
@@ -26,7 +30,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('terminations', function (Blueprint $table) {
+        Schema::table('leaves', function (Blueprint $table) {
             //
         });
     }
