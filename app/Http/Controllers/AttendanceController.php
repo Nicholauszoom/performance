@@ -344,22 +344,44 @@ class AttendanceController extends Controller
      }
   
    //  for fetching sub categories of leave
-      public function getDetails($id = 0)
+      public function getDetails($uid = 0)
       {
 
+        $par=$uid;
+
+
+        $raw=explode('|',$par);
+        $id=$raw[0];
+        $start=$raw[1];
+        $end=$raw[2];
+
+        if ($start==null || $end==null ) {
+          $total_days=0;
+        }
+        else
+        {
+          $days= SysHelpers::countWorkingDays($start,$end);
+          $holidays=SysHelpers::countHolidays($start,$end);
+          $total_days=$days-$holidays;
+        }
+
+     
+     
                 //For Gender 
         $gender=Auth::user()->gender;
         if($gender=="Male"){$gender=1; }else { $gender=2;  }
         // For Male Employees 
         if ($gender==1) {
-          $data = LeaveSubType::where('category_id', $id)->Where('sex',0)->get();
-          return response()->json($data);
+          $data['data'] = LeaveSubType::where('category_id', $id)->Where('sex',0)->get();
+          // return response()->json($data);
+          return json_encode($data);
         }
         // For Female Employees 
         else
         {
           $data = LeaveSubType::where('category_id', $id)->get(); 
-          return response()->json($data);
+          // return json_encode($data);
+              return response()->json(['data'=>$data,'days'=>$total_days]);
         }
 
         

@@ -32,6 +32,13 @@
     </div>
     {{-- id="applyLeave" --}}
     <div class="card-body">
+      
+   
+      <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
+        <code class="text-success">  <span id="remain" class="text-success"></span> </code>
+
+      </div>
+   
         <form  autocomplete="off" action="{{ url('flex/attendance/save_leave') }}"  method="post"  enctype="multipart/form-data">
           @csrf
             <!-- START -->
@@ -39,10 +46,10 @@
 
         
             <div class="form-group col-6">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Start</label>
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Start Date <span  class="text-danger">*</span></label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="has-feedback">
-                        <input type="date" name="start" class="form-control col-xs-12 " placeholder="Start Date"  required="" >
+                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required="" >
                         <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
                         </div>
                 <span class="text-danger"><?php// echo form_error("fname");?></span>
@@ -53,38 +60,37 @@
             <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}">
 
         <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Date to Finish
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"> End Date <span  class="text-danger">*</span>
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <div class="has-feedback">
-            <input type="date" required="" placeholder="End Date" name="end" class="form-control col-xs-12 " >
+            <input type="date" required="" id="end-date" placeholder="End Date" name="end" class="form-control col-xs-12 " >
             <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
           </div>
             <span class="text-danger"><?php// echo form_error("fname");?></span>
           </div>
         </div>
         <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave</label>
-                  <select class="form-control select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature">
-                      <option value=""> Leave Nature </option>
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave <span  class="text-danger">*</span></label>
+                  <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature">
+                    <option value=""></option>
                       <?php  $sex = Auth::user()->gender;
                       if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }
                       foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
-                     <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?></option> <?php  } ?>
+                     <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?> Leave</option> <?php  } ?>
                   </select>
       
         </div>
         {{-- @if($days<336) --}}
         <div class="col-6 form-group" id="sub" style="display:none">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category</label>
+          <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category <span  class="text-danger">*</span></label>
           <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
-            <option value="0" id="first">--Select Sub Nature --</option>
           </select>
         </div>
         {{-- @endif --}}
 
         <div class="form-group col-6">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address <span  class="text-danger">*</span>
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <input required="required" type="text" id="address" name="address" class="form-control col-md-7 col-xs-12">
@@ -92,7 +98,7 @@
           </div>
         </div>
         <div class="form-group col-6">
-          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile</label>
+          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile <span  class="text-danger">*</span></label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <input required="required" class="form-control col-md-7 col-xs-12" type="text" name="mobile">
             <span class="text-danger"><?php// echo form_error("mname");?></span>
@@ -108,7 +114,7 @@
             </div>
           </div>
         <div class="form-group col-12">
-          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave(Optional)
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave <span  class="text-danger">*</span>
           </label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
             <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
@@ -120,11 +126,50 @@
             <!-- END -->
             <div class="form-group py-2">
               <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
-                 <button  type="submit" class="btn btn-main float-end" >Apply Leave</button>
+                <button class="float-end btn btn-main" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
+               
               </div>
             </div>
 
           </div>
+
+          {{-- start of add approval modal --}}
+
+<div id="approval" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <button type="button" class="btn-close " data-bs-dismiss="modal">
+
+          </button>
+      </div>
+      <modal-body class="p-4">
+        <h6 class="text-center">Are you Sure ?</h6>
+        <div class="row ">
+          <div class="col-4 mx-auto">
+            <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
+          
+            <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
+              No
+          </button>
+          </div>
+       
+
+        </div>
+      </modal-body>
+      <modal-footer>
+  
+      </modal-footer>
+    
+       
+      </div>
+  </div>
+</div>
+
+{{-- end of add approval modal --}}
+
+
             </form>
     </div>
 </div>
@@ -135,7 +180,7 @@
     </div>
 
     <div class="card-body">
-        <p>Days Accrued: <code> {{ $totalAccrued .' Days' }}</code></p>
+        <p>Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</code></p>
 
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
@@ -246,6 +291,61 @@
     {{-- @include("app.includes.overtime_operations") --}}
 
     <script>
+function confirmSubmit() {
+
+Swal.fire({
+    title: 'Are You Sure That You Want to Submit This Leave Request ?',
+    // text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Approve it!'
+}).then((result) => {
+    if (result.isConfirmed) {
+        var terminationid = id;
+
+        $.ajax({
+            url: "{{ url('flex/attendance/approveLeave') }}/" + terminationid
+        })
+        .done(function(data) {
+            $('#resultfeedOvertime').fadeOut('fast', function() {
+                $('#resultfeedOvertime').fadeIn('fast').html(data);
+            });
+
+            $('#status' + id).fadeOut('fast', function() {
+                $('#status' + id).fadeIn('fast').html(
+                    '<div class="col-md-12"><span class="label label-warning">Approved</span></div>'
+                    );
+            });
+
+            // alert('Request Cancelled Successifully!! ...');
+
+            Swal.fire(
+                'Cancelled!',
+                'Leave Request Approved Successifully!!.',
+                'success'
+            )
+
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
+        })
+        .fail(function() {
+            Swal.fire(
+                'Failed!',
+                'Leave Request Cancellation Failed!! ....',
+                'success'
+            )
+
+            alert('Leave Request Cancellation Failed!! ...');
+        });
+    }
+});
+
+}
+
+
 function approveRequest(id) {
 
 Swal.fire({
@@ -298,34 +398,6 @@ Swal.fire({
     }
 });
 
-// if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
-
-//     var overtimeid = id;
-
-//     $.ajax({
-//             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
-//         })
-//         .done(function(data) {
-//             $('#resultfeedOvertime').fadeOut('fast', function() {
-//                 $('#resultfeedOvertime').fadeIn('fast').html(data);
-//             });
-
-//             $('#status' + id).fadeOut('fast', function() {
-//                 $('#status' + id).fadeIn('fast').html(
-//                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
-//                     );
-//             });
-
-//             alert('Request Cancelled Successifully!! ...');
-
-//             setTimeout(function() {
-//                 location.reload();
-//             }, 1000);
-//         })
-//         .fail(function() {
-//             alert('Overtime Cancellation Failed!! ...');
-//         });
-// }
 }
       
 
@@ -423,8 +495,11 @@ Swal.fire({
 
   $('#docNo').change(function(){
       var id = $(this).val();
+      const start = document.getElementById("start-date").value;
+      const end = document.getElementById("end-date").value;
+    var par= id+'|'+start+'|'+end;
       var url = '{{ route("getSubs", ":id") }}';
-      url = url.replace(':id', id);
+      url = url.replace(':id', par);
 
       if (id==1) {
         $("#attachment").hide(); 
@@ -438,14 +513,19 @@ Swal.fire({
           url: url,
           type: 'get',
           dataType: 'json',
+          
           success: function(response){
-             let subs=response;
 
-           
+            let days=response.days;
+             let subs=response.data;
+            var status ="<span>"+response.days+" Days</span>"
+            $("#remaining").empty(status);
+             $("#remaining").append(status);
+             $("#remaining").show()
              $("#sub").hide();
             
            
-            for (var i = 0; i < response.length; i++) {
+            for (var i = 0; i < response.data.length; i++) {
               
               var id=subs[i].id;
               var name=subs[i].name;
@@ -455,9 +535,9 @@ Swal.fire({
               $("#subs_cat").append(option);
               
               $("#sub").show(); 
-              
-              
+            
             }
+
         
           }
       });

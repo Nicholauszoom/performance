@@ -32,8 +32,7 @@
 
                                 <div class="row">
                                 <div class="col-6 col-md-3 mb-2">
-                                    <label class="col-form-label ">Overtime Category <span
-                                            class="text-danger">*</span> :</label>
+                                    <label class="col-form-label ">Overtime Category <span  class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
 
                                         <select class="form-control select_category select" name="category" required>
