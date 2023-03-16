@@ -96,7 +96,12 @@
 
 <div class=" mx-auto">
     <div class="row bg-white mx-auto mb-2" style="border-bottom: 8px solid #00204e !important; " >
-        <div class="col-4"></div>
+        <div class="col-4">
+            <a href="{{ route('flex.viewProfile', base64_encode($empID)) }}" class="btn btn-main btn-sm mt-2">
+                <i class="ph-note-pencil me-2"></i>
+                Update Biodata
+            </a>
+        </div>
         <div class="col-md-4 col-4">
                 <div class="row">
                 <div class="col-6 mx-auto">
