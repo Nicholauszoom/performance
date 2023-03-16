@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Salary Slip</title>
-    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
     <style>
         .headers {
             border-bottom: 2px solid rgb(9, 5, 64);
@@ -36,7 +36,7 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here"
+                                    <img src="{{ public_path('assets/images/logo-dif2.png') }}" alt="logo here"
                                         class="image-fluid"> <br>
 
                                 </div>
