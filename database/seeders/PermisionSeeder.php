@@ -211,7 +211,22 @@ class PermisionSeeder extends Seeder
                //dashboard
             ['slug' => 'view-dashboard','sys_module_id'=>8],
 
+
+            // For Performance
+            ['slug' => 'view-Performance','sys_module_id'=>9],
+            ['slug' => 'add-Performance','sys_module_id'=>9],
+            ['slug' => 'edit-Performance','sys_module_id'=>9], 
+            ['slug' => 'delete-Performance','sys_module_id'=>9],
+            ['slug' => 'view-Performance-matrix','sys_module_id'=>9],
+
+             //For Talent
+             ['slug' => 'view-Talent','sys_module_id'=>10],
+             ['slug' => 'add-Talent','sys_module_id'=>10],
+             ['slug' => 'edit-Talent','sys_module_id'=>10], 
+             ['slug' => 'delete-Talent','sys_module_id'=>10],
+             ['slug' => 'view-Talent-matrix','sys_module_id'=>10],
              // end manage-AccessControl permissions
+
         ];
 
         foreach ($data as $row) {

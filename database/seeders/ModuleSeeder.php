@@ -24,6 +24,8 @@ class ModuleSeeder extends Seeder
             ['slug' => 'Reports'],
             ['slug' => 'Settings'],
             ['slug' => 'Dashboard'],
+            ['slug' => 'Performance Management'],
+            ['slug' => 'Talent Management'],
         ];
 foreach ($data as $row) {
     SystemModule::updateOrCreate($row);
