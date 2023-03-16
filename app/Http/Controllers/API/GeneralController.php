@@ -243,8 +243,9 @@ class GeneralController extends Controller
 
 
 
-        $split_start = explode("  at  ", $start);
-        $split_finish = explode("  at  ", $finish);
+        $split_start = explode(" ", $start);
+        $split_finish = explode(" ", $finish);
+        
 
         $start_date = $split_start[0];
         $start_time = $split_start[1];
