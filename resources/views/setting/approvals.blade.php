@@ -52,9 +52,9 @@
                                     <a href="{{ route('flex.approval-levels', base64_encode($item->id)) }}" class="btn btn-main btn-sm" aria-label="Edit">
                                         <i class="ph-info"></i>
                                     </a>
-                                    <a href="{{ route('flex.deleteApproval', $item->id) }}" class="btn btn-danger btn-sm" >
+                                    {{-- <a href="{{ route('flex.deleteApproval', $item->id) }}" class="btn btn-danger btn-sm" >
                                         <i class="ph-trash"></i>
-                                    </a>
+                                    </a> --}}
                                 </td>
                             </tr>
                         @empty

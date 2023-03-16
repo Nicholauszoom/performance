@@ -343,6 +343,82 @@
                         </ul>
                     </li>
                 @endcan
+                
+                {{-- For Performance Management --}}
+                @can(' view-Performance')
+                <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-folder"></i>
+                        <span>Performance Management</span>
+                    </a>
+                    <ul
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                        <li class="nav-item">
+                            <a href="{{ route('flex.projects') }}"
+                                class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
+                                Projects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.tasks') }}"
+                                class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
+                                Adhoc Tasks
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.performance') }}"
+                                class="nav-link {{ request()->routeIs('flex.performance') ? 'active' : null }}">
+                                Performance Ratios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.performance-report') }}"
+                                class="nav-link {{ request()->routeIs('flex.performance-report') ? 'active' : null }} ">
+                                Performance Matrix
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endcan
+                {{-- / --}}
+
+                {{-- For Talent Management --}}
+                @can('view-Talent')
+                <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-presentation-chart"></i>
+                        <span>Talent Management</span>
+                    </a>
+                    <ul
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') || request()->routeIs('flex.talent-range') ? 'show' : null }}">
+                        <li class="nav-item">
+                            <a href="{{ route('flex.employee-profiles') }}"
+                                class="nav-link {{ request()->routeIs('flex.employee-profiles') ? 'active' : null }}">
+                                Employees Profiles
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.talent-range') }}"
+                                class="nav-link {{ request()->routeIs('flex.talent-range') ? 'active' : null }} ">
+                                Talent Ranges
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.talent-matrix') }}" class="nav-link ">
+                                Talent Matrix
+                            </a>
+                        </li>
+                        {{-- <li class="nav-item">
+                        <a href="{{ route('flex.performance') }}" class="nav-link ">
+                            Talent Settings
+                        </a>
+                    </li> --}}
+                    </ul>
+                </li>
+                 @endcan
+                {{-- / --}}
                 @can('view-organization')
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.department') || request()->routeIs('flex.costCenter') || request()->routeIs('flex.branch') || request()->routeIs('flex.position') || request()->routeIs('flex.contract') || request()->routeIs('flex.organization_level') || request()->routeIs('flex.organization_structure') || request()->routeIs('flex.accounting_coding') ? 'nav-item-expand nav-item-open' : null }}">
@@ -388,88 +464,6 @@
 
 
 
-                {{-- For Performance Management --}}
-                @can(' view-Performance')
-                <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                    <a href="#" class="nav-link">
-                        <i class="ph-folder"></i>
-                        <span>Performance Management</span>
-                    </a>
-                    <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                        <li class="nav-item">
-                            <a href="{{ route('flex.projects') }}"
-                                class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
-                                Projects
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.tasks') }}"
-                                class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
-                                Adhoc Tasks
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.performance') }}"
-                                class="nav-link {{ request()->routeIs('flex.performance') ? 'active' : null }}">
-                                Performance Ratios
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.performance-report') }}"
-                                class="nav-link {{ request()->routeIs('flex.performance-report') ? 'active' : null }} ">
-                                Performance Matrix
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                @endcan
-                
-
-                {{-- / --}}
-
-                {{-- For Talent Management --}}
-                @can('view-Talent')
-                <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') ? 'nav-item-expand nav-item-open' : null }}">
-                    <a href="#" class="nav-link">
-                        <i class="ph-presentation-chart"></i>
-                        <span>Talent Management</span>
-                    </a>
-                    <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') || request()->routeIs('flex.talent-range') ? 'show' : null }}">
-                        <li class="nav-item">
-                            <a href="{{ route('flex.employee-profiles') }}"
-                                class="nav-link {{ request()->routeIs('flex.employee-profiles') ? 'active' : null }}">
-                                Employees Profiles
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.talent-range') }}"
-                                class="nav-link {{ request()->routeIs('flex.talent-range') ? 'active' : null }} ">
-                                Talent Ranges
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item">
-                        <a href="{{ route('flex.talent-ratios') }}" class="nav-link {{ request()->routeIs('flex.talent-ratios') ? 'active' : null }} ">
-                            Ratio Configuration
-                        </a>
-                    </li> --}}
-                        <li class="nav-item">
-                            <a href="{{ route('flex.talent-matrix') }}" class="nav-link ">
-                                Talent Matrix
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item">
-                        <a href="{{ route('flex.performance') }}" class="nav-link ">
-                            Talent Settings
-                        </a>
-                    </li> --}}
-                    </ul>
-                </li>
-                 @endcan
-                {{-- / --}}
                 @can('view-report')
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.financial_reports') || request()->routeIs('flex.organisation_reports') ? 'nav-item-expand nav-item-open' : null }}">

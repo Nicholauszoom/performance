@@ -206,12 +206,7 @@
                             $('#resultfeedOvertime').fadeIn('fast').html(data);
                         });
 
-                        /*$('#status'+id).fadeOut('fast', function(){
-                            $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                            });
-                        $('#record'+id).fadeOut('fast', function(){
-                            $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                            });*/
+             
 
                         setTimeout(function() {
                             location.reload();
@@ -226,36 +221,6 @@
             });
 
 
-            // if (confirm("Are You Sure You Want to Approve This Overtime Request") == true) {
-
-            //         var overtimeid = id;
-
-            //         $.ajax({
-            //             url: "{{ url('flex/lineapproveOvertime') }}/" + overtimeid
-            //         })
-            //         .done(function(data) {
-
-            //             $('#resultfeedOvertime').fadeOut('fast', function() {
-            //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
-            //             });
-
-            //             /*$('#status'+id).fadeOut('fast', function(){
-            //                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-            //                 });
-            //             $('#record'+id).fadeOut('fast', function(){
-            //                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-            //                 });*/
-
-            //             setTimeout(function() {
-            //                 location.reload();
-            //             }, 2000);
-            //         })
-            //         .fail(function() {
-            //             // Basic initialization
-
-            //             alert('Overtime Approval Failed!! ...');
-            //         });
-            // }
         }
 
         function hrapproveOvertime(id) {
