@@ -7812,7 +7812,7 @@ class GeneralController extends Controller
         //$overtime_amount = $this->flexperformance_model->get_overtime($normalDays,$publicDays,$employeeID);
         $overtime_amount = $normal_days_overtime_amount + $public_overtime_amount;
 
-        if ($check_termination_date == false) {
+       // if ($check_termination_date == false) {
             $net_pay = 0;
             $take_home = 0;
             // $total_gross = 0;
@@ -7854,10 +7854,10 @@ class GeneralController extends Controller
             $termination->total_deductions = $total_deductions;
             $termination->save();
             // $pentionable_amount =$salaryEnrollment + $leavePay + $arrears + overtime_amount;
-        } else {
+        // } else {
 
-            dd('YES');
-        }
+        //     dd('YES');
+        // }
         return redirect('flex/termination')->with('status', $msg);
     }
 
