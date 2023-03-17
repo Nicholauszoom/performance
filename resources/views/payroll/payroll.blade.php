@@ -38,7 +38,7 @@
                                 <div class="col-md-12">
                                     <form autocomplete="off" id="initPayroll" method="POST">
                                         <div class="mb-3 row">
-                                            @if($pending_overtime != 0)
+                                            @if($pending_overtime == 0)
                                             <div class="col-7 row">
                                                 <label class="form-label col-md-3 text-center font-bold">
                                                     <h6>Payroll Month:</h6>
