@@ -2080,7 +2080,7 @@ dd($data['paye_terminated']);
 
        
 
-        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month);
        
         dd($data['new_employee']);
         

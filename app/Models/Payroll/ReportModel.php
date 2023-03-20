@@ -1512,9 +1512,11 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row + $row2;
     }
 
-    public function new_employee($date,$date2){
+    public function new_employee($date){
+        $calender = explode('-', $date);
+        $date2 = '%' . $calender[0] . '-' . $calender[1] . '%';
      //   $query = "SELECT count(id) as total from payroll_logs pl where pl.payroll_date = '".$date."' and pl.empID NOT IN (SELECT empID from payroll_logs where payroll_date = '".$date2."')";
-        $query = "SELECT count(id) as total from payroll_logs pl where pl.payroll_date = '".$date."'";
+        $query = "SELECT count(id) as total from financial_logs  where field_name = 'Add Employee' and created_at LIKE '".$date2."'";
 
 
         return  DB::select(DB::raw($query));
