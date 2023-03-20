@@ -1549,7 +1549,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     function terminated_salary($previous_payroll_month){
       $calender = explode('-', $previous_payroll_month);
       $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
-      $query = "SELECT SUM(salaryEnrollment) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
+      $query = "SELECT SUM(net_pay) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
       $row = DB::select(DB::raw($query));
 
       return $row[0]->amount;
