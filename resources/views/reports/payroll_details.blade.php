@@ -108,7 +108,7 @@
                                     $total_overtime = $total_overtime +$row->overtime;
                                     $total_house_rent = $total_house_rent + $row->house_rent;
                                     $total_others = $total_others + $row->other_payments ;
-                                    $total_taxs += $row->taxdue;
+                                    $total_taxs += round($row->taxdue,1);
 
                                     $total_pension = $total_pension + $row->pension_employer;
                                     $total_deduction += ($row->salary + $row->allowances)-$amount;
@@ -220,7 +220,7 @@
                                         $total_salary += $row2->salaryEnrollment;
                                         $total_others += $row2->leavePay + $row2->leaveAllowance;
                                         $total_taxable_amount += $row2->taxable;
-                                        $total_taxs += round($row2->paye,0);
+                                        $total_taxs += $row2->paye;
                                         //$total_netpay += ($row2->taxable -$row2->paye);
                                         $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
                                         $total_pension += $row2->pension_employee;
