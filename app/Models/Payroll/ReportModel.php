@@ -1554,6 +1554,8 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     }
 
+    
+
     public function s_overtime($date)
     {
 

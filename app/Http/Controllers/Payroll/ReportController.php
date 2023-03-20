@@ -2078,6 +2078,9 @@ dd($data['paye_terminated']);
 
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
+
+        $data['new_employee'] = $this->reports_model->new_employee($previous_payroll_month);
+
         if($data['terminated_employee'] > 0){
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
