@@ -2078,8 +2078,9 @@ dd($data['paye_terminated']);
 
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
+        dd($data['count_current_month'] - $data['count_previous_month'] );
 
-        $data['new_employee'] = $this->reports_model->new_employee($previous_payroll_month);
+        //$data['new_employee'] = $this->reports_model->new_employee($previous_payroll_month);
 
         if($data['terminated_employee'] > 0){
 
