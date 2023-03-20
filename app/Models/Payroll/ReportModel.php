@@ -1512,6 +1512,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $row + $row2;
     }
 
+    public function new_employee($date){
+        $query = "SELECT count(id) from payroll_logs pl where pl.payroll_date = '".$date."' and pl.empID NOT IN (SELECT empID from payroll_logs where payroll_date = '".$date2."')";
+   
+
+        return  DB::select(DB::raw($query));
+    }
+
     public function s_count1($date)
     {
 
