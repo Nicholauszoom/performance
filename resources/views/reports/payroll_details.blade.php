@@ -220,7 +220,7 @@
                                         $total_salary += $row2->salaryEnrollment;
                                         $total_others += $row2->leavePay + $row2->leaveAllowance;
                                         $total_taxable_amount += $row2->taxable;
-                                        $total_taxs += $row2->paye;
+                                        $total_taxs += round($row2->paye,0);
                                         //$total_netpay += ($row2->taxable -$row2->paye);
                                         $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
                                         $total_pension += $row2->pension_employee;
