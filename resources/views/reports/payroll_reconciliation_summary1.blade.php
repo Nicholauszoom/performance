@@ -138,7 +138,7 @@
                                                     <td class="text-end">
                                                         {{ number_format(0-($termination_salary), 2) }}
                                                     </td>
-                                                    <td class="text-end">{{ $count_previous_month - $count_current_month }}
+                                                    <td class="text-end">{{ $terminated_employee }}
                                                     </td>
                                                 </tr>
                                                 @php
