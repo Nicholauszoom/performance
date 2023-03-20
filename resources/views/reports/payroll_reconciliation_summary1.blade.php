@@ -203,7 +203,7 @@
                             @foreach ($total_allowances as $row)
                                 @php $i++;  @endphp
                                 @if ($row->current_amount - $row->previous_amount != 0)
-                                @if ($row->description != 'Add/Les Leave Pay' && $row->description != 'Add/Les Leave Allowance' )
+                                @if ($row->description == 'Add/Les Leave Pay' && $row->description == 'Add/Les Leave Allowance' )
                                     <tr style="border-bottom:2px solid rgb(67, 67, 73)">
                                         <td class="text-start">{{ '000' . $i + 4 }}</td>
                                         <td class="text-start">
