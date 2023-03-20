@@ -108,7 +108,7 @@
                                     $total_overtime = $total_overtime +$row->overtime;
                                     $total_house_rent = $total_house_rent + $row->house_rent;
                                     $total_others = $total_others + $row->other_payments ;
-                                    $total_taxs += round($row->taxdue,0);
+                                    $total_taxs += floor($row->taxdue,0);
 
                                     $total_pension = $total_pension + $row->pension_employer;
                                     $total_deduction += ($row->salary + $row->allowances)-$amount;
