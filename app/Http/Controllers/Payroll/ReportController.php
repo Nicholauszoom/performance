@@ -2188,7 +2188,7 @@ dd($data['paye_terminated']);
         //return $pdf->download('sam.pdf');
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
 
-        return $pdf->download('payroll_reconciliation_summary.pdf');
+        return $pdf->download('payroll_reconciliation_summary-'.$current_payroll_month.'.pdf');
         //return view('reports.payroll_reconciliation_summary1', $data);
 
         // return view('reports.samplepdf', $data);
@@ -3000,7 +3000,7 @@ EOD;
             return view('reports.payrolldetails_datatable', $data);
         else {
             $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('payrolldetails.pdf');
+            return $pdf->download('payrolldetails'.$$data['payroll_date'].'.pdf');
        }
 
         // include(app_path() . '/reports/temp_payroll.php');
