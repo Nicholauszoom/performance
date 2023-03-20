@@ -104,26 +104,27 @@
                             <td class="text-end">{{ $count_previous_month }}</td>
                         </tr>
                         @if ($count_current_month - $count_previous_month != 0)
-                            @if ($count_current_month > $count_previous_month)
+                            @if ($new_employee > 0)
                                 <tr style="border-bottom:2px solid rgb(67, 67, 73)">
                                     <td class="text-start">00002</td>
                                     <td class="text-start">Add New Employee</td>
                                     <td class="text-end">
                                         {{ number_format(0, 2) }}</td>
                                     <td class="text-end">
-                                        {{ number_format($total_current_basic - $total_previous_basic, 2) }}
+                                        {{ number_format($termination_salary, 2) }}
                                     </td>
                                     <td class="text-end">
-                                        {{ number_format($total_current_basic - $total_previous_basic, 2) }}
+                                        {{ number_format($termination_salary, 2) }}
                                     </td>
-                                    <td class="text-end">{{ $count_current_month - $count_previous_month }}</td>
+                                    <td class="text-end">{{ $termination_salary }}</td>
                                 </tr>
                                 @php
                                     $total_previous += 0;
-                                    $total_current += $total_current_basic - $total_previous_basic;
-                                    $total_amount += $total_current_basic - $total_previous_basic;
+                                    $total_current += $termination_salary;
+                                    $total_amount += $termination_salary;
                                 @endphp
-                                                @elseif($terminated_employee > 0)
+                                @endif
+                                 @if($terminated_employee > 0)
                                                 <tr style="border-bottom:2px solid rgb(67, 67, 73)">
                                                     <td class="text-start">00002</td>
                                                     <td class="text-start">Less Terminated Employee</td>
