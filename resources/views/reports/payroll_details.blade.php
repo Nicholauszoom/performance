@@ -260,7 +260,7 @@
 
                                     <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
 
-                                    <td class="text-end"><b><b>{{ number_format($total_pension, 0) }}</b></b></td>
+                                    <td class="text-end"><b><b>{{ number_format($total_pension, 1) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_loans, 0) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($others, 0) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_deduction, 0) }}</b></b></td>
