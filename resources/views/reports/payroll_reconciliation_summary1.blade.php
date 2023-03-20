@@ -223,7 +223,7 @@
                                     @php
                                         $total_previous += 0;
                                         $total_current += $row->current_amount;
-                                        $total_amount = $total_amount + $row->current_amount;
+                                        $total_amount += $row->current_amount;
 
                                     @endphp
                                     @else
@@ -246,7 +246,7 @@
                                     @php
                                         $total_previous += $row->previous_amount;
                                         $total_current += $row->current_amount;
-                                        $total_amount = $total_amount + $row->difference;
+                                        $total_amount += $row->difference;
 
                                     @endphp
 
