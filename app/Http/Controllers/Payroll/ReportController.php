@@ -3000,7 +3000,7 @@ EOD;
             return view('reports.payrolldetails_datatable', $data);
         else {
             $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('payrolldetails'.$$data['payroll_date'].'.pdf');
+            return $pdf->download('payrolldetails'.$data['payroll_date'].'.pdf');
        }
 
         // include(app_path() . '/reports/temp_payroll.php');
