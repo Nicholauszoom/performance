@@ -215,6 +215,29 @@
                                                 {{ $row->description }}
                                             @endif
                                         </td>
+                                        <td class="text-end">{{ number_format(0, 2) }}</td>
+                                        <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                        <td class="text-end"></td>
+                                    </tr>
+                                    @php
+                                        $total_previous += 0;
+                                        $total_current += $row->current_amount;
+                                        $total_amount = $total_amount + $row->current_amount;
+
+                                    @endphp
+                                    @else
+                                    <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                        <td class="text-start">{{ '000' . $i + 4 }}</td>
+                                        <td class="text-start">
+                                            @if ($row->description == 'Add/Les S-Overtime')
+                                                Add/Less Sunday Overtime Hours
+                                            @elseif($row->description == 'Add/Les N-Overtime')
+                                                Add/Less Normal Day Overtime Hours
+                                            @else
+                                                {{ $row->description }}
+                                            @endif
+                                        </td>
                                         <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
                                         <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
                                         <td class="text-end">{{ number_format($row->difference, 2) }}</td>
@@ -226,6 +249,7 @@
                                         $total_amount = $total_amount + $row->difference;
 
                                     @endphp
+
                                     @endif
                                 @endif
                             @endforeach
