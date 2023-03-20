@@ -111,17 +111,17 @@
                                     <td class="text-end">
                                         {{ number_format(0, 2) }}</td>
                                     <td class="text-end">
-                                        {{ number_format($termination_salary, 2) }}
+                                        {{ number_format($new_employee_salary, 2) }}
                                     </td>
                                     <td class="text-end">
-                                        {{ number_format($termination_salary, 2) }}
+                                        {{ number_format($new_employee_salary, 2) }}
                                     </td>
-                                    <td class="text-end">{{ $termination_salary }}</td>
+                                    <td class="text-end">{{ $new_employee }}</td>
                                 </tr>
                                 @php
                                     $total_previous += 0;
-                                    $total_current += $termination_salary;
-                                    $total_amount += $termination_salary;
+                                    $total_current += $new_employee_salary;
+                                    $total_amount += $new_employee_salary;
                                 @endphp
                                 @endif
                                  @if($terminated_employee > 0)
