@@ -150,7 +150,7 @@
                                     <td class="text-end">
                                         {{ number_format($row->salary + $row->allowances - $row->pension_employer, 0) }}
                                     </td>
-                                    <td class="text-end">{{ number_format(round($row->taxdue,0), 2) }}</td>
+                                    <td class="text-end">{{ number_format((int)$row->taxdue, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->loans, 0) }}</td>
