@@ -1997,7 +1997,7 @@ dd($data['paye_terminated']);
         } elseif ($count_previous_month > $count_current_month) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
-            dd($$data['employee_increase']);
+           
         }
 
         if ($current_increase['basic_increase'] > 0) {
