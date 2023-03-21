@@ -108,7 +108,7 @@
                                     $total_overtime = $total_overtime +$row->overtime;
                                     $total_house_rent = $total_house_rent + $row->house_rent;
                                     $total_others = $total_others + $row->other_payments ;
-                                    $total_taxs += (int)$row->taxdue;
+                                    $total_taxs += round($row->taxdue,0);
 
                                     $total_pension = $total_pension + $row->pension_employer;
                                     $total_deduction += ($row->salary + $row->allowances)-$amount;
@@ -150,7 +150,7 @@
                                     <td class="text-end">
                                         {{ number_format($row->salary + $row->allowances - $row->pension_employer, 0) }}
                                     </td>
-                                    <td class="text-end">{{ number_format((int)$row->taxdue, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->taxdue, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->loans, 0) }}</td>
