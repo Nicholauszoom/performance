@@ -167,6 +167,7 @@
 
                                 <?php } ?>
                                 @foreach ($termination as $row2)
+                                @if($row2->taxable != 0)
                                     <tr style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                         <td class="">{{ $row2->emp_id }}</td>
@@ -228,6 +229,7 @@
                                         // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
 
                                     @endphp
+                                    @endif
                                 @endforeach
                                 <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
 
@@ -258,7 +260,7 @@
 
                                     <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
 
-                                    <td class="text-end"><b><b>{{ number_format($total_pension, 0) }}</b></b></td>
+                                    <td class="text-end"><b><b>{{ number_format($total_pension, 1) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_loans, 0) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($others, 0) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_deduction, 0) }}</b></b></td>

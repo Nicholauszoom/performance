@@ -813,7 +813,7 @@
                 autoUpdateInput: false,
                 timePicker: true,
                 timePicker24Hour: true,
-                timePickerIncrement: 30,
+                timePickerIncrement: 1,
                 singleClasses: "picker_1",
                 locale: {
                     cancelLabel: 'Clear',
@@ -857,7 +857,7 @@
                 autoUpdateInput: false,
                 timePicker: true,
                 timePicker24Hour: true,
-                timePickerIncrement: 30,
+                timePickerIncrement: 1,
                 startDate: dateToday,
                 minDate: dateToday,
                 locale: {
@@ -903,7 +903,7 @@
                 autoUpdateInput: false,
                 timePicker: true,
                 timePicker24Hour: true,
-                timePickerIncrement: 30,
+                timePickerIncrement: 1,
                 startDate: dateToday,
                 minDate: dateToday,
                 locale: {
@@ -1620,7 +1620,7 @@ $('#docNo').change(function(){
                 autoUpdateInput: false,
                 timePicker: true,
                 timePicker24Hour: true,
-                timePickerIncrement: 30,
+                timePickerIncrement: 1,
                 singleClasses: "picker_1",
                 locale: {
                     cancelLabel: 'Clear',
@@ -1664,7 +1664,7 @@ $('#docNo').change(function(){
                 autoUpdateInput: false,
                 timePicker: true,
                 timePicker24Hour: true,
-                timePickerIncrement: 30,
+                timePickerIncrement: 1,
                 startDate: dateToday,
                 minDate: dateToday,
                 locale: {
@@ -1710,7 +1710,7 @@ $('#docNo').change(function(){
                 autoUpdateInput: false,
                 timePicker: true,
                 timePicker24Hour: true,
-                timePickerIncrement: 30,
+                timePickerIncrement: 1,
                 startDate: dateToday,
                 minDate: dateToday,
                 locale: {

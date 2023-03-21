@@ -55,7 +55,7 @@
                                             </div>
                                             @else
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <p class='alert alert-warning text-center'>Note! There is Pending Overtimes which Needs To be Confirmed Before Another Payroll is Run</p>
+                                            <p class='alert alert-warning text-center'>Note! There is Pending Overtimes  To be Confirmed</p>
                                         </div>
                                             @endif
 
