@@ -1902,21 +1902,21 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
             SELECT 'Add/Les S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(public_overtime_amount > 0,public_overtime_amount,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leaveAllowance > 0,leaveAllowance,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(houseAllowance > 0,houseAllowance,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
@@ -1930,14 +1930,14 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
             SELECT 'Add/Les  Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
@@ -1969,42 +1969,42 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
             SELECT 'Add/Les S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(public_overtime_amount > 0,public_overtime_amount,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leaveAllowance > 0,leaveAllowance,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(houseAllowance > 0,houseAllowance,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(tellerAllowance > 0,tellerAllowance,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les  Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
