@@ -46,17 +46,32 @@ class LeaveController extends Controller
     
 
     $id=auth()->user()->emp_id;
-
-    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
-
-    $sub_category=LeaveSubType::all();
-
+   
+    $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
     $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+  
+    $data = json_decode($active_leaves, true); // Decode the JSON data into an array
+
+    // Loop through each object in the array
+    foreach ($data as &$object) {
+        // Add the accrued days data to the current object
+    
+        
+        $object['accrued_days'] = $annualleaveBalance;
+    }
+    
+    // Encode the modified array as JSON and return it as the API response
+  //  return response()->json($data);
+    
+   
+    
+
     return response(
         [
-            'pending_leaves'=>$pending_leaves,
-            'active_leaves'=>$active_leaves,
-            'sub_category'=>$sub_category
+ 
+            'active_leaves'=>$data,
+           
+           
         ],200 );
 }
 
@@ -223,6 +238,10 @@ class LeaveController extends Controller
                     $leaves->nature = $request->nature;
                     // for annual leave
                     if ($request->nature==1) {
+
+
+
+                      
                       $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
     
                       // checking annual leave balance
@@ -580,4 +599,28 @@ class LeaveController extends Controller
     {
         //
     }
+    public function leave() {
+      $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
+
+      if(session('appr_leave')){
+        $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
+      }else{
+        $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
+      }
+      $data['leave_types'] =LeaveType::all();
+      $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+      $data['leaves'] =Leaves::get();
+
+
+      // For Working days
+      $d1 = new DateTime (Auth::user()->hire_date);
+      $d2 = new DateTime();
+      $interval = $d2->diff($d1);
+      $data['days']=$interval->days;
+      $data['title'] = 'Leave';
+      $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
+      $data['leave_type'] = $this->attendance_model->leave_type();
+      return view('app.leave', $data);
+
+   }
 }
