@@ -1893,19 +1893,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
            UNION
 
-            SELECT 'Add/Les N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
-
-            UNION
-
-            SELECT 'Add/Les S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(public_overtime_amount > 0,public_overtime_amount,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
-
-            UNION
+      
 
             SELECT 'Add/Les Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leaveAllowance > 0,leaveAllowance,0) as current_amount,
