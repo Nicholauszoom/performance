@@ -1868,7 +1868,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function employee_decrease($current_payroll_month, $previous_payroll_month){
         $calender = explode('-',$previous_payroll_month);
         $terminationDate = '%'.$calender[0].'-'.$calender[1].'%';
-        $query = "SELECT  'Less Terminated Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,tm.salaryEnrollment as salary
+        $query = "SELECT  'Less Terminated Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,tm.salaryEnrollment as salary,tm.net_pay as previous_amount,0 as current_amount
         from terminations tm,employee e where  e.emp_id = tm.employeeID and terminationDate LIKE'".$terminationDate."'";
 
         $row = DB::select(DB::raw($query));
