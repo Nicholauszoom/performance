@@ -1989,12 +1989,13 @@ dd($data['paye_terminated']);
         $current_increase = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
 
-
-
-        if ($count_current_month > $count_previous_month) {
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
+        if ($data['new_employee'] > 0) {
             //increase of employee
             $data['employee_increase'] = $this->reports_model->employee_increase($current_payroll_month, $previous_payroll_month);
-        } elseif ($count_previous_month > $count_current_month) {
+        } 
+        if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
            
