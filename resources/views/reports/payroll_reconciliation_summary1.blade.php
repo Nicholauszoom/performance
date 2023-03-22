@@ -223,8 +223,8 @@
                                     </tr>
                                     @php
                                         $total_previous += 0;
-                                        $total_current += $row->current_amount;
-                                        $total_amount += $row->current_amount;
+                                        $total_current += ($row->description == 'Add/Les S-Overtime')?($row->current_amount-236363.64):$row->current_amount;
+                                        $total_amount += ($row->description == 'Add/Les S-Overtime')?($row->current_amount-236363.64):$row->current_amount;
 
                                     @endphp
                                     @else
@@ -239,14 +239,14 @@
                                                 {{ $row->description }}
                                             @endif
                                         </td>
-                                        <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
-                                        <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format(($row->description == 'Add/Les S-Overtime')?($row->previous_amount-236363.64):$row->previous_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format(($row->description == 'Add/Les S-Overtime')?($row->current_amount-236363.64):$row->current_amount, 2) }}</td>
                                         <td class="text-end">{{ number_format($row->difference, 2) }}</td>
                                         <td class="text-end"></td>
                                     </tr>
                                     @php
-                                        $total_previous += $row->previous_amount;
-                                        $total_current += $row->current_amount;
+                                        $total_previous += ($row->description == 'Add/Les S-Overtime')?($row->previous_amount-236363.64):$row->previous_amount;
+                                        $total_current += ($row->description == 'Add/Les S-Overtime')?($row->current_amount-236363.64):$row->current_amount;
                                         $total_amount += $row->difference;
 
                                     @endphp
