@@ -421,6 +421,8 @@
                              @endphp
                             @foreach ($allowances as $row)
                             @if($row->description == $name)
+                            @if($row->description == "Add/Les S-Overtime")
+                            @if($row->previous_amount != $row->current_amount)
                                 @php
                                     $total_previous += $row->previous_amount;
                                     $total_current += $row->current_amount;
@@ -450,7 +452,40 @@
 
 
                                 </tr>
-                                @endif
+                            @endif
+                            @else 
+                            @php
+                            $total_previous += $row->previous_amount;
+                            $total_current += $row->current_amount;
+                            $total_amount += ($row->current_amount - $row->previous_amount);
+                             @endphp
+                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                            <td class="text-end">{{ $row->emp_id }}</td>
+
+
+
+                            <td class="text-end">{{ $row->fname }}</td>
+
+                            <td class="text-end">{{ $row->lname }}</td>
+
+
+                            <td class="text-end">{{ number_format($row->previous_amount, 2) }}</td>
+                            <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+
+                            <td class="text-end">
+                                {{ number_format($row->current_amount - $row->previous_amount, 2) }}</td>
+
+                            <td class="text-end">{{ $row->hire_date }}</td>
+
+                            <td class="text-end">{{ number_format(0, 0) }}
+                            </td>
+
+
+                        </tr>
+
+                            @endif
+                            @endif
                             @endforeach
                             <tr style="border-bottom:2px solid rgb(67, 67, 73)">
 
