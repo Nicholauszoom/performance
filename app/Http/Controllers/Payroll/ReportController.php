@@ -1989,15 +1989,16 @@ dd($data['paye_terminated']);
         $current_increase = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
 
-
-
-        if ($count_current_month > $count_previous_month) {
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
+        if ($data['new_employee'] > 0) {
             //increase of employee
             $data['employee_increase'] = $this->reports_model->employee_increase($current_payroll_month, $previous_payroll_month);
-        } elseif ($count_previous_month > $count_current_month) {
+        } 
+        if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
-            dd($$data['employee_increase']);
+           
         }
 
         if ($current_increase['basic_increase'] > 0) {
@@ -2100,15 +2101,19 @@ dd($data['paye_terminated']);
         $descriptions = [];
         foreach ($total_allowances as $row) {
             if ($row->allowance == "N-Overtime") {
+             
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
                 array_push($descriptions, $row->description);
+
             } elseif ($row->allowance == "S-Overtime") {
+                if($row->current_amount != $row->previous_amount ){
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
                 array_push($descriptions, $row->description);
+            }
             } elseif ($row->allowance == "House Rent") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
                 $row->current_amount += $allowance[0]->current_amount;
