@@ -2496,6 +2496,19 @@ as gross,
         });
         return true;
     }
+
+    public function getAssignedAllowance(){
+      $row = DB::table('employee_allowance')->select('*')->get();
+
+      return $row;
+    }
+
+    public function getAssignedDeduction(){
+        $row = DB::table('employee_allowance')->select('*')->get();
+  
+        return $row;
+      }
+
     public function getPayrollMonth1() {
         $query = "SELECT distinct payroll_date FROM temp_payroll_logs";
         return DB::select(DB::raw($query));

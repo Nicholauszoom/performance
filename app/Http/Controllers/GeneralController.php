@@ -5153,6 +5153,21 @@ class GeneralController extends Controller
         }
     }
 
+
+    public function submitInputs(Request $request){
+        $allowances = $this->payroll_model->getAssignedAllowance();
+        foreach($allowances as $row){
+            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+
+        }
+        $deductions = $this->payroll_model->getAssignedDeduction();
+        foreach($deductions as $row){
+         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+
+        }
+
+    }
+
     public function assign_allowance_group(Request $request)
     {
         $method = $request->method();

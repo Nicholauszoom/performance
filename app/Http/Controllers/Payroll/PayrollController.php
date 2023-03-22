@@ -52,7 +52,6 @@ class PayrollController extends Controller
                 $empID = auth()->user()->emp_id;
                 $today = date('Y-m-d');
 
-
                 $check = $this->payroll_model->payrollcheck($payroll_month);
                 if ($check == 0) {
                     $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
