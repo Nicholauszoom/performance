@@ -215,9 +215,10 @@
                                                 {{ $row->description }}
                                             @endif
                                         </td>
+                                        
                                         <td class="text-end">{{ number_format(0, 2) }}</td>
-                                        <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
-                                        <td class="text-end">{{ number_format($row->current_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format(($row->description == 'Add/Les S-Overtime')?($row->current_amount-236,363.64):$row->current_amount, 2) }}</td>
+                                        <td class="text-end">{{ number_format(($row->description == 'Add/Les S-Overtime')?($row->current_amount-236,363.64):$row->current_amount, 2) }}</td>
                                         <td class="text-end"></td>
                                     </tr>
                                     @php

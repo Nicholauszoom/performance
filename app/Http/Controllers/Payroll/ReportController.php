@@ -2101,17 +2101,19 @@ dd($data['paye_terminated']);
         $descriptions = [];
         foreach ($total_allowances as $row) {
             if ($row->allowance == "N-Overtime") {
-                if($row->current_amount != $row->previous_amount ){
+             
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
                 array_push($descriptions, $row->description);
-            }
+
             } elseif ($row->allowance == "S-Overtime") {
+                if($row->current_amount != $row->previous_amount ){
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
                 array_push($descriptions, $row->description);
+            }
             } elseif ($row->allowance == "House Rent") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
                 $row->current_amount += $allowance[0]->current_amount;
