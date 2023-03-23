@@ -6568,6 +6568,7 @@ class GeneralController extends Controller
             $data['title'] = "Add Employee";
             $data['parent'] = "Employee";
             $data["child"] = "Register Employee";
+            // return $data['ldrop'];
             return view('app.employeeAdd', $data);
         } else {
             echo 'Unauthorized Access';
@@ -6684,7 +6685,7 @@ class GeneralController extends Controller
 
                 $password = "ABC1234";
 
-                $emp_id = $this->flexperformance_model->get_lastPayrollNo() + 1;
+                $emp_id = $this->flexperformance_model->get_lastPayrollNo()+ 1;
 
                 $employee = array(
                     'fname' => $request->input("fname"),
@@ -6751,7 +6752,7 @@ class GeneralController extends Controller
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
-                    SysHelpers::FinancialLogs($id, 'Assign Salary', '0', $employee['salary '], 'Employee Registration');
+                    SysHelpers::FinancialLogs($id, 'Assign Salary', '0', $request->input("salary"), 'Employee Registration');
 
 
                     /*give 100 allocation*/
