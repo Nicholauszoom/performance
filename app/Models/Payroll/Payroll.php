@@ -2508,7 +2508,7 @@ as gross,
     public function getAssignedDeduction(){
 
 
-        $query = "SELECT ed.empID,ed.deduction,d.* from emp_deduction ef,deductions d where a.id = ea.allowance";
+        $query = "SELECT ed.empID,ed.deduction,d.* from emp_deductions ed,deductions d where a.id = ea.allowance";
         $row = DB::select(DB::raw($query));
 
         return $row;
