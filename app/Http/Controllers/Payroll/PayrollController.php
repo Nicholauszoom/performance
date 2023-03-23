@@ -34,7 +34,9 @@ class PayrollController extends Controller
     {
 
         if ($request->post()) {
-
+            
+            $pendingInputs = $this->payroll_model->checkInputs($request->payrolldate);
+if($pendingInputs > 0){
             $pendingPayroll = $this->payroll_model->pendingPayrollCheck();
 
             if ($pendingPayroll > 0) {
@@ -134,6 +136,9 @@ class PayrollController extends Controller
                 }
             }
         }
+    }else{
+        echo "<p class='alert alert-warning text-center'>FAILED! There is Pending Payroll Inputs Needs To be Submitted Before  Payroll is Run</p>";
+    }
     }
 
     public function financial_reports()
