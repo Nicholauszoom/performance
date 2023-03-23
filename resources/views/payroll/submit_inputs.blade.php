@@ -89,7 +89,7 @@
                 beforeSend: function () {
                     $('.request__spinner').show() },
                     complete: function(){
-
+                        $('.request__spinner').hidden() },
                     }
 
             }).done(function(data) {
@@ -98,7 +98,7 @@
                 });
                 setTimeout(function() {
                     location.reload();
-                }, 5000)
+                }, 1000)
             })
             .fail(function() {
                 // alert('Payroll Failed!! ...');

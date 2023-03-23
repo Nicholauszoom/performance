@@ -1449,8 +1449,7 @@
 
 
                             setTimeout(function() { // wait for 2 secs(2)
-                                location
-                                    .reload(); // then reload the div to clear the success notification
+                                location.reload(); // then reload the div to clear the success notification
                             }, 1500);
 
                         } else {
@@ -1458,8 +1457,7 @@
                             $('#delete').modal('hide');
                             notify('Payroll approval failed!', 'top', 'right', 'danger');
                             setTimeout(function() { // wait for 2 secs(2)
-                                location
-                                    .reload(); // then reload the div to clear the success notification
+                                location.reload(); // then reload the div to clear the success notification
                             }, 1500);
                         }
 
