@@ -436,9 +436,10 @@ class AttendanceController extends Controller
 
 
       public function savelLeave(Request $request) {
-     
+        $start = $request->start;
+        $end = $request->end;
 
-   
+   if($start < $end){
      
         //For Gender 
         $gender=Auth::user()->gender;
@@ -461,8 +462,7 @@ class AttendanceController extends Controller
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
 
         // For  Requested days
-        $start = $request->start;
-        $end = $request->end;
+   
         $holidays=SysHelpers::countHolidays($start,$end);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
        
@@ -934,6 +934,10 @@ class AttendanceController extends Controller
  
           
            }
+          }else{
+               $msg=" start date should be less that end date!";
+              return redirect()->back()->with('msg', $msg);
+          }
 
       }
 

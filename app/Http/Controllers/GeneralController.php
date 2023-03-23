@@ -5163,8 +5163,8 @@ class GeneralController extends Controller
 
         $submission  = $this->payroll_model->checkInputMonth($date);
 
-            if($month > 1){
-        if($submission > 1){
+            if($month < 1){
+        if($submission < 1){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             if($row->state == 1){
@@ -5177,6 +5177,7 @@ class GeneralController extends Controller
 
         }
         InputSubmission::create(['empID'=>auth()->user()->emp_id,'date'=>$date]);
+        echo "<p class='alert alert-danger text-center'>Inputs  submitted Successfuly</p>";
     }else{
         echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
     }
@@ -5216,7 +5217,7 @@ class GeneralController extends Controller
 
                 $allowanceName = DB::table('allowances')->select('name')->where('id', $request->input('allowance'))->limit(1)->first();
 
-                SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+                //SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
             }
 
             if ($result == true) {
@@ -6078,9 +6079,9 @@ class GeneralController extends Controller
                             $this->flexperformance_model->assign_allowance($data);
 
                             if (empty($allowanceName)) {
-                                SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', 'Allowance Not Found', 'Payroll Input');
+                             //   SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', 'Allowance Not Found', 'Payroll Input');
                             } else {
-                                SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
+                              //  SysHelpers::FinancialLogs($empID, 'Assigned allowance', '-', $allowanceName->name, 'Payroll Input');
                             }
                         }
                     }
@@ -6110,9 +6111,9 @@ class GeneralController extends Controller
                             $this->flexperformance_model->assign_deduction($data);
 
                             if (empty($deductionName)) {
-                                SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', 'Deduction Not Found', 'Payroll Input');
+                               // SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', 'Deduction Not Found', 'Payroll Input');
                             } else {
-                                SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', $deductionName->name, 'Payroll Input');
+                                //SysHelpers::FinancialLogs($empID, 'Assigned Deduction', '-', $deductionName->name, 'Payroll Input');
                             }
                         }
                     }
@@ -6749,6 +6750,8 @@ class GeneralController extends Controller
                 if ($recordID > 0) {
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
+
+                    SysHelpers::FinancialLogs($id, 'Assign Salary', '0', $employee['salary '], 'Employee Registration');
 
 
                     /*give 100 allocation*/
