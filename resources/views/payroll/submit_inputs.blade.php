@@ -112,72 +112,7 @@
         });
     </script>
 
-    <script>
-        function approvePayroll() {
 
-            // Advanced initialization
-            Swal.fire({
-                title: 'Are You Sure You Want To Approve This Payroll?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, approve it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-
-                    $('#hideList').hide();
-
-                    $.ajax({
-                        url: "{{route('payroll.runpayroll',$pendingPayroll_month)}}",
-                        async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    }
-                        success: function(data) {
-                            if (data.status == 'OK') {
-                                alert("Payroll Approved Successifully");
-
-                                // SEND EMAILS
-                                if (confirm(
-                                        "Payroll Approved Successifully!\n Do you want to send The Payslip as Email to All Employees??"
-                                    ) == true) {
-                                    $.ajax({
-                                        url: "{{route('payroll.send_payslips',['pendingPayroll_month'=>$pendingPayroll_month])}}",
-                                        success: function(data) {}
-                                    });
-                                    // SEND EMAILS
-                                }
-
-                                $('#payrollFeedback').fadeOut('fast', function() {
-                                    $('#payrollFeedback').fadeIn('fast').html(data.message);
-                                });
-                                setTimeout(function() { // wait for 2 secs(2)
-                                    location.reload(); // then reload the div to clear the success notification
-                                }, 1500);
-                            } else {
-                                alert(
-                                    "Payroll Approval FAILED, Try again,  If the Error persists Contact Your System Admin."
-                                    );
-
-                                $('#payrollFeedback').fadeOut('fast', function() {
-                                    $('#payrollFeedback').fadeIn('fast').html(data.message);
-                                });
-                            }
-
-                        }
-
-                    });
-
-
-
-                }
-            });
-
-        }
-    </script>
 
 
 
