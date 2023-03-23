@@ -268,7 +268,7 @@ class AttendanceController extends Controller
             $id = Auth::user()->emp_id;
             $data['deligate']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->count();
             $data['leave_types'] =LeaveType::all();
-            $data['employees'] =EMPL::where('line_manager','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
+            $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
             $data['leaves'] =Leaves::get();
 
 
