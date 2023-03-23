@@ -2514,7 +2514,7 @@ as gross,
         return $row;
       }
     public function checkPayrollMonth($date){
-        $calender = explode('-',$date);
+        $calender = explode('/',$date);
         $month = $calender[0].'-'.$calender[1];
         $query = "SELECT count(id) from payroll_month where payroll_date like '%".$month."%'";
 
@@ -2522,7 +2522,7 @@ as gross,
     }
 
     public function checkInputMonth($date){
-        $calender = explode('-',$date);
+        $calender = explode('/',$date);
         $month = $calender[0].'-'.$calender[1];
         $query = "SELECT count(id) from input_submissions where date like '%".$month."%'";
 
