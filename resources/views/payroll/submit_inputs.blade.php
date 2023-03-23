@@ -89,7 +89,7 @@
                 beforeSend: function () {
                     $('.request__spinner').show() },
                     complete: function(){
-                        $('.request__spinner').hidden() },
+                        }
                     }
 
             }).done(function(data) {
