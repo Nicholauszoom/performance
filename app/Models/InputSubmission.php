@@ -10,4 +10,5 @@ class InputSubmission extends Model
     use HasFactory;
 
     protected $table = "input_submittions";
+    protected $guarded = ['id'];
 }
