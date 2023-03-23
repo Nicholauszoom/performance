@@ -34,6 +34,7 @@ use App\Models\FinancialLogs;
 use App\Models\LeaveApproval;
 use App\Models\BehaviourRatio;
 use App\Models\EmployeeDetail;
+use App\Models\InputSubmission;
 
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSkills;
@@ -5158,6 +5159,7 @@ class GeneralController extends Controller
 
         $data['pending_payroll'] = 0;
         if($request->method() == 'POST'){
+
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             if($row->state == 1){
@@ -5169,6 +5171,7 @@ class GeneralController extends Controller
          SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input');
 
         }
+        InputSubmission::create(['empID'=>auth()->user()->emp_id,'date'=>$request->date]);
 
         echo "<p class='alert alert-info text-center'>Payroll Inputs Submited Successfull</p>";
                     
@@ -6669,7 +6672,7 @@ class GeneralController extends Controller
 
                 // $randomPassword = $this->password_generator(8);
 
-                $password = "@2023" . $request->fname;
+                $password = "ABC1234";
 
                 $emp_id = $this->flexperformance_model->get_lastPayrollNo() + 1;
 
