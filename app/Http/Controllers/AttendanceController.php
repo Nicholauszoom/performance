@@ -935,7 +935,7 @@ class AttendanceController extends Controller
           
            }
           }else{
-               $msg=" start date should be less that end date!";
+               $msg="Error!! start date should be less that end date!";
               return redirect()->back()->with('msg', $msg);
           }
 
