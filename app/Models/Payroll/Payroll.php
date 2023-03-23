@@ -2517,7 +2517,7 @@ as gross,
         $calender = explode('-',$date);
         
         $month = $calender[0].'-'.$calender[1];
-        $query = "SELECT count(id) from payroll_month where payroll_date like '%".$month."%'";
+        $query = "SELECT count(id) from payroll_months where payroll_date like '%".$month."%'";
 
         return DB::select(DB::raw($query));
     }
