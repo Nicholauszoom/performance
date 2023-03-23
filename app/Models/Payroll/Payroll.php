@@ -2498,7 +2498,7 @@ as gross,
     }
 
     public function getAssignedAllowance(){
-        $query = "SELECT ea.*,a.name,a.state from emp_allowance ea,allowances a where a.id = ea.allowance";
+        $query = "SELECT ea.*,a.name,a.state from emp_allowances ea,allowances a where a.id = ea.allowance";
         $row = DB::select(DB::raw($query));
     
   
