@@ -23,6 +23,7 @@
         $merital_status = $row->merital_status;
         $birthdate = explode('-', $row->birthdate);
         $hire_date = explode('-', $row->hire_date);
+        $contract_end = explode('-', $row->contract_end);
         $position = $row->pName;
         $ctype = $row->CONTRACT;
         $linemanager = $row->LINEMANAGER;
@@ -182,7 +183,11 @@
                             <td>{{ $pf_membership_no }}</td>
                         </tr>
                         <tr>
-                            <td>Member Since:</td>
+                            <td>Contract start:</td>
+                            <td>{{ $hire_date[2] . '-' . $hire_date[1] . '-' . $hire_date[0] }}</td>
+                        </tr>
+                        <tr>
+                            <td>Contract End:</td>
                             <td>{{ $hire_date[2] . '-' . $hire_date[1] . '-' . $hire_date[0] }}</td>
                         </tr>
                     </tbody>

@@ -2491,7 +2491,13 @@ as gross,
             DB::table('temp_payroll_logs')->delete();
             DB::table('temp_arrears')->delete();
             DB::table('payroll_months')->where('state', 1)->orWhere('state', 2)->delete();
-            //$query = " DELETE FROM payroll_months WHERE state = 1 || state = 2";
+
+            $query = "SELECT created_at from input_submissions order by date desc";
+            $row = DB::select(DB::raw($query));
+            $calender = explode('-',$row[0]->date);
+            $date = $calender[0].'-'.$calender[1];
+            DB::table('financial_logs')->where('created_at','like','%'.$date.'%')->where('input_screen','Payroll Input')->where('field_name','NOT LIKE','%vertime%')->delete();
+            DB::table('input_submissions')->where('id', $row[0]->id)->delete();
 
         });
         return true;
