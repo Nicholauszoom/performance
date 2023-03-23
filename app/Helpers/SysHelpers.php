@@ -53,8 +53,9 @@ class SysHelpers
      * @param Request $request
      * @return void
      */
-    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen)
-    {
+    public static function FinancialLogs($empID, $fieldName, $from, $to, $inputScreen,$created_at = null)
+    {   
+        if(empty($created_at)){
         FinancialLogs::create([
             'payrollno' => $empID,
             'changed_by' => Auth::user()->emp_id,
@@ -63,6 +64,18 @@ class SysHelpers
             'action_to' => $to,
             'input_screen' => $inputScreen
         ]);
+    }
+    else{
+        FinancialLogs::create([
+            'payrollno' => $empID,
+            'changed_by' => Auth::user()->emp_id,
+            'field_name' => $fieldName,
+            'action_from' => $from,
+            'action_to' => $to,
+            'input_screen' => $inputScreen,
+            'created_at' => $created_at
+        ]); 
+    }
     }
     public static function employeeData($empID)
     {

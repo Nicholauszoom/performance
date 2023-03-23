@@ -41,7 +41,7 @@
                                                 </label>
 
                                                 <div class="col-md-9">
-                                                    <input type="text" required placeholder="Payroll Month" name="payrolldate" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
+                                                    <input type="text" required placeholder="Payroll Month" name="date" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
                                                     <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
                                                 </div>
                                             </div>

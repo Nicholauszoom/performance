@@ -5159,22 +5159,31 @@ class GeneralController extends Controller
 
         $data['pending_payroll'] = 0;
         if($request->method() == 'POST'){
+        $month  = $this->payroll_model->checkPayrollMonth($request->date);
 
+        $submission  = $this->payroll_model->checkInputMonth($request->date);
+
+            if($month < 1){
+        if($submission < 1){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             if($row->state == 1){
-            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input');
+            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input',$request->date);
         }
         }
         $deductions = $this->payroll_model->getAssignedDeduction();
         foreach($deductions as $row){
-         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input');
+         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input',$request->date);
 
         }
         InputSubmission::create(['empID'=>auth()->user()->emp_id,'date'=>$request->date]);
-
-        echo "<p class='alert alert-info text-center'>Payroll Inputs Submited Successfull</p>";
-                    
+    }else{
+        echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
+    }
+        
+    }else{
+        echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
+    }        
     }else{
         return view('payroll.submit_inputs',$data);
     }

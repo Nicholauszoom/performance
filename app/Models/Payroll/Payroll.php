@@ -2508,11 +2508,26 @@ as gross,
     public function getAssignedDeduction(){
 
 
-        $query = "SELECT ed.empID,ed.deduction,d.* from emp_deductions ed,deductions d where a.id = ea.allowance";
+        $query = "SELECT ed.empID,ed.deduction,d.* from emp_deductions ed,deductions d where d.id = ed.deduction";
         $row = DB::select(DB::raw($query));
 
         return $row;
       }
+    public function checkPayrollMonth($date){
+        $calender = explode('-',$date);
+        $month = $calender[0].'-'.$calender[1];
+        $query = "SELECT count(id) from payroll_month where payroll_date like '%".$month."%'";
+
+        return DB::select(DB::raw($query));
+    }
+
+    public function checkInputMonth($date){
+        $calender = explode('-',$date);
+        $month = $calender[0].'-'.$calender[1];
+        $query = "SELECT count(id) from input_submissions where date like '%".$month."%'";
+
+        return DB::select(DB::raw($query));
+    }
 
     public function getPayrollMonth1() {
         $query = "SELECT distinct payroll_date FROM temp_payroll_logs";
