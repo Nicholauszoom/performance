@@ -101,7 +101,7 @@
         <div class="form-group col-6">
           <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile <span  class="text-danger">*</span></label>
           <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-            <input required="required" class="form-control col-md-7 col-xs-12" type="tel" pattern="" maxlength="10" name="mobile">
+            <input required="required" class="form-control col-md-7 col-xs-12" type="tel" maxlength="10" name="mobile">
             <span class="text-danger"><?php// echo form_error("mname");?></span>
           </div>
         </div>
