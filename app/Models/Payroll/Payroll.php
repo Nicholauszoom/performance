@@ -2492,7 +2492,7 @@ as gross,
             DB::table('temp_arrears')->delete();
             DB::table('payroll_months')->where('state', 1)->orWhere('state', 2)->delete();
 
-            $query = "SELECT created_at from input_submissions order by date desc";
+            $query = "SELECT created_at,id from input_submissions order by date desc";
             $row = DB::select(DB::raw($query));
             $calender = explode('-',$row[0]->created_at);
             $date = $calender[0].'-'.$calender[1];
