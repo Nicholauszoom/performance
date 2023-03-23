@@ -5156,27 +5156,27 @@ class GeneralController extends Controller
 
 
     public function submitInputs(Request $request){
-
+          $date = date("Y-m-d", strtotime($request->date));
         $data['pending_payroll'] = 0;
         if($request->method() == 'POST'){
-        $month  = $this->payroll_model->checkPayrollMonth($request->date);
+        $month  = $this->payroll_model->checkPayrollMonth($date);
 
-        $submission  = $this->payroll_model->checkInputMonth($request->date);
+        $submission  = $this->payroll_model->checkInputMonth($date);
 
             if($month < 1){
         if($submission < 1){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             if($row->state == 1){
-            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input',$request->date);
+            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input',$date);
         }
         }
         $deductions = $this->payroll_model->getAssignedDeduction();
         foreach($deductions as $row){
-         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input',$request->date);
+         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input',$date);
 
         }
-        InputSubmission::create(['empID'=>auth()->user()->emp_id,'date'=>$request->date]);
+        InputSubmission::create(['empID'=>auth()->user()->emp_id,'date'=>$date]);
     }else{
         echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
     }
