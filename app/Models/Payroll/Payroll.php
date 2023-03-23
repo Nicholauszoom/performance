@@ -2494,7 +2494,7 @@ as gross,
 
             $query = "SELECT created_at from input_submissions order by date desc";
             $row = DB::select(DB::raw($query));
-            $calender = explode('-',$row[0]->date);
+            $calender = explode('-',$row[0]->created_at);
             $date = $calender[0].'-'.$calender[1];
             DB::table('financial_logs')->where('created_at','like','%'.$date.'%')->where('input_screen','Payroll Input')->where('field_name','NOT LIKE','%vertime%')->delete();
             DB::table('input_submissions')->where('id', $row[0]->id)->delete();
