@@ -162,8 +162,11 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">Line Manager:</label>
-                            <select class="form-control select2_single select" id="linemanager" name="linemanager">
-                                <option selected disabled> Select Line manager </option>
+                            <select name="linemanager" id="linemanager" class="form-control select2_single select">
+                                <option selected disabled>Select line Manager</option>
+                                @foreach ($ldrop as $row)
+                                <option  value="{{ $row->empID}}"> {{ $row->empID}} - {{ $row->NAME }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -589,13 +592,13 @@
                             }
 
                             //populate linemanager
-                            $("#linemanager option").remove();
-                            $('#linemanager').append($('<option>', {
-                                value: '',
-                                text: 'Select Line Manager',
-                                selected: true,
-                                disabled: true
-                            }));
+                            // $("#linemanager option").remove();
+                            // $('#linemanager').append($('<option>', {
+                            //     value: '',
+                            //     text: 'Select Line Manager',
+                            //     selected: true,
+                            //     disabled: true
+                            // }));
 
                             $.each(output, function(detail, name) {
                                 $('#linemanager').append($('<option>', {
@@ -632,6 +635,7 @@
                 })
                 .done(function(data) {
                     new Noty({
+                        layout: 'top',
                         text: data.title+', and We have sent an email to '+ document.getElementById("email").value,
                         type: 'success'
                     }).show();
