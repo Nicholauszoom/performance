@@ -5155,6 +5155,9 @@ class GeneralController extends Controller
 
 
     public function submitInputs(Request $request){
+
+        $data['pending_payroll'] = 0;
+        if($request->method() == 'POST'){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
@@ -5165,6 +5168,10 @@ class GeneralController extends Controller
          SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
 
         }
+                    
+    }else{
+        return view('payroll.submit_inputs',$data);
+    }
 
     }
 
