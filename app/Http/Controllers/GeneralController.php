@@ -5164,7 +5164,7 @@ class GeneralController extends Controller
         $submission  = $this->payroll_model->checkInputMonth($date);
 
             if($month > 1){
-        if($submission < 1){
+        if($submission > 1){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             if($row->state == 1){
