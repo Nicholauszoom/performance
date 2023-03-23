@@ -98,7 +98,7 @@
                 });
                 setTimeout(function() {
                     location.reload();
-                }, 1000)
+                }, 5000)
             })
             .fail(function() {
                 // alert('Payroll Failed!! ...');
