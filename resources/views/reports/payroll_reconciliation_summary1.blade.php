@@ -235,7 +235,7 @@
                                                 Add/Less Sunday Overtime Hours
                                             @elseif($row->description == 'Add/Les N-Overtime')
                                                 Add/Less Normal Day Overtime Hours
-                                            @el   se
+                                            @else
                                                 {{ $row->description }}
                                             @endif
                                         </td>
