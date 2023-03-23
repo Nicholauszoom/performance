@@ -2515,6 +2515,7 @@ as gross,
       }
     public function checkPayrollMonth($date){
         $calender = explode('/',$date);
+        dd($calender);
         $month = $calender[0].'-'.$calender[1];
         $query = "SELECT count(id) from payroll_month where payroll_date like '%".$month."%'";
 
