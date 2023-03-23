@@ -5160,14 +5160,17 @@ class GeneralController extends Controller
         if($request->method() == 'POST'){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
-            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
-
+            if($row->state == 1){
+            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input');
+        }
         }
         $deductions = $this->payroll_model->getAssignedDeduction();
         foreach($deductions as $row){
-         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $allowanceName->name, '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input');
 
         }
+
+        echo "<p class='alert alert-info text-center'>Payroll Inputs Submited Successfull</p>";
                     
     }else{
         return view('payroll.submit_inputs',$data);

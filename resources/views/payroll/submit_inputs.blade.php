@@ -24,7 +24,7 @@
 
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-header">
-                            <h5 class="card-title">Payroll</h5>
+                            <h5 class="card-title">Payroll Inputs</h5>
                         </div>
 
                         <div class="card-body">
@@ -32,7 +32,7 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form autocomplete="off" id="initPayroll" method="POST">
+                                    <form autocomplete="off" id="submitInputs" method="POST">
                                         <div class="mb-3 row">
                                             @if($pending_payroll == 0)
                                             <div class="col-7 row">
@@ -47,7 +47,7 @@
                                             </div>
 
                                             <div class="col-3">
-                                                <button name="init" type="submit" class="btn btn-main">Change Payroll Period</button>
+                                                <button name="init" type="submit" class="btn btn-main">Submit</button>
                                             </div>
                                             @else
                                         <div class="d-flex justify-content-center align-items-center">
@@ -73,12 +73,12 @@
 
 @push('footer-script')
     <script type="text/javascript">
-        $('#initPayroll').submit(function(e) {
+        $('#submitInputs').submit(function(e) {
             e.preventDefault();
             $('#initPayroll').hide();
 
             $.ajax({
-                url: "{{route('payroll.initPayroll')}}",
+                url: "{{route('flex.submitInputs')}}",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 type: "post",
                 data: new FormData(this),

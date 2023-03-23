@@ -2498,14 +2498,19 @@ as gross,
     }
 
     public function getAssignedAllowance(){
-      $row = DB::table('employee_allowance')->select('*')->get();
-
-      return $row;
+        $query = "SELECT ea.*,a.name,a.state from emp_allowance ea,allowances a where a.id = ea.allowance";
+        $row = DB::select(DB::raw($query));
+    
+  
+        return $row;
     }
 
     public function getAssignedDeduction(){
-        $row = DB::table('employee_allowance')->select('*')->get();
-  
+
+
+        $query = "SELECT ed.empID,ed.deduction,d.* from emp_deduction ef,deductions d where a.id = ea.allowance";
+        $row = DB::select(DB::raw($query));
+
         return $row;
       }
 
