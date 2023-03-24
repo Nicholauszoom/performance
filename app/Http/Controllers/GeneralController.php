@@ -1791,7 +1791,7 @@ class GeneralController extends Controller
                 'level' => $level + 1,
 
             );
-            dd($data);
+          
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
                 $response_array['status'] = "OK";
