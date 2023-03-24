@@ -65,7 +65,7 @@ Route::middleware('auth:sanctum')->group( function () {
       //test Apply Leave
       Route::post('/save-leave',[LeaveController::class,'saveLeave']);
 
-
+      Route::get('/returnLeave',[LeaveController::class,'myLeaves']);
 
 
       Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');

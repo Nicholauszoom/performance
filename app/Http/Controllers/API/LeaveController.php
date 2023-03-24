@@ -8,6 +8,8 @@ use App\Models\Leaves;
 use App\Models\LeaveType;
 use App\Models\LeaveSubType;
 // use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Models\EMPL;
 use Illuminate\Http\Request;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
@@ -1192,6 +1194,37 @@ class LeaveController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+    public function myLeaves()
+    {
+          $data =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
+           $id = Auth::user()->emp_id;
+           $data['deligate']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->count();
+           $data['deligates']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->get();
+           $data['leave_types'] =LeaveType::all();
+           $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
+           $data['leaves'] =Leaves::get();
+           // For Working days
+           $d1 = new DateTime (Auth::user()->hire_date);
+           $d2 = new DateTime();
+           $interval = $d2->diff($d1);
+           $data['days']=$interval->days;
+           $data['title'] = 'Leave';
+           $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
+
+           // dd($data['leaveBalance']);
+           $data['leave_type'] = $this->attendance_model->leave_type();
+         
+
+           $data['parent'] = 'My Services';
+           $data['child'] = 'Leaves';
+           return response(
+            [
+     
+                'active_leaves'=>$data,
+               
+               
+            ],200 );
     }
 
     /**
