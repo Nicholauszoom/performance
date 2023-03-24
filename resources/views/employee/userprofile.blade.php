@@ -36,7 +36,7 @@
         $departmentID = $row->department;
         $nhif = $row->pf_membership_no;
         $photo = $row->photo;
-        $branch = $row->branch;
+        $branch = $row->branch_name;
         // $leave_days = $row->leave_days;
         $postal_address = $row->postal_address;
         $postal_city = $row->postal_city;
@@ -175,7 +175,7 @@
                         @if (session('mng_emp') || session('appr_paym') || session('mng_paym') || session('emp_id') == $empID)
                             <tr>
                                 <td>Salary:</td>
-                                <td>{{ $salary }}</td>
+                                <td>{{ number_format($salary,2) }}</td>
                             </tr>
                         @endif
                         <tr>
