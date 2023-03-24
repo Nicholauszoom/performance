@@ -61,7 +61,7 @@
             @php
             $l_name = ' ';
             if(!empty($row->line_manager)){
-             $mng = App\Models\Employee::find($row->line_manager);
+             $mng = App\Models\Employee::all()->where('emp_id',$row->line_manager)->first();
              $l_name = $mng->fname.' '.$mng->lname.' '.$mng->lname;
             }
        
