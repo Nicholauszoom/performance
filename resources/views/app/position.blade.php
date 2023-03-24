@@ -79,13 +79,7 @@
                                 </select>
                         </div>
                       </div>
-                      <div class="form-group col-6 mb-3">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Position Code</label>
-                        </label>
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                          <input type="text" maxlength="10" class="form-control col-md-7 col-xs-12" name="code" placeholder="Position Code"/>
-                        </div>
-                      </div>
+
                  
                       <div class="form-group col-6 mb-3">
                         <label class="control-label col-md-3  col-xs-6" >Department</label>
