@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);
       // For Saving Leaves
       Route::post('/apply-leave',[LeaveController::class,'store']);
-
+   
       // For Updating profile image
       Route::post('/update-image',[GeneralController::class,'updateImg']);
 
@@ -61,7 +61,9 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::prefix('flex')->controller(ReportController::class)->group(function (){
       Route::any('/reports/payslip','payslip')->name('flex.employee_payslip');
       });
-
+     
+      //test Apply Leave
+      Route::post('/save-leave',[LeaveController::class,'saveLeave']);
 
 
 
