@@ -61,7 +61,7 @@
                                             <select class="form-control select @error('department') is-invalid @enderror" id="docNo" name="emp_ID">
                                                 <option value=""> Select Employee </option>
                                                 @foreach ($employees as $depart)
-                                                <option value="{{ $depart->emp_id }}">{{ $depart->fname }} {{ $depart->mname }} {{ $depart->lname }}</option>
+                                                <option value="{{ $depart->emp_id }}">{{ $depart->emp_id }} - {{ $depart->fname }} {{ $depart->mname }} {{ $depart->lname }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

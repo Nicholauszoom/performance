@@ -45,7 +45,7 @@
                                     <option value=""> Select Employee </option>
                                     @if (!empty($employees))
                                         @foreach ($employees as $depart)
-                                            <option value="{{ $depart->emp_id }}">{{ $depart->fname }} {{ $depart->mname }}
+                                            <option value="{{ $depart->emp_id }}">{{ $depart->emp_id }} - {{ $depart->fname }} {{ $depart->mname }}
                                                 {{ $depart->lname }}</option>
                                         @endforeach
                                     @endif

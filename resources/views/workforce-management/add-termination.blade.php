@@ -49,7 +49,7 @@
                                         <select class="form-control select" name="employeeID" id="employeeID">
                                             <option selected disabled> Select Employee</option>
                                             @foreach ($employees as $employee)
-                                            <option value="{{ $employee->emp_id }}">{{ $employee->fname }} {{ $employee->mname }} {{ $employee->lname }}</option>
+                                            <option value="{{ $employee->emp_id }}">{{ $employee->emp_id }} - {{ $employee->fname }} {{ $employee->mname }} {{ $employee->lname }}</option>
                                             @endforeach
                                         </select>
 
