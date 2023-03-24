@@ -291,10 +291,10 @@ class ReportController extends Controller
         $total = $data['total'];
         $info = $data['info'];
 
-        if($reportformat == 1)
+        // if($reportformat == 1)
         include(app_path() . '/reports/heslb.php');
-        else
-        return view('reports/heslb', $data);
+        // else
+        // return view('reports/heslb', $data);
     }
 
     function get_payroll_temp_summary(Request $requst)
@@ -557,7 +557,7 @@ class ReportController extends Controller
             $title = $data['title'];
             include app_path() . '/reports/loan_report.php';
 
-            //  return view('app.reports/loan_report', $data);
+             return view('app.reports/loan_report', $data);
         }
     }
 
@@ -694,8 +694,8 @@ class ReportController extends Controller
                 $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
                 $data['payroll_date'] = $request->input("payrolldate");
 
-                $date = explode('-',$payroll_date);
-                $payroll_month = $date[0].'-'.$date[1];
+                $date = explode('-', $payroll_date);
+                $payroll_month = $date[0] . '-' . $date[1];
 
                 $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
                 $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
@@ -703,7 +703,10 @@ class ReportController extends Controller
                 //include(app_path() . '/reports/customleave_report.php');
                 // include app_path() . '/reports/payslip.php';
 
-                return view('payroll.payslip2', $data);
+                //return view('payroll.payslip2', $data);
+                $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
+
+                return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
         } else {
             // DATE MANIPULATION
@@ -900,6 +903,285 @@ class ReportController extends Controller
         }
     }
 
+    // public function payslip(Request $request)
+    // {
+    //     //dd($request->all());
+    //     $empID = $request->input("employee");
+
+    //     if ($empID != "Select Employee") {
+
+    //         // DATE MANIPULATION
+    //         $empID = $request->input("employee");
+    //         $start = $request->input("payrolldate");
+    //         $profile = $request->input("profile"); //For redirecting Purpose
+    //         $date_separate = explode("-", $start);
+
+    //         $mm = $date_separate[1];
+    //         $yyyy = $date_separate[0];
+    //         $dd = $date_separate[2];
+    //         $one_year_back = $date_separate[0] - 1;
+
+    //         $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+    //         $payroll_month_end = $yyyy . "-" . $mm . "-31";
+    //         $payroll_month = $yyyy . "-" . $mm;
+
+    //         $check = $this->reports_model->payslipcheck($payroll_month, $empID);
+
+    //         if ($check == 0) {
+    //             if ($profile == 0) {
+    //                 session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+    //                 return redirect('/flex/payroll/employee_payslip/');
+    //             } else {
+    //                 session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+    //                 return redirect('/flex/userprofile/?id=' . $empID);
+    //             }
+    //         } else {
+    //             $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
+    //             $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
+    //             $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
+    //             $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
+    //             $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
+    //             $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
+    //             $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
+    //             $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
+    //             $data['total_pensions'] = $this->reports_model->total_pensions($empID, $payroll_date);
+    //             $data['total_deductions'] = $this->reports_model->total_deductions($empID, $payroll_month);
+    //             $data['companyinfo'] = $this->reports_model->company_info();
+    //             $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+    //             $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
+    //             $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
+    //             $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+    //             $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
+    //             $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
+    //             $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
+
+    //             $slipinfo = $data['slipinfo'];
+    //             $leaves = $data['leaves'];
+    //             $annualLeaveSpent = $data['annualLeaveSpent'];
+    //             $allowances = $data['allowances'];
+    //             $deductions = $data['deductions'];
+    //             $loans = $data['loans'];
+    //             $salary_advance_loan = $data['salary_advance_loan'];
+    //             $total_allowances = $data['total_allowances'];
+    //             $total_pensions = $data['total_pensions'];
+    //             $total_deductions = $data['total_deductions'];
+    //             $companyinfo = $data['companyinfo'];
+    //             $arrears_paid = $data['arrears_paid'];
+    //             $arrears_paid_all = $data['arrears_paid_all'];
+    //             $arrears_all = $data['arrears_all'];
+    //             $arrears_paid = $data['arrears_paid'];
+    //             $paid_with_arrears = $data['paid_with_arrears'];
+    //             $paid_with_arrears_d = $data['paid_with_arrears_d'];
+    //             $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
+    //             $data['payroll_date'] = $request->input("payrolldate");
+
+    //             $date = explode('-',$payroll_date);
+    //             $payroll_month = $date[0].'-'.$date[1];
+
+    //             $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
+    //             $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
+
+    //             //include(app_path() . '/reports/customleave_report.php');
+    //             // include app_path() . '/reports/payslip.php';
+
+    //             return view('payroll.payslip2', $data);
+    //         }
+    //     } else {
+    //         // DATE MANIPULATION
+    //         $start = $request->input("payrolldate");
+    //         $date_separate = explode("-", $start);
+    //         $reportType = 1;  //Staff = 1, temporary = 2
+    //         $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+
+    //         $mm = $date_separate[1];
+    //         $yyyy = $date_separate[0];
+    //         $dd = $date_separate[2];
+    //         $one_year_back = $date_separate[0] - 1;
+
+    //         $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+    //         $payroll_month_end = $yyyy . "-" . $mm . "-31";
+    //         $payroll_month = $yyyy . "-" . $mm;
+
+    //         $check = $this->reports_model->payslipcheckAll($payroll_month);
+
+    //         if ($check == 0) {
+    //             session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+    //             return redirect('/flex/cipay/employee_payslip/');
+    //         } else {
+    //             /*print all*/
+    //             if ($reportType == 1) {
+    //                 $payroll_emp_ids = $this->reports_model->s_payrollLogEmpID($payroll_month);
+    //             } else {
+    //                 $payroll_emp_ids = $this->reports_model->v_payrollLogEmpID($payroll_month);
+    //             }
+    //             $data_all = [];
+    //             foreach ($payroll_emp_ids as $payroll_emp_id) {
+
+    //                 // if($payroll_emp_id->empID != 255001){
+    //                 $data['slipinfo'] = $this->reports_model->payslip_info($payroll_emp_id->empID, $payroll_month_end, $payroll_month);
+    //                 $data['leaves'] = $this->reports_model->leaves($payroll_emp_id->empID, $payroll_month_end);
+    //                 $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($payroll_emp_id->empID, $payroll_month_end);
+    //                 $data['allowances'] = $this->reports_model->allowances($payroll_emp_id->empID, $payroll_month);
+    //                 $data['deductions'] = $this->reports_model->deductions($payroll_emp_id->empID, $payroll_month);
+    //                 $data['loans'] = $this->reports_model->loans($payroll_emp_id->empID, $payroll_month);
+    //                 $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($payroll_emp_id->empID, $payroll_month);
+    //                 $data['total_allowances'] = $this->reports_model->total_allowances($payroll_emp_id->empID, $payroll_month);
+    //                 $data['total_pensions'] = $this->reports_model->total_pensions($payroll_emp_id->empID, $payroll_date);
+    //                 $data['total_deductions'] = $this->reports_model->total_deductions($payroll_emp_id->empID, $payroll_month);
+    //                 $data['companyinfo'] = $this->reports_model->company_info();
+    //                 $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($payroll_emp_id->empID, $payroll_date);
+    //                 $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($payroll_emp_id->empID, $payroll_date);
+    //                 $data['arrears_all'] = $this->reports_model->employeeArrearAll($payroll_emp_id->empID, $payroll_date);
+    //                 $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($payroll_emp_id->empID, $payroll_date);
+    //                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($payroll_emp_id->empID, $payroll_date);
+    //                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID, $payroll_date);
+    //                 $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
+    //                 $data_all['dat'][$payroll_emp_id->empID] = $data;
+
+    //                 $slipinfo = $data['slipinfo'];
+    //                 $leaves = $data['leaves'];
+    //                 $annualLeaveSpent = $data['annualLeaveSpent'];
+    //                 $allowances = $data['allowances'];
+    //                 $deductions = $data['deductions'];
+    //                 $loans = $data['loans'];
+    //                 $salary_advance_loan = $data['salary_advance_loan'];
+    //                 $total_allowances = $data['total_allowances'];
+    //                 $total_pensions = $data['total_pensions'];
+    //                 $total_deductions = $data['total_deductions'];
+    //                 $companyinfo = $data['companyinfo'];
+    //                 $arrears_paid = $data['arrears_paid'];
+    //                 $arrears_paid_all = $data['arrears_paid_all'];
+    //                 $arrears_all = $data['arrears_all'];
+    //                 $arrears_paid = $data['arrears_paid'];
+    //                 $paid_with_arrears = $data['paid_with_arrears'];
+    //                 $paid_with_arrears_d = $data['paid_with_arrears_d'];
+    //                 $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
+
+    //                 include app_path() . '/reports/payslip.php';
+    //                 // }
+    //             }
+
+    //             $data_all['emp_id'] = $payroll_emp_ids;
+
+    //             return view('app.reports/payslip_all', $data_all);
+    //         }
+    //     }
+    // }
+    
+
+    // function temp_payslip(Request $request)
+    // {
+
+    //     // DATE MANIPULATION
+    //     $empID = $request->input("employee");
+    //     $start = $request->input("payrolldate");
+    //     $profile = $request->input("profile"); //For redirecting Purpose
+    //     $date_separate = explode("-", $start);
+
+    //     $mm = $date_separate[1];
+    //     $yyyy = $date_separate[0];
+    //     $dd = $date_separate[2];
+    //     $one_year_back = $date_separate[0] - 1;
+
+    //     $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+    //     $payroll_month_end = $yyyy . "-" . $mm . "-31";
+    //     $payroll_month = $yyyy . "-" . $mm;
+
+    //     $check = $this->reports_model->temp_payslipcheck($payroll_month, $empID);
+
+    //     if ($check == 0) {
+    //         if ($profile == 0) {
+    //             session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+    //             return redirect('/flex/cipay/employee_payslip/');
+    //         } else {
+    //             session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+    //             return redirect('/flex/cipay/userprofile/?id=' . $empID);
+    //         }
+    //     } else {
+    //         $data['slipinfo'] = $this->reports_model->temp_payslip_info($empID, $payroll_month_end, $payroll_month);
+    //         $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
+    //         $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
+    //         $data['allowances'] = $this->reports_model->temp_allowances($empID, $payroll_month);
+    //         $data['deductions'] = $this->reports_model->temp_deductions($empID, $payroll_month);
+    //         $data['loans'] = $this->reports_model->temp_loans($empID, $payroll_month);
+    //         $data['salary_advance_loan'] = $this->reports_model->temp_loansPolicyAmount($empID, $payroll_month);
+    //         $data['total_allowances'] = $this->reports_model->temp_total_allowances($empID, $payroll_month);
+    //         $data['total_pensions'] = $this->reports_model->temp_total_pensions($empID, $payroll_date);
+    //         $data['total_deductions'] = $this->reports_model->temp_total_deductions($empID, $payroll_month);
+    //         $data['companyinfo'] = $this->reports_model->company_info();
+    //         $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+    //         $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
+    //         $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
+    //         $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+    //         $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
+    //         $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
+    //         $data['salary_advance_loan_remained'] = $this->reports_model->temp_loansAmountRemained($empID, $payroll_date);
+
+    //         $slipinfo = $data['slipinfo'];
+    //         $leaves = $data['leaves'];
+    //         $annualLeaveSpent = $data['annualLeaveSpent'];
+    //         $allowances = $data['allowances'];
+    //         $deductions = $data['deductions'];
+    //         $loans = $data['loans'];
+    //         $salary_advance_loan = $data['salary_advance_loan'];
+    //         $total_allowances = $data['total_allowances'];
+    //         $total_pensions = $data['total_pensions'];
+    //         $total_deductions = $data['total_deductions'];
+    //         $companyinfo = $data['companyinfo'];
+    //         $arrears_paid = $data['arrears_paid'];
+    //         $arrears_paid_all = $data['arrears_paid_all'];
+    //         $arrears_all = $data['arrears_all'];
+    //         $arrears_paid = $data['arrears_paid'];
+    //         $paid_with_arrears = $data['paid_with_arrears'];
+    //         $paid_with_arrears_d = $data['paid_with_arrears_d'];
+    //         $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
+
+    //         include app_path() . '/reports/payslip.php';
+    //         //  return view('app.reports/payslip', $data);
+
+    //     }
+    // }
+
+    // function backup_payslip(Request $request)
+    // {
+
+    //     if ($request->input('print')) {
+
+    //         // DATE MANIPULATION
+    //         $empID = $request->input("employee");
+    //         $start = $request->input("payrolldate");
+    //         $date_separate = explode("-", $start);
+
+    //         // exit($start);
+
+    //         $mm = $date_separate[1];
+    //         $yyyy = $date_separate[0];
+    //         $one_year_back = $date_separate[0] - 1;
+
+    //         $dates = $yyyy . "-" . $mm . "-01";
+    //         $datee = $yyyy . "-" . $mm . "-31";
+
+    //         $year_month = $yyyy . "-" . $mm;
+    //         $date_one_year_back = $one_year_back . "-" . $mm . "-01";
+
+    //         $check = $this->reports_model->payslipcheck($year_month, $empID);
+
+    //         if ($check == 0) {
+    //             exit("No Payroll Records Found For This Employee under This Month");
+    //             // session('note', "<p class='alert alert-warning text-center'>Sorry There is No Payroll or any Payment Informations to Appear in Your Salary Slip For the Year and Month Selected</font></p>");
+    //             // return redirect('/flex/cipay/employee/');
+    //         } else {
+    //             $data['slipinfo'] = $this->reports_model->payslip_info($empID, $datee, $year_month, $date_one_year_back);
+    //             $data['companyinfo'] = $this->reports_model->company_info();
+
+    //             $slipinfo = $data['slipinfo'];
+    //             $companyinfo = $data['companyinfo'];
+
+    //             include app_path() . '/reports/payslip_test.php';
+    //         }
+    //     }
+    // }
+
     function kpi(Request $request)
     {
         $empID = $request->input('empID');
@@ -918,7 +1200,16 @@ class ReportController extends Controller
         //  return view('app.reports/kpi', $data);
 
     }
+    function employee_pension(Request $request)
+    {
+        $id = $request->emp_id;
+        $data['employee_pension'] = $this->reports_model->employee_pension($id);
+        $data['years'] = $this->reports_model->get_pension_years($id);
 
+        $pdf = Pdf::loadView('reports.employee_pension', $data)->setPaper('a4', 'potrait');
+        return $pdf->download("employee_pension.pdf");
+    }
+    
     function attendance(Request $request)
     {
 
