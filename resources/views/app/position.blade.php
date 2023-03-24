@@ -86,13 +86,7 @@
                           <input type="text" maxlength="10" class="form-control col-md-7 col-xs-12" name="code" placeholder="Position Code"/>
                         </div>
                       </div>
-                      <div class="form-group col-6 mb-3">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Minimum Qualification</label>
-                        </label>
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                          <input type="text" class="form-control col-md-7 col-xs-12" name="qualification" placeholder="Minimum Qualification">
-                        </div>
-                      </div>
+                 
                       <div class="form-group col-6 mb-3">
                         <label class="control-label col-md-3  col-xs-6" >Department</label>
                         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -127,12 +121,7 @@
                         <div class="form-group col-8 mb-3">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">
                         </label>
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                           <label class="containercheckbox"> Need a Driving Licence (Tick if True)
-                           <input type="checkbox" name="driving_licence" value="1">
-                            <span class="checkmark"></span>
-                          </label>
-                        </div>
+                      
                       </div>  <br>
                       <!-- END -->
                       <div class="form-group col-4">
@@ -252,6 +241,7 @@
               $('#positionAddFeedBack').fadeOut('fast', function(){
                   $('#positionAddFeedBack').fadeIn('fast').html(data.message);
                 });
+                notify('Position added successfully!', 'top', 'right', 'success');
               setTimeout(function(){// wait for 2 secs(2)
                     location.reload(); // then reload the page.(3)
                 }, 2000);
