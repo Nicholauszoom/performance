@@ -177,7 +177,7 @@
 
                                     </div>
                                     <div class="col-md-1  d-none d-md-block col-12 ">
-                                    <a href="{{ asset('img/slide2.png') }}" class="btn btn-main" download>download APK  <i class="ph-dowload"></i></a>
+                                    <a href="{{ asset('img/slide2.png') }}" class="btn btn-main" download>APK<i class="ph-download"></i></a>
                                     </div>
 
 
