@@ -131,6 +131,7 @@
                 <tr>
                     <th>S/N</th>
                     <th>Date</th>
+                    <th>Line Manager</th>
                     <th>Total Overtime(in Hrs.)</th>
                     <th>Reason(Description)</th>
                     <th>Status</th>
@@ -146,6 +147,7 @@
                 ?>">
                     <td width="1px"><?php echo $row->SNo; ?></td>
                     <td><?php echo date('d-m-Y', strtotime($row->applicationDATE)); ?></td>
+                    <td>{{$row->line_manager}}</td>
                     <td>
                         <?php echo '<b>Duration: </b>' . $row->totoalHOURS . ' Hrs.<br><b>From: </b>' . $row->time_in . ' <b> To </b>' . $row->time_out; ?>
                     </td>
