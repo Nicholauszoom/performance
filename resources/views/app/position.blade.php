@@ -58,7 +58,7 @@
                   <div class="card-body">
                 <div id="positionAddFeedBack"></div>
 
-                    <form id="addPosition12" enctype="multipart/form-data" action="{{ route('flex.addPosition') }}"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="addPosition" enctype="multipart/form-data"  method="post"  data-parsley-validate class="form-horizontal form-label-left">
                        @csrf
                       <!-- START -->
                       <div class="row">
