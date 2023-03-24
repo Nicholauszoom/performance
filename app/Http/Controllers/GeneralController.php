@@ -5163,8 +5163,8 @@ class GeneralController extends Controller
 
         $submission  = $this->payroll_model->checkInputMonth($date);
 
-            if($month < 1){
-        if($submission < 1){
+            if($month > 1){
+        if($submission > 1){
         $allowances = $this->payroll_model->getAssignedAllowance();
         foreach($allowances as $row){
             if($row->state == 1){
@@ -8014,7 +8014,7 @@ class GeneralController extends Controller
 
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
-        $data['employee_salary'] = $employee_salary;
+        $data['employee_salary'] = ($employee_actual_salary == $employee_salary)? ($employee_salary*$dd/30):$employee_salary;
         return  json_encode($data);
     }
     // end of terminations functions

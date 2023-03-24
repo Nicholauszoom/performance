@@ -2492,15 +2492,27 @@ as gross,
             DB::table('temp_arrears')->delete();
             DB::table('payroll_months')->where('state', 1)->orWhere('state', 2)->delete();
 
-            $query = "SELECT created_at from input_submissions order by date desc";
+            $query = "SELECT created_at,id from input_submissions order by date desc";
             $row = DB::select(DB::raw($query));
-            $calender = explode('-',$row[0]->date);
+            $calender = explode('-',$row[0]->created_at);
             $date = $calender[0].'-'.$calender[1];
             DB::table('financial_logs')->where('created_at','like','%'.$date.'%')->where('input_screen','Payroll Input')->where('field_name','NOT LIKE','%vertime%')->delete();
             DB::table('input_submissions')->where('id', $row[0]->id)->delete();
 
         });
         return true;
+    }
+    public function checkInputs($date){
+        $calender = explode('/',$date);
+        $date = $calender[0].'-'.$calender[1];
+       // $query = "SELECT COUNT(id) as total from financial_logs where created_at like '%".$date."%' and input_screen ='Payroll Input' and field_name NOT LIKE '%vertime%'";
+
+        $query = "SELECT COUNT(id) as total from input_submissions where created_at like '%".$date."%'";
+
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->total;
+
     }
 
     public function getAssignedAllowance(){

@@ -1757,8 +1757,8 @@ function meals_deduction()
           ,e.salary) as salary
           from employee e where e.emp_id = " . $empID . "";
 
-
-            $salary = DB::select(DB::raw($query))[0]->salary;
+            $row = DB::select(DB::raw($query));
+            $salary = $row[0]->salary;
 
             return $salary;
     }
