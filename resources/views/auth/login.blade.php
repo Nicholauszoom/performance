@@ -67,7 +67,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="col-md-6  col-sm-11 col-11 mx-auto bg-white border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0">
+                                        class="col-md-5  col-sm-11 col-11 mx-auto bg-white border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0">
 
                                         <form action="{{ route('login') }}" method="POST" class="mb-4 py-4"
                                             autocomplete="off">
@@ -175,6 +175,9 @@
                                         </form>
                                         {{-- /login card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 --}}
 
+                                    </div>
+                                    <div class="col-md-1  d-none d-md-block col-12 ">
+                                    <a href="{{ asset('img/slide2.png') }}" class="btn btn-main" download>App-<i class="ph-download"></i></a>
                                     </div>
 
 

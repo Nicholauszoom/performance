@@ -1791,11 +1791,12 @@ class GeneralController extends Controller
                 'level' => $level + 1,
 
             );
-            dd($data);
+          
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
-                $response_array['status'] = "OK";
-                $response_array['message'] = "<p class='alert alert-success text-center'>Position Added Successifully!</p>";
+                return redirect()->back();
+                //$response_array['status'] = "OK";
+               // $response_array['message'] = "<p class='alert alert-success text-center'>Position Added Successifully!</p>";
             } else {
                 $response_array['status'] = "ERR";
                 $response_array['message'] = "<p class='alert alert-danger text-center'>FAILED: Position NOT Deleted!</p>";
