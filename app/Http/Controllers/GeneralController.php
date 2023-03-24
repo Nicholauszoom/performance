@@ -8014,7 +8014,7 @@ class GeneralController extends Controller
 
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
-        $data['employee_salary'] = $employee_salary*$dd/30;
+        $data['employee_salary'] = ($employee_actual_salary == $employee_salary)? ($employee_salary*$dd/30):$employee_salary;
         return  json_encode($data);
     }
     // end of terminations functions
