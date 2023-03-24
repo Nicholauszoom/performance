@@ -60,10 +60,10 @@
             </td>
             @php
             $l_name = ' ';
-            @if(!empty($row->line_manager))
+            if(!empty($row->line_manager)){
              $mng = App\Models\Employee::find($row->line_manager);
              $l_name = $mng->fname.' '.$mng->lname.' '.$mng->lname;
-            @endif
+            }
        
             @endphp
             <td> {{ $l_name }} </td>
