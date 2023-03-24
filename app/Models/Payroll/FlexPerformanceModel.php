@@ -343,7 +343,7 @@ class FlexPerformanceModel extends Model
 
 	function my_overtimes($id)
 	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,(SELECT CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) from employee le where le.emp_id = eo.linemanager limit 1 ) as line_manager,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,(SELECT CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) from employee le where  eo.linemanager = le.emp_id  limit 1 ) as line_manager_name,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, ROUND( (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60), 2) as totoalHOURS
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id and e.department = d.id and e.position = p.id and eo.empID = '".$id."' ORDER BY eo.id DESC";
 
