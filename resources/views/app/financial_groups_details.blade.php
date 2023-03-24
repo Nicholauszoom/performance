@@ -118,7 +118,7 @@
                                 foreach ($members as $row) { ?>
                                     <tr>
                                         <td width="1px"><?php echo $row->SNo; ?></td>
-                                        <td><?php echo $row->NAME; ?></td>
+                                        <td><?php echo $row->ID.' - '.$row->NAME; ?></td>
                                         <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
                                         <td hidden></td>
                                         <td hidden></td>

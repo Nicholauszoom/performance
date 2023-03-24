@@ -198,7 +198,7 @@
                                         <select required name="empID" class="select4_single form-control select" data-width="1%">
                                             <option> Select </option>
                                             <?php foreach ($employee as $row) { ?>
-                                            <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
+                                                <option value="<?php echo $row->empID; ?>"><?php echo $row->empID.' - '.$row->NAME; ?></option> <?php } ?>
                                          </select>
 
                                          <button  class="btn btn-main">ADD</button>

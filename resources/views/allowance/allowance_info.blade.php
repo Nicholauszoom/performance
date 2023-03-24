@@ -336,7 +336,7 @@
                                 <select required name="empID" class="select4_single form-control select" data-width="1%">
                                     <option selected disabled> select Employee</option>
                                     <?php foreach ($employee as $row) { ?>
-                                    <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
+                                        <option value="<?php echo $row->empID; ?>"><?php echo $row->empID.' - '.$row->NAME; ?></option>
                                     <?php } ?>
                                 </select>
 
