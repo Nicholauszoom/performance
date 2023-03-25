@@ -195,6 +195,12 @@ class FlexPerformanceModel extends Model
     	return true;
 	}
 
+	public function getCompanyInfo(){
+		$row = DB::table('company_info')->select('*')->result();
+
+		return $row;
+	}
+
 	function updateCompanyInfo($data,$id)
 	{
 
