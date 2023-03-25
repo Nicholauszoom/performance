@@ -27,25 +27,25 @@
 
                 <div class="border rounded-0 p-3 mb-3">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                 
                         <li class="nav-item" role="presentation">
-                            <a href="#overtimeTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
+                            <a href="#payrollReportTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
+                                role="tab" tabindex="-1">
+                                <i class="ph-list me-2 "></i>
+                                List
+                            </a>
+                        </li>
+                  
+                        <li class="nav-item" role="presentation">
+                            <a href="#overtimeTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
                                 role="tab" tabindex="-1">
                                 <i class="ph-list me-2"></i>
-                                Overtime
+                                Add Info
                             </a>
                         </li>
        
 
                         {{-- start of payroll tab link --}}
-                        <li class="nav-item" role="presentation">
-                            <a href="#payrollReportTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2 "></i>
-                                Payroll
-                            </a>
-                        </li>
-                  
+                   
                     </ul>
 
                     <div class="tab-content" id="myTabContent">
@@ -100,32 +100,74 @@
                                         <?php //echo $this->session->flashdata("note");
                                         ?>
                                         <div id="resultfeedOvertime"></div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Username</label>
-                                            <div class="form-control-feedback form-control-feedback-start">
-                                                <input type="text" name="username" class="form-control"
-                                                    placeholder="JohnDoe">
-                                                <div class="form-control-feedback-icon">
-                                                    <i class="ph-user-circle text-muted"></i>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Username</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="username" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Username</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="username" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        @error('username')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <div class="form-control-feedback form-control-feedback-start">
-                                                <input type="text" name="email" class="form-control"
-                                                    placeholder="john@doe.com">
-                                                <div class="form-control-feedback-icon">
-                                                    <i class="ph-at text-muted"></i>
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Username</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="username" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Username</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="username" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        @error('email')
-                                            <p class="text-danger">{{ $message }}</p>
-                                        @enderror
+                                            <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Username</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="username" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Username</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="username" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
+
                                        
                                     </div>
                                 </div>

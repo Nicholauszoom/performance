@@ -576,7 +576,7 @@ class GeneralController extends Controller
                     echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Added. Please Try Again</p>";
                 }
             }else{
-                $data = $this->flexperformance_model->getCompanyInfo();
+                $data['data'] = $this->flexperformance_model->getCompanyInfo();
 
                 return view('app.company_info',$data);
 
