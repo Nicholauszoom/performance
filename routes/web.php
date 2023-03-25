@@ -408,6 +408,8 @@ Route::middleware('auth')->group(function () {
     // start of  loans access permission routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
         
+        Route::any('/companyInfo','companyInfo')->name('flex.companyInfo');
+        Route::any('/updatecompanyInfo','updatecompanyInfo')->name('flex.updatecompanyInfo');
         Route::any('/submitInputs','submitInputs')->name('flex.submitInputs');
         Route::any('/my-loans','myLoans')->name('flex.my-loans');
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
