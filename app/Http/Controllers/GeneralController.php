@@ -556,6 +556,64 @@ class GeneralController extends Controller
 
     }
 
+    public function CompanyInfo(Request $request)
+    {
+        if ($request->method() == "POST") {
+
+            $data = array(
+                'name' => $request->input('name'),
+                //'department_id' => $request->input('department_id'),
+                'street' => $request->input('street'),
+                'region' => $request->input('region'),
+                'code' => "0",
+                'country' => $request->input('country'),
+            );
+            $result = $this->flexperformance_model->addCompanyInfo($data);
+                if ($result == true) {
+                    //return redirect()->back();
+              echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Added. Please Try Again</p>";
+                }
+            }else{
+                $data = $this->flexperformance_model->getCompanyInfo();
+
+                return view('app.compay_info',$data);
+
+            }
+          
+    }
+
+
+    public function UpdateCompanyInfo($id,Request $request)
+    {
+        if ($request->method() == "PUT") {
+
+            $data = array(
+                'name' => $request->input('name'),
+                //'department_id' => $request->input('department_id'),
+                'street' => $request->input('street'),
+                'region' => $request->input('region'),
+                'code' => "0",
+                'country' => $request->input('country'),
+            );
+            $result = $this->flexperformance_model->updateCompanyInfo($data,$id);
+                if ($result == true) {
+                    //return redirect()->back();
+              echo "<p class='alert alert-success text-center'>Branch Updated Successifully!</p>";
+                } else {
+                    echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Updated. Please Try Again</p>";
+                }
+            }else{
+                $data['data'] = $this->flexperformance_model->getCompanyInfoById($id);
+                $data['id'] = $id;
+
+                return view('app.compay_info',$data);
+
+            }
+          
+    }
+
     public function addCompanyBranch(Request $request)
     {
         if ($request->method() == "POST") {
