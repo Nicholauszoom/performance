@@ -156,7 +156,9 @@ class AuthController extends Controller
     }
     public function dateDiffCalculate(){
         $from = $this->password_age(Auth::user()->emp_id);
-
+        if($from == '0'){
+            return '0';
+        }
         $from = date_create($from);
 
         $today=date_create(date('Y-m-d'));
@@ -173,7 +175,14 @@ class AuthController extends Controller
             ->limit(1)
             ->orderBy('id', 'desc')
             ->first();
-
+       if($query != null){
+           //dd($query->time);
             return $query->time;
+
+       }
+         else{
+              return '0';
+         }
+           
 	}
 }

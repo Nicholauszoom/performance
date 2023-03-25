@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LeaveController;
 use App\Http\Controllers\API\GeneralController;
-use App\Http\Controllers\Payroll\ReportController;
+use App\Http\Controllers\API\ReportController;
 use App\Http\Controllers\API\PasswordController;
 
 
@@ -61,13 +61,19 @@ Route::middleware('auth:sanctum')->group( function () {
       Route::prefix('flex')->controller(ReportController::class)->group(function (){
       Route::any('/reports/payslip','payslip')->name('flex.employee_payslip');
       });
-     
+      Route::prefix('flex')->controller(ReportController::class)->group(function (){
+            Route::any('/reports/heslb','heslb')->name('flex.emmployee_loanreport');
+            });
+
+      
       //test Apply Leave
       Route::post('/save-leave',[LeaveController::class,'saveLeave']);
 
+      Route::get('/returnLeave',[LeaveController::class,'myLeaves']);
 
-
-
+      Route::prefix('flex')->controller(ReportController::class)->group(function (){
+            Route::any('/reports/employee_pension','employee_pension')->name('flex.e');
+            });
       Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 });
 

@@ -951,7 +951,7 @@ class AttendanceController extends Controller
         $approver=Auth()->user()->emp_id;
         $employee=Auth()->user()->position;
 
-        $position=Position::where('id',$employee)->first();
+        $poFition=Position::where('id',$employee)->first();
 
 
         // chacking level 1
