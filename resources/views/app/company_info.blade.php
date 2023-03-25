@@ -64,14 +64,24 @@
                                         <thead>
                                             <tr>
                                                 <th>S/N</th>
-                                                <th>Payroll Month</th>
-                                                <th>Status</th>
-                                                {{-- <th>Mail Status</th> --}}
+                                                <th>Company Name</th>
+                                                <th>Email</th>
+                                                <th>TIN</th>
                                                 <th>Option</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
+                                            @if(!empty($data))
+                                            @foreach($data as $row)
+                                             <tr>
+                                                <td>{{$row->cname}}</td>
+                                                <td>{{$row->email}}</td>
+                                                <td>{{$row->tin}}</td>
+                                                <td>update and edit</td>
+                                             </tr>
+                                        @endforeach
+                                        @endif
                                            
                                         </tbody>
                                     </table>
@@ -90,6 +100,32 @@
                                         <?php //echo $this->session->flashdata("note");
                                         ?>
                                         <div id="resultfeedOvertime"></div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Username</label>
+                                            <div class="form-control-feedback form-control-feedback-start">
+                                                <input type="text" name="username" class="form-control"
+                                                    placeholder="JohnDoe">
+                                                <div class="form-control-feedback-icon">
+                                                    <i class="ph-user-circle text-muted"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @error('username')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <div class="form-control-feedback form-control-feedback-start">
+                                                <input type="text" name="email" class="form-control"
+                                                    placeholder="john@doe.com">
+                                                <div class="form-control-feedback-icon">
+                                                    <i class="ph-at text-muted"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @error('email')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                        
                                     </div>
                                 </div>
@@ -123,487 +159,5 @@
 
 
 
-    <script type="text/javascript">
-        function resolveImprest(id) {
-            if (confirm("Are You Sure You Want To Resolve This Imprest? (Action is NOT REVERSIBLE)") == true) {
-                var id = id;
-                // $('#recordRequirement'+id).show();
-                $.ajax({
-                    url: "<?php echo url('flex/resolveImprest'); ?>/" + id,
-                    success: function(data) {
-                        alert("Sussess!");
-                        $('#resultfeedImprest').fadeOut('fast', function() {
-                            $('#resultfeedImprest').fadeIn('fast').html(data);
-                        });
-
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 1000);
-
-                    }
-
-                });
-            }
-        }
-
-        function confirmOvertime(id) {
-            if (confirm("Are You Sure You Want To Confirm This Overtime?") == true) {
-                var id = id;
-                // $('#recordRequirement'+id).show();
-                $.ajax({
-                    url: "<?php echo url('flex/confirmOvertimePayment'); ?>/" + id,
-                    async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                    success: function(data) {
-                        alert("Sussess!");
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 2000);
-
-                    }
-
-                });
-            }
-        }
-
-        function unconfirmOvertime(id) {
-            if (confirm("Are You Sure You Want To Unconfirm This Overtime?") == true) {
-                var id = id;
-                // $('#recordRequirement'+id).show();
-                $.ajax({
-                    url: "<?php echo url('flex/unconfirmOvertimePayment'); ?>/" + id,
-                    async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                    success: function(data) {
-                        alert("Sussess!");
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 2000);
-
-                    }
-
-                });
-            }
-        }
-
-
-        function recommendArrearsPayment(id) {
-            if (confirm("Are You Sure You Want To Confirm this Payment?") == true) {
-                var id = id;
-                // $('#recordRequirement'+id).show();
-                $.ajax({
-                    url: "<?php echo url('flex/payroll/recommendArrearsPayment'); ?>/" + id,
-                    success: function(data) {
-                        alert("Sussess!");
-                        $('#resultfeedArrears').fadeOut('fast', function() {
-                            $('#resultfeedArrears').fadeIn('fast').html(data);
-                        });
-
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 1500);
-
-                    }
-
-                });
-            }
-        }
-
-
-        jQuery(document).ready(function($) {
-
-            $('#policy').change(function() {
-                $("#policy option:selected").each(function() {
-                    var value = $(this).val();
-                    if (value == "1") {
-                        $("#percentf").attr("disabled", "disabled");
-                        $("#days").attr("disabled", "disabled");
-
-
-                    } else if (value == "2") {
-                        $("#days").attr("disabled", "disabled");
-                        $("#percentf").removeAttr("disabled");
-                    } else if (value == "3") {
-                        $("#percentf").attr("disabled", "disabled");
-                        $("#days").removeAttr("disabled");
-                    }
-                });
-            });
-        });
-    </script>
-
-    <script>
-        function confirmArrears(id) {
-            if (confirm("Are You Sure You Want To Confirm This Arrear?") == true) {
-                var id = id;
-                // $('#recordRequirement'+id).show();
-                $.ajax({
-
-                    url: "<?php echo url('flex/payroll/confirmArrearsPayment'); ?>/" + id,
-                    success: function(data) {
-                        alert("Sussess!");
-                        $('#resultfeedArrears').fadeOut('fast', function() {
-                            $('#resultfeedArrears').fadeIn('fast').html(data);
-                        });
-
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 2000);
-
-                    }
-
-                });
-            }
-        }
-
-        function cancelArrearsPayment(id) {
-            if (confirm("Are You Sure You Want To Cancel this Payment?") == true) {
-                var id = id;
-                // $('#recordRequirement'+id).show();
-                $.ajax({
-                    url: "<?php echo url('flex/payroll/cancelArrearsPayment'); ?>/" + id,
-                    success: function(data) {
-                        alert("Sussess!");
-                        $('#resultfeedArrears').fadeOut('fast', function() {
-                            $('#resultfeedArrears').fadeIn('fast').html(data);
-                        });
-
-                        setTimeout(function() { // wait for 5 secs(2)
-                            location.reload(); // then reload the page.(3)
-                        }, 1500);
-
-                    }
-
-                });
-            }
-        }
-
-        function approvePayroll() {
-
-            const message = "Are you sure you want to approve this payroll?";
-            const message1 = "Send payslip as email to employees?";
-
-            $('#delete').modal('show');
-            $('#delete').find('.modal-body #message').text(message);
-
-            $("#yes_delete").click(function() {
-                $('#hideList').hide();
-                $.ajax({
-                    url: "<?php echo url('flex/payroll/runpayroll'); ?>/<?php echo $pendingPayroll_month; ?>",
-                    async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                    success: function(data) {
-                        var data = JSON.parse(data);
-                        if (data.status == 'OK') {
-
-                            $('#delete').modal('hide');
-                            new Noty({
-                                text: 'Payroll approved successfully!',
-                                type: 'success'
-                            }).show();
-
-
-
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
-
-                        } else {
-
-                            $('#delete').modal('hide');
-                            notify('Payroll approval failed!', 'top', 'right', 'danger');
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location.reload(); // then reload the div to clear the success notification
-                            }, 1500);
-                        }
-
-                    }
-
-                });
-            });
-
-        }
-
-        function recomendPayrollByHr() {
-
-            const message = "Are you sure you want to recommend this payroll?";
-            $('#delete').modal('show');
-            $('#delete').find('.modal-body #message').text(message);
-
-            $("#yes_delete").click(function() {
-                $('#hideList').hide();
-                var message = document.getElementById('comment').value;
-                var url =
-                    "{{ route('payroll.recommendpayrollByHr', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
-                url = url.replace(':msg', message);
-                if (message != "") {
-                    $.ajax({
-                        url: url,
-                        async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                        success: function(data) {
-                            var data = JSON.parse(data);
-                            if (data.status == 'OK') {
-                                $('#delete').modal('hide');
-                                new Noty({
-                                    text: 'Payroll recommended successfully!',
-                                    type: 'success'
-                                }).show();
-                                location.reload();
-                            } else {
-                                $('#delete').modal('hide');
-                                new Noty({
-                                    text: 'Payroll recommendation failed!',
-                                    type: 'error'
-                                }).show();
-
-
-                            }
-
-                        }
-
-                    });
-                } else {
-                    $('#delete').modal('hide');
-
-                    new Noty({
-                        text: 'Failed, Comment should not be empty',
-                        type: 'error'
-                    }).show();
-                }
-
-            });
-
-        }
-
-        function viewComment(date) {
-
-            var url = "{{ route('payroll.getComment', ':date') }}";
-            url = url.replace(':date', date);
-            $.ajax({
-                url: url,
-                async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                success: function(data) {
-                    var data = JSON.parse(data);
-
-                    const message = data;
-                    $('#delete1').modal('show');
-                    $('#delete1').find('.modal-body #message').text(message);
-
-                }
-
-            });
-
-
-
-
-        }
-
-        function recomendPayrollByFinance() {
-
-            const message = "Are you sure you want to recommend this payroll?";
-            $('#delete').modal('show');
-            $('#delete').find('.modal-body #message').text(message);
-
-            $("#yes_delete").click(function() {
-                $('#hideList').hide();
-                var message = document.getElementById('comment').value;
-
-                var url =
-                    "{{ route('payroll.recommendpayrollByFinance', ['pdate' => $pendingPayroll_month, 'message' => ':msg']) }}";
-                url = url.replace(':msg', message);
-                if (message != "") {
-                    $.ajax({
-                        url: url,
-                        async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                        success: function(data) {
-                            var data = JSON.parse(data);
-                            if (data.status == 'OK') {
-                                $('#delete').modal('hide');
-                                new Noty({
-                                    text: 'Payroll recommended successfully!',
-                                    type: 'success'
-                                }).show();
-                                location.reload();
-                            } else {
-                                $('#delete').modal('hide');
-                                new Noty({
-                                    text: 'Payroll recommendation failed!',
-                                    type: 'error'
-                                }).show();
-
-
-                            }
-
-                        }
-
-                    });
-                } else {
-                    $('#delete').modal('hide');
-
-                    new Noty({
-                        text: 'Failed, Comment should not be empty',
-                        type: 'error'
-                    }).show();
-                }
-
-            });
-
-        }
-
-        function hidemodel() {
-
-            $('#delete').hide();
-            location.reload();
-        }
-
-        function cancelPayroll(type) {
-
-            const message = "Are you sure you want to cancel this payroll?";
-            $('#delete').modal('show');
-            $('#delete').find('.modal-body #message').text(message);
-
-            $("#yes_delete").click(function() {
-                $('#hideList').hide();
-                $.ajax({
-                    url: "<?php echo url('flex/payroll/cancelpayroll'); ?>/" + +type,
-                    async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                    success: function(data) {
-                        var data = JSON.parse(data);
-                        if (data.status == 'OK') {
-                            $('#delete').modal('hide');
-                            notify('Payroll cancelled successfully!', 'top', 'right', 'success');
-
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location
-                                    .reload(); // then reload the div to clear the success notification
-                            }, 1500);
-                        } else {
-                            $('#delete').modal('hide');
-                            notify('Payroll cancellation failed!', 'top', 'right', 'danger');
-                            setTimeout(function() { // wait for 2 secs(2)
-                                location
-                                    .reload(); // then reload the div to clear the success notification
-                            }, 1500);
-
-                        }
-
-                    }
-
-                });
-            });
-
-        }
-
-
-        function sendEmail(payrollDate) {
-
-            if (confirm(
-                    "Are You Sure You Want To want to Send The Payslips Emails to the Employees For the selected Payroll Month??"
-                ) == true) {
-
-                $.ajax({
-                    url: "<?php echo url('flex/payroll/send_payslips'); ?>/" + payrollDate,
-                    async: true,
-                beforeSend: function () {
-                    $('.request__spinner').show() },
-                    complete: function(){
-
-                    },
-                    success: function(data) {}
-
-
-                });
-                $('#feedBackMail').fadeOut('fast', function() {
-                    $('#feedBackMail').fadeIn('fast').html(
-                        "<p class='alert alert-success text-center'>Emails Have been sent Successifully</p>");
-                });
-                setTimeout(function() { // wait for 2 secs(2)
-                    location.reload(); // then reload the div to clear the success notification
-                }, 1500);
-            }
-        }
-    </script>
-
-    <script>
-        function notify(message, from, align, type) {
-            $.growl({
-                message: message,
-                url: ''
-            }, {
-                element: 'body',
-                type: type,
-                allow_dismiss: true,
-                placement: {
-                    from: from,
-                    align: align
-                },
-                offset: {
-                    x: 30,
-                    y: 30
-                },
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                url_target: '_blank',
-                mouse_over: false,
-
-                icon_type: 'class',
-                template: '<div data-growl="container" class="alert" role="alert" style="padding-bottom:20px;">' +
-                    '<button type="button" class="close" data-growl="dismiss">' +
-                    '<span aria-hidden="true">&times;</span>' +
-                    '<span class="sr-only">Close</span>' +
-                    '</button>' +
-                    '<span data-growl="icon"></span>' +
-                    '<span data-growl="title"></span>' +
-                    '<span data-growl="message"></span>' +
-                    '<a href="#!" data-growl="url"></a>' +
-                    '</div>'
-            });
-        }
-    </script>
+  
 @endpush
