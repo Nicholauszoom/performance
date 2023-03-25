@@ -578,7 +578,7 @@ class GeneralController extends Controller
             }else{
                 $data = $this->flexperformance_model->getCompanyInfo();
 
-                return view('app.compay_info',$data);
+                return view('app.company_info',$data);
 
             }
           
