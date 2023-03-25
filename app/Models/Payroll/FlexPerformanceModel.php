@@ -196,7 +196,7 @@ class FlexPerformanceModel extends Model
 	}
 
 	public function getCompanyInfo(){
-		$row = DB::table('company_info')->select('*')->result();
+		$row = DB::table('company_info')->select('*')->get();
 
 		return $row;
 	}
