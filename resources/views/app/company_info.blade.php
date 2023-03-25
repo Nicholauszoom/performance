@@ -14,6 +14,13 @@
 
 
 @section('content')
+@php
+$id = '';
+foreach($data as $row2){
+ $id = $row2->id;
+}
+
+@endphp
 
 
 
@@ -50,7 +57,7 @@
 
                     <div class="tab-content" id="myTabContent">
 
-                        <div role="tabpanel" role="tabpanel" class="tab-pane fade " id="payrollReportTab"
+                        <div role="tabpanel" role="tabpanel" class="tab-pane active show " id="payrollReportTab"
                             aria-labelledby="home-tab">
              
 
@@ -63,7 +70,7 @@
                                     <table id="datatable" class="table datatable-basic table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>S/N</th>
+                                                
                                                 <th>Company Name</th>
                                                 <th>Email</th>
                                                 <th>TIN</th>
@@ -78,7 +85,7 @@
                                                 <td>{{$row->cname}}</td>
                                                 <td>{{$row->email}}</td>
                                                 <td>{{$row->tin}}</td>
-                                                <td>update and edit</td>
+                                                <td>-</td>
                                              </tr>
                                         @endforeach
                                         @endif
@@ -89,7 +96,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
+                        <div role="tabpanel" class="tab-pane fade" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card  rounded-0 border-0 shadow-none">
                                     <div class="tab-head py-2 px-2">
@@ -100,7 +107,9 @@
                                         <?php //echo $this->session->flashdata("note");
                                         ?>
                                         <div id="resultfeedOvertime"></div>
-                                        <form action="{{route('flex.companyInfo')}}">
+                                        <form action="{{route('flex.updatecompanyInfo',$id)}}" method="PUT">
+                                    @csrf
+                                            <input type="hidden" name="id" value="{{$id}}">
                                         <div class="row">
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Company Name</label>

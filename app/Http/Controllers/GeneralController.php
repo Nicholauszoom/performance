@@ -589,14 +589,7 @@ class GeneralController extends Controller
     {
         if ($request->method() == "PUT") {
 
-            $data = array(
-                'name' => $request->input('name'),
-                //'department_id' => $request->input('department_id'),
-                'street' => $request->input('street'),
-                'region' => $request->input('region'),
-                'code' => "0",
-                'country' => $request->input('country'),
-            );
+            $data = $request->all();
             $result = $this->flexperformance_model->updateCompanyInfo($data,$id);
                 if ($result == true) {
                     //return redirect()->back();
