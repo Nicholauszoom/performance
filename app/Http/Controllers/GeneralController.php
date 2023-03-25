@@ -570,7 +570,7 @@ class GeneralController extends Controller
             );
             $result = $this->flexperformance_model->addCompanyInfo($data);
                 if ($result == true) {
-                    //return redirect()->back();
+                    return redirect()->route('flex.companyInfo');
               echo "<p class='alert alert-success text-center'>Branch Added Successifully!</p>";
                 } else {
                     echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Added. Please Try Again</p>";

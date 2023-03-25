@@ -100,22 +100,23 @@
                                         <?php //echo $this->session->flashdata("note");
                                         ?>
                                         <div id="resultfeedOvertime"></div>
+                                        <form action="{{route('flex.companyInfo')}}">
                                         <div class="row">
                                             <div class="col-lg-6 col-sm-6 mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Company Name</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="username" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="cname" class="form-control"
+                                                        placeholder="company name">
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-sm-6 mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Postal Address</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="username" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="postal_address" class="form-control"
+                                                       >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
@@ -124,20 +125,20 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-6 col-sm-6 mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Postal City</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="username" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="postal_city" class="form-control"
+                                                       >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-sm-6 mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Phone No</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="username" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="phone_no1" class="form-control"
+                                                       >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
@@ -146,19 +147,91 @@
                                         </div>
                                             <div class="row">
                                             <div class="col-lg-6 col-sm-6 mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Email</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="username" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="email" class="form-control"
+                                                       >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-sm-6 mb-3">
-                                                <label class="form-label">Username</label>
+                                                <label class="form-label">Plot No</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="username" class="form-control"
+                                                    <input type="text" name="plot_no" class="form-control">
+                                                 
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Block No</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="block_no" class="form-control"
+                                                       >
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">street</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="street" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">Branch</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="branch" class="form-control"
+                                                       >
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">WCF REG NO</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="wcf_reg_no" class="form-control"
+                                                        placeholder="JohnDoe">
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">HESLB CODE NO</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="heslb_code_no" class="form-control"
+                                                       >
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">NSSF Contorol No</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="nssf_control_number" class="form-control"
                                                         placeholder="JohnDoe">
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -167,7 +240,7 @@
                                             </div>
                                         </div>
                                    
-
+                                    </form>
                                        
                                     </div>
                                 </div>
