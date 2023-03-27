@@ -185,6 +185,32 @@ class FlexPerformanceModel extends Model
     	return $row[0]->id;
 	}
 
+	
+	function addCompanyInfo($data)
+	{
+
+        DB::table('company_info')->insert($data);
+
+        
+    	return true;
+	}
+
+	public function getCompanyInfo(){
+		$query = "SELECT * from company_info";
+
+		return DB::select(DB::raw($query));
+
+	}
+
+	function updateCompanyInfo($data,$id)
+	{
+
+        DB::table('company_info')->wher('id',$id)->update($data);
+
+        
+    	return true;
+	}
+
 	function addCostCenter($data)
 	{
 
