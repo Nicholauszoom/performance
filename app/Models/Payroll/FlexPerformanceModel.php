@@ -196,16 +196,18 @@ class FlexPerformanceModel extends Model
 	}
 
 	public function getCompanyInfo(){
-		$query = "SELECT * from company_info";
+		$query = "SELECT * from company_info limit 1";
 
-		return DB::select(DB::raw($query));
+		$row =  DB::select(DB::raw($query));
+        
+		return $row[0];
 
 	}
 
 	function updateCompanyInfo($data,$id)
 	{
 
-        DB::table('company_info')->wher('id',$id)->update($data);
+        DB::table('company_info')->where('id',$id)->update($data);
 
         
     	return true;
@@ -411,7 +413,7 @@ class FlexPerformanceModel extends Model
 	}
 
     function pending_overtime(){
-        $query = "SELECT count(id) as total from employee_overtime where status=0 OR status = 1";
+        $query = "SELECT count(id) as total from employee_overtime where status = 1";
         $row = DB::select(DB::raw($query));
 		return $row[0]->total;
     }

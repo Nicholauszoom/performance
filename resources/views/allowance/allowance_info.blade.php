@@ -101,7 +101,7 @@
                     <form autocomplete="off" id="assignGroup"  data-parsley-validate class="form-horizontal form-label-left">
 
                         <div class="mb-2">
-                            <label class="form-label">Employee :</label>
+                            <label class="form-label">Groups :</label>
                             <div class="input-group">
                                 <select required name="group" class="select_group form-control select" data-width="1%">
                                     <option selected disabled>Select Group</option>

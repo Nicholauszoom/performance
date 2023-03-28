@@ -585,25 +585,26 @@ class GeneralController extends Controller
     }
 
 
-    public function UpdateCompanyInfo($id,Request $request)
+    public function UpdateCompanyInfo(Request $request)
     {
-        if ($request->method() == "PUT") {
-
-            $data = $request->all();
+        //if ($request->method() == "PUT") {
+            $id = $request->id;
+            $data = $request->except('_token','_method');
             $result = $this->flexperformance_model->updateCompanyInfo($data,$id);
                 if ($result == true) {
-                    //return redirect()->back();
-              echo "<p class='alert alert-success text-center'>Branch Updated Successifully!</p>";
+                    return redirect()->back();
+             // echo "<p class='alert alert-success text-center'>Branch Updated Successifully!</p>";
                 } else {
-                    echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Updated. Please Try Again</p>";
+                    return redirect()->back();
+                   // echo "<p class='alert alert-danger text-center'>FAILED, Compay Info Not Updated. Please Try Again</p>";
                 }
-            }else{
-                $data['data'] = $this->flexperformance_model->getCompanyInfoById($id);
-                $data['id'] = $id;
+            // }else{
+            //     $data['data'] = $this->flexperformance_model->getCompanyInfoById($id);
+            //     $data['id'] = $id;
 
-                return view('app.compay_info',$data);
+            //     return view('app.compay_info',$data);
 
-            }
+            // }
           
     }
 

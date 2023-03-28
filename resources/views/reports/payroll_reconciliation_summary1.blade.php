@@ -10,7 +10,46 @@
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}"> --}}
+<style>
+    .header,
+.footer {
+    width: 100%;
+    text-align: center;
+    position: fixed;
+}
+.header {
+    top: 0px;
+}
+.footer {
+    bottom: 0px;
+}
+.pagenum:before {
+    content: counter(page);
+}
 
+.page-break {
+    page-break-after: always;
+}
+
+
+.body-font {
+  font-family1: Arial, sans-serif;
+}
+.p-space{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size:12px;
+}
+
+.ftp{
+    display: flex;
+    justify-content: space-between
+}
+.footer-font{
+    font-size: 13px;
+}
+
+</style>
 
 
 
@@ -21,51 +60,77 @@
 
 <body>
 
-    <main>
+    <main class="body-font">
         <div class="row my-4">
 
             <div class="col-md-12">
-
+<hr>
                 <table class="table">
                     <tfoot>
 
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here"
-                                        class="image-fluid"> <br>
-
+                                   
+                                    <div class="box-text text-end">
+                                     <p>   <img src="{{ asset('assets/images/report-img.png') }}" width="180px" height="100px"
+                                        class="image-fluid"> 
+                                     </p>
+                                    </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="box-text text-center">
-                                    <p style="font-weight:700" class="">
-                                        AFRICAN BANKING CORPORATION<br>
-                                        P.O. BOX 31 ,DAR ES SALAAM
-
-                                    </p>
+                                <div class="box-text text-center" style="">
+                                    <p class="p-space"><h5 style="font-weight:bolder;margin-top:15px; padding-left:7px;">Human Capital Payroll System</h5></p>
+                                    <p class="p-space">5th & 6th Floor, Uhuru Heights</p>	
+                                    <p class="p-space">Bibi Titi Mohammed Road</p>	
+                                    <p class="p-space">P.O. Box 31, Dar es salaam </p>
+                                    <p class="p-space">+255 22 22119422/2111990 </p>
+                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
+                                   
                                 </div>
                             </td>
                             <td>
                                 <div class="box-text"> </div>
                             </td>
 
-                            <td colspan="4" class="w-50" style="">
-                                <div class="" style="text-align: right; padding-right:20px">
-
-                                    <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll
-                                        Detail_By Number</h5>
-                                    <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">
-                                        Date:
-                                        {{ $payroll_date }}
-
+                             <td colspan="4" class="w-50" style="">
+                                <div class="box-text text-end">
+                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px"
+                                    class="image-fluid"> 
                                 </div>
-                            </td>
+                             </td>
                         </tr>
 
                     </tfoot>
                 </table>
+                <hr>
+                <table class="table">
+                    <tfoot>
 
+                        <tr>
+                            <td class="">
+                                <div class="box-text">
+                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Reconciliation Summary</h5>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-text text-end">
+                          
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-text"> </div>
+                            </td>
+
+                             <td colspan="4" class="w-50" style="">
+                                <h5 style="font-weight:bolder;text-align: right;"> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</h5>
+                             </td>
+                        </tr>
+
+                    </tfoot>
+                </table>
                 <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
                 @php
                     $total_previous = 0;
@@ -277,101 +342,72 @@
                     </tbody>
                 </table>
                 <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
+                <hr>
+                <hr>
                 <table class="table">
-                    <tfoot>
+  
+                    <tbody>
                         <tr>
-                            <td collspan="4">
-                                <p class="text-start"><small><b>Prepared By</b></small></p>
-                            </td>
+                            <td><p class="text-start" style="font-size:15px;"><small><b>HUMAN CAPITAL DEPARTMENT:</b></small></p>	</td>
+                            <td><p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p></td>
+                            <td>.</td>
                         </tr>
                         <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-
-                            </td>
+                           
+                                <td><p class="text-start"><small>Reviewed By:</small></p></td>
+                                <td><p class="text-start"><small>Checked  By:</small></p></td>
+                                <td><p class="text-start"><small>Approved By:</small></p></td>
+                            
                         </tr>
                         <tr>
-                            <td collspan="4">
-                                <p><small><b>Checked and Approved By</b></small></p>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td collspan="4">
-                                <b>Checked and Approved By</b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td collspan="4">
-                                <p><small><b>Approved By</b></small></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-
-                            </td>
-                        </tr>
-
-
-                    </tfoot>
+                           
+                            <td><p class="text-start"><small>Name______________________</small></p></td>
+                            <td><p class="text-start"><small>Name______________________</small></p></td>
+                            <td><p class="text-start"><small>Name______________________</small></p></td>
+                        
+                    </tr>
+                    <tr>
+                           
+                        <td><p class="text-start"><small>Signature and Date___________</small></p></td>
+                        <td><p class="text-start"><small>Signature and Date___________</small></p></td>
+                        <td><p class="text-start"><small>Signature and Date___________</small></p></td>
+                    
+                </tr>
+                    </tbody>
+                    
                 </table>
+                <hr>
+                <div class="footer">
+                    <table class="table footer-font">
+                        <tfoot>
+    
+                            <tr>
+                                <td class="">
+                                    <div class="box-text">
+                                        {{date('l jS \of F Y')}}
+    
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="box-text text-end">
+                              
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="box-text">BancABC Flex Performance-Payroll System </div>
+                                </td>
+    
+                                 <td colspan="4" class="w-50" style="">
+                                    <i> Page <span class="pagenum">.</span></i>
+                                 </td>
+                            </tr>
+    
+                        </tfoot>
+                    </table>
+
+                    
+                  
+                </div>
             </div>
 
 
@@ -381,7 +417,7 @@
         </div>
         </div>
     </main>
-
+ 
 
 
 

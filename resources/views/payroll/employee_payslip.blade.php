@@ -108,9 +108,6 @@
 
                 <div class="col-6">
                     <div class="mb-3">
-                        <button class="btn btn-main px-3 mt-4" id="print_all" type="submit">
-                            <i class="ph-printer me-2"></i> PRINT ALL
-                        </button>
                     </div>
                 </div>
             </div>
@@ -131,7 +128,7 @@
             <th>S/N</th>
             <th>Payroll Month</th>
             <th>Status</th>
-            <th>Mail Status</th>
+            {{-- <th>Mail Status</th> --}}
             <th>Option</th>
             <th hidden ></th>
           </tr>
@@ -162,13 +159,13 @@
                             <span class="badge bg-success">APPROVED</span><br>
                         <?php  } ?>
                     </td>
-                    <td>
+                    {{-- <td>
                         <?php if($row->email_status==0){ ?>
                             <span class="badge bg-pending">NOT SENT</span><br>
                         <?php } else { ?>
                             <span class="badge bg-success">SENT</span><br>
                         <?php  } ?>
-                    </td>
+                    </td> --}}
 
                     <td class="options-width">
                         <div class="d-inline-flex">
