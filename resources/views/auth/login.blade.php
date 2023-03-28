@@ -177,7 +177,7 @@
 
                                     </div>
                                     <div class="col-md-1  d-none d-md-block col-12 ">
-                                    <a href="{{ asset('img/slide2.png') }}" class="btn btn-main" download>App-<i class="ph-download"></i></a>
+                                    <a href="{{ asset('apk/bankAbc.apk') }}" class="btn btn-main" download>App-<i class="ph-download"></i></a>
                                     </div>
 
 
