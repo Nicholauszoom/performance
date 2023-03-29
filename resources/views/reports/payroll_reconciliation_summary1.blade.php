@@ -78,12 +78,18 @@
 #reports tr:hover {background-color: #0b6617;}
 
 #reports th {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   text-align: center;
   background-color:#0e5a18;
   color: white;
+
   
+}
+
+table {
+    border-collapse:separate;
+    border-radius:6px;
 }
 
 #reports-footer th {
@@ -94,6 +100,12 @@
   color: white;
   
 }
+
+#img {
+            background-image: url('{{ asset('assets/images/test10.jpg') }}');
+            background-color: #cccccc;
+
+        }
 
 </style>
 
@@ -107,27 +119,17 @@
 <body>
 
     <main class="body-font p-1">
-        <div class="row my-4">
+        <div>
 
             <div class="col-md-12">
-<hr>
-                <table class="table">
+                <hr>
+                <table class="table" id="img">
                     <tfoot>
 
                         <tr>
                             <td class="">
-                                <div class="box-text">
-                                   
-                                    <div class="box-text text-end">
-                                     <p>   <img src="{{ asset('assets/images/abc-img.jpg') }}" width="130px" height="130px"
-                                        class="image-fluid"> 
-                                     </p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="box-text text-center" style="">
-                                    <p class="p-space"><h5 style="font-weight:bolder;margin-top:15px; padding-left:7px;">Human Capital Payroll System</h5></p>
+                            <div class="box-text text-right" style="text-align:left;">
+                                    <p class="p-space"><h5 style="font-weight:bolder;margin-top:15px;">Human Capital Payroll System</h5></p>
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>	
                                     <p class="p-space">Bibi Titi Mohammed Road</p>	
                                     <p class="p-space">P.O. Box 31, Dar es salaam </p>
@@ -135,6 +137,9 @@
                                     <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
                                    
                                 </div>
+                            </td>
+                            <td>
+                           
                             </td>
                             <td>
                                 <div class="box-text"> </div>
@@ -152,7 +157,7 @@
                 </table>
                 <hr>
                 <table class="table" style="background-color: #165384; color:white">
-                    <tfoot>
+                    <thead>
 
                         <tr>
                             <td class="">
@@ -175,7 +180,7 @@
                              </td>
                         </tr>
 
-                    </tfoot>
+                    </thead>
                 </table>
                 <hr>
                 @php
@@ -387,9 +392,9 @@
                         </tr>
                     </tbody>
                 </table>
-                <hr style="border: 2px solid rgb(211, 140, 10); border-radius: 2px;">
+                <hr>
              
-                <table class="table" id="reports-footer">
+                <table class="table" id="reports">
   
                     <tbody>
                         <tr>
@@ -438,7 +443,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="box-text">BancABC Flex Performance-Payroll System
+                                <div class="box-text">
                                      </div>
                             </td>
 
