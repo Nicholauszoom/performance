@@ -49,6 +49,52 @@
     font-size: 13px;
 }
 
+/* body {
+            background-image: url('{{ asset('img/bg.png') }}');
+            background-color: #cccccc75;
+            height:100%;
+            background-size:cover;
+
+        } */
+
+        #reports {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#reports th {
+  border: 3px solid #ddd;
+  /* padding: 8px; */
+}
+
+#reports td {
+  border: 3px solid #ddd;
+  /* padding: 8px; */
+}
+
+#reports tr:nth-child(even){background-color: #f2f2f2;}
+
+#reports tr:hover {background-color: #0b6617;}
+
+#reports th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color:#0e5a18;
+  color: white;
+  
+}
+
+#reports-footer th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  /* text-align: center; */
+  background-color:#F0C356;
+  color: white;
+  
+}
+
 </style>
 
 
@@ -60,7 +106,7 @@
 
 <body>
 
-    <main class="body-font">
+    <main class="body-font p-1">
         <div class="row my-4">
 
             <div class="col-md-12">
@@ -73,7 +119,7 @@
                                 <div class="box-text">
                                    
                                     <div class="box-text text-end">
-                                     <p>   <img src="{{ asset('assets/images/report-img.png') }}" width="180px" height="100px"
+                                     <p>   <img src="{{ asset('assets/images/abc-img.jpg') }}" width="130px" height="130px"
                                         class="image-fluid"> 
                                      </p>
                                     </div>
@@ -105,7 +151,7 @@
                     </tfoot>
                 </table>
                 <hr>
-                <table class="table">
+                <table class="table" style="background-color: #165384; color:white">
                     <tfoot>
 
                         <tr>
@@ -125,13 +171,13 @@
                             </td>
 
                              <td colspan="4" class="w-50" style="">
-                                <h5 style="font-weight:bolder;text-align: right;"> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</h5>
+                                <P style="text-align: right;"> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</p>
                              </td>
                         </tr>
 
                     </tfoot>
                 </table>
-                <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
+                <hr>
                 @php
                     $total_previous = 0;
                     $total_current = 0;
@@ -139,15 +185,15 @@
 
                 @endphp
 
-                <table class="table" style="font-size:14px;">
+                <table class="table" id="reports" style="font-size:14px;">
                     <thead>
-                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                        <tr>
                             <th><b>RefNo</b></th>
                             <th><b>Desc</b></th>
-                            <th class="text-end"><b>Last Month</b></th>
-                            <th class="text-end"><b>This Month</b></th>
-                            <th class="text-end"><b>Amount</b></th>
-                            <th class="text-end"><b>Count</b></th>
+                            <th style=""><b>Last Month</b></th>
+                            <th><b>This Month</b></th>
+                            <th><b>Amount</b></th>
+                            <th><b>Count</b></th>
 
                         </tr>
                     </thead>
@@ -158,7 +204,7 @@
                             $total_current += 0;
                             $total_amount += ($total_previous_gross + (($payroll_date == '2023-03-19')? 100000:0));
                         @endphp
-                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                        <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                             <td class="text-start">00001</td>
                             <td class="text-start">Last Month Gross Salary</td>
                             <td class="text-end">
@@ -170,7 +216,7 @@
                         </tr>
                         @if ($count_current_month - $count_previous_month != 0)
                             @if ($new_employee > 0)
-                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
                                     <td class="text-start">Add New Employee</td>
                                     <td class="text-end">
@@ -190,7 +236,7 @@
                                 @endphp
                                 @endif
                                  @if($terminated_employee > 0)
-                                                <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                                <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                                     <td class="text-start">00002</td>
                                                     <td class="text-start">Less Terminated Employee</td>
                                                     <td class="text-end">
@@ -215,7 +261,7 @@
                         @endif
                         @if($count_previous_month != 0)
                         @if ($current_increase['basic_increase'] > 0)
-                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                        <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                             <td class="text-start">00004</td>
                             <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
                             <td class="text-end">
@@ -241,7 +287,7 @@
                         @endphp
                         @endif
                         @if ($current_decrease['basic_decrease'] > 0)
-                            <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                 <td class="text-start">00004</td>
                                 <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
                                 <td class="text-end">
@@ -251,7 +297,7 @@
                                     {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'], 2) }}
                                 </td>
                                 <td class="text-end">
-                                    {{ number_format(($current_decrease['actual_amount'] - $current_decrease['basic_decrease'])-$current_decrease['actual_amount'], 2) }}
+                                    {{ number_format(($current_decrease['actual_amount'] - $current_decrease['basic_decrease'])-$current_decrease['actual_amount'], 1) }}
                                 </td>
 
                                 <td class="text-end"></td>
@@ -269,7 +315,7 @@
                                 @php $i++;  @endphp
                                 @if ($row->current_amount - $row->previous_amount != 0)
                                 @if ($row->description == 'Add/Les Leave Pay' || $row->description == 'Add/Les Leave Allowance' )
-                                    <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                    <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                         <td class="text-start">{{ '000' . $i + 4 }}</td>
                                         <td class="text-start">
                                             @if ($row->description == 'Add/Les S-Overtime')
@@ -293,7 +339,7 @@
 
                                     @endphp
                                     @else
-                                    <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                    <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                         <td class="text-start">{{ '000' . $i + 4 }}</td>
                                         <td class="text-start">
                                             @if ($row->description == 'Add/Les S-Overtime')
@@ -341,10 +387,9 @@
                         </tr>
                     </tbody>
                 </table>
-                <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
-                <hr>
-                <hr>
-                <table class="table">
+                <hr style="border: 2px solid rgb(211, 140, 10); border-radius: 2px;">
+             
+                <table class="table" id="reports-footer">
   
                     <tbody>
                         <tr>
@@ -376,43 +421,42 @@
                     </tbody>
                     
                 </table>
-                <hr>
-                <div class="footer">
-                    <table class="table footer-font">
-                        <tfoot>
-    
-                            <tr>
-                                <td class="">
-                                    <div class="box-text">
-                                        {{date('l jS \of F Y')}}
-    
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="box-text text-end">
-                              
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="box-text">BancABC Flex Performance-Payroll System </div>
-                                </td>
-    
-                                 <td colspan="4" class="w-50" style="">
-                                    <i> Page <span class="pagenum">.</span></i>
-                                 </td>
-                            </tr>
-    
-                        </tfoot>
-                    </table>
 
-                    
-                  
-                </div>
+                <table class="table footer-font">
+                    <tfoot>
+
+                        <tr>
+                            <td class="">
+                                <div class="box-text">
+                                    {{date('l jS \of F Y')}}
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-text text-end">
+                          
+                                </div>
+                            </td>
+                            <td>
+                                <div class="box-text">BancABC Flex Performance-Payroll System
+                                     </div>
+                            </td>
+
+                             <td colspan="4" class="w-50" style="">
+                                <i> Page <span class="pagenum">.</span></i>
+                             </td>
+                        </tr>
+
+                    </tfoot>
+                </table>
+         
+                
+            
             </div>
 
 
         </div>
-
+       
 
         </div>
         </div>
