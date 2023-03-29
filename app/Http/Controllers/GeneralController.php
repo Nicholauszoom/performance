@@ -1959,7 +1959,7 @@ class GeneralController extends Controller
 
         $start = $request->input('time_start');
         $finish = $request->input('time_finish');
-        $reason = $request->input('reason');
+        $reason = $request->inpput('reason');
         $category = $request->input('category');
         $linemanager = $request->input('linemanager');
 
