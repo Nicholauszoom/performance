@@ -64,12 +64,12 @@
 }
 
 #reports th {
-  border: 3px solid #ddd;
+  border: 1px solid #ddd;
   /* padding: 8px; */
 }
 
 #reports td {
-  border: 3px solid #ddd;
+  border: 1px solid #ddd;
   /* padding: 8px; */
 }
 
@@ -81,8 +81,10 @@
   padding-top: 6px;
   padding-bottom: 6px;
   text-align: center;
-  background-color:#0e5a18;
-  color: white;
+  /* background-color:#F4BD36; */
+  /* color: white; */
+  border-top:2px solid #F0C356;
+  border-bottom:2px solid #F0C356;
 
   
 }
@@ -102,7 +104,7 @@ table {
 }
 
 #img {
-            background-image: url('{{ asset('assets/images/test10.jpg') }}');
+            background-image: url('{{ asset('assets/images/test6.jpg') }}');
             background-color: #cccccc;
 
         }
@@ -190,7 +192,7 @@ table {
 
                 @endphp
 
-                <table class="table" id="reports" style="font-size:14px;">
+                <table class="table" id="reports" style="font-size:14px;  ">
                     <thead>
                         <tr>
                             <th><b>RefNo</b></th>
@@ -217,7 +219,7 @@ table {
                             <td class="text-end">
                                 {{ number_format(0, 2) }}</td>
                             <td class="text-end">{{ number_format(($total_previous_gross + (($payroll_date == '2023-03-19')? 100000:0)), 0) }}</td>
-                            <td class="text-end">{{ $count_previous_month }}</td>
+                            <td class="text-end">{{ $payroll_date == '2023-03-19'? $count_previous_month-1:$count_previous_month }}</td>
                         </tr>
                         @if ($count_current_month - $count_previous_month != 0)
                             @if ($new_employee > 0)
@@ -345,7 +347,7 @@ table {
                                     @endphp
                                     @else
                                     <tr style="border-bottom:1px solid rgb(211, 211, 230)">
-                                        <td class="text-start">{{ '000' . $i + 4 }}</td>
+                                        <td class="text-start">{{ '000' . $i + 14 }}</td>
                                         <td class="text-start">
                                             @if ($row->description == 'Add/Les S-Overtime')
                                                 Add/Less Sunday Overtime Hours
@@ -378,7 +380,7 @@ table {
 
                         {{-- </tbody>
                             <tbody> --}}
-                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                        <tr style="border-bottom:2px solid #F0C356;">
                             <td class="text-start"></td>
                             <td class="text-start"><b>This Month</b> </td>
                             <td class="text-end">
@@ -426,7 +428,29 @@ table {
                     </tbody>
                     
                 </table>
+        
+            
+            </div>
 
+
+        </div>
+       
+
+        </div>
+        </div>
+    </main>
+ 
+
+
+
+    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
+    <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+
+
+    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+
+    <div class="footer">
                 <table class="table footer-font">
                     <tfoot>
 
@@ -454,28 +478,7 @@ table {
 
                     </tfoot>
                 </table>
-         
-                
-            
-            </div>
-
-
-        </div>
-       
-
-        </div>
-        </div>
-    </main>
- 
-
-
-
-    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
-    <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-
-
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
+             </div>  
 </body>
 
 </html>
