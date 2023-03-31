@@ -75,7 +75,7 @@
             <div class="row">
                 <div class="col-md-3 col-6">
 
-                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout" style="backgroud:red;">
                         <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to here view your Overtimes">
                         <h1 class="text-main"><i class="ph-clock panel-text"></i></h1>
                         <h4 class="panel-footer">My Overtimes <i class="ph-arrow-circle-right"></i></h4>
@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="col-md-3 col-6">
-                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout">
                         <a href="{{ route('flex.my-leaves') }}" style="text-decoration:none;"  title="Click to here view your Leaves">
                         <h1 class="text-main"><i class="ph-calendar-check panel-text"></i></h1>
                         <h4 class="panel-footer">My Leaves <i class="ph-arrow-circle-right"></i></h4>
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="col-md-3 col-6">
-                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main  ">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout ">
                         <a href="{{ route('flex.my-loans') }}" style="text-decoration:none;"  title="Click here to view your Loans">
                         <h1 class="text-main"> <i class="ph-bank panel-text"></i></h1>
                             <h4 class="panel-footer">My Loans <i class="ph-arrow-circle-right"></i></h4>
@@ -105,7 +105,7 @@
 
 
                 <div class="col-md-3 col-6">
-                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main ">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout">
                         <a href="{{ route('flex.my-pensions') }}" style="text-decoration:none;"  title="Click here to view your Pension History">
                         <h1 class="text-main"><i class="ph-scales panel-text"></i></h1>
                         <h4 class="panel-footer">My Pensions <i class="ph-arrow-circle-right"></i></h4>
@@ -122,7 +122,7 @@
         <section>
             @if (session('vw_emp_sum'))
             <div class="col-xl-12">
-                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 card-layout">
 
                     <ul class="list-group list-group-flush border-top">
                         <li class="list-group-item d-flex">
@@ -153,9 +153,9 @@
         {{-- /col --}}
 
         <div class="col-xl-12">
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0 card-layout">
                 <div class="card-header bg-main text-center">
-                    <h5 class="mb-0">Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
+                    <h5 class="mb-0" >Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
                 </div>
 
                 <table class="table table-bordered">
@@ -223,9 +223,9 @@
         </div>
 
         <div class="col-md-12">
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0">
+            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0 card-layout">
                 <div class="card-header bg-main text-center">
-                    <h5 class="">Payroll Reconciliation Summary (Current & Previous) for the month {{ date('F, Y', strtotime($payroll_date)) }}</h5>
+                    <h5 >Payroll Reconciliation Summary (Current & Previous) for the month {{ date('F, Y', strtotime($payroll_date)) }}</h5>
                 </div>
 
                 @php
