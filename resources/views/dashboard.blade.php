@@ -68,6 +68,18 @@
                 </div>
             </div>
         </div>
+
+        @if($deligate > 0)
+        <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
+            <div class="card bg-danger bg-opacity-10 border-success rounded-0">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <p class="text-main">You Deligate leave approving authority to someone else! <strong>  </strong></p>
+
+                    <p > <a href="{{ route('attendandance.revoke_authority') }}">Click here to revoke</a> </p>
+                </div>
+            </div>
+        </div>
+        @endif
         {{-- /col --}}
 
         {{-- Start of Self Services  --}}
@@ -75,7 +87,7 @@
             <div class="row">
                 <div class="col-md-3 col-6">
 
-                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout" style="backgroud:red;">
+                    <div class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main" >
                         <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"  title="Click to here view your Overtimes">
                         <h1 class="text-main"><i class="ph-clock panel-text"></i></h1>
                         <h4 class="panel-footer">My Overtimes <i class="ph-arrow-circle-right"></i></h4>

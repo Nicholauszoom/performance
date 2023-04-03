@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payroll Details </title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
 </head>
 
 <body>
@@ -15,9 +16,7 @@
         <div id="logo pl-1" style="margin-left: 7px; z-index: -10">
             <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
         </div>
-        <div id="logo2 pl-1" style="margin-left: 7px; z-index: -10">
-            <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
-        </div>
+
         <div style="margin-top:20px;">
             <div class="col-md-12">
 
@@ -57,7 +56,7 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Reconciliation Summary </h5>
+                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Details </h5>
                                 </div>
                             </td>
                             <td> <div class="box-text text-end"></div> </td>
@@ -71,7 +70,7 @@
 
                 <hr>
 
-                <table class="table" style="font-size:9px; ">
+                <table class="table" id="reports"  style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -356,14 +355,16 @@
 
 
 
-
+        <div id="logo2 pl-1" style="margin-left: 7px; z-index: -10">
+            <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
+        </div>
     </main>
     <div class="footer">
         <table class="table footer-font">
             <tfoot>
                 <tr>
                     <td class="">
-                        <div class="box-text"> {{ date('l jS \of F Y') }} </div>
+                        <div class="box-text"> {{ date('l, F j, Y') }} </div>
                     </td>
                     <td>
                         <div class="box-text text-end"> </div>

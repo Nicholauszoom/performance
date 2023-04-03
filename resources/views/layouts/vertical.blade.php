@@ -55,7 +55,7 @@ border-radius: 50%;
         }
 
         .card {
-            background-color: transparent
+            background-color: transparent !important;
         }
      </style>
 </head>

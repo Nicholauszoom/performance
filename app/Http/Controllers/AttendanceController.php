@@ -20,6 +20,8 @@ use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
 use App\CustomModels\PayrollModel;
+
+
 use App\CustomModels\ReportsModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +30,9 @@ use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use App\CustomModels\flexFerformanceModel;
 use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Level1;
+use App\Models\level2;
+use App\Models\Level3;
 
 class AttendanceController extends Controller
 {
@@ -166,15 +171,15 @@ class AttendanceController extends Controller
       //         if ($range>$approval->escallation_time) {
       //           $leave=Leaves::where('id' ,$item->id)->first();
       //           $status=$leave->status;
-                
+
       //           if ($status == 0) {
       //             if ($approval->level2 != null) {
       //               $leave->status=1;
       //               $leave->updated_at=$today;
       //               $leave->update();
-                
+
       //             }
-               
+
       //           }
       //           elseif ($status == 1)
       //           {
@@ -203,7 +208,7 @@ class AttendanceController extends Controller
       //   }
       // }
       // End of Escallation
-      
+
 
       // Start of Auto apply leave
 
@@ -237,12 +242,12 @@ class AttendanceController extends Controller
             //     $leaves->state=0;
             //     $leaves->save();
 
-            
+
             //   }
-        
+
 
             // }
-          
+
       }
 
 
@@ -254,19 +259,24 @@ class AttendanceController extends Controller
       $interval = $d2->diff($d1);
       $data['days']=$interval->days;
       $data['title'] = 'Leave';
-  
+
       $data['leave_type'] = $this->attendance_model->leave_type();
       return view('app.leave', $data);
 
    }
 
-  
+
      // For My Leaves
      public function myLeaves()
      {
            $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
             $id = Auth::user()->emp_id;
-            $data['deligate']=DB::table('leave_approvals')->Where('level1',$id)->orWhere('level2',$id)->orWhere('level3',$id)->count();
+
+            $level1 = DB::table('leave_approvals')->Where('level1',$id)->count();
+            $level2 = DB::table('leave_approvals')->Where('level2',$id)->count();
+            $level3 = DB::table('leave_approvals')->Where('level3',$id)->count();
+
+            $data['deligate']= $level1 + $level2 + $level3;
             $data['leave_types'] =LeaveType::all();
             $data['employees'] =EMPL::where('emp_id','!=',Auth::user()->emp_id)->whereNot('state',4)->get();
             $data['leaves'] =Leaves::get();
@@ -288,15 +298,15 @@ class AttendanceController extends Controller
             //         if ($range>$approval->escallation_time) {
             //           $leave=Leaves::where('id' ,$item->id)->first();
             //           $status=$leave->status;
-                      
+
             //           if ($status == 0) {
             //             if ($approval->level2 != null) {
             //               $leave->status=1;
             //               $leave->updated_at=$today;
             //               $leave->update();
-                      
+
             //             }
-                     
+
             //           }
             //           elseif ($status == 1)
             //           {
@@ -322,7 +332,7 @@ class AttendanceController extends Controller
             //           }
             //         }
             //       }
-            
+
             //   }
             // }
             // End of Escallation
@@ -337,13 +347,13 @@ class AttendanceController extends Controller
 
             // dd($data['leaveBalance']);
             $data['leave_type'] = $this->attendance_model->leave_type();
-          
+
 
             $data['parent'] = 'My Services';
             $data['child'] = 'Leaves';
          return view('my-services/leaves', $data);
      }
-  
+
    //  for fetching sub categories of leave
       public function getDetails($uid = 0)
       {
@@ -366,28 +376,28 @@ class AttendanceController extends Controller
           $total_days=$days-$holidays;
         }
 
-     
-     
-                //For Gender 
+
+
+                //For Gender
         $gender=Auth::user()->gender;
         if($gender=="Male"){$gender=1; }else { $gender=2;  }
-        // For Male Employees 
+        // For Male Employees
         if ($gender==1) {
           $data['data'] = LeaveSubType::where('category_id', $id)->Where('sex',0)->get();
           // return response()->json($data);
           return json_encode($data);
         }
-        // For Female Employees 
+        // For Female Employees
         else
         {
-          $data = LeaveSubType::where('category_id', $id)->get(); 
+          $data = LeaveSubType::where('category_id', $id)->get();
           // return json_encode($data);
               return response()->json(['data'=>$data,'days'=>$total_days]);
         }
 
-        
+
       }
-  
+
 
   public  function check_leave_balance(Request $request){
     $today = date('Y-m-d');
@@ -440,8 +450,8 @@ class AttendanceController extends Controller
         $end = $request->end;
 
    if($start < $end){
-     
-        //For Gender 
+
+        //For Gender
         $gender=Auth::user()->gender;
         if($gender=="Male"){$gender=1; }else { $gender=2;  }
         // for checking balance
@@ -462,10 +472,10 @@ class AttendanceController extends Controller
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
 
         // For  Requested days
-   
+
         $holidays=SysHelpers::countHolidays($start,$end);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
-       
+
         // For Total Leave days
          $total_remaining=$leaves+$different_days;
 
@@ -495,7 +505,7 @@ class AttendanceController extends Controller
               $total_leave_days=$leaves+$different_days;
               $maximum=$sub->max_days;
               // Case hasnt used all days
-              if ($total_leave_days < $maximum) 
+              if ($total_leave_days < $maximum)
               {
                   $leaves=new Leaves();
                   $empID=Auth::user()->emp_id;
@@ -506,13 +516,13 @@ class AttendanceController extends Controller
                   $leaves->mobile = $request->mobile;
                   $leaves->nature = $request->nature;
 
-            
+
                   // For Study Leave
-                  if ($request->nature == 6) 
+                  if ($request->nature == 6)
                   {
                     $leaves->days = $different_days;
                   }
-                  //For Compassionate and Maternity 
+                  //For Compassionate and Maternity
                   else{
                     $leaves->days = $different_days;
                   }
@@ -545,9 +555,9 @@ class AttendanceController extends Controller
 
                 return $url->with('msg', $msg);
               }
-      
+
             }
-           // For Leaves with no sub Category 
+           // For Leaves with no sub Category
             else
             {
 
@@ -576,22 +586,22 @@ class AttendanceController extends Controller
                     $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
                     // checking annual leave balance
                     if($different_days<$annualleaveBalance)
-                    {                     
+                    {
                       $leaves->days=$different_days;
                       $remaining=$annualleaveBalance-$different_days;
                     }
                     else
                     {
-                      // $leaves->days=$annualleaveBalance;  
+                      // $leaves->days=$annualleaveBalance;
                       $msg='You Have Insufficient Annual  Accrued Days';
                       return $url->with('msg',$msg);
-                    }                        
-                }              
+                    }
+                }
 
                 // For Paternity
                 if($request->nature != 5 && $request->nature!=1)
                 {
-                 
+
                   $leaves->days = $different_days;
                 }
                 if ($request->nature==5)
@@ -599,13 +609,13 @@ class AttendanceController extends Controller
 
                   // Incase the employee had already applied paternity before
                     $paternity=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->first();
-                    if ( $paternity) 
+                    if ( $paternity)
                     {
                       $d1 = $paternity->created_at;
                       $d2 = new DateTime();
                       $interval = SysHelpers::countWorkingDays($d1,$d2);
                       $range=SysHelpers::countWorkingDays($d1,$d2);
-                      
+
                       $month=SysHelpers::countWorkingDays($d1,$d2);
                       // Incase an Employee has less than four working month since the last applied paternity
                       if ($month <112) {
@@ -623,17 +633,17 @@ class AttendanceController extends Controller
                             $msg="Sorry, You have Insufficient  Leave Days Balance";
                           return $url->with('msg', $msg);
                           }
-                         
+
                         }
                         else
                         {
-                         
+
                           $leave_type=LeaveType::where('id',$nature)->first();
                           $type_name=$leave_type->type;
                           $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
                           return $url->with('msg', $msg);
-                      
-                        
+
+
                         }
 
                       }
@@ -651,14 +661,14 @@ class AttendanceController extends Controller
                           $msg="Sorry, You have Insufficient  Leave Days Balance";
                           return $url->with('msg', $msg);
                         }
-                      
+
                       }
                     }
                   // Incase an employee is applying for paternity for the first time
                     else
                     {
                       // Checking if employee has less than 4 working months
-                      if ($day < 112 ) 
+                      if ($day < 112 )
                       {
                         $max_days=7;
                         if($total_leave_days < $max_days)
@@ -672,17 +682,17 @@ class AttendanceController extends Controller
                             $msg="Sorry, You have Insufficient  Leave Days Balance";
                             return $url->with('msg', $msg);
                           }
-                         
+
                         }
                         else
                         {
-                         
+
                           $leave_type=LeaveType::where('id',$nature)->first();
                           $type_name=$leave_type->type;
                           $msg="Sorry, You have Insufficient  ".$type_name." Leave Days Balance";
                           return $url->with('msg', $msg);
-                      
-                        
+
+
                         }
 
                       }
@@ -700,14 +710,14 @@ class AttendanceController extends Controller
                           $msg="Sorry, You have Insufficient  Leave Days Balance";
                           return $url->with('msg', $msg);
                         }
-                      
+
                       }
                     }
-                
+
                 }
                   $leaves->reason = $request->reason;
                   $leaves->remaining = $remaining;
-                
+
                   $leaves->sub_category = $request->sub_cat;
                   $leaves->application_date = date('Y-m-d');
                  // START
@@ -717,10 +727,10 @@ class AttendanceController extends Controller
                     $request->image->move(public_path('storage/leaves'), $newImageName);
                     $leaves->attachment =  $newImageName;
                   }
-                 
-          
+
+
                 $leaves->save();
-                  
+
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
                 $msg=$type_name." Leave Request is submitted successfully!";
@@ -740,9 +750,9 @@ class AttendanceController extends Controller
 
         }
         // For Employee with more than 12 Month
-        else 
+        else
         {
-  
+
           $total_leave_days=$leaves+$different_days;
 
           if($total_leave_days<$max_leave_days)
@@ -760,47 +770,47 @@ class AttendanceController extends Controller
 
 
             // for annual leave
-            if ($request->nature==1) 
+            if ($request->nature==1)
             {
                       $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
-    
+
                       // checking annual leave balance
                       if($different_days < $annualleaveBalance)
                       {
                         $leaves->days=$different_days;
                         $remaining=$annualleaveBalance-$different_days;
-    
+
                       }
                       else
-                      { 
+                      {
                         $msg='You Have Insufficient Annual  Accrued Days';
                         return response( [ 'msg'=>$msg ],202 );
                       }
-                             
+
             }
-                    
+
             if($request->nature != 5 && $request->nature != 1)
             {
-             
+
               $leaves->days = $different_days;
             }
             // For Paternity leabe
-            if ($request->nature==5) 
+            if ($request->nature==5)
             {
 
                 $paternity=Leaves::where('empID',$empID)->where('nature',5)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->orderBy('created_at','desc')->first();
                 // Case an Employee has ever applied leave before
-                if ( $paternity) 
+                if ( $paternity)
                 {
                   $d1 = $paternity->created_at;
                   $d2 = new DateTime();
                   $interval = SysHelpers::countWorkingDays($d1,$d2);
-                  
+
                   $month=$interval;
                     // For Employee With Less Than 4 month of service and last application
                     if ($month <112 )
                     {
-            
+
                         $max_days=7;
                       // Case Requested days are less than max-days
                         if($total_leave_days <= $max_days)
@@ -814,7 +824,7 @@ class AttendanceController extends Controller
                             $msg="Sorry, You have Insufficient Leave Days Balance";
                             return $url->with('msg', $msg);
                           }
-                         
+
                         }
                         // case All Paternity days have been used up
                         else
@@ -823,7 +833,7 @@ class AttendanceController extends Controller
                           $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
                           return $url->with('msg', $msg);
                         }
-                        
+
                     }
                       // For Employee who as attained more than 4 working days
                     else
@@ -840,7 +850,7 @@ class AttendanceController extends Controller
                           $msg="Sorry, You have Insufficient Leave Days Balance";
                           return $url->with('msg', $msg);
                         }
-                       
+
                       }
                       // case All Paternity days have been used up
                       else
@@ -858,7 +868,7 @@ class AttendanceController extends Controller
                 else
                 {
                   // Checking if employee has less than 4 working months
-                  if ($day < 112 ) 
+                  if ($day < 112 )
                   {
                     $max_days=7;
                     if($total_leave_days < $max_days)
@@ -872,17 +882,17 @@ class AttendanceController extends Controller
                         $msg="Sorry, You have Insufficient  Leave Days Balance";
                         return $url->with('msg', $msg);
                       }
-                     
+
                     }
                     else
                     {
-                     
+
                       $leave_type=LeaveType::where('id',$nature)->first();
                       $type_name=$leave_type->type;
                       $msg="Sorry, You have Insufficient  ".$type_name." Leave Days Balance";
                       return $url->with('msg', $msg);
-                  
-                    
+
+
                     }
 
                   }
@@ -900,12 +910,12 @@ class AttendanceController extends Controller
                       $msg="Sorry, You have Insufficient  Leave Days Balance";
                       return $url->with('msg', $msg);
                     }
-                  
+
                   }
                 }
-            
+
             }
-          
+
               $leaves->reason = $request->reason;
               $leaves->remaining = $remaining;
               $leaves->sub_category = $request->sub_cat;
@@ -915,8 +925,8 @@ class AttendanceController extends Controller
                 $request->image->move(public_path('storage/leaves'), $newImageName);
                 $leaves->attachment =  $newImageName;
               }
-            
-              $leaves->save();  
+
+              $leaves->save();
               $leave_type=LeaveType::where('id',$nature)->first();
               $type_name=$leave_type->type;
 
@@ -931,8 +941,8 @@ class AttendanceController extends Controller
                 return $url->with('msg', $msg);
 
               }
- 
-          
+
+
            }
           }else{
                $msg="Error!! start date should be less that end date!";
@@ -945,47 +955,53 @@ class AttendanceController extends Controller
     // start of leave approval
     public function approveLeave($id)
       {
-        $leave=Leaves::where('id',$id)->first();
+        $leave=Leaves::find($id);
         $empID=$leave->empID;
         $approval=LeaveApproval::where('empID',$empID)->first();
         $approver=Auth()->user()->emp_id;
         $employee=Auth()->user()->position;
 
-        $poFition=Position::where('id',$employee)->first();
+        $position=Position::where('id',$employee)->first();
 
 
         // chacking level 1
         if ($approval->level1==$approver) {
-  
+
                 // For Deligation
             if($leave->deligated!=null){
+                $id=Auth::user()->emp_id;
+                $this->attendance_model->save_deligated($leave->empID);
 
-              $id=Auth::user()->emp_id;
+
               $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
               $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
               $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
               // dd($request->deligate);
 
             }
-       
-            
-     
-      
+
+
+
+
             $leave->status=3;
             $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
-          
+
 
         }
         elseif($approval->level2==$approver)
         {
+
               // For Deligation
             if($leave->deligated!=null){
+                $id=Auth::user()->emp_id;
+                $this->attendance_model->save_deligated($leave->empID);
 
-              $id=Auth::user()->emp_id;
+
+
               $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
               $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
               $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
@@ -999,13 +1015,17 @@ class AttendanceController extends Controller
             $leave->updated_at= new DateTime();
             $leave->update();
           }
-        
+
         elseif($approval->level3==$approver)
         {
+
             // For Deligation
             if($leave->deligated!=null){
+                $id=Auth::user()->emp_id;
+                $this->attendance_model->save_deligated($leave->empID);
 
-              $id=Auth::user()->emp_id;
+
+
               $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
               $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
               $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
@@ -1021,6 +1041,7 @@ class AttendanceController extends Controller
         }
         else
         {
+
             $msg='Sorry, You are Not Authorized';
 
             return redirect('flex/attendance/leave')->with('msg', $msg);
@@ -1033,7 +1054,42 @@ class AttendanceController extends Controller
         // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
         return redirect('flex/attendance/leave')->with('msg', $msg);
 
-  
+
+      }
+
+      public function revoke_authority(){
+        $id=Auth::user()->emp_id;
+
+        $del_level1 = Level1::all()->where('deligetor',$id);
+
+        foreach($del_level1 as $row){
+        $level1=DB::table('leave_approvals')->Where('empID',$row->line_employee)->update(['level1'=>$id]);
+
+       // if($level1 > 0){
+            Level1::where('line_employee',$row->line_employee)->delete();
+       // }
+        }
+
+        $del_level2 = Level2::all()->where('deligetor',$id);
+
+        foreach($del_level2 as $row){
+           
+        $level2=DB::table('leave_approvals')->Where('empID',$row->line_employee)->update(['level2'=>$id]);
+       // if($level2 > 0){
+            Level2::where('line_employee',$row->line_employee)->delete();
+       // }
+        }
+
+        $del_level3 = Level3::all()->where('deligetor',$id);
+        foreach($del_level3 as $row){
+        $level3=DB::table('leave_approvals')->Where('empID',$row->line_employee)->update(['level3'=>$id]);
+        //if($level3 > 0){
+            Level3::where('line_employee',$row->line_employee)->delete();
+        //}
+        }
+
+      return redirect()->back();
+
       }
 
 
@@ -1100,7 +1156,7 @@ class AttendanceController extends Controller
                     'attachment'=>$newImageName
                 );
 
-                dd($data);
+
                 $result = $this->attendance_model->applyleave($data);
                 if($result ==true){
                     echo "<p class='alert alert-success text-center'>Application Sent Added Successifully</p>";
@@ -1124,7 +1180,7 @@ class AttendanceController extends Controller
 
 
         $msg="Leave Was Deleted Successfully !";
-    
+
         return redirect('flex/attendance/my-leaves')->with('msg', $msg);
       }
    }
@@ -1222,7 +1278,7 @@ class AttendanceController extends Controller
       $empID = session('emp_id');
       // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
       $data['leaves'] =Leaves::where('state',0)->latest()->get();
-      
+
 
       if(session('conf_leave')!='' && session('line')!='' ){
         $data['other_leave'] =  $this->attendance_model->leavereport_hr();

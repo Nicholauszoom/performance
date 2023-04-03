@@ -250,6 +250,8 @@ class GeneralController extends Controller
         }
     }
 
+   
+
     public function updatecontract(Request $request)
     {
         $id = $request->input('id');
@@ -581,7 +583,7 @@ class GeneralController extends Controller
                 return view('app.company_info',$data);
 
             }
-          
+
     }
 
 
@@ -605,7 +607,7 @@ class GeneralController extends Controller
             //     return view('app.compay_info',$data);
 
             // }
-          
+
     }
 
     public function addCompanyBranch(Request $request)
@@ -1843,7 +1845,7 @@ class GeneralController extends Controller
                 'level' => $level + 1,
 
             );
-          
+
             $result = $this->flexperformance_model->addposition($data);
             if ($result == true) {
                 return redirect()->back();
@@ -1965,7 +1967,7 @@ class GeneralController extends Controller
         $linemanager = $request->input('linemanager');
 
         $empID = session('emp_id');
-       
+
 
 
 
@@ -3794,7 +3796,7 @@ class GeneralController extends Controller
         $rate_per_month = number_format(($strategyProgress / $months), 1);
 
         $data['appreciated'] = $this->flexperformance_model->appreciated_employee();
-
+        $data['deligate'] = $this->flexperformance_model->get_deligates(auth()->user()->emp_id);
         // $data['employee_count'] =  $this->flexperformance_model->count_employees();
         $data['overview'] = $this->flexperformance_model->employees_info();
         $data["strategyProgress"] = $strategyProgress;
@@ -5234,10 +5236,10 @@ class GeneralController extends Controller
     }else{
         echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
     }
-        
+
     }else{
         echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
-    }        
+    }
     }else{
         return view('payroll.submit_inputs',$data);
     }

@@ -81,7 +81,7 @@ class FlexPerformanceModel extends Model
 	function employee() {
 		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, e.*, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) FROM employee el where el.emp_id = e.line_manager limit 1 ) as LINEMANAGER, IF((( SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id GROUP by nature)>0), (SELECT sum(days)  FROM `leaves` where nature=1 and empID=e.emp_id  GROUP by nature),0) as ACCRUED FROM employee e, department d, position p , (select @s:=0) as s WHERE  p.id=e.position and d.id=e.department and e.state=1";
 
-	
+
 		return DB::select(DB::raw($query));
 	}
 
@@ -152,6 +152,17 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+    public function get_deligates($id){
+        $level1 = DB::table('level1')->where('deligetor',$id)->count();
+
+        $level2 = DB::table('level2')->where('deligetor',$id)->count();
+
+        $level3 = DB::table('level3')->where('deligetor',$id)->count();
+
+       
+        return ($level1+$level2+$level3);
+    }
+
 	function branch()
 	{
 		$query = "SELECT @s:=@s+1 as SNo, b.* FROM branch b";
@@ -181,17 +192,17 @@ class FlexPerformanceModel extends Model
 
         $query = "SELECT id from branch ORDER BY id DESC LIMIT 1";
         $row =  DB::select(DB::raw($query));
-        
+
     	return $row[0]->id;
 	}
 
-	
+
 	function addCompanyInfo($data)
 	{
 
         DB::table('company_info')->insert($data);
 
-        
+
     	return true;
 	}
 
@@ -199,7 +210,7 @@ class FlexPerformanceModel extends Model
 		$query = "SELECT * from company_info limit 1";
 
 		$row =  DB::select(DB::raw($query));
-        
+
 		return $row[0];
 
 	}
@@ -209,7 +220,7 @@ class FlexPerformanceModel extends Model
 
         DB::table('company_info')->where('id',$id)->update($data);
 
-        
+
     	return true;
 	}
 
@@ -424,7 +435,7 @@ class FlexPerformanceModel extends Model
 		FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id   ORDER BY eo.id DESC";
 
 		//$query = "SELECT *  FROM employee_overtime";
-	
+
 		return DB::select(DB::raw($query));
 	}
 

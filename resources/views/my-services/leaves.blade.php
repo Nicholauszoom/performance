@@ -32,19 +32,19 @@
     </div>
     {{-- id="applyLeave" --}}
     <div class="card-body">
-      
-   
+
+
       <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
         <code class="text-success">  <span id="remain" class="text-success"></span> </code>
 
       </div>
-   
+
         <form  autocomplete="off" action="{{ url('flex/attendance/save_leave') }}"  method="post"  enctype="multipart/form-data">
           @csrf
             <!-- START -->
             <div class="row">
 
-        
+
             <div class="form-group col-6">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Start Date <span  class="text-danger">*</span></label>
                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
@@ -80,7 +80,7 @@
                       foreach($leave_type as $key){ if($key->gender > 0 && $key->gender!= $gender) continue; ?>
                      <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?> Leave</option> <?php  } ?>
                   </select>
-      
+
         </div>
         {{-- @if($days<336) --}}
         <div class="col-6 form-group" id="sub" style="display:none">
@@ -122,26 +122,26 @@
             <span class="text-danger"><?php// echo form_error("lname");?></span>
           </div>
         </div>
-        @if($deligate>0)
+        @if($deligate > 0)
         <div class="form-group col-6">
           <label class="control-label " for="first-name" for="stream" >Deligate Position To <span  class="text-danger">*</span></label>
-           
+
           <select name="deligate" @if($deligate>0) required  @endif class="form-control form-select select" id="">
             <option value="">&nbsp;</option>
             @foreach( $employees as $item)
             <option value=" {{ $item->emp_id }}">{{ $item->fname }} {{ $item->mname }} {{ $item->lname }}</option>
             @endforeach
           </select>
-      
+
         </div>
         @endif
 
-      
+
             <!-- END -->
             <div class="form-group py-2">
               <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
                 <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
-               
+
               </div>
             </div>
 
@@ -152,7 +152,7 @@
 <div id="approval" class="modal fade" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-md">
       <div class="modal-content">
-        
+
         <div class="modal-header">
           <button type="button" class="btn-close " data-bs-dismiss="modal">
 
@@ -163,20 +163,20 @@
         <div class="row ">
           <div class="col-4 mx-auto">
             <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
-          
+
             <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
               No
           </button>
           </div>
-       
+
 
         </div>
       </modal-body>
       <modal-footer>
-  
+
       </modal-footer>
-    
-       
+
+
       </div>
   </div>
 </div>
@@ -261,7 +261,7 @@
             </div></td>
               <td>
                 <div >
-                  
+
                       <?php if ($row->state==1){ ?>
                       <div class="col-md-12">
                       <span class="label label-default badge bg-pending text-white">PENDING</span></div><?php }
@@ -277,7 +277,7 @@
               <td class="options-width d-flex">
                 {{-- start of cancel leave button --}}
               <?php if($row->status==0 ){ ?>
-                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip disabled"  
+                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip disabled"
                 onclick="cancelRequest(<?php echo $row->id; ?>)">
                   <button  class="btn btn-danger btn-sm" ><i class="ph-x"></i></button></a>
               <?php } else{ ?>
@@ -285,7 +285,7 @@
               <button  class="btn btn-danger btn-sm"  disabled><i class="ph-x"></i></button></a>
               <?php }  ?>
               </td>
-             
+
               </tr>
 
             <?php } //} ?>
@@ -413,7 +413,7 @@ Swal.fire({
 });
 
 }
-      
+
 
         function cancelRequest(id) {
 
@@ -500,7 +500,7 @@ Swal.fire({
 
 
 
- 
+
 
 
 @include('app.includes.leave_operations')
@@ -516,18 +516,18 @@ Swal.fire({
       url = url.replace(':id', par);
 
       if (id==1) {
-        $("#attachment").hide(); 
+        $("#attachment").hide();
       } else {
         $("#attachment").show();
       }
 
       $('#subs_cat').find('option').not(':first').remove();
-  
+
       $.ajax({
           url: url,
           type: 'get',
           dataType: 'json',
-          
+
           success: function(response){
 
             let days=response.days;
@@ -537,29 +537,29 @@ Swal.fire({
              $("#remaining").append(status);
              $("#remaining").show()
              $("#sub").hide();
-            
-           
+
+
             for (var i = 0; i < response.data.length; i++) {
-              
+
               var id=subs[i].id;
               var name=subs[i].name;
               var option = "<option value='"+id+"'>"+name+"</option>";
-           
-             
+
+
               $("#subs_cat").append(option);
-              
-              $("#sub").show(); 
-            
+
+              $("#sub").show();
+
             }
 
-        
+
           }
       });
   });
-  
-  
+
+
   </script>
-  
+
 <script>
     $(function() {
       var today = new Date();

@@ -7,59 +7,73 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payroll Details </title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
 
 </head>
 
 <body>
 
-    <main class="mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table">
-                    <tfoot>
+    <main class="body-font p-1">
+        <div id="logo pl-1" style="margin-left: 7px; z-index: -10">
+            <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
+        </div>
 
+        <div style="margin-top:20px;">
+            <div class="col-md-12">
+
+                <table class="table" id="img">
+                    <tfoot>
                         <tr>
                             <td class="">
-                                <div class="box-text">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here"
-                                        class="image-fluid"> <br>
-
-                                </div>
-                            </td>
-                            <td>
-                                <div class="box-text text-center">
-                                    <p style="font-weight:700" class="">
-                                        AFRICAN BANKING CORPORATION<br>
-                                        P.O. BOX 31 ,DAR ES SALAAM
-
+                                <div class="box-text text-right" style="text-align:left;">
+                                    <p class="p-space">
+                                        <h5 style="font-weight:bolder;margin-top:15px;">Human Capital Information System</h5>
                                     </p>
+                                    <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
+                                    <p class="p-space">Bibi Titi Mohammed Road</p>
+                                    <p class="p-space">P.O. Box 31, Dar es salaam </p>
+                                    <p class="p-space">+255 22 22119422/2111990 </p>
+                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
                                 </div>
                             </td>
+                            <td> </td>
                             <td>
                                 <div class="box-text"> </div>
                             </td>
 
                             <td colspan="4" class="w-50" style="">
-                                <div class="" style="text-align: right; padding-right:20px">
-
-                                    <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll
-                                        Reconciliation Summary</h5>
-                                    <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">
-                                        Date:
-                                        {{ $payroll_date }}
-
+                                <div class="box-text text-end">
+                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                 </div>
                             </td>
                         </tr>
-
                     </tfoot>
                 </table>
 
-                <hr style="border: 10px solid rgb(211, 140, 10); border-radius: 2px;">
+                <hr>
+
+                <table class="table" style="background-color: #165384; color:white">
+                    <thead>
+                        <tr>
+                            <td class="">
+                                <div class="box-text">
+                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Reconciliation Details </h5>
+                                </div>
+                            </td>
+                            <td> <div class="box-text text-end"></div> </td>
+                            <td> <div class="box-text"> </div> </td>
+                            <td colspan="4" class="w-50" style="">
+                                <P class="mt-1" style="text-align: right; "> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</p>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <hr>
                 @if(isset($employee_increase))
                 @if(count($employee_increase) > 0)
                 <h4>Add New Employee</h4>
-                <table class="table" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -143,7 +157,7 @@
                 @if(isset($employee_decrease))
                 @if(count($employee_decrease) > 0)
                 <h4>Less Terminated Employee</h4>
-                <table class="table" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -226,7 +240,7 @@
                 @if(isset($basic_increase))
                 @if(count($basic_increase) > 0)
                 <h4>Add Increase in Basic Pay Comparison to Last M</h4>
-                <table class="table" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -309,7 +323,7 @@
                 @if(isset($basic_decrease))
                 @if(count($basic_decrease) > 0)
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
-                <table class="table" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -390,9 +404,9 @@
                 @endif
                 @endif
                 @foreach($names as $name)
-                <h4>{{ $name }}</h4>
+                <h4>{{ $name == 'Add/Les N-Overtime'? 'Add/Les Normal Day Overtime':($name == 'Add/Les S-Overtime' ? 'Add/Les Sunday Overtime':$name) }}</h4>
 
-                <table class="table" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead>
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -453,7 +467,7 @@
 
                                 </tr>
                             @endif
-                            @else 
+                            @else
                             @php
                             $total_previous += $row->previous_amount;
                             $total_current += $row->current_amount;
@@ -507,103 +521,63 @@
                 </table>
                 @endforeach
 
-                <hr style="border: 4px solid rgb(211, 140, 10); border-radius: 2px;">
-                <table class="table">
-                    <tfoot>
+                <table class="table" id="reports">
+                    <tbody>
                         <tr>
-                            <td collspan="4">
-                                <p class="text-start"><small><b>Prepared By</b></small></p>
+                            <td>
+                                <p class="text-start" style="font-size:15px;">
+                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
+                                </p>
                             </td>
+                            <td>
+                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p>
+                            </td>
+                            <td>.</td>
                         </tr>
                         <tr>
-                            <td class="">
 
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
+                            <td>
+                                <p class="text-start"><small>Reviewed By:</small></p>
                             </td>
                             <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
+                                <p class="text-start"><small>Checked By:</small></p>
                             </td>
                             <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
+                                <p class="text-start"><small>Approved By:</small></p>
                             </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
 
-                            </td>
                         </tr>
                         <tr>
-                            <td collspan="4">
-                                <p><small><b>Checked and Approved By</b></small></p>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
+                            <td>
+                                <p class="text-start"><small>Name______________________</small></p>
                             </td>
                             <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
+                                <p class="text-start"><small>Name______________________</small></p>
                             </td>
                             <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
+                                <p class="text-start"><small>Name______________________</small></p>
                             </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
 
-                            </td>
                         </tr>
                         <tr>
-                            <td collspan="4">
-                                <b>Checked and Approved By</b>
+
+                            <td>
+                                <p class="text-start"><small>Signature and Date___________</small></p>
                             </td>
+                            <td>
+                                <p class="text-start"><small>Signature and Date___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature and Date___________</small></p>
+                            </td>
+
                         </tr>
-                        <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td collspan="4">
-                                <p><small><b>Approved By</b></small></p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="">
-
-
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            </td>
-                            <td>
-                                    <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-
-                            </td>
-                        </tr>
-
-
-                    </tfoot>
+                    </tbody>
                 </table>
-
+                <div id="logo2 pl-1" style="margin-left: 7px; z-index: -10">
+                    <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
+                </div>
             </div>
         </div>
 
@@ -614,7 +588,26 @@
     </main>
 
 
-
+    <div class="footer">
+        <table class="table footer-font">
+            <tfoot>
+                <tr>
+                    <td class="">
+                        <div class="box-text"> {{ date('l jS \of F Y') }} </div>
+                    </td>
+                    <td>
+                        <div class="box-text text-end"> </div>
+                    </td>
+                    <td>
+                        <div class="box-text"> </div>
+                    </td>
+                    <td colspan="4" class="w-50" style="">
+                        <i> Page <span class="pagenum">.</span></i>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 
 
 

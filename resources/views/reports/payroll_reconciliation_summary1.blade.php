@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payroll Reconciliation-Summary</title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
-
     <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
+
 
 
 

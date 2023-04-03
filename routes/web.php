@@ -145,7 +145,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
         Route::any('/resolve_grievance/{id}','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance/{id}','unresolve_grievance')->name('flex.unresolve_grievance');
-        
+
         Route::any('/grievance_details/{id}','grievance_details')->name('flex.grievance_details');
 
         // end of grievances routes
@@ -199,7 +199,7 @@ Route::middleware('auth')->group(function () {
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
         Route::any('completed_task/{id}','completed_task')->name('flex.completed_task');
-        
+
 
         // For Perfomance report
         Route::any('performance-report','performance')->name('flex.performance-report');
@@ -207,11 +207,11 @@ Route::middleware('auth')->group(function () {
          // For Perfomance ratios
          Route::any('performance','performance_ratio')->name('flex.performance');
          Route::any('save_performance_ratio','save_performance_ratio')->name('flex.save_performance_ratio');
-         
+
         // Task Assessment Routes
         Route::any('assess-task/{id}','assess_task')->name('flex.assess-task');
         Route::any('save-task-assessment','save_task_assessment')->name('flex.save_task_assessment');
-      
+
 
         //Adhoc Tasks routes
         Route::any('tasks','tasks')->name('flex.tasks');
@@ -224,7 +224,7 @@ Route::middleware('auth')->group(function () {
         // Adhoc Task Assessment Routes
         Route::any('assess-adhoctask/{id}','assess_adhoctask')->name('flex.assess-adhoctask');
         Route::any('save-adhoctask-assessment','save_adhoctask_assessment')->name('flex.save_adhoctask_assessment');
-       
+
 
         // Performance Ratios routes
         Route::any('performance-ratios','performance_ratios')->name('flex.performance-ratios');
@@ -345,6 +345,8 @@ Route::middleware('auth')->group(function () {
     // Routes 1
     Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
 
+
+        Route::any('/revoke_authority' ,'revoke_authority')->name('attendandance.revoke_authority');
             Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
             Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
             Route::any('/leave' ,'leave')->name('attendandance.leave');
@@ -407,7 +409,7 @@ Route::middleware('auth')->group(function () {
 
     // start of  loans access permission routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
-        
+
         Route::any('/companyInfo','companyInfo')->name('flex.companyInfo');
         Route::any('/updatecompanyInfo','updatecompanyInfo')->name('flex.updatecompanyInfo');
         Route::any('/submitInputs','submitInputs')->name('flex.submitInputs');
@@ -511,7 +513,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/department_structure','department_structure')->name('flex.department_structure');
         Route::any('/Oldorganization_structure','Oldorganization_structure')->name('flex.Oldorganization_structure');
         Route::any('/grievances','grievances')->name('flex.grievances');
-   
+
     });
     //end of organization access permission  routes
 
