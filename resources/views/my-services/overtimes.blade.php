@@ -25,7 +25,10 @@
                     </div>
 
                     <div class="card-body">
+                        <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
+                            <code class="text-success">  <span id="remain" class="text-success"></span> </code>
 
+                          </div>
                         <form id="applyOvertime" enctype="multipart/form-data" method="post" data-parsley-validate
                             autocomplete="off">
                             @csrf
@@ -951,8 +954,8 @@
                     async: false
                 })
                 .done(function(data) {
-                    $('#resultfeedSubmission').fadeOut('slow', function() {
-                        $('#resultfeedSubmission').fadeIn('slow').html(data);
+                    $('#remaining').fadeOut('slow', function() {
+                        $('#remaining').fadeIn('slow').html(data);
                     });
 
                     setTimeout(function() { // wait for 5 secs(2)

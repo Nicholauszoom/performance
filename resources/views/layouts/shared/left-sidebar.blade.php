@@ -72,7 +72,7 @@
 
                         <li class="nav-item ">
                             <a class="nav-link {{ request()->routeIs('flex.my-loans') ? 'active' : null }}"
-                                href="{{ route('flex.my-loans') }}">Loans</a>
+                                href="{{ route('flex.my-loans') }}">Loans(HESLB)</a>
                         </li>
 
                         {{-- / --}}
@@ -315,7 +315,7 @@
                             @can('view-report')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('attendance.leavereport') ? 'active' : null }}"
-                                        href="{{ route('attendance.leavereport') }}">Leave Reports</a></li>
+                                        href="{{ route('attendance.leavereport') }}">Leave History</a></li>
                             @endcan
                         </ul>
                     </li>
@@ -348,7 +348,7 @@
                         </ul>
                     </li>
                 @endcan
-                
+
                 {{-- For Performance Management --}}
                 @can('view-Performance')
                 <li

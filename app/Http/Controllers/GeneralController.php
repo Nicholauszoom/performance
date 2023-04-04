@@ -250,7 +250,7 @@ class GeneralController extends Controller
         }
     }
 
-   
+
 
     public function updatecontract(Request $request)
     {
@@ -1966,7 +1966,174 @@ class GeneralController extends Controller
         $category = $request->input('category');
         $linemanager = $request->input('linemanager');
 
-        $empID = session('emp_id');
+        $empID = auth()->user()->emp_id;
+
+
+
+
+        $split_start = explode("  at  ", $start);
+        $split_finish = explode("  at  ", $finish);
+
+        $start_date = $split_start[0];
+        $start_time = $split_start[1];
+
+        $finish_date = $split_finish[0];
+        $finish_time = $split_finish[1];
+
+        $start_calendar = str_replace('/', '-', $start_date);
+        $finish_calendar = str_replace('/', '-', $finish_date);
+
+        $start_final = date('Y-m-d', strtotime($start_calendar));
+        $finish_final = date('Y-m-d ', strtotime($finish_calendar));
+
+        $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
+
+        //fetch Line manager data from employee table and send email
+        // $linemanager_data = SysHelpers::employeeData($linemanager);
+        // $fullname = $linemanager_data['full_name'];
+        // $email_data = array(
+        //     'subject' => 'Employee Overtime Approval',
+        //     'view' => 'emails.linemanager.overtime-approval',
+        //     'email' => $linemanager_data['email'],
+        //     'full_name' => $fullname,
+        // );
+        // Notification::route('mail', $email_data['email'])->notify(new EmailRequests($email_data));
+        // dd('Email Sent Successfully');
+        //$linemanager = $this->flexperformance_model->get_linemanagerID($empID);
+
+        // foreach ($line as $row) {
+        //     $linemanager = $row->line_manager;
+        // }
+        //Overtime Should range between 24 Hrs;
+
+        if ($maxRange > 24) {
+
+            echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
+        } else {
+
+            $end_night_shift = "6:00";
+            $start_night_shift = "20:00";
+
+            if ($start_date == $finish_date) {
+
+                if (strtotime($start_time) >= strtotime($finish_time)) {
+
+                    echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
+                } else {
+
+                    if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
+
+                        $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
+
+                        $data = array(
+                            'time_start' => $start_final . " " . $start_time,
+                            'time_end' => $finish_final . " " . $finish_time,
+                            'overtime_type' => $type,
+                            'overtime_category' => $category,
+                            'reason' => $reason,
+                            'empID' => $empID,
+                            'linemanager' => $linemanager,
+                            'time_recommended_line' => date('Y-m-d h:i:s'),
+                            'time_approved_hr' => date('Y-m-d'),
+                            'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        );
+
+                        $result = $this->flexperformance_model->apply_overtime($data);
+
+                        if ($result == true) {
+                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+                    } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
+
+                        $type = 0; // echo "DAY OVERTIME";
+
+                        $data = array(
+                            'time_start' => $start_final . " " . $start_time,
+                            'time_end' => $finish_final . " " . $finish_time,
+                            'overtime_type' => $type,
+                            'overtime_category' => $category,
+                            'reason' => $reason,
+                            'empID' => $empID,
+                            'linemanager' => $linemanager,
+                            'time_recommended_line' => date('Y-m-d h:i:s'),
+                            'time_approved_hr' => date('Y-m-d'),
+                            'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        );
+
+                        $result = $this->flexperformance_model->apply_overtime($data);
+
+                        if ($result == true) {
+                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+                    } else {
+                        echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
+                    }
+                }
+            } else if ($start_date > $finish_date) {
+                echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
+            } else {
+                // echo "CORRECT DATE - <BR>";
+                if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
+                    $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
+                    $data = array(
+                        'time_start' => $start_final . " " . $start_time,
+                        'time_end' => $finish_final . " " . $finish_time,
+                        'overtime_type' => $type,
+                        'overtime_category' => $category,
+                        'reason' => $reason,
+                        'empID' => $empID,
+                        'linemanager' => $linemanager,
+                        'time_recommended_line' => date('Y-m-d h:i:s'),
+                        'time_approved_hr' => date('Y-m-d'),
+                        'time_confirmed_line' => date('Y-m-d h:i:s'),
+                    );
+                    $result = $this->flexperformance_model->apply_overtime($data);
+                    if ($result == true) {
+                        echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                    } else {
+                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                    }
+                } else {
+                    $type = 0; // echo "DAY OVERTIME";
+                    $data = array(
+                        'time_start' => $start_final . " " . $start_time,
+                        'time_end' => $finish_final . " " . $finish_time,
+                        'overtime_type' => $type,
+                        'overtime_category' => $category,
+                        'reason' => $reason,
+                        'empID' => $empID,
+                        'linemanager' => $linemanager,
+                        'time_recommended_line' => date('Y-m-d h:i:s'),
+                        'time_approved_hr' => date('Y-m-d'),
+                        'time_confirmed_line' => date('Y-m-d h:i:s'),
+                    );
+                    $result = $this->flexperformance_model->apply_overtime($data);
+                    if ($result == true) {
+                        echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                    } else {
+                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                    }
+                }
+            }
+        }
+    }
+
+    public function applyOvertimeOnbehalf(Request $request)
+    {
+
+        $start = $request->input('time_start');
+        $finish = $request->input('time_finish');
+        $reason = $request->input('reason');
+        $category = $request->input('category');
+        $linemanager = $request->input('linemanager');
+
+        $empID = $request->empID;
+
+       
 
 
 
@@ -3842,6 +4009,7 @@ class GeneralController extends Controller
         $calendar = $payrollMonth;
         //dd($calendar);
 
+
         $previousDate = date('Y-m-d', strtotime($calendar . ' -1 months'));
 
 
@@ -3860,7 +4028,7 @@ class GeneralController extends Controller
 
         $current_payroll_month = $payrollMonth;
         $reportType = 1;  //Staff = 1, temporary = 2
-        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+        //$reportformat = $request->input('type'); //Staff = 1, temporary = 2
         $previous_payroll_month_raw = date('Y-m', strtotime(date('Y-m-d', strtotime($current_payroll_month . "-1 month"))));
         $previous_payroll_month = $this->reports_model->prevPayrollMonth($previous_payroll_month_raw);
 
@@ -3873,19 +4041,43 @@ class GeneralController extends Controller
         $data['total_previous_overtime'] = $this->reports_model->s_overtime($previous_payroll_month);
         $data['total_current_overtime'] = $this->reports_model->s_overtime($current_payroll_month);
 
+        $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
+
+
+
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        //dd($data['new_employee']);
+        if($data['new_employee'] > 0){
+
+            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
+
+        }
+
+
+
+        if($data['terminated_employee'] > 0){
+
+            $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
+
+
+        }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
         foreach ($total_allowances as $row) {
             if ($row->allowance == "N-Overtime") {
+
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
                 array_push($descriptions, $row->description);
+
             } elseif ($row->allowance == "S-Overtime") {
+                if($row->current_amount != $row->previous_amount ){
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
                 array_push($descriptions, $row->description);
+            }
             } elseif ($row->allowance == "House Rent") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
                 $row->current_amount += $allowance[0]->current_amount;
@@ -3955,6 +4147,7 @@ class GeneralController extends Controller
 
 
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
+
 
 
 
@@ -8404,6 +8597,13 @@ class GeneralController extends Controller
         $disciplinary->recommended_sanctum = $request->recommended_sanctum;
         $disciplinary->final_decission = $request->final_decission;
 
+        //new fields
+        $disciplinary->appeal_received_by = $request->appeal_received_by;
+        $disciplinary->date_of_receiving_appeal = $request->date_of_receiving_appeal;
+        $disciplinary->appeal_reasons = $request->appeal_reasons;
+        $disciplinary->appeal_findings = $request->appeal_findings;
+        $disciplinary->appeal_outcomes = $request->appeal_outcomes;
+
 
 
 
@@ -9712,6 +9912,22 @@ class GeneralController extends Controller
         $data['child'] = 'Overtimes';
         return view('my-services.overtimes', $data);
     }
+
+    public function overtime_on_behalf()
+    {
+        $data['title'] = "Overtime";
+        $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
+        $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
+        $data['employees'] = $this->flexperformance_model->Employee();
+
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+
+        $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
+        $data['parent'] = 'My Services';
+        $data['child'] = 'Overtimes';
+        return view('overtime.overtime_onbehalf', $data);
+    }
+
 
 
 

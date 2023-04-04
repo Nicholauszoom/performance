@@ -184,6 +184,9 @@ Route::middleware('auth')->group(function () {
         // start of overtime routes
         Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
 
+        Route::any('/applyOvertimeOnbehalf','applyOvertimeOnbehalf')->name('flex.applyOvertimeOnbehalf');
+
+
         // end of overtime routes
 
         // Start of performance routes
@@ -911,6 +914,9 @@ Route::middleware('auth')->group(function () {
 
         // start of selfservices routes
         Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+
+        Route::any('/overtime_on_behalf','overtime_on_behalf')->name('flex.overtime_on_behalf');
+
         Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
         Route::any('/my-biodata','my_biodata')->name('flex.my-biodata');
         // end of self services
