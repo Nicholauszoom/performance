@@ -11,19 +11,19 @@
                    <div class="card-header header-elements-sm-inline">
 								<h4 class="card-title"> Permissions</h4>
 								<div class="header-elements">
-								   
-                             
+
+
                         <button type="button" class="btn btn-outline-info btn-xs px-4"
                             data-toggle="modal" data-target="#addPermissionModal">
                         <i class="fa fa-plus-circle"></i>
                         Add
                     </button>
-									
+
 				                	</div>
-			                	
+
 							</div>
                     <div class="card-body">
-                      
+
                         <div class="tab-content tab-bordered" id="myTab3Content">
                             <div class="tab-pane fade @if(empty($id)) active show @endif" id="home2" role="tabpanel"
                                 aria-labelledby="home-tab2">
@@ -34,7 +34,7 @@
                         <th>S/N</th>
                         <th>Slug</th>
                         <th>Module</th>
-                        <th>Actions</th>
+                        {{-- <th>Actions</th> --}}
                     </tr>
                     </thead>
                     <tbody>
@@ -46,7 +46,7 @@
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $permission->slug }}</td>
                             <td>{{ $permission->modules->slug  ?? '' }}</td>
-                            <td >
+                            {{-- <td >
                                 {!! Form::open(['route' => ['permissions.destroy', $permission->id], 'method' => 'delete']) !!}
                                 <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
                                         data-toggle="modal"
@@ -58,7 +58,7 @@
                                 </button>
                                 {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
-                            </td>
+                            </td> --}}
                         </tr>
                     @endcan
                     @endforeach
@@ -111,7 +111,7 @@
                 lengthMenu: '<span>Show:</span> _MENU_',
              paginate: { 'first': 'First', 'last': 'Last', 'next': $('html').attr('dir') == 'rtl' ? '&larr;' : '&rarr;', 'previous': $('html').attr('dir') == 'rtl' ? '&rarr;' : '&larr;' }
             },
-        
+
         });
     </script>
 @endsection
