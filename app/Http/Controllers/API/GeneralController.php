@@ -404,7 +404,7 @@ class GeneralController extends Controller
     public function myLeaves(Request $request)
     {
         $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
-
+        // $data['myleave'] = array_reverse($data['myleave']); // Reverse the order of leaves
 
         $emp_id=auth()->user()->emp_id;
         
