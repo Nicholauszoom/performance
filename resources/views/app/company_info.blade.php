@@ -16,9 +16,9 @@
 @section('content')
 @php
 $id = '';
-foreach($data as $row2){
- $id = $row2->id;
-}
+
+ $id = $data->id;
+
 
 @endphp
 
@@ -33,88 +33,28 @@ foreach($data as $row2){
             <div class="col-lg-12">
 
                 <div class="border rounded-0 p-3 mb-3">
-                    <ul class="nav nav-tabs nav-tabs-underline nav-justified mb-3" id="tabs-target-right" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a href="#payrollReportTab" class="nav-link active show" data-bs-toggle="tab" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2 "></i>
-                                List
-                            </a>
-                        </li>
-                  
-                        <li class="nav-item" role="presentation">
-                            <a href="#overtimeTab" class="nav-link " data-bs-toggle="tab" aria-selected="false"
-                                role="tab" tabindex="-1">
-                                <i class="ph-list me-2"></i>
-                                Add Info
-                            </a>
-                        </li>
-       
 
-                        {{-- start of payroll tab link --}}
-                   
-                    </ul>
 
                     <div class="tab-content" id="myTabContent">
-
-                        <div role="tabpanel" role="tabpanel" class="tab-pane active show " id="payrollReportTab"
-                            aria-labelledby="home-tab">
-             
-
-                            <div class="col-md-12 col-sm-6 col-xs-12">
-                                <div class="card  rounded-0 border-0 shadow-none">
-                                  
-
-
-                                    {{-- table --}}
-                                    <table id="datatable" class="table datatable-basic table-bordered">
-                                        <thead>
-                                            <tr>
-                                                
-                                                <th>Company Name</th>
-                                                <th>Email</th>
-                                                <th>TIN</th>
-                                                <th>Option</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            @if(!empty($data))
-                                            @foreach($data as $row)
-                                             <tr>
-                                                <td>{{$row->cname}}</td>
-                                                <td>{{$row->email}}</td>
-                                                <td>{{$row->tin}}</td>
-                                                <td>-</td>
-                                             </tr>
-                                        @endforeach
-                                        @endif
-                                           
-                                        </tbody>
-                                    </table>
-                                    {{-- /table --}}
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane fade" id="overtimeTab">
+                        <div role="tabpanel" class="tab-pane active show" id="overtimeTab">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="card  rounded-0 border-0 shadow-none">
                                     <div class="tab-head py-2 px-2">
-                                        <h2 class="text-warning">Add Company Info</h2>
+                                        <h2 class="text-warning">Update Company Info</h2>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="tab-body">
                                         <?php //echo $this->session->flashdata("note");
                                         ?>
                                         <div id="resultfeedOvertime"></div>
-                                        <form action="{{route('flex.updatecompanyInfo',$id)}}" method="PUT">
+                                        <form action="{{route('flex.updatecompanyInfo')}}" method="POST">
                                     @csrf
                                             <input type="hidden" name="id" value="{{$id}}">
                                         <div class="row">
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Company Name</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="cname" class="form-control"
+                                                    <input type="text" name="cname" value="{{$data->cname}}" class="form-control"
                                                         placeholder="company name">
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -124,7 +64,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Postal Address</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="postal_address" class="form-control"
+                                                    <input type="text" name="postal_address" value="{{$data->postal_address}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -136,7 +76,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Postal City</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="postal_city" class="form-control"
+                                                    <input type="text" name="postal_city" value="{{$data->postal_city}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -146,7 +86,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Phone No</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="phone_no1" class="form-control"
+                                                    <input type="text" name="phone_no1" value="{{$data->phone_no1}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -158,7 +98,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Email</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="email" class="form-control"
+                                                    <input type="text" name="email" value="{{$data->email}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -168,7 +108,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Plot No</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="plot_no" class="form-control">
+                                                    <input type="text" name="plot_no" value="{{$data->plot_no}}" class="form-control">
                                                  
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -183,7 +123,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Block No</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="block_no" class="form-control"
+                                                    <input type="text" name="block_no" value="{{$data->block_no}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -193,8 +133,8 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">street</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="street" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="street" value="{{$data->street}}" class="form-control"
+                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
@@ -207,7 +147,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">Branch</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="branch" class="form-control"
+                                                    <input type="text" name="branch" value="{{$data->branch}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -217,8 +157,8 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">WCF REG NO</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="wcf_reg_no" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="wcf_reg_no" value="{{$data->wcf_reg_no}}" class="form-control"
+                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
@@ -230,7 +170,7 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">HESLB CODE NO</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="heslb_code_no" class="form-control"
+                                                    <input type="text" name="heslb_code_no" value="{{$data->heslb_code_no}}" class="form-control"
                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
@@ -240,14 +180,44 @@ foreach($data as $row2){
                                             <div class="col-lg-6 col-sm-6 mb-3">
                                                 <label class="form-label">NSSF Contorol No</label>
                                                 <div class="form-control-feedback form-control-feedback-start">
-                                                    <input type="text" name="nssf_control_number" class="form-control"
-                                                        placeholder="JohnDoe">
+                                                    <input type="text" name="nssf_control_number" value="{{$data->nssf_control_number}}" class="form-control"
+                                                        >
                                                     <div class="form-control-feedback-icon">
                                                         <i class="ph-user-circle text-muted"></i>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">TIN</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="tin" value="{{$data->tin}}" class="form-control"
+                                                       >
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 mb-3">
+                                                <label class="form-label">NSSF Reg</label>
+                                                <div class="form-control-feedback form-control-feedback-start">
+                                                    <input type="text" name="nssf_reg" value="{{$data->nssf_reg}}" class="form-control"
+                                                        >
+                                                    <div class="form-control-feedback-icon">
+                                                        <i class="ph-user-circle text-muted"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-1 offset-11">
+
+                                                <button type="submit" class="btn btn-perfrom mb-2 mt-2">Save</button>
+                                            </div>
+                                        </div>
+                                        
                                    
                                     </form>
                                        

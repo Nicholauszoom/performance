@@ -1994,11 +1994,11 @@ dd($data['paye_terminated']);
         if ($data['new_employee'] > 0) {
             //increase of employee
             $data['employee_increase'] = $this->reports_model->employee_increase($current_payroll_month, $previous_payroll_month);
-        } 
+        }
         if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
-           
+
         }
 
         if ($current_increase['basic_increase'] > 0) {
@@ -2079,7 +2079,7 @@ dd($data['paye_terminated']);
 
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
-       
+
 
         $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
         //dd($data['new_employee']);
@@ -2088,9 +2088,9 @@ dd($data['paye_terminated']);
             $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
 
         }
-       
-        
-        
+
+
+
         if($data['terminated_employee'] > 0){
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
@@ -2101,7 +2101,7 @@ dd($data['paye_terminated']);
         $descriptions = [];
         foreach ($total_allowances as $row) {
             if ($row->allowance == "N-Overtime") {
-             
+
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
                 $row->current_amount += $allowance[0]->current_amount;
                 $row->current_amount += $allowance[0]->current_amount;
@@ -2192,6 +2192,7 @@ dd($data['paye_terminated']);
 
         //return $pdf->download('sam.pdf');
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
+
 
         return $pdf->download('payroll_reconciliation_summary-'.$current_payroll_month.'.pdf');
         //return view('reports.payroll_reconciliation_summary1', $data);
@@ -3124,8 +3125,16 @@ EOD;
             }
         }
         // dd($employees);
+        if($request->type == 1){
+           $data['employees'] =  $employees;
+        $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
+        return $pdf->download('payrolldetails.pdf');
+        }else{
+            return view('reports.leave_balance_datatable', ['employees' => $employees]);
+        }
 
-        return view('reports.leave_balance', ['employees' => $employees]);
+
+
     }
 
     public function annualLeaveData(Request $request)

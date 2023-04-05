@@ -127,7 +127,7 @@ thead{
 }
 
 h5 {
-    color: #f0ab00 !important;
+    /* color: #f0ab00 !important; */
     /* font-weight: 600; */
     font-style: normal;
     font-variant-caps: normal;
@@ -144,7 +144,7 @@ h5 {
 }
 
 h2 {
-    color: #f0ab00 !important;
+    /* color: #f0ab00 !important; */
     /* font-weight: 600; */
     font-style: normal;
     font-variant-caps: normal;
@@ -282,8 +282,11 @@ bg-extra {
     background-color: #00204e;
     color: #fff;
 }
+/* .card-layout{
+    background: #c81a1a !important;
+} */
 
 
 
 
-  
+

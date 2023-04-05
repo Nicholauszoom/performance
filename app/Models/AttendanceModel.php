@@ -366,7 +366,7 @@ class AttendanceModel extends Model
 
 
 
-				dd($leave_start, $leave_end);
+
 				$total_leave = $total_leave + $this->getNumberOfWorkingDays($leave_start, $leave_end, $holidays);
 			}
 		}
@@ -434,6 +434,23 @@ class AttendanceModel extends Model
 
 		return $maximum_days;
 	}
+
+    function save_deligated($id){
+        $query = "insert into level1 (deligetor,line_employee) SELECT la.level1 as deligetor,la.empID as line_employee from
+            leave_approvals la where la.level1 = '". $id. "'";
+        DB::insert(DB::raw($query));
+
+        $query = "insert into level2 (deligetor,line_employee) SELECT la.level2 as deligetor,la.empID as line_employee from
+        leave_approvals la where la.level2 = '". $id. "' ";
+    DB::insert(DB::raw($query));
+
+    $query = "insert into level3 (deligetor,line_employee) SELECT la.level3 as deligetor,la.empID as line_employee from
+    leave_approvals la where la.level3 = '". $id. "' ";
+DB::insert(DB::raw($query));
+
+return true;
+    }
+
 
 	function getOpeningLeaveBalance($empID, $hireDate, $today)
 	{

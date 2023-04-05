@@ -24,7 +24,7 @@
         @if (session('mng_emp'))
         @can('add-employee')
           <a href="{{ url('/flex/addEmployee') }}" class="btn btn-main">
-            <i class="ph-plus me-2"></i> Register Employee
+            <i class="ph-plus me-2"></i> Register New Employee
           </a>
         @endcan
         @endif
@@ -64,7 +64,7 @@
              $mng = App\Models\Employee::all()->where('emp_id',$row->line_manager)->first();
              $l_name = $mng->fname.' '.$mng->mname.' '.$mng->lname;
             }
-       
+
             @endphp
             <td> {{ $l_name }} </td>
             <td>

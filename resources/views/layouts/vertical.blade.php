@@ -43,14 +43,20 @@ border-radius: 50%;
   }
 
         body {
-     background-image: url('{{ asset('img/bg.png') }}');
-     /* background-color: #f1f1f1; */
-     background-color: #ffff;
-     background: cover;
-     background-repeat: none;
+            background-image: url('{{ asset('img/bg2.png') }}');
+            /* background-color: #f1f1f1; */
+            background-color: #ffff;
+            /* background: cover; */
+            background-position:center;
+
+            background-repeat: no-repeat;
 
 
-    }
+        }
+
+        .card {
+            background-color: transparent !important;
+        }
      </style>
 </head>
 

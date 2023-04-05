@@ -25,7 +25,7 @@
     <div class="card-header">
         <h4 class="text-warning">Employee Payslip</h4>
     </div>
-   
+
     @can('view-employee-payslip')
     <div class="card-body">
 
@@ -57,7 +57,7 @@
                         <select required="" name="employee" id="employee_list" class="select4_single form-control select" tabindex="-1">
                             <option> Select Employee </option>
                             @foreach ( $employee as $row)
-                            <option value="{{ $row->empID }}"> {{ $row->NAME }}</option>
+                            <option value="{{ $row->empID }}">{{ $row->empID }} - {{ $row->NAME }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -98,19 +98,16 @@
                                 <span class="form-check-label">Employee</span>
                             </label>
 
-                            <label class="form-check form-check-inline">
+                            {{-- <label class="form-check form-check-inline">
                                 <input type="radio" class="form-check-input" value="2" name="type">
                                 <span class="form-check-label">temporary</span>
-                            </label>
+                            </label> --}}
                         </div>
                     </div>
                 </div>
 
                 <div class="col-6">
                     <div class="mb-3">
-                        <button class="btn btn-main px-3 mt-4" id="print_all" type="submit">
-                            <i class="ph-printer me-2"></i> PRINT ALL
-                        </button>
                     </div>
                 </div>
             </div>
@@ -122,7 +119,7 @@
 
     {{-- start of payslip mail delivery --}}
     <div class="card-header">
-        <h4 class="text-warning">Payslip Mail Delivery List</h4>
+        <h4 class="text-warning">Payroll List</h4>
     </div>
 
     <table id="datatable" class="table datatable-basic table-bordered">
@@ -131,7 +128,7 @@
             <th>S/N</th>
             <th>Payroll Month</th>
             <th>Status</th>
-            <th>Mail Status</th>
+            {{-- <th>Mail Status</th> --}}
             <th>Option</th>
             <th hidden ></th>
           </tr>
@@ -162,13 +159,13 @@
                             <span class="badge bg-success">APPROVED</span><br>
                         <?php  } ?>
                     </td>
-                    <td>
+                    {{-- <td>
                         <?php if($row->email_status==0){ ?>
                             <span class="badge bg-pending">NOT SENT</span><br>
                         <?php } else { ?>
                             <span class="badge bg-success">SENT</span><br>
                         <?php  } ?>
-                    </td>
+                    </td> --}}
 
                     <td class="options-width">
                         <div class="d-inline-flex">
@@ -213,9 +210,9 @@
                                     </a>
                                     {{-- / --}}
                                 <?php } ?>
-                               
+
                                 <?php if($row->email_status==0){ ?>
-                                                                       
+
                                     {{-- send payslip mail button --}}
                                     @can('mail-payroll')
                                     <a href="javascript:void(0)" onclick="sendEmail('<?php echo $row->payroll_date; ?>')" title="Send Pay Slip as Email" class="me-2">
@@ -229,9 +226,9 @@
                                        <button class="btn bg-warning text-white btn-xs"> <i class="ph-repeat"></i>&nbsp;&nbsp;<i class="ph-envelope"></i> </button>
                                     </a>
                                     {{-- / --}}
-                                   
 
-                                <?php } 
+
+                                <?php }
                             ?>
                            <?php } ?>
                         <?php } ?>

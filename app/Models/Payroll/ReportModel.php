@@ -522,11 +522,11 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     function get_payroll_inputs_before_payroll($empID)
     {
 
-        $query = "select e.emp_id,e.fname,e.hire_date,e.cost_center,e.salary, e.mname, IF(e.state = 1,'Active','InActive') as status, e.lname, e.gender, e.birthdate, e.nationality, e.email,
-        d.name as department, p.name as position, b.name as branch, concat(el.fname,' ',el.mname,' ',el.lname) as line_manager, c.name as contract, e.salary,
+        $query = "select e.emp_id,e.fname,e.hire_date,e.cost_center,e.salary,(SELECT concat(el.fname,' ',el.mname,' ',el.lname) from employee el where el.emp_id = e.line_manager) as lime_manager, e.mname, IF(e.state = 1,'Active','InActive') as status, e.lname, e.gender, e.birthdate, e.nationality, e.email,
+        d.name as department, p.name as position, b.name as branch, c.name as contract, e.salary,
         pf.name as pension, e.pf_membership_no as pension_number, e.account_no, e.mobile
         from employee e, department d, position p, branch b, employee el, contract c, pension_fund pf where e.department = d.id and e.position = p.id
-        and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type and e.pension_fund = pf.id and e.state != 4 and e.emp_id = '" . $empID . "'";
+        and e.branch = b.code  and c.id = e.contract_type and e.pension_fund = pf.id and e.state != 4 and e.emp_id = '" . $empID . "'";
 
         $row  =  DB::select(DB::raw($query));
 
@@ -583,7 +583,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
 
-        from payroll_logs pl,employee e where e.emp_id = pl.empID and e.state !=4  and pl.payroll_date='" . $date . "'
+        from payroll_logs pl,employee e where e.emp_id = pl.empID and e.state !=4  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
 
         ";
 
@@ -1516,16 +1516,16 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
        // $calender = explode('-', $date);
        // $date2 = '%' . $calender[0] . '-' . $calender[1] . '%';
         $query = "SELECT count(pl.empID) as total from payroll_logs pl where pl.payroll_date = '".$date."' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '".$date2."')";
-       
+
        $row =  DB::select(DB::raw($query));
-    
+
 
         return $row[0]->total;
     }
 
     public function new_employee_salary($date,$date2){
         $query = "SELECT SUM(pl.salary) as total from payroll_logs pl where pl.payroll_date = '".$date."' and pl.empID NOT IN (SELECT pl2.empID from payroll_logs pl2 where pl2.payroll_date = '".$date2."')";
-       
+
         $row =  DB::select(DB::raw($query));
         return $row[0]->total;
     }
@@ -1572,7 +1572,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     }
 
-    
+
 
     public function s_overtime($date)
     {
@@ -1957,7 +1957,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             SELECT 'Add/Les Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leavePay != 0,leavePay,0) as current_amount, 0 as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
-           
+
 
 
             /* employee terminated last month  */
@@ -2086,7 +2086,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     //     return $row;
     // }
-    
+
 
 
     public function total_allowance1($current_payroll_month, $previous_payroll_month)

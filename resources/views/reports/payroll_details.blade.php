@@ -7,86 +7,100 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payroll Details </title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/report.css') }}">
 </head>
 
 <body>
 
-    <main class="mb-5">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table">
-                    <tfoot>
+    <main class="body-font p-1">
+        <div id="logo pl-1" style="margin-left: 7px; z-index: -10">
+            <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
+        </div>
 
+        <div style="margin-top:20px;">
+            <div class="col-md-12">
+
+                <table class="table" id="img">
+                    <tfoot>
                         <tr>
                             <td class="">
-                                <div class="box-text">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here"
-                                        class="image-fluid"> <br>
-
-                                </div>
-                            </td>
-                            <td>
-                                <div class="box-text text-center">
-                                    <p style="font-weight:700" class="">
-                                        AFRICAN BANKING CORPORATION<br>
-                                        P.O. BOX 31 ,DAR ES SALAAM
-
+                                <div class="box-text text-right" style="text-align:left;">
+                                    <p class="p-space">
+                                        <h5 style="font-weight:bolder;margin-top:15px;">Human Capital Information System</h5>
                                     </p>
+                                    <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
+                                    <p class="p-space">Bibi Titi Mohammed Road</p>
+                                    <p class="p-space">P.O. Box 31, Dar es salaam </p>
+                                    <p class="p-space">+255 22 22119422/2111990 </p>
+                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
                                 </div>
                             </td>
+                            <td> </td>
                             <td>
                                 <div class="box-text"> </div>
                             </td>
 
                             <td colspan="4" class="w-50" style="">
-                                <div class="" style="text-align: right; padding-right:20px">
-
-                                    <h5 class="text-end font-weight-bolder" style="font-weight:bolder;">Payroll
-                                        Detail_By Number</h5>
-                                    <p class="text-end font-weight-bolder text-primary" style="font-weight:bolder;">
-                                        Date:
-                                        {{ $payroll_date }}
-
+                                <div class="box-text text-end">
+                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                 </div>
                             </td>
                         </tr>
-
                     </tfoot>
                 </table>
 
-<hr style="border: 10px solid rgb(211, 140, 10); border-radius: 2px;">
+                <hr>
 
-                        <table class="table" style="font-size:9px; ">
-                            <thead style="font-size:8px;">
-                                <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+                <table class="table" style="background-color: #165384; color:white">
+                    <thead>
+                        <tr>
+                            <td class="">
+                                <div class="box-text">
+                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Details </h5>
+                                </div>
+                            </td>
+                            <td> <div class="box-text text-end"></div> </td>
+                            <td> <div class="box-text"> </div> </td>
+                            <td colspan="4" class="w-50" style="">
+                                <P class="mt-1" style="text-align: right; "> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</p>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
 
-                                    <th ><b>Pay No</b></th>
-                                    <td></td>
-                                    <th  colspan="2" style="margin-bottom: 30px;" class="text-center"><b>Name</b><br>
-                                    </th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Basic Salary</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Overtime</b></th>
+                <hr>
 
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Respons. Allowance</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Areas</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Other Payment</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Gross Salary</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Taxable Gross</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>PAYE</b></th>
+                <table class="table" id="reports"  style="font-size:9px; ">
+                    <thead style="font-size:8px;">
+                        <tr style="border-bottom:2px solid rgb(9, 5, 64);">
+
+                            <th><b>Pay No</b></th>
+                            <td></td>
+                            <th colspan="2" style="margin-bottom: 30px;" class="text-center"><b>Name</b><br>
+                            </th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Basic Salary</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Overtime</b></th>
+
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Respons. Allowance</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Areas</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Other Payment</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Gross Salary</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Taxable Gross</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>PAYE</b></th>
 
 
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>NSSF</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Loan Board</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Advance/Others</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Total Deduction</b></th>
-                                    <th  class="text-end" style="margin-bottom: 30px;"><b>Ammount Payable</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>NSSF</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Loan Board</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Advance/Others</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Total Deduction</b></th>
+                            <th class="text-end" style="margin-bottom: 30px;"><b>Ammount Payable</b></th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
                                 $i =0;
                                 if(!empty($summary)){
                                     $total_loans = 0;
@@ -123,212 +137,248 @@
 
                                 ?>
 
+                        <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+
+                            <td class="text-end">{{ $row->emp_id }}</td>
+                            <td></td>
+                            <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }} @if ($row->fname == '' || $row->fname == '')
+                                    {{ substr($row->lname, 0, 3) }}
+                                @else
+                                @endif
+                            </td>
+                            <td class="" style="margin-left: 0px;" colspan="">{{ $row->lname }} @if ($row->fname == '' || $row->fname == '')
+                                    {{ substr($row->lname, 0, 3) }}
+                                @else
+                                @endif
+                            </td>
+
+                            <td class="text-end">{{ number_format($row->salary, 0) }}</td>
+
+                            <td class="text-end">{{ number_format($row->overtime, 0) }}</td>
+
+
+                            <td class="text-end">{{ number_format($row->teller_allowance, 0) }}</td>
+                            <td class="text-end">{{ number_format($row->house_rent, 0) }}</td>
+
+                            <td class="text-end">{{ number_format(0, 0) }}</td>
+
+                            <td class="text-end">{{ number_format($row->other_payments, 0) }}</td>
+
+                            <td class="text-end">{{ number_format($row->salary + $row->allowances, 0) }}
+                            </td>
+                            <td class="text-end">{{ number_format(0, 0) }}</td>
+                            <td class="text-end">
+                                {{ number_format($row->salary + $row->allowances - $row->pension_employer, 0) }}
+                            </td>
+                            <td class="text-end">{{ number_format($row->taxdue, 2) }}</td>
+
+                            <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
+                            <td class="text-end">{{ number_format($row->loans, 0) }}</td>
+
+                            <td class="text-end">{{ number_format(intval($row->deductions), 0) }}</td>
+
+                            <td class="text-end">
+                                {{ number_format(intval($row->salary) + intval($row->allowances) - intval($amount), 0) }}
+                            </td>
+                            <td class="text-end">{{ number_format($amount, 0) }}</td>
+
+
+                        </tr>
+
+                        <?php } ?>
+                        @foreach ($termination as $row2)
+                            @if ($row2->taxable != 0)
                                 <tr style="border-bottom:2px solid rgb(67, 67, 73)">
 
-                                    <td class="text-end">{{ $row->emp_id }}</td>
+                                    <td class="">{{ $row2->emp_id }}</td>
+
                                     <td></td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }} @if($row->fname == ""|| $row->fname == "" ) {{ substr($row->lname, 0, 3) }} @else @endif
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->fname }}
                                     </td>
-                                    <td class="" style="margin-left: 0px;" colspan="">{{ $row->lname }} @if($row->fname == ""|| $row->fname == "" ) {{ substr($row->lname, 0, 3) }} @else  @endif
+                                    <td class="" style="margin-left: 0px;" colspan="">{{ $row2->lname }}
                                     </td>
 
-                                    <td class="text-end">{{ number_format($row->salary, 0) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->overtime, 0) }}</td>
-
-
-                                    <td class="text-end">{{ number_format($row->teller_allowance, 0) }}</td>
-                                    <td class="text-end">{{ number_format($row->house_rent, 0) }}</td>
+                                    <td class="text-end">{{ number_format($row2->salaryEnrollment, 0) }}
+                                    </td>
 
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->other_payments, 0) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->salary + $row->allowances, 0) }}
+
+                                    <td class="text-end">{{ number_format(0, 0) }}</td>
+                                    <td class="text-end">{{ number_format(0, 0) }}</td>
+
+                                    <td class="text-end">{{ number_format(0, 0) }}</td>
+
+                                    <td class="text-end">
+                                        {{ number_format($row2->leavePay + $row2->leaveAllowance, 0) }}
+                                    </td>
+                                    @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay;  @endphp
+                                    <td class="text-end">
+                                        {{ number_format($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay, 0) }}
                                     </td>
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
                                     <td class="text-end">
-                                        {{ number_format($row->salary + $row->allowances - $row->pension_employer, 0) }}
+                                        {{ number_format($row2->taxable, 0) }}
                                     </td>
-                                    <td class="text-end">{{ number_format($row->taxdue, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row2->paye, 2) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
-                                    <td class="text-end">{{ number_format($row->loans, 0) }}</td>
-
-                                    <td class="text-end">{{ number_format(intval($row->deductions), 0) }}</td>
-
+                                    <td class="text-end">{{ number_format($row2->pension_employee, 2) }}
+                                    </td>
+                                    <td class="text-end">{{ number_format(0, 0) }}</td>
+                                    <td class="text-end">{{ number_format($row2->loan_balance, 0) }}</td>
                                     <td class="text-end">
-                                        {{ number_format(intval($row->salary) + intval($row->allowances) - intval($amount), 0) }}
+                                        {{ number_format($row2->pension_employee + $row2->paye + $row2->otherDeductions, 0) }}
                                     </td>
-                                    <td class="text-end">{{ number_format($amount, 0) }}</td>
+                                    <td class="text-end">{{ number_format(0, 0) }}</td>
 
 
                                 </tr>
+                                @php
+                                    $others += $row2->loan_balance;
+                                    $total_salary += $row2->salaryEnrollment;
+                                    $total_others += $row2->leavePay + $row2->leaveAllowance;
+                                    $total_taxable_amount += $row2->taxable;
+                                    $total_taxs += $row2->paye;
+                                    //$total_netpay += ($row2->taxable -$row2->paye);
+                                    $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
+                                    $total_pension += $row2->pension_employee;
+                                    $total_gross_salary += $row2->total_gross;
 
-                                <?php } ?>
-                                @foreach ($termination as $row2)
-                                @if($row2->taxable != 0)
-                                    <tr style="border-bottom:2px solid rgb(67, 67, 73)">
+                                    // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
 
-                                        <td class="">{{ $row2->emp_id }}</td>
+                                @endphp
+                            @endif
+                        @endforeach
+                        <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
 
-                                        <td></td>
-                                        <td class="" style="margin-right: 0px" colspan="">{{ $row2->fname }}
-                                        </td>
-                                        <td class="" style="margin-left: 0px;" colspan="">{{ $row2->lname }}
-                                        </td>
-
-
-                                        <td class="text-end">{{ number_format($row2->salaryEnrollment,0) }}
-                                        </td>
-
-                                        <td class="text-end">{{ number_format(0,0) }}</td>
-
-
-
-                                        <td class="text-end">{{ number_format(0,0) }}</td>
-                                        <td class="text-end">{{ number_format(0,0) }}</td>
-
-                                        <td class="text-end">{{ number_format(0,0) }}</td>
-
-                                        <td class="text-end">
-                                            {{ number_format($row2->leavePay + $row2->leaveAllowance,0) }}
-                                        </td>
-                                        @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay;  @endphp
-                                        <td class="text-end">
-                                            {{ number_format($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay,0) }}
-                                        </td>
-                                        <td class="text-end">{{ number_format(0,0) }}</td>
-                                        <td class="text-end">
-                                            {{ number_format($row2->taxable,0) }}
-                                        </td>
-                                        <td class="text-end">{{ number_format($row2->paye,2) }}</td>
-
-                                        <td class="text-end">{{ number_format($row2->pension_employee, 2) }}
-                                        </td>
-                                        <td class="text-end">{{ number_format(0, 0) }}</td>
-                                        <td class="text-end">{{ number_format($row2->loan_balance, 0) }}</td>
-                                        <td class="text-end">
-                                            {{ number_format($row2->pension_employee + $row2->paye + $row2->otherDeductions, 0) }}
-                                        </td>
-                                        <td class="text-end">{{ number_format(0, 0) }}</td>
-
-
-                                    </tr>
-                                    @php
-                                        $others += $row2->loan_balance;
-                                        $total_salary += $row2->salaryEnrollment;
-                                        $total_others += $row2->leavePay + $row2->leaveAllowance;
-                                        $total_taxable_amount += $row2->taxable;
-                                        $total_taxs += $row2->paye;
-                                        //$total_netpay += ($row2->taxable -$row2->paye);
-                                        $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
-                                        $total_pension += $row2->pension_employee;
-                                        $total_gross_salary += $row2->total_gross;
-
-                                        // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
-
-                                    @endphp
-                                    @endif
-                                @endforeach
-                                <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
-
-                                    {{-- <td></td>
+                            {{-- <td></td>
                                     <td></td>
                                     <td></td> --}}
-                                    <td colspan="4">
-                                            <b>
-                                                <center><b>TOTAL<b></center>
-                                                </b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_salary, 0) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_overtime, 0) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_teller_allowance, 0) }}</b></b>
-                                    </td>
+                            <td colspan="4">
+                                <b>
+                                    <center><b>TOTAL<b></center>
+                                </b>
+                            </td>
+                            <td class="text-end"><b><b>{{ number_format($total_salary, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_overtime, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_teller_allowance, 0) }}</b></b>
+                            </td>
 
-                                    <td class="text-end"><b><b>{{ number_format($total_house_rent, 0) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format(0, 0) }}<b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_house_rent, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format(0, 0) }}<b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
 
-                                    <td class="text-end">
-                                        <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others, 0) }}</b></b>
-                                    </td>
+                            <td class="text-end">
+                                <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others, 0) }}</b></b>
+                            </td>
 
-                                    <td class="text-end"><b><b> {{ number_format(0, 0) }}</b></b></td>
-                                    <td class="text-end">
-                                        <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others - $total_pension, 0) }}</b></b>
-                                    </td>
+                            <td class="text-end"><b><b> {{ number_format(0, 0) }}</b></b></td>
+                            <td class="text-end">
+                                <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others - $total_pension, 0) }}</b></b>
+                            </td>
 
-                                    <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
 
-                                    <td class="text-end"><b><b>{{ number_format($total_pension, 1) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_loans, 0) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($others, 0) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_deduction, 0) }}</b></b></td>
-                                    <td class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_pension, 1) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_loans, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($others, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_deduction, 0) }}</b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
 
-                                </tr>
+                        </tr>
 
-                                <?php } ?>
-                            </tbody>
+                        <?php } ?>
+                    </tbody>
 
-                        </table>
+                </table>
+
+                <table class="table" id="reports">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p class="text-start" style="font-size:15px;">
+                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
+                                </p>
+                            </td>
+                            <td>
+                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p>
+                            </td>
+                            <td>.</td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Reviewed By:</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Checked By:</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Approved By:</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Name______________________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Name______________________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Name______________________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Signature and Date___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature and Date___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature and Date___________</small></p>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
 
             </div>
         </div>
 
 
-        <table class="table">
-            <tfoot>
 
+
+        <div id="logo2 pl-1" style="margin-left: 7px; z-index: -10">
+            <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
+        </div>
+    </main>
+    <div class="footer">
+        <table class="table footer-font">
+            <tfoot>
                 <tr>
                     <td class="">
-                        <p class="text-start"><small><b>Prepared By</b></small></p>
-                        <div class="row mt-3">
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-                        </div>
+                        <div class="box-text"> {{ date('l, F j, Y') }} </div>
                     </td>
                     <td>
-                        <p><small><b>Checked and Approved By</b></small></p>
-
-                        <div class="row mt-3">
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date:________________</div>
-                        </div>
+                        <div class="box-text text-end"> </div>
                     </td>
                     <td>
-                        <b>Checked and Approved By</b>
-
-                        <div class="row mt-3">
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date________________</div>
-                        </div>
+                        <div class="box-text"> </div>
                     </td>
-
                     <td colspan="4" class="w-50" style="">
-                        <p><small><b>Approved By</b></small></p>
-
-                        <div class="row mt-3">
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Name:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Position:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Signature:________________</div>
-                            <div class="col-md-3 col-sm-3 col-lg-3 mb-3">Date________________</div>
-                        </div>
+                        <i> Page <span class="pagenum">.</span></i>
                     </td>
                 </tr>
-
             </tfoot>
         </table>
-
-
-    </main>
-
+    </div>
 
 
 

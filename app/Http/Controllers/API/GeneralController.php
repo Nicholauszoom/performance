@@ -240,7 +240,7 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
 
-
+       
 
 
         $split_start = explode(" ", $start);
