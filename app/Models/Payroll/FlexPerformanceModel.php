@@ -159,7 +159,7 @@ class FlexPerformanceModel extends Model
 
         $level3 = DB::table('level3')->where('deligetor',$id)->count();
 
-       
+
         return ($level1+$level2+$level3);
     }
 
@@ -389,6 +389,14 @@ class FlexPerformanceModel extends Model
 
 		return DB::select(DB::raw($query));
 	}
+
+    public function Overtime_total($id){
+        $query = "SELECT SUM(amount) as total_amount,SUM((TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60)) as total_hours from overtime WHERE empID = '".$id."'";
+        $row = DB::select(DB::raw($query));
+
+      return $row;
+
+    }
 
 	function fetch_my_overtime($id)
 	{
