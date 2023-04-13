@@ -207,6 +207,8 @@ Route::middleware('auth')->group(function () {
         // For Perfomance report
         Route::any('performance-report','performance')->name('flex.performance-report');
 
+        Route::any('performanceDetails/{id}','performanceDetails')->name('flex.performanceDetails');
+
          // For Perfomance ratios
          Route::any('performance','performance_ratio')->name('flex.performance');
          Route::any('save_performance_ratio','save_performance_ratio')->name('flex.save_performance_ratio');

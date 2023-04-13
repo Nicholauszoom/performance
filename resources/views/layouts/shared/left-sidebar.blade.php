@@ -350,7 +350,7 @@
                 @endcan
 
                 {{-- For Performance Management --}}
-                @can('view-Performance')
+               
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -385,11 +385,11 @@
                         </li>
                     </ul>
                 </li>
-                @endcan
+
                 {{-- / --}}
 
                 {{-- For Talent Management --}}
-                @can('view-Talent')
+
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -422,7 +422,7 @@
                     </li> --}}
                     </ul>
                 </li>
-                 @endcan
+
                 {{-- / --}}
                 @can('view-organization')
                     <li
