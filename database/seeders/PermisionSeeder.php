@@ -17,7 +17,7 @@ class PermisionSeeder extends Seeder
 
 
             // For Workforce access
-           
+
             #1 workforce management permissions
             // ['slug' => 'access-workforce','sys_module_id'=>1],
             ['slug' => 'view-workforce','sys_module_id'=>1],
@@ -172,8 +172,8 @@ class PermisionSeeder extends Seeder
             ['slug' => 'delete-loan','sys_module_id'=>4],
             ['slug' => 'approve-loan','sys_module_id'=>4],
             ['slug' => 'view-bank-loan','sys_module_id'=>4],
-            
-            
+
+
 
              //Organization
             //  ['slug' => 'access-organization','sys_module_id'=>5],
@@ -202,7 +202,7 @@ class PermisionSeeder extends Seeder
 
                ['slug' => 'view-Permission','sys_module_id'=>7],
                ['slug' => 'add-Permission','sys_module_id'=>7],
-               ['slug' => 'edit-Permission','sys_module_id'=>7], 
+               ['slug' => 'edit-Permission','sys_module_id'=>7],
                ['slug' => 'delete-Permission','sys_module_id'=>7],
                ['slug' => 'view-audit-trail','sys_module_id'=>7],
                ['slug' => 'view-mail-configuration','sys_module_id'=>7],
@@ -215,14 +215,14 @@ class PermisionSeeder extends Seeder
             // For Performance
             ['slug' => 'view-Performance','sys_module_id'=>9],
             ['slug' => 'add-Performance','sys_module_id'=>9],
-            ['slug' => 'edit-Performance','sys_module_id'=>9], 
+            ['slug' => 'edit-Performance','sys_module_id'=>9],
             ['slug' => 'delete-Performance','sys_module_id'=>9],
             ['slug' => 'view-Performance-matrix','sys_module_id'=>9],
 
              //For Talent
              ['slug' => 'view-Talent','sys_module_id'=>10],
              ['slug' => 'add-Talent','sys_module_id'=>10],
-             ['slug' => 'edit-Talent','sys_module_id'=>10], 
+             ['slug' => 'edit-Talent','sys_module_id'=>10],
              ['slug' => 'delete-Talent','sys_module_id'=>10],
              ['slug' => 'view-Talent-matrix','sys_module_id'=>10],
              // end manage-AccessControl permissions
@@ -230,7 +230,7 @@ class PermisionSeeder extends Seeder
         ];
 
         foreach ($data as $row) {
-            Permission::firstOrCreate($row);
+            Permission::updateOrCreate($row);
         }
     }
 }
