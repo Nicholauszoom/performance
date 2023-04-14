@@ -2133,7 +2133,7 @@ class GeneralController extends Controller
 
         $empID = $request->empID;
 
-       
+
 
 
 
@@ -10470,84 +10470,110 @@ class GeneralController extends Controller
 
     public function performance()
     {
-        $employee = EMPL::all();
+         //$employee = EMPL::all();
+        $employee = $this->flexperformance_model->employee();
 
         $item1 = 0;
         $item1_count = 0;
+        $data['item1_data'] =  array();
 
         $item2 = 0;
         $item2_count = 0;
+        $data['item2_data'] =  array();
 
         $item3 = 0;
         $item3_count = 0;
+        $data['item3_data'] =  array();
 
         $item4 = 0;
         $item4_count = 0;
+        $data['item4_data'] =  array();
 
         $item5 = 0;
         $item5_count = 0;
+        $data['item5_data'] =  array();
 
         $item6 = 0;
         $item6_count = 0;
+        $data['item6_data'] =  array();
 
         $item7 = 0;
         $item7_count = 0;
+        $data['item7_data'] =  array();
 
         $item8 = 0;
         $item8_count = 0;
+        $data['item8_data'] =  array();
 
         $item9 = 0;
         $item9_count = 0;
+        $data['item9_data'] =  array();
 
         $item10 = 0;
         $item10_count = 0;
+        $data['item10_data'] =  array();
 
         $item11 = 0;
         $item11_count = 0;
+        $data['item11_data'] =  array();
 
         $item12 = 0;
         $item12_count = 0;
+        $data['item12_data'] =  array();
 
         $item13 = 0;
         $item13_count = 0;
+        $data['item13_data'] =  array();
 
 
         $item14 = 0;
         $item14_count = 0;
+        $data['item14_data'] =  array();
 
 
         $item15 = 0;
         $item15_count = 0;
+        $data['item15_data'] =  array();
 
         $item16 = 0;
         $item16_count = 0;
+        $data['item16_data'] =  array();
 
         $item17 = 0;
         $item17_count = 0;
+        $data['item17_data'] =  array();
 
         $item18 = 0;
         $item18_count = 0;
+        $data['item18_data'] =  array();
 
         $item19 = 0;
         $item19_count = 0;
+        $data['item19_data'] =  array();
 
         $item20 = 0;
         $item20_count = 0;
+        $data['item20_data'] =  array();
 
         $item21 = 0;
         $item21_count = 0;
+        $data['item21_data'] =  array();
 
         $item22 = 0;
         $item22_count = 0;
+        $data['item22_data'] =  array();
 
         $item23 = 0;
         $item23_count = 0;
+        $item23_data =  array();
 
         $item24 = 0;
         $item24_count = 0;
+        $data['item24_data'] =  array();
 
         $item25 = 0;
         $item25_count = 0;
+        $data['item25_data'] =  array();
 
         foreach ($employee as $item) {
             $performance = DB::table('employee')
@@ -10573,26 +10599,35 @@ class GeneralController extends Controller
                 if ($performance > 0 && $performance < 20) {
                     $item1 = $item1 + $performance;
                     $item1_count++;
+                    array_push($data['item1_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
                 }
                 // For Improvement Good
                 if ($performance >= 20 && $performance < 40) {
                     $item2 = $item2 + $performance;
                     $item2_count++;
+                    array_push($data['item2_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Strong
                 if ($performance >= 40 && $performance < 60) {
                     $item3 = $item3 + $performance;
                     $item3_count++;
+                    array_push($data['item3_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item4 = $item4 + $performance;
                     $item4_count++;
+                    array_push($data['item4_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Outstanding
                 if ($performance >= 80 && $performance < 100) {
                     $item5 = $item5 + $performance;
                     $item5_count++;
+                    array_push($data['item5_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
             }
 
@@ -10602,26 +10637,36 @@ class GeneralController extends Controller
                 if ($performance > 0 && $performance < 20) {
                     $item6 = $item6 + $performance;
                     $item6_count++;
+                    array_push($data['item6_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Good
                 if ($performance >= 20 && $performance < 40) {
                     $item7 = $item7 + $performance;
                     $item7_count++;
+                    array_push($data['item7_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Strong
                 if ($performance >= 40 && $performance < 60) {
                     $item8 = $item8 + $performance;
                     $item8_count++;
+                    array_push($data['item8_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item9 = $item9 + $performance;
                     $item9_count++;
+                    array_push($data['item9_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Outstanding
                 if ($performance >= 80 && $performance < 100) {
                     $item10 = $item10 + $performance;
                     $item10_count++;
+                    array_push($data['item10_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
             }
 
@@ -10631,26 +10676,36 @@ class GeneralController extends Controller
                 if ($performance > 0 && $performance < 20) {
                     $item11 = $item11 + $performance;
                     $item11_count++;
+                    array_push($data['item11_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Good
                 if ($performance >= 20 && $performance < 40) {
                     $item12 = $item12 + $performance;
                     $item12_count++;
+                    array_push($data['item12_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Strong
                 if ($performance >= 40 && $performance < 60) {
                     $item13 = $item13 + $performance;
                     $item13_count++;
+                    array_push($data['item13_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item14 = $item14 + $performance;
                     $item14_count++;
+                    array_push($data['item14_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Outstanding
                 if ($performance >= 80 && $performance < 100) {
                     $item15 = $item15 + $performance;
                     $item15_count++;
+                    array_push($data['item15_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
             }
 
@@ -10661,26 +10716,36 @@ class GeneralController extends Controller
                 if ($performance > 0 && $performance < 20) {
                     $item16 = $item16 + $performance;
                     $item16_count++;
+                    array_push($data['item16_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Good
                 if ($performance >= 20 && $performance < 40) {
                     $item17 = $item17 + $performance;
                     $item17_count++;
+                    array_push($data['item17_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Strong
                 if ($performance >= 40 && $performance < 60) {
                     $item18 = $item18 + $performance;
                     $item18_count++;
+                    array_push($data['item18_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item19 = $item19 + $performance;
                     $item19_count++;
+                    array_push($data['item19_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
                 // For Improvement Outstanding
                 if ($performance >= 80 && $performance < 100) {
                     $item20 = $item20 + $performance;
                     $item20_count++;
+                    array_push($data['item20_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                 }
             }
 
@@ -10761,6 +10826,368 @@ class GeneralController extends Controller
 
         return view('performance.report', $data);
     }
+
+    public function performanceDetails($id){
+
+
+         //$employee = EMPL::all();
+         $employee = $this->flexperformance_model->employee();
+
+         $item1 = 0;
+         $item1_count = 0;
+         $data['item1_data'] =  array();
+
+         $item2 = 0;
+         $item2_count = 0;
+         $data['item2_data'] =  array();
+
+         $item3 = 0;
+         $item3_count = 0;
+         $data['item3_data'] =  array();
+
+         $item4 = 0;
+         $item4_count = 0;
+         $data['item4_data'] =  array();
+
+         $item5 = 0;
+         $item5_count = 0;
+         $data['item5_data'] =  array();
+
+         $item6 = 0;
+         $item6_count = 0;
+         $data['item6_data'] =  array();
+
+         $item7 = 0;
+         $item7_count = 0;
+         $data['item7_data'] =  array();
+
+         $item8 = 0;
+         $item8_count = 0;
+         $data['item8_data'] =  array();
+
+         $item9 = 0;
+         $item9_count = 0;
+         $data['item9_data'] =  array();
+
+         $item10 = 0;
+         $item10_count = 0;
+         $data['item10_data'] =  array();
+
+         $item11 = 0;
+         $item11_count = 0;
+         $data['item11_data'] =  array();
+
+         $item12 = 0;
+         $item12_count = 0;
+         $data['item12_data'] =  array();
+
+         $item13 = 0;
+         $item13_count = 0;
+         $data['item13_data'] =  array();
+
+
+         $item14 = 0;
+         $item14_count = 0;
+         $data['item14_data'] =  array();
+
+
+         $item15 = 0;
+         $item15_count = 0;
+         $data['item15_data'] =  array();
+
+         $item16 = 0;
+         $item16_count = 0;
+         $data['item16_data'] =  array();
+
+         $item17 = 0;
+         $item17_count = 0;
+         $data['item17_data'] =  array();
+
+         $item18 = 0;
+         $item18_count = 0;
+         $data['item18_data'] =  array();
+
+         $item19 = 0;
+         $item19_count = 0;
+         $data['item19_data'] =  array();
+
+         $item20 = 0;
+         $item20_count = 0;
+         $data['item20_data'] =  array();
+
+         $item21 = 0;
+         $item21_count = 0;
+         $data['item21_data'] =  array();
+
+         $item22 = 0;
+         $item22_count = 0;
+         $data['item22_data'] =  array();
+
+         $item23 = 0;
+         $item23_count = 0;
+         $item23_data =  array();
+
+         $item24 = 0;
+         $item24_count = 0;
+         $data['item24_data'] =  array();
+
+         $item25 = 0;
+         $item25_count = 0;
+         $data['item25_data'] =  array();
+
+         foreach ($employee as $item) {
+             $performance = DB::table('employee')
+                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                 ->where('employee.emp_id', $item->emp_id)
+                 ->whereNotNull('employee_performances.performance')
+                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                 ->avg('employee_performances.performance')
+                 // ->get()
+             ;
+
+             $behaviour = DB::table('employee')
+                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
+                 ->where('employee.emp_id', $item->emp_id)
+                 ->whereNotNull('employee_performances.behaviour')
+                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
+                 ->avg('employee_performances.behaviour');
+
+
+             // For Behaviour Needs Improvement
+             if ($behaviour > 0 && $behaviour < 20) {
+                 //For Improvement
+                 if ($performance > 0 && $performance < 20) {
+                     $item1 = $item1 + $performance;
+                     $item1_count++;
+                     array_push($data['item1_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+                 }
+                 // For Improvement Good
+                 if ($performance >= 20 && $performance < 40) {
+                     $item2 = $item2 + $performance;
+                     $item2_count++;
+                     array_push($data['item2_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Strong
+                 if ($performance >= 40 && $performance < 60) {
+                     $item3 = $item3 + $performance;
+                     $item3_count++;
+                     array_push($data['item3_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement very Strong
+                 if ($performance >= 60 && $performance < 80) {
+                     $item4 = $item4 + $performance;
+                     $item4_count++;
+                     array_push($data['item4_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Outstanding
+                 if ($performance >= 80 && $performance < 100) {
+                     $item5 = $item5 + $performance;
+                     $item5_count++;
+                     array_push($data['item5_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+             }
+
+             // For Behaviour Good
+             if ($behaviour >= 20 && $behaviour < 40) {
+                 //For Improvement
+                 if ($performance > 0 && $performance < 20) {
+                     $item6 = $item6 + $performance;
+                     $item6_count++;
+                     array_push($data['item6_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Good
+                 if ($performance >= 20 && $performance < 40) {
+                     $item7 = $item7 + $performance;
+                     $item7_count++;
+                     array_push($data['item7_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Strong
+                 if ($performance >= 40 && $performance < 60) {
+                     $item8 = $item8 + $performance;
+                     $item8_count++;
+                     array_push($data['item8_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement very Strong
+                 if ($performance >= 60 && $performance < 80) {
+                     $item9 = $item9 + $performance;
+                     $item9_count++;
+                     array_push($data['item9_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Outstanding
+                 if ($performance >= 80 && $performance < 100) {
+                     $item10 = $item10 + $performance;
+                     $item10_count++;
+                     array_push($data['item10_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+             }
+
+             // For Behaviour Strong
+             if ($behaviour >= 40 && $behaviour < 60) {
+                 //For Improvement
+                 if ($performance > 0 && $performance < 20) {
+                     $item11 = $item11 + $performance;
+                     $item11_count++;
+                     array_push($data['item11_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Good
+                 if ($performance >= 20 && $performance < 40) {
+                     $item12 = $item12 + $performance;
+                     $item12_count++;
+                     array_push($data['item12_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Strong
+                 if ($performance >= 40 && $performance < 60) {
+                     $item13 = $item13 + $performance;
+                     $item13_count++;
+                     array_push($data['item13_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement very Strong
+                 if ($performance >= 60 && $performance < 80) {
+                     $item14 = $item14 + $performance;
+                     $item14_count++;
+                     array_push($data['item14_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Outstanding
+                 if ($performance >= 80 && $performance < 100) {
+                     $item15 = $item15 + $performance;
+                     $item15_count++;
+                     array_push($data['item15_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+             }
+
+
+             // For Behaviour Very Strong
+             if ($behaviour >= 60 && $behaviour < 80) {
+                 //For Improvement
+                 if ($performance > 0 && $performance < 20) {
+                     $item16 = $item16 + $performance;
+                     $item16_count++;
+                     array_push($data['item16_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Good
+                 if ($performance >= 20 && $performance < 40) {
+                     $item17 = $item17 + $performance;
+                     $item17_count++;
+                     array_push($data['item17_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Strong
+                 if ($performance >= 40 && $performance < 60) {
+                     $item18 = $item18 + $performance;
+                     $item18_count++;
+                     array_push($data['item18_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement very Strong
+                 if ($performance >= 60 && $performance < 80) {
+                     $item19 = $item19 + $performance;
+                     $item19_count++;
+                     array_push($data['item19_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+                 // For Improvement Outstanding
+                 if ($performance >= 80 && $performance < 100) {
+                     $item20 = $item20 + $performance;
+                     $item20_count++;
+                     array_push($data['item20_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
+                 }
+             }
+
+
+             // For Behaviour Outstanding
+             if ($behaviour >= 80 && $behaviour < 100) {
+                 //For Improvement
+                 if ($performance > 0 && $performance < 20) {
+                     $item21 = $item21 + $performance;
+                     $item21_count++;
+                 }
+                 // For Improvement Good
+                 if ($performance >= 20 && $performance < 40) {
+                     $item22 = $item22 + $performance;
+                     $item22_count++;
+                 }
+                 // For Improvement Strong
+                 if ($performance >= 40 && $performance < 60) {
+                     $item23 = $item23 + $performance;
+                     $item23_count++;
+                 }
+                 // For Improvement very Strong
+                 if ($performance >= 60 && $performance < 80) {
+                     $item24 = $item24 + $performance;
+                     $item24_count++;
+                 }
+                 // For Improvement Outstanding
+                 if ($performance >= 80 && $performance < 100) {
+                     $item25 = $item25 + $performance;
+                     $item25_count++;
+                 }
+             }
+
+
+             // var_dump($performance);
+         }
+
+         // For Colum 1
+         $data['improvement'] = ($item1 > 0) ? $item1_count : 0;
+         $data['improvement_good'] = ($item2 > 0) ? $item2_count : 0;
+         $data['improvement_strong'] = ($item3 > 0) ? $item3_count : 0;
+         $data['improvement_very_strong'] = ($item4 > 0) ? $item4_count : 0;
+         $data['improvement_outstanding'] = ($item5 > 0) ? $item5_count : 0;
+
+         // For Column 2
+         $data['good_improvement'] = ($item6 > 0) ? $item6_count : 0;
+         $data['good'] = ($item7 > 0) ? $item7_count : 0;
+         $data['good_strong'] = ($item8 > 0) ? $item8_count : 0;
+         $data['good_very_strong'] = ($item9 > 0) ? $item9_count : 0;
+         $data['good_outstanding'] = ($item10 > 0) ? $item10_count : 0;
+
+         // For Column 3
+         $data['strong_improvement'] = ($item11 > 0) ? $item11_count : 0;
+         $data['strong_good'] = ($item12 > 0) ? $item12_count : 0;
+         $data['strong'] = ($item13 > 0) ? $item13_count : 0;
+         $data['strong_very_strong'] = ($item14 > 0) ? $item14_count : 0;
+         $data['strong_outstanding'] = ($item15 > 0) ? $item15_count : 0;
+
+         // For Column 4
+        //  $data['very_strong_improvement'] = ($item16 > 0) ? $item16_count : 0;
+        //  $data['very_strong_good'] = ($item17 > 0) ? $item17_count : 0;
+        //  $data['very_strong_strong'] = ($item18 > 0) ? $item18_count : 0;
+        //  $data['very_strong'] = ($item19 > 0) ? $item19_count : 0;
+        //  $data['very_strong_outstanding'] = ($item20 > 0) ? $item20_count : 0;
+
+        //  // For Column 5
+        //  $data['outstanding_improvement'] = ($item21 > 0) ? $item21_count : 0;
+        //  $data['outstanding_good'] = ($item22 > 0) ? $item22_count : 0;
+        //  $data['outstanding_strong'] = ($item23 > 0) ? $item23_count : 0;
+        //  $data['outstanding_very_strong'] = ($item24 > 0) ? $item24_count : 0;
+        //  $data['outstanding'] = ($item25 > 0) ? $item25_count : 0;
+
+        $par = 'item'.$id.'_data';
+        $data2['result'] = $data[$par];
+
+
+        return view('performance.performance_details', $data2);
+
+    }
+
+
+
 
     public function performance_ratio()
     {
