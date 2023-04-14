@@ -14,7 +14,7 @@
 <body>
 
     <main class="body-font p-1">
-        <div id="logo pl-1" style="margin-left: 7px; z-index: -10">
+        <div id="logo" style="margin-left: 7px; z-index: -10">
             <img src="{{ asset('assets/images/x-left.png') }}" width="100px;" height="50px;">
         </div>
 
@@ -186,7 +186,7 @@
 
 
 
-        <div id="logo2 pl-1" style="margin-left: 7px; z-index: -10">
+        <div id="logo2" style="margin-left: 7px; z-index: -10">
             <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
         </div>
 

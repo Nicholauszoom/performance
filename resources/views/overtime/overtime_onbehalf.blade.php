@@ -47,22 +47,23 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-6 col-md-3 mb-2">
-                                    <label class="col-form-label ">Select Aprover <span
+                                    <label class="col-form-label ">Select Employee <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
-                                        <select class="form-control select" name="linemanager" id="linemanager">
-                                            <option selected disabled> Select Approver</option>
+                                        <select class="form-control select" name="empID" id="empID">
+                                            <option selected disabled> Select Employee</option>
                                             @foreach ($employees as $employee)
                                             @if($employee->emp_id != auth()->user()->emp_id)
-                                                <option value="{{ $employee->emp_id }}">{{ $employee->fname }}
+                                                <option value="{{ $employee->emp_id }}">{{ $employee->emp_id }} - {{ $employee->fname }}
                                                     {{ $employee->mname }} {{ $employee->lname }}</option>
                                             @endif
                                              @endforeach
                                         </select>
                                     </div>
                                 </div>
+
+
 
                                 <div class="col-6 col-md-3 mb-2">
                                     <label class="col-form-label ">Time Start <span class="text-danger">*</span>
@@ -85,6 +86,21 @@
                                             <input type="text" required placeholder="Finish Time" name="time_finish"
                                                 id="time_end" class="form-control daterange-single">
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3 mb-2">
+                                    <label class="col-form-label ">Select Aprover <span
+                                            class="text-danger">*</span> :</label>
+                                    <div class="col-sm-12">
+                                        <select class="form-control select" name="linemanager" id="linemanager">
+                                            <option selected disabled> Select Approver</option>
+                                            @foreach ($employees as $employee)
+
+                                                <option value="{{ $employee->emp_id }}">{{ $employee->emp_id }} - {{ $employee->fname }}
+                                                    {{ $employee->mname }} {{ $employee->lname }}</option>
+
+                                             @endforeach
+                                        </select>
                                     </div>
                                 </div>
 
@@ -110,84 +126,6 @@
     @endcan
     {{-- / --}}
 
-    {{-- start of view my overtime card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0--}}
-    @can('view-my-overtime')
-    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-        <div class="card-header mb-0">
-            <div class="d-flex justify-content-between">
-                <h4 class="text-warning">My Overtimes</h4>
-                {{-- start of apply overtime button --}}
-                @can('apply-overtme')
-                <a href="#apply_overtime" class="btn btn-perfrom"><i class="ph-plus me-2"></i> Apply Overtime</a>
-                @endcan
-                {{-- / --}}
-            </div>
-        </div>
-
-        <div class="card-body border-0 shadow-none">
-            <?php session('note'); ?>
-            <div id="myResultfeedOvertime"></div>
-        </div>
-
-        <table id="datatable" class="table table-striped table-bordered datatable-basic">
-            <thead>
-                <tr>
-                    <th>S/N</th>
-                    <th>Date</th>
-                    <th>Line Manager</th>
-                    <th>Total Overtime(in Hrs.)</th>
-                    <th>Reason(Description)</th>
-                    <th>Status</th>
-                    <th>Option</th>
-                </tr>
-            </thead>
-
-
-            <tbody>
-                <?php foreach ($my_overtimes as $row) { ?>
-
-                <tr id="domain<?php //echo $row->id;
-                ?>">
-                    <td width="1px"><?php echo $row->SNo; ?></td>
-                    <td><?php echo date('d-m-Y', strtotime($row->applicationDATE)); ?></td>
-                    <td>
-                        @foreach($employees as $mng)
-                        @if($row->line_manager == $mng->emp_id)
-                        {{ $mng->fname }} {{ $mng->mname }} {{ $mng->lname }}
-
-                        @endif
-                        @endforeach
-                    </td>
-                    <td>
-                        <?php echo '<b>Duration: </b>' . $row->totoalHOURS . ' Hrs.<br><b>From: </b>' . $row->time_in . ' <b> To </b>' . $row->time_out; ?>
-                    </td>
-                    <td><?php echo $row->reason; ?></td>
-                    <td>
-                        <div id="status<?php echo $row->eoid; ?>">
-                            <?php if($row->status==0){ ?> <span class="badge bg-secondary">REQUESTED</span> <?php }
-                        elseif($row->status==1){ ?> <span
-                                class="badge bg-info">RECOMENDED</span> <?php }
-                        elseif($row->status==2){ ?> <span
-                                class="badge bg-success">APPROVED</span> <?php }
-                        elseif($row->status==3){ ?> <i style="color:red"
-                                class="ph-paper-plane-tilt"></i><?php }  ?>
-                        </div>
-                    </td>
-                    <td class="options-width">
-                        <?php if($row->status==0 || $row->status==3){ ?>
-                        <a href="javascript:void(0)" onclick="cancelOvertime(<?php echo $row->eoid; ?>)" title="Cancel overtime">
-                            <button type="button" class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
-                        </a>
-                        <?php } ?>
-                    </td>
-                </tr>
-                <?php }  ?>
-
-            </tbody>
-        </table>
-    </div>
-    @endcan
-    {{-- / --}}
 
 </div>
     {{-- @endcan --}}
@@ -942,7 +880,7 @@
         $('#applyOvertime').submit(function(e) {
             e.preventDefault();
             $.ajax({
-                    url: "{{ url('/flex/applyOvertime') }}",
+                    url: "{{ url('/flex/applyOvertimeOnbehalf') }}",
                     type: "post",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -958,9 +896,13 @@
                         $('#remaining').fadeIn('slow').html(data);
                     });
 
-                    setTimeout(function() { // wait for 5 secs(2)
-                        location.reload(); // then reload the page.(3)
-                    }, 1000);
+
+                    // setTimeout(function() {
+                    //                         var url =
+                    //                             "{{route('flex.overtime')}}"
+                    //                         window.location.href = url;
+                    //                     }, 1000)
+
 
                     //   $('#updateName')[0].reset();
                 })

@@ -72,7 +72,7 @@
 
                         <li class="nav-item ">
                             <a class="nav-link {{ request()->routeIs('flex.my-loans') ? 'active' : null }}"
-                                href="{{ route('flex.my-loans') }}">Loans</a>
+                                href="{{ route('flex.my-loans') }}">Loans(HESLB)</a>
                         </li>
 
                         {{-- / --}}
@@ -315,7 +315,7 @@
                             @can('view-report')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('attendance.leavereport') ? 'active' : null }}"
-                                        href="{{ route('attendance.leavereport') }}">Leave Reports</a></li>
+                                        href="{{ route('attendance.leavereport') }}">Leave History</a></li>
                             @endcan
                         </ul>
                     </li>
@@ -348,9 +348,9 @@
                         </ul>
                     </li>
                 @endcan
-                
+
                 {{-- For Performance Management --}}
-                @can('view-Performance')
+               
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -385,11 +385,11 @@
                         </li>
                     </ul>
                 </li>
-                @endcan
+
                 {{-- / --}}
 
                 {{-- For Talent Management --}}
-                @can('view-Talent')
+
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-profiles') || request()->routeIs('flex.talent-ratios') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
@@ -422,7 +422,7 @@
                     </li> --}}
                     </ul>
                 </li>
-                 @endcan
+
                 {{-- / --}}
                 @can('view-organization')
                     <li

@@ -269,7 +269,7 @@
         </table>
         @endforeach
         <hr>
-        <table class="table w-100 mt-10" style="font-size: 8px;">
+        <table class="table w-100 mt-10" style="font-size: 12px;">
             <tbody>
                     <td colspan="3">GRAND TOTAL</td>
 
@@ -279,7 +279,8 @@
                     <td>TOTAL CONTRIBUTION: {{ number_format($gland_total_pension*2,2) }}</td>
                     <td></td>
                     <td></td>
-                </tbody></table>
+                </tbody>
+                </table>
         <table class="table w-100 mt-10">
             <tr>
                 <td style="width: 50%;">

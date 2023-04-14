@@ -973,9 +973,9 @@ class AttendanceController extends Controller
                 $this->attendance_model->save_deligated($leave->empID);
 
 
-              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
-              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
-              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              $level1=DB::table('leave_approvals')->Where('level1',$empID)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$empID)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$empID)->update(['level3'=>$leave->deligated]);
               // dd($request->deligate);
 
             }
@@ -1073,7 +1073,7 @@ class AttendanceController extends Controller
         $del_level2 = Level2::all()->where('deligetor',$id);
 
         foreach($del_level2 as $row){
-           
+
         $level2=DB::table('leave_approvals')->Where('empID',$row->line_employee)->update(['level2'=>$id]);
        // if($level2 > 0){
             Level2::where('line_employee',$row->line_employee)->delete();

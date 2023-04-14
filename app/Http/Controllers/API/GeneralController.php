@@ -202,7 +202,7 @@ class GeneralController extends Controller
 
         // return view('my-services/pensions',$data);
 
-        
+
         return response( ['data'=>$data ],200 );
     }
      // end of pension history
@@ -212,18 +212,20 @@ class GeneralController extends Controller
     {
 
         $emp_id=auth()->user()->emp_id;
-       
+
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes($emp_id);
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session($emp_id));
+        $data['overtime_total'] = $this->flexperformance_model->Overtime_total($emp_id);
+
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes($emp_id);
 
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';
         $data['child'] = 'Overtimes';
 
-             
+
         return response( [ 'data'=>$data ],200 );
     }
     //  end of employee overtimes function
@@ -240,7 +242,7 @@ class GeneralController extends Controller
 
         $empID = auth()->user()->emp_id;
 
-       
+
 
 
         $split_start = explode(" ", $start);
@@ -328,7 +330,7 @@ class GeneralController extends Controller
                             $msg='Overtime Request Sent Successifully !';
                             return response( [ 'msg'=>$msg ],200);
                         } else {
-                           
+
                             $msg='Overtime Request Not Sent, Please Try Again!';
                             return response( [ 'msg'=>$msg ],401);
                         }
@@ -360,11 +362,11 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
-                  
+
                         $msg='Overtime Request Sent Successifully!';
                         return response( [ 'msg'=>$msg ],200);
                     } else {
-                 
+
                         $msg='Overtime Request Not Sent, Please Try Again!';
                         return response( [ 'msg'=>$msg ],401);
                     }
@@ -384,7 +386,7 @@ class GeneralController extends Controller
                     );
                     $result = $this->flexperformance_model->apply_overtime($data);
                     if ($result == true) {
-                    
+
                         $msg='Overtime Request Sent Successifully!';
                         return response( [ 'msg'=>$msg ],200);
                     } else {
@@ -404,10 +406,10 @@ class GeneralController extends Controller
     public function myLeaves(Request $request)
     {
         $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
-
+        // $data['myleave'] = array_reverse($data['myleave']); // Reverse the order of leaves
 
         $emp_id=auth()->user()->emp_id;
-        
+
         // $data['leave_types'] =LeaveType::all();
         // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
         // $data['leaves'] =Leaves::get();
@@ -429,15 +431,15 @@ class GeneralController extends Controller
                 if ($range>$approval->escallation_time) {
                   $leave=Leaves::where('id' ,$item->id)->first();
                   $status=$leave->status;
-                  
+
                   if ($status == 0) {
                     if ($approval->level2 != null) {
                       $leave->status=1;
                       $leave->updated_at=$today;
                       $leave->update();
-                  
+
                     }
-                 
+
                   }
                   elseif ($status == 1)
                   {
@@ -463,7 +465,7 @@ class GeneralController extends Controller
                   }
                 }
               }
-        
+
           }
         }
         // End of Escallation
@@ -475,9 +477,9 @@ class GeneralController extends Controller
         // $data['days']=$interval->days;
         // $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($emp_id, auth()->user()->hire_date, date('Y-m-d'));
         // $data['leave_type'] = $this->attendance_model->leave_type();
-      
 
-  
+
+
 
     return response( [ 'data'=>$data  ],200 );
     }
@@ -490,7 +492,7 @@ class GeneralController extends Controller
             $empID = auth()->user()->emp_id;
             // For pending loans
             $data['loans'] =Helsb::where('empID',$empID)->get();
-         
+
 
         return response( [ 'data'=>$data  ],200 );
         }
@@ -503,7 +505,7 @@ class GeneralController extends Controller
             // $empID = auth()->user()->emp_id;
 
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
-        
+
 
         return response( [ 'data'=>$data  ],200 );
         }
@@ -516,26 +518,26 @@ class GeneralController extends Controller
         {
             //dd($request->all());
             $empID = auth()->user()->emp_id;
-    
+
             if ($empID != "Select Employee") {
-    
+
                 // DATE MANIPULATION
                 $empID = auth()->user()->emp_id;
                 $start = $date;
                 $profile = auth()->user()->emp_id; //For redirecting Purpose
                 $date_separate = explode("-", $start);
-    
+
                 $mm = $date_separate[1];
                 $yyyy = $date_separate[0];
                 $dd = $date_separate[2];
                 $one_year_back = $date_separate[0] - 1;
-    
+
                 $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
                 $payroll_month_end = $yyyy . "-" . $mm . "-31";
                 $payroll_month = $yyyy . "-" . $mm;
-    
+
                 $check = $this->reports_model->payslipcheck($payroll_month, $empID);
-    
+
                 if ($check == 0) {
                     if ($profile == 0) {
                         session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
@@ -563,7 +565,7 @@ class GeneralController extends Controller
                     $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
                     $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
                     $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
-    
+
                     $slipinfo = $data['slipinfo'];
                     $leaves = $data['leaves'];
                     $annualLeaveSpent = $data['annualLeaveSpent'];
@@ -583,21 +585,21 @@ class GeneralController extends Controller
                     $paid_with_arrears_d = $data['paid_with_arrears_d'];
                     $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
                     $data['payroll_date'] = $date;
-    
+
                     $date = explode('-',$payroll_date);
                     $payroll_month = $date[0].'-'.$date[1];
-    
+
                     $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
                     $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
-    
+
                     //include(app_path() . '/reports/customleave_report.php');
                     // include app_path() . '/reports/payslip.php';
-    
+
                     //return view('payroll.payslip2', $data);
                     // $pdf = Pdf::loadView('payroll.payslip2',$data)->setPaper('a4', 'potrait');
-    
+
                     // return $pdf->download('payslip_for_'.$empID.'.pdf');
-                    
+
         return response( [ 'data'=>$data  ],200 );
                 }
             } else {
@@ -606,18 +608,18 @@ class GeneralController extends Controller
                 $date_separate = explode("-", $start);
                 $reportType = 1;  //Staff = 1, temporary = 2
                 // $reportformat = $request->input('type'); //Staff = 1, temporary = 2
-    
+
                 $mm = $date_separate[1];
                 $yyyy = $date_separate[0];
                 $dd = $date_separate[2];
                 $one_year_back = $date_separate[0] - 1;
-    
+
                 $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
                 $payroll_month_end = $yyyy . "-" . $mm . "-31";
                 $payroll_month = $yyyy . "-" . $mm;
-    
+
                 $check = $this->reports_model->payslipcheckAll($payroll_month);
-    
+
                 if ($check == 0) {
                     // session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     // return redirect('/flex/cipay/employee_payslip/');
@@ -633,7 +635,7 @@ class GeneralController extends Controller
                     }
                     $data_all = [];
                     foreach ($payroll_emp_ids as $payroll_emp_id) {
-    
+
                         // if($payroll_emp_id->empID != 255001){
                         $data['slipinfo'] = $this->reports_model->payslip_info($payroll_emp_id->empID, $payroll_month_end, $payroll_month);
                         $data['leaves'] = $this->reports_model->leaves($payroll_emp_id->empID, $payroll_month_end);
@@ -654,7 +656,7 @@ class GeneralController extends Controller
                         $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($payroll_emp_id->empID, $payroll_date);
                         $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($payroll_emp_id->empID, $payroll_month);
                         $data_all['dat'][$payroll_emp_id->empID] = $data;
-    
+
                         $slipinfo = $data['slipinfo'];
                         $leaves = $data['leaves'];
                         $annualLeaveSpent = $data['annualLeaveSpent'];
@@ -673,16 +675,16 @@ class GeneralController extends Controller
                         $paid_with_arrears = $data['paid_with_arrears'];
                         $paid_with_arrears_d = $data['paid_with_arrears_d'];
                         $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
-    
+
                         // include app_path() . '/reports/payslip.php';
 
                         return response( [ 'data'=>$data  ],200 );
 
                         // }
                     }
-    
+
                     $data_all['emp_id'] = $payroll_emp_ids;
-    
+
                     // return view('app.reports/payslip_all', $data_all);
 
                     return response( [ 'data_all'=>$data_all  ],401 );
@@ -697,7 +699,7 @@ class GeneralController extends Controller
     public function updateImg(Request $request)
     {
 
-      
+
         $user = auth()->user()->emp_id;
         request()->validate([
             'image' => 'required'
@@ -709,12 +711,12 @@ class GeneralController extends Controller
             $newImageName = $request->image->hashName();
             $request->image->move(public_path('storage/profile'), $newImageName);
             $employee->photo = $newImageName;
-            
+
             $employee->update();
 
             $msg='Your Profile Image is updated Successfully !';
             return response( [ 'msg'=>$msg  ],200 );
-    
+
         }
         else
         {
@@ -722,7 +724,7 @@ class GeneralController extends Controller
             return response( [ 'msg'=>$msg  ],401 );
         }
 
-    
+
 
     }
 
@@ -746,7 +748,7 @@ class GeneralController extends Controller
        $test= $newImageName->move(public_path('storage/tests'), $newImageName);
 
       return response( [ 'test'=> $test ],200 );
-        
+
     }
 
 

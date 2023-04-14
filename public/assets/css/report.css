@@ -115,7 +115,7 @@ table {
 #logo2 {
     position: fixed;
     bottom: 0;
-    right: 0px;
+    right: 0px !important;
 
 }
 

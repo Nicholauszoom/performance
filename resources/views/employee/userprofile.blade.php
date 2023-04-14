@@ -172,7 +172,7 @@
                             <td>Account No:</td>
                             <td>{{ $account_no }}</td>
                         </tr>
-                        @if (session('mng_emp') || session('appr_paym') || session('mng_paym') || session('emp_id') == $empID)
+                        @if (Auth::user()->can('view-payroll') || auth()->user()->emp_id == $empID)
                             <tr>
                                 <td>Salary:</td>
                                 <td>{{ number_format($salary,2) }}</td>
@@ -199,7 +199,7 @@
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12">
-                    @if (session('mng_emp') || session('emp_id') == $empID)
+                    @if (Auth::user()->can('view-payroll') || auth()->user()->emp_id == $empID)
                         <form method="post" action="{{ route('reports.payslip') }}" target="_blank">
                             @csrf
                             <div class="card border-0 rounded-0">

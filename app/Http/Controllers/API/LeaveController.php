@@ -53,7 +53,7 @@ class LeaveController extends Controller
     $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
   
     $data = json_decode($active_leaves, true); // Decode the JSON data into an array
-
+    $data= array_reverse($data); 
     // Loop through each object in the array
     foreach ($data as &$object) {
         // Add the accrued days data to the current object

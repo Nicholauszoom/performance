@@ -22,12 +22,14 @@
         <div class="card border-top  border-top-width-3 border-top-main rounded-0">
             <div class="card-header">
                 <h4 class="text-warning">Overtime Requests</h4>
-
+                <a href="{{ route('flex.overtime_on_behalf') }}" class="btn btn-perfrom  float-end">
+                    <i class="ph-list me-2"></i> Apply Overtime on Behalf
+                </a>
                 <?php session('note'); ?>
                 <div id="myResultfeedOvertime"></div>
             </div>
 
-            <table id="datatable-keytable" class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered datatable-basic">
                 <thead>
                     <tr>
                         <th>S/N</th>

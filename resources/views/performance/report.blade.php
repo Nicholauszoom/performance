@@ -24,6 +24,8 @@
 </div>
 <div class="row">
     {{-- <col class="" ></div>/ --}}
+
+
     <div class="col-11">
         <div class="container" style="height:600px" id="container"></div>
     </div>
@@ -34,16 +36,22 @@
         <p class="text-center text-white"> <i class="ph-arrow-fat-right"></i> The "how" - Values in Action</p>
     </div>
 </div>
-
+<div class="modal fade" id="appFormModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    </div>
+</div>
 
   <script src="{{ asset('js/anychart-core.min.js') }}"></script>
   <script src="{{ asset('js/anychart-heatmap.min.js') }}"></script>
-  <script type="text/javascript">anychart.onDocumentReady(function () {
 
-  // create the data 
+  <script type="text/javascript">
+
+  anychart.onDocumentReady(function () {
+
+  // create the data
   var data = [
 
-    // First Column  
+    // First Column
     { x: "Improvement Needed ", y: " Outstanding", heat: {{ $improvement_outstanding  }} },
     { x: "Improvement Needed ", y: "very Strong ", heat:{{ $improvement_very_strong }} },
     { x: "Improvement Needed ", y: "Strong ", heat: {{ $improvement_strong }}},
@@ -78,19 +86,19 @@
     { x: "Outstanding ", y: "Strong ", heat: {{ $outstanding_strong }} },
     { x: "Outstanding ", y: "Good ", heat: {{ $outstanding_good }} },
     { x: "Outstanding ", y: "Improvement Needed", heat: {{ $outstanding_improvement }} },
-   
-   
 
-    
 
-  ];        
-        
+
+
+
+  ];
+
   // create the chart and set the data
   chart = anychart.heatMap(data);
-        
+
   // set the chart title
   chart.title("Performance Development Index by Region");
-        
+
   // create and configure the color scale
   var customColorScale = anychart.scales.ordinalColor();
   customColorScale.ranges([
@@ -100,46 +108,57 @@
     { from: 60, to: 79.99 },//very Strong
     { greater: 80 } //outstanding
   ]);
-  
+
   // set the colors for each range, from smaller to bigger
   customColorScale.colors(["#736c6c", "#db9190", "#de6866","#c24240", "#690f0d",]);
-        
+
   // set the color scale as the color scale of the chart
   chart.colorScale(customColorScale);
-        
+
   // set the container id
   chart.container("container");
 
   // set the onclick
 
-  chart.listen("pointDblClick", function(e){ 
-//   var new_value = e.iterator.get("url");
-//   window.open(new_value,"_blank"); var index = e.iterator.getIndex();
+  chart.listen("pointDblClick", function(e){
+
+
+  //var new_value = e.iterator.get("flex/financial_reports");
+  //alert(new_value);
+  // window.open(new_value,"_blank"); var index = e.iterator.getIndex();
 
 var index = e.iterator.getIndex();
-//   var row = dataSet.row(index);
+  //var row = dataSet.row(index);
 
-// alert(index)
+
 
 if(index==0){
-       alert("High Performer"+"High Potential",)
+
+      var url ="{{route('flex.performanceDetails',21)}}"
+      window.location.href = url;
+
 
 
 
 }
 
 else if(index==1){
-       alert("Medium Performer"+"Medium Potential",)
+
+    var url ="{{route('flex.performanceDetails',16)}}"
+      window.location.href = url;
+
 
 
 }
 else if(index==2){
-       alert("Low Performer"+"Low Potential",)
+    var url ="{{route('flex.performanceDetails',11)}}"
+      window.location.href = url;
 
 }
 
 else if(index==3){
-       alert("High Performer"+"Medium Potential")
+    var url ="{{route('flex.performanceDetails',6)}}"
+      window.location.href = url;
 
 
 }
@@ -147,7 +166,8 @@ else if(index==3){
 
 
 else if(index==4){
-       alert("Medium Performer"+"High Potential")
+    var url ="{{route('flex.performanceDetails',1)}}"
+      window.location.href = url;
 
 
 }
@@ -155,32 +175,100 @@ else if(index==4){
 
 
 else if(index==5){
-       alert("Low Performer"+"Medium Potential")
+
+    var url ="{{route('flex.performanceDetails',22)}}"
+       window.location.href = url;
 
 
 }
-
-
-
 else if(index==6){
-       alert("Low Performer"+"High Potential")
-
-
+    var url ="{{route('flex.performanceDetails',17)}}"
+      window.location.href = url;
 }
-
-
 
 else if(index==7){
-       alert("High Performer"+"Low Potential")
+    var url ="{{route('flex.performanceDetails',12)}}"
+      window.location.href = url;
 
 }
 
 
 else if(index==8){
-       alert("Medium Performer"+"Low Potential")
+    var url ="{{route('flex.performanceDetails',7)}}"
+      window.location.href = url;
 
 
 }
+else if(index==9){
+    var url ="{{route('flex.performanceDetails',2)}}"
+      window.location.href = url;
+
+
+}
+else if(index==10){
+        var url ="{{route('flex.performanceDetails',23)}}"
+      window.location.href = url;
+
+
+}
+else if(index==11){
+        var url ="{{route('flex.performanceDetails',18)}}"
+      window.location.href = url;
+}
+else if(index==12){
+        var url ="{{route('flex.performanceDetails',13)}}"
+      window.location.href = url;
+}
+else if(index==13){
+        var url ="{{route('flex.performanceDetails',8)}}"
+      window.location.href = url;
+}
+else if(index==14){
+        var url ="{{route('flex.performanceDetails',3)}}"
+      window.location.href = url;
+}
+else if(index==15){
+        var url ="{{route('flex.performanceDetails',24)}}"
+      window.location.href = url;
+}
+else if(index==16){
+        var url ="{{route('flex.performanceDetails',19)}}"
+      window.location.href = url;
+}
+else if(index==17){
+        var url ="{{route('flex.performanceDetails',14)}}"
+      window.location.href = url;
+}
+else if(index==18){
+        var url ="{{route('flex.performanceDetails',9)}}"
+      window.location.href = url;
+}
+else if(index==19){
+        var url ="{{route('flex.performanceDetails',4)}}"
+      window.location.href = url;
+}
+else if(index==20){
+        var url ="{{route('flex.performanceDetails',25)}}"
+      window.location.href = url;
+}
+else if(index==21){
+        var url ="{{route('flex.performanceDetails',20)}}"
+      window.location.href = url;
+}
+else if(index==22){
+        var url ="{{route('flex.performanceDetails',15)}}"
+      window.location.href = url;
+}
+else if(index==23){
+    alert(index);
+        var url ="{{route('flex.performanceDetails',10)}}"
+      //window.location.href = url;
+}
+else if(index==24){
+        var url ="{{route('flex.performanceDetails',5)}}"
+      window.location.href = url;
+}
+
 
 
 
@@ -194,11 +282,16 @@ else if(index==8){
 
 
 //   chart.container.
-        
+
   // initiate drawing the chart
   chart.draw();
-        
-});</script>
+
+
+});
+
+
+
+</script>
 
 
         </div>
@@ -207,9 +300,9 @@ else if(index==8){
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -217,7 +310,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -225,15 +318,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -241,19 +334,22 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });
+
+
 </script>
+
  @endsection

@@ -450,7 +450,7 @@ dd($data['paye_terminated']);
         $data['employee_pension'] = $this->reports_model->employee_pension($id);
         $data['years'] = $this->reports_model->get_pension_years($id);
 
-        $pdf = Pdf::loadView('reports.employee_pension', $data)->setPaper('a4', 'potrait');
+        $pdf = Pdf::loadView('reports.employee_pension', $data)->setPaper('a4', 'landscape');
         return $pdf->download("employee_pension.pdf");
     }
 

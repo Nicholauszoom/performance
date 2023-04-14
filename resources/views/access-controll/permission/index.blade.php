@@ -27,20 +27,20 @@
                 <th>S/N</th>
                 <th>Slug</th>
                 <th>Module</th>
-                <th class="text-center">Actions</th>
+                {{-- <th class="text-center">Actions</th> --}}
             </tr>
         </thead>
 
         <tbody>
             @if(isset($permissions))
                 @foreach($permissions as $permission)
-                   
+
 
                         <tr>
                             <th>{{ $loop->iteration }}</th>
                             <td>{{ $permission->slug }}</td>
                             <td>{{ $permission->modules->slug  ?? '' }}</td>
-                            <td align="right">
+                            {{-- <td align="right">
                                 {!! Form::open(['route' => ['permissions.destroy', $permission->id], 'method' => 'delete']) !!}
                                 <button type="button" class="btn btn-outline-info btn-xs edit_permission_btn"
                                         data-toggle="modal"
@@ -52,7 +52,7 @@
                                 </button>
                                 {{ Form::button('<i class="fas fa-trash"></i> Delete', ['type' => 'submit', 'class' => 'btn btn-outline-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) }}
                                 {{ Form::close() }}
-                            </td>
+                            </td> --}}
                         </tr>
 
                 @endforeach
