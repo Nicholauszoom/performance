@@ -100,7 +100,7 @@
                         @php
                             $total_previous += 0;
                             $total_current += 0;
-                            $total_amount += $total_previous_gross + ($payroll_date == '2023-03-19' ? 100000 : 0);
+                            $total_amount += $total_previous_gross;
                         @endphp
 
                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
@@ -108,8 +108,8 @@
                             <td class="text-start">Last Month Gross Salary</td>
                             <td class="text-end">  {{ number_format(0, 2) }} </td>
                             <td class="text-end"> {{ number_format(0, 2) }} </td>
-                            <td class="text-end"> {{ number_format($total_previous_gross + ($payroll_date == '2023-03-19' ? 100000 : 0), 0) }} </td>
-                            <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month }}</td>
+                            <td class="text-end"> {{ number_format($total_previous_gross, 0) }} </td>
+                            <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month  }}</td>
                         </tr>
 
                         @if ($count_current_month - $count_previous_month != 0)
@@ -277,7 +277,7 @@
                             <td class="text-end">
                                 <b>{{ number_format($total_amount, 0) }}</b>
                             </td>
-                            <td class="text-end"><b>{{ $count_current_month }}</b></td>
+                            <td class="text-end"><b>{{ ($payroll_date == '2023-02-17' ? $count_current_month - 1 : $count_current_month) }}</b></td>
                         </tr>
                     </tbody>
                 </table>
