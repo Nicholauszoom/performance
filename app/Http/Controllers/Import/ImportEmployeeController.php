@@ -10,6 +10,7 @@ use App\Imports\ImportDepartment;
 use App\Imports\ImportEmployee;
 use App\Imports\ImportPension;
 use App\Imports\ImportPosition;
+use App\Imports\ImportLeaves;
 use App\Imports\ImportHeslb;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -30,9 +31,10 @@ class ImportEmployeeController extends Controller
         // $data1 = Excel::import(new ImportBranches, $request->file('file')->store('files'));
 
 
-         $data1 = Excel::import(new ImportPension, $request->file('file')->store('files'));
+         //$data1 = Excel::import(new ImportPension, $request->file('file')->store('files'));
 
 
+         $data1 = Excel::import(new ImportLeaves, $request->file('file')->store('files'));
 
 
        // $data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));

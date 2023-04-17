@@ -327,6 +327,13 @@ class AttendanceModel extends Model
 		return $maximum_days;
 	}
 
+    function get_anualLeave($empID){
+
+        $leaves = DB::table('leaves')->where('empID', $empID)->where('nature', 1)->sum('days');
+
+        return $leaves;
+    }
+
 
 	function getLeaveTaken($empID, $hireDate, $today)
 	{
