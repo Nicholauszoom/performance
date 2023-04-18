@@ -2504,7 +2504,7 @@ as gross,
     }
     public function checkInputs($date){
         $calender = explode('/',$date);
-        $date = $calender[0].'-'.$calender[1];
+        $date = $calender[2].'-'.$calender[1];
        // $query = "SELECT COUNT(id) as total from financial_logs where created_at like '%".$date."%' and input_screen ='Payroll Input' and field_name NOT LIKE '%vertime%'";
 
         $query = "SELECT COUNT(id) as total from input_submissions where created_at like '%".$date."%'";
