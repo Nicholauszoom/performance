@@ -1508,7 +1508,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         if(count($calender) > 2){
             $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
         }else{
-            $terminationDate = '%' . '' . '-' . '' . '%';
+            $terminationDate = 'null';
 
         }
         
@@ -1557,7 +1557,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
       if(count($calender) > 2){
         $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
     }else{
-        $terminationDate = '%' . '' . '-' . ''. '%';
+        $terminationDate = 'null';
 
     }
       $query = "SELECT SUM(net_pay) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
@@ -1572,9 +1572,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         if(count($calender) > 2){
             $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
         }else{
-            $terminationDate = '%' . '' . '-' . ''. '%';
+            $terminationDate = 'null';
 
         }
+        
 
 
         $query = "SELECT COUNT(id) as number from terminations where terminationDate LIKE '".$terminationDate."'";
@@ -1889,7 +1890,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $terminationDate = '%'.$calender[0] . '-' . $calender[1].'%';
 
         }else{
-            $terminationDate = '%'.''.'-'.''.'%';
+            $terminationDate = 'null';
 
         }
         
@@ -1908,7 +1909,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $previous_termination_date = $calender1[0] . '-' . $calender1[1];
 
         }else{
-            $previous_termination_date = '%'.''.'-'.''.'%';
+            $previous_termination_date = 'null';
 
         }
 
