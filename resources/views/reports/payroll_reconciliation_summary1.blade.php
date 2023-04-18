@@ -130,7 +130,7 @@
                                 @endphp
                             @endif
 
-                            @if ($terminated_employee > 10)
+                            @if ($terminated_employee > 0)
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
                                     <td class="text-start">Less Terminated Employee</td>
