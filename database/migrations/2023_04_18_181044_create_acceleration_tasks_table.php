@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('project_tasks', function (Blueprint $table) {
+        Schema::create('acceleration_tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->dateTime('complete_date');
-            $table->foreignId('project_id');
+            $table->foreignId('acceleration_id');
             $table->foreignId('assigned')->nullable();
             $table->integer('status')->default(0);
             $table->double('target')->default(0);
@@ -32,8 +32,7 @@ return new class extends Migration
             $table->integer('created_by');
             $table->timestamps();
 
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-
+            $table->foreign('acceleration_id')->references('id')->on('accelerations')->onDelete('cascade');
 
         });
     }
@@ -45,6 +44,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_tasks');
+        Schema::dropIfExists('acceleration_tasks');
     }
 };

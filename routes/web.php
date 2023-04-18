@@ -9,6 +9,7 @@ use App\Http\Middleware\Setting;
 use App\Http\Middleware\Employee;
 use App\Http\Middleware\Overtime;
 use App\Http\Middleware\Dashboard;
+use App\Http\Middleware\Promotion;
 use App\Http\Middleware\WorkForce;
 use App\Http\Middleware\Termination;
 use Illuminate\Support\Facades\Auth;
@@ -26,27 +27,30 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\AccelerationController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\Import\BankLoanController;
-use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\Recruitment\LoginController;
+use App\Http\Controllers\PerformanceReportsController;
 use App\Http\Controllers\AccessControll\RoleController;
 use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\Recruitment\RegisterController;
 use App\Http\Controllers\AccessControll\SystemController;
 use App\Http\Controllers\Import\ImportEmployeeController;
+use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
+
 use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Middleware\Promotion;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -522,6 +526,33 @@ Route::middleware('auth')->group(function () {
     });
     //end of organization access permission  routes
 
+
+    //Start of Acceleration routes
+    Route::prefix('flex/')->controller(AccelerationController::class)->group(function (){
+        Route::any('acceleration','index')->name('flex.acceleration');
+        Route::any('add-acceleration','create')->name('flex.add-acceleration');
+        Route::any('save-acceleration','store')->name('flex.save-acceleration');
+        Route::any('view-acceleration/{id}','show')->name('flex.view-acceleration');
+        Route::any('edit-acceleration/{id}','edit')->name('flex.edit-acceleration');
+        Route::any('update-acceleration','update')->name('flex.update-acceleration');
+        Route::any('add-acceleration-task/{id}','add_acceleration_task')->name('flex.add-acceleration-task');
+        Route::any('save-acceleration-task','save_acceleration_task')->name('flex.save-acceleration-task');
+        Route::any('edit-project-task/{id}','edit_project_task')->name('flex.edit-project-task');
+        Route::any('delete-acceleration/{id}','delete_project')->name('flex.delete-project');
+        Route::any('delete-acceleration-task/{id}','delete_acceleration_task')->name('flex.delete-acceleration-task');
+        Route::any('completed-acceleration-task/{id}','completed_acceleration_task')->name('flex.complete_acceleration_task');
+        Route::any('assess-acceleration-task/{id}','assess_task')->name('flex.assess-acceleration-task');
+        Route::any('save-acceleration-assessment','save_assessment')->name('flex.save_acceleration_assessment');
+        Route::any('acceleration-report','performance')->name('flex.acceleration-report');
+        Route::any('accelerationDetails/{id}','accelerationDetails')->name('flex.accelerationDetails');
+        Route::any('completed-acceleration/{id}','completed_acceleration')->name('flex.complete_acceleration');
+    });  
+
+    // For Performance Reports Routes
+    Route::prefix('flex/')->controller(PerformanceReportsController::class)->group(function (){
+        Route::any('performance-reports','index')->name('flex.performance-reports');
+
+    });
 
     // start of report access permissions routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){

@@ -385,6 +385,29 @@
                             </li>
                         </ul>
                     </li>
+                    <li
+                    class="nav-item nav-item-submenu {{  request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-graph"></i>
+                        <span>Performance Acceleration</span>
+                    </a>
+                    <ul
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.acceleration-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                        <li class="nav-item">
+                            <a href="{{ route('flex.acceleration') }}"
+                                class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
+                               Acceleration Programme
+                            </a>
+                        </li>
+          
+                        <li class="nav-item">
+                            <a href="{{ route('flex.acceleration-report') }}"
+                                class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
+                                Acceleration Matrix
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 @endcan
                 {{-- / --}}
 
@@ -477,14 +500,21 @@
                             <span>Reports</span>
                         </a>
                         <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.financial_reports') || request()->routeIs('flex.organisation_reports') ? 'show' : null }}">
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.performance-reports') || request()->routeIs('flex.financial_reports') || request()->routeIs('flex.organisation_reports') ? 'show' : null }}">
 
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.financial_reports') ? 'active' : null }}"
                                     href="{{ route('flex.financial_reports') }}">Statutory Reports </a></li>
                             <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('flex.organisation_reports') ? 'active' : null }}"
-                                    href="{{ route('flex.organisation_reports') }}">Organisation Reports </a></li>
+                                    href="{{ route('flex.organisation_reports') }}">Organisation Reports </a>
+                            </li>
+                            {{-- For Performance Reports --}}
+                            <li class="nav-item"><a
+                                class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
+                                href="{{ route('flex.performance-reports') }}">Performance Reports </a>
+                            </li>
+                            {{-- ./ --}}
 
                         </ul>
                     </li>
