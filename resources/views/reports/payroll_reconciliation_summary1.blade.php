@@ -112,7 +112,7 @@
                             <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month  }}</td>
                         </tr>
 
-                        @if ($count_current_month - $count_previous_month != 0)
+                        
                             @if ($new_employee > 0)
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
@@ -148,7 +148,7 @@
                                     $total_amount += 0 - $termination_salary;
                                 @endphp
                             @endif
-                        @endif
+                        
 
                         @if ($count_previous_month != 0)
                             @if ($current_increase['basic_increase'] > 0)
@@ -222,17 +222,17 @@
 
                                             <td class="text-end">{{ number_format(0, 2) }}</td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end"></td>
                                         </tr>
                                         @php
                                             $total_previous += 0;
-                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount;
-                                            $total_amount += $row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount;
+                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
+                                            $total_amount += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
 
                                         @endphp
                                     @else
@@ -248,17 +248,17 @@
                                                 @endif
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->previous_amount - 236363.64 : $row->previous_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->previous_amount : $row->previous_amount, 2) }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end">{{ number_format($row->difference, 2) }}</td>
                                             <td class="text-end"></td>
                                         </tr>
                                         @php
-                                            $total_previous += $row->description == 'Add/Les S-Overtime' ? $row->previous_amount - 236363.64 : $row->previous_amount;
-                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount;
+                                            $total_previous += $row->description == 'Add/Les S-Overtime' ? $row->previous_amount  : $row->previous_amount;
+                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
                                             $total_amount += $row->difference;
 
                                         @endphp

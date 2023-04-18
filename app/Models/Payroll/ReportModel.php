@@ -1505,7 +1505,13 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $row = DB::table('payroll_logs')->where('payroll_date', $date)->select('id')->count();
 
         $calender = explode('-', $date);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        if(count($calender) > 2){
+            $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        }else{
+            $terminationDate = 'null';
+
+        }
+        
         $row2 = DB::table('terminations')->where('terminationDate', 'like', $terminationDate)->select('id')->count();
 
 
@@ -1548,7 +1554,12 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     function terminated_salary($previous_payroll_month){
       $calender = explode('-', $previous_payroll_month);
-      $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+      if(count($calender) > 2){
+        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+    }else{
+        $terminationDate = 'null';
+
+    }
       $query = "SELECT SUM(net_pay) as amount from terminations where terminationDate LIKE '".$terminationDate."'";
       $row = DB::select(DB::raw($query));
 
@@ -1558,7 +1569,14 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     function terminated_employee($date){
         $calender = explode('-', $date);
-        $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        if(count($calender) > 2){
+            $terminationDate = '%' . $calender[0] . '-' . $calender[1] . '%';
+        }else{
+            $terminationDate = 'null';
+
+        }
+        
+
 
         $query = "SELECT COUNT(id) as number from terminations where terminationDate LIKE '".$terminationDate."'";
         $row = DB::select(DB::raw($query));
@@ -1867,7 +1885,15 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function employee_decrease($current_payroll_month, $previous_payroll_month){
         $calender = explode('-',$previous_payroll_month);
-        $terminationDate = '%'.$calender[0].'-'.$calender[1].'%';
+      
+        if(count($calender) > 2){
+            $terminationDate = '%'.$calender[0] . '-' . $calender[1].'%';
+
+        }else{
+            $terminationDate = 'null';
+
+        }
+        
         $query = "SELECT  'Less Terminated Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,tm.salaryEnrollment as salary,tm.net_pay as previous_amount,0 as current_amount
         from terminations tm,employee e where  e.emp_id = tm.employeeID and terminationDate LIKE'".$terminationDate."'";
 
@@ -1879,7 +1905,15 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     {
         $calender = explode('-', $current_payroll_month);
         $calender1 = explode('-', $previous_payroll_month);
-        $previous_termination_date = $calender1[0] . '-' . $calender1[1];
+        if(count($calender1) > 2){
+            $previous_termination_date = $calender1[0] . '-' . $calender1[1];
+
+        }else{
+            $previous_termination_date = 'null';
+
+        }
+
+
         $current_termination_date = $calender[0] . '-' . $calender[1];
 
         $query = "
