@@ -82,7 +82,7 @@
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('flex.projects-report') }}" data-parsley-validate
+                    action="{{ route('flex.project-report') }}" data-parsley-validate
                     class="form-horizontal form-label-left">
                     @csrf
 
