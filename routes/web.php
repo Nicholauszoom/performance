@@ -554,8 +554,7 @@ Route::middleware('auth')->group(function () {
         Route::any('organization-reports','organization_report')->name('flex.organization-reports');
         Route::any('project-report','project_report')->name('flex.project-report');
         Route::any('department-report','department_report')->name('flex.department-report');
-
-
+        Route::any('acceleration-reports','acceleration_report')->name('flex.acceleration-reports');
 
 
     });

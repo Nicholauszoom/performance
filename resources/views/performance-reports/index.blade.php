@@ -102,7 +102,7 @@
 
                             </select>
                         </div>
-{{-- 
+                        {{-- 
                         <div class="input-group row d-flex">
                             <div class="col-6 col-md-6 mb-2">
                                 <label class="col-form-label ">Start Date <span class="text-danger">*</span>
@@ -229,6 +229,76 @@
                     </div>
                 </div>
                 {{-- ./ --}}
+
+             {{-- For Project Report --}}
+             <div class="col-md-6">
+                <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                    <div class="card-header">
+                        <h5 class="text-warning">  Performance Acceleration Report ~ PIP</h5>
+                    </div>
+    
+                    <form id="demo-form2" enctype="multipart/form-data" method="post"
+                        action="{{ route('flex.acceleration-reports') }}" data-parsley-validate
+                        class="form-horizontal form-label-left">
+                        @csrf
+    
+                        <div class="card-body">
+                            <div class="col-12 col-md-12 mb-2">
+                                <label class="col-form-label col-sm-3">Select Programme:</label>
+                                <select name="project_id" class="form-control select" id="">
+                                    @php
+                                        $project = App\Models\Acceleration::get();
+                                    @endphp
+    
+                                    @foreach ($project as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+    
+    
+    
+                                </select>
+                            </div>
+                            {{-- 
+                            <div class="input-group row d-flex">
+                                <div class="col-6 col-md-6 mb-2">
+                                    <label class="col-form-label ">Start Date <span class="text-danger">*</span>
+                                        :</label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                            <input type="date" required placeholder="Start Time" name="time_start"
+                                                id="time_start" class="form-control daterange-single">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-6 mb-2">
+                                    <label class="col-form-label ">End Date <span class="text-danger">*</span>
+                                        :</label>
+                                    <div class="col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                            <input type="date" required placeholder="Start Time" name="time_start"
+                                                id="time_start" class="form-control daterange-single">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            <div class="mt-2">
+                                {{-- <label class="form-label">Report Format:</label> --}}
+    
+                                <div class="">
+    
+                                    <button type="submit" class="btn btn-main float-end">
+                                        {{-- <i class="ph-printer me-2"></i> --}}
+                                            View
+                                        </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {{-- ./ --}}
 
 
 

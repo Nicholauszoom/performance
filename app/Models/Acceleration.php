@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Acceleration extends Model
 {
     use HasFactory;
+
+
 }
