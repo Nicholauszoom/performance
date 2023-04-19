@@ -78,7 +78,7 @@
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
-                    <h5 class="text-warning"> Employee Projects Performance Report</h5>
+                    <h5 class="text-warning"> Projects Performance Report</h5>
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"

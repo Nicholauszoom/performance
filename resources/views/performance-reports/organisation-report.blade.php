@@ -62,6 +62,7 @@
                               <td>{{ number_format($item->time,2)  }} %</td>
                               <td>{{ number_format($item->behaviour,2) }} %</td>
                               <td>{{ number_format($item->performance,2)}} %</td>
+                              <td hidden></td>
                           </tr>  
                             @endforeach
                           
