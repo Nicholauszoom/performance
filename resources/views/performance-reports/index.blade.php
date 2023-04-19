@@ -62,8 +62,10 @@
 
                             <div class="">
 
-                                <button type="submit" class="btn btn-main float-end"><i
-                                        class="ph-printer me-2"></i>Print</button>
+                                <button type="submit" class="btn btn-main float-end">
+                                    {{-- <i class="ph-printer me-2"></i>Print --}}
+                                    View
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -80,7 +82,7 @@
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('reports.payrollReconciliationSummary') }}" data-parsley-validate
+                    action="{{ route('flex.projects-report') }}" data-parsley-validate
                     class="form-horizontal form-label-left">
                     @csrf
 

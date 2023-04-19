@@ -29,7 +29,7 @@
                     <h2>Organization Report
                     </h2>
                     <a href="{{ route('flex.performance-reports') }}" class="btn btn-main float-end">
-                        <i class="ph-plus me-2"></i> Other Reports
+                        <i class="ph-list me-2"></i> Other Reports
                       </a>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -46,7 +46,7 @@
                         <thead>
                             <tr>
                                 <th>S/N</th>
-                                <th>Name</th>
+                                <th>Project Name</th>
                                 <th>Time</th>
                                 <th>Behaviour</th>
                                 <th>Performance</th>
@@ -55,17 +55,18 @@
                         </thead>
                         <tbody>
                             <?php $j = 1; ?>
-                            @if (count($result) > 0)
-                                @for ($i = 0; $i < count($result); $i++)
-                                    <tr>
-                                        <td>{{ $j++ }}</td>
-                                        <td>{{ $result[$i]['full_name'] }}</td>
-                                        <td>{{ $result[$i]['department'] }}</td>
-                                        <td>{{ $result[$i]['performance'] }}</td>
-                                        <td>{{ $result[$i]['behavior'] }}</td>
-                                    </tr>
-                                @endfor
-                            @endif
+                            @foreach ($performances as $item)
+                            <tr>
+                              <td>{{ $j++ }}</td>
+                              <td>{{ $item->name }}</td>
+                              <td>{{ number_format($item->time,2)  }} %</td>
+                              <td>{{ number_format($item->behaviour,2) }} %</td>
+                              <td>{{ number_format($item->performance,2)}} %</td>
+                          </tr>  
+                            @endforeach
+                          
+
+                            
                         </tbody>
                     </table>
                   {{-- </div> --}}
