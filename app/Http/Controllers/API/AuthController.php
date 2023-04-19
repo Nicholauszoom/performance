@@ -89,7 +89,7 @@ class AuthController extends Controller
                 'emp_id' => 'required',
                 'password' => 'required'
             ]);
-    
+
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
@@ -97,37 +97,38 @@ class AuthController extends Controller
                     'errors' => $validateUser->errors()
                 ], 401);
             }
-    
+
             if(!Auth::attempt($request->only(['emp_id', 'password']))){
                 return response()->json([
                     'status' => false,
                     'message' => 'Email & Password does not match with our record.',
                 ], 401);
             }
-    
+
             $user = User::where('emp_id', $request->emp_id)->first();
             if ($user->tokens()->count() > 0) {
                 $user->tokens()->delete();
             }
-              
-         
-      
-           
+
+
+
+
             $result=$this->dateDiffCalculate();
             session(['pass_age' => $result]);
 
             $pass_age = session()->get('pass_age');
             // $pass_age = session()->all();
              //  dd(session()->all());
-    
+
             $data['employee'] = $this->flexperformance_model->userprofile($request->emp_id);
+            $annualleaveBalance = 10;
             //$annualleaveBalance = $this->attendance_model->getLeaveBalance($user->hire_date, date('Y-m-d'));
-            $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+           // $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
             $myNewData = json_decode(json_encode($data['employee'][0]), true);
-            $myNewData['accrued_days'] = $annualleaveBalance;
+            $myNewData['accrued_days'] = 12;
             $myNewData['pass_age'] = $pass_age;
             $myNewDataJson = json_encode($myNewData);
-            
+
             $token = $user->createToken("API TOKEN");
             return response()->json([
                 'employee'=>$myNewData,
@@ -135,7 +136,7 @@ class AuthController extends Controller
                 'message' => 'User Logged In Successfully',
                 'token' => $token->plainTextToken
             ], 200);
-    
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -143,7 +144,7 @@ class AuthController extends Controller
             ], 500);
         }
     }
-    
+
 
     // For user details
 
@@ -183,6 +184,6 @@ class AuthController extends Controller
          else{
               return '0';
          }
-           
+
 	}
 }
