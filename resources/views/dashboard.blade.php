@@ -292,7 +292,7 @@
                                     </td>
                                 </tr>
 
-                                @if ($count_current_month - $count_previous_month != 0)
+                                
                                     @if ($new_employee > 0)
                                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                             <td class="text-start">00002</td>
@@ -328,7 +328,7 @@
                                             $total_amount += 0 - $termination_salary;
                                         @endphp
                                     @endif
-                                @endif
+
 
                                 @if ($count_previous_month != 0)
                                     @if ($current_increase['basic_increase'] > 0)
