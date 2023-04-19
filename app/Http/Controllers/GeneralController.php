@@ -10580,6 +10580,8 @@ class GeneralController extends Controller
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.performance')
+                ->where('employee_performances.type','!=','pip')
+
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.performance')
                 // ->get()
@@ -10589,6 +10591,8 @@ class GeneralController extends Controller
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
+                ->where('employee_performances.type','!=','pip')
+
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
@@ -10940,6 +10944,8 @@ class GeneralController extends Controller
                  ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                  ->where('employee.emp_id', $item->emp_id)
                  ->whereNotNull('employee_performances.performance')
+                 ->where('employee_performances.type','!=','pip')
+
                  // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                  ->avg('employee_performances.performance')
                  // ->get()
@@ -10949,6 +10955,8 @@ class GeneralController extends Controller
                  ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                  ->where('employee.emp_id', $item->emp_id)
                  ->whereNotNull('employee_performances.behaviour')
+                 ->where('employee_performances.type','!=','pip')
+
                  // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                  ->avg('employee_performances.behaviour');
 
@@ -11140,7 +11148,7 @@ class GeneralController extends Controller
              }
 
 
-             // var_dump($performance);
+            //  var_dump($performance);
          }
 
          // For Colum 1
@@ -11180,8 +11188,9 @@ class GeneralController extends Controller
 
         $par = 'item'.$id.'_data';
         $data2['result'] = $data[$par];
+        // $data2['result'] = $data['item22_data'] ;
 
-
+// dd($data['item7_data'] );
         return view('performance.performance_details', $data2);
 
     }
