@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjectTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -58,7 +59,10 @@ class PerformanceReportsController extends Controller
         // dd($request->project_id);
         $data['start'] = $request->start_date;
         $data['end'] = $request->end_date;
-        $data['performances'] = DB::table('project_tasks')
+        $data['name'] =ProjectTask::where('project_id',$request->project_id)->first();
+
+        $data['performances'] =ProjectTask::where('project_id',$request->project_id)->get();
+        // $data['performances'] = DB::table('project_tasks')
         // ->select('projects.name'
         // , DB::raw('AVG(employee_performances.performance) as performance'),
         // DB::raw('AVG(project_tasks.time) as time'),
@@ -68,7 +72,7 @@ class PerformanceReportsController extends Controller
         // ->distinct('projects.id')
         // ->join('project_tasks', ' projects.id', '=','project_tasks.project_id')
         // ->where('projects.id','=',$request->project_id)
-        ->where('project_tasks.project_id','=',$request->project_id)
+        // ->where('project_tasks.project_id','=',$request->project_id)
         // ->where('employee_performances.type','=','project')
         // ->join('projects','project_tasks.project_id' ,'=',' projects.id')
         
@@ -82,7 +86,7 @@ class PerformanceReportsController extends Controller
 
         // ->whereBetween('project.start_date', [$start, $end])
        
-        ->get();
+        // ->get();
 
 //   return($data['performances']);
 

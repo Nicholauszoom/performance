@@ -28,7 +28,7 @@
                   <div class="card-head px-3 py-1">
                     <h2>Project Report
                     </h2>
-                    <h5>Name:</h5>
+                    <h5>Project Name: <span class="text-main">{{ $name->project->name}}</span></h5>
                     <a href="{{ route('flex.performance-reports') }}" class="btn btn-main float-end">
                         <i class="ph-list me-2"></i> Other Reports
                       </a>
@@ -48,6 +48,7 @@
                             <tr>
                                 <th>S/N</th>
                                 <th>Task Name</th>
+                                <th>Assigned Employee </th>
                                 <th>Time</th>
                                 <th>Behaviour</th>
                                 <th>Performance</th>
@@ -60,6 +61,7 @@
                             <tr>
                               <td>{{ $count++ }}</td>
                               <td>{{ $item->name }}</td>
+                              <td>{{ $item->employee->fname }} {{ $item->employee->lname }}</td>
                               <td>{{ number_format($item->time,2)  }} %</td>
                               <td>{{ number_format($item->behaviour,2) }} %</td>
                               <td>{{ number_format($item->performance,2)}} %</td>
