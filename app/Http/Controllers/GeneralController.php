@@ -10051,7 +10051,7 @@ class GeneralController extends Controller
     // For All Projects
     public function projects()
     {
-        $data['project'] = Project::all();
+        $data['project'] = Project::latest()->get();
         return view('performance.projects', $data);
     }
 
@@ -10091,11 +10091,20 @@ class GeneralController extends Controller
         return redirect('flex/projects')->with('msg', 'Project was updated Successfully !');
     }
 
+    // For Completed Projects
+
+    public function completed_project($id)
+    {
+        $project = Project::where('id', $id)->first();
+        $project->status = 1;
+        $project->update();
+        return back()->with('msg', 'Project was Completed Successfully !');
+    }
     // View single project
     public function view_project($id)
     {
         $project = Project::where('id', $id)->first();
-        $tasks = ProjectTask::where('project_id', $id)->get();
+        $tasks = ProjectTask::where('project_id', $id)->latest()->get();
         return view('performance.single_project', compact('project', 'tasks'));
     }
 

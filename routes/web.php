@@ -206,6 +206,8 @@ Route::middleware('auth')->group(function () {
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
         Route::any('completed_task/{id}','completed_task')->name('flex.completed_task');
+        Route::any('completed-project/{id}','completed_project')->name('flex.complete_project');
+
 
 
         // For Perfomance report
@@ -555,6 +557,7 @@ Route::middleware('auth')->group(function () {
         Route::any('project-report','project_report')->name('flex.project-report');
         Route::any('department-report','department_report')->name('flex.department-report');
         Route::any('acceleration-reports','acceleration_report')->name('flex.acceleration-reports');
+
 
 
     });

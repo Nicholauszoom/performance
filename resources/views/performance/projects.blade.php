@@ -83,12 +83,20 @@
                                     <a href="{{ url('flex/view-project/'.$item->id); }}" class="btn btn-sm bg-main">
                                         <i class="ph-info"></i>
                                     </a>
-                                    <a href="{{ url('flex/edit-project/'.$item->id); }}" class="btn btn-sm bg-main">
+                                    @if ($item->status==0)
+
+                                
+
+                                    <a href="{{ url('flex/edit-acceleration/'.$item->id); }}" class="btn btn-sm bg-main">
                                         <i class="ph-pen"></i>
                                     </a>
-                                    <a href="{{ url('flex/delete-project/'.$item->id); }}" class="btn btn-sm btn-danger">
+                                    <a href="{{ url('flex/delete-acceleration/'.$item->id); }}" class="btn btn-sm btn-danger">
                                         <i class="ph-trash"></i>
                                     </a>
+                                    <a href="{{ url('flex/completed-project/'.$item->id); }}" class="btn btn-sm bg-success text-light">
+                                        <i class="ph-check"></i>
+                                    </a>
+                                    @endif
                                 </td>
 
                             </tr>
