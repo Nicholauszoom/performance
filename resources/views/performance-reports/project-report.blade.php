@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Organisation Report'])
+@extends('layouts.vertical', ['title' => 'Project Report'])
 
 @push('head-script')
   <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -26,8 +26,9 @@
 
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
-                    <h2>Organization Report
+                    <h2>Project Report
                     </h2>
+                    <h5>Name:</h5>
                     <a href="{{ route('flex.performance-reports') }}" class="btn btn-main float-end">
                         <i class="ph-list me-2"></i> Other Reports
                       </a>
@@ -46,7 +47,7 @@
                         <thead>
                             <tr>
                                 <th>S/N</th>
-                                <th>Project Name</th>
+                                <th>Task Name</th>
                                 <th>Time</th>
                                 <th>Behaviour</th>
                                 <th>Performance</th>
@@ -62,6 +63,7 @@
                               <td>{{ number_format($item->time,2)  }} %</td>
                               <td>{{ number_format($item->behaviour,2) }} %</td>
                               <td>{{ number_format($item->performance,2)}} %</td>
+                              <td hidden></td>
                           </tr>  
                             @endforeach
                           
