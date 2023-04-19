@@ -551,6 +551,8 @@ Route::middleware('auth')->group(function () {
     // For Performance Reports Routes
     Route::prefix('flex/')->controller(PerformanceReportsController::class)->group(function (){
         Route::any('performance-reports','index')->name('flex.performance-reports');
+        Route::any('organization-reports','organization_report')->name('flex.organization-reports');
+
 
     });
 

@@ -412,6 +412,8 @@ class AccelerationController extends Controller
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
+                ->where('employee_performances.type','=','pip')
+
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
@@ -776,6 +778,8 @@ class AccelerationController extends Controller
                 ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
                 ->where('employee.emp_id', $item->emp_id)
                 ->whereNotNull('employee_performances.behaviour')
+                ->where('employee_performances.type','=','pip')
+
                 // ->join('adhoc_tasks', 'employee.emp_id', '=', 'adhoc_tasks.assigned')
                 ->avg('employee_performances.behaviour');
 
