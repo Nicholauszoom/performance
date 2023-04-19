@@ -26,9 +26,14 @@
 
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
-                    <h2>Project Report
+                    <h2>
+                        <i class="ph-folder"></i>
+                        Project Report
                     </h2>
+                    <hr>
                     <h5>Project Name: <span class="text-main">{{ $name->project->name}}</span></h5>
+                    <p>Performance: {{ $tasks }} %</p>
+                    <p>Behaviour: {{ $behaviour }} %</p>
                     <a href="{{ route('flex.performance-reports') }}" class="btn btn-main float-end">
                         <i class="ph-list me-2"></i> Other Reports
                       </a>

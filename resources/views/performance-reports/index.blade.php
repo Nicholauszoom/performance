@@ -102,7 +102,7 @@
 
                             </select>
                         </div>
-
+{{-- 
                         <div class="input-group row d-flex">
                             <div class="col-6 col-md-6 mb-2">
                                 <label class="col-form-label ">Start Date <span class="text-danger">*</span>
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="mt-2">
                             {{-- <label class="form-label">Report Format:</label> --}}
 
@@ -153,14 +153,14 @@
                         </div>
         
                         <form id="demo-form2" enctype="multipart/form-data" method="post"
-                            action="{{ route('reports.payrollReconciliationSummary') }}" data-parsley-validate
+                            action="{{ route('flex.department-report') }}" data-parsley-validate
                             class="form-horizontal form-label-left">
                             @csrf
         
                             <div class="card-body">
                                 <div class="col-12 col-md-12 mb-2">
                                     <label class="col-form-label col-sm-3">Select Department:</label>
-                                    <select name="project_id" class="form-control select" id="">
+                                    <select name="dept_id" class="form-control select" id="">
                                         @php
                                             $project = App\Models\Department::get();
                                         @endphp
@@ -190,7 +190,7 @@
                                     </select>
                                 </div>
 
-                                <div class="input-group row d-flex">
+                                {{-- <div class="input-group row d-flex">
                                     <div class="col-6 col-md-6 mb-2">
                                         <label class="col-form-label ">Start Date <span class="text-danger">*</span>
                                             :</label>
@@ -213,7 +213,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="mt-2">
                                     {{-- <label class="form-label">Report Format:</label> --}}
         

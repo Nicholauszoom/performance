@@ -62,6 +62,10 @@ class PerformanceReportsController extends Controller
         $data['name'] =ProjectTask::where('project_id',$request->project_id)->first();
 
         $data['performances'] =ProjectTask::where('project_id',$request->project_id)->get();
+        $data['tasks'] =ProjectTask::where('project_id',$request->project_id)->avg('performance');
+        $data['behaviour'] =ProjectTask::where('project_id',$request->project_id)->avg('behaviour');
+
+
         // $data['performances'] = DB::table('project_tasks')
         // ->select('projects.name'
         // , DB::raw('AVG(employee_performances.performance) as performance'),
@@ -92,6 +96,13 @@ class PerformanceReportsController extends Controller
 
         return view('performance-reports.project-report',$data);
 
+    }
+
+
+    // For Department Report
+    public function department_report(Request $request)
+    {
+        # code...
     }
 
 }
