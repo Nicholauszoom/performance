@@ -583,7 +583,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
 
-        from payroll_logs pl,employee e where e.emp_id = pl.empID and e.state !=4  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
+        from payroll_logs pl,employee e where e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
 
         ";
 
@@ -1511,7 +1511,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $terminationDate = 'null';
 
         }
-        
+
         $row2 = DB::table('terminations')->where('terminationDate', 'like', $terminationDate)->select('id')->count();
 
 
@@ -1575,7 +1575,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $terminationDate = 'null';
 
         }
-        
+
 
 
         $query = "SELECT COUNT(id) as number from terminations where terminationDate LIKE '".$terminationDate."'";
@@ -1640,6 +1640,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     function basic_decrease1($previous_payroll_month,$current_payroll_month)
     {
 
+
+
+
+
         $calender1 = explode('-', $current_payroll_month);
         $calender2 = explode('-', $previous_payroll_month);
         // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
@@ -1686,19 +1690,24 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from payroll_logs pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row = DB::select(DB::raw($query));
 
-        $query = "SELECT SUM(pl.salary - (SELECT actual_salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."')) as amount from payroll_logs pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT actual_salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."')) as amount,SUM(pl.actual_salary) as actual_salary from payroll_logs pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
         $row2 = DB::select(DB::raw($query));
         $data['basic_increase'] = $row[0]->amount + $row1[0]->amount + $row2[0]->amount;
 
+        $data['actual_amount'] = $row2[0]->actual_salary;
 
-        $subquery = "SELECT SUM(tm.actual_salary) as amount from terminations tm where tm.actual_salary < tm.salaryEnrollment and  tm.terminationDate like '%" . $current_terminationDate . "%'";
-        $row1 = DB::select(DB::raw($subquery));
 
-        $query = "SELECT SUM(pl.actual_salary) as amount from payroll_logs pl where   pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
-        $row = DB::select(DB::raw($query));
 
-        $data['actual_amount'] = $row[0]->amount + $row1[0]->amount;
 
+        // $subquery = "SELECT SUM(tm.actual_salary) as amount from terminations tm where tm.actual_salary < tm.salaryEnrollment and  tm.terminationDate like '%" . $current_terminationDate . "%'";
+        // $row1 = DB::select(DB::raw($subquery));
+
+        // $query = "SELECT SUM(pl.actual_salary) as amount from payroll_logs pl where   pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
+        // $row = DB::select(DB::raw($query));
+
+        //$data['actual_amount'] = $row[0]->amount + $row1[0]->amount;
+
+       // dd($data);
         return $data;
     }
 
@@ -1885,7 +1894,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
     public function employee_decrease($current_payroll_month, $previous_payroll_month){
         $calender = explode('-',$previous_payroll_month);
-      
+
         if(count($calender) > 2){
             $terminationDate = '%'.$calender[0] . '-' . $calender[1].'%';
 
@@ -1893,7 +1902,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             $terminationDate = 'null';
 
         }
-        
+
         $query = "SELECT  'Less Terminated Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,tm.salaryEnrollment as salary,tm.net_pay as previous_amount,0 as current_amount
         from terminations tm,employee e where  e.emp_id = tm.employeeID and terminationDate LIKE'".$terminationDate."'";
 

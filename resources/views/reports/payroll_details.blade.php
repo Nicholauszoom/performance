@@ -107,7 +107,7 @@
                                     $others = 0;
                                     $total_teller_allowance = 0;
                                     $total_taxable_amount = 0;
-                                    $total_gross_salary = 0;
+                                    //$total_gross_salary = 0;
                                     $total_taxs = 0;
                                     $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
                                     $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
@@ -276,7 +276,10 @@
 
                             <td class="text-end"><b><b> {{ number_format(0, 0) }}</b></b></td>
                             <td class="text-end">
-                                <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others - $total_pension, 0) }}</b></b>
+
+                                <b><b>{{ number_format($total_gross_salary, 0) }}</b></b>
+
+                                {{-- <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others - $total_pension, 0) }}</b></b> --}}
                             </td>
 
                             <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>

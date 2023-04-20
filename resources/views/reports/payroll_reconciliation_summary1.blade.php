@@ -112,7 +112,7 @@
                             <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month  }}</td>
                         </tr>
 
-                        
+
                             @if ($new_employee > 0)
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
@@ -148,7 +148,7 @@
                                     $total_amount += 0 - $termination_salary;
                                 @endphp
                             @endif
-                        
+
 
                         @if ($count_previous_month != 0)
                             @if ($current_increase['basic_increase'] > 0)
@@ -157,24 +157,24 @@
                                     <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
                                     <td class="text-end">
 
+                                        {{ number_format($current_increase['actual_amount']-$current_increase['basic_increase'], 2) }}
+                                    </td>
+                                    <td class="text-end">
                                         {{ number_format($current_increase['actual_amount'], 2) }}
                                     </td>
                                     <td class="text-end">
                                         {{ number_format($current_increase['basic_increase'], 2) }}
                                     </td>
-                                    <td class="text-end">
-                                        {{ number_format($current_increase['basic_increase'] - $current_increase['actual_amount'] - $current_increase['actual_amount'], 2) }}
-                                    </td>
                                     <td class="text-end"></td>
                                 </tr>
 
                                 @php
-                                    $total_previous += $current_increase['actual_amount'];
+                                    $total_previous += ($current_increase['actual_amount']-$current_increase['basic_increase']);
 
-                                    $total_current += $current_increase['actual_amount'] - $current_increase['basic_increase'];
+                                    $total_current += ($current_increase['actual_amount']);
                                     //dd($total_current);
 
-                                    $total_amount += $current_increase['basic_increase'] - $current_increase['actual_amount'] - $current_increase['actual_amount'];
+                                    $total_amount += ($current_increase['basic_increase']);
                                 @endphp
                             @endif
                             @if ($current_decrease['basic_decrease'] > 0)

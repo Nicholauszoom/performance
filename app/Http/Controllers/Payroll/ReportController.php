@@ -110,7 +110,7 @@ class ReportController extends Controller
             $total_heslb = $data['total_heslb'];
 
             $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
-            return $pdf->download('payrolldetails.pdf');
+            return $pdf->download('paychecklist-'.$payrollMonth.'.pdf');
         }
     }
 
@@ -1995,11 +1995,11 @@ dd($data['paye_terminated']);
             //increase of employee
             $data['employee_increase'] = $this->reports_model->employee_increase($current_payroll_month, $previous_payroll_month);
         }
-        
+
         if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
-       
+
         }
 
         if ($current_increase['basic_increase'] > 0) {
@@ -2080,11 +2080,11 @@ dd($data['paye_terminated']);
 
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
-       
+
 
 
         $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
-       
+
         if($data['new_employee'] > 0){
 
             $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
@@ -2097,7 +2097,7 @@ dd($data['paye_terminated']);
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
 
-            
+
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
