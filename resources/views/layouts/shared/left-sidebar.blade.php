@@ -399,7 +399,7 @@
                                Acceleration Programme
                             </a>
                         </li>
-          
+
                         <li class="nav-item">
                             <a href="{{ route('flex.acceleration-report') }}"
                                 class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
@@ -589,6 +589,13 @@
                                         class="nav-link {{ request()->routeIs('flex.audit_logs') ? 'active' : null }}"
                                         href="{{ route('flex.audit_logs') }}">Audit Trail</a></li>
                             @endif
+
+                            @if (session('mng_audit'))
+                            <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.passwordAutogenerate') ? 'active' : null }}"
+                                    href="{{ route('flex.passwordAutogenerate') }}">Password Reset</a></li>
+                        @endif
+
 
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ route('/flex/nationality')}}">Nationality</a></li>  --}}
                             <li class="nav-item"><a

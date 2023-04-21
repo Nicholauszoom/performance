@@ -95,6 +95,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('error', [HomeController::class,'home']);
          // start of overtime routes
+
+         Route::any('/passwordAutogenerate','passwordAutogenerate')->name('flex.passwordAutogenerate');
+
          Route::any('/overtime','overtime')->name('flex.overtime');
          Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
          Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
@@ -548,7 +551,7 @@ Route::middleware('auth')->group(function () {
         Route::any('acceleration-report','performance')->name('flex.acceleration-report');
         Route::any('accelerationDetails/{id}','accelerationDetails')->name('flex.accelerationDetails');
         Route::any('completed-acceleration/{id}','completed_acceleration')->name('flex.complete_acceleration');
-    });  
+    });
 
     // For Performance Reports Routes
     Route::prefix('flex/')->controller(PerformanceReportsController::class)->group(function (){

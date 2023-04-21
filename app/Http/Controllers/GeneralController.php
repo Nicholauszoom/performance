@@ -6896,6 +6896,34 @@ class GeneralController extends Controller
         return $result;
     }
 
+    public function passwordAutogenerate(Request $request){
+        // $email_data = array(
+        //     'email' => $request->email,
+        //     'fname' => $request->fname,
+        //     'lname' => $request->lname,
+        //     'username' => $emp_id,
+        //     'password' => $password
+        // );
+
+        if($request->method() == 'POST'){
+        $email_data = array(
+            'email' => 'samwel.herman@cits.co.tz',
+            'fname' => 'sam',
+            'lname' => 'sam',
+            'username' => 'sam',
+            'password' => 'sam'
+        );
+
+        Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
+
+       }else{
+        $data['employee'] = Employee::where('state', '=', 1)->get();
+
+        return view('password-seting',$data);
+       }
+
+    }
+
     /**
      * Register emmployee
      *

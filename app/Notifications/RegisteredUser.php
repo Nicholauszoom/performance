@@ -45,7 +45,7 @@ use Illuminate\Notifications\Notification;
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('VSO User Credentials')
+            ->subject('HC HUB User Credentials')
             // ->to($this->arr['email'])
             // ->to($this->arr['email'])
             // ->greeting('Dear ' . $this->arr['username'])
