@@ -54,7 +54,7 @@
 
                 <hr>
 
-                <table class="table" style="background-color: #165384; color:white">
+                <table class="table" style="background-color: #165384; color:white;font-size:12px;">
                     <thead>
                         <tr>
                             <td class="">
@@ -128,57 +128,62 @@
                         <?php }} ?>
                     </tbody>
                 </table>
-                <hr>
-                <table class="table" id="reports">
+
+                <table class="table" id="reports" style="font-size:10px; height:20px;">
                     <tbody>
                         <tr>
                             <td>
-                                <p class="text-start" style="font-size:15px;">
-                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
+                                <p class="text-start" style="font-size:12px !important;">
+                                    <small><b>Approved By:</b></small>
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small>
+                                <p class="text-start" style="font-size:14px !important;">
+                                    <small><b>Approved By:</b></small>
                                 </p>
                             </td>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p class="text-start"><small>Reviewed By:</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Checked By:</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Approved By:</small></p>
-                            </td>
 
                         </tr>
+
                         <tr>
 
+
                             <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name_______________________________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name______________________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name_______________________________</small></p>
                             </td>
 
                         </tr>
                         <tr>
 
+
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position_____________________________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position_____________________________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Signature____________________________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Signature____________________________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Date________________________________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date________________________________</small></p>
                             </td>
 
                         </tr>
@@ -188,7 +193,7 @@
 
         </div>
 
-
+<br><br>
 
         <div id="logo2" style="margin-left: 7px; z-index: -10">
             <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">

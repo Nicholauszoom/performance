@@ -289,50 +289,78 @@
                         <tr>
                             <td>
                                 <p class="text-start" style="font-size:15px;">
-                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
+                                    <small><b>Prepared By:</b></small>
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>1st Cheker & Approved By:</b></small></p>
                             </td>
-                            <td>.</td>
+                            <td>
+                                <p class="text-start" style="font-size:15px;"><small><b>2nd Cheker & Approved By:</b></small></p>
+                            </td>
+                            <td><p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p></td>
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Reviewed By:</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Checked By:</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Approved By:</small></p>
-                            </td>
-
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name______________________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
 
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position:_____________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position:_____________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position:_____________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Position:_____________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
                             </td>
 
                         </tr>
