@@ -6907,14 +6907,14 @@ class GeneralController extends Controller
 
         if($request->method() == 'POST'){
         $email_data = array(
-            'email' => 'samwel.herman@cits.co.tz',
-            'fname' => 'sam',
-            'lname' => 'sam',
-            'username' => 'sam',
-            'password' => 'sam'
+            'email' => 'fmugishangwe@bancabc.co.tz',
+            'fname' => 'Franco',
+            'lname' => 'Mugishangwe',
+            'username' => 'TEST',
+            'password' => $this->password_generator(5),
         );
 
-        Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
+        Notification::route('mail', 'fmugishangwe@bancabc.co.tz')->notify(new RegisteredUser($email_data));
 
        }else{
         $data['employee'] = Employee::where('state', '=', 1)->get();
