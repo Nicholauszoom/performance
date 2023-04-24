@@ -6906,15 +6906,29 @@ class GeneralController extends Controller
         // );
 
         if($request->method() == 'POST'){
-        $email_data = array(
-            'email' => 'fmugishangwe@bancabc.co.tz',
-            'fname' => 'Franco',
-            'lname' => 'Mugishangwe',
-            'username' => 'TEST',
-            'password' => $this->password_generator(5),
-        );
+         if($request->emp_id == 'all'){
+        $employee =  Employee::all();
+         }else{
+        $employee = Employee::all()->where('emp_id',$request->emp_id);
+         }
 
-        Notification::route('mail', 'fmugishangwe@bancabc.co.tz')->notify(new RegisteredUser($email_data));
+         foreach($employee as $row){
+            $pass = $this->password_generator(5);
+            $password = Hash::make($pass);
+            //Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
+            $email_data = array(
+                'email' => $row->email,
+                'fname' => $row->fname,
+                'lname' => $row->lname,
+                'username' =>$row->emp_id,
+                'password' => $pass,
+            );
+            Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
+
+         }
+
+       
+          return redirect()->back();   
 
        }else{
         $data['employee'] = Employee::where('state', '=', 1)->get();

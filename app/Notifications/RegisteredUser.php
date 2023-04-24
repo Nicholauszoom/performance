@@ -50,13 +50,13 @@ use Illuminate\Notifications\Notification;
             // ->to($this->arr['email'])
             // ->greeting('Dear ' . $this->arr['username'])
             ->greeting('Dear '. $this->arr['fname'] . ' ' . $this->arr['lname'])
-            ->line('Your Flex Performance Account login credential are: ')
+            ->line('Your  HC-HUB Account login credentials are: ')
             ->line('Username: ' . $this->arr['username'])
             ->line('Password: ' . $this->arr['password'])
             ->line('You are advised not to share your password with anyone. If you don\'t know this activity or you received this email by accident, please report this incident to the system administrator')
             ->action('Login Link', url('/login'))
             ->line('Thank you')
-            ->line('Flex Performance Software Self Service');
+            ->line('HC-HUB Software Self Service');
     }
 
     /**
