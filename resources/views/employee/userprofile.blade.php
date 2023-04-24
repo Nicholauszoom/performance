@@ -45,11 +45,11 @@
         $retired = $row->retired;
         $login_user = $row->login_user;
     }
-
+    
     foreach ($active_properties as $rowActive) {
         $numActive = $rowActive->ACTIVE_PROPERTIES;
     }
-
+    
     $delimeter = '|';
     ?>
 
@@ -59,7 +59,8 @@
 
     <div class="row">
         <div class="col-md-4 mt-1">
-            <div class="card rounded-0 border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none pb-4">
+            <div
+                class="card rounded-0 border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none pb-4">
                 <div class="sidebar-section-body text-center">
                     <div class="card-img-actions d-inline-block my-3">
                         {{-- rounded-circle --}}
@@ -92,7 +93,8 @@
                 </ul>
             </div>
 
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
+            <div
+                class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div class="card-header border-0 shadow-none">
                     {{-- text-muted --}}
                     <h6 class=" text-warning">Basic Details</h6>
@@ -136,7 +138,8 @@
                 </table>
             </div>
 
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+            <div
+                class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                 <div class="card-header">
                     <h6 class="text-warning">Work Details</h6>
                 </div>
@@ -175,7 +178,7 @@
                         @if (Auth::user()->can('view-payroll') || auth()->user()->emp_id == $empID)
                             <tr>
                                 <td>Salary:</td>
-                                <td>{{ number_format($salary,2) }}</td>
+                                <td>{{ number_format($salary, 2) }}</td>
                             </tr>
                         @endif
                         <tr>
@@ -283,7 +286,8 @@
                                 <div role="tabpanel" class="tab-pane fade active show " id="work"
                                     aria-labelledby="work-tab">
 
-                                    <div class="card border-top  border-top-width-3 border-top-main rounded-0 m-2 shadow-none">
+                                    <div
+                                        class="card border-top  border-top-width-3 border-top-main rounded-0 m-2 shadow-none">
                                         <div class="card-header d-flex justify-content-between">
                                             <h5 class="text-main">Next of Kin(s)</h5>
 
@@ -347,7 +351,8 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="card border-top border-top-width-3 border-top-main rounded-0 border-0 shadow-none">
+                                                <div
+                                                    class="card border-top border-top-width-3 border-top-main rounded-0 border-0 shadow-none">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Roles Granted</h6>
                                                     </div>
@@ -406,7 +411,8 @@
                                             </div>
 
                                             <div class="col-md-6">
-                                                <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0  shadow-none">
+                                                <div
+                                                    class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0  shadow-none">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Roles Not Granted</h6>
                                                     </div>
@@ -519,7 +525,8 @@
 
                                 {{-- L & D --}}
                                 <div role="tabpanel" class="tab-pane " id="l-d" aria-labelledby="l-d-tab">
-                                    <div class="card border-top  border-top-width-3 border-top-main  rounded-0  shadow-none mb-3">
+                                    <div
+                                        class="card border-top  border-top-width-3 border-top-main  rounded-0  shadow-none mb-3">
                                         <div class="card-header">
                                             <h4 class="text-main">Skills Acquired </h4>
                                         </div>
@@ -546,7 +553,8 @@
                                     <?php if(session('mng_emp')) { ?>
                                     <hr class="my-4">
 
-                                    <div class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+                                    <div
+                                        class="card border-top border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                                         <div class="card-header">
                                             <h5 class="text-main">Skills Not Acquired (To be Trained)</h5>
                                         </div>
@@ -619,7 +627,8 @@
 
                                     <hr class="my-4">
 
-                                    <div class="card border-top border-top-width-3 border-top-main rounded-0 border-0 shadow-none">
+                                    <div
+                                        class="card border-top border-top-width-3 border-top-main rounded-0 border-0 shadow-none">
                                         <div class="card-header">
                                             <h4 class="text-main">Skills Requested For Training</h4>
                                         </div>
@@ -691,12 +700,16 @@
                                     <div class="card rounded-0 border-0 shadow-none">
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12 col-sm-12">
-                                                <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
+                                                <div
+                                                    class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 border-0 shadow-none">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Pension Summary</h6>
 
-                                                        <a class="ms-3" href="{{ route('reports.employee_pension',['emp_id'=>$empID]) }}" target="blank">
-                                                            <button type="button" name="print" value="print" class="btn btn-main btn-sm">
+                                                        <a class="ms-3"
+                                                            href="{{ route('reports.employee_pension', ['emp_id' => $empID]) }}"
+                                                            target="blank">
+                                                            <button type="button" name="print" value="print"
+                                                                class="btn btn-main btn-sm">
                                                                 Print
                                                             </button>
                                                         </a>
@@ -704,12 +717,11 @@
                                                     </div>
 
                                                     @php
-                                                    $total = 0;
-                                                      foreach ($employee_pension as $row) {
-
-                                                      $total +=$row->pension_employee;
-                                                      }
-
+                                                        $total = 0;
+                                                        foreach ($employee_pension as $row) {
+                                                            $total += $row->pension_employee;
+                                                        }
+                                                        
                                                     @endphp
 
                                                     <div class="card-body">
@@ -731,12 +743,13 @@
                                                                 <tbody>
 
                                                                     <tr>
-                                                                        <td>{{ number_format($total,2 ) }}</td>
-                                                                        <td>{{ number_format($total,2 ) }}</td>
+                                                                        <td>{{ number_format($total, 2) }}</td>
+                                                                        <td>{{ number_format($total, 2) }}</td>
 
                                                                     </tr>
                                                                     <tr>
-                                                                        <td colspan="2">Total : {{ number_format($total*2,2) }}</td>
+                                                                        <td colspan="2">Total :
+                                                                            {{ number_format($total * 2, 2) }}</td>
 
 
                                                                     </tr>
@@ -749,7 +762,8 @@
                                             </div>
 
                                             <div class="col-md-12 col-lg-12 col-sm-12">
-                                                <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 border-1 col-md-12">
+                                                <div
+                                                    class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 border-1 col-md-12">
                                                     <div class="card-header border-0">
                                                         <h6 class="text-muted">Detailed</h6>
                                                         <hr>
@@ -778,8 +792,8 @@
                                                                 <?php foreach ($employee_pension as $row) {  ?>
                                                                 <tr>
                                                                     <td><?php echo $row->payment_date; ?></td>
-                                                                    <td><?php echo number_format($row->pension_employee,2); ?></td>
-                                                                    <td><?php echo number_format($row->pension_employer,2); ?></td>
+                                                                    <td><?php echo number_format($row->pension_employee, 2); ?></td>
+                                                                    <td><?php echo number_format($row->pension_employer, 2); ?></td>
                                                                     <td hidden></td>
                                                                     <td hidden></td>
                                                                     <td hidden></td>
@@ -798,7 +812,8 @@
 
                                 {{-- Exit --}}
                                 <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
-                                    <div class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
+                                    <div
+                                        class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
 
                                         <div class="card-body">
                                             <form id="upload_form" method="post" enctype="multipart/form-data"
@@ -868,8 +883,8 @@
                                                         class="btn btn-main">Confirm Exit</button>
                                                     <?php endif; ?>
                                                     <!-- <?php if($state = 0 ){ ?>
-                                                <h5><?php echo number_format($allowances, 2); ?></h5> <?php } ?>
-                                                <button  type="submit" <?php if($state == 1 || $numActive > 0) { ?> disabled <?php } ?> name="exit" value = "exit" class="btn btn-warning">CONFIRM EXIT</button> -->
+                                                    <h5><?php echo number_format($allowances, 2); ?></h5> <?php } ?>
+                                                    <button  type="submit" <?php if($state == 1 || $numActive > 0) { ?> disabled <?php } ?> name="exit" value = "exit" class="btn btn-warning">CONFIRM EXIT</button> -->
 
                                                 </div>
                                             </form>
@@ -1082,8 +1097,8 @@
 @push('footer-script')
     <script type="text/javascript">
         /*
-                     check if form submitted is for creating or updating
-                 */
+                         check if form submitted is for creating or updating
+                     */
         $("#save-qualification-btn").click(function(event) {
             event.preventDefault();
             if ($("#update_id").val() == null || $("#update_id").val() == "") {
@@ -1147,8 +1162,8 @@
                     $("#save-community-btn").prop('disabled', false);
 
                     /*
-                    show validation error
-                                */
+                        show validation error
+                                    */
                     if (typeof response.responseJSON.errors !== 'undefined') {
                         let errors = response.responseJSON.errors;
                         let abbreviationValidation = "";

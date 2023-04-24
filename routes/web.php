@@ -186,6 +186,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
+
+        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
+
+
+        
         // end of employee personal details  route
 
         // start of overtime routes

@@ -6915,7 +6915,7 @@ class GeneralController extends Controller
          foreach($employee as $row){
             $pass = $this->password_generator(5);
             $password = Hash::make($pass);
-            //Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
+            Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
             $email_data = array(
                 'email' => $row->email,
                 'fname' => $row->fname,
@@ -6923,7 +6923,7 @@ class GeneralController extends Controller
                 'username' =>$row->emp_id,
                 'password' => $pass,
             );
-            Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
+            Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
 
          }
 
@@ -6936,6 +6936,13 @@ class GeneralController extends Controller
         return view('password-seting',$data);
        }
 
+    }
+
+    public function download_payslip(){
+
+        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+
+        return view('my-services.payslip',$data);
     }
 
     /**
