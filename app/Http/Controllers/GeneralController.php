@@ -2149,12 +2149,8 @@ class GeneralController extends Controller
     public function applyOvertimeOnbehalf(Request $request)
     {
 
-        $start = $request->input('time_start');
-        $finish = $request->input('time_finish');
-        $reason = $request->input('reason');
+        $days = $request->input('days');
         $category = $request->input('category');
-        $linemanager = $request->input('linemanager');
-
         $empID = $request->empID;
 
 
@@ -2197,120 +2193,120 @@ class GeneralController extends Controller
         // }
         //Overtime Should range between 24 Hrs;
 
-        if ($maxRange > 24) {
+        // if ($maxRange > 24) {
 
-            echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
-        } else {
+        //     echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
+        // } else {
 
-            $end_night_shift = "6:00";
-            $start_night_shift = "20:00";
+        //     $end_night_shift = "6:00";
+        //     $start_night_shift = "20:00";
 
-            if ($start_date == $finish_date) {
+        //     if ($start_date == $finish_date) {
 
-                if (strtotime($start_time) >= strtotime($finish_time)) {
+        //         if (strtotime($start_time) >= strtotime($finish_time)) {
 
-                    echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
-                } else {
+        //             echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
+        //         } else {
 
-                    if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
+        //             if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
 
-                        $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
+        //                 $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
 
-                        $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
-                            'overtime_type' => $type,
-                            'overtime_category' => $category,
-                            'reason' => $reason,
-                            'empID' => $empID,
-                            'linemanager' => $linemanager,
-                            'time_recommended_line' => date('Y-m-d h:i:s'),
-                            'time_approved_hr' => date('Y-m-d'),
-                            'time_confirmed_line' => date('Y-m-d h:i:s'),
-                        );
+        //                 $data = array(
+        //                     'time_start' => $start_final . " " . $start_time,
+        //                     'time_end' => $finish_final . " " . $finish_time,
+        //                     'overtime_type' => $type,
+        //                     'overtime_category' => $category,
+        //                     'reason' => $reason,
+        //                     'empID' => $empID,
+        //                     'linemanager' => $linemanager,
+        //                     'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                     'time_approved_hr' => date('Y-m-d'),
+        //                     'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //                 );
 
-                        $result = $this->flexperformance_model->apply_overtime($data);
+        //                 $result = $this->flexperformance_model->apply_overtime($data);
 
-                        if ($result == true) {
-                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {
-                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                        }
-                    } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
+        //                 if ($result == true) {
+        //                     echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //                 } else {
+        //                     echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //                 }
+        //             } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
 
-                        $type = 0; // echo "DAY OVERTIME";
+        //                 $type = 0; // echo "DAY OVERTIME";
 
-                        $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
-                            'overtime_type' => $type,
-                            'overtime_category' => $category,
-                            'reason' => $reason,
-                            'empID' => $empID,
-                            'linemanager' => $linemanager,
-                            'time_recommended_line' => date('Y-m-d h:i:s'),
-                            'time_approved_hr' => date('Y-m-d'),
-                            'time_confirmed_line' => date('Y-m-d h:i:s'),
-                        );
+        //                 $data = array(
+        //                     'time_start' => $start_final . " " . $start_time,
+        //                     'time_end' => $finish_final . " " . $finish_time,
+        //                     'overtime_type' => $type,
+        //                     'overtime_category' => $category,
+        //                     'reason' => $reason,
+        //                     'empID' => $empID,
+        //                     'linemanager' => $linemanager,
+        //                     'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                     'time_approved_hr' => date('Y-m-d'),
+        //                     'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //                 );
 
-                        $result = $this->flexperformance_model->apply_overtime($data);
+        //                 $result = $this->flexperformance_model->apply_overtime($data);
 
-                        if ($result == true) {
-                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {
-                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                        }
-                    } else {
-                        echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
-                    }
-                }
-            } else if ($start_date > $finish_date) {
-                echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
-            } else {
-                // echo "CORRECT DATE - <BR>";
-                if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
-                    $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
-                    $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
-                        'overtime_type' => $type,
-                        'overtime_category' => $category,
-                        'reason' => $reason,
-                        'empID' => $empID,
-                        'linemanager' => $linemanager,
-                        'time_recommended_line' => date('Y-m-d h:i:s'),
-                        'time_approved_hr' => date('Y-m-d'),
-                        'time_confirmed_line' => date('Y-m-d h:i:s'),
-                    );
-                    $result = $this->flexperformance_model->apply_overtime($data);
-                    if ($result == true) {
-                        echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                    } else {
-                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                    }
-                } else {
-                    $type = 0; // echo "DAY OVERTIME";
-                    $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
-                        'overtime_type' => $type,
-                        'overtime_category' => $category,
-                        'reason' => $reason,
-                        'empID' => $empID,
-                        'linemanager' => $linemanager,
-                        'time_recommended_line' => date('Y-m-d h:i:s'),
-                        'time_approved_hr' => date('Y-m-d'),
-                        'time_confirmed_line' => date('Y-m-d h:i:s'),
-                    );
-                    $result = $this->flexperformance_model->apply_overtime($data);
-                    if ($result == true) {
-                        echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                    } else {
-                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                    }
-                }
-            }
-        }
+        //                 if ($result == true) {
+        //                     echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //                 } else {
+        //                     echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //                 }
+        //             } else {
+        //                 echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
+        //             }
+        //         }
+        //     } else if ($start_date > $finish_date) {
+        //         echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
+        //     } else {
+        //         // echo "CORRECT DATE - <BR>";
+        //         if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
+        //             $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
+        //             $data = array(
+        //                 'time_start' => $start_final . " " . $start_time,
+        //                 'time_end' => $finish_final . " " . $finish_time,
+        //                 'overtime_type' => $type,
+        //                 'overtime_category' => $category,
+        //                 'reason' => $reason,
+        //                 'empID' => $empID,
+        //                 'linemanager' => $linemanager,
+        //                 'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                 'time_approved_hr' => date('Y-m-d'),
+        //                 'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //             );
+        //             $result = $this->flexperformance_model->apply_overtime($data);
+        //             if ($result == true) {
+        //                 echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //             } else {
+        //                 echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //             }
+        //         } else {
+        //             $type = 0; // echo "DAY OVERTIME";
+        //             $data = array(
+        //                 'time_start' => $start_final . " " . $start_time,
+        //                 'time_end' => $finish_final . " " . $finish_time,
+        //                 'overtime_type' => $type,
+        //                 'overtime_category' => $category,
+        //                 'reason' => $reason,
+        //                 'empID' => $empID,
+        //                 'linemanager' => $linemanager,
+        //                 'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                 'time_approved_hr' => date('Y-m-d'),
+        //                 'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //             );
+        //             $result = $this->flexperformance_model->apply_overtime($data);
+        //             if ($result == true) {
+        //                 echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //             } else {
+        //                 echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     /*IMPREST FUNCTIONS MOVED TO IMPREST CONTROLLER*/

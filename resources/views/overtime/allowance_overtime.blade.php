@@ -61,10 +61,12 @@
         <div class="card-body">
 
             <div class="row">
+
                 <div class="col-md-7">
+
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
-                          <h4 class="text-main">Overtime </h4>
+                          <h4 class="text-main">Overtime Settings</h4>
                         </div>
 
                         <div id="allowanceList" class="card-body">
@@ -110,12 +112,17 @@
                 </div>
 
                 <div class="col-md-5">
+
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                         <div class="card-header">
-                            <h4 class="text-main">Add Overtime</h4>
+
+                            <a href="{{ route('flex.overtime_on_behalf') }}" class="btn btn-perfrom  float-end">
+                                <i class="ph-list me-2"></i> Apply Overtime on Behalf
+                            </a>
                         </div>
 
                         <div class="card-body">
+                            <h4 class="text-main">Add Overtime Settings</h4>
                             <div id="resultOvertimeSubmission"></div>
                             <form id="addOvertime" autocomplete="off" class="form-horizontal form-label-left">
                                 <div class="mb-3">

@@ -34,7 +34,7 @@
                             @csrf
 
                                 <div class="row">
-                                <div class="col-6 col-md-3 mb-2">
+                                <div class="col-6 col-md-4 mb-2">
                                     <label class="col-form-label ">Overtime Category <span  class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
 
@@ -47,7 +47,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-6 col-md-3 mb-2">
+                                <div class="col-6 col-md-4 mb-2">
                                     <label class="col-form-label ">Select Employee <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
@@ -65,30 +65,20 @@
 
 
 
-                                <div class="col-6 col-md-3 mb-2">
-                                    <label class="col-form-label ">Time Start <span class="text-danger">*</span>
+                                <div class="col-6 col-md-4 mb-2">
+                                    <label class="col-form-label ">Days <span class="text-danger">*</span>
                                         :</label>
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="text" required placeholder="Start Time" name="time_start"
-                                                id="time_start" class="form-control daterange-single">
+                                            <input type="number" required placeholder="days" name="days" step="0.1"
+                                                 class="form-control daterange-single">
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-6 col-md-3 mb-2">
-                                    <label class="col-form-label ">Time End <span class="text-danger">*</span>
-                                        :</label>
-                                    <div class="col-sm-12">
-                                        <div class="input-group">
-                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="text" required placeholder="Finish Time" name="time_finish"
-                                                id="time_end" class="form-control daterange-single">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-3 mb-2">
+
+                                {{-- <div class="col-6 col-md-3 mb-2">
                                     <label class="col-form-label ">Select Aprover <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
@@ -102,18 +92,18 @@
                                              @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
 
-                                <div class="col-12  mb-3">
+                                {{-- <div class="col-12  mb-3">
                                     <label class="col-form-label ">Reason for overtime <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
                                         <textarea rows="3" cols="3" required class="form-control" name="reason" placeholder='Reason'></textarea>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-perfrom float-end">Send</button>
+                                    <button type="submit" class="btn btn-perfrom float-end">Save</button>
                                 </div>
 
 

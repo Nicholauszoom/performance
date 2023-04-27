@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('leaves', function (Blueprint $table) {
+        Schema::table('leave_type', function (Blueprint $table) {
             //
 
             $table->integer('max_days')->change();
@@ -28,7 +28,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('leaves', function (Blueprint $table) {
+        Schema::table('leave_type', function (Blueprint $table) {
             //
 
             $table->dropColumn('max_days');
