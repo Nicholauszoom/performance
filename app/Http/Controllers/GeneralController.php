@@ -6939,14 +6939,23 @@ class GeneralController extends Controller
         if($request->method() == 'POST'){
          if($request->emp_id == 'all'){
         $employee =  Employee::all();
+        if($request->type == 'All'){
+            $employee =  Employee::all();
+        }elseif($request->type == 1){
+            $employee =  Employee::all()->where('branch',1)->whereNot('emp_id',102927)->whereNot('emp_id',102928)->whereNot('emp_id',100281);
+        }elseif($request->type == 1){
+            $employee =  Employee::all()->whereNot('branch',1);
+        }else{
+            $employee =  Employee::all();
+        }
          }else{
         $employee = Employee::all()->where('emp_id',$request->emp_id);
          }
 
          foreach($employee as $row){
-            $pass = $this->password_generator(5);
+            $pass = $this->password_generator(8);
             $password = Hash::make($pass);
-           // Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
+           Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
             $email_data = array(
                 'email' => $row->email,
                 'fname' => $row->fname,
@@ -6954,12 +6963,12 @@ class GeneralController extends Controller
                 'username' =>$row->emp_id,
                 'password' => $pass,
             );
-            Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
+            Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
 
          }
 
 
-          return redirect()->back();
+          return redirect()->back()->with(['success'=>'Password changed successfully']);
 
        }else{
         $data['employee'] = Employee::where('state', '=', 1)->get();

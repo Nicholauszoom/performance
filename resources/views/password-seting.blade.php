@@ -31,15 +31,37 @@
                     @csrf
 
                     <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6 col-lg-6">
+                                <div class="">
+                                    <label class="form-label"> Employee:</label>
+                                    <select required name="emp_id" class="select form-control"
+                                    >
+                                    <option selected disabled>Select Employee</option>
+                                    <option value="all" >All </option>
+                                    <?php foreach ($employee as $row) { ?>
+                                    <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . ' ' . $row->mname . ' ' . $row->lname; ?></option>
+                                    <?php } ?>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="">
+                                    <label class="form-label"> Select Type:</label>
+                                    <select required name="type" class="form-control"
+                                    >
+                                    <option selected disabled>Select Employee</option>
+                                    <option value="all" >All </option>
+                                    <option value="1" >Head Office</option>
+                                    <option value="2" >Branch Office/Non Head Office </option>
+
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="input-group">
-                            <select required name="emp_id" class="select_payroll_month form-control select"
-                                data-width="1%">
-                                <option selected disabled>Select Employee</option>
-                                <option value="all" >All </option>
-                                <?php foreach ($employee as $row) { ?>
-                                <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . ' ' . $row->mname . ' ' . $row->lname; ?></option>
-                                <?php } ?>
-                            </select>
+
                             <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Reset</button>
                         </div>
 
@@ -61,7 +83,7 @@
 @endsection
 
 @push('footer-script')
-    
+
     <!-- <script>
         $(function() {
                     var today = new Date();
