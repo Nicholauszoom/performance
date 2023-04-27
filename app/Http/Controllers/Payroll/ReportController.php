@@ -784,7 +784,7 @@ dd($data['paye_terminated']);
                 // include app_path() . '/reports/payslip.php';
 
                 //return view('payroll.payslip2', $data);
-                $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
+                $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
                 return $pdf->download('payslip_for_' . $empID . '.pdf');
             }

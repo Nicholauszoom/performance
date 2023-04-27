@@ -14,11 +14,11 @@
 
 @section('content')
     @php
- 
+
     @endphp
             {{-- start of run payroll --}}
-      
-        
+
+
 
                 <div class="col-lg-12">
 
@@ -66,8 +66,8 @@
                         </div>
                     </div>
                 </div >
-   
-       
+
+
 
 @endsection
 
@@ -117,7 +117,7 @@
 
 
     <script>
-       
+
     </script>
 
     <script>

@@ -241,7 +241,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.id";
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
             /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
@@ -1326,7 +1326,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.id";
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
             /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),

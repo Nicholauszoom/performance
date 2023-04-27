@@ -1962,7 +1962,7 @@ class GeneralController extends Controller
 
         $start = $request->input('time_start');
         $finish = $request->input('time_finish');
-        $reason = $request->inpput('reason');
+        $reason = $request->input('reason');
         $category = $request->input('category');
         $linemanager = $request->input('linemanager');
 
@@ -2070,7 +2070,31 @@ class GeneralController extends Controller
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
                         }
                     } else {
-                        echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
+
+                        $type = 0; // echo "DAY OVERTIME";
+
+                        $data = array(
+                            'time_start' => $start_final . " " . $start_time,
+                            'time_end' => $finish_final . " " . $finish_time,
+                            'overtime_type' => $type,
+                            'overtime_category' => $category,
+                            'reason' => $reason,
+                            'empID' => $empID,
+                            'linemanager' => $linemanager,
+                            'time_recommended_line' => date('Y-m-d h:i:s'),
+                            'time_approved_hr' => date('Y-m-d'),
+                            'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        );
+
+                        $result = $this->flexperformance_model->apply_overtime($data);
+
+                        if ($result == true) {
+                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+
+                       // echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
                     }
                 }
             } else if ($start_date > $finish_date) {
@@ -6927,8 +6951,8 @@ class GeneralController extends Controller
 
          }
 
-       
-          return redirect()->back();   
+
+          return redirect()->back();
 
        }else{
         $data['employee'] = Employee::where('state', '=', 1)->get();

@@ -445,11 +445,11 @@ class AttendanceController extends Controller
 // start of save leave Function
 
 
-      public function savelLeave(Request $request) {
+public function savelLeave(Request $request) {
         $start = $request->start;
         $end = $request->end;
 
-   if($start < $end){
+     if($start < $end){
 
         //For Gender
         $gender=Auth::user()->gender;
@@ -462,11 +462,14 @@ class AttendanceController extends Controller
         $empID  = Auth::user()->emp_id;
 
         // Checking used leave days based on leave type and sub type
-        $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereYear('created_at',date('Y'))->sum('days');
+        $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereNot('reason','Automatic applied!')->whereYear('created_at',date('Y'))->sum('days');
+
         $leave_balance=$leaves;
         // For Leave Nature days
         $type=LeaveType::where('id',$nature)->first();
         $max_leave_days= $type->max_days;
+
+        //$max_leave_days = 10000;
 
         // Annual leave accurated days
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
@@ -551,7 +554,7 @@ class AttendanceController extends Controller
 
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
-                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance1";
 
                 return $url->with('msg', $msg);
               }
@@ -584,6 +587,7 @@ class AttendanceController extends Controller
                 // for annual leave
                 if ($request->nature==1) {
                     $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
+
                     // checking annual leave balance
                     if($different_days<$annualleaveBalance)
                     {
@@ -640,7 +644,7 @@ class AttendanceController extends Controller
 
                           $leave_type=LeaveType::where('id',$nature)->first();
                           $type_name=$leave_type->type;
-                          $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                          $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance2";
                           return $url->with('msg', $msg);
 
 
@@ -741,7 +745,7 @@ class AttendanceController extends Controller
 
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
-                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance3";
               return $url->with('msg', $msg);
 
               }
@@ -769,9 +773,11 @@ class AttendanceController extends Controller
             $leaves->deligated=$request->deligate;
 
 
+
             // for annual leave
             if ($request->nature==1)
             {
+
                       $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
 
                       // checking annual leave balance
@@ -830,7 +836,7 @@ class AttendanceController extends Controller
                         else
                         {
 
-                          $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                          $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance4";
                           return $url->with('msg', $msg);
                         }
 
@@ -935,9 +941,10 @@ class AttendanceController extends Controller
               }
               else
               {
+                
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
-                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance";
+                $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance5";
                 return $url->with('msg', $msg);
 
               }
@@ -1610,4 +1617,4 @@ class AttendanceController extends Controller
 
 
 
-}?>
+}
