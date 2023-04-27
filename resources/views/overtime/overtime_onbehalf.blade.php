@@ -21,7 +21,7 @@
             <div class="col-md-12 ">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                     <div class="card-header border-0 shadow-none">
-                        <h5 class="text-warning">Apply Overtime</h5>
+                        <h5 class="text-warning">Apply Overtime On Behalf</h5>
                     </div>
 
                     <div class="card-body">
@@ -66,12 +66,12 @@
 
 
                                 <div class="col-6 col-md-4 mb-2">
-                                    <label class="col-form-label ">Days <span class="text-danger">*</span>
+                                    <label class="col-form-label ">Hours <span class="text-danger">*</span>
                                         :</label>
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="number" required placeholder="days" name="days" step="0.1"
+                                            <input type="number" required placeholder="Hours" name="days" step="0.1"
                                                  class="form-control daterange-single">
                                         </div>
                                     </div>
@@ -108,6 +108,49 @@
 
 
                         </form>
+<br>
+<hr>
+                        <table class="table table-striped table-bordered datatable-basic">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Employee Name</th>
+                                    <th>Department</th>
+                                    <th>Overtime Category</th>
+                                    <th>Total Overtime(in Hrs.)</th>
+                                    <th>Amount</th>
+                                  
+                                   
+                                </tr>
+                            </thead>
+            
+                            <tbody>
+                                @php
+                                    $i =0;
+                                @endphp
+                                <?php foreach ($line_overtime as $row) { ?>
+                                
+            
+            
+                                <tr>
+                                    <td width="1px"><?php echo $i++; ?></td>
+                                    <td><?php echo $row->name; ?></td>
+                                    <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
+                                    <td>{{ $row->overtime_category }} </td>
+                                    <td>{{ $row->totoalHOURS }} </td>
+                                    <td><?php echo $row->amount; ?></td>
+            
+                                   
+                                    {{-- start of cancel overtime --}}
+                                    @can('cancel-overtime')
+                                
+                                    @endcan
+                                    {{-- / --}}
+                                </tr>
+                             
+                                <?php }  ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -884,6 +927,9 @@
                 .done(function(data) {
                     $('#remaining').fadeOut('slow', function() {
                         $('#remaining').fadeIn('slow').html(data);
+                        setTimeout(function() {
+                    location.reload();
+                }, 5000)
                     });
 
 

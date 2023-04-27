@@ -153,7 +153,7 @@
                         <a href="{{ route('flex.my-grievances') }}" style="text-decoration:none;"
                             title="Click here to view your Pension History">
                             <h1 class="text-main"><i class="ph-scales panel-text"></i></h1>
-                            <h4 class="panel-footer">Grivancies <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Grievance <i class="ph-arrow-circle-right"></i></h4>
                         </a>
                     </div>
                 </div>

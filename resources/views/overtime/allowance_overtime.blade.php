@@ -117,7 +117,7 @@
                         <div class="card-header">
 
                             <a href="{{ route('flex.overtime_on_behalf') }}" class="btn btn-perfrom  float-end">
-                                <i class="ph-list me-2"></i> Apply Overtime on Behalf
+                                <i class="ph-list me-2"></i> Approved Overtimes
                             </a>
                         </div>
 

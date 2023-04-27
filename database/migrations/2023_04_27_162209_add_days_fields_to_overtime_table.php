@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('leave_type', function (Blueprint $table) {
+        Schema::table('overtimes', function (Blueprint $table) {
             //
-
-          //  $table->integer('max_days')->change();
-
+            $table->decimal('days',3);
         });
     }
 
@@ -28,10 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('leave_type', function (Blueprint $table) {
+        Schema::table('overtimes', function (Blueprint $table) {
             //
-
-            $table->dropColumn('max_days');
+            $table->dropColumn('days');
         });
     }
 };

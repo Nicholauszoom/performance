@@ -215,7 +215,7 @@
                             @can('view-grivance')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('flex.grievances') ? 'active' : null }}"
-                                        href="{{ route('flex.grievances') }}"> Employees Grievances</a>
+                                        href="{{ route('flex.grievances') }}"> Employees Grievance</a>
                                 </li>
                             @endcan
                             {{-- / --}}

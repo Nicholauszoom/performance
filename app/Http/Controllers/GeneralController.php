@@ -7086,6 +7086,11 @@ class GeneralController extends Controller
 
                 $id = $emp_id;
                 if ($recordID > 0) {
+                    $emp_data = Employee::where('emp_id',$emp_id)->first();
+                    $user = User::find($emp_data->id);
+                    $user->roles()->attach(6);
+
+                    $user->roles()->attach($request['role']);
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
@@ -10009,7 +10014,7 @@ class GeneralController extends Controller
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->approvedOvertimes();
 
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';
