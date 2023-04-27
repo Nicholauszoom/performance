@@ -2150,30 +2150,41 @@ class GeneralController extends Controller
     {
 
         $days = $request->input('days');
-        $category = $request->input('category');
+        $overtime_category = $request->input('category');
         $empID = $request->empID;
+        $signatory = auth()->user()->emp_id;
+        $date = date('Y-m-d');
+        $employee_data = Employee::where('emp_id', $empID)->first();
+        $line_maager = $employee_data->line_manager;
+        $percent = $this->flexperformance_model->get_percent($overtime_category);
 
 
 
+        $result =   $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category,$date,$days,$percent,$line_maager);
+         if($result == true){
+            echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
+         }else{
+            echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
+         }
 
 
 
-        $split_start = explode("  at  ", $start);
-        $split_finish = explode("  at  ", $finish);
+        // $split_start = explode("  at  ", $start);
+        // $split_finish = explode("  at  ", $finish);
 
-        $start_date = $split_start[0];
-        $start_time = $split_start[1];
+        // $start_date = $split_start[0];
+        // $start_time = $split_start[1];
 
-        $finish_date = $split_finish[0];
-        $finish_time = $split_finish[1];
+        // $finish_date = $split_finish[0];
+        // $finish_time = $split_finish[1];
 
-        $start_calendar = str_replace('/', '-', $start_date);
-        $finish_calendar = str_replace('/', '-', $finish_date);
+        // $start_calendar = str_replace('/', '-', $start_date);
+        // $finish_calendar = str_replace('/', '-', $finish_date);
 
-        $start_final = date('Y-m-d', strtotime($start_calendar));
-        $finish_final = date('Y-m-d ', strtotime($finish_calendar));
+        // $start_final = date('Y-m-d', strtotime($start_calendar));
+        // $finish_final = date('Y-m-d ', strtotime($finish_calendar));
 
-        $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
+        // $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
         //fetch Line manager data from employee table and send email
         // $linemanager_data = SysHelpers::employeeData($linemanager);
@@ -6935,7 +6946,7 @@ class GeneralController extends Controller
          foreach($employee as $row){
             $pass = $this->password_generator(5);
             $password = Hash::make($pass);
-            Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
+           // Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
             $email_data = array(
                 'email' => $row->email,
                 'fname' => $row->fname,

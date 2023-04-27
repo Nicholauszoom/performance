@@ -632,6 +632,37 @@ class FlexPerformanceModel extends Model
 		return true;
 	}
 
+    function get_percent($id){
+        $query = "SELECT day_percent from overtime_category where id = $id limit 1";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->day_percent;
+    }
+
+    function direct_insert_overtime($empID, $signatory, $overtime_category,$date,$days,$percent,$line_maager) {
+        $time_start = $date;
+        $time_end = $date;
+        $application_time = $date;
+        $time_confirmed_line = $date;
+        $time_approved = $date;
+        $type = 0;
+
+    //     DB::transaction(function() use($id,$signatory, $time_approved)
+    //   {
+       $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT 1, '".$empID."', '".$time_start."','".$time_end."','".$overtime_category."', (('".$days."') * ((e.salary/176)*('".$percent."')))
+        AS amount,'".$line_maager."', '".$signatory."','".$application_time."','".$time_confirmed_line."', '".$time_approved."' FROM employee e WHERE e.emp_id = '".$empID."'  ";
+        DB::insert(DB::raw($query));
+
+
+       //$query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
+      // DB::insert(DB::raw($query));
+
+
+   //    });
+
+       return true;
+   }
+
 	public function lineapproveOvertime($id, $time_approved) {
 
         $query = DB::transaction(function() use($id, $time_approved)
