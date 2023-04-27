@@ -6942,7 +6942,7 @@ class GeneralController extends Controller
         if($request->type == 'All'){
             $employee =  Employee::all();
         }elseif($request->type == 1){
-            $employee =  Employee::all()->where('branch',1)->whereNot('emp_id',102927)->whereNot('emp_id',102928)->whereNot('emp_id',100281);
+            $employee =  Employee::all()->where('branch',1)->where('emp_id','!=',102927)->where('emp_id','!=',102928)->where('emp_id','!=',100281);
         }elseif($request->type == 1){
             $employee =  Employee::all()->whereNot('branch',1);
         }else{
