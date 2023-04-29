@@ -64,7 +64,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h5 class="text-main mb-0">Account settings</h5>
+        <h5 class="text-main mb-0">Employee Updating</h5>
 
         <div class="mt-2">
             <?php echo session("note");  ?>
@@ -169,37 +169,7 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updatedob">
-                        <div id="feedBackDob"></div>
-                        <label for="stream" class="form-label">Date of birth</label>
-                        <div class="input-group">
-                            <input type="text" name="dob" value="<?php echo $birthdate; ?>" class="form-control">
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
 
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateEmployeePhoto" enctype="multipart/form-data">
-                        <div id="feedBackEmployeePhoto"></div>
-                        <label for="stream" class="form-label">Employee Picture</label>
-
-                        <div class="input-group">
-                            <input required type='file' id="imgInp" name='userfile' class="form-control">
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                        <small class="text-muted">The size of the image should not exced 30MB</small>
-                    </form>
-                </div>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-lg-4">
@@ -225,6 +195,21 @@
                 </div>
             </div>
 
+
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <form id="updateOldID">
+                        <div id="feedBackOldID"></div>
+                        <label for="stream" class="form-label">Old Employee ID</label>
+                        <div class="input-group">
+                            <input type="text" name="old_id" value="<?php echo $old_empID; ?>" class="form-control">
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
             <div class="col-lg-4">
                 <div class="mb-3">
                     <form id="updateExpatriate">
@@ -240,152 +225,11 @@
                                 <input type="radio" name="expatriate" value="0" id="dm2" {{ ($expatriate  == 0) ? 'checked' : null }}>
                                 <label class="ms-2" for="dm2">Normal Employee</label>
                             </div>
-
-                            <button class="btn btn-main ms-5">UPDATE</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateOldID">
-                        <div id="feedBackOldID"></div>
-                        <label for="stream" class="form-label">Old Employee ID</label>
-                        <div class="input-group">
-                            <input type="text" name="old_id" value="<?php echo $old_empID; ?>" class="form-control">
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-        </div>
+                            <div class="d-inline-flex align-items-left">
+                                <button class="btn btn-main ms-5">UPDATE</button>
+                            </div>
 
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateNationality">
-                        <div id="feedBackNationality"></div>
-                        <label for="stream" class="form-label">Nationality</label>
-                        <div class="input-group">
-                            <select required="" name="nationality" class="select1_single form-control select" data-width="1%">
-                                <?php foreach ($countrydrop as $row){ ?>
-                                <option <?php if($nationality == $row->code){ ?> selected=""<?php } ?> value="<?php echo $row->code; ?>"><?php echo $row->name; ?></option>
-                                <?php } ?>
-                            </select>
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateDeptPos">
-                        <div id="feedBackDeptPos"></div>
-
-                        <?php if($positionTransfer > 0 || $departmentTransfer > 0 || $branchTransfer > 0){ ?>
-                        <p class='alert alert-warning text-center mt-2'>
-                            The Request For Department or Position Transfer on this Employee is Already Pending For Approval
-                        </p>
-                        <?php } ?>
-
-                        <label for="stream" class="form-label">Department</label>
-
-                        <span class="badge bg-info">{{ $department }}</span>
-
-                        <select required id='department' name="department" class="select3_single form-control select">
-                            <option> Select Department </option>
-                            <?php foreach ($ddrop as $row){ ?>
-                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
-                            <?php } ?>
-                        </select>
-
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                        <input hidden name="oldPosition" value="<?php echo $positionID; ?>">
-                        <input hidden name="oldDepartment" value="<?php echo $departmentID; ?>">
-
-                        <label for="stream" class="form-label mt-2">Position</label>
-                        <span class="badge bg-info"><?php echo $position;?></span>
-
-                        <select required id="pos" name="position" class="select1_single form-control select" tabindex="-1"></select>
-
-                        <button <?php if($positionTransfer>0 || $departmentTransfer>0){ ?>disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                     <form id="updateBranch">
-                        <div id="feedBackBranch"></div>
-                        <label for="stream" class="form-label">Company Branch</label>
-                        <div class="input-group">
-                            <!-- <input hidden name ="old" value="<?php echo $branchCode; ?>"> -->
-                            <select required="" name="branch" class="select1_single form-control select" data-width="1%">
-                                <?php foreach ($branchdrop as $row){ ?>
-                                <option <?php if($branchCode == $row->code){ ?> selected <?php } ?> value="<?php echo $row->code; ?>"> <?php echo $row->name; ?></option>
-                                <?php } ?>
-                            </select>
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="mb-3">
-                     <form id="updateLineManager">
-                        <div id="feedBackLineManager"></div>
-                        <label for="stream" class="form-label">Line Manager</label>
-
-                        <div class="input-group">
-                            <select required name="line_manager" class="select2_single form-control select" data-width="1%">
-                                <option> Select Line Manager </option>
-                                <?php foreach ($ldrop as $row){ ?>
-                                <option <?php if($line_managerID == $row->empID){ ?> selected <?php } ?> value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
-                                <?php } ?>
-                            </select>
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                     <form id="updateCode">
-                        <div id="feedBackLineManager"></div>
-                        <label for="stream" class="form-label">Code</label>
-
-                        <div class="input-group">
-                            {{-- <input type="text" name="emp_code" value="<?php echo $emp_code; ?>" class="form-control"> --}}
-                            <button class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                     <form id="updateLevel">
-                        <div id="feedBackLineManager"></div>
-                        <label for="stream" class="form-label">Level</label>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-
-                        <div class="input-group">
-                            <input type="text" name="emp_level" value="<?php echo $emp_level; ?>" class="form-control">
-                            <button class="btn btn-main">UPDATE</button>
                         </div>
                     </form>
                 </div>
@@ -393,78 +237,7 @@
         </div>
 
 
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateSalary">
-                        <div id="feedBackSalary"></div>
 
-                        <?php if($salaryTransfer>0){ ?>
-                        <p class='alert alert-warning text-center'>
-                            The Request For Salary Updation on this Employee is Already Pending For Approval
-                        </p>
-                        <?php } ?>
-
-                        <label for="stream" class="form-label">Salary</label>
-
-                        <div class="input-group">
-                            <input type="text" name="salary" value="<?php echo $salary; ?>" class="form-control">
-                            <button <?php if( $salaryTransfer > 0){ ?> disabled <?php } ?> class="btn btn-main">UPDATE</button>
-                        </div>
-
-                        <input hidden name="old" value="<?php echo $salary; ?>">
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateBank_Bankbranch">
-                        <div id="feedBackBank_Bankbranch"></div>
-
-                        <?php if($pendingPayroll>0){ ?>
-                        <p class='alert alert-warning text-center'>
-                            Updating Employee Bank Information is Not Allowed When There is Pending Payroll
-                        </p>
-                        <?php } ?>
-
-                        <label for="stream" class="form-label">Bank </label>
-                        <span class="badge bg-info"><?php echo $bankName;?></span>
-
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-
-                        <select required id='bank' name="bank" class="select_bank form-control select">
-                            <option value="">Select Employee Bank</option>
-                            <?php foreach ($bankdrop as $row){ ?>
-                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
-                            <?php } ?>
-                        </select>
-
-                        <label for="stream" class="form-label mt-2">Branch </label>
-                        <span class="badge bg-info"><?php echo $bankBranch;?></span>
-
-                        <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1"></select>
-
-                        <button <?php if($pendingPayroll>0){ ?> disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <form id="updateBankAccountNo">
-                        <div id="feedBackBankAccountNo"></div>
-                        <label for="stream" class="form-label">Account No</label>
-                        <div class="input-group">
-                            <input type="text" required="" name="acc_no" value="<?php echo $account_no; ?>" class="form-control">
-                            <button <?php if($pendingPayroll>0){ ?> disabled <?php } ?> class="btn btn-main">UPDATE</button>
-                        </div>
-                        <input hidden name="empID" value="<?php echo $empID; ?>">
-                    </form>
-                </div>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-lg-4">
@@ -660,6 +433,228 @@
                     </form>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <form id="updateNationality">
+                        <div id="feedBackNationality"></div>
+                        <label for="stream" class="form-label">Nationality</label>
+                        <div class="input-group">
+                            <select required="" name="nationality" class="select1_single form-control select" data-width="1%">
+                                <?php foreach ($countrydrop as $row){ ?>
+                                <option <?php if($nationality == $row->code){ ?> selected=""<?php } ?> value="<?php echo $row->code; ?>"><?php echo $row->name; ?></option>
+                                <?php } ?>
+                            </select>
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            {{-- <div class="col-lg-4">
+                <div class="mb-3">
+                    <form id="updateDeptPos">
+                        <div id="feedBackDeptPos"></div>
+
+                        <?php if($positionTransfer > 0 || $departmentTransfer > 0 || $branchTransfer > 0){ ?>
+                        <p class='alert alert-warning text-center mt-2'>
+                            The Request For Department or Position Transfer on this Employee is Already Pending For Approval
+                        </p>
+                        <?php } ?>
+
+                        <label for="stream" class="form-label">Department</label>
+
+                        <span class="badge bg-info">{{ $department }}</span>
+
+                        <select required id='department' name="department" class="select3_single form-control select">
+                            <option> Select Department </option>
+                            <?php foreach ($ddrop as $row){ ?>
+                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+                            <?php } ?>
+                        </select>
+
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                        <input hidden name="oldPosition" value="<?php echo $positionID; ?>">
+                        <input hidden name="oldDepartment" value="<?php echo $departmentID; ?>">
+
+                        <label for="stream" class="form-label mt-2">Position</label>
+                        <span class="badge bg-info"><?php echo $position;?></span>
+
+                        <select required id="pos" name="position" class="select1_single form-control select" tabindex="-1"></select>
+
+                        <button <?php if($positionTransfer>0 || $departmentTransfer>0){ ?>disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
+                    </form>
+                </div>
+            </div> --}}
+
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                     <form id="updateLineManager">
+                        <div id="feedBackLineManager"></div>
+                        <label for="stream" class="form-label">Line Manager</label>
+
+                        <div class="input-group">
+                            <select required name="line_manager" class="select2_single form-control select" data-width="1%">
+                                <option> Select Line Manager </option>
+                                <?php foreach ($ldrop as $row){ ?>
+                                <option <?php if($line_managerID == $row->empID){ ?> selected <?php } ?> value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option>
+                                <?php } ?>
+                            </select>
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
+
+            {{-- <div class="col-lg-4">
+                <div class="mb-3">
+                     <form id="updateCode">
+                        <div id="feedBackLineManager"></div>
+                        <label for="stream" class="form-label">Code</label>
+
+                        <div class="input-group">
+                             <input type="text" name="emp_code" value="<?php echo $emp_code; ?>" class="form-control">
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div> --}}
+            <div class="col-lg-4">
+                <div class="mb-3">
+                     <form id="updateBranch">
+                        <div id="feedBackBranch"></div>
+                        <label for="stream" class="form-label">Company Branch</label>
+                        <div class="input-group">
+                            <!-- <input hidden name ="old" value="<?php echo $branchCode; ?>"> -->
+                            <select required="" name="branch" class="select1_single form-control select" data-width="1%">
+                                <?php foreach ($branchdrop as $row){ ?>
+                                <option <?php if($branchCode == $row->code){ ?> selected <?php } ?> value="<?php echo $row->code; ?>"> <?php echo $row->name; ?></option>
+                                <?php } ?>
+                            </select>
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                     <form id="updateLevel">
+                        <div id="feedBackLineManager"></div>
+                        <label for="stream" class="form-label">Level</label>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+
+                        <div class="input-group">
+                            <input type="text" name="emp_level" value="<?php echo $emp_level; ?>" class="form-control">
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <form id="updatedob">
+                        <div id="feedBackDob"></div>
+                        <label for="stream" class="form-label">Date of birth</label>
+                        <div class="input-group">
+                            <input type="text" name="dob" value="<?php echo $birthdate; ?>" class="form-control">
+                            <button class="btn btn-main">UPDATE</button>
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <form id="updateBankAccountNo">
+                        <div id="feedBackBankAccountNo"></div>
+                        <label for="stream" class="form-label">Account No</label>
+                        <div class="input-group">
+                            <input type="text" required="" name="acc_no" value="<?php echo $account_no; ?>" class="form-control">
+                            <button <?php if($pendingPayroll>0){ ?> disabled <?php } ?> class="btn btn-main">UPDATE</button>
+                        </div>
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            {{-- <div class="col-lg-4">
+                <div class="mb-3">
+                    <form id="updateSalary">
+                        <div id="feedBackSalary"></div>
+
+                        <?php if($salaryTransfer>0){ ?>
+                        <p class='alert alert-warning text-center'>
+                            The Request For Salary Updation on this Employee is Already Pending For Approval
+                        </p>
+                        <?php } ?>
+
+                        <label for="stream" class="form-label">Salary</label>
+
+                        <div class="input-group">
+                            <input type="text" name="salary" value="<?php echo $salary; ?>" class="form-control">
+                            <button <?php if( $salaryTransfer > 0){ ?> disabled <?php } ?> class="btn btn-main">UPDATE</button>
+                        </div>
+
+                        <input hidden name="old" value="<?php echo $salary; ?>">
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+                    </form>
+                </div>
+            </div> --}}
+
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <form id="updateBank_Bankbranch">
+                        <div id="feedBackBank_Bankbranch"></div>
+
+                        <?php if($pendingPayroll>0){ ?>
+                        <p class='alert alert-warning text-center'>
+                            Updating Employee Bank Information is Not Allowed When There is Pending Payroll
+                        </p>
+                        <?php } ?>
+
+                        <label for="stream" class="form-label">Bank </label>
+                        <span class="badge bg-info"><?php echo $bankName;?></span>
+
+                        <input hidden name="empID" value="<?php echo $empID; ?>">
+
+                        <select required id='bank' name="bank" class="select_bank form-control select">
+                            <option value="">Select Employee Bank</option>
+                            <?php foreach ($bankdrop as $row){ ?>
+                            <option value="<?php echo $row->id; ?>"><?php echo $row->name; ?></option>
+                            <?php } ?>
+                        </select>
+
+                        <label for="stream" class="form-label mt-2">Branch </label>
+                        <span class="badge bg-info"><?php echo $bankBranch;?></span>
+
+                        <select required id="bank_branch" name="bank_branch" class="select_bank_branch form-control select" tabindex="-1"></select>
+
+                        <button <?php if($pendingPayroll>0){ ?> disabled <?php } ?> class="btn btn-main mt-2">UPDATE</button>
+                    </form>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>

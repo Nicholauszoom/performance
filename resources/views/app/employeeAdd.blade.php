@@ -15,7 +15,7 @@
 @section('content')
     <div class="mb-3">
         <h6 class="mb-0 text-main">Employee Registration</h6>
-        <span class="text-muted d-block">All the required fields need to be filled</span>
+        <span class="text-muted d-block">All the requiredes fields need to be filled</span>
     </div>
 
     <form id="addEmployee" enctype="multipart/form-data" autocomplete="off" method="post" data-parsley-validate>
@@ -33,6 +33,9 @@
                             <input type="text" id="firstName" pattern="[a-zA-Z]+" maxlength="15"
                                 title="Only enter letters" name="fname" id="name" value="{{ old('fname') }}"
                                 class="form-control @error('fname') is-invalid @enderror" placeholder="First Name">
+                            @error('fname')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -75,8 +78,9 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email:</label>
-                            <input id="email" type="email" maxlength="30" class="form-control @error('email') is-invalid @enderror"
-                                name="email" value="{{ old('email') }}" id="email" placeholder="example@email.com">
+                            <input id="email" type="email" maxlength="30"
+                                class="form-control @error('email') is-invalid @enderror" name="email"
+                                value="{{ old('email') }}" id="email" placeholder="example@email.com">
                         </div>
                     </div>
 
@@ -96,7 +100,7 @@
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
                             <label class="form-label">Maritial Status:</label>
-                            <select class="form-control @error('status') is-invalid @enderror" name="status" required>
+                            <select class="form-control @error('status') is-invalid @enderror" name="status" requiredes>
                                 <option value="Single">Single</option>
                                 <option value="Married">Married</option>
                                 <option value="Widowed">Widowed</option>
@@ -165,7 +169,8 @@
                             <select name="linemanager" id="linemanager" class="form-control select2_single select">
                                 <option selected disabled>Select line Manager</option>
                                 @foreach ($ldrop as $row)
-                                <option  value="{{ $row->empID}}"> {{ $row->empID}} - {{ $row->NAME }}</option>
+                                    <option value="{{ $row->empID }}"> {{ $row->empID }} - {{ $row->NAME }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -175,7 +180,7 @@
                         <div class="mb-3">
                             <label class="form-label">Company Branch:</label>
                             <select class="form-control select_branch select @error('branch') is-invalid @enderror"
-                                name="branch" required>
+                                name="branch" requiredes>
                                 <option value=""> Select </option>
                                 @foreach ($branch as $row)
                                     <option value="{{ $row->code }}">{{ $row->name }}</option>
@@ -188,7 +193,7 @@
                         <div class="mb-3">
                             <label class="form-label">Contract Type:</label>
                             <select class="form-control select @error('ctype') is-invalid @enderror" name="ctype"
-                                required>
+                                requiredes>
                                 <option value="" selected disabled>Select type</option>
                                 @foreach ($contract as $row)
                                     <option value="{{ $row->id }}">{{ $row->name }}</option>
@@ -207,11 +212,12 @@
                         <div class="mb-3">
                             <label class="form-label">Currency:</label>
                             <div class="input-group">
-                                <select required name="currency" class="select_group form-control select" data-width="1%">
+                                <select requiredes name="currency" class="select_group form-control select"
+                                    data-width="1%">
                                     <option selected disabled>Select Currency</option>
                                     <?php foreach ($currencies as $row) { ?>
-                                        <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
-                                        <?php } ?>
+                                    <option value="<?php echo $row->currency; ?>"><?php echo $row->currency; ?></option>
+                                    <?php } ?>
 
                                 </select>
                             </div>
@@ -222,11 +228,12 @@
                         <div class="mb-3">
                             <label class="form-label">Cost Center:</label>
                             <div class="input-group">
-                                <select required name="cost_center" class="select_group form-control select" data-width="1%">
+                                <select requiredes name="cost_center" class="select_group form-control select"
+                                    data-width="1%">
                                     <option selected disabled>Select Cost Center</option>
 
-                                        <option value="Management">Management</option>
-                                        <option value="Non Management">Non Management</option>
+                                    <option value="Management">Management</option>
+                                    <option value="Non Management">Non Management</option>
 
 
                                 </select>
@@ -298,9 +305,10 @@
 
                     <div class="col-md-4 col-lg-4">
                         <div class="mb-3">
-                            <label class="form-label">Code:</label>
-                            <input type="text" name="emp_code" maxlength="30"
-                                class="form-control @error('emp_code') is-invalid @enderror" placeholder="code" required>
+                            <label class="form-label">Payroll Number:</label>
+                            <input type="text" name="emp_id"
+                                class="form-control @error('emp_id') is-invalid @enderror" placeholder="Payroll number"
+                                requiredes>
                         </div>
                     </div>
 
@@ -391,52 +399,52 @@
                         </div>
                     </div>
 
-                <div class="col-md-4 col-lg-4">
-                    <div class="mb-3">
-                        <label class="form-label">Job Level:</label>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="mb-3">
+                            <label class="form-label">Job Level:</label>
 
-                        <select name="emp_level" id="" class="form-select select">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                            <option value="23">23</option>
-                            <option value="24">24</option>
-                            <option value="25">25</option>
-                            <option value="25">26</option>
-                            <option value="27">27</option>
-                            <option value="28">28</option>
-                            <option value="29">29</option>
-                            <option value="30">30</option>
-                        </select>
+                            <select name="emp_level" id="" class="form-select select">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="25">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                            </select>
 
-                        {{-- <input type="text" name="emp_level" value="{{ old('emp_level') }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" maxlength="30" required> --}}
+                            {{-- <input type="text" name="emp_level" value="{{ old('emp_level') }}" class="form-control emp_level @error('emp_level') is-invalid @enderror" maxlength="30" requiredes> --}}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card-footer bg-white">
-                <button class="btn btn-sm btn-main" type="submit">Register Employee</button>
+                <div class="card-footer bg-white">
+                    <button class="btn btn-sm btn-main" type="submit">Register Employee</button>
+                </div>
             </div>
-        </div>
 
     </form>
 
@@ -454,7 +462,7 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Upload Employees In Batch:</label>
-                            <input type="file" required accept=".xls, .xlsx"
+                            <input type="file" requiredes accept=".xls, .xlsx"
                                 class="form-control @error('file') is-invalid @enderror" name="file">
                             <div class="form-text text-muted">Accepted formats: xls, xlsx. Max file size 2Mb</div>
                         </div>
@@ -634,32 +642,47 @@
                     dataType: 'json'
                 })
                 .done(function(data) {
+                    if(data.status == 400){
+                        const item = data.errors;
+                    const listItems = Object.keys(item).map(key => `<p>${item[key]}</p>`);
                     new Noty({
                         layout: 'top',
-                        text: data.title+', and We have sent an email to '+ document.getElementById("email").value,
-                        type: 'success'
+                        text: listItems,
+                        type: 'error'
                     }).show();
 
-                    if (data.status == 'OK') {
-                        $('#feedBackSubmission').fadeOut('fast', function() {
-                            $('#feedBackSubmission').fadeIn('fast').html(data.message);
-                        });
-                        setTimeout(function() { // wait for 5 secs(2)
-                            // window.location.href =
-                            //     "<?php echo url('flex/userprofile/'); ?>" + data
-                            //     .empID; // then reload the page.(3)
-                        }, 2000);
-                        $('#addEmployee').trigger("reset");
-                    } else {
-                        $('#feedBackSubmission').fadeOut('fast', function() {
-                            $('#feedBackSubmission').fadeIn('fast').html(data.message);
-                        });
-                        $('#addEmployee').trigger("reset");
-
+                    }else{
+                        new Noty({
+                        layout: 'top',
+                        text: data.errors + ', and We have sent an email to ' + document.getElementById(
+                            "email").value,
+                        type: 'success'
+                    }).show();
                     }
+
+
+                    // if (data.status == 'OK') {
+                    //     $('#feedBackSubmission').fadeOut('fast', function() {
+                    //         $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                    //     });
+                    //     setTimeout(function() { // wait for 5 secs(2)
+                    //         // window.location.href =
+                    //         //     "<?php echo url('flex/userprofile/'); ?>" + data
+                    //         //     .empID; // then reload the page.(3)
+                    //     }, 2000);
+                    //     $('#addEmployee').trigger("reset");
+                    // } else {
+                    //     $('#feedBackSubmission').fadeOut('fast', function() {
+                    //         $('#feedBackSubmission').fadeIn('fast').html(data.message);
+                    //     });
+                    //     $('#addEmployee').trigger("reset");
+
+                    // }
                 })
-                .fail(function() {
-                    alert('Registration Failed, Review Your Network Connection...');
+                .fail(function(data) {
+                    //var data = JSON.parse(data);
+                    console.log(data);
+                    alert(data.error);
                 });
         });
 

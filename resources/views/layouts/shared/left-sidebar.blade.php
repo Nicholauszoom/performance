@@ -47,8 +47,8 @@
 
                     <ul
                         class="nav-group-sub collapse {{ request()->routeIs('flex.download_payslip') || request()->routeIs('flex.my-grievances') || request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
-                       
-                       
+
+
                         {{--  start of suspend employee link --}}
 
                         <li class="nav-item">
@@ -57,7 +57,7 @@
                         </li>
 
                         {{-- / --}}
-                       
+
                         {{-- start of active employee link --}}
 
                         <li class="nav-item">
@@ -87,7 +87,7 @@
                         {{-- / --}}
 
 
-                     
+
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.download_payslip') ? 'active' : null }}"
@@ -359,7 +359,7 @@
                 @endcan
 
                 {{-- For Performance Management --}}
-                @can('view-Performance')
+
                     <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                         <a href="#" class="nav-link">
@@ -417,7 +417,7 @@
                         </li>
                     </ul>
                 </li>
-                @endcan
+            
                 {{-- / --}}
 
                 {{-- For Talent Management --}}

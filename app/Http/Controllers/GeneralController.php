@@ -58,6 +58,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
 use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -2786,9 +2787,13 @@ class GeneralController extends Controller
 
     ################## UPDATE EMPLOYEE INFO #############################
 
-    public function updateEmployee(Request $request, $id, $departmentID)
+    public function updateEmployee(Request $request, $id)
     {
-        $empID = base64_decode($id);
+
+        $data = explode('|',$id);
+      
+        $empID = $data[0];
+        $departmentID = $data[1];
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
         $data['title'] = "Employee";
@@ -6994,6 +6999,41 @@ class GeneralController extends Controller
 
         if ($request->method() == "POST") {
 
+            $validator = Validator::make($request->all(), [
+                'fname' => 'required',
+                'mname' => 'required',
+                'currency' => 'required',
+                'emp_level' => 'required',
+                'cost_center' => 'required',
+                'leave_days_entitled' => 'required',
+                'lname' => 'required',
+                'emp_id'=>'required|unique',
+                'salary' => 'required',
+                'gender' => 'required',
+                'email' => 'required',
+                'nationality' => 'required',
+                'merital_status' => 'required',
+                'position' => 'required',
+                'contract_type' => 'required',
+                'mobile' => 'required',
+                'account_no' => 'required',
+                'bank' => 'required',
+                'bank_branch' => 'required',
+                'pension_fund' => 'required',
+                'pf_membership_no' => 'required',
+                'line_manager' => 'required',
+                'department' =>'required',
+                'branch' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'status' => 400,
+                    'errors' => $validator->messages(),
+                ]);
+            }
+
+
             // DATE MANIPULATION
             $calendar = str_replace('/', '-', $request->input('birthdate'));
             $contract_end = str_replace('/', '-', $request->input('contract_end'));
@@ -7022,7 +7062,7 @@ class GeneralController extends Controller
 
                 $password = "ABC1234";
 
-                $emp_id = $this->flexperformance_model->get_lastPayrollNo()+ 1;
+                $emp_id = $request->emp_id;
 
                 $employee = array(
                     'fname' => $request->input("fname"),

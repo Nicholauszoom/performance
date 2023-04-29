@@ -445,11 +445,11 @@ class AttendanceController extends Controller
 // start of save leave Function
 
 
-public function savelLeave(Request $request) {
+public function saveLeave(Request $request) {
         $start = $request->start;
         $end = $request->end;
 
-     if($start < $end){
+     if($start <= $end){
 
         //For Gender
         $gender=Auth::user()->gender;
@@ -941,7 +941,7 @@ public function savelLeave(Request $request) {
               }
               else
               {
-                
+
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
                 $msg="Sorry, You have Insufficient ".$type_name." Leave Days Balance5";

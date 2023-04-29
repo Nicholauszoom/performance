@@ -85,11 +85,11 @@
                 <a href="javascript:void(0)" onclick="requestDeactivation('<?php echo $row->emp_id; ?>')"  class="btn btn-danger btn-sm"  title="Deactivate">
                 <i class="ph-prohibit"></i>
                 </a>
-{{--
+
                     <a href="<?php echo  url('') .'/flex/updateEmployee/'.$row->emp_id."|".$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-warning btn-xs"><i class="ph-note-pencil"></i></button>
                     </a>
-
+{{--
                     <a href="<?php echo  url('').'flex/project/evaluateEmployee/'.$row->emp_id.'|'.$row->department; ?>" title="Update">
                         <button type="button" class="btn btn-success btn-xs"><i class="">Evaluate</i></button>
                     </a> --}}
