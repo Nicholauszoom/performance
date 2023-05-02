@@ -554,10 +554,10 @@ public function saveLeave(Request $request) {
                $email_data = array(
                    'subject' => 'Employee Leave Approval',
                    'view' => 'emails.linemanager.leave-approval',
-                   'email' => 'samwel.herman@cits.co.tz',
+                   'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
                );
-               Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new EmailRequests($email_data));
+               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
                   $msg=$type_name." Leave Request  Has been Requested Successfully!";
                   return $url->with('msg', $msg);
@@ -758,10 +758,10 @@ public function saveLeave(Request $request) {
                $email_data = array(
                    'subject' => 'Employee Leave Approval',
                    'view' => 'emails.linemanager.leave-approval',
-                   'email' => 'samwel.herman@cits.co.tz',
+                   'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
                );
-               Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new EmailRequests($email_data));
+               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
 
 
@@ -974,10 +974,10 @@ public function saveLeave(Request $request) {
                $email_data = array(
                    'subject' => 'Employee Leave Approval',
                    'view' => 'emails.linemanager.leave-approval',
-                   'email' => 'samwel.herman@cits.co.tz',
+                   'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
                );
-               Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new EmailRequests($email_data));
+               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
               $msg=$type_name." Leave Request is submitted successfully!";
               return $url->with('msg', $msg);
