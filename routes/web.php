@@ -9,6 +9,7 @@ use App\Http\Middleware\Setting;
 use App\Http\Middleware\Employee;
 use App\Http\Middleware\Overtime;
 use App\Http\Middleware\Dashboard;
+use App\Http\Middleware\Promotion;
 use App\Http\Middleware\WorkForce;
 use App\Http\Middleware\Termination;
 use Illuminate\Support\Facades\Auth;
@@ -26,27 +27,31 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuditTrailController;
 use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\PerformanceController;
+use App\Http\Controllers\AccelerationController;
 use App\Http\Controllers\Payroll\ReportController;
 use App\Http\Controllers\setting\BranchController;
 use App\Http\Controllers\Import\BankLoanController;
-use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\Payroll\PayrollController;
 use App\Http\Controllers\Recruitment\JobController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\setting\PositionController;
 use App\Http\Controllers\Recruitment\LoginController;
+use App\Http\Controllers\PerformanceReportsController;
 use App\Http\Controllers\AccessControll\RoleController;
 use App\Http\Controllers\AccessControll\UsersController;
 use App\Http\Controllers\Recruitment\RegisterController;
 use App\Http\Controllers\AccessControll\SystemController;
 use App\Http\Controllers\Import\ImportEmployeeController;
+use App\Http\Controllers\Import\PensionPayslipController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
+
 use App\Http\Controllers\AccessControll\DesignationController;
+use App\Http\Controllers\EmployeePerformanceController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
-use App\Http\Middleware\Promotion;
+
 
 Route::get('/', function () {
     return view('auth.login');
@@ -91,6 +96,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('error', [HomeController::class,'home']);
          // start of overtime routes
+
+         Route::any('/passwordAutogenerate','passwordAutogenerate')->name('flex.passwordAutogenerate');
+
          Route::any('/overtime','overtime')->name('flex.overtime');
          Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
          Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
@@ -179,6 +187,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
+
+        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
+
+
+
         // end of employee personal details  route
 
         // start of overtime routes
@@ -202,6 +215,8 @@ Route::middleware('auth')->group(function () {
         Route::any('delete-project/{id}','delete_project')->name('flex.delete-project');
         Route::any('delete-project-task/{id}','delete_project_task')->name('flex.delete-project-task');
         Route::any('completed_task/{id}','completed_task')->name('flex.completed_task');
+        Route::any('completed-project/{id}','completed_project')->name('flex.complete_project');
+
 
 
         // For Perfomance report
@@ -390,7 +405,7 @@ Route::middleware('auth')->group(function () {
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
-        Route::post('/save_leave' ,'savelLeave')->name('attendance.saveLeave');
+        Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
         Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
@@ -523,12 +538,64 @@ Route::middleware('auth')->group(function () {
     //end of organization access permission  routes
 
 
+    //Start of Acceleration routes
+    Route::prefix('flex/')->controller(AccelerationController::class)->group(function (){
+        Route::any('acceleration','index')->name('flex.acceleration');
+        Route::any('add-acceleration','create')->name('flex.add-acceleration');
+        Route::any('save-acceleration','store')->name('flex.save-acceleration');
+        Route::any('view-acceleration/{id}','show')->name('flex.view-acceleration');
+        Route::any('edit-acceleration/{id}','edit')->name('flex.edit-acceleration');
+        Route::any('update-acceleration','update')->name('flex.update-acceleration');
+        Route::any('add-acceleration-task/{id}','add_acceleration_task')->name('flex.add-acceleration-task');
+        Route::any('save-acceleration-task','save_acceleration_task')->name('flex.save-acceleration-task');
+        Route::any('edit-project-task/{id}','edit_project_task')->name('flex.edit-project-task');
+        Route::any('delete-acceleration/{id}','delete_project')->name('flex.delete-project');
+        Route::any('delete-acceleration-task/{id}','delete_acceleration_task')->name('flex.delete-acceleration-task');
+        Route::any('completed-acceleration-task/{id}','completed_acceleration_task')->name('flex.complete_acceleration_task');
+        Route::any('assess-acceleration-task/{id}','assess_task')->name('flex.assess-acceleration-task');
+        Route::any('save-acceleration-assessment','save_assessment')->name('flex.save_acceleration_assessment');
+        Route::any('acceleration-report','performance')->name('flex.acceleration-report');
+        Route::any('accelerationDetails/{id}','accelerationDetails')->name('flex.accelerationDetails');
+        Route::any('completed-acceleration/{id}','completed_acceleration')->name('flex.complete_acceleration');
+    });
+
+    // For Performance Reports Routes
+    Route::prefix('flex/')->controller(PerformanceReportsController::class)->group(function (){
+        Route::any('performance-reports','index')->name('flex.performance-reports');
+        Route::any('organization-reports','organization_report')->name('flex.organization-reports');
+        Route::any('project-report','project_report')->name('flex.project-report');
+        Route::any('department-report','department_report')->name('flex.department-report');
+        Route::any('acceleration-reports','acceleration_report')->name('flex.acceleration-reports');
+
+
+
+    });
+
     // start of report access permissions routes
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
         Route::any('/financial_reports','financial_reports')->name('flex.financial_reports');
         Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
     });
     // end of report access permissions routes
+
+
+
+    // For New Employees
+    Route::prefix('flex/')->controller(EmployeePerformanceController::class)->group(function (){
+        Route::any('/all-employees','index')->name('flex.employee-list');
+        Route::any('/employee-performance','employee_performance')->name('flex.employee-performance');
+        Route::any('/performance-pillars','performance_pillars')->name('flex.performance-pillars');
+        Route::any('/add-evaluation/{id}','add_evaluation')->name('flex.add-evaluation');
+        Route::any('/delete-pillar/{id}','delete_pillar')->name('flex.delete-pillar');
+        Route::any('/edit-pillar/{id}','edit_pillar')->name('flex.edit-pillar');
+        Route::any('/add-pillar','add_pillar')->name('flex.add-pillar');
+        Route::any('/save-pillar','save_pillar')->name('flex.save-pillar');
+        Route::any('/update-pillar','update_pillar')->name('flex.update-pillar');
+
+
+
+    });
+    // End of new employees
 
      // start of settings access permissions routes
      Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
@@ -747,7 +814,7 @@ Route::middleware('auth')->group(function () {
         // end of education qualification route
 
 
-        Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
+        Route::any('/updateEmployee/{id}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
         Route::any('/updateCode','updateCode')->name('flex.updateCode');
         Route::any('/updateLevel','updateLevel')->name('flex.updateLevel');

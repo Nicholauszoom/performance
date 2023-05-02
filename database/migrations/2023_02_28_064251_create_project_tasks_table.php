@@ -31,6 +31,10 @@ return new class extends Migration
             $table->double('performance')->nullable();
             $table->integer('created_by');
             $table->timestamps();
+
+            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+
+
         });
     }
 

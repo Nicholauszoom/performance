@@ -94,7 +94,7 @@
                                                 @endif
 
                                                 <div class="mb-3">
-                                                    <label class="form-label text-main font-weight-bold">Username</label>
+                                                    <label class="form-label text-main font-weight-bold">Payroll Number</label>
 
                                                     <div class="form-control-feedback form-control-feedback-start">
                                                         <input

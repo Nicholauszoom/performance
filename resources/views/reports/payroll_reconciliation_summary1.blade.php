@@ -100,7 +100,7 @@
                         @php
                             $total_previous += 0;
                             $total_current += 0;
-                            $total_amount += $total_previous_gross + ($payroll_date == '2023-03-19' ? 100000 : 0);
+                            $total_amount += $total_previous_gross;
                         @endphp
 
                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
@@ -108,11 +108,11 @@
                             <td class="text-start">Last Month Gross Salary</td>
                             <td class="text-end">  {{ number_format(0, 2) }} </td>
                             <td class="text-end"> {{ number_format(0, 2) }} </td>
-                            <td class="text-end"> {{ number_format($total_previous_gross + ($payroll_date == '2023-03-19' ? 100000 : 0), 0) }} </td>
-                            <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month }}</td>
+                            <td class="text-end"> {{ number_format($total_previous_gross, 0) }} </td>
+                            <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month  }}</td>
                         </tr>
 
-                        @if ($count_current_month - $count_previous_month != 0)
+
                             @if ($new_employee > 0)
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
@@ -148,7 +148,7 @@
                                     $total_amount += 0 - $termination_salary;
                                 @endphp
                             @endif
-                        @endif
+
 
                         @if ($count_previous_month != 0)
                             @if ($current_increase['basic_increase'] > 0)
@@ -157,24 +157,24 @@
                                     <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
                                     <td class="text-end">
 
+                                        {{ number_format($current_increase['actual_amount']-$current_increase['basic_increase'], 2) }}
+                                    </td>
+                                    <td class="text-end">
                                         {{ number_format($current_increase['actual_amount'], 2) }}
                                     </td>
                                     <td class="text-end">
                                         {{ number_format($current_increase['basic_increase'], 2) }}
                                     </td>
-                                    <td class="text-end">
-                                        {{ number_format($current_increase['basic_increase'] - $current_increase['actual_amount'] - $current_increase['actual_amount'], 2) }}
-                                    </td>
                                     <td class="text-end"></td>
                                 </tr>
 
                                 @php
-                                    $total_previous += $current_increase['actual_amount'];
+                                    $total_previous += ($current_increase['actual_amount']-$current_increase['basic_increase']);
 
-                                    $total_current += $current_increase['actual_amount'] - $current_increase['basic_increase'];
+                                    $total_current += ($current_increase['actual_amount']);
                                     //dd($total_current);
 
-                                    $total_amount += $current_increase['basic_increase'] - $current_increase['actual_amount'] - $current_increase['actual_amount'];
+                                    $total_amount += ($current_increase['basic_increase']);
                                 @endphp
                             @endif
                             @if ($current_decrease['basic_decrease'] > 0)
@@ -222,17 +222,17 @@
 
                                             <td class="text-end">{{ number_format(0, 2) }}</td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end"></td>
                                         </tr>
                                         @php
                                             $total_previous += 0;
-                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount;
-                                            $total_amount += $row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount;
+                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
+                                            $total_amount += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
 
                                         @endphp
                                     @else
@@ -248,17 +248,17 @@
                                                 @endif
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->previous_amount - 236363.64 : $row->previous_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->previous_amount : $row->previous_amount, 2) }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end">{{ number_format($row->difference, 2) }}</td>
                                             <td class="text-end"></td>
                                         </tr>
                                         @php
-                                            $total_previous += $row->description == 'Add/Les S-Overtime' ? $row->previous_amount - 236363.64 : $row->previous_amount;
-                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount - 236363.64 : $row->current_amount;
+                                            $total_previous += $row->description == 'Add/Les S-Overtime' ? $row->previous_amount  : $row->previous_amount;
+                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
                                             $total_amount += $row->difference;
 
                                         @endphp
@@ -277,7 +277,7 @@
                             <td class="text-end">
                                 <b>{{ number_format($total_amount, 0) }}</b>
                             </td>
-                            <td class="text-end"><b>{{ $count_current_month }}</b></td>
+                            <td class="text-end"><b>{{ ($payroll_date == '2023-02-17' ? $count_current_month - 1 : $count_current_month) }}</b></td>
                         </tr>
                     </tbody>
                 </table>
@@ -289,50 +289,78 @@
                         <tr>
                             <td>
                                 <p class="text-start" style="font-size:15px;">
-                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
+                                    <small><b>Prepared By:</b></small>
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>1st Cheker & Approved By:</b></small></p>
                             </td>
-                            <td>.</td>
+                            <td>
+                                <p class="text-start" style="font-size:15px;"><small><b>2nd Cheker & Approved By:</b></small></p>
+                            </td>
+                            <td><p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p></td>
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Reviewed By:</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Checked By:</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Approved By:</small></p>
-                            </td>
-
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name______________________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name:_______________</small></p>
                             </td>
 
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position:_____________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position:_____________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position:_____________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Position:_____________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Signature:___________</small></p>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date:_______________</small></p>
                             </td>
 
                         </tr>

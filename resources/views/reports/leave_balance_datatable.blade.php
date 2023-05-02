@@ -29,9 +29,9 @@
                     <th>Leave Entitled</th>
 
                     <th>Opening Balance</th>
-                    <th>Rate</th>
-                    <th>Amount</th>
-                    <th>Accrual Balance</th>
+                    {{-- <th>Rate</th>
+                    <th>Amount</th> --}}
+                    <th>Accrual Rate</th>
                     <th>Used Days</th>
                     <th>Current Balance</th>
                     <th>Amount</th>
@@ -47,14 +47,14 @@
                     <td><?php echo $employee->emp_id; ?></td>
                     <td><?php echo $employee->fname; ?></td>
                     <td><?php echo $employee->lname; ?></td>
-                    <td><?php echo $employee->day_entitled; ?></td>
+                    <td><?php echo $employee->leave_days_entitled; ?></td>
                     <td><?php echo number_format($employee->opening_balance, 2); ?></td>
-                    <td><?php echo number_format($employee->rate, 2); ?></td>
-                    <td><?php echo number_format($employee->rate * $employee->opening_balance, 2); ?></td>
+                    {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
+                    <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
                     <td><?php echo number_format($employee->accrual_days, 2); ?></td>
-                    <td><?php echo number_format($employee->maximum_days, 2); ?></td>
+                    <td><?php echo number_format($employee->opening_balance - $employee->current_balance, 2); ?></td>
                     <td><?php echo number_format($employee->current_balance, 2); ?></td>
-                    <td><?php echo number_format($employee->current_balance * $employee->rate, 2); ?></td>
+                    <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td>
 
                 </tr>
 

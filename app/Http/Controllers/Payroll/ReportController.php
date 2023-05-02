@@ -110,7 +110,7 @@ class ReportController extends Controller
             $total_heslb = $data['total_heslb'];
 
             $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
-            return $pdf->download('payrolldetails.pdf');
+            return $pdf->download('paychecklist-'.$payrollMonth.'.pdf');
         }
     }
 
@@ -784,7 +784,7 @@ dd($data['paye_terminated']);
                 // include app_path() . '/reports/payslip.php';
 
                 //return view('payroll.payslip2', $data);
-                $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
+                $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
                 return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
@@ -1995,6 +1995,7 @@ dd($data['paye_terminated']);
             //increase of employee
             $data['employee_increase'] = $this->reports_model->employee_increase($current_payroll_month, $previous_payroll_month);
         }
+
         if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
@@ -2038,7 +2039,7 @@ dd($data['paye_terminated']);
 
         $pdf = Pdf::loadView('reports.payroll_reconciliation_details', $data)->setPaper('a4', 'potrait');
 
-        return $pdf->download('payroll_reconciliation_details.pdf');
+        return $pdf->download('payroll_reconciliation_details-'.$current_payroll_month.'.pdf');
     }
 
     public function payrollReconciliationSummary(Request $request)
@@ -2081,8 +2082,9 @@ dd($data['paye_terminated']);
 
 
 
+
         $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
-        //dd($data['new_employee']);
+
         if($data['new_employee'] > 0){
 
             $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
@@ -3006,7 +3008,7 @@ EOD;
             return view('reports.payrolldetails_datatable', $data);
         else {
             $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('payrolldetails'.$data['payroll_date'].'.pdf');
+            return $pdf->download('payrolldetails-'.$data['payroll_date'].'.pdf');
        }
 
         // include(app_path() . '/reports/temp_payroll.php');
@@ -3043,12 +3045,12 @@ EOD;
 
     }
 
-    public function annualleave1(Request $request)
-    {
-        $data = $this->attendance_model->get_anual_leave_position($request->duration);
+    // public function annualleave1(Request $request)
+    // {
+    //     $data = $this->attendance_model->get_anual_leave_position($request->duration);
 
-        //dd($request->duration);
-    }
+    //     //dd($request->duration);
+    // }
 
 
     public function annualleave(Request $request)
@@ -3060,45 +3062,8 @@ EOD;
 
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
             // $employee= Employee::all();
-
+            //$employee = $this->flexperformance_model->employee();
             $employees = Employee::where('state', '=', 1)->get();
-
-            foreach ($employees  as $employee) {
-
-                // $d1 = new \DateTime(date($employee->hire_date));
-
-                // $d2 =new \DateTime("now");
-                // $diff = $d1->diff($d2);
-
-                // $years=$diff->y;
-                // $months=$diff->m;
-                // $days=$diff->d;
-
-                // $days_this_month = intval(date('t', strtotime(date(''))));
-                // $accrual_days = $days*$employee->accrual_rate/$days_this_month;
-
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
-
-                // $accrual_days = $days*$employee->accrual_rate/$days_this_month;
-                $employee->day_entitled = $employee->leave_days_entitled;
-
-                $employee->rate = $employee->salary / $employee->leave_days_entitled;
-
-                $employee->accrual_days = $employee->accrual_rate;
-
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
-
-
-                $employee->current_balance = $this->attendance_model->getClossingLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
-
-                // $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
-
-                // $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
-            }
-            // dd("all here");
-        } else {
-
-            $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
 
             foreach ($employees  as $employee) {
 
@@ -3113,6 +3078,8 @@ EOD;
 
                 $days_this_month = intval(date('t', strtotime(date(''))));
 
+                $employee->accrual_amount = $employee->salary/30;
+
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
 
                 $accrual_days = $days * $employee->accrual_rate / $days_this_month;
@@ -3123,12 +3090,47 @@ EOD;
 
                 $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
             }
+
+        } else {
+
+            $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
+            //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
+            foreach ($employees  as $employee) {
+
+                $d1 = new \DateTime(date($employee->hire_date));
+
+                $d2 = new \DateTime("now");
+                $diff = $d1->diff($d2);
+
+                $years = $diff->y;
+                $months = $diff->m;
+                $days = $diff->d;
+
+                $days_this_month = intval(date('t', strtotime(date(''))));
+
+
+                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id);
+
+
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
+
+                $accrual_days = $days * $employee->accrual_rate / $days_this_month;
+
+                $employee->accrual_days = $accrual_days;
+
+                $employee->accrual_amount = $employee->salary/30;
+
+
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+
+                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+            }
         }
         // dd($employees);
         if($request->type == 1){
            $data['employees'] =  $employees;
         $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
-        return $pdf->download('payrolldetails.pdf');
+        return $pdf->download('Leave_report'.$request->duration.'.pdf');
         }else{
             return view('reports.leave_balance_datatable', ['employees' => $employees]);
         }
