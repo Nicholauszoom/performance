@@ -62,7 +62,9 @@
         <div class="@if (session('vw_emp_sum')) col-md-12 @else col-md-12 @endif">
             <div class="card bg-success bg-opacity-10 border-success rounded-0">
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    <p class="text-main">Welcome to Fléx Performance! <strong>
+                    {{-- <p class="text-main">Welcome to Fléx Performance! <strong> --}}
+                        <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" alt="flex logo" height="150px" width="150px" class="img-fluid">
+                          <p class="text-main">Welcome<strong>
                             {{ session('fname') . ' ' . session('lname') }} </strong></p>
 
                     <p <?php if(session('pass_age') > 84){?> style="color:red" <?php } ?>>Password Expires in <?php echo 90 - session('pass_age'); ?> Days
@@ -93,7 +95,7 @@
                         <a href="{{ route('flex.my-overtimes') }}" style="text-decoration:none;"
                             title="Click to here view your Overtimes">
                             <h1 class="text-main"><i class="ph-clock panel-text"></i></h1>
-                            <h4 class="panel-footer">My Overtimes <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Overtimes <i class="ph-arrow-circle-right"></i></h4>
                         </a>
                     </div>
 
@@ -105,7 +107,7 @@
                         <a href="{{ route('flex.my-leaves') }}" style="text-decoration:none;"
                             title="Click to here view your Leaves">
                             <h1 class="text-main"><i class="ph-calendar-check panel-text"></i></h1>
-                            <h4 class="panel-footer">My Leaves <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Leaves <i class="ph-arrow-circle-right"></i></h4>
                         </a>
                     </div>
                 </div>
@@ -116,20 +118,53 @@
                         <a href="{{ route('flex.my-loans') }}" style="text-decoration:none;"
                             title="Click here to view your Loans">
                             <h1 class="text-main"> <i class="ph-bank panel-text"></i></h1>
-                            <h4 class="panel-footer">My Loans <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Loans(HESLB) <i class="ph-arrow-circle-right"></i></h4>
+
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div
+                        class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout ">
+                        <a href="{{ route('flex.download_payslip') }}" style="text-decoration:none;"
+                            title="Click here to view your Loans">
+                            <h1 class="text-main"> <i class="ph-money panel-text"></i></h1>
+                            <h4 class="panel-footer">Salary Slip <i class="ph-arrow-circle-right"></i></h4>
 
                         </a>
                     </div>
                 </div>
 
 
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-6">
                     <div
                         class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout">
                         <a href="{{ route('flex.my-pensions') }}" style="text-decoration:none;"
                             title="Click here to view your Pension History">
+                            <h1 class="text-main"><i class="ph-wallet panel-text"></i></h1>
+                            <h4 class="panel-footer">Pensions <i class="ph-arrow-circle-right"></i></h4>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-6">
+                    <div
+                        class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout">
+                        <a href="{{ route('flex.my-grievances') }}" style="text-decoration:none;"
+                            title="Click here to view your Pension History">
                             <h1 class="text-main"><i class="ph-scales panel-text"></i></h1>
-                            <h4 class="panel-footer">My Pensions <i class="ph-arrow-circle-right"></i></h4>
+                            <h4 class="panel-footer">Grievance <i class="ph-arrow-circle-right"></i></h4>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-6">
+                    <div
+                        class="card p-2 text-center bordered-0 rounded-0 border-top  border-top-width-3 border-top-main card-layout">
+                        <a href="{{ route('flex.userdata', base64_encode(auth()->user()->emp_id)) }}" style="text-decoration:none;"
+                            title="Click here to view your Pension History">
+                            <h1 class="text-main"><i class="ph-user-square panel-text"></i></h1>
+                            <h4 class="panel-footer">Biodata <i class="ph-arrow-circle-right"></i></h4>
                         </a>
                     </div>
                 </div>
@@ -292,7 +327,7 @@
                                     </td>
                                 </tr>
 
-                                
+
                                     @if ($new_employee > 0)
                                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                             <td class="text-start">00002</td>

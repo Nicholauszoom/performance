@@ -14,11 +14,11 @@
 
 @section('content')
     @php
-
+ 
     @endphp
             {{-- start of run payroll --}}
-
-
+      
+        
 
                 <div class="col-lg-12">
 
@@ -26,38 +26,37 @@
                         <div class="card-header">
                             <h5 class="card-title">Payroll Inputs</h5>
                         </div>
-
+@php
+    $empID = auth()->user()->emp_id;
+@endphp
                         <div class="card-body">
                             <div id="payrollFeedback"></div>
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <form autocomplete="off" id="submitInputs" method="POST">
-                                        <div class="mb-3 row">
-                                            @if($pending_payroll == 0)
-                                            <div class="col-7 row">
-                                                <label class="form-label col-md-3 text-center font-bold">
-                                                    <h6>Payroll Month:</h6>
-                                                </label>
-
-                                                <div class="col-md-9">
-                                                    <input type="text" required placeholder="Payroll Month" name="date" class="form-control col-md-7 has-feedback-left" id="payrollDate" aria-describedby="inputSuccess2Status">
-                                                    <span class="ph-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                                    <form method="post" action="{{ route('reports.payslip') }}" target="_blank">
+                                        @csrf
+                                        <div class="card border-0 rounded-0">
+                                            <div class="m-3">
+                                                <label class="form-label text-warning" for="stream">Pay Slip</label>
+            
+                                                <input hidden name="employee" value="{{ $empID }}">
+                                                <input hidden name="profile" value="1">
+            
+                                                <div class="input-group">
+                                                    <select required name="payrolldate" class="select_payroll_month form-control select"
+                                                        data-width="1%">
+                                                        <option>Select Month</option>
+                                                        @foreach ($month_list as $row)
+                                                            <option value="{{ $row->payroll_date }}">
+                                                                {{ date('F, Y', strtotime($row->payroll_date)) }}</option>
+                                                        @endforeach
+                                                    </select>
+            
+                                                    <button type="submit" class="btn btn-main" type="button"><i
+                                                            class="ph-printer me-2"></i> Print</button>
                                                 </div>
                                             </div>
-
-                                            <div class="col-3">
-                                                <button name="init" type="submit" class="btn btn-main">Submit</button>
-                                            </div>
-                                            @else
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <p class='alert alert-warning text-center'>Note! There is Pending payroll</p>
-                                        </div>
-                                            @endif
-
-                                        </div>
-                                        <div class="d-flex justify-content-end align-items-center">
-
                                         </div>
                                     </form>
                                 </div>
@@ -66,8 +65,8 @@
                         </div>
                     </div>
                 </div >
-
-
+   
+       
 
 @endsection
 
@@ -117,7 +116,7 @@
 
 
     <script>
-
+       
     </script>
 
     <script>

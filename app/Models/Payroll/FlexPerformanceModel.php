@@ -447,6 +447,16 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+    function approvedOvertimes(){
+		$query = "SELECT  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION,
+		  eo.days as totoalHOURS,eo.amount,eo.status as status,oc.name as overtime_category
+		FROM employee e, overtimes eo, position p, department d,overtime_category oc, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id and eo.overtime_category = oc.id  ORDER BY eo.id DESC";
+
+		//$query = "SELECT *  FROM employee_overtime";
+
+		return DB::select(DB::raw($query));
+	}
+
 	function overtimesHR()
 	{
 		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
@@ -469,13 +479,7 @@ class FlexPerformanceModel extends Model
 
 	}
 
-	function approvedOvertimes()
-	{
-		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment,  eo.status as status, o.status AS payment_status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
-		CAST(eo.time_end as time) as time_out ,CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)),((e.salary/240)*(SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category)) )) AS earnings, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totoalHOURS
-		FROM employee e, employee_overtime eo, overtimes o, position p, department d, (SELECT @s:=0) as s WHERE eo.empID = e.emp_id AND e.department = d.id AND e.position = p.id AND eo.id = o.overtimeID AND  eo.status IN(2,4,5) ORDER BY eo.id DESC";
-		return DB::select(DB::raw($query));
-	}
+
 
 
 	function waitingOvertimes_hr()
@@ -631,6 +635,39 @@ class FlexPerformanceModel extends Model
 
 		return true;
 	}
+
+    function get_percent($id){
+        $query = "SELECT day_percent from overtime_category where id = $id limit 1";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->day_percent;
+    }
+
+ 
+
+    function direct_insert_overtime($empID, $signatory, $overtime_category,$date,$days,$percent,$line_maager) {
+        $time_start = $date;
+        $time_end = $date;
+        $application_time = $date;
+        $time_confirmed_line = $date;
+        $time_approved = $date;
+        $type = 0;
+
+    //     DB::transaction(function() use($id,$signatory, $time_approved)
+    //   {
+       $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT 1, '".$empID."', '".$time_start."','".$time_end."','".$overtime_category."', (('".$days."') * ((e.salary/176)*('".$percent."')))
+        AS amount,'".$line_maager."', '".$signatory."','".$application_time."','".$time_confirmed_line."', '".$time_approved."' FROM employee e WHERE e.emp_id = '".$empID."'  ";
+        DB::insert(DB::raw($query));
+
+
+       //$query = "UPDATE employee_overtime SET status = 2, cd ='".$signatory."', time_approved_cd = '".$time_approved."'  WHERE id ='".$id."'";
+      // DB::insert(DB::raw($query));
+
+
+   //    });
+
+       return true;
+   }
 
 	public function lineapproveOvertime($id, $time_approved) {
 

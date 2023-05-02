@@ -46,7 +46,18 @@
                     </a>
 
                     <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.my-grievances') || request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.download_payslip') || request()->routeIs('flex.my-grievances') || request()->routeIs('flex.biodata') || request()->routeIs('flex.my-pensions') || request()->routeIs('flex.my-overtimes') || request()->routeIs('flex.my-leaves') || request()->routeIs('flex.my-loans') ? 'show' : null }}">
+
+
+                        {{--  start of suspend employee link --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
+                                href="{{ route('flex.my-leaves') }}">Leaves</a>
+                        </li>
+
+                        {{-- / --}}
+
                         {{-- start of active employee link --}}
 
                         <li class="nav-item">
@@ -57,15 +68,13 @@
                         </li>
 
                         {{--  / --}}
+                           {{--  start of overtime link --}}
 
-                        {{--  start of suspend employee link --}}
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
-                                href="{{ route('flex.my-leaves') }}">Leaves</a>
+                           <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
+                                href="{{ route('flex.my-pensions') }}"> Pensions </a>
                         </li>
 
-                        {{-- / --}}
 
                         {{--  start of employee termination link --}}
 
@@ -78,11 +87,11 @@
                         {{-- / --}}
 
 
-                        {{--  start of overtime link --}}
+
 
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
-                                href="{{ route('flex.my-pensions') }}"> Pensions </a>
+                            <a class="nav-link {{ request()->routeIs('flex.download_payslip') ? 'active' : null }}"
+                                href="{{ route('flex.download_payslip') }}"> Payslip </a>
                         </li>
 
                         {{-- / --}}
@@ -206,7 +215,7 @@
                             @can('view-grivance')
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->routeIs('flex.grievances') ? 'active' : null }}"
-                                        href="{{ route('flex.grievances') }}"> Employees Grievances</a>
+                                        href="{{ route('flex.grievances') }}"> Employees Grievance</a>
                                 </li>
                             @endcan
                             {{-- / --}}
@@ -350,33 +359,8 @@
                 @endcan
 
                 {{-- For Performance Management --}}
-                @can('view-Performance')
-                    {{-- Start of new performance --}}
+
                     <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                        <a href="#" class="nav-link">
-                            <i class="ph-folder"></i>
-                            <span>Performance Management</span>
-                        </a>
-                        <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                            <li class="nav-item">
-                                <a href="{{ route('flex.employee-list') }}"
-                                    class="nav-link {{ request()->routeIs('flex.employee-list') ? 'active' : null }}">
-                                    Employee Performance
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('flex.performance-pillars') }}"
-                                    class="nav-link {{ request()->routeIs('flex.performance-pillars') ? 'active' : null }}">
-                                    Performance Pillars
-                                </a>
-                            </li>
-              
-                        </ul>
-                    </li>
-                    {{-- ./ --}}
-                    {{-- <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                         <a href="#" class="nav-link">
                             <i class="ph-folder"></i>
@@ -409,31 +393,31 @@
                                 </a>
                             </li>
                         </ul>
-                    </li> --}}
-                    <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                        <a href="#" class="nav-link">
-                            <i class="ph-graph"></i>
-                            <span>Performance Acceleration</span>
-                        </a>
-                        <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.acceleration-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                            <li class="nav-item">
-                                <a href="{{ route('flex.acceleration') }}"
-                                    class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
-                                    Acceleration Programme
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a href="{{ route('flex.acceleration-report') }}"
-                                    class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
-                                    Acceleration Matrix
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-                @endcan
+                    <li
+                    class="nav-item nav-item-submenu {{  request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-graph"></i>
+                        <span>Performance Acceleration</span>
+                    </a>
+                    <ul
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.acceleration-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                        <li class="nav-item">
+                            <a href="{{ route('flex.acceleration') }}"
+                                class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
+                               Acceleration Programme
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('flex.acceleration-report') }}"
+                                class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
+                                Acceleration Matrix
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            
                 {{-- / --}}
 
                 {{-- For Talent Management --}}
@@ -536,8 +520,8 @@
                             </li>
                             {{-- For Performance Reports --}}
                             <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
-                                    href="{{ route('flex.performance-reports') }}">Performance Reports </a>
+                                class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
+                                href="{{ route('flex.performance-reports') }}">Performance Reports </a>
                             </li>
                             {{-- ./ --}}
 
@@ -614,6 +598,13 @@
                                         class="nav-link {{ request()->routeIs('flex.audit_logs') ? 'active' : null }}"
                                         href="{{ route('flex.audit_logs') }}">Audit Trail</a></li>
                             @endif
+
+                            @if (session('mng_audit'))
+                            <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.passwordAutogenerate') ? 'active' : null }}"
+                                    href="{{ route('flex.passwordAutogenerate') }}">Password Reset</a></li>
+                        @endif
+
 
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ route('/flex/nationality')}}">Nationality</a></li>  --}}
                             <li class="nav-item"><a

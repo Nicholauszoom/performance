@@ -54,7 +54,7 @@
 
                 <hr>
 
-                <table class="table" style="background-color: #165384; color:white">
+                <table class="table" style="background-color: #165384; color:white;font-size:12px;">
                     <thead>
                         <tr>
                             <td class="">
@@ -81,23 +81,27 @@
                     <thead style="border-bottom:2px solid rgb(9, 5, 64);">
                         <tr>
                         <tr>
-                            <th><b>S/N</b></th>
-                            <th><b>Payroll No</b></th>
+                            <th style="text-align: right;"><b>S/N</b></th>
+                            <th style="text-align: center;"><b>Payroll No</b></th>
                             <th><b>Name</b></th>
 
-                            <th><b>Bank</b></th>
+                            <th style="text-align: center;"><b>Bank</b></th>
 
-                            <th><b>BranchCode</b></th>
-                            <th><b>Account No</b></th>
+                            <th style="text-align: center;"><b>BranchCode</b></th>
+                            <th style="text-align: center;"><b>Account No</b></th>
                             <th><b>Currency</b></th>
-                            <th><b>Net Pay</b></th>
+                            <th style="text-align: right;"><b>Net Pay</b></th>
                         </tr>
 
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach($employee_list as $row){
-                                    $sno = $row->SNo;
+                        <?php
+                        $sno =0;
+                        foreach($employee_list as $row){
+
+                            if($row->currency == 'TZS'){
+                                    $sno++;
                                     $empID =  $row->empID;
                                     $name = $row->name;
                                     $bank = $row->bank;
@@ -110,71 +114,76 @@
                                     if  ($sno % 2 == 0) { $background = "#d3d3d3;"; } else { $background = "#FFFFFF;"; }
                                     ?>
                         <tr nobr="true" style="border-bottom:2px solid rgb(67, 67, 73)">
-                            <td>{{ $sno }}</td>
-                            <td>&nbsp;{{ $empID }}</td>
+                            <td  style="text-align: right;">{{ $sno }}</td>
+                            <td style="text-align: center;">&nbsp;{{ $empID }}</td>
                             <td>&nbsp;{{ $name }}</td>
 
-                            <td>&nbsp;{{ $bank }}</td>
+                            <td style="text-align: center;">&nbsp;{{ $bank }}</td>
 
-                            <td>&nbsp;{{ $swiftcode }}</td>
-                            <td>&nbsp;{{ $account_no }}</td>
-                            <td>&nbsp;{{ $row->currency }}</td>
-                            <td>&nbsp;{{ number_format($amount / $row->rate, 2) }}</td>
+                            <td style="text-align: center;">&nbsp;{{ $swiftcode }}</td>
+                            <td style="text-align: center;">&nbsp;{{ $account_no }}</td>
+                            <td style="text-align: center;">&nbsp;{{ $row->currency }}</td>
+                            <td  style="text-align: right;">&nbsp;{{ number_format($amount / $row->rate, 2) }}</td>
                         </tr>
-                        <?php } ?>
+                        <?php }} ?>
                     </tbody>
                 </table>
-                <hr>
-                <table class="table" id="reports">
+
+                <table class="table" id="reports" style="font-size:10px; height:20px;">
                     <tbody>
                         <tr>
                             <td>
-                                <p class="text-start" style="font-size:15px;">
-                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
+                                <p class="text-start" style="font-size:12px !important;">
+                                    <small><b>Approved By:</b></small>
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small>
+                                <p class="text-start" style="font-size:14px !important;">
+                                    <small><b>Approved By:</b></small>
                                 </p>
                             </td>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p class="text-start"><small>Reviewed By:</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Checked By:</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Approved By:</small></p>
-                            </td>
 
                         </tr>
+
                         <tr>
 
+
                             <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name_______________________________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name______________________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <p class="text-start"><small>Name_______________________________</small></p>
                             </td>
 
                         </tr>
                         <tr>
 
+
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position_____________________________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Position_____________________________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Signature____________________________</small></p>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <p class="text-start"><small>Signature____________________________</small></p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p class="text-start"><small>Date________________________________</small></p>
+                            </td>
+                            <td>
+                                <p class="text-start"><small>Date________________________________</small></p>
                             </td>
 
                         </tr>
@@ -184,7 +193,7 @@
 
         </div>
 
-
+<br><br>
 
         <div id="logo2" style="margin-left: 7px; z-index: -10">
             <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">

@@ -96,6 +96,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('error', [HomeController::class,'home']);
          // start of overtime routes
+
+         Route::any('/passwordAutogenerate','passwordAutogenerate')->name('flex.passwordAutogenerate');
+
          Route::any('/overtime','overtime')->name('flex.overtime');
          Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
          Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
@@ -184,6 +187,11 @@ Route::middleware('auth')->group(function () {
         Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
+
+        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
+
+
+
         // end of employee personal details  route
 
         // start of overtime routes
@@ -397,7 +405,7 @@ Route::middleware('auth')->group(function () {
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
-        Route::post('/save_leave' ,'savelLeave')->name('attendance.saveLeave');
+        Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave');
         Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
         Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
@@ -549,7 +557,7 @@ Route::middleware('auth')->group(function () {
         Route::any('acceleration-report','performance')->name('flex.acceleration-report');
         Route::any('accelerationDetails/{id}','accelerationDetails')->name('flex.accelerationDetails');
         Route::any('completed-acceleration/{id}','completed_acceleration')->name('flex.complete_acceleration');
-    });  
+    });
 
     // For Performance Reports Routes
     Route::prefix('flex/')->controller(PerformanceReportsController::class)->group(function (){
@@ -806,7 +814,7 @@ Route::middleware('auth')->group(function () {
         // end of education qualification route
 
 
-        Route::any('/updateEmployee/{id}/{departmentID}','updateEmployee')->name('flex.updateEmployee');
+        Route::any('/updateEmployee/{id}','updateEmployee')->name('flex.updateEmployee');
         Route::any('/updateFirstName','updateFirstName')->name('flex.updateFirstName');
         Route::any('/updateCode','updateCode')->name('flex.updateCode');
         Route::any('/updateLevel','updateLevel')->name('flex.updateLevel');

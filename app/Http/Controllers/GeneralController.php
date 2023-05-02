@@ -58,6 +58,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
 use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -1962,7 +1963,7 @@ class GeneralController extends Controller
 
         $start = $request->input('time_start');
         $finish = $request->input('time_finish');
-        $reason = $request->inpput('reason');
+        $reason = $request->input('reason');
         $category = $request->input('category');
         $linemanager = $request->input('linemanager');
 
@@ -2070,7 +2071,31 @@ class GeneralController extends Controller
                             echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
                         }
                     } else {
-                        echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
+
+                        $type = 0; // echo "DAY OVERTIME";
+
+                        $data = array(
+                            'time_start' => $start_final . " " . $start_time,
+                            'time_end' => $finish_final . " " . $finish_time,
+                            'overtime_type' => $type,
+                            'overtime_category' => $category,
+                            'reason' => $reason,
+                            'empID' => $empID,
+                            'linemanager' => $linemanager,
+                            'time_recommended_line' => date('Y-m-d h:i:s'),
+                            'time_approved_hr' => date('Y-m-d'),
+                            'time_confirmed_line' => date('Y-m-d h:i:s'),
+                        );
+
+                        $result = $this->flexperformance_model->apply_overtime($data);
+
+                        if ($result == true) {
+                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+                        }
+
+                       // echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
                     }
                 }
             } else if ($start_date > $finish_date) {
@@ -2125,35 +2150,42 @@ class GeneralController extends Controller
     public function applyOvertimeOnbehalf(Request $request)
     {
 
-        $start = $request->input('time_start');
-        $finish = $request->input('time_finish');
-        $reason = $request->input('reason');
-        $category = $request->input('category');
-        $linemanager = $request->input('linemanager');
-
+        $days = $request->input('days');
+        $overtime_category = $request->input('category');
         $empID = $request->empID;
+        $signatory = auth()->user()->emp_id;
+        $date = date('Y-m-d');
+        $employee_data = Employee::where('emp_id', $empID)->first();
+        $line_maager = $employee_data->line_manager;
+        $percent = $this->flexperformance_model->get_percent($overtime_category);
 
 
 
+        $result =   $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category,$date,$days,$percent,$line_maager);
+         if($result == true){
+            echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
+         }else{
+            echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
+         }
 
 
 
-        $split_start = explode("  at  ", $start);
-        $split_finish = explode("  at  ", $finish);
+        // $split_start = explode("  at  ", $start);
+        // $split_finish = explode("  at  ", $finish);
 
-        $start_date = $split_start[0];
-        $start_time = $split_start[1];
+        // $start_date = $split_start[0];
+        // $start_time = $split_start[1];
 
-        $finish_date = $split_finish[0];
-        $finish_time = $split_finish[1];
+        // $finish_date = $split_finish[0];
+        // $finish_time = $split_finish[1];
 
-        $start_calendar = str_replace('/', '-', $start_date);
-        $finish_calendar = str_replace('/', '-', $finish_date);
+        // $start_calendar = str_replace('/', '-', $start_date);
+        // $finish_calendar = str_replace('/', '-', $finish_date);
 
-        $start_final = date('Y-m-d', strtotime($start_calendar));
-        $finish_final = date('Y-m-d ', strtotime($finish_calendar));
+        // $start_final = date('Y-m-d', strtotime($start_calendar));
+        // $finish_final = date('Y-m-d ', strtotime($finish_calendar));
 
-        $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
+        // $maxRange = ((strtotime($finish_final) - strtotime($start_final)) / 3600);
 
         //fetch Line manager data from employee table and send email
         // $linemanager_data = SysHelpers::employeeData($linemanager);
@@ -2173,120 +2205,120 @@ class GeneralController extends Controller
         // }
         //Overtime Should range between 24 Hrs;
 
-        if ($maxRange > 24) {
+        // if ($maxRange > 24) {
 
-            echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
-        } else {
+        //     echo "<p class='alert alert-warning text-center'>Overtime Should Range between 0 to 24 Hours</p>";
+        // } else {
 
-            $end_night_shift = "6:00";
-            $start_night_shift = "20:00";
+        //     $end_night_shift = "6:00";
+        //     $start_night_shift = "20:00";
 
-            if ($start_date == $finish_date) {
+        //     if ($start_date == $finish_date) {
 
-                if (strtotime($start_time) >= strtotime($finish_time)) {
+        //         if (strtotime($start_time) >= strtotime($finish_time)) {
 
-                    echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
-                } else {
+        //             echo "<p class='alert alert-danger text-center'>Invalid Time Selection, Please Choose the correct time and Try Again!</p>";
+        //         } else {
 
-                    if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
+        //             if (strtotime($start_time) >= strtotime($start_night_shift) || $start_time <= 5 && strtotime($finish_time) <= strtotime($end_night_shift)) {
 
-                        $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
+        //                 $type = 1; // echo " CORRECT:  NIGHT OVERTIME";
 
-                        $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
-                            'overtime_type' => $type,
-                            'overtime_category' => $category,
-                            'reason' => $reason,
-                            'empID' => $empID,
-                            'linemanager' => $linemanager,
-                            'time_recommended_line' => date('Y-m-d h:i:s'),
-                            'time_approved_hr' => date('Y-m-d'),
-                            'time_confirmed_line' => date('Y-m-d h:i:s'),
-                        );
+        //                 $data = array(
+        //                     'time_start' => $start_final . " " . $start_time,
+        //                     'time_end' => $finish_final . " " . $finish_time,
+        //                     'overtime_type' => $type,
+        //                     'overtime_category' => $category,
+        //                     'reason' => $reason,
+        //                     'empID' => $empID,
+        //                     'linemanager' => $linemanager,
+        //                     'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                     'time_approved_hr' => date('Y-m-d'),
+        //                     'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //                 );
 
-                        $result = $this->flexperformance_model->apply_overtime($data);
+        //                 $result = $this->flexperformance_model->apply_overtime($data);
 
-                        if ($result == true) {
-                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {
-                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                        }
-                    } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
+        //                 if ($result == true) {
+        //                     echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //                 } else {
+        //                     echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //                 }
+        //             } elseif (strtotime($start_time) >= strtotime($end_night_shift) && strtotime($start_time) < strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($start_night_shift)) {
 
-                        $type = 0; // echo "DAY OVERTIME";
+        //                 $type = 0; // echo "DAY OVERTIME";
 
-                        $data = array(
-                            'time_start' => $start_final . " " . $start_time,
-                            'time_end' => $finish_final . " " . $finish_time,
-                            'overtime_type' => $type,
-                            'overtime_category' => $category,
-                            'reason' => $reason,
-                            'empID' => $empID,
-                            'linemanager' => $linemanager,
-                            'time_recommended_line' => date('Y-m-d h:i:s'),
-                            'time_approved_hr' => date('Y-m-d'),
-                            'time_confirmed_line' => date('Y-m-d h:i:s'),
-                        );
+        //                 $data = array(
+        //                     'time_start' => $start_final . " " . $start_time,
+        //                     'time_end' => $finish_final . " " . $finish_time,
+        //                     'overtime_type' => $type,
+        //                     'overtime_category' => $category,
+        //                     'reason' => $reason,
+        //                     'empID' => $empID,
+        //                     'linemanager' => $linemanager,
+        //                     'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                     'time_approved_hr' => date('Y-m-d'),
+        //                     'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //                 );
 
-                        $result = $this->flexperformance_model->apply_overtime($data);
+        //                 $result = $this->flexperformance_model->apply_overtime($data);
 
-                        if ($result == true) {
-                            echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                        } else {
-                            echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                        }
-                    } else {
-                        echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
-                    }
-                }
-            } else if ($start_date > $finish_date) {
-                echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
-            } else {
-                // echo "CORRECT DATE - <BR>";
-                if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
-                    $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
-                    $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
-                        'overtime_type' => $type,
-                        'overtime_category' => $category,
-                        'reason' => $reason,
-                        'empID' => $empID,
-                        'linemanager' => $linemanager,
-                        'time_recommended_line' => date('Y-m-d h:i:s'),
-                        'time_approved_hr' => date('Y-m-d'),
-                        'time_confirmed_line' => date('Y-m-d h:i:s'),
-                    );
-                    $result = $this->flexperformance_model->apply_overtime($data);
-                    if ($result == true) {
-                        echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                    } else {
-                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                    }
-                } else {
-                    $type = 0; // echo "DAY OVERTIME";
-                    $data = array(
-                        'time_start' => $start_final . " " . $start_time,
-                        'time_end' => $finish_final . " " . $finish_time,
-                        'overtime_type' => $type,
-                        'overtime_category' => $category,
-                        'reason' => $reason,
-                        'empID' => $empID,
-                        'linemanager' => $linemanager,
-                        'time_recommended_line' => date('Y-m-d h:i:s'),
-                        'time_approved_hr' => date('Y-m-d'),
-                        'time_confirmed_line' => date('Y-m-d h:i:s'),
-                    );
-                    $result = $this->flexperformance_model->apply_overtime($data);
-                    if ($result == true) {
-                        echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
-                    } else {
-                        echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
-                    }
-                }
-            }
-        }
+        //                 if ($result == true) {
+        //                     echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //                 } else {
+        //                     echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //                 }
+        //             } else {
+        //                 echo "<p class='alert alert-warning text-center'>Sorry Cross-Shift Overtime is NOT ALLOWED, Please Choose the correct time and Try Again!</p>";
+        //             }
+        //         }
+        //     } else if ($start_date > $finish_date) {
+        //         echo "<p class='alert alert-warning text-center'>Invalid Date, Please Choose the correct Date and Try Again!</p>";
+        //     } else {
+        //         // echo "CORRECT DATE - <BR>";
+        //         if (strtotime($start_time) >= strtotime($start_night_shift) && strtotime($finish_time) <= strtotime($end_night_shift)) {
+        //             $type = 1; // echo "NIGHT OVERTIME CROSS DATE ";
+        //             $data = array(
+        //                 'time_start' => $start_final . " " . $start_time,
+        //                 'time_end' => $finish_final . " " . $finish_time,
+        //                 'overtime_type' => $type,
+        //                 'overtime_category' => $category,
+        //                 'reason' => $reason,
+        //                 'empID' => $empID,
+        //                 'linemanager' => $linemanager,
+        //                 'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                 'time_approved_hr' => date('Y-m-d'),
+        //                 'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //             );
+        //             $result = $this->flexperformance_model->apply_overtime($data);
+        //             if ($result == true) {
+        //                 echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //             } else {
+        //                 echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //             }
+        //         } else {
+        //             $type = 0; // echo "DAY OVERTIME";
+        //             $data = array(
+        //                 'time_start' => $start_final . " " . $start_time,
+        //                 'time_end' => $finish_final . " " . $finish_time,
+        //                 'overtime_type' => $type,
+        //                 'overtime_category' => $category,
+        //                 'reason' => $reason,
+        //                 'empID' => $empID,
+        //                 'linemanager' => $linemanager,
+        //                 'time_recommended_line' => date('Y-m-d h:i:s'),
+        //                 'time_approved_hr' => date('Y-m-d'),
+        //                 'time_confirmed_line' => date('Y-m-d h:i:s'),
+        //             );
+        //             $result = $this->flexperformance_model->apply_overtime($data);
+        //             if ($result == true) {
+        //                 echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
+        //             } else {
+        //                 echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     /*IMPREST FUNCTIONS MOVED TO IMPREST CONTROLLER*/
@@ -2755,9 +2787,13 @@ class GeneralController extends Controller
 
     ################## UPDATE EMPLOYEE INFO #############################
 
-    public function updateEmployee(Request $request, $id, $departmentID)
+    public function updateEmployee(Request $request, $id)
     {
-        $empID = base64_decode($id);
+
+        $data = explode('|',$id);
+      
+        $empID = $data[0];
+        $departmentID = $data[1];
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
         $data['title'] = "Employee";
@@ -6896,6 +6932,64 @@ class GeneralController extends Controller
         return $result;
     }
 
+    public function passwordAutogenerate(Request $request){
+        // $email_data = array(
+        //     'email' => $request->email,
+        //     'fname' => $request->fname,
+        //     'lname' => $request->lname,
+        //     'username' => $emp_id,
+        //     'password' => $password
+        // );
+
+        if($request->method() == 'POST'){
+         if($request->emp_id == 'all'){
+        $employee =  Employee::all();
+        if($request->type == 'All'){
+            $employee =  Employee::all();
+        }elseif($request->type == 1){
+            $employee =  Employee::all()->where('branch',1)->where('emp_id','!=',102927)->where('emp_id','!=',102928)->where('emp_id','!=',100281);
+        }elseif($request->type == 1){
+            $employee =  Employee::all()->whereNot('branch',1);
+        }else{
+            $employee =  Employee::all();
+        }
+         }else{
+        $employee = Employee::all()->where('emp_id',$request->emp_id);
+         }
+
+         foreach($employee as $row){
+            $pass = $this->password_generator(8);
+            $password = Hash::make($pass);
+           Employee::where('emp_id',$row->emp_id)->update(['password'=>$password]);
+            $email_data = array(
+                'email' => $row->email,
+                'fname' => $row->fname,
+                'lname' => $row->lname,
+                'username' =>$row->emp_id,
+                'password' => $pass,
+            );
+            Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
+
+         }
+
+
+          return redirect()->back()->with(['success'=>'Password changed successfully']);
+
+       }else{
+        $data['employee'] = Employee::where('state', '=', 1)->get();
+
+        return view('password-seting',$data);
+       }
+
+    }
+
+    public function download_payslip(){
+
+        $data['month_list'] = $this->flexperformance_model->payroll_month_list();
+
+        return view('my-services.payslip',$data);
+    }
+
     /**
      * Register emmployee
      *
@@ -6904,6 +6998,41 @@ class GeneralController extends Controller
     {
 
         if ($request->method() == "POST") {
+
+            $validator = Validator::make($request->all(), [
+                'fname' => 'required',
+                'mname' => 'required',
+                'currency' => 'required',
+                'emp_level' => 'required',
+                'cost_center' => 'required',
+                'leave_days_entitled' => 'required',
+                'lname' => 'required',
+                'emp_id'=>'required|unique',
+                'salary' => 'required',
+                'gender' => 'required',
+                'email' => 'required',
+                'nationality' => 'required',
+                'merital_status' => 'required',
+                'position' => 'required',
+                'contract_type' => 'required',
+                'mobile' => 'required',
+                'account_no' => 'required',
+                'bank' => 'required',
+                'bank_branch' => 'required',
+                'pension_fund' => 'required',
+                'pf_membership_no' => 'required',
+                'line_manager' => 'required',
+                'department' =>'required',
+                'branch' => 'required',
+            ]);
+
+            if($validator->fails()){
+                return response()->json([
+                    'status' => 400,
+                    'errors' => $validator->messages(),
+                ]);
+            }
+
 
             // DATE MANIPULATION
             $calendar = str_replace('/', '-', $request->input('birthdate'));
@@ -6933,7 +7062,7 @@ class GeneralController extends Controller
 
                 $password = "ABC1234";
 
-                $emp_id = $this->flexperformance_model->get_lastPayrollNo()+ 1;
+                $emp_id = $request->emp_id;
 
                 $employee = array(
                     'fname' => $request->input("fname"),
@@ -6997,6 +7126,11 @@ class GeneralController extends Controller
 
                 $id = $emp_id;
                 if ($recordID > 0) {
+                    $emp_data = Employee::where('emp_id',$emp_id)->first();
+                    $user = User::find($emp_data->id);
+                    $user->roles()->attach(6);
+
+                    $user->roles()->attach($request['role']);
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
@@ -9920,7 +10054,7 @@ class GeneralController extends Controller
         $data['overtimeCategory'] = $this->flexperformance_model->overtimeCategory();
         $data['employees'] = $this->flexperformance_model->Employee();
 
-        $data['line_overtime'] = $this->flexperformance_model->lineOvertimes(session('emp_id'));
+        $data['line_overtime'] = $this->flexperformance_model->approvedOvertimes();
 
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
         $data['parent'] = 'My Services';

@@ -194,7 +194,7 @@
     </div>
 
     <div class="card-body">
-        <p>Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</code></p>
+        <p><b>Days Accrued: <code class="text-success"> {{ $totalAccrued .' Days' }}</b></code></p>
 
 
         @if(Session::has('note'))      {{ session('note') }}  @endif
@@ -218,6 +218,7 @@
           <?php
           // if ($leave->num_rows() > 0){
             foreach ($myleave as $row) {
+                if($row->position != "Default Apllication"){
             //   if($row->status==2){ continue; }
               $date1=date_create($row->start);
               $date2=date_create($row->end);
@@ -288,7 +289,7 @@
 
               </tr>
 
-            <?php } //} ?>
+            <?php }} //} ?>
         </tbody>
       </table>
 </div>

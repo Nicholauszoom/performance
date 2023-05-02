@@ -21,7 +21,7 @@
             <div class="col-md-12 ">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                     <div class="card-header border-0 shadow-none">
-                        <h5 class="text-warning">Apply Overtime</h5>
+                        <h5 class="text-warning">Apply Overtime On Behalf</h5>
                     </div>
 
                     <div class="card-body">
@@ -34,7 +34,7 @@
                             @csrf
 
                                 <div class="row">
-                                <div class="col-6 col-md-3 mb-2">
+                                <div class="col-6 col-md-4 mb-2">
                                     <label class="col-form-label ">Overtime Category <span  class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
 
@@ -47,7 +47,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-6 col-md-3 mb-2">
+                                <div class="col-6 col-md-4 mb-2">
                                     <label class="col-form-label ">Select Employee <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
@@ -65,30 +65,20 @@
 
 
 
-                                <div class="col-6 col-md-3 mb-2">
-                                    <label class="col-form-label ">Time Start <span class="text-danger">*</span>
+                                <div class="col-6 col-md-4 mb-2">
+                                    <label class="col-form-label ">Hours <span class="text-danger">*</span>
                                         :</label>
                                     <div class="col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="text" required placeholder="Start Time" name="time_start"
-                                                id="time_start" class="form-control daterange-single">
+                                            <input type="number" required placeholder="Hours" name="days" step="0.1"
+                                                 class="form-control daterange-single">
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-6 col-md-3 mb-2">
-                                    <label class="col-form-label ">Time End <span class="text-danger">*</span>
-                                        :</label>
-                                    <div class="col-sm-12">
-                                        <div class="input-group">
-                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="text" required placeholder="Finish Time" name="time_finish"
-                                                id="time_end" class="form-control daterange-single">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-3 mb-2">
+
+                                {{-- <div class="col-6 col-md-3 mb-2">
                                     <label class="col-form-label ">Select Aprover <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
@@ -102,22 +92,65 @@
                                              @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
 
-                                <div class="col-12  mb-3">
+                                {{-- <div class="col-12  mb-3">
                                     <label class="col-form-label ">Reason for overtime <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
                                         <textarea rows="3" cols="3" required class="form-control" name="reason" placeholder='Reason'></textarea>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-perfrom float-end">Send</button>
+                                    <button type="submit" class="btn btn-perfrom float-end">Save</button>
                                 </div>
 
 
                         </form>
+<br>
+<hr>
+                        <table class="table table-striped table-bordered datatable-basic">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Employee Name</th>
+                                    <th>Department</th>
+                                    <th>Overtime Category</th>
+                                    <th>Total Overtime(in Hrs.)</th>
+                                    <th>Amount</th>
+                                  
+                                   
+                                </tr>
+                            </thead>
+            
+                            <tbody>
+                                @php
+                                    $i =0;
+                                @endphp
+                                <?php foreach ($line_overtime as $row) { ?>
+                                
+            
+            
+                                <tr>
+                                    <td width="1px"><?php echo $i++; ?></td>
+                                    <td><?php echo $row->name; ?></td>
+                                    <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
+                                    <td>{{ $row->overtime_category }} </td>
+                                    <td>{{ $row->totoalHOURS }} </td>
+                                    <td><?php echo $row->amount; ?></td>
+            
+                                   
+                                    {{-- start of cancel overtime --}}
+                                    @can('cancel-overtime')
+                                
+                                    @endcan
+                                    {{-- / --}}
+                                </tr>
+                             
+                                <?php }  ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -894,6 +927,9 @@
                 .done(function(data) {
                     $('#remaining').fadeOut('slow', function() {
                         $('#remaining').fadeIn('slow').html(data);
+                        setTimeout(function() {
+                    location.reload();
+                }, 5000)
                     });
 
 
