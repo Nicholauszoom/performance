@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('overtimes', function (Blueprint $table) {
+        Schema::table('education_qualifications', function (Blueprint $table) {
             //
-        //    $table->decimal('days',3);
+            $table->string('certificate')->nullable();
         });
     }
 
@@ -26,9 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('overtimes', function (Blueprint $table) {
+        Schema::table('education_qualifications', function (Blueprint $table) {
             //
-         //   $table->dropColumn('days');
         });
     }
 };

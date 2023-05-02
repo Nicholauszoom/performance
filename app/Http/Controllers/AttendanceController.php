@@ -20,6 +20,9 @@ use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
 use App\CustomModels\PayrollModel;
+use Illuminate\Support\Facades\Notification;
+use App\Models\EmailNotification;
+use App\Notifications\EmailRequests;
 
 
 use App\CustomModels\ReportsModel;
@@ -544,6 +547,18 @@ public function saveLeave(Request $request) {
                   $leave_type=LeaveType::where('id',$nature)->first();
                   $type_name=$leave_type->type;
 
+               //fetch Line manager data from employee table and send email
+               $linemanager =  LeaveApproval::where('emp_id',$empID)->first();
+               $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+               $fullname = $linemanager_data['full_name'];
+               $email_data = array(
+                   'subject' => 'Employee Leave Approval',
+                   'view' => 'emails.linemanager.leave-approval',
+                   'email' => $linemanager_data['email'],
+                   'full_name' => $fullname,
+               );
+               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
                   $msg=$type_name." Leave Request  Has been Requested Successfully!";
                   return $url->with('msg', $msg);
 
@@ -581,7 +596,7 @@ public function saveLeave(Request $request) {
 
 
 
-                // For Deligation
+
 
 
                 // for annual leave
@@ -734,6 +749,21 @@ public function saveLeave(Request $request) {
 
 
                 $leaves->save();
+
+
+               //fetch Line manager data from employee table and send email
+               $linemanager =  LeaveApproval::where('emp_id',$empID)->first();
+               $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+               $fullname = $linemanager_data['full_name'];
+               $email_data = array(
+                   'subject' => 'Employee Leave Approval',
+                   'view' => 'emails.linemanager.leave-approval',
+                   'email' => $linemanager_data['email'],
+                   'full_name' => $fullname,
+               );
+               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+
 
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
@@ -935,6 +965,19 @@ public function saveLeave(Request $request) {
               $leaves->save();
               $leave_type=LeaveType::where('id',$nature)->first();
               $type_name=$leave_type->type;
+
+
+               //fetch Line manager data from employee table and send email
+               $linemanager =  LeaveApproval::where('emp_id',$empID)->first();
+               $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+               $fullname = $linemanager_data['full_name'];
+               $email_data = array(
+                   'subject' => 'Employee Leave Approval',
+                   'view' => 'emails.linemanager.leave-approval',
+                   'email' => $linemanager_data['email'],
+                   'full_name' => $fullname,
+               );
+               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
               $msg=$type_name." Leave Request is submitted successfully!";
               return $url->with('msg', $msg);
