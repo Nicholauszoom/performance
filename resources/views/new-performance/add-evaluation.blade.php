@@ -54,82 +54,22 @@
                             </div>
                         </div>
                         @endforeach
-                        <div class="col-6  col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Capability:</label>
-                                <input type="number" min="0" name="Capability" id="" class="form-control"
-                                    placeholder="Enter Capability Percentage">
-                            </div>
-                        </div>
-                        <div class="col-6  col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Enterprise Risk Managementr & Government:</label>
-                                <input type="number" min="0" name="Enterprise" id="" class="form-control"
-                                    placeholder="Enter Enterprise Percentage">
-                            </div>
-                        </div>
-                        <div class="col-6  col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">People:</label>
-                                <input type="number" min="0" name="People" id="" class="form-control"
-                                    placeholder="Enter People Percentage">
-                            </div>
-                        </div>
-                        <div class="col-6  col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Customer Excellence:</label>
-                                <input type="number" min="0" name="Excellence" id="" class="form-control"
-                                    placeholder="Enter Customer Excellence Percentage">
-                            </div>
-                        </div>
-                        <div class="col-6  col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Finance:</label>
-                                <input type="number" min="0" name="Finance" id="" class="form-control"
-                                    placeholder="Enter Customer Finance Percentage">
-                            </div>
-                        </div>
+
              
                     </div>
 
                     <div class="row mb-1 mx-auto">
                         <small class="text-muted"><b>BEHAVIOUR</b> </small>
                         <hr>
-                        <div class="col-6 col-lg-6">
+                        @foreach ($behaviour as $item)
+                        <div class="col-6  col-lg-6">
                             <div class="mb-1">
-                                <label class="form-label">Partnership:</label>
-                                <input type="number" min="0" name="Partnership"  class="form-control"
-                                    placeholder="Enter Partnership Pecentage">
+                                <label class="form-label">{{ $item->name }}:</label>
+                                <input type="number" min="0" name="Capability" id="" class="form-control"
+                                    placeholder="Enter {{ $item->name }} Percentage">
                             </div>
                         </div>
-                        <div class="col-6 col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Courage:</label>
-                                <input type="number" min="0" name="Courage"  class="form-control"
-                                    placeholder="Enter Courage Pecentage">
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Integrity:</label>
-                                <input type="number" min="0" name="Integrity"  class="form-control"
-                                    placeholder="Enter Integrity Pecentage">
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Respect:</label>
-                                <input type="number" min="0" name="Respect"  class="form-control"
-                                    placeholder="Enter Respect Pecentage">
-                            </div>
-                        </div>
-                        <div class="col-6 col-lg-6">
-                            <div class="mb-1">
-                                <label class="form-label">Visible Commitment:</label>
-                                <input type="number" min="0" name="VisibleCommitment"  class="form-control"
-                                    placeholder="Enter Visible Commitment Pecentage">
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
 
 
