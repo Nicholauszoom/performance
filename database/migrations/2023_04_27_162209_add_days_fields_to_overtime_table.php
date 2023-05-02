@@ -28,7 +28,7 @@ return new class extends Migration
     {
         Schema::table('overtimes', function (Blueprint $table) {
             //
-         //   $table->dropColumn('days');
+            $table->dropColumn('days');
         });
     }
 };
