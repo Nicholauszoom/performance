@@ -751,5 +751,218 @@ class GeneralController extends Controller
 
     }
 
+    public function approveOvertime($id)
+    {
+
+        $overtimeID = $id;
+
+        // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
+        // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
+        // // $rate = $this->flexperformance_model->get_overtime_rate();
+
+        // if($status==4){
+        $signatory = session('emp_id');
+        $time_approved = date('Y-m-d');
+        $amount = 0;
+
+        $overtime = $this->flexperformance_model->get_employee_overtime($overtimeID);
+        //dd($overtime);
+
+        $emp_id = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
+
+        $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
+        if ($result == true) {
+
+
+            SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0', number_format($overtime, 2), 'Payroll Input');
+
+            echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+        }
+        // }else{
+        //   echo "<p class='alert alert-danger text-center'>Overtime is not yet Approved</p>";
+        // }
+
+    }
+
+    public function lineapproveOvertime($id)
+    {
+
+        $overtimeID = $id;
+
+        $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
+        // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
+        // $rate = $this->flexperformance_model->get_overtime_rate();
+
+        if ($status == 0) {
+            $signatory = session('emp_id');
+            $time_approved = date('Y-m-d');
+            $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
+
+            if ($result == true) {
+                echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+            }
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
+        }
+    }
+
+    public function hrapproveOvertime($id)
+    {
+
+        $overtimeID = $id;
+
+        $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
+        // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
+        // $rate = $this->flexperformance_model->get_overtime_rate();
+
+        // if($status==0){
+        $signatory = session('emp_id');
+        $time_approved = date('Y-m-d');
+        $result = $this->flexperformance_model->hrapproveOvertime($overtimeID, $signatory, $time_approved);
+        if ($result == true) {
+            echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+        }
+        // }else{
+        //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
+        // }
+
+    }
+
+    public function fin_approveOvertime($id)
+    {
+
+        $overtimeID = $id;
+
+        // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
+        // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
+        // // $rate = $this->flexperformance_model->get_overtime_rate();
+
+        // if($status==0){
+        $signatory = session('emp_id');
+        $time_approved = date('Y-m-d');
+        $result = $this->flexperformance_model->fin_approveOvertime($overtimeID, $signatory, $time_approved);
+        if ($result == true) {
+            echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+        }
+        // }else{
+        //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
+        // }
+
+    }
+
+    public function denyOvertime($id)
+    { //or disapprove
+
+        $overtimeID = $id;
+        $result = $this->flexperformance_model->deny_overtime($overtimeID);
+        if ($result == true) {
+            echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
+        }
+    }
+
+    public function cancelOvertime($id)
+    {
+        $result = $this->flexperformance_model->deleteOvertime($id);
+
+        if ($result == true) {
+            echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
+        }
+    }
+
+    public function confirmOvertimePayment(Request $request)
+    {
+
+        if ($this->uri->segment(3) != '') {
+
+            $overtimeID = $this->uri->segment(3);
+            $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 1);
+            if ($result == true) {
+                echo "<p class='alert alert-warning text-center'>Overtime Payment Confirmed Successifully</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Confirm, Please Try Again!</p>";
+            }
+        }
+    }
+
+    public function unconfirmOvertimePayment(Request $request)
+    {
+
+        if ($this->uri->segment(3) != '') {
+
+            $overtimeID = $this->uri->segment(3);
+            $result = $this->flexperformance_model->confirmOvertimePayment($overtimeID, 0);
+            if ($result == true) {
+                echo "<p class='alert alert-warning text-center'>Overtime Payment Unconfirmed Successifully</p>";
+            } else {
+                echo "<p class='alert alert-danger text-center'>FAILED to Unconfirm, Please Try Again!</p>";
+            }
+        }
+    }
+
+    public function fetchOvertimeComment(Request $request, $id)
+    {
+
+        $data['comment'] = $this->flexperformance_model->fetchOvertimeComment($id);
+        $data['mode'] = 1; // Mode 1 fo Comment Purpose and Mode 2 for Update Purpose
+        $data['parent'] = 'Overtime Remarks';
+
+        return view('overtime.overtime_info', $data);
+    }
+
+    public function commentOvertime(Request $request)
+    {
+        $overtimeID = $request->input('overtimeID');
+
+        $data = array(
+            'final_line_manager_comment' => $request->input('comment'),
+            'commit' => 1,
+        );
+
+        $this->flexperformance_model->update_overtime($data, $overtimeID);
+
+        session('note', "<p class='alert alert-success text-center'>Commented Successifully</p>");
+
+        return redirect(route('flex.overtime'));
+    }
+
+    /* public function deleteposition(Request $request)
+    {
+
+    $id = $this->uri->segment(3);
+    $data = array(
+    'state' => 0
+    );
+    $this->flexperformance_model->updateposition($data, $id);
+
+    $response_array['status'] = "OK";
+    $response_array['message'] = "<p class='alert alert-danger text-center'>Department Deleted!</p>";
+    header('Content-type: application/json');
+    echo json_encode($response_array);
+
+    }*/
+    /*{
+    $id = $request->input("id");
+    $data = array(
+    'state' => 0
+    );
+    $this->flexperformance_model->updateposition($data, $id);
+    session('note', "<p class='alert alert-warning text-center'>Position Removed Successifully</p>");
+    return  redirect('/flex/position');
+
+    }*/
+
 
 }
+

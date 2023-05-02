@@ -48,6 +48,7 @@ use App\Http\Controllers\AccessControll\DepartmentController;
 use App\Http\Controllers\AccessControll\PermissionController;
 
 use App\Http\Controllers\AccessControll\DesignationController;
+use App\Http\Controllers\EmployeePerformanceController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
 
@@ -576,6 +577,25 @@ Route::middleware('auth')->group(function () {
         Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
     });
     // end of report access permissions routes
+
+
+
+    // For New Employees
+    Route::prefix('flex/')->controller(EmployeePerformanceController::class)->group(function (){
+        Route::any('/all-employees','index')->name('flex.employee-list');
+        Route::any('/employee-performance','employee_performance')->name('flex.employee-performance');
+        Route::any('/performance-pillars','performance_pillars')->name('flex.performance-pillars');
+        Route::any('/add-evaluation/{id}','add_evaluation')->name('flex.add-evaluation');
+        Route::any('/delete-pillar/{id}','delete_pillar')->name('flex.delete-pillar');
+        Route::any('/edit-pillar/{id}','edit_pillar')->name('flex.edit-pillar');
+        Route::any('/add-pillar','add_pillar')->name('flex.add-pillar');
+        Route::any('/save-pillar','save_pillar')->name('flex.save-pillar');
+        Route::any('/update-pillar','update_pillar')->name('flex.update-pillar');
+
+
+
+    });
+    // End of new employees
 
      // start of settings access permissions routes
      Route::prefix('flex/')->controller(GeneralController::class)->group(function (){

@@ -10700,7 +10700,7 @@ class GeneralController extends Controller
 
         $item23 = 0;
         $item23_count = 0;
-        $item23_data =  array();
+        $item23_data['item23_data']  =  array();
 
         $item24 = 0;
         $item24_count = 0;
@@ -10870,31 +10870,41 @@ class GeneralController extends Controller
             }
 
 
-            // For Behaviour Outstanding
-            if ($behaviour >= 80 && $behaviour < 100) {
+             // For Behaviour Outstanding
+             if ($behaviour >= 80 && $behaviour < 100) {
                 //For Improvement
                 if ($performance > 0 && $performance < 20) {
                     $item21 = $item21 + $performance;
+                    array_push($data['item21_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                     $item21_count++;
                 }
                 // For Improvement Good
                 if ($performance >= 20 && $performance < 40) {
                     $item22 = $item22 + $performance;
+                    array_push($data['item22_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                     $item22_count++;
                 }
                 // For Improvement Strong
                 if ($performance >= 40 && $performance < 60) {
                     $item23 = $item23 + $performance;
+                    array_push($data['item23_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                     $item23_count++;
                 }
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item24 = $item24 + $performance;
+                    array_push($data['item24_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                     $item24_count++;
                 }
                 // For Improvement Outstanding
                 if ($performance >= 80 && $performance < 100) {
                     $item25 = $item25 + $performance;
+                    array_push($data['item25_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+
                     $item25_count++;
                 }
             }
@@ -11277,18 +11287,19 @@ class GeneralController extends Controller
         //  $data['very_strong'] = ($item19 > 0) ? $item19_count : 0;
         //  $data['very_strong_outstanding'] = ($item20 > 0) ? $item20_count : 0;
 
-        //  // For Column 5
-        //  $data['outstanding_improvement'] = ($item21 > 0) ? $item21_count : 0;
-        //  $data['outstanding_good'] = ($item22 > 0) ? $item22_count : 0;
-        //  $data['outstanding_strong'] = ($item23 > 0) ? $item23_count : 0;
-        //  $data['outstanding_very_strong'] = ($item24 > 0) ? $item24_count : 0;
-        //  $data['outstanding'] = ($item25 > 0) ? $item25_count : 0;
+         // For Column 5
+         $data['outstanding_improvement'] = ($item21 > 0) ? $item21_count : 0;
+         $data['outstanding_good'] = ($item22 > 0) ? $item22_count : 0;
+         $data['outstanding_strong'] = ($item23 > 0) ? $item23_count : 0;
+         $data['outstanding_very_strong'] = ($item24 > 0) ? $item24_count : 0;
+         $data['outstanding'] = ($item25 > 0) ? $item25_count : 0;
 
         $par = 'item' . $id . '_data';
         $data2['result'] = $data[$par];
         // $data2['result'] = $data['item22_data'] ;
 
-        // dd($data['item7_data'] );
+// dd($data['item23_data'] );
+// return $data2;
         return view('performance.performance_details', $data2);
     }
 

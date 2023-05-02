@@ -68,9 +68,9 @@
                         </li>
 
                         {{--  / --}}
-                           {{--  start of overtime link --}}
+                        {{--  start of overtime link --}}
 
-                           <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-pensions') ? 'active' : null }}"
                                 href="{{ route('flex.my-pensions') }}"> Pensions </a>
                         </li>
@@ -360,42 +360,65 @@
 
                 {{-- For Performance Management --}}
 
-                    <li
-                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                        <a href="#" class="nav-link">
-                            <i class="ph-folder"></i>
-                            <span>Performance Management</span>
-                        </a>
-                        <ul
-                            class="nav-group-sub collapse {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                            <li class="nav-item">
-                                <a href="{{ route('flex.projects') }}"
-                                    class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
-                                    Projects
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('flex.tasks') }}"
-                                    class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
-                                    Adhoc Tasks
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('flex.performance') }}"
-                                    class="nav-link {{ request()->routeIs('flex.performance') ? 'active' : null }}">
-                                    Performance Ratios
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('flex.performance-report') }}"
-                                    class="nav-link {{ request()->routeIs('flex.performance-report') ? 'active' : null }} ">
-                                    Performance Matrix
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li
-                    class="nav-item nav-item-submenu {{  request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-folder"></i>
+                        <span>Performance Management</span>
+                    </a>
+                    <ul
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                        <li class="nav-item">
+                            <a href="{{ route('flex.employee-list') }}"
+                                class="nav-link {{ request()->routeIs('flex.employee-list') ? 'active' : null }}">
+                                Employee Performance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.performance-pillars') }}"
+                                class="nav-link {{ request()->routeIs('flex.performance-pillars') ? 'active' : null }}">
+                                Performance Pillars
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                {{-- <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                    <a href="#" class="nav-link">
+                        <i class="ph-folder"></i>
+                        <span>Performance Management</span>
+                    </a>
+                    <ul
+                        class="nav-group-sub collapse {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                        <li class="nav-item">
+                            <a href="{{ route('flex.projects') }}"
+                                class="nav-link {{ request()->routeIs('flex.projects') ? 'active' : null }}">
+                                Projects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.tasks') }}"
+                                class="nav-link {{ request()->routeIs('flex.tasks') ? 'active' : null }}">
+                                Adhoc Tasks
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.performance') }}"
+                                class="nav-link {{ request()->routeIs('flex.performance') ? 'active' : null }}">
+                                Performance Ratios
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('flex.performance-report') }}"
+                                class="nav-link {{ request()->routeIs('flex.performance-report') ? 'active' : null }} ">
+                                Performance Matrix
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li
+                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
                         <i class="ph-graph"></i>
                         <span>Performance Acceleration</span>
@@ -405,7 +428,7 @@
                         <li class="nav-item">
                             <a href="{{ route('flex.acceleration') }}"
                                 class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
-                               Acceleration Programme
+                                Acceleration Programme
                             </a>
                         </li>
 
@@ -416,8 +439,8 @@
                             </a>
                         </li>
                     </ul>
-                </li>
-            
+                </li> --}}
+
                 {{-- / --}}
 
                 {{-- For Talent Management --}}
@@ -520,8 +543,8 @@
                             </li>
                             {{-- For Performance Reports --}}
                             <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
-                                href="{{ route('flex.performance-reports') }}">Performance Reports </a>
+                                    class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
+                                    href="{{ route('flex.performance-reports') }}">Performance Reports </a>
                             </li>
                             {{-- ./ --}}
 
@@ -600,10 +623,10 @@
                             @endif
 
                             @if (session('mng_audit'))
-                            <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('flex.passwordAutogenerate') ? 'active' : null }}"
-                                    href="{{ route('flex.passwordAutogenerate') }}">Password Reset</a></li>
-                        @endif
+                                <li class="nav-item"><a
+                                        class="nav-link {{ request()->routeIs('flex.passwordAutogenerate') ? 'active' : null }}"
+                                        href="{{ route('flex.passwordAutogenerate') }}">Password Reset</a></li>
+                            @endif
 
 
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ route('/flex/nationality')}}">Nationality</a></li>  --}}
