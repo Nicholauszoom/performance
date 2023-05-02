@@ -2150,6 +2150,7 @@ class GeneralController extends Controller
     {
 
         $days = $request->input('days');
+      
         $overtime_category = $request->input('category');
         $empID = $request->empID;
         $signatory = auth()->user()->emp_id;
@@ -2627,6 +2628,20 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deleteOvertime($id);
 
         if ($result == true) {
+            echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
+        } else {
+            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
+        }
+    }
+
+
+    public function cancelApprovedOvertimes($id)
+    {
+        $result = $this->flexperformance_model->deleteApprovedOvertime($id);
+
+        if ($result == true) {
+      //      SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0', number_format($overtime, 2), 'Payroll Input');
+
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('overtimes', function (Blueprint $table) {
             //
-        //    $table->decimal('days',3);
+           $table->dounle('days');
         });
     }
 
