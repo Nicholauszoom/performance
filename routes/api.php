@@ -48,6 +48,8 @@ Route::middleware('auth:sanctum')->group( function () {
       // For Salary slips details
       Route::get('/my-slips/{date}',[GeneralController::class,'SlipDetail']);
 
+       //for approving Leaves
+       Route::post('/approveLeave',[LeaveController::class,'approveLeave']);
 
       // For Saving Overtimes
       Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);
