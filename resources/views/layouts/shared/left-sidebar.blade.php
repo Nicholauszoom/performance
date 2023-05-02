@@ -351,7 +351,32 @@
 
                 {{-- For Performance Management --}}
                 @can('view-Performance')
+                    {{-- Start of new performance --}}
                     <li
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                        <a href="#" class="nav-link">
+                            <i class="ph-folder"></i>
+                            <span>Performance Management</span>
+                        </a>
+                        <ul
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                            <li class="nav-item">
+                                <a href="{{ route('flex.employee-list') }}"
+                                    class="nav-link {{ request()->routeIs('flex.employee-list') ? 'active' : null }}">
+                                    Employee Performance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('flex.performance-pillars') }}"
+                                    class="nav-link {{ request()->routeIs('flex.performance-pillars') ? 'active' : null }}">
+                                    Performance Pillars
+                                </a>
+                            </li>
+              
+                        </ul>
+                    </li>
+                    {{-- ./ --}}
+                    {{-- <li
                         class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                         <a href="#" class="nav-link">
                             <i class="ph-folder"></i>
@@ -384,30 +409,30 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> --}}
                     <li
-                    class="nav-item nav-item-submenu {{  request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                    <a href="#" class="nav-link">
-                        <i class="ph-graph"></i>
-                        <span>Performance Acceleration</span>
-                    </a>
-                    <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.acceleration-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                        <li class="nav-item">
-                            <a href="{{ route('flex.acceleration') }}"
-                                class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
-                               Acceleration Programme
-                            </a>
-                        </li>
-          
-                        <li class="nav-item">
-                            <a href="{{ route('flex.acceleration-report') }}"
-                                class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
-                                Acceleration Matrix
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                        <a href="#" class="nav-link">
+                            <i class="ph-graph"></i>
+                            <span>Performance Acceleration</span>
+                        </a>
+                        <ul
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.acceleration') || request()->routeIs('flex.acceleration-report') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                            <li class="nav-item">
+                                <a href="{{ route('flex.acceleration') }}"
+                                    class="nav-link {{ request()->routeIs('flex.acceleration') ? 'active' : null }}">
+                                    Acceleration Programme
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('flex.acceleration-report') }}"
+                                    class="nav-link {{ request()->routeIs('flex.acceleration-report') ? 'active' : null }} ">
+                                    Acceleration Matrix
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @endcan
                 {{-- / --}}
 
@@ -511,8 +536,8 @@
                             </li>
                             {{-- For Performance Reports --}}
                             <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
-                                href="{{ route('flex.performance-reports') }}">Performance Reports </a>
+                                    class="nav-link {{ request()->routeIs('flex.performance-reports') ? 'active' : null }}"
+                                    href="{{ route('flex.performance-reports') }}">Performance Reports </a>
                             </li>
                             {{-- ./ --}}
 
