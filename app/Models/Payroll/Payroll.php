@@ -2542,8 +2542,9 @@ as gross,
 
     public function checkInputMonth($date){
         $calender = explode('-',$date);
-        $month = $calender[0].'-'.$calender[1];
-        $query = "SELECT count(id) from input_submissions where date like '%".$month."%'";
+        $month = $calender[0].'-'.$calender[2];
+    //dd($calender);
+        $query = "SELECT count(id) from input_submissions where updated_at like '".$month."%'";
 
         return DB::select(DB::raw($query));
     }

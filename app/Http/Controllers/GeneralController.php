@@ -5443,8 +5443,8 @@ class GeneralController extends Controller
 
             $submission  = $this->payroll_model->checkInputMonth($date);
 
-            if ($month > 1) {
-                if ($submission > 1) {
+            if ($month < 1) {
+                if ($submission < 1) {
                     $allowances = $this->payroll_model->getAssignedAllowance();
                     foreach ($allowances as $row) {
                         if ($row->state == 1) {
@@ -5456,7 +5456,7 @@ class GeneralController extends Controller
                         SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? $row->amount . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
                     }
                     InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
-                    echo "<p class='alert alert-danger text-center'>Inputs  submitted Successfuly</p>";
+                    echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
                 } else {
                     echo "<p class='alert alert-danger text-center'>Inputs for this payroll month already submitted</p>";
                 }
