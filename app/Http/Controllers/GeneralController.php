@@ -2150,7 +2150,7 @@ class GeneralController extends Controller
     {
 
         $days = $request->input('days');
-      
+
         $overtime_category = $request->input('category');
         $empID = $request->empID;
         $signatory = auth()->user()->emp_id;
@@ -2163,6 +2163,10 @@ class GeneralController extends Controller
 
         $result =   $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
+            $amount = $days*($employee_data->salary/176)*$percent;
+
+            SysHelpers::FinancialLogs($empID, 'Direct Assig Overtime', '0', number_format($amount, 2), 'Payroll Input');
+
             echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
         } else {
             echo "<p class='alert alert-danger text-center'>Overtime Request not saved Successifully</p>";
@@ -2637,10 +2641,11 @@ class GeneralController extends Controller
 
     public function cancelApprovedOvertimes($id)
     {
+        $data = $this->flexperformance_model->getDeletedOvertime($id);
         $result = $this->flexperformance_model->deleteApprovedOvertime($id);
 
         if ($result == true) {
-      //      SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0', number_format($overtime, 2), 'Payroll Input');
+           SysHelpers::FinancialLogs($data->empID, 'Direct Cancel  Overtime', number_format($data->amount, 2),'0','Payroll Input');
 
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {

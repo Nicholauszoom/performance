@@ -670,6 +670,12 @@ class FlexPerformanceModel extends Model
        return true;
    }
 
+   public function getDeletedOvertime($id){
+    $query = "SELECT * from overtimes where id = '".$id."' limit 1";
+$row = DB::select(DB::raw($query));
+    return $row[0] ;
+   }
+
 	public function lineapproveOvertime($id, $time_approved) {
 
         $query = DB::transaction(function() use($id, $time_approved)
