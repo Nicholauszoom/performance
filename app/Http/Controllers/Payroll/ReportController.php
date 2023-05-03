@@ -785,10 +785,13 @@ dd($data['paye_terminated']);
                 //include(app_path() . '/reports/customleave_report.php');
                 // include app_path() . '/reports/payslip.php';
 
-                return view('payroll.payslip_details', $data);
+                //return view('payroll.payslip_details_pdf', $data);
                // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
-               // return $pdf->download('payslip_for_' . $empID . '.pdf');
+             $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'landscape');
+
+
+             return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
         } else {
             // DATE MANIPULATION
