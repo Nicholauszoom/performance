@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('cert_qualification');
             $table->string('cert_number');
             $table->string('cert_status');
-            $table->string('certificate')->nullable();
+            // $table->string('certificate')->nullable();
             $table->timestamps();
         });
     }

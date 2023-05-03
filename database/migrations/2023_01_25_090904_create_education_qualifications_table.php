@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('end_year');
             $table->string('study_location');
             $table->string('final_score');
-            $table->string('certificate')->nullable();
+            // $table->string('certificate')->nullable();
             $table->timestamps();
         });
     }

@@ -39,7 +39,7 @@
 
 
                 <div class="card-body">
-                    <h5><span  class="text-danger">*</span> </h5>
+                    <h6><span  class="text-danger">*</span> EMPLOYEE EVALUATION CRITERIAS </h6>
                     <hr>
                     <div class="row mb-1 ">
 
@@ -50,7 +50,8 @@
                             <div class="mb-1">
                                 <label class="form-label">{{ $item->name }}:</label>
                                 <input type="number" min="0" name="Capability" id="" class="form-control"
-                                    placeholder="Enter {{ $item->name }} Percentage">
+                                    value="0">
+                                <input type="hidden" value="{{ $evaluation->id}}" name="evaluation_id">
                             </div>
                         </div>
                         @endforeach
@@ -65,8 +66,9 @@
                         <div class="col-6  col-lg-6">
                             <div class="mb-1">
                                 <label class="form-label">{{ $item->name }}:</label>
-                                <input type="number" min="0" name="Capability" id="" class="form-control"
-                                    placeholder="Enter {{ $item->name }} Percentage">
+                                <input type="number" min="0" name="Capability" id="" class="form-control" value="0">
+                                <input type="hidden" value="{{ $evaluation->id}}" name="evaluation_id">
+
                             </div>
                         </div>
                         @endforeach

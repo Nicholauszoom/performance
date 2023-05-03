@@ -23,7 +23,7 @@
 
 
             </div>
-            <a href="{{ url('flex/add-evaluation/'.$employee->emp_id) }}" class="btn btn-sm btn-main float-end"> New Evaluation </a>
+            <a href="{{ url('flex/save-evaluation/'.$employee->emp_id) }}" class="btn btn-sm btn-main float-end"> New Evaluation </a>
        
            
        
@@ -37,6 +37,45 @@
                             {{ session('msg') }}
                         </div>
                     @endif
+
+                    <table class="table datatable-basic">
+                        <thead>
+                            <th>SN</th>
+                            <th>Holiday</th>
+                            <th>Date</th>
+                            <th>Recurring</th>
+                            <th>Actions</th>
+                            <th hidden></th>
+                        </thead>
+                        <tbody>
+                            <?php $i=1; ?>
+                            @forelse ($evaluations as $item )
+                                <tr>
+                                    <td>{{ $i++}}</td>
+                                    <td>{{ $item->name}}</td>
+                                    <td>{{ $item->date}}</td>
+                                    <td>{{ $item->recurring=='1'? 'Yes':'No' }}</td>
+                                    <td>
+                                        <a href="{{ route('flex.editholiday', base64_encode($item->id)) }}" class="btn btn-sm btn-main">
+                                            <i class="ph-pen"></i>
+                                        </a>
+    
+                                        <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                                        onclick="deleteHoliday(<?php echo $item->id; ?>)">
+                                        <button class="btn btn-danger btn-sm"><i class="ph-trash"></i> </button>
+                                         </a>
+    
+                                    </td>
+                                    <td hidden>
+    
+                                    </td>
+                                </tr>
+                            @empty
+    
+                            @endforelse
+                        </tbody>
+                    </table>
+                 
 
                 </div>
             </div>
