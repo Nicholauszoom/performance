@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EMPL;
+use App\Models\EmployeeEvaluation;
 use App\Models\PerformancePillar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,8 @@ class EmployeePerformanceController extends Controller
     // For Employee Performance History
     public function employee_performance(Request $request)
     {
-        $employee=EMPL::where('emp_id',$request->empID)->first();
+        // $employee=EMPL::where('emp_id',$request->empID)->first();
+        $data['evaluations']=EmployeeEvaluation::where('empID',$request->empID)->latest()->get();
         $data['employee']=EMPL::where('emp_id',$request->empID)->first();
         return view('new-performance.employee-performance',$data);
         // dd($employee);
@@ -94,16 +96,48 @@ class EmployeePerformanceController extends Controller
     }
 
 
-    // For Add Employee Evaluation
-    public function add_evaluation ($id)
+    // For Save Employee Evaluation
+    public function save_evaluation ($id)
     {
-        $data['employee']=EMPL::where('emp_id',$id)->first();
+        $evaluation=new EmployeeEvaluation();
+        $evaluation->empID=$id;
+        $evaluation->save();
+
+        return redirect('flex/add-evaluation/'.$evaluation->id);
+    }
+
+    // For Add Employee Evaluation 
+    public function add_evaluation($id)
+    {
+        $evaluation=EmployeeEvaluation::where('id',$id)->first();
+        $data['evaluation']=EmployeeEvaluation::where('id',$id)->first();
+        $data['employee']=EMPL::where('emp_id',$evaluation->empID)->first();
         $data['strategy']=PerformancePillar::where('type','Strategy')->latest()->get();
         $data['behaviour']=PerformancePillar::where('type','Behaviour')->latest()->get();
-
         return view('new-performance.add-evaluation',$data);
-
     }
+
+    // For Save Employee Evaluation Criterias
+    public function save_criterias(Request $request)
+    {
+        $data = $request->input('data'); // assuming the form input name for the data is "data"
+    
+        foreach ($data as $entry) {
+            $pillar_id = $entry['pillar_id'];
+            $target = $entry['target'];
+            
+            // insert the data into the database
+            DB::table('users')->insert([
+                'pillar_id' => $pillar_id,
+                'target' => $target
+            ]);
+        }
+        return redirect()->back()->with('success', 'Data inserted successfully.');
+    }
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *

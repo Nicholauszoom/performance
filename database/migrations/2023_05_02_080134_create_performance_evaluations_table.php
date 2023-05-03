@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('employee_evaluations', function (Blueprint $table) {
+        Schema::create('performance_evaluations', function (Blueprint $table) {
             $table->id();
-            $table->integer('empID');
+            $table->foreignId('evaluation_id');
+            $table->foreignId('pillar_id');
+            $table->double('target');
+            $table->double('achieved');
             $table->boolean('status')->default('0');
             $table->timestamps();
-
         });
     }
 
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_evaluations');
+        Schema::dropIfExists('performance_evaluations');
     }
 };
