@@ -735,6 +735,7 @@ dd($data['paye_terminated']);
                     return redirect('/flex/userprofile/?id=' . $empID);
                 }
             } else {
+                $emp = Employee::where('emp_id',$empID)->first();
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
                 $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
                 $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
@@ -753,6 +754,7 @@ dd($data['paye_terminated']);
                 $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
                 $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
                 $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
+                $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID, $emp->hire_date, $payroll_month_end);
 
                 $slipinfo = $data['slipinfo'];
                 $leaves = $data['leaves'];
@@ -783,10 +785,10 @@ dd($data['paye_terminated']);
                 //include(app_path() . '/reports/customleave_report.php');
                 // include app_path() . '/reports/payslip.php';
 
-                //return view('payroll.payslip2', $data);
-                $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
+                return view('payroll.payslip_details', $data);
+               // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
-                return $pdf->download('payslip_for_' . $empID . '.pdf');
+               // return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
         } else {
             // DATE MANIPULATION
