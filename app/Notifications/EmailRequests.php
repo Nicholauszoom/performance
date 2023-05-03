@@ -17,7 +17,7 @@ class EmailRequests extends Notification
      * @return void
      */
     protected $email_data;
-    protected $data;
+    protected $data;    
     public function __construct(array $email_data)
     {
         //

@@ -108,7 +108,7 @@
           {{-- start of attachment --}}
 
           <div class="form-group col-6" style="display:none" id="attachment">
-            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment</label>
+            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment<span  class="text-danger">*</span></label></label>
             <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
               <input class="form-control col-md-7 col-xs-12"  type="file" name="image">
               <span class="text-danger"><?php// echo form_error("mname");?></span>

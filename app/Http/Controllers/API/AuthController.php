@@ -115,7 +115,6 @@ class AuthController extends Controller
 
             $result=$this->dateDiffCalculate();
             session(['pass_age' => $result]);
-
             $pass_age = session()->get('pass_age');
             // $pass_age = session()->all();
              //  dd(session()->all());

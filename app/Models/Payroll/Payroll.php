@@ -13,7 +13,7 @@ class Payroll extends Model {
         return DB::select(DB::raw($query));
     }
     public function payroll_month_list() {
-        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs ORDER BY payroll_date DESC';
+        $query = 'SELECT DISTINCT payroll_date FROM payroll_logs where payroll_date > "2022-12-31" ORDER BY payroll_date DESC';
         return DB::select(DB::raw($query));
     }
     public function payroll_year_list() {
@@ -2535,17 +2535,20 @@ as gross,
         $calender = explode('-',$date);
 
         $month = $calender[0].'-'.$calender[1];
-        $query = "SELECT count(id) from payroll_months where payroll_date like '%".$month."%'";
+        $query = "SELECT count(id) as total from payroll_months where payroll_date like '%".$month."%'";
 
-        return DB::select(DB::raw($query));
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->total;
     }
 
     public function checkInputMonth($date){
         $calender = explode('-',$date);
-        $month = $calender[0].'-'.$calender[1];
-        $query = "SELECT count(id) from input_submissions where date like '%".$month."%'";
-
-        return DB::select(DB::raw($query));
+        $month = $calender[0].'-'.$calender[2];
+    //dd($calender);
+        $query = "SELECT count(id) as total from  input_submissions where updated_at like '".$month."%'";
+        $row = DB::select(DB::raw($query));
+        return $row[0]->total;
     }
 
     public function getPayrollMonth1() {

@@ -16,69 +16,71 @@
 @section('content')
     {{-- start of apply overtime div --}}
     @can('add-overtime')
-    <div id="apply_overtime">
-        <div class="row">
-            <div class="col-md-12 ">
-                <div class="card border-top  border-top-width-3 border-top-main rounded-0">
-                    <div class="card-header border-0 shadow-none">
-                        <h5 class="text-warning">Apply Overtime On Behalf</h5>
-                    </div>
+        <div id="apply_overtime">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="card border-top  border-top-width-3 border-top-main rounded-0">
+                        <div class="card-header border-0 shadow-none">
+                            <h5 class="text-warning">Apply Overtime On Behalf</h5>
+                        </div>
 
-                    <div class="card-body">
-                        <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
-                            <code class="text-success">  <span id="remain" class="text-success"></span> </code>
+                        <div class="card-body">
+                            <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
+                                <code class="text-success"> <span id="remain" class="text-success"></span> </code>
 
-                          </div>
-                        <form id="applyOvertime" enctype="multipart/form-data" method="post" data-parsley-validate
-                            autocomplete="off">
-                            @csrf
+                            </div>
+                            <form id="applyOvertime" enctype="multipart/form-data" method="post" data-parsley-validate
+                                autocomplete="off">
+                                @csrf
 
                                 <div class="row">
-                                <div class="col-6 col-md-4 mb-2">
-                                    <label class="col-form-label ">Overtime Category <span  class="text-danger">*</span> :</label>
-                                    <div class="col-sm-12">
+                                    <div class="col-6 col-md-4 mb-2">
+                                        <label class="col-form-label ">Overtime Category <span class="text-danger">*</span>
+                                            :</label>
+                                        <div class="col-sm-12">
 
-                                        <select class="form-control select_category select" name="category" required>
-                                            <option selected disabled> Select </option>
-                                            @foreach ($overtimeCategory as $overtimeCategorie)
-                                                <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-4 mb-2">
-                                    <label class="col-form-label ">Select Employee <span
-                                            class="text-danger">*</span> :</label>
-                                    <div class="col-sm-12">
-                                        <select class="form-control select" name="empID" id="empID">
-                                            <option selected disabled> Select Employee</option>
-                                            @foreach ($employees as $employee)
-                                            @if($employee->emp_id != auth()->user()->emp_id)
-                                                <option value="{{ $employee->emp_id }}">{{ $employee->emp_id }} - {{ $employee->fname }}
-                                                    {{ $employee->mname }} {{ $employee->lname }}</option>
-                                            @endif
-                                             @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-6 col-md-4 mb-2">
-                                    <label class="col-form-label ">Hours <span class="text-danger">*</span>
-                                        :</label>
-                                    <div class="col-sm-12">
-                                        <div class="input-group">
-                                            <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                            <input type="number" required placeholder="Hours" name="days" step="0.1"
-                                                 class="form-control daterange-single">
+                                            <select class="form-control select_category select" name="category" required>
+                                                <option selected disabled> Select </option>
+                                                @foreach ($overtimeCategory as $overtimeCategorie)
+                                                    <option value="{{ $overtimeCategorie->id }}"> {{ $overtimeCategorie->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="col-6 col-md-4 mb-2">
+                                        <label class="col-form-label ">Select Employee <span class="text-danger">*</span>
+                                            :</label>
+                                        <div class="col-sm-12">
+                                            <select class="form-control select" name="empID" id="empID">
+                                                <option selected disabled> Select Employee</option>
+                                                @foreach ($employees as $employee)
+                                                    @if ($employee->emp_id != auth()->user()->emp_id)
+                                                        <option value="{{ $employee->emp_id }}">{{ $employee->emp_id }} -
+                                                            {{ $employee->fname }}
+                                                            {{ $employee->mname }} {{ $employee->lname }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
 
 
-                                {{-- <div class="col-6 col-md-3 mb-2">
+
+                                    <div class="col-6 col-md-4 mb-2">
+                                        <label class="col-form-label ">Hours <span class="text-danger">*</span>
+                                            :</label>
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                                <input type="number" required placeholder="Hours" name="days" step="0.01"
+                                                    class="form-control daterange-single">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    {{-- <div class="col-6 col-md-3 mb-2">
                                     <label class="col-form-label ">Select Aprover <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
@@ -94,7 +96,7 @@
                                     </div>
                                 </div> --}}
 
-                                {{-- <div class="col-12  mb-3">
+                                    {{-- <div class="col-12  mb-3">
                                     <label class="col-form-label ">Reason for overtime <span
                                             class="text-danger">*</span> :</label>
                                     <div class="col-sm-12">
@@ -102,65 +104,65 @@
                                     </div>
                                 </div> --}}
 
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-perfrom float-end">Save</button>
-                                </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-perfrom float-end">Save</button>
+                                    </div>
 
 
-                        </form>
-<br>
-<hr>
-                        <table class="table table-striped table-bordered datatable-basic">
-                            <thead>
-                                <tr>
-                                    <th>S/N</th>
-                                    <th>Employee Name</th>
-                                    <th>Department</th>
-                                    <th>Overtime Category</th>
-                                    <th>Total Overtime(in Hrs.)</th>
-                                    <th>Amount</th>
-                                  
-                                   
-                                </tr>
-                            </thead>
-            
-                            <tbody>
-                                @php
-                                    $i =0;
-                                @endphp
-                                <?php foreach ($line_overtime as $row) { ?>
-                                
-            
-            
-                                <tr>
-                                    <td width="1px"><?php echo $i++; ?></td>
-                                    <td><?php echo $row->name; ?></td>
-                                    <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
-                                    <td>{{ $row->overtime_category }} </td>
-                                    <td>{{ $row->totoalHOURS }} </td>
-                                    <td><?php echo $row->amount; ?></td>
-            
-                                   
-                                    {{-- start of cancel overtime --}}
-                                    @can('cancel-overtime')
-                                
-                                    @endcan
-                                    {{-- / --}}
-                                </tr>
-                             
-                                <?php }  ?>
-                            </tbody>
-                        </table>
+                            </form>
+                            <br>
+                            <hr>
+                            <table class="table table-striped table-bordered datatable-basic">
+                                <thead>
+                                    <tr>
+                                        <th>S/N</th>
+                                        <th>Employee Name</th>
+                                        <th>Department</th>
+                                        <th>Overtime Category</th>
+                                        <th>Total Overtime(in Hrs.)</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @php
+                                        $i = 0;
+                                    @endphp
+                                    <?php foreach ($line_overtime as $row) { ?>
+
+
+
+                                    <tr>
+                                        <td width="1px"><?php echo $i++; ?></td>
+                                        <td><?php echo $row->name; ?></td>
+                                        <td><?php echo '<b>Department: </b>' . $row->DEPARTMENT . '<br><b>Position: </b>' . $row->POSITION; ?></td>
+                                        <td>{{ $row->overtime_category }} </td>
+                                        <td>{{ $row->totoalHOURS }} </td>
+                                        <td><?php echo $row->amount; ?></td>
+
+
+                                        <td> <a href="javascript:void(0)" title="Approve" class="me-2"
+                                                onclick="cancelOvertime(<?php echo $row->id; ?>)">
+                                                <button class="btn btn-danger btn-xs"><i class="ph-x"></i></button>
+                                            </a></td>
+                                    </tr>
+
+                                    <?php }  ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @endcan
     {{-- / --}}
 
 
-</div>
+    </div>
     {{-- @endcan --}}
     {{-- / --}}
 @endsection
@@ -215,7 +217,7 @@
                         $('#status' + id).fadeOut('fast', function() {
                             $('#status' + id).fadeIn('fast').html(
                                 '<div class="col-md-12"><span class="label label-success">HELD</span></div>'
-                                );
+                            );
                         });
 
                         alert('Request Canceled!');
@@ -246,25 +248,25 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/approveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            url: "{{ url('flex/approveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });
+                            $('#record'+id).fadeOut('fast', function(){
+                                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });*/
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Approval Failed!! ...');
                         });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
-                    });
                 }
             });
 
@@ -312,30 +314,30 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/lineapproveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
+                            url: "{{ url('flex/lineapproveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
 
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-
-                        /*$('#status'+id).fadeOut('fast', function(){
-                            $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
                             });
-                        $('#record'+id).fadeOut('fast', function(){
-                            $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                            });*/
 
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        // Basic initialization
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                                });
+                            $('#record'+id).fadeOut('fast', function(){
+                                $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                                });*/
 
-                        alert('Overtime Approval Failed!! ...');
-                    });
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            // Basic initialization
+
+                            alert('Overtime Approval Failed!! ...');
+                        });
                 }
             });
 
@@ -387,25 +389,25 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/hrapproveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            url: "{{ url('flex/hrapproveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });
+                            $('#record'+id).fadeOut('fast', function(){
+                                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });*/
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Approval Failed!! ...');
                         });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
-                    });
                 }
             });
 
@@ -450,25 +452,25 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ url('flex/fin_approveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            url: "{{ url('flex/fin_approveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });
+                            $('#record'+id).fadeOut('fast', function(){
+                                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });*/
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Approval Failed!! ...');
                         });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
-                    });
                 }
             });
 
@@ -514,27 +516,27 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/denyOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
+                            url: "{{ url('flex/denyOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
                                 );
-                        });
-                        $('#record' + id).fadeOut('fast', function() {
-                            $('#record' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
+                            });
+                            $('#record' + id).fadeOut('fast', function() {
+                                $('#record' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
                                 );
+                            });
+                            alert('Request Dissaproved! ...');
+                        })
+                        .fail(function() {
+                            alert('Overtime Dissaproval Failed!! ...');
                         });
-                        alert('Request Dissaproved! ...');
-                    })
-                    .fail(function() {
-                        alert('Overtime Dissaproval Failed!! ...');
-                    });
                 }
             });
 
@@ -583,25 +585,25 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/recommendOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>'
+                            url: "{{ url('flex/recommendOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>'
                                 );
+                            });
+                            alert('Request Recommended Successifully!! ...');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Recommendation Failed!! ...');
                         });
-                        alert('Request Recommended Successifully!! ...');
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Recommendation Failed!! ...');
-                    });
                 }
             });
 
@@ -648,25 +650,25 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/confirmOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>'
+                            url: "{{ url('flex/confirmOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>'
                                 );
+                            });
+                            alert('Request Confirmed Successifully!! ...');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Confirmation Failed!! ...');
                         });
-                        alert('Request Confirmed Successifully!! ...');
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Confirmation Failed!! ...');
-                    });
                 }
             });
 
@@ -715,40 +717,40 @@
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
+                            url: "{{ url('flex/cancelApprovedOvertimes') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
 
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
                                 );
+                            });
+
+                            // alert('Request Cancelled Successifully!! ...');
+
+                            Swal.fire(
+                                'Cancelled!',
+                                'Request Cancelled Successifully1!!.',
+                                'success'
+                            )
+
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        })
+                        .fail(function() {
+                            Swal.fire(
+                                'Failed!',
+                                'Overtime Cancellation Failed!! ....',
+                                'success'
+                            )
+
+                            alert('Overtime Cancellation Failed!! ...');
                         });
-
-                        // alert('Request Cancelled Successifully!! ...');
-
-                        Swal.fire(
-                            'Cancelled!',
-                            'Request Cancelled Successifully!!.',
-                            'success'
-                        )
-
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
-                    })
-                    .fail(function() {
-                        Swal.fire(
-                            'Failed!',
-                            'Overtime Cancellation Failed!! ....',
-                            'success'
-                        )
-
-                        alert('Overtime Cancellation Failed!! ...');
-                    });
                 }
             });
 
@@ -928,14 +930,14 @@
                     $('#remaining').fadeOut('slow', function() {
                         $('#remaining').fadeIn('slow').html(data);
                         setTimeout(function() {
-                    location.reload();
-                }, 5000)
+                            location.reload();
+                        }, 5000)
                     });
 
 
                     // setTimeout(function() {
                     //                         var url =
-                    //                             "{{route('flex.overtime')}}"
+                    //                             "{{ route('flex.overtime') }}"
                     //                         window.location.href = url;
                     //                     }, 1000)
 
@@ -949,35 +951,30 @@
     </script>
 
 
-<script>
+    <script>
+        $('#docNo').change(function() {
+            var id = $(this).val();
+            var url = '{{ route('getDetails', ':id') }}';
+            url = url.replace(':id', id);
 
-$('#docNo').change(function(){
-    var id = $(this).val();
-    var url = '{{ route("getDetails", ":id") }}';
-    url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function(response) {
+                    if (response != null) {
 
-    $.ajax({
-        url: url,
-        type: 'get',
-        dataType: 'json',
-        success: function(response){
-            if(response != null){
+                        document.getElementById("oldsalary").value = response.salary;
+                        document.getElementById("oldRate").value = response.rate;
 
-                document.getElementById("oldsalary").value = response.salary;
-                document.getElementById("oldRate").value = response.rate;
-
-                $('#salary').val(response.salary+' '+response.currency);
-                $('#oldLevel').val(response.emp_level);
-                $('#oldPosition').val(response.position.name);
-            }
-        }
-    });
-});
-
-
-</script>
-
-
+                        $('#salary').val(response.salary + ' ' + response.currency);
+                        $('#oldLevel').val(response.emp_level);
+                        $('#oldPosition').val(response.position.name);
+                    }
+                }
+            });
+        });
+    </script>
 @endpush
 @push('footer-script')
     {{-- @include("app.includes.overtime_operations") --}}
@@ -1029,7 +1026,7 @@ $('#docNo').change(function(){
                         $('#status' + id).fadeOut('fast', function() {
                             $('#status' + id).fadeIn('fast').html(
                                 '<div class="col-md-12"><span class="label label-success">HELD</span></div>'
-                                );
+                            );
                         });
 
                         alert('Request Canceled!');
@@ -1060,25 +1057,25 @@ $('#docNo').change(function(){
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/approveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            url: "{{ url('flex/approveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });
+                            $('#record'+id).fadeOut('fast', function(){
+                                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });*/
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Approval Failed!! ...');
                         });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
-                    });
                 }
             });
 
@@ -1126,30 +1123,30 @@ $('#docNo').change(function(){
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/lineapproveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
+                            url: "{{ url('flex/lineapproveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
 
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-
-                        /*$('#status'+id).fadeOut('fast', function(){
-                            $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
                             });
-                        $('#record'+id).fadeOut('fast', function(){
-                            $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                            });*/
 
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        // Basic initialization
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                                });
+                            $('#record'+id).fadeOut('fast', function(){
+                                $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                                });*/
 
-                        alert('Overtime Approval Failed!! ...');
-                    });
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            // Basic initialization
+
+                            alert('Overtime Approval Failed!! ...');
+                        });
                 }
             });
 
@@ -1201,25 +1198,25 @@ $('#docNo').change(function(){
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/hrapproveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            url: "{{ url('flex/hrapproveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });
+                            $('#record'+id).fadeOut('fast', function(){
+                                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });*/
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Approval Failed!! ...');
                         });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
-                    });
                 }
             });
 
@@ -1264,25 +1261,25 @@ $('#docNo').change(function(){
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{ url('flex/fin_approveOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            url: "{{ url('flex/fin_approveOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            /*$('#status'+id).fadeOut('fast', function(){
+                                 $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });
+                            $('#record'+id).fadeOut('fast', function(){
+                                 $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
+                               });*/
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Approval Failed!! ...');
                         });
-                        /*$('#status'+id).fadeOut('fast', function(){
-                             $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });
-                        $('#record'+id).fadeOut('fast', function(){
-                             $('#record'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-success">APPROVED</span></div>');
-                           });*/
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Approval Failed!! ...');
-                    });
                 }
             });
 
@@ -1328,27 +1325,27 @@ $('#docNo').change(function(){
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/denyOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
+                            url: "{{ url('flex/denyOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
                                 );
-                        });
-                        $('#record' + id).fadeOut('fast', function() {
-                            $('#record' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
+                            });
+                            $('#record' + id).fadeOut('fast', function() {
+                                $('#record' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-danger">DISAPPROVED</span></div>'
                                 );
+                            });
+                            alert('Request Dissaproved! ...');
+                        })
+                        .fail(function() {
+                            alert('Overtime Dissaproval Failed!! ...');
                         });
-                        alert('Request Dissaproved! ...');
-                    })
-                    .fail(function() {
-                        alert('Overtime Dissaproval Failed!! ...');
-                    });
                 }
             });
 
@@ -1397,25 +1394,25 @@ $('#docNo').change(function(){
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/recommendOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>'
+                            url: "{{ url('flex/recommendOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-info">RECOMENDED</span></div>'
                                 );
+                            });
+                            alert('Request Recommended Successifully!! ...');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Recommendation Failed!! ...');
                         });
-                        alert('Request Recommended Successifully!! ...');
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Recommendation Failed!! ...');
-                    });
                 }
             });
 
@@ -1462,25 +1459,25 @@ $('#docNo').change(function(){
                     var overtimeid = id;
 
                     $.ajax({
-                        url: "{{ url('flex/confirmOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>'
+                            url: "{{ url('flex/confirmOvertime') }}/" + overtimeid
+                        })
+                        .done(function(data) {
+                            $('#resultfeedOvertime').fadeOut('fast', function() {
+                                $('#resultfeedOvertime').fadeIn('fast').html(data);
+                            });
+                            $('#status' + id).fadeOut('fast', function() {
+                                $('#status' + id).fadeIn('fast').html(
+                                    '<div class="col-md-12"><span class="label label-info">CONFIRMED</span></div>'
                                 );
+                            });
+                            alert('Request Confirmed Successifully!! ...');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        })
+                        .fail(function() {
+                            alert('Overtime Confirmation Failed!! ...');
                         });
-                        alert('Request Confirmed Successifully!! ...');
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    })
-                    .fail(function() {
-                        alert('Overtime Confirmation Failed!! ...');
-                    });
                 }
             });
 
@@ -1514,87 +1511,87 @@ $('#docNo').change(function(){
 
 
 
-        function cancelOvertime(id) {
+        // function cancelOvertime(id) {
 
-            Swal.fire({
-                title: 'Are You Sure You Want to Cancel This Overtime Request?',
-                // text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var overtimeid = id;
+        //     Swal.fire({
+        //         title: 'Are You Sure You Want to Cancel This Overtime Request?',
+        //         // text: "You won't be able to revert this!",
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#d33',
+        //         confirmButtonText: 'Yes, delete it!'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             var overtimeid = id;
 
-                    $.ajax({
-                        url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
-                    })
-                    .done(function(data) {
-                        $('#resultfeedOvertime').fadeOut('fast', function() {
-                            $('#resultfeedOvertime').fadeIn('fast').html(data);
-                        });
+        //             $.ajax({
+        //                     url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+        //                 })
+        //                 .done(function(data) {
+        //                     $('#resultfeedOvertime').fadeOut('fast', function() {
+        //                         $('#resultfeedOvertime').fadeIn('fast').html(data);
+        //                     });
 
-                        $('#status' + id).fadeOut('fast', function() {
-                            $('#status' + id).fadeIn('fast').html(
-                                '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
-                                );
-                        });
+        //                     $('#status' + id).fadeOut('fast', function() {
+        //                         $('#status' + id).fadeIn('fast').html(
+        //                             '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+        //                         );
+        //                     });
 
-                        // alert('Request Cancelled Successifully!! ...');
+        //                     // alert('Request Cancelled Successifully!! ...');
 
-                        Swal.fire(
-                            'Cancelled!',
-                            'Request Cancelled Successifully!!.',
-                            'success'
-                        )
+        //                     Swal.fire(
+        //                         'Cancelled!',
+        //                         'Request Cancelled Successifully!!.',
+        //                         'success'
+        //                     )
 
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
-                    })
-                    .fail(function() {
-                        Swal.fire(
-                            'Failed!',
-                            'Overtime Cancellation Failed!! ....',
-                            'success'
-                        )
+        //                     setTimeout(function() {
+        //                         location.reload();
+        //                     }, 1000);
+        //                 })
+        //                 .fail(function() {
+        //                     Swal.fire(
+        //                         'Failed!',
+        //                         'Overtime Cancellation Failed!! ....',
+        //                         'success'
+        //                     )
 
-                        alert('Overtime Cancellation Failed!! ...');
-                    });
-                }
-            });
+        //                     alert('Overtime Cancellation Failed!! ...');
+        //                 });
+        //         }
+        //     });
 
-            // if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
+        //     // if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
 
-            //     var overtimeid = id;
+        //     //     var overtimeid = id;
 
-            //     $.ajax({
-            //             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
-            //         })
-            //         .done(function(data) {
-            //             $('#resultfeedOvertime').fadeOut('fast', function() {
-            //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
-            //             });
+        //     //     $.ajax({
+        //     //             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+        //     //         })
+        //     //         .done(function(data) {
+        //     //             $('#resultfeedOvertime').fadeOut('fast', function() {
+        //     //                 $('#resultfeedOvertime').fadeIn('fast').html(data);
+        //     //             });
 
-            //             $('#status' + id).fadeOut('fast', function() {
-            //                 $('#status' + id).fadeIn('fast').html(
-            //                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
-            //                     );
-            //             });
+        //     //             $('#status' + id).fadeOut('fast', function() {
+        //     //                 $('#status' + id).fadeIn('fast').html(
+        //     //                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+        //     //                     );
+        //     //             });
 
-            //             alert('Request Cancelled Successifully!! ...');
+        //     //             alert('Request Cancelled Successifully!! ...');
 
-            //             setTimeout(function() {
-            //                 location.reload();
-            //             }, 1000);
-            //         })
-            //         .fail(function() {
-            //             alert('Overtime Cancellation Failed!! ...');
-            //         });
-            // }
-        }
+        //     //             setTimeout(function() {
+        //     //                 location.reload();
+        //     //             }, 1000);
+        //     //         })
+        //     //         .fail(function() {
+        //     //             alert('Overtime Cancellation Failed!! ...');
+        //     //         });
+        //     // }
+        // }
     </script>
 
 
@@ -1726,33 +1723,28 @@ $('#docNo').change(function(){
 
 
 
-<script>
+    <script>
+        $('#docNo').change(function() {
+            var id = $(this).val();
+            var url = '{{ route('getDetails', ':id') }}';
+            url = url.replace(':id', id);
 
-$('#docNo').change(function(){
-    var id = $(this).val();
-    var url = '{{ route("getDetails", ":id") }}';
-    url = url.replace(':id', id);
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function(response) {
+                    if (response != null) {
 
-    $.ajax({
-        url: url,
-        type: 'get',
-        dataType: 'json',
-        success: function(response){
-            if(response != null){
+                        document.getElementById("oldsalary").value = response.salary;
+                        document.getElementById("oldRate").value = response.rate;
 
-                document.getElementById("oldsalary").value = response.salary;
-                document.getElementById("oldRate").value = response.rate;
-
-                $('#salary').val(response.salary+' '+response.currency);
-                $('#oldLevel').val(response.emp_level);
-                $('#oldPosition').val(response.position.name);
-            }
-        }
-    });
-});
-
-
-</script>
-
-
+                        $('#salary').val(response.salary + ' ' + response.currency);
+                        $('#oldLevel').val(response.emp_level);
+                        $('#oldPosition').val(response.position.name);
+                    }
+                }
+            });
+        });
+    </script>
 @endpush

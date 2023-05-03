@@ -274,15 +274,19 @@ class ReportController extends Controller
 
     function heslb(Request $request)
     {
-        $reportType = 1;
+        $reportType = 3;
         $payrolldate = $request->input('payrolldate');
-        $reportformat = $request->input('type'); //Staff = 1, temporary = 2
+        $reportformat = $request->input('type'); 
+        $empID=$request->input('employee');
+        //Staff = 1, temporary = 2
         if ($reportType == 1) {
             $data['heslb'] = $this->reports_model->s_heslb($payrolldate);
             $data['total'] = $this->reports_model->s_totalheslb($payrolldate);
         } else {
-            $data['heslb'] = $this->reports_model->v_heslb($payrolldate);
-            $data['total'] = $this->reports_model->v_totalheslb($payrolldate);
+            $data['heslb'] = $this->reports_model->v_heslb($payrolldate,$empID);
+          
+            $data['total'] = array_reverse($this->reports_model->v_totalheslb($payrolldate,$empID));
+      //dd($data);
         }
         $data['info'] = $this->reports_model->company_info();
         $data['payrolldate'] = $payrolldate;
@@ -291,10 +295,10 @@ class ReportController extends Controller
         $total = $data['total'];
         $info = $data['info'];
 
-        // if($reportformat == 1)
+     if($reportformat == 1)
         include(app_path() . '/reports/heslb.php');
-        // else
-        // return view('reports/heslb', $data);
+         else
+     return view('reports/heslb', $data);
     }
 
     function get_payroll_temp_summary(Request $requst)

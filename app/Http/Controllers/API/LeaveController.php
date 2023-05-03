@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use App\Models\Leaves;
 use App\Models\LeaveType;
 use App\Models\LeaveSubType;
+use App\Models\LeaveApproval;
+use App\Models\Position;
 // use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\EMPL;
@@ -19,7 +21,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Payroll\FlexPerformanceModel;
-
+use Illuminate\Support\Facades\Session;
 class LeaveController extends Controller
 {
 
@@ -33,7 +35,9 @@ class LeaveController extends Controller
       $this->flexperformance_model = new FlexPerformanceModel();
    
       $this->attendance_model = new AttendanceModel();
-   
+      session('agent', '');
+      session('platform', '');
+      session('ip_address', '');
 
     }
 
@@ -51,7 +55,10 @@ class LeaveController extends Controller
    
     $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
     $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
-  
+ 
+  //   $data['otherleave'] = $this->attendance_model->other_leaves($id);
+  //   $data['otherleaves'] = $this->attendance_model->leave_line($id);
+  //  //dd($data);
     $data = json_decode($active_leaves, true); // Decode the JSON data into an array
     $data= array_reverse($data); 
     // Loop through each object in the array
@@ -604,96 +611,113 @@ class LeaveController extends Controller
 
 
   // start of leave approval
-  public function approveLeave($id)
-    {
-      $leave=Leaves::where('id',$id)->first();
-      $empID=$leave->empID;
-      $approval=LeaveApproval::where('empID',$empID)->first();
-      $approver=Auth()->user()->emp_id;
-      $employee=Auth()->user()->position;
+  public function approveLeave(Request $request)
+    { 
+      //session('mng_emp') || session('appr_leave');
+      $id = $request->empID;
+      // $this->session->set_userdata('vw_emp', $this->flexperformance_model->getpermission($empID, '4'));
+      // $this->session->set_userdata('mng_emp', $this->flexperformance_model->getpermission($empID, '5'));
 
-      $position=Position::where('id',$employee)->first();
+      // dd(session());     dd( session($id));
+      // $leave=Leaves::find($id);
+      $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
+     // dd($data);
+      $leave=Leaves::where('empID',$id)->first();
+      
+      if($leave!=null){
+        $empID=$leave->empID;
+        $approval=LeaveApproval::where('empID',$empID)->first();
 
 
-      // chacking level 1
-      if ($approval->level1==$approver) {
 
-              // For Deligation
-          if($leave->deligated!=null){
-
-            $id=Auth::user()->emp_id;
-            $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
-            $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
-            $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
-            // dd($request->deligate);
-
-          }
+        $approver=Auth()->user()->emp_id;
+        //dd($approver);
+        $employee=Auth()->user()->position;
+      
+        $position=Position::where('id',$employee)->first();
+        // dd($position);
+  
+        // chacking level 1
+        if ($approval->level1==$approver) {
+  
+                // For Deligation
+            if($leave->deligated!=null){
+  
+              $id=Auth::user()->emp_id;
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+  
+            }
+       
+            
      
+      
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level1=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
           
-   
-    
-          $leave->status=3;
-          $leave->state=0;
-          $leave->level1=Auth()->user()->emp_id;
-          $leave->position='Recommended by '. $position->name;
-          $leave->updated_at= new DateTime();
-          $leave->update();
-        
-
-      }
-      elseif($approval->level2==$approver)
-      {
-            // For Deligation
-          if($leave->deligated!=null){
-
-            $id=Auth::user()->emp_id;
-            $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
-            $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
-            $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
-            // dd($request->deligate);
-
+  
+        }
+        elseif($approval->level2==$approver)
+        {
+              // For Deligation
+            if($leave->deligated!=null){
+  
+              $id=Auth::user()->emp_id;
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+  
+            }
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level2=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
           }
+        
+        elseif($approval->level3==$approver)
+        {
+            // For Deligation
+            if($leave->deligated!=null){
+  
+              $id=Auth::user()->emp_id;
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+  
+            }
           $leave->status=3;
           $leave->state=0;
-          $leave->level2=Auth()->user()->emp_id;
-          $leave->position='Recommended by '. $position->name;
+          $leave->level3=Auth()->user()->emp_id;
+          $leave->position=$position->name;
           $leave->updated_at= new DateTime();
           $leave->update();
         }
       
-      elseif($approval->level3==$approver)
-      {
-          // For Deligation
-          if($leave->deligated!=null){
-
-            $id=Auth::user()->emp_id;
-            $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
-            $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
-            $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
-            // dd($request->deligate);
-
-          }
-        $leave->status=3;
-        $leave->state=0;
-        $leave->level3=Auth()->user()->emp_id;
-        $leave->position=$position->name;
-        $leave->updated_at= new DateTime();
-        $leave->update();
+  
+  
+  
+  
+        $msg = "Leave Request Has been approved Successfully !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+        //return redirect('flex/attendance/leave')->with('msg', $msg);
+        return response( [ 'msg'=>$msg ],200 );
       }
-      else
-      {
-          $msg='Sorry, You are Not Authorized';
-
-          return redirect('flex/attendance/leave')->with('msg', $msg);
+      else{
+        $msg = "Sorry, Leave Request Not Found !";
+        return response( [ 'msg'=>$msg ],401 );
+       // return redirect('flex/attendance/leave')->with('msg', $msg);
       }
-
-
-
-
-      $msg = "Leave Request Has been Approves Successfully !";
-      // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
-      return redirect('flex/attendance/leave')->with('msg', $msg);
-
+     
 
     }
 

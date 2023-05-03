@@ -448,7 +448,7 @@ class FlexPerformanceModel extends Model
 	}
 
     function approvedOvertimes(){
-		$query = "SELECT  CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION,
+		$query = "SELECT  eo.id as id,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION,
 		  eo.days as totoalHOURS,eo.amount,eo.status as status,oc.name as overtime_category
 		FROM employee e, overtimes eo, position p, department d,overtime_category oc, (SELECT @s:=0) as s WHERE   e.department = d.id and eo.empID = e.emp_id  and e.position = p.id and eo.overtime_category = oc.id  ORDER BY eo.id DESC";
 
@@ -643,7 +643,7 @@ class FlexPerformanceModel extends Model
         return $row[0]->day_percent;
     }
 
- 
+
 
     function direct_insert_overtime($empID, $signatory, $overtime_category,$date,$days,$percent,$line_maager) {
         $time_start = $date;
@@ -653,10 +653,11 @@ class FlexPerformanceModel extends Model
         $time_approved = $date;
         $type = 0;
 
+
     //     DB::transaction(function() use($id,$signatory, $time_approved)
     //   {
-       $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time) SELECT 1, '".$empID."', '".$time_start."','".$time_end."','".$overtime_category."', (('".$days."') * ((e.salary/176)*('".$percent."')))
-        AS amount,'".$line_maager."', '".$signatory."','".$application_time."','".$time_confirmed_line."', '".$time_approved."' FROM employee e WHERE e.emp_id = '".$empID."'  ";
+       $query = "INSERT INTO overtimes(overtimeID, empID, time_start, time_end,overtime_category, amount, linemanager, hr, application_time, confirmation_time, approval_time,days) SELECT 1, '".$empID."', '".$time_start."','".$time_end."','".$overtime_category."', (('".$days."') * ((e.salary/176)*('".$percent."')))
+        AS amount,'".$line_maager."', '".$signatory."','".$application_time."','".$time_confirmed_line."', '".$time_approved."','".$days."' FROM employee e WHERE e.emp_id = '".$empID."'  ";
         DB::insert(DB::raw($query));
 
 
@@ -667,6 +668,12 @@ class FlexPerformanceModel extends Model
    //    });
 
        return true;
+   }
+
+   public function getDeletedOvertime($id){
+    $query = "SELECT * from overtimes where id = '".$id."' limit 1";
+$row = DB::select(DB::raw($query));
+    return $row[0] ;
    }
 
 	public function lineapproveOvertime($id, $time_approved) {
@@ -706,6 +713,13 @@ class FlexPerformanceModel extends Model
 	public function deleteOvertime($id) {
 
         DB::table('employee_overtime')->where('id',$id)->delete();
+        return true;
+    }
+
+    public function deleteApprovedOvertime($id) {
+
+
+        DB::table('overtimes')->where('id',$id)->delete();
         return true;
     }
 

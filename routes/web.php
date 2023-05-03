@@ -115,6 +115,8 @@ Route::middleware('auth')->group(function () {
          Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
          Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
 
+         Route::any('/cancelApprovedOvertimes/{id}','cancelApprovedOvertimes')->name('flex.cancelApprovedOvertimes');
+
          // start of termination routes
          Route::any('/termination','termination')->name('flex.termination');
          Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');

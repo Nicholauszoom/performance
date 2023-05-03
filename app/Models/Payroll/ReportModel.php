@@ -613,11 +613,18 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return DB::select(DB::raw($query));
     }
 
-    function v_heslb($payrolldate)
+    function v_heslb($payrolldate,$emp_id)
     {
-        $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE l.empID = e.emp_id and e.contract_type = 2 AND ll.loanID = l.id AND l.type = 3 AND ll.payment_date = '" . $payrolldate . "'";
+        $query = "SELECT @s:=@s+1 as SNo, l.form_four_index_no , CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, ll.paid, ll.remained FROM employee e, loan_logs ll, loan l, (SELECT @s:=0) s WHERE e.emp_id=l.empID AND e.emp_id= '" . $emp_id . "' and e.contract_type != 2 AND ll.loanID = l.id AND l.type = 3 ";
         return DB::select(DB::raw($query));
     }
+    function v_totalheslb($payrolldate,$emp_id)
+    {
+        $query = "SELECT if(SUM(ll.paid) IS NULL, 0, SUM(ll.paid)) as total_paid,MIN(ll.remained) as total_remained  FROM loan l, loan_logs ll, employee e  WHERE ll.loanID = l.id  AND l.type = 3 AND e.emp_id = l.empID  AND e.emp_id= '" . $emp_id . "' and e.contract_type !=2 ";
+        return DB::select(DB::raw($query));
+    }
+
+
 
     function totalheslb($payrolldate)
     {
@@ -631,11 +638,6 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         return DB::select(DB::raw($query));
     }
 
-    function v_totalheslb($payrolldate)
-    {
-        $query = "SELECT if(SUM(ll.paid) IS NULL, 0, SUM(ll.paid)) as total_paid, IF(SUM(ll.remained) IS NULL, 0, SUM(ll.remained)) as total_remained  FROM loan l, loan_logs ll, employee e  WHERE ll.loanID = l.id AND l.type = 3 AND e.emp_id = l.empID and e.contract_type = 2 and ll.payment_date = '" . $payrolldate . "'";
-        return DB::select(DB::raw($query));
-    }
 
     function staffTotalheslb($payrolldate)
     {
