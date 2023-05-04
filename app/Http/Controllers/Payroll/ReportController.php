@@ -788,7 +788,7 @@ dd($data['paye_terminated']);
                 //return view('payroll.payslip_details_pdf', $data);
                // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
-             $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'landscape');
+             $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
 
 
              return $pdf->download('payslip_for_' . $empID . '.pdf');

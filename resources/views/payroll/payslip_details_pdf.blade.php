@@ -5,24 +5,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Salary Slip</title>
-    @include('layouts.shared.head-css')
-    <script src="{{ asset('assets/notification/js/bootstrap-growl.min.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('assets/notification/css/notification.min.css') }}">
-    <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}">
+
+    {{-- @include('layouts.shared.head-css') --}}
+
+    {{-- <link rel="stylesheet" href="{{ asset('assets/fonts/inter/inter.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/icons/phosphor/styles.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ltr/all.min.css') }}"> --}}
+
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}"> --}}
+
+    {{-- <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}"> --}}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <style>
-        .headers {
-            border-bottom: 2px solid rgb(9, 5, 64);
-            font-weight: 600 !important;
-            background-color: rgb(140, 193, 210)
+        body {
+            background-color: #ffff;
+            background-position: auto;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background: url({{ asset('img/bg2.png') }});
         }
 
-        .contents {
+        table {
+            font-size: 9px;
+        }
+
+        .thead-bg {
+            padding: 0;
+            border: none !important;
+            color: #fff;
+            text-transform: uppercase;
+            border-radius: 0px !important;
+            /* background-repeat: no-repeat;
+            background-size: auto;
+            background-position: 0;
+            background: url( {{ asset('img/bg2.png') }}); */
+            background-color: blue !important;
+        }
+
+        .list-group-item {
+            text-align: justify;
+            padding: 10px;
+        }
+
+        .list-group-item::after {
+            content: '';
+            display: inline-block;
+            width: 100%;
+        }
+
+        .text-muted {
+            display: inline-block;
+            text-align: left;
+        }
+
+        .font-weight-bold {
+            display: inline-block;
             text-align: right;
         }
 
-        .table-body {
-            border-bottom: 2px;
+        .pagenum:before {
+            content: counter(page);
+        }
+
+        .page-break {
+            page-break-after: always;
         }
     </style>
 </head>
@@ -152,375 +203,276 @@
         $sum_deductions = $total_deductions / $rate;
 
         ?>
-        <div class="card border-top  border-top-width-3 border-top-main rounded-0 px-0 pt-0 pb-5">
-            <div class="card-header border-0">
-                <h5 class="text-main">Payslip<small></small></h5>
-            </div>
 
-            <div class="card rounded-0" style="background: #fff !important;">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Payslip For the month : {{ date('M-Y', strtotime($payroll_date)) }}</h5>
+        <table class="table border-0">
+            <thead style="border: none">
+                <tr>
+                    <th style="text-align: left;">
+                        <p><img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
+                                width="70px" height="70px"></p>
+                    </th>
+                    <th style="text-align: center;">
+                        <h5 class="text-main">Payslip For the month : {{ date('M-Y', strtotime($payroll_date)) }}</h5>
+                    </th>
+                    <th style="text-align: right;">
+                        <p><img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="" width="150px"
+                                height="150px"></p>
+                    </th>
+                </tr>
+            </thead>
+        </table>
 
-                    <p> <img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="" width="100px"
-                            height="100px"></p>
-                </div>
+        <table class="table table-bordered" style="border-radius: 10px !important">
+            <thead class="thead-bg">
+                <tr style="background-color:#00204e;">
+                    <th>Employee Details</th>
+                    <th>Earnings</th>
+                    <th>Deductions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <ul class="list-group list-group-flush ">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted text-left">Full Name</span>
+                                <span class="font-weight-bold text-right">{{ $name }}</span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Department</span>
+                                <span class="font-weight-bold">{{ $department }}</span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Position</span>
+                                <span class="font-weight-bold">{{ $position }}</span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Branch</span>
+                                <span class="font-weight-bold"> {{ $branch }} </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Payroll Number</span>
+                                <span class="font-weight-bold"> {{ $employeeID }} </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">NSSF Number:</span>
+                                <span class="font-weight-bold">{{ $membership_no }}</span>
+                            </li>
 
-                <div class="card-body bg-light p-2">
-                    <div class="row row-cols-sm-3">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Annual leave remaining</span>
+                                <span class="font-weight-bold">
+                                    {{ number_format($leaveBalance, 2) }} </span>
+                            </li>
+                        </ul>
+                    </td>
 
+                    <td>
+                        <ul class="list-group list-group-flush ">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Basic Pay</span>
+                                <span class="font-weight-bold"> {{ number_format($salary, 2) }} </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Net Basic</span>
+                                <span class="font-weight-bold">{{ number_format($salary, 2) }} </span>
+                            </li>
+                            <?php foreach($allowances as $row){
+                            ?>
 
+                            <li class="list-group-item d-flex">
+                                @if ($row->description == 'N-Overtime')
+                                    <span class="text-muted">Normal Days Overtime</span>
+                                @elseif($row->description == 'S-Overtime')
+                                    <span class="text-muted">Sunday Overtime</span>
+                                @else
+                                    <span class="text-muted">{{ $row->description }}</span>
+                                @endif
+                                <span class="font-weight-bold"> {{ number_format($row->amount / $rate, 2) }} </span>
+                            </li>
 
-                        <table>
-                            <tr>
-                                <td>
-                                    <div class="col-sm">
-                                        <div class="card h-sm-100 mb-sm-0" style="background: #fff !important">
+                            <?php } ?>
 
+                            <li class="list-group-item bg-light mt-5 d-flex">
+                                <span class="text-muted">Total Gross</span>
+                                <span class="font-weight-bold"> {{ number_format($sum_allowances + $salary, 2) }}
+                                </span>
+                            </li>
+                        </ul>
+                    </td>
 
-                                            <div class="card-header bg-white p-0 px-2 pt-2">
-                                                <h5 class="card-title">Employee Details</h5>
-                                            </div>
-
-                                            <ul class="list-group list-group-flush ">
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Full Name</span>
-                                                    <div class="ms-auto fw-semibold">{{ $name }}</div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Department</span>
-                                                    <div class="ms-auto fw-semibold">{{ $department }}</div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Position</span>
-                                                    <div class="ms-auto fw-semibold">{{ $position }}</div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Branch</span>
-                                                    <div class="ms-auto fw-semibold"> {{ $branch }} </div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Payroll Number</span>
-                                                    <div class="ms-auto fw-semibold"> {{ $employeeID }} </div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">NSSF Number:</span>
-                                                    <div class="ms-auto fw-semibold">{{ $membership_no }}</div>
-                                                </li>
-
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Annual leave remaining</span>
-                                                    <div class="ms-auto fw-semibold">
-                                                        {{ number_format($leaveBalance, 2) }} </div>
-                                                </li>
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col-sm">
-
-                                        <div class="card h-sm-100 mb-sm-0" style="background: #fff !important">
-
-                                            <div class="card-header bg-white p-0 px-2 pt-2">
-                                                <h5 class="card-title">Earnings</h5>
-                                            </div>
-
-
-                                            <ul class="list-group list-group-flush ">
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Basic Pay</span>
-                                                    <div class="ms-auto fw-semibold">{{ number_format($salary, 2) }}
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Net Basic</span>
-                                                    <div class="ms-auto fw-semibold">{{ number_format($salary, 2) }}
-                                                    </div>
-                                                </li>
-                                                <?php foreach($allowances as $row){
-                                                ?>
-
-                                                <li class="list-group-item d-flex">
-                                                    @if ($row->description == 'N-Overtime')
-                                                        <span class="text-muted">Normal Days Overtime</span>
-                                                    @elseif($row->description == 'S-Overtime')
-                                                        <span class="text-muted">Sunday Overtime</span>
-                                                    @else
-                                                        <span class="text-muted">{{ $row->description }}</span>
-                                                    @endif
-                                                    <div class="ms-auto fw-semibold">
-                                                        {{ number_format($row->amount / $rate, 2) }}</div>
-                                                </li>
-
-                                                <?php } ?>
-                                            </ul>
-
-                                            <div class="card-footer d-flex justify-content-between border-top bg-white">
-                                                <span class="text-muted">Total</span>
-                                                <span class="hstack gap-1">
-                                                    <span
-                                                        class="text-muted ms-1">{{ number_format($sum_allowances + $salary, 2) }}</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col-sm">
-                                        <div class="card  h-sm-100 mb-sm-0" style="background: #fff !important">
-
-                                            <div class="card-header bg-white p-0 px-2 pt-2">
-                                                <h5 class="card-title">Deductions</h5>
-                                            </div>
-
-                                            <ul class="list-group list-group-flush ">
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Net Tax</span>
-                                                    <div class="ms-auto fw-semibold">{{ number_format($taxdue, 2) }}
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">NSSF</span>
-                                                    <div class="ms-auto fw-semibold">
-                                                        {{ number_format($pension_employee, 2) }}</div>
-                                                </li>
-                                                @foreach ($deductions as $row)
-                                                    <li class="list-group-item d-flex">
-                                                        <span class="text-muted">{{ $row->description }}</span>
-                                                        <div class="ms-auto fw-semibold">
-                                                            {{ number_format($row->paid / $rate, 2) }}</div>
-                                                    </li>
-                                                @endforeach
-                                                @foreach ($loans as $row)
-                                                    <li class="list-group-item d-flex">
-                                                        <span class="text-muted">{{ $row->description }}</span>
-                                                        <div class="ms-auto fw-semibold">
-                                                            {{ number_format($row->paid / $rate, 2) }}</div>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            <div class="card-footer d-flex justify-content-between border-top bg-white">
-                                                <span class="text-muted">Total Deduction</span>
-                                                <span class="hstack gap-1">
-                                                    <span
-                                                        class="text-muted ms-1">{{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}</span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-
-
-
-
-                    </div>
-                </div>
-
-                <div class="card-body p-2">
-                    <div class="row row-cols-sm-3">
-
-
-                        <table>
-                            <tr>
-                                <td>
-                                    <div class="col-sm">
-                                        <div class="card h-sm-100 mb-sm-0">
-                                            <div class="card-header bg-white p-0 px-2 pt-2">
-                                                <h5 class="card-title">Taxation</h5>
-                                            </div>
-
-                                            <ul class="list-group list-group-flush ">
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Gross pay</span>
-                                                    <div class="ms-auto fw-semibold">
-                                                        {{ number_format($sum_allowances + $salary, 2) }}
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Less: Tax free Pension</span>
-                                                    <div class="ms-auto fw-semibold">
-                                                        {{ number_format($pension_employee, 2) }}</div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">Taxable Gross</span>
-                                                    <div class="ms-auto fw-semibold">
-                                                        {{ number_format($sum_allowances + $salary - $pension_employee, 2) }}
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex">
-                                                    <span class="text-muted">PAYE</span>
-                                                    <div class="ms-auto fw-semibold"> {{ number_format($taxdue, 2) }}
-                                                    </div>
-                                                </li>
-
-                                            </ul>
-
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="col-sm">
-
-                                        <div class="card  h-sm-100 mb-sm-0">
-
-                                            <div class="card-header bg-white p-0 px-2 pt-2">
-                                                <h5 class="card-title">Summary</h5>
-                                            </div>
-
-
-                                            @if ($total_bank_loan > 0)
-                            <tr class="headers text-center">
-                                <td colspan="2"> Bank Loans</td>
-                            </tr>
-                            @foreach ($bank_loan as $row)
-                                <tr class="table-body">
-                                    <td>{{ $row->product }}</td>
-                                    <td class="contents">{{ number_format($row->amount / $rate, 2) }}</td>
-                                </tr>
+                    <td class="cell">
+                        <ul class="list-group list-group-flush ">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Net Tax</span>
+                                <span class="font-weight-bold"> {{ number_format($taxdue, 2) }} </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">NSSF</span>
+                                <span class="font-weight-bold"> {{ number_format($pension_employee, 2) }} </span>
+                            </li>
+                            @foreach ($deductions as $row)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">{{ $row->description }}</span>
+                                    <span class="font-weight-bold"> {{ number_format($row->paid / $rate, 2) }} </span>
+                                </li>
+                            @endforeach
+                            @foreach ($loans as $row)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">{{ $row->description }}</span>
+                                    <span class="font-weight-bold">{{ number_format($row->paid / $rate, 2) }}</span>
+                                </li>
                             @endforeach
 
-                            <tr class="table-body">
-                                <td>Total</td>
-                                <td class="contents"><?php echo number_format($total_bank_loan, 2); ?></td>
-                            </tr>
-                            @endif
+                            <li class="list-group-item mt-5 bg-light">
+                                <span class="text-muted">Total Deduction</span>
+                                <span
+                                    class="font-weight-bold">{{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}</span>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
+        <table class="table table-bordered">
+            <thead class="thead-bg">
+                <tr style="background-color:#00204e;">
+                    <th>Taxation</th>
+                    <th>Summary</th>
+                    <th>Take Home</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <ul class="list-group list-group-flush ">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Gross pay</span>
+                                <span class="font-weight-bold">
+                                    {{ number_format($sum_allowances + $salary, 2) }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Less: Tax free Pension</span>
+                                <span class="font-weight-bold">
+                                    {{ number_format($pension_employee, 2) }}</span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Taxable Gross</span>
+                                <span class="font-weight-bold">
+                                    {{ number_format($sum_allowances + $salary - $pension_employee, 2) }}
+                                </span>
+                            </li>
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">PAYE</span>
+                                <span class="font-weight-bold"> {{ number_format($taxdue, 2) }}
+                                </span>
+                            </li>
 
-                            <ul class="list-group list-group-flush ">
-                                <li class="list-group-item d-flex">
-                                    <span class="text-muted">Total Income</span>
-                                    <div class="ms-auto fw-semibold">{{ number_format($sum_allowances + $salary, 2) }}
-                                    </div>
-                                </li>
-                                <li class="list-group-item d-flex">
-                                    <span class="text-muted">Total Deduction</span>
-                                    <div class="ms-auto fw-semibold">
-                                        {{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}
-                                    </div>
-                                </li>
-                                <li class="list-group-item d-flex">
-                                    <span class="text-muted">Net pay</span>
-                                    <div class="ms-auto fw-semibold">{{ number_format($amount_takehome, 2) }}</div>
-                                </li>
-                                @if ($total_bank_loan > 0)
-                                    <tr class="headers text-center">
-                                        <td colspan="2"> Bank Loans</td>
-                                    </tr>
-                                    <li class="list-group-item d-flex">
-                                        <span class="text-muted">Bank Loans</span>
-                                        <div class="ms-auto fw-semibold">.</div>
-                                    </li>
-                                    @foreach ($bank_loan as $row)
-                                        <li class="list-group-item d-flex">
-                                            <span class="text-muted">{{ $row->product }}</span>
-                                            <div class="ms-auto fw-semibold">
-                                                {{ number_format($row->amount / $rate, 2) }}
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                    <li class="list-group-item d-flex">
-                                        <span class="text-muted">Total Bank Loan</span>
-                                        <div class="ms-auto fw-semibold">
-                                            {{ number_format($total_bank_loan / $rate, 2) }}
-                                        </div>
-                                    </li>
-                                @endif
+                        </ul>
+                    </td>
 
-                            </ul>
-
-                            {{-- <div class="card-footer d-flex justify-content-between border-top" >
-                    <span class="text-muted">Total Deduction</span>
-                    <span class="hstack gap-1">
-                    <span class="text-muted ms-1">ff</span>
-                    </span>
-                </div> --}}
-                    </div>
-                </div>
-                </td>
-                <td>
-                    {{-- <div class="col-sm">
-                <div class="card  h-sm-100 mb-sm-0">
-
-                    <div class="card-header bg-white p-0 px-2 pt-2">
-                        <h5 class="card-title">Take Home</h5>
-                    </div>
-
-                    <ul class="list-group list-group-flush ">
-                        <li class="list-group-item d-flex">
-                            <span class="text-muted">Take home</span>
-                            <div class="ms-auto fw-semibold">{{ number_format($amount_takehome, 2) }}</div>
-                        </li>
+                    <td>
                         @if ($total_bank_loan > 0)
-                        <li class="list-group-item d-flex">
-                            <span class="text-muted">Take Home After Loan Deductions</span>
-                            <div class="ms-auto fw-semibold">{{ number_format($amount_takehome - $total_bank_loan, 2) }}</div>
-                        </li>
+                <tr class="headers text-center">
+                    <td colspan="2"> Bank Loans</td>
+                </tr>
 
+                @foreach ($bank_loan as $row)
+                    <tr class="table-body">
+                        <td>{{ $row->product }}</td>
+                        <td class="contents">{{ number_format($row->amount / $rate, 2) }}</td>
+                    </tr>
+                @endforeach
+
+                <tr class="table-body">
+                    <td>Total</td>
+                    <td class="contents"><?php echo number_format($total_bank_loan, 2); ?></td>
+                </tr>
+                @endif
+
+                <ul class="list-group list-group-flush ">
+                    <li class="list-group-item d-flex">
+                        <span class="text-muted">Total Income</span>
+                        <span class="font-weight-bold">{{ number_format($sum_allowances + $salary, 2) }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex">
+                        <span class="text-muted">Total Deduction</span>
+                        <span class="font-weight-bold">
+                            {{ number_format($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals, 2) }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex">
+                        <span class="text-muted">Net pay</span>
+                        <span class="font-weight-bold">{{ number_format($amount_takehome, 2) }}</span>
+                    </li>
+                    @if ($total_bank_loan > 0)
+                        <tr class="headers text-center">
+                            <td colspan="2"> Bank Loans</td>
+                        </tr>
+                        <li class="list-group-item d-flex">
+                            <span class="text-muted">Bank Loans</span>
+                            <span class="font-weight-bold">.</span>
+                        </li>
+                        @foreach ($bank_loan as $row)
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">{{ $row->product }}</span>
+                                <span class="font-weight-bold">
+                                    {{ number_format($row->amount / $rate, 2) }}
+                                </span>
+                            </li>
+                        @endforeach
+                        <li class="list-group-item d-flex">
+                            <span class="text-muted">Total Bank Loan</span>
+                            <span class="font-weight-bold">
+                                {{ number_format($total_bank_loan / $rate, 2) }}
+                            </span>
+                        </li>
                     @endif
 
-                        <li class="list-group-item d-flex">
-                            <span class="text-muted">Method of Payment:</span>
-                            <div class="ms-auto fw-semibold">Bank</div>
-                        </li>
-                        <li class="list-group-item d-flex">
-                            <span class="text-muted">Account No:</span>
-                            <div class="ms-auto fw-semibold">{{ $account_no }}</div>
-                        </li>
+                </ul>
+                </td>
 
-                    </ul>
-                </div>
-            </div> --}}
+                <td>
+                    <div class="text-center" style="margin-top: 40%">
+                        <b>
+                            @if ($rate == 1)
+                                Tsh.
+                            @else
+                                USD.
+                            @endif
 
-                    <div class="col-sm">
-                        <div class="card  h-sm-100 mb-sm-0">
-
-                            <div class="card-header bg-white p-0 px-2 pt-2">
-                                <h5 class="card-title">Take Home</h5>
-                            </div>
-
-                            <div class="card-body d-flex text-center align-items-center justify-content-center">
-                                <b>{{ number_format($amount_takehome, 2) }} /=
-                                    @if ($rate == 1)
-                                        Tsh
-                                    @else
-                                        USD
-                                    @endif <br />
-                                    {{ date('d-M-Y', strtotime($payroll_date)) }}
-                                </b>
-                            </div>
-                        </div>
+                            {{ number_format($amount_takehome, 2) }}
+                        </b>
                     </div>
                 </td>
                 </tr>
-                </table>
-
-
-
-
-
-
-
-            </div>
+            </tbody>
+        </table>
+        <div class="footer">
+            <table class="table footer-font">
+                <tfoot>
+                    <tr>
+                        <td class="">
+                            <div class="box-text"> {{ date('l jS \of F Y') }} </div>
+                        </td>
+                        <td>
+                            <div class="box-text text-end"> </div>
+                        </td>
+                        <td>
+                            <div class="box-text"> </div>
+                        </td>
+                        <td colspan="4" class="w-50" style="">
+                            <i> Page <span class="pagenum">.</span></i>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        </div>
-
-
-        </div>
-
 
     </main>
-
-
-    <script src="{{ public_path('assets/js/jquery/jquery.min.js') }}"></script>
-    <script src="{{ public_path('assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
-
-
-    <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery/jquery.min.js') }}"></script>
-
 </body>
 
 </html>
