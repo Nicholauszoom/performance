@@ -256,12 +256,12 @@
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
                                     <input type="radio" name="type" value="1" id="p9">
-                                    <label class="ms-2" for="p9">PDF</label>
+                                    <label class="ms-2" for="p9">TZS</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">USD</label>
                                 </div>
                             </div>
                         </div>

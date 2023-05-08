@@ -585,10 +585,16 @@ Route::middleware('auth')->group(function () {
     // For New Employees
     Route::prefix('flex/')->controller(EmployeePerformanceController::class)->group(function (){
         Route::any('/all-employees','index')->name('flex.employee-list');
+        Route::any('/modal', 'modal')->name('flex.modal');
+        Route::any('/addScore', 'addScore')->name('flex.addScore');
+        
         Route::any('/employee-performance','employee_performance')->name('flex.employee-performance');
         Route::any('/performance-pillars','performance_pillars')->name('flex.performance-pillars');
         Route::any('/save-evaluation/{id}','save_evaluation')->name('flex.save-evaluation');
         Route::any('/add-evaluation/{id}','add_evaluation')->name('flex.add-evaluation');
+        Route::any('/show_evaluation/{id}','show_evaluation')->name('flex.show_evaluation');
+
+        
         Route::any('/delete-pillar/{id}','delete_pillar')->name('flex.delete-pillar');
         Route::any('/edit-pillar/{id}','edit_pillar')->name('flex.edit-pillar');
         Route::any('/add-pillar','add_pillar')->name('flex.add-pillar');

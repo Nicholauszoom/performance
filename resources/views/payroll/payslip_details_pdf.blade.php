@@ -18,8 +18,10 @@
 
     {{-- <link rel="stylesheet" href="{{ public_path('assets/bootstrap/css/bootstrap.min.css') }}"> --}}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
+
+        <link rel="stylesheet" href="{{ asset('assets/bootstrap/b4css/bootstrap.css') }}">
 
     <style>
         body {
@@ -68,13 +70,29 @@
             text-align: right;
         }
 
-        .pagenum:before {
-            content: counter(page);
-        }
+        .header,
+.footer {
+    width: 100%;
+    text-align: center;
+    position: fixed;
+}
 
-        .page-break {
-            page-break-after: always;
-        }
+.header {
+    top: 0px;
+}
+
+.footer {
+    bottom: 0px;
+}
+
+.pagenum:before {
+    content: counter(page);
+}
+
+.page-break {
+    page-break-after: always;
+}
+
     </style>
 </head>
 
@@ -209,7 +227,7 @@
                 <tr>
                     <th style="text-align: left;">
                         <p><img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
-                                width="70px" height="70px"></p>
+                                width="100px" height="100px"></p>
                     </th>
                     <th style="text-align: center;">
                         <h5 class="text-main">Payslip For the month : {{ date('M-Y', strtotime($payroll_date)) }}</h5>

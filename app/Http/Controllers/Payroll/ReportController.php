@@ -108,6 +108,11 @@ class ReportController extends Controller
             $payroll_date = $data['payroll_date'];
             $payroll_month = $data['payroll_month'];
             $total_heslb = $data['total_heslb'];
+            if($request->type == 1){
+                $data['currency'] = 'TZS';
+            }else{
+                $data['currency'] = 'USD';
+            }
 
             $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
             return $pdf->download('paychecklist-'.$payrollMonth.'.pdf');
