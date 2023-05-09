@@ -77,6 +77,10 @@ Route::middleware('auth:sanctum')->group( function () {
             Route::any('/reports/employee_pension','employee_pension')->name('flex.e');
             });
       Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
+
+      
+       //for approving overtimes
+       Route::post('/approveOvertime',[GeneralController::class,'approveOvertime']);
 });
 
 

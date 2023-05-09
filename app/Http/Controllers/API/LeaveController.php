@@ -609,9 +609,125 @@ class LeaveController extends Controller
 
     }
 
+ //approve leave
+ public function approveLeave(Request $request)
+      {
+        $id=$request->id;
+       // $employee=$request->employee;
+        $leave=Leaves::find($id);
+        $empID=$leave->empID;
+        $approval=LeaveApproval::where('empID',$empID)->first();
+      //  dd($approval);
+        $approver=Auth()->user()->emp_id;
+        $employee=Auth()->user()->position;
+      //  dd($approver);
+
+        $position=Position::where('id',$employee)->first();
+
+
+        // chacking level 1
+        dd($approval->level1);
+        if ($approval->level1==$approver) {
+
+                // For Deligation
+            if($leave->deligated!=null){
+                $id=Auth::user()->emp_id;
+                $this->attendance_model->save_deligated($leave->empID);
+
+
+              $level1=DB::table('leave_approvals')->Where('level1',$empID)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$empID)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$empID)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+
+            }
+
+
+
+
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level1=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+
+
+        }
+        elseif($approval->level2==$approver)
+        {
+
+              // For Deligation
+            if($leave->deligated!=null){
+                $id=Auth::user()->emp_id;
+                $this->attendance_model->save_deligated($leave->empID);
+
+
+
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+
+            }
+            $leave->status=3;
+            $leave->state=0;
+            $leave->level2=Auth()->user()->emp_id;
+            $leave->position='Recommended by '. $position->name;
+            $leave->updated_at= new DateTime();
+            $leave->update();
+          }
+
+        elseif($approval->level3==$approver)
+        {
+
+            // For Deligation
+            if($leave->deligated!=null){
+                $id=Auth::user()->emp_id;
+                $this->attendance_model->save_deligated($leave->empID);
+
+
+
+              $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
+              $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
+              $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
+              // dd($request->deligate);
+
+            }
+          $leave->status=3;
+          $leave->state=0;
+          $leave->level3=Auth()->user()->emp_id;
+          $leave->position=$position->name;
+          $leave->updated_at= new DateTime();
+          $leave->update();
+        }
+        else
+        {
+
+            $msg='Sorry, You are Not Authorized';
+
+           // return redirect('flex/attendance/leave')->with('msg', $msg);
+           return response(['msg'=>$msg,
+          'status'=>'error'
+          ],400);
+        }
+
+
+
+
+        $msg = "Leave Request Has been approved Successfully !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+       // return redirect('flex/attendance/leave')->with('msg', $msg);
+               return response(['msg'=>$msg,
+              'status'=>'success'
+              ],200);
+
+      }
+   
+
 
   // start of leave approval
-  public function approveLeave(Request $request)
+  public function approvLeave(Request $request)
     { 
       //session('mng_emp') || session('appr_leave');
       $id = $request->empID;
