@@ -18,7 +18,7 @@
     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
         <div class="card-header border-0">
             <div class="d-flex justify-content-between">
-                <h5 class="mb-0 text-warning">Name: <small class="text-main">{{ $employee->fname }} {{ $employee->mname }} {{ $employee->lname }} Performance</small></h5>
+                <h5 class="mb-0 text-warning">Name: <small class="text-main">{{ $employee->fname }} {{ $employee->mname }} {{ $employee->lname }} </small></h5>
                 {{-- <h5 class="mb-0 text-warning">Name: <small class="text-main">{{ $employee->position }}</small></h5> --}}
 
 
@@ -41,9 +41,9 @@
                     <table class="table datatable-basic">
                         <thead>
                             <th>SN</th>
-                            <th>Holiday</th>
                             <th>Date</th>
-                            <th>Recurring</th>
+                            <th>Employee</th>
+                           
                             <th>Actions</th>
                             <th hidden></th>
                         </thead>
@@ -52,11 +52,15 @@
                             @forelse ($evaluations as $item )
                                 <tr>
                                     <td>{{ $i++}}</td>
-                                    <td>{{ $item->name}}</td>
-                                    <td>{{ $item->date}}</td>
-                                    <td>{{ $item->recurring=='1'? 'Yes':'No' }}</td>
+                                  
+                                    <td>{{ date('d-M-Y',$item->creates_at)}}</td>
+                                    @php
+                                        $user = APP\Models\User::where('emp_id',$item->empID)->first();
+                                    @endphp
+                                    <td>{{ $user->fname}}  {{ $user->lname}}</td>
+                                 
                                     <td>
-                                        <a href="{{ route('flex.editholiday', base64_encode($item->id)) }}" class="btn btn-sm btn-main">
+                                        <a href="{{ route('flex.show_evaluation',$item->id) }}" class="btn btn-sm btn-main">
                                             <i class="ph-pen"></i>
                                         </a>
     

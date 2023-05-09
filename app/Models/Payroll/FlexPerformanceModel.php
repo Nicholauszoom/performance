@@ -170,6 +170,15 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+    public function addEvaluation($evaluation,$evaluation_id){
+        $query = "INSERT INTO performance_evaluations(empID,evaluation_id,pillar_id,target,achieved,actions,measures,results,rating,weighting,score,strategy_type)
+         SELECT '".$evaluation->empID."','".$evaluation_id."',p.id,0,0,'N/A','N/A','N/A',0,0,0,p.type from performance_pillars p ";
+
+         $result = DB::insert(DB::raw($query));
+
+         return true;
+    }
+
 
 	function get_employee_details($empID)
 	{

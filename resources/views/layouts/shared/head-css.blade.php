@@ -6,6 +6,7 @@
 @stack('head-css')
 
 <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+
 <link href="{{ asset('assets/date-picker/daterangepicker.css') }}" rel="stylesheet">
 
 

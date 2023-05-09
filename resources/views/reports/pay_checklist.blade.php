@@ -100,7 +100,7 @@
                         $sno =0;
                         foreach($employee_list as $row){
 
-                            if($row->currency == 'TZS'){
+                            if($row->currency == $currency){
                                     $sno++;
                                     $empID =  $row->empID;
                                     $name = $row->name;
