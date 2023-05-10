@@ -405,11 +405,13 @@ class GeneralController extends Controller
     //  start of employee leaves function
     public function myLeaves(Request $request)
     {
-        $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->orderBy('id','desc')->get();
+       $data['leaves'] =Leaves::orderBy('id','desc')->get();
+      
         // $data['myleave'] = array_reverse($data['myleave']); // Reverse the order of leaves
 
         $emp_id=auth()->user()->emp_id;
-
+        // $data['leaves'] = $this->attendance_model->other_leaves($emp_id);
+        // $data['leaves'] = $this->attendance_model->leave_line($emp_id);
         // $data['leave_types'] =LeaveType::all();
         // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
         // $data['leaves'] =Leaves::get();
@@ -751,16 +753,17 @@ class GeneralController extends Controller
 
     }
 
-    public function approveOvertime($id)
+    public function approveOvertime(Request $request)
     {
 
-        $overtimeID = $id;
+        $overtimeID =$request->$id;
 
         // $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
         // // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
         // // $rate = $this->flexperformance_model->get_overtime_rate();
 
         // if($status==4){
+            dd($overtimeID);
         $signatory = session('emp_id');
         $time_approved = date('Y-m-d');
         $amount = 0;
