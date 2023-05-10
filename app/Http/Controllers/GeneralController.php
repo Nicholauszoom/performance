@@ -515,7 +515,7 @@ class GeneralController extends Controller
         return view('app.cost_center', $data);
     }
 
-  
+
 
     public function nationality(Request $request)
     {
@@ -8358,11 +8358,13 @@ class GeneralController extends Controller
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
+        $name = $termination->employee->fname . ' ' . $termination->employee->mname . ' ' . $termination->employee->lname ;
 
+         
         $pdf = Pdf::loadView('reports.terminalbenefit2', compact('termination', 'employee_info'));
        // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
         $pdf->setPaper('landscape');
-        return $pdf->download('terminal-benefit-slip.pdf');
+        return $pdf->download('terminal-benefit-slip-for-'.$name.'.pdf');
         //return view('reports.terminalbenefit',compact('termination', 'employee_info'));
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }

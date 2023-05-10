@@ -75,6 +75,7 @@
     width: 100%;
     text-align: center;
     position: fixed;
+
 }
 
 .header {
@@ -225,15 +226,16 @@
         <table class="table border-0">
             <thead style="border: none">
                 <tr>
-                    <th style="text-align: left;">
-                        <p><img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
-                                width="100px" height="100px"></p>
-                    </th>
-                    <th style="text-align: center;">
-                        <h5 class="text-main">Payslip For the month : {{ date('M-Y', strtotime($payroll_date)) }}</h5>
-                    </th>
+                    <th style="text-align: left; padding: 0">
+                        <div style="display: inline-block; vertical-align: middle;">
+                          <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt="" width="150px" height="150px" style="display: inline;">
+                          <h6 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip</h6>
+                        </div>
+                      </th>
+
+
                     <th style="text-align: right;">
-                        <p><img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="" width="150px"
+                        <p><img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="" width="180px"
                                 height="150px"></p>
                     </th>
                 </tr>
@@ -243,15 +245,17 @@
         <table class="table table-bordered" style="border-radius: 10px !important">
             <thead class="thead-bg">
                 <tr style="background-color:#00204e;">
-                    <th>Employee Details</th>
-                    <th>Earnings</th>
-                    <th>Deductions</th>
+                    <th style="width: 33%" colspan="2">Employee Details</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>
+                    <td style="width: 33%">
                         <ul class="list-group list-group-flush ">
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted text-left">Month</span>
+                                <span class="font-weight-bold text-right">{{ date('M-Y', strtotime($payroll_date)) }}</span>
+                            </li>
                             <li class="list-group-item d-flex">
                                 <span class="text-muted text-left">Full Name</span>
                                 <span class="font-weight-bold text-right">{{ $name }}</span>
@@ -264,6 +268,13 @@
                                 <span class="text-muted">Position</span>
                                 <span class="font-weight-bold">{{ $position }}</span>
                             </li>
+
+                        </ul>
+                    </td>
+
+                    <td style="width: 33%">
+                        <ul class="list-group list-group-flush ">
+
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Branch</span>
                                 <span class="font-weight-bold"> {{ $branch }} </span>
@@ -284,8 +295,23 @@
                             </li>
                         </ul>
                     </td>
+                </tr>
+            </tbody>
+        </table>
 
-                    <td>
+        <table class="table table-bordered" style="border-radius: 10px !important">
+            <thead class="thead-bg">
+                <tr style="background-color:#00204e;">
+
+                    <th style="width: 33%">Earning</th>
+                    <th style="width: 33%">Deduction</th>
+                    <th style="width: 33%">Taxation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <td style="width: 33%">
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Basic Pay</span>
@@ -319,7 +345,7 @@
                         </ul>
                     </td>
 
-                    <td class="cell">
+                    <td class="cell" style="width: 33%">
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Net Tax</span>
@@ -349,21 +375,7 @@
                             </li>
                         </ul>
                     </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <table class="table table-bordered">
-            <thead class="thead-bg">
-                <tr style="background-color:#00204e;">
-                    <th>Taxation</th>
-                    <th>Summary</th>
-                    <th>Take Home</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
+                    <td style="width: 33%">
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Gross pay</span>
@@ -390,8 +402,23 @@
 
                         </ul>
                     </td>
+                </tr>
+            </tbody>
+        </table>
 
-                    <td>
+        <table class="table table-bordered" style="width: 33%; transform: translateX(102%);">
+            <thead class="thead-bg">
+                <tr style="background-color:#00204e; width: 100%" >
+
+                    <th >Summary</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+
+                    <td style="width: 33%">
                         @if ($total_bank_loan > 0)
                 <tr class="headers text-center">
                     <td colspan="2"> Bank Loans</td>
@@ -453,7 +480,7 @@
                 </ul>
                 </td>
 
-                <td>
+                {{-- <td style="width: 33%">
                     <div class="text-center" style="margin-top: 40%">
                         <b>
                             @if ($rate == 1)
@@ -465,11 +492,11 @@
                             {{ number_format($amount_takehome, 2) }}
                         </b>
                     </div>
-                </td>
+                </td> --}}
                 </tr>
             </tbody>
         </table>
-        <div class="footer">
+        <div class="footer" style="background-color: #fff">
             <table class="table footer-font">
                 <tfoot>
                     <tr>
