@@ -108,7 +108,7 @@
             <th style="text-align: left; padding: 0">
                 <div style="display: inline-block; vertical-align: middle;">
                   <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt="" width="150px" height="150px" style="display: inline;">
-                  <h6 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Terminal Benefit Slip</h6>
+                  <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Terminal Benefit Slip</h5>
                 </div>
               </th>
 
@@ -133,7 +133,7 @@
                     <td style="width:50%">
 
 
-                        <ul class="list-group list-group-flush ">
+                        <ul class="list-group ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted text-left">Full Name</span>
                                 <span
@@ -156,7 +156,7 @@
                     <td style="width:50%">
 
 
-                        <ul class="list-group list-group-flush ">
+                        <ul class="list-group ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Termination Date</span>
                                 <span class="font-weight-bold"> {{ $termination->terminationDate }} </span>
@@ -184,137 +184,118 @@
         <table class="table table-bordered" style="border-radius: 10px !important">
             <thead class="thead-bg">
                 <tr style="background-color:#00204e;">
-                    <th style="width: 33%">Payments</th>
-                    <th style="width: 33%">Taxation</th>
-                    <th style="width: 33%">Deduction</th>
+                    <th style="width: 50%">Payments</th>
+                    <th style="width: 50%">Taxation</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td style="width: 33%">
-                        @if ($termination->salaryEnrollment != 0)
-                            <ul class="list-group list-group-flush " class="p-1">
+                        <ul class="list-group">
+                            @if ($termination->salaryEnrollment != 0)
                                 <li class="list-group-item d-flex">
                                     <span class="text-muted">Salary Enrollment</span>
-                                    <span
-                                        class="font-weight-bold">{{ number_format($termination->salaryEnrollment, 2) }}</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->salaryEnrollment, 2) }}</span>
                                 </li>
-                        @endif
-                        @if ($termination->normal_days_overtime_amount != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Overtime Normal Days</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->normal_days_overtime_amount, 2) }}
-                                </span>
-                            </li>
-                        @endif
-
-
-                        @if ($termination->public_overtime_amount != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Overtime Public</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->public_overtime_amount, 2) }}
-                                </span>
-                            </li>
-                        @endif
-
-                        @if ($termination->noticePay != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Notice Payment</span>
-                                <span class="font-weight-bold">{{ number_format($termination->noticePay, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->leavePay != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Outstanding Leave Pay</span>
-                                <span class="font-weight-bold">{{ number_format($termination->leavePay, 2) }}</span>
-                            </li>
-                        @endif
-
-                        @if ($termination->serevanceCost != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">House Allowance</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->livingCost != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Cost of Living</span>
-                                <span class="font-weight-bold">{{ number_format($termination->livingCost, 2) }}</span>
-                            </li>
-                        @endif
-
-                        @if ($termination->utilityAlloacance != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Utility Allowance</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->utilityAllowance, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->leaveAllowance != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Leave Allowance</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->leaveAllowance, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->severanceCost != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Serevance Pay</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
-                            </li>
-                        @endif
-
-
-                        @if ($termination->tellerAllowance != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Teller Allowance</span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->tellerAllowance, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->arrears != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Arrears</span>
-                                <span class="font-weight-bold">{{ number_format($termination->arrears, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->exgracia != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Discr Exgracia</span>
-                                <span class="font-weight-bold">{{ number_format($termination->exgracia, 2) }}</span>
-                            </li>
-                        @endif
-
-                        @if ($termination->bonus != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Bonus</span>
-                                <span class="font-weight-bold">{{ number_format($termination->bonus, 2) }}</span>
-                            </li>
-                        @endif
-                        @if ($termination->longServing != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Long Serving</span>
-                                <span class="font-weight-bold">{{ number_format($termination->longServing, 2) }}</span>
-                            </li>
-                        @endif
-
-                        @if ($termination->otherPayments != 0)
-                            <li class="list-group-item d-flex">
-                                <span class="text-muted">Other Non Taxable Payments </span>
-                                <span
-                                    class="font-weight-bold">{{ number_format($termination->otherPayments, 2) }}</span>
-                            </li>
-                        @endif
+                            @endif
+                            @if ($termination->normal_days_overtime_amount != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Overtime Normal Days</span>
+                                    <span
+                                        class="font-weight-bold">{{ number_format($termination->normal_days_overtime_amount, 2) }}  </span>
+                                </li>
+                            @endif
+                            @if ($termination->public_overtime_amount != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Overtime Public</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->public_overtime_amount, 2) }} </span>
+                                </li>
+                            @endif
+                            @if ($termination->noticePay != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Notice Payment</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->noticePay, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->leavePay != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Outstanding Leave Pay</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->leavePay, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->serevanceCost != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">House Allowance</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->livingCost != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Cost of Living</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->livingCost, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->utilityAlloacance != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Utility Allowance</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->utilityAllowance, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->leaveAllowance != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Leave Allowance</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->leaveAllowance, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->severanceCost != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Serevance Pay</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->serevanceCost, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->tellerAllowance != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Teller Allowance</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->tellerAllowance, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->arrears != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Arrears</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->arrears, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->exgracia != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Discr Exgracia</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->exgracia, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->bonus != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Bonus</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->bonus, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->longServing != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Long Serving</span>
+                                    <span class="font-weight-bold">{{ number_format($termination->longServing, 2) }}</span>
+                                </li>
+                            @endif
+                            @if ($termination->otherPayments != 0)
+                                <li class="list-group-item d-flex">
+                                    <span class="text-muted">Other Non Taxable Payments </span>
+                                    <span
+                                        class="font-weight-bold">{{ number_format($termination->otherPayments, 2) }}</span>
+                                </li>
+                            @endif
                         </ul>
 
                     </td>
 
                     <td class="cell" style="width: 33%">
-                        <ul class="list-group list-group-flush ">
+                        <ul class="list-group ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted"><b>TOTAL GROSS</b></span>
                                 <span
@@ -340,9 +321,22 @@
 
                         </ul>
                     </td>
+                </tr>
+            </tbody>
+        </table>
 
-                    <td style="width: 33%">
-                        <ul class="list-group list-group-flush ">
+        <table class="table table-bordered" style="border-radius: 10px !important">
+            <thead class="thead-bg">
+                <tr style="background-color:#00204e;">
+                    <th style="width: 50%">Deduction</th>
+                    <th style="width: 50%">Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <td style="width: 50%">
+                        <ul class="list-group ">
 
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">P.A.Y.E</span>
@@ -385,26 +379,10 @@
 
                         </ul>
                     </td>
-                </tr>
-            </tbody>
-        </table>
-
-        <table class="table table-bordered" style="width: 33%; transform: translateX(102%);">
-            <thead class="thead-bg">
-                <tr style="background-color:#00204e;">
-
-                    <th style="width: 33%">Summary</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
+                    <td style="width: 50%">
 
 
-                    <td style="width: 33%">
-
-
-                        <ul class="list-group list-group-flush ">
+                        <ul class="list-group ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">TOTAL GROSS</span>
                                 <span
@@ -435,16 +413,17 @@
 
                         </ul>
                     </td>
-
-
                 </tr>
             </tbody>
         </table>
 
 
-        <table class="table border-0 mt-2">
-            <thead style="border: none">
-                <tr>
+
+
+
+        <table class="table border-0 mt-2"class="table border-0 mt-2" style="border: 0px !important">
+            <thead class="border-0" style="border: 0px !important">
+                <tr class="border-0" style="border: 0px !important">
                     <td class="pt-3">
                         <div class="text-muted">Employee Signature </div>
                         <div class="font-weight-bold">

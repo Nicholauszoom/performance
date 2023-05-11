@@ -133,6 +133,7 @@
                                         <div class="col-md-3 form-group">
                                             <label for="">Leave & O/stand</label>
                                             <input type="text" class="form-control" value="0" name="leaveStand"  id="leaveStand">
+                                            <input type="number" name="leave_entitled" id="leave_entitled" hidden>
                                         </div>
                                         <div class="col-md-3 form-group">
                                             <label for="">Teller Allowance</label>
@@ -227,10 +228,12 @@
             var data =  JSON.parse(data);
 
             //alert(data.leave_allowance);
-            
+
              document.getElementById("leaveAllowance").value  =  data.leave_allowance;
              document.getElementById("salaryEnrollment").value = data.employee_salary;
              document.getElementById("employee_actual_salary").value = data.employee_actual_salary;
+             document.getElementById("leave_entitled").value = data.leave_entitled;
+
 
 
 
@@ -248,8 +251,11 @@
     $('#leaveStand').change(function(e){
         var leaveStand  = document.getElementById("leaveStand").value;
         var salaryEnrollment  = document.getElementById("employee_actual_salary").value;
+        var leave_entitled = document.getElementById("leave_entitled").value;
 
-        var leave_pay = (leaveStand/25)*salaryEnrollment;
+        // alert(leave_entitled);
+
+        var leave_pay = (leaveStand/leave_entitled)*salaryEnrollment;
 
         document.getElementById("leavePay").value  =  leave_pay;
 
