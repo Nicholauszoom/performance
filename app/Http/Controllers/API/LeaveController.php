@@ -626,7 +626,8 @@ class LeaveController extends Controller
 
 
         // chacking level 1
-        dd($approval->level1);
+      // dd($leave->state);
+      if($leave->state==0){
         if ($approval->level1==$approver) {
 
                 // For Deligation
@@ -646,7 +647,7 @@ class LeaveController extends Controller
 
 
             $leave->status=3;
-            $leave->state=0;
+            $leave->state=1;
             $leave->level1=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
@@ -671,7 +672,7 @@ class LeaveController extends Controller
 
             }
             $leave->status=3;
-            $leave->state=0;
+            $leave->state=1;
             $leave->level2=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
@@ -695,7 +696,7 @@ class LeaveController extends Controller
 
             }
           $leave->status=3;
-          $leave->state=0;
+          $leave->state=1;
           $leave->level3=Auth()->user()->emp_id;
           $leave->position=$position->name;
           $leave->updated_at= new DateTime();
@@ -722,7 +723,19 @@ class LeaveController extends Controller
               'status'=>'success'
               ],200);
 
+              
       }
+      else if($leave->state!=0)
+      {
+        $msg='Leave Request Already Approved';
+        return response(['msg'=>$msg,],202);
+
+      }
+
+
+
+
+    }
    
 
 

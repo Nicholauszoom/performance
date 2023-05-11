@@ -789,27 +789,33 @@ class GeneralController extends Controller
 
     }
 
-    public function lineapproveOvertime($id)
+    public function lineApproveOvertime(Request $request)
     {
 
-        $overtimeID = $id;
+        $overtimeID = $request->id;
 
-        $status = $this->flexperformance_model->checkApprovedOvertime($overtimeID);
+        $status = $this->flexperformance_model->checkApprovedOvertimeApi($overtimeID);
+   //     dd($status);
         // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
         // $rate = $this->flexperformance_model->get_overtime_rate();
 
         if ($status == 0) {
             $signatory = session('emp_id');
+          //  dd($signatory)
             $time_approved = date('Y-m-d');
             $result = $this->flexperformance_model->lineapproveOvertime($overtimeID, $time_approved);
 
             if ($result == true) {
-                echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
+                return response()->json([
+                
+                    'msg' => 'Overtime Approved Successifully'],200);
             } else {
-                echo "<p class='alert alert-danger text-center'>Overtime Not Approved, Some Errors Occured Please Try Again!</p>";
+                 return response()->json([
+                    'msg' => 'Overtime Not Approved'],400);
             }
         } else {
-            echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
+            return response()->json([
+                'msg' => 'Overtime already Approved'],400);
         }
     }
 

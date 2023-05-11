@@ -610,6 +610,17 @@ class FlexPerformanceModel extends Model
 
 		return $row->counts;
 	}
+	function checkApprovedOvertimeApi($overtimID)
+	{
+		$row = DB::table('employee_overtime')
+		    ->select(DB::raw('COUNT(id) as counts'))
+            ->where('id', $overtimID)
+            ->where('status', 1)
+            ->limit(1)
+		    ->first();
+
+		return $row->counts;
+	}
 
     function get_employee_overtime($overtimeID){
         $query  = "Select eo.empID, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";

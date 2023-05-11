@@ -81,6 +81,7 @@ Route::middleware('auth:sanctum')->group( function () {
       
        //for approving overtimes
        Route::post('/approveOvertime',[GeneralController::class,'approveOvertime']);
+       Route::post('/lineApproveOvertime',[GeneralController::class,'lineApproveOvertime']);
 });
 
 
