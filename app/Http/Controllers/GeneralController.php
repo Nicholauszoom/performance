@@ -515,7 +515,7 @@ class GeneralController extends Controller
         return view('app.cost_center', $data);
     }
 
-  
+
 
     public function nationality(Request $request)
     {
@@ -8358,11 +8358,13 @@ class GeneralController extends Controller
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
+        $name = $termination->employee->fname . ' ' . $termination->employee->mname . ' ' . $termination->employee->lname ;
+
 
         $pdf = Pdf::loadView('reports.terminalbenefit2', compact('termination', 'employee_info'));
        // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
         $pdf->setPaper('landscape');
-        return $pdf->download('terminal-benefit-slip.pdf');
+        return $pdf->download('terminal-benefit-slip-for-'.$name.'.pdf');
         //return view('reports.terminalbenefit',compact('termination', 'employee_info'));
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
@@ -8373,6 +8375,7 @@ class GeneralController extends Controller
     {
         $terminationDate =  $request->terminationDate;
         $employeeID = $request->employeeID;
+        $leave_entitled = Employee::where('emp_id',$employeeID)->first();
 
         $calendar = $request->terminationDate;
         $datewell = explode("-", $calendar);
@@ -8409,6 +8412,7 @@ class GeneralController extends Controller
         }
         $employee_actual_salary = $this->flexperformance_model->get_actual_basic_salary($employeeID);
 
+        $data['leave_entitled'] = $leave_entitled->leave_days_entitled;
         $data['employee_actual_salary'] = $employee_actual_salary;
         $data['leave_allowance'] = $leave_allowance;
         $data['employee_salary'] = ($employee_actual_salary == $employee_salary) ? ($employee_salary * $dd / 30) : $employee_salary;
