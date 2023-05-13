@@ -1713,6 +1713,48 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         return $data;
     }
 
+    function basic_increase_temp($previous_payroll_month,$current_payroll_month)
+    {
+
+        // if (empty($previous_payroll_month)) {
+        //     $data['basic_decrease'] = 0;
+        //     $data['actual_amount'] = 0;
+
+        //     return $data;
+        // }
+
+        $calender1 = explode('-', $current_payroll_month);
+        $calender2 = explode('-', $previous_payroll_month);
+
+       // $previous_terminationDate = $calender2[0] . '-' . $calender2[1];
+        $current_terminationDate = $calender1[0] . '-' . $calender1[1];
+        $subquery = "SELECT SUM(tm.salaryEnrollment-tm.actual_salary) as amount from terminations tm where tm.salaryEnrollment > tm.actual_salary and tm.terminationDate like '%" . $current_terminationDate . "%'";
+        $row1 = DB::select(DB::raw($subquery));
+
+        $query = "SELECT SUM(pl.salary - pl.actual_salary) as amount from temp_payroll_logs pl where pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $row = DB::select(DB::raw($query));
+
+        $query = "SELECT SUM(pl.salary - (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."')) as amount,SUM(pl.actual_salary) as actual_salary from temp_payroll_logs pl where pl.actual_salary = pl.salary and pl.actual_salary > (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
+        $row2 = DB::select(DB::raw($query));
+        $data['basic_increase'] = $row[0]->amount /*+ $row1[0]->amount */ + $row2[0]->amount;
+
+        $data['actual_amount'] = $row2[0]->actual_salary;
+
+
+
+
+        // $subquery = "SELECT SUM(tm.actual_salary) as amount from terminations tm where tm.actual_salary < tm.salaryEnrollment and  tm.terminationDate like '%" . $current_terminationDate . "%'";
+        // $row1 = DB::select(DB::raw($subquery));
+
+        // $query = "SELECT SUM(pl.actual_salary) as amount from payroll_logs pl where   pl.actual_salary < pl.salary and pl.salary != (SELECT salary from payroll_logs where pl.empID = payroll_logs.empID and payroll_logs.payroll_date = '".$previous_payroll_month."') and pl.payroll_date = '" . $current_payroll_month . "'";
+        // $row = DB::select(DB::raw($query));
+
+        //$data['actual_amount'] = $row[0]->amount + $row1[0]->amount;
+
+       // dd($data);
+        return $data;
+    }
+
     function basic_increase1($previous_payroll_month,$current_payroll_month)
     {
 
@@ -1940,14 +1982,14 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
             SELECT 'Add/Les N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
             SELECT 'Add/Les S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(public_overtime_amount > 0,public_overtime_amount,0) as current_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
