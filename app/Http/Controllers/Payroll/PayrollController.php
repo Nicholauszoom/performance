@@ -294,6 +294,16 @@ class PayrollController extends Controller
         $data['total_current_overtime'] = $this->reports_model->s_overtime1($current_payroll_month);
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
 
+
+
+
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        //dd($data['new_employee']);
+        if($data['new_employee'] > 0){
+
+            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
+
+        }
         if($data['terminated_employee'] > 0){
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
@@ -385,8 +395,10 @@ class PayrollController extends Controller
        // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
        // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
-        $data['current_increase'] = $this->reports_model->basic_increase1($previous_payroll_month,$current_payroll_month);
+       // $data['current_increase'] = $this->reports_model->basic_increase1($previous_payroll_month,$current_payroll_month);
+        $data['current_increase'] = $this->reports_model->basic_increase_temp($previous_payroll_month, $current_payroll_month);
 
+    //    dd($data['current_increase']);
 
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
@@ -578,7 +590,7 @@ class PayrollController extends Controller
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
-
+dd($data['current_increase']);
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 

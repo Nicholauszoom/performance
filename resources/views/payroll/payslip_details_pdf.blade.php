@@ -21,7 +21,7 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> --}}
 
-        <link rel="stylesheet" href="{{ asset('assets/bootstrap/b4css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/b4css/bootstrap.css') }}">
 
     <style>
         body {
@@ -71,29 +71,28 @@
         }
 
         .header,
-.footer {
-    width: 100%;
-    text-align: center;
-    position: fixed;
+        .footer {
+            width: 100%;
+            text-align: center;
+            position: fixed;
 
-}
+        }
 
-.header {
-    top: 0px;
-}
+        .header {
+            top: 0px;
+        }
 
-.footer {
-    bottom: 0px;
-}
+        .footer {
+            bottom: 0px;
+        }
 
-.pagenum:before {
-    content: counter(page);
-}
+        .pagenum:before {
+            content: counter(page);
+        }
 
-.page-break {
-    page-break-after: always;
-}
-
+        .page-break {
+            page-break-after: always;
+        }
     </style>
 </head>
 
@@ -228,10 +227,12 @@
                 <tr>
                     <th style="text-align: left; padding: 0">
                         <div style="display: inline-block; vertical-align: middle;">
-                          <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt="" width="150px" height="150px" style="display: inline;">
-                          <h6 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip</h6>
+                            <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
+                                width="150px" height="150px" style="display: inline;">
+                            <h5 class="text-main" style="display: inline; margin: 0; vertical-align: middle;">Payslip
+                            </h5>
                         </div>
-                      </th>
+                    </th>
 
 
                     <th style="text-align: right;">
@@ -254,7 +255,8 @@
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted text-left">Month</span>
-                                <span class="font-weight-bold text-right">{{ date('M-Y', strtotime($payroll_date)) }}</span>
+                                <span
+                                    class="font-weight-bold text-right">{{ date('M-Y', strtotime($payroll_date)) }}</span>
                             </li>
                             <li class="list-group-item d-flex">
                                 <span class="text-muted text-left">Full Name</span>
@@ -303,15 +305,15 @@
             <thead class="thead-bg">
                 <tr style="background-color:#00204e;">
 
-                    <th style="width: 33%">Earning</th>
-                    <th style="width: 33%">Deduction</th>
-                    <th style="width: 33%">Taxation</th>
+                    <th style="width: 50%">Earning</th>
+                    <th style="width: 50%">Deduction</th>
+
                 </tr>
             </thead>
             <tbody>
                 <tr>
 
-                    <td style="width: 33%">
+                    <td style="width: 50%">
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Basic Pay</span>
@@ -345,7 +347,7 @@
                         </ul>
                     </td>
 
-                    <td class="cell" style="width: 33%">
+                    <td class="cell" style="width: 50%">
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Net Tax</span>
@@ -375,7 +377,23 @@
                             </li>
                         </ul>
                     </td>
-                    <td style="width: 33%">
+
+                </tr>
+            </tbody>
+        </table>
+        <table class="table table-bordered" style="border-radius: 10px !important">
+            <thead class="thead-bg">
+                <tr style="background-color:#00204e;">
+
+                    <th style="width: 50%">Taxation</th>
+                    <th style="width: 50%">Summary</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    <td style="width: 50%">
                         <ul class="list-group list-group-flush ">
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Gross pay</span>
@@ -402,39 +420,30 @@
 
                         </ul>
                     </td>
-                </tr>
-            </tbody>
-        </table>
 
-        <table class="table table-bordered" style="width: 33%; transform: translateX(102%);">
-            <thead class="thead-bg">
-                <tr style="background-color:#00204e; width: 100%" >
-
-                    <th >Summary</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-
-
-                    <td style="width: 33%">
+                    <td style="width: 50%">
                         @if ($total_bank_loan > 0)
-                <tr class="headers text-center">
-                    <td colspan="2"> Bank Loans</td>
-                </tr>
+
+                <li class="list-group-item d-flex">
+                    <span class="font-weight-bold">Bank Loans</span>
+                    <span class="font-weight-bold">.
+                    </span>
+                </li>
 
                 @foreach ($bank_loan as $row)
-                    <tr class="table-body">
-                        <td>{{ $row->product }}</td>
-                        <td class="contents">{{ number_format($row->amount / $rate, 2) }}</td>
-                    </tr>
-                @endforeach
+                <li class="list-group-item d-flex">
+                    <span class="text-muted">{{ $row->product }}</span>
+                    <span class="font-weight-bold">{{ number_format($row->amount / $rate, 2) }}
+                    </span>
+                </li>
 
-                <tr class="table-body">
-                    <td>Total</td>
-                    <td class="contents"><?php echo number_format($total_bank_loan, 2); ?></td>
-                </tr>
+                @endforeach
+                <li class="list-group-item d-flex">
+                    <span class="text-muted">Total</span>
+                    <span class="font-weight-bold"><?php echo number_format($total_bank_loan, 2); ?>
+                    </span>
+                </li>
+
                 @endif
 
                 <ul class="list-group list-group-flush ">
@@ -479,23 +488,11 @@
 
                 </ul>
                 </td>
-
-                {{-- <td style="width: 33%">
-                    <div class="text-center" style="margin-top: 40%">
-                        <b>
-                            @if ($rate == 1)
-                                Tsh.
-                            @else
-                                USD.
-                            @endif
-
-                            {{ number_format($amount_takehome, 2) }}
-                        </b>
-                    </div>
-                </td> --}}
                 </tr>
             </tbody>
         </table>
+
+
         <div class="footer" style="background-color: #fff">
             <table class="table footer-font">
                 <tfoot>

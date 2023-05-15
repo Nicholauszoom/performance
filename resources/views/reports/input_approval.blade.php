@@ -56,7 +56,7 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Journal </h5>
+                                    <h5 style="font-weight:bolder;text-align: left;"> Payroll Input Change Report </h5>
                                 </div>
                             </td>
                             <td> <div class="box-text text-end"></div> </td>
