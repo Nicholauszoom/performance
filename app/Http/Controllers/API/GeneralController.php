@@ -418,69 +418,7 @@ class GeneralController extends Controller
 
 
         // Start of Escallation
-        $leaves=Leaves::get();
-        if ($leaves) {
-
-          foreach($leaves as $item)
-          {
-              $today= new DateTime();
-              $applied =$item->updated_at;
-              $diff= $today->diff($applied);
-              $range=$diff->days;
-              $approval=LeaveApproval::where('empID',$item->empID)->first();
-
-              if ($approval) {
-                if ($range>$approval->escallation_time) {
-                  $leave=Leaves::where('id' ,$item->id)->first();
-                  $status=$leave->status;
-
-                  if ($status == 0) {
-                    if ($approval->level2 != null) {
-                      $leave->status=1;
-                      $leave->updated_at=$today;
-                      $leave->update();
-
-                    }
-
-                  }
-                  elseif ($status == 1)
-                  {
-                    if ($approval->level3 != null) {
-                      $leave->status=2;
-                      $leave->updated_at=$today;
-                      $leave->update();
-                    }
-                    else
-                    {
-                      $leave->status=0;
-                      $leave->updated_at=$today;
-                      $leave->update();
-                    }
-                  }
-                  elseif ($status == 2)
-                  {
-                    if ($approval->level1 != null) {
-                      $leave->status=0;
-                      $leave->updated_at=$today;
-                      $leave->update();
-                    }
-                  }
-                }
-              }
-
-          }
-        }
-        // End of Escallation
-
-        // For Working days
-        // $d1 = new DateTime (Auth::user()->hire_date);
-        // $d2 = new DateTime();
-        // $interval = $d2->diff($d1);
-        // $data['days']=$interval->days;
-        // $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($emp_id, auth()->user()->hire_date, date('Y-m-d'));
-        // $data['leave_type'] = $this->attendance_model->leave_type();
-
-
+       
 
 
     return response( [ 'data'=>$data  ],200 );
@@ -841,6 +779,115 @@ class GeneralController extends Controller
         //   echo "<p class='alert alert-danger text-center'>Overtime is Already Approved</p>";
         // }
 
+    }
+    public function dashboardData(){
+        $id=auth()->user()->emp_id;
+        $active_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->get();
+        $data=$active_leaves;
+    //   foreach ($active_leaves as &object){
+    //         if($active_leaves->state==0){
+
+    //         }
+    //   }
+    $pending_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','1')->get();
+    $approved_leaves=Leaves::where('empID',auth()->user()->emp_id)->with('type:id,type,max_days')->where('state','0')->get();
+    // $data['total leaves applied']=$data;
+
+    $overtimes= $this->flexperformance_model->my_overtimes($id);
+  
+    
+    $count = 0;
+    $count2 =0;
+    
+    foreach ($overtimes as $overtime) {
+        if ($overtime->status == '0') {
+            $count++;
+        }
+        else if($overtime->status =='1'){
+   $count2++;
+        }
+    }
+    
+    $length = $count;
+    $length2= $count2;
+
+    $loans =Helsb::where('empID',$id)->get();
+    //dd($loans->count());
+    if($loans->count()>0){
+     $total =$loans->first()->amount;
+     $paid =$loans->first()->paid;
+
+     $remaining = $total-$paid;
+     $percentage= $paid/$total *100;
+     
+     $pensions = $this->reports_model->employee_pension($id);
+     $pension_employee =0;
+     $pension_employer=0;
+     foreach ($pensions
+      as $pension) {
+        $pension_employee = $pension_employee + $pension->pension_employee;
+        # code...
+        $pension_employer = $pension_employer + $pension->pension_employer;
+     }
+     $pension_employee=$pension_employee;
+     $pension_employer=$pension_employer;
+     $total_pension=$pension_employee+$pension_employee;
+
+
+    
+   
+        return response([
+           'total leaves applied'=>$data->count(),
+           'pending leaves'=> $pending_leaves->count(),
+           'approved leaves'=>$approved_leaves->count(),
+           'total overtimes'=>count($overtimes),
+           'pending overtimes'=>$length,
+           'approved overtimes'=>$length2,
+           'total loan amount'=>$total,
+           'remaining amount'=>$remaining,
+           'paid amount'=>$paid,
+           'percentage paid' => $percentage,
+           'total employee pension contribution'=>$pension_employee,
+           'total employer pension contribution'=>$pension_employer,
+           'total pension'=>$total_pension
+
+          // 'approved overtimes'=>count($overtimes->where('status','0'))
+        ],200);
+    }
+    else{
+        $pensions = $this->reports_model->employee_pension($id);
+        $pension_employee =0;
+        $pension_employer=0;
+        foreach ($pensions
+         as $pension) {
+           $pension_employee = $pension_employee + $pension->pension_employee;
+           # code...
+           $pension_employer = $pension_employer + $pension->pension_employer;
+        }
+        $pension_employee=$pension_employee;
+        $pension_employer=$pension_employer;
+        $total_pension=$pension_employee+$pension_employee;
+      //  $msg="No loan data found";
+        return response([
+            'total leaves applied'=>$data->count(),
+            'pending leaves'=> $pending_leaves->count(),
+            'approved leaves'=>$approved_leaves->count(),
+            'total overtimes'=>count($overtimes),
+            'pending overtimes'=>$length,
+            'approved overtimes'=>$length2,
+            'total loan amount'=>'0.0',
+            'remaining amount'=>'0.0',
+            'paid amount'=>'0.0',
+            'percentage paid' => '0.0',
+            'total employee pension contribution'=>$pension_employee,
+            'total employer pension contribution'=>$pension_employer,
+            'total pension'=>$total_pension
+           
+ 
+           // 'approved overtimes'=>count($overtimes->where('status','0'))
+         ],200);
+    }
+    
     }
 
     public function fin_approveOvertime($id)

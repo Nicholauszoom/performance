@@ -613,8 +613,10 @@ class LeaveController extends Controller
  public function approveLeave(Request $request)
       {
         $id=$request->id;
+
        // $employee=$request->employee;
         $leave=Leaves::find($id);
+     
         $empID=$leave->empID;
         $approval=LeaveApproval::where('empID',$empID)->first();
       //  dd($approval);
@@ -626,8 +628,8 @@ class LeaveController extends Controller
 
 
         // chacking level 1
-      // dd($leave->state);
-      if($leave->state==0){
+     
+      if($leave->state==1){
         if ($approval->level1==$approver) {
 
                 // For Deligation
@@ -725,7 +727,9 @@ class LeaveController extends Controller
 
               
       }
-      else if($leave->state!=0)
+
+      // dd()
+      else if($leave->state==0)
       {
         $msg='Leave Request Already Approved';
         return response(['msg'=>$msg,],202);
