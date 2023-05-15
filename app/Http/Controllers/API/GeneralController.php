@@ -812,6 +812,8 @@ class GeneralController extends Controller
     $length2= $count2;
 
     $loans =Helsb::where('empID',$id)->get();
+    //dd($loans->count());
+    if($loans->count()>0){
      $total =$loans->first()->amount;
      $paid =$loans->first()->paid;
 
@@ -851,6 +853,41 @@ class GeneralController extends Controller
 
           // 'approved overtimes'=>count($overtimes->where('status','0'))
         ],200);
+    }
+    else{
+        $pensions = $this->reports_model->employee_pension($id);
+        $pension_employee =0;
+        $pension_employer=0;
+        foreach ($pensions
+         as $pension) {
+           $pension_employee = $pension_employee + $pension->pension_employee;
+           # code...
+           $pension_employer = $pension_employer + $pension->pension_employer;
+        }
+        $pension_employee=$pension_employee;
+        $pension_employer=$pension_employer;
+        $total_pension=$pension_employee+$pension_employee;
+      //  $msg="No loan data found";
+        return response([
+            'total leaves applied'=>$data->count(),
+            'pending leaves'=> $pending_leaves->count(),
+            'approved leaves'=>$approved_leaves->count(),
+            'total overtimes'=>count($overtimes),
+            'pending overtimes'=>$length,
+            'approved overtimes'=>$length2,
+            'total loan amount'=>'0.0',
+            'remaining amount'=>'0.0',
+            'paid amount'=>'0.0',
+            'percentage paid' => '0.0',
+            'total employee pension contribution'=>$pension_employee,
+            'total employer pension contribution'=>$pension_employer,
+            'total pension'=>$total_pension
+           
+ 
+           // 'approved overtimes'=>count($overtimes->where('status','0'))
+         ],200);
+    }
+    
     }
 
     public function fin_approveOvertime($id)
