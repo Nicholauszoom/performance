@@ -34,7 +34,9 @@
                             <td class="">
                                 <div class="box-text text-right" style="text-align:left;">
                                     <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">Human Capital Information System</h5>
+                                        {{-- <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
+                                width="50px" height="50px" style="display: inline;"> --}}
+                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
                                     </p>
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
                                     <p class="p-space">Bibi Titi Mohammed Road</p>
