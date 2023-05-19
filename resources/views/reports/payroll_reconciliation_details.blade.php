@@ -27,7 +27,7 @@
                             <td class="">
                                 <div class="box-text text-right" style="text-align:left;">
                                     <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">Human Capital Information System</h5>
+                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
                                     </p>
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
                                     <p class="p-space">Bibi Titi Mohammed Road</p>
@@ -322,6 +322,7 @@
                 @endif
                 @if(isset($basic_decrease))
                 @if(count($basic_decrease) > 0)
+                <br>
                 <h4>Less Decrease in Basic Pay Comparison to Last M</h4>
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
@@ -404,7 +405,7 @@
                 @endif
                 @endif
                 @foreach($names as $name)
-                <h4>{{ $name == 'Add/Les N-Overtime'? 'Add/Les Normal Day Overtime':($name == 'Add/Les S-Overtime' ? 'Add/Les Sunday Overtime':$name) }}</h4>
+                <h4>{{ $name == 'Add/Less N-Overtime'? 'Add/Less Normal Day Overtime':($name == 'Add/Less S-Overtime' ? 'Add/Less Sunday Overtime':$name) }}</h4>
 
                 <table class="table" id="reports" style="font-size:9px; ">
                     <thead>
@@ -435,7 +436,7 @@
                              @endphp
                             @foreach ($allowances as $row)
                             @if($row->description == $name)
-                            @if($row->description == "Add/Les S-Overtime")
+                            @if($row->description == "Add/Less S-Overtime")
                             @if($row->previous_amount != $row->current_amount)
                                 @php
                                     $total_previous += $row->previous_amount;
@@ -520,6 +521,7 @@
 
                 </table>
                 @endforeach
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
                 <table class="table" id="reports">
                     <tbody>
@@ -537,39 +539,39 @@
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Reviewed By:</small></p>
+                                <span class="text-start"><small>Reviewed By:</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Checked By:</small></p>
+                                <span class="text-start"><small>Checked By:</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Approved By:</small></p>
-                            </td>
-
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Name______________________</small></p>
+                                <span class="text-start"><small>Approved By:</small></span>
                             </td>
 
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <span class="text-start"><small>Name______________________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <span class="text-start"><small>Name______________________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature and Date___________</small></p>
+                                <span class="text-start"><small>Name______________________</small></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <span class="text-start"><small>Signature and Date___________</small></span>
+                            </td>
+                            <td>
+                                <span class="text-start"><small>Signature and Date___________</small></span>
+                            </td>
+                            <td>
+                                <span class="text-start"><small>Signature and Date___________</small></span>
                             </td>
 
                         </tr>

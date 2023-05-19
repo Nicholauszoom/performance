@@ -7021,7 +7021,7 @@ class GeneralController extends Controller
                 'cost_center' => 'required',
                 'leave_days_entitled' => 'required',
                 'lname' => 'required',
-                'emp_id' => 'required|unique',
+                'emp_id' => 'required|unique:employee',
                 'salary' => 'required',
                 'gender' => 'required',
                 'email' => 'required',
@@ -8255,7 +8255,6 @@ class GeneralController extends Controller
         // $total_gross = 0;
         $taxable = 0;
 
-
         $pension_employer = $this->flexperformance_model->get_pension_employer($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
 
         $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
@@ -8268,6 +8267,7 @@ class GeneralController extends Controller
         //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
 
         $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
+
 
         $deduction_rate = $this->flexperformance_model->get_deduction_rate();
 

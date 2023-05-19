@@ -34,7 +34,9 @@
                             <td class="">
                                 <div class="box-text text-right" style="text-align:left;">
                                     <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">Human Capital Information System</h5>
+                                        {{-- <img src="{{ asset('assets/images/hc-hub-logo3.png') }}" class="img-fluid" alt=""
+                                width="50px" height="50px" style="display: inline;"> --}}
+                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
                                     </p>
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
                                     <p class="p-space">Bibi Titi Mohammed Road</p>
@@ -89,7 +91,7 @@
                         <tr>
                             <th><b>RefNo</b></th>
                             <th><b>Desc</b></th>
-                            <th style=""><b>Last Month</b></th>
+                            {{-- <th style=""><b>Last Month</b></th> --}}
                             <th><b>This Month</b></th>
                             <th><b>Amount</b></th>
                             <th><b>Count</b></th>
@@ -106,7 +108,7 @@
                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                             <td class="text-start">00001</td>
                             <td class="text-start">Last Month Gross Salary</td>
-                            <td class="text-end">  {{ number_format(0, 2) }} </td>
+                            {{-- <td class="text-end">  {{ number_format(0, 2) }} </td> --}}
                             <td class="text-end"> {{ number_format(0, 2) }} </td>
                             <td class="text-end"> {{ number_format($total_previous_gross, 0) }} </td>
                             <td class="text-end"> {{ $payroll_date == '2023-03-19' ? $count_previous_month - 1 : $count_previous_month  }}</td>
@@ -117,7 +119,7 @@
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
                                     <td class="text-start">Add New Employee</td>
-                                    <td class="text-end"> {{ number_format(0, 2) }} </td>
+                                    {{-- <td class="text-end"> {{ number_format(0, 2) }} </td> --}}
                                     <td class="text-end"> {{ number_format($new_employee_salary, 2) }} </td>
                                     <td class="text-end"> {{ number_format($new_employee_salary, 2) }} </td>
                                     <td class="text-end"> {{ $new_employee }} </td>
@@ -134,10 +136,11 @@
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00002</td>
                                     <td class="text-start">Less Terminated Employee</td>
-                                    <td class="text-end">
+                                    {{-- <td class="text-end">
                                         {{ number_format($termination_salary, 2) }}
+                                    </td> --}}
                                         <td class="text-end"> {{ number_format(0, 2) }}</td>
-                                    </td>
+
                                     <td class="text-end"> {{ number_format(0 - $termination_salary, 2) }} </td>
                                     <td class="text-end">{{ $terminated_employee * -1 }} </td>
                                 </tr>
@@ -155,10 +158,10 @@
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00004</td>
                                     <td class="text-start">Add Increase in Basic Pay incomparison to Last M </td>
-                                    <td class="text-end">
+                                    {{-- <td class="text-end">
 
                                         {{ number_format($current_increase['actual_amount']-$current_increase['basic_increase'], 2) }}
-                                    </td>
+                                    </td> --}}
                                     <td class="text-end">
                                         {{ number_format($current_increase['actual_amount'], 2) }}
                                     </td>
@@ -181,9 +184,9 @@
                                 <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                     <td class="text-start">00004</td>
                                     <td class="text-start">Less Decrease in Basic Pay incomparison to Last M </td>
-                                    <td class="text-end">
+                                    {{-- <td class="text-end">
                                         {{ number_format($current_decrease['actual_amount'], 2) }}
-                                    </td>
+                                    </td> --}}
                                     <td class="text-end">
                                         {{ number_format($current_decrease['actual_amount'] - $current_decrease['basic_decrease'], 2) }}
                                     </td>
@@ -207,49 +210,49 @@
                             @foreach ($total_allowances as $row)
                                 @php $i++;  @endphp
                                 @if ($row->current_amount - $row->previous_amount != 0)
-                                    @if ($row->description == 'Add/Les Leave Pay' || $row->description == 'Add/Les Leave Allowance')
+                                    @if ($row->description == 'Add/Less Leave Pay' || $row->description == 'Add/Less Leave Allowance')
                                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                             <td class="text-start">{{ '000' . $i + 4 }}</td>
                                             <td class="text-start">
-                                                @if ($row->description == 'Add/Les S-Overtime')
+                                                @if ($row->description == 'Add/Less S-Overtime')
                                                     Add/Less Sunday Overtime Hours
-                                                @elseif($row->description == 'Add/Les N-Overtime')
+                                                @elseif($row->description == 'Add/Less N-Overtime')
                                                     Add/Less Normal Day Overtime Hours
                                                 @else
                                                     {{ $row->description }}
                                                 @endif
                                             </td>
 
-                                            <td class="text-end">{{ number_format(0, 2) }}</td>
+                                            {{-- <td class="text-end">{{ number_format(0, 2) }}</td> --}}
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end">
-                                                {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
+                                                {{ number_format($row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount, 2) }}
                                             </td>
                                             <td class="text-end"></td>
                                         </tr>
                                         @php
                                             $total_previous += 0;
-                                            $total_current += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
-                                            $total_amount += $row->description == 'Add/Les S-Overtime' ? $row->current_amount  : $row->current_amount;
+                                            $total_current += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
+                                            $total_amount += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
 
                                         @endphp
                                     @else
                                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">
                                             <td class="text-start">{{ '000' . $i + 14 }}</td>
                                             <td class="text-start">
-                                                @if ($row->description == 'Add/Les S-Overtime')
+                                                @if ($row->description == 'Add/Less S-Overtime')
                                                     Add/Less Sunday Overtime Hours
-                                                @elseif($row->description == 'Add/Les N-Overtime')
+                                                @elseif($row->description == 'Add/Less N-Overtime')
                                                     Add/Less Normal Day Overtime Hours
                                                 @else
                                                     {{ $row->description }}
                                                 @endif
                                             </td>
-                                            <td class="text-end">
+                                            {{-- <td class="text-end">
                                                 {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->previous_amount : $row->previous_amount, 2) }}
-                                            </td>
+                                            </td> --}}
                                             <td class="text-end">
                                                 {{ number_format($row->description == 'Add/Les S-Overtime' ? $row->current_amount : $row->current_amount, 2) }}
                                             </td>
@@ -270,9 +273,9 @@
                         <tr style="border-bottom:2px solid #F0C356;">
                             <td class="text-start"></td>
                             <td class="text-start"><b>This Month</b> </td>
-                            <td class="text-end">
+                            {{-- <td class="text-end">
                                 <b>{{ number_format(!empty($total_previous) ? $total_previous : 0, 2) }}</b>
-                            </td>
+                            </td> --}}
                             <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
                             <td class="text-end">
                                 <b>{{ number_format($total_amount, 0) }}</b>
@@ -283,89 +286,90 @@
                 </table>
 
                 <hr>
-
                 <table class="table" id="reports">
                     <tbody>
                         <tr>
                             <td>
-                                <p class="text-start" style="font-size:15px;">
+                                <span class="text-start" style="font-size:15px;">
                                     <small><b>Prepared By:</b></small>
-                                </p>
+                                </span>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>1st Cheker & Approved By:</b></small></p>
+                                <span class="text-start" style="font-size:15px;"><small><b>1st Cheker & Approved By:</b></small></span>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>2nd Cheker & Approved By:</b></small></p>
+                                <span class="text-start" style="font-size:15px;"><small><b>2nd Cheker & Approved By:</b></small></span>
                             </td>
-                            <td><p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p></td>
+                            <td><span class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></span></td>
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Name:_______________</small></p>
+                                <span class="text-start"><small>Name:_______________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name:_______________</small></p>
+                                <span class="text-start"><small>Name:_______________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name:_______________</small></p>
+                                <span class="text-start"><small>Name:_______________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Name:_______________</small></p>
-                            </td>
-
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p class="text-start"><small>Position:_____________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Position:_____________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Position:_____________</small></p>
-                            </td>
-                            <td>
-                                <p class="text-start"><small>Position:_____________</small></p>
+                                <span class="text-start"><small>Name:_______________</small></span>
                             </td>
 
                         </tr>
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Signature:___________</small></p>
+                                <span class="text-start"><small>Position:_____________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature:___________</small></p>
+                                <span class="text-start"><small>Position:_____________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature:___________</small></p>
+                                <span class="text-start"><small>Position:_____________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Signature:___________</small></p>
+                                <span class="text-start"><small>Position:_____________</small></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <span class="text-start"><small>Signature:___________</small></span>
+                            </td>
+                            <td>
+                                <span class="text-start"><small>Signature:___________</small></span>
+                            </td>
+                            <td>
+                                <span class="text-start"><small>Signature:___________</small></span>
+                            </td>
+                            <td>
+                                <span class="text-start"><small>Signature:___________</small></span>
 
                         </tr>
 
                         <tr>
 
                             <td>
-                                <p class="text-start"><small>Date:_______________</small></p>
+                                <span class="text-start"><small>Date:_______________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Date:_______________</small></p>
+                                <span class="text-start"><small>Date:_______________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Date:_______________</small></p>
+                                <span class="text-start"><small>Date:_______________</small></span>
                             </td>
                             <td>
-                                <p class="text-start"><small>Date:_______________</small></p>
+                                <span class="text-start"><small>Date:_______________</small></span>
                             </td>
 
                         </tr>
                     </tbody>
                 </table>
+
+
             </div>
         </div>
         <div id="logo2" style="margin-left: 7px; z-index: -10">

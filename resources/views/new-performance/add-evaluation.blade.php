@@ -29,8 +29,16 @@
                 <h5 class="mb-0 text-warning card-tirle"> {{ $employee->fname }} {{ $employee->lname }} </h5>
             </div>
 
-            <a href="{{ route('flex.performance-pillars') }}" class="btn btn-main btn-sm float-end"> <i
-                    class="ph-list me-2"></i> Back</a>
+            <div class="d-flex justify-content-between mt-2">
+                <a href="{{ url('flex/add-evaluation/'.$evaluation->id) }}" class="btn btn-main btn-sm float-end"> <i
+                    class="ph-list me-2"></i> Add Evaluations</a>
+
+                    <a href="{{ url(Request::url()) }}" class="btn btn-main btn-sm float-end"> <i
+                        class="ph-list me-2"></i> Back</a>
+            </div>
+
+            {{-- <a href="{{ url(Request::url()) }}" class="btn btn-main btn-sm float-end"> <i
+                    class="ph-list me-2"></i> Back</a> --}}
         </div>
 
         @if (session('msg'))
@@ -76,7 +84,7 @@
                                     {{ $item->results }}
                                 </td>
                                 <td>
-
+                                    {{ $item->rating }}
                                 </td>
                                 <td>
                                     {{ $item->weighting }}

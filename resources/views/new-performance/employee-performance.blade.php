@@ -23,10 +23,10 @@
 
 
             </div>
-            <a href="{{ url('flex/save-evaluation/'.$employee->emp_id) }}" class="btn btn-sm btn-main float-end"> New Evaluation </a>
-       
-           
-       
+            {{-- <a href="{{ url('flex/save-evaluation/'.$employee->emp_id) }}" class="btn btn-sm btn-main float-end"> New Evaluation </a> --}}
+
+
+
         </div>
         <hr>
         <div id="save_termination" class="" tabindex="-1">
@@ -43,7 +43,7 @@
                             <th>SN</th>
                             <th>Date</th>
                             <th>Employee</th>
-                           
+
                             <th>Actions</th>
                             <th hidden></th>
                         </thead>
@@ -52,34 +52,34 @@
                             @forelse ($evaluations as $item )
                                 <tr>
                                     <td>{{ $i++}}</td>
-                                  
+
                                     <td>{{ date('d-M-Y',$item->creates_at)}}</td>
                                     @php
                                         $user = APP\Models\User::where('emp_id',$item->empID)->first();
                                     @endphp
                                     <td>{{ $user->fname}}  {{ $user->lname}}</td>
-                                 
+
                                     <td>
                                         <a href="{{ route('flex.show_evaluation',$item->id) }}" class="btn btn-sm btn-main">
                                             <i class="ph-pen"></i>
                                         </a>
-    
+
                                         <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
-                                        onclick="deleteHoliday(<?php echo $item->id; ?>)">
+                                        onclick="deleteEvaluation(<?php echo $item->id; ?>)">
                                         <button class="btn btn-danger btn-sm"><i class="ph-trash"></i> </button>
                                          </a>
-    
+
                                     </td>
                                     <td hidden>
-    
+
                                     </td>
                                 </tr>
                             @empty
-    
+
                             @endforelse
                         </tbody>
                     </table>
-                 
+
 
                 </div>
             </div>
@@ -113,5 +113,33 @@
                 }
             });
         });
+
+
+
+        function deleteEvaluation(id)
+    {
+        if (confirm("Are You Sure You Want to Delete") == true) {
+        var leaveid = id;
+
+            $.ajax({
+                url: "<?php echo url('flex/deleteEvaluation');?>/"+leaveid
+            })
+            .done(function(data){
+             $('#resultfeed').fadeOut('fast', function(){
+                  $('#resultfeed').fadeIn('fast').html(data);
+                });
+             $('#status'+id).fadeOut('fast', function(){
+                  $('#status'+id).fadeIn('fast').html('<div class="col-md-12"><span class="label label-warning">HELD</span></div>');
+                });
+             alert('Request Held Successifully!! ...');
+             setTimeout(function(){
+                     location.reload();
+                }, 1500);
+                })
+            .fail(function(){
+             alert('Leave Hold Failed!! ...');
+                });
+        }
+    }
     </script>
 @endpush

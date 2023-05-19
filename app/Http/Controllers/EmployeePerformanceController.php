@@ -46,6 +46,11 @@ class EmployeePerformanceController extends Controller
     }
     // end
 
+    //delete evaluation
+    public function deleteEvaluation($id){
+        $evaluation = EmployeeEvaluation::find($id);
+    }
+
 
 
     // For All Performance Pillars
@@ -113,6 +118,7 @@ class EmployeePerformanceController extends Controller
     {
         $evaluation=new EmployeeEvaluation();
         $evaluation->empID=$id;
+        $evaluation->name= now();
         $evaluation->save();
 
         return redirect('flex/add-evaluation/'.$evaluation->id);
@@ -136,7 +142,7 @@ class EmployeePerformanceController extends Controller
 
       $performance->update($data);
 
-      return redirect('flex/show_evaluation/'.$id);
+      return redirect('flex/show_evaluation/'.$performance->evaluation_id);
 
     }
     // For Add Employee Evaluation
@@ -144,10 +150,14 @@ class EmployeePerformanceController extends Controller
     {
         $evaluation=EmployeeEvaluation::where('id',$id)->first();
 
+
         $data['evaluation']=EmployeeEvaluation::where('id',$id)->first();
         $data['employee']=EMPL::where('emp_id',$evaluation->empID)->first();
         $result = $this->flexperformance_model->addEvaluation($evaluation,$id);
+
+
         $data['strategy'] = PerformanceEvaluation::all()->where('strategy_type','Strategy')->where('evaluation_id',$evaluation->id);
+
         //$data['strategy']=PerformancePillar::where('type','Strategy')->latest()->get();
         //$data['behaviour']=PerformancePillar::where('type','Behaviour')->latest()->get();
         $data['behaviour'] = PerformanceEvaluation::all()->where('strategy_type','Behaviour')->where('evaluation_id',$evaluation->id);
@@ -161,6 +171,8 @@ class EmployeePerformanceController extends Controller
     {
         $evaluation=EmployeeEvaluation::where('id',$id)->first();
 
+    
+
         $data['evaluation']=EmployeeEvaluation::where('id',$id)->first();
         $data['employee']=EMPL::where('emp_id',$evaluation->empID)->first();
         //$result = $this->flexperformance_model->addEvaluation($evaluation,$id);
@@ -170,7 +182,7 @@ class EmployeePerformanceController extends Controller
         $data['behaviour'] = PerformanceEvaluation::all()->where('strategy_type','Behaviour')->where('evaluation_id',$evaluation->id);
 
 
-       
+
 
         return view('new-performance.add-evaluation',$data);
     }
