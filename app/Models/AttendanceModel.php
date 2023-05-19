@@ -81,6 +81,22 @@ class AttendanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+	function myLeaves($empId)
+{
+    $query = "SELECT l.*, la.level1, la.level2, la.level3
+              FROM leaves AS l
+              JOIN leave_approvals AS la ON l.empID = la.empID
+              WHERE :empId IN (la.level1, la.level2, la.level3)
+              ORDER BY l.id DESC";
+
+    $bindings = ['empId' => $empId];
+    $results = DB::select(DB::raw($query), $bindings);
+    return $results;
+}
+
+	
+
+
 	function leave_line($empID)
 	{
 		$query = "SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager = '" . $empID . "' AND NOT e.emp_id =  '" . $empID . "'  ";

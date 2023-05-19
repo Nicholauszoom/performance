@@ -228,6 +228,18 @@ class GeneralController extends Controller
 
         return response( [ 'data'=>$data ],200 );
     }
+    public function myOvertimeApprovals()
+    {
+
+        $emp_id=auth()->user()->emp_id;
+
+      
+        $data['line_overtime'] = $this->flexperformance_model->lineOvertime($emp_id);
+
+
+
+        return response( [ 'data'=>$data ],200 );
+    }
     //  end of employee overtimes function
 
     //  start of apply overtimes function
@@ -405,11 +417,12 @@ class GeneralController extends Controller
     //  start of employee leaves function
     public function myLeaves(Request $request)
     {
-       $data['leaves'] =Leaves::orderBy('id','desc')->get();
+     //  $data['leaves'] =Leaves::orderBy('id','desc')->get();
       
         // $data['myleave'] = array_reverse($data['myleave']); // Reverse the order of leaves
 
         $emp_id=auth()->user()->emp_id;
+        $data['leaves'] = $this->attendance_model->myLeaves($emp_id);
         // $data['leaves'] = $this->attendance_model->other_leaves($emp_id);
         // $data['leaves'] = $this->attendance_model->leave_line($emp_id);
         // $data['leave_types'] =LeaveType::all();
@@ -732,11 +745,11 @@ class GeneralController extends Controller
 
         $overtimeID = $request->id;
 
-        $status = $this->flexperformance_model->checkApprovedOvertimeApi($overtimeID);
+        $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
    //     dd($status);
         // $overtime_type = $this->flexperformance_model->get_overtime_type($overtimeID);
         // $rate = $this->flexperformance_model->get_overtime_rate();
-
+      
         if ($status == 0) {
             $signatory = session('emp_id');
           //  dd($signatory)
@@ -746,14 +759,19 @@ class GeneralController extends Controller
             if ($result == true) {
                 return response()->json([
                 
-                    'msg' => 'Overtime Approved Successifully'],200);
+                    'msg' => 'Overtime Recommended Successifully'],200);
             } else {
                  return response()->json([
-                    'msg' => 'Overtime Not Approved'],400);
+                    'msg' => 'Overtime recommendation failed'],400);
             }
-        } else {
+        }else if($status == 4){
             return response()->json([
-                'msg' => 'Overtime already Approved'],400);
+                'msg' => 'Overtime cannot be recommended '],400);
+        }
+     
+        else {
+            return response()->json([
+                'msg' => "Overtime already recommended {$status}"],400);
         }
     }
 
@@ -798,6 +816,8 @@ class GeneralController extends Controller
     
     $count = 0;
     $count2 =0;
+    $count3 =0;
+    $count4=0;
     
     foreach ($overtimes as $overtime) {
         if ($overtime->status == '0') {
@@ -805,11 +825,18 @@ class GeneralController extends Controller
         }
         else if($overtime->status =='1'){
    $count2++;
+        }else if($overtime->status =='3'){
+            $count3++;
+        }
+        else if($overtime->status =='4'){
+            $count4++;
         }
     }
     
-    $length = $count;
-    $length2= $count2;
+    $pending = $count;
+    $recommended= $count2;
+    $approved= $count3;
+    $denied= $count4;
 
     $loans =Helsb::where('empID',$id)->get();
     //dd($loans->count());
@@ -841,8 +868,10 @@ class GeneralController extends Controller
            'pending leaves'=> $pending_leaves->count(),
            'approved leaves'=>$approved_leaves->count(),
            'total overtimes'=>count($overtimes),
-           'pending overtimes'=>$length,
-           'approved overtimes'=>$length2,
+           'pending overtimes'=>$pending,
+           'recommended overtimes'=>$recommended,
+           'approved overtimes'=>$approved,
+              'denied overtimes'=>$denied,
            'total loan amount'=>$total,
            'remaining amount'=>$remaining,
            'paid amount'=>$paid,
@@ -873,8 +902,10 @@ class GeneralController extends Controller
             'pending leaves'=> $pending_leaves->count(),
             'approved leaves'=>$approved_leaves->count(),
             'total overtimes'=>count($overtimes),
-            'pending overtimes'=>$length,
-            'approved overtimes'=>$length2,
+            'pending overtimes'=>$pending,
+            'denied overtimes'=>$denied,
+            'approved overtimes'=>$approved,
+            'recommended overtimes'=>$recommended,
             'total loan amount'=>'0.0',
             'remaining amount'=>'0.0',
             'paid amount'=>'0.0',
@@ -914,16 +945,34 @@ class GeneralController extends Controller
 
     }
 
-    public function denyOvertime($id)
+    public function denyOvertime(Request $request)
     { //or disapprove
 
-        $overtimeID = $id;
+        $overtimeID = $request->id;
+
+        $status = $this->flexperformance_model->checkOvertimeStatus($overtimeID);
+        if($status===0){
         $result = $this->flexperformance_model->deny_overtime($overtimeID);
         if ($result == true) {
-            echo "<p class='alert alert-warning text-center'>Overtime DISSAPPROVED Successifully</p>";
+            $msg="Overtime denied Successfully";
+            return response([
+                'msg'=>$msg
+            ],200);
         } else {
-            echo "<p class='alert alert-danger text-center'>FAILED to Disapprove, Some Errors Occured Please Try Again!</p>";
+            $msg="Overtime not denied, Some Errors Occured Please Try Again!";
+            return response([
+                'msg'=>$msg
+            ],400);
         }
+    }
+        else{
+            $msg="You cannot further reject this overtime";
+            return response([
+                'msg'=>$msg
+            ],400);
+        }
+      //  dd($status);
+       
     }
 
     public function cancelOvertime($id)
