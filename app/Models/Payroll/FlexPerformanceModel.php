@@ -1882,20 +1882,20 @@ function meals_deduction()
             return $salary;
     }
 
-    public function get_leave_allowance($empID,$termination_date,$jananuary_date){
+    public function get_leave_allowance($empID,$termination_date,$january_date){
 
 
 $query = "
 SELECT
 IF(
-  DATEDIFF('" . $termination_date . "',e.hire_date) < 365,
+  (YEAR('" . $termination_date . "') = YEAR(e.hire_date)),
 (
   ((DATEDIFF('" . $termination_date . "',e.hire_date)+1)/365)*e.salary
 )
   ,
 
  (
-    ((DATEDIFF('" . $termination_date . "','" . $jananuary_date . "')+1)/365)*e.salary
+    ((DATEDIFF('" . $termination_date . "','" . $january_date . "')+1)/365)*e.salary
  )
 
   ) as leave_allowance

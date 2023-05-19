@@ -1973,75 +1973,75 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
 
 
-          (SELECT  CONCAT('Add/Les ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+          (SELECT  CONCAT('Add/Less ',al.description) as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
           (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID  and  allowance_logs.payment_date = '" . $current_payroll_month . "' LIMIT 1 ) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $current_payroll_month . "' LIMIT 1 ),0)) as current_amount,
          (IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1)  > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = al.description and e.emp_id = allowance_logs.empID and  allowance_logs.payment_date = '" . $previous_payroll_month . "' LIMIT 1),0)) as previous_amount
            from employee e,allowance_logs al where e.emp_id = al.empID and e.state!=4)
 
            UNION
 
-            SELECT 'Add/Les N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(public_overtime_amount > 0,public_overtime_amount,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leaveAllowance > 0,leaveAllowance,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(houseAllowance > 0,houseAllowance,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(tellerAllowance > 0,tellerAllowance,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "' group by e.emp_id) > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and  payment_date = '" . $previous_payroll_month . "' group by e.emp_id),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les  Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less  Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as current_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $previous_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and  payment_date = '" . $previous_payroll_month . "'),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(longServing > 0,longServing,0) as current_amount, 0 as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(longServing > 0,longServing,0) as current_amount, 0 as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leavePay != 0,leavePay,0) as current_amount, 0 as previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
@@ -2051,21 +2051,21 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
             UNION
 
-            SELECT 'Add/Les N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(public_overtime_amount > 0,public_overtime_amount,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'S-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 /*
-            SELECT 'Add/Les Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Leave Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leaveAllowance > 0,leaveAllowance,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Leave Allowance' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
@@ -2073,48 +2073,48 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             UNION
             */
 
-            SELECT 'Add/Les House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less House Rent' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(houseAllowance > 0,houseAllowance,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'House Rent' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Teller Allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(tellerAllowance > 0,tellerAllowance,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Teller Allowance' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les  Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less  Arrears' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Arrears' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(arrears > 0,arrears,0) as previous_amount,
             IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'Long Serving allowance' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less  Long Serving allowance' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(longServing > 0,longServing,0) as previous_amount, 0 as current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
-            SELECT 'Add/Les Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Notice Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(longServing > 0,longServing,0) as previous_amount, 0 as current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
 /*
             UNION
 
-            SELECT 'Add/Les Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
+            SELECT 'Add/Less Leave Pay' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(leavePay != 0,leavePay,0) as previous_amount, 0 as current_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
 
@@ -2133,7 +2133,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function total_allowance($current_payroll_month, $previous_payroll_month)
     {
 
-        $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,al.description as allowance,
+        $query = "SELECT  distinct(CONCAT('Add/Less ',al.description)) as description,al.description as allowance,
      (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)) as current_amount,
      (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
 
@@ -2155,7 +2155,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     // public function total_s_overtime($current_payroll_month, $previous_payroll_month)
     // {
 
-    //     $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,al.description as allowance,
+    //     $query = "SELECT  distinct(CONCAT('Add/Less ',al.description)) as description,al.description as allowance,
     //  (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)) as current_amount,
     //  (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
 
@@ -2179,7 +2179,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function total_allowance1($current_payroll_month, $previous_payroll_month)
     {
 
-        $query = "SELECT  distinct(CONCAT('Add/Les ',al.description)) as description,al.description as allowance,
+        $query = "SELECT  distinct(CONCAT('Add/Less ',al.description)) as description,al.description as allowance,
      (IF((SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM temp_allowance_logs WHERE temp_allowance_logs.description = al.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)) as current_amount,
      (IF((SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(amount)  FROM allowance_logs WHERE allowance_logs.description = al.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
 
@@ -2207,56 +2207,56 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $previous_termination = !empty($previous_payroll_month) ? '%'.$calender2[0] . '-' . $calender2[1].'%' : null;
 
         if ($type == "N-Overtime") {
-            $query = "SELECT CONCAT('Add/Les N-Overtime') as description,
+            $query = "SELECT CONCAT('Add/Less N-Overtime') as description,
         SUM((IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE    terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
          SUM((IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
          from terminations tm";
         } elseif ($type == "S-Overtime") {
 
-            $query = "SELECT CONCAT('Add/Les S-Overtime') as description,
+            $query = "SELECT CONCAT('Add/Less S-Overtime') as description,
         SUM((IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
          SUM((IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
          from terminations tm";
 
         } elseif ($type == "leave_pay") {
 
-            $query = "SELECT CONCAT('Add/Les Leave Pay') as description,
+            $query = "SELECT CONCAT('Add/Less Leave Pay') as description,
     SUM((IF((SELECT SUM(leavePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(leavePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(leavePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(leavePay)  FROM terminations WHERE   terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
 
      from terminations tm";
         } elseif ($type == "notice_pay") {
-            $query = "SELECT CONCAT('Add/Les Notice Pay') as description,
+            $query = "SELECT CONCAT('Add/Less Notice Pay') as description,
     SUM((IF((SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         } elseif ($type == "house_allowance") {
-            $query = "SELECT CONCAT('Add/Les House Rent') as description,
+            $query = "SELECT CONCAT('Add/Less House Rent') as description,
     SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         } elseif ($type == "leave_allowance") {
-            $query = "SELECT CONCAT('Add/Les Leave Allowance') as description,
+            $query = "SELECT CONCAT('Add/Less Leave Allowance') as description,
     SUM((IF((SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         } elseif ($type == "teller_allowance") {
-            $query = "SELECT CONCAT('Add/Les Teller Allowance') as description,
+            $query = "SELECT CONCAT('Add/Less Teller Allowance') as description,
     SUM((IF((SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         } elseif ($type == "arreas") {
-            $query = "SELECT CONCAT('Add/Les Arrears') as description,
+            $query = "SELECT CONCAT('Add/Less Arrears') as description,
     SUM((IF((SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         } elseif ($type == "long_serving") {
-            $query = "SELECT CONCAT('Add/Les Long Serving allowance') as description,
+            $query = "SELECT CONCAT('Add/Less Long Serving allowance') as description,
     SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         } elseif ($type == "other_payments") {
-            $query = "SELECT CONCAT('Add/Les Other Payments') as description,
+            $query = "SELECT CONCAT('Add/Less Other Payments') as description,
     SUM((IF((SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
@@ -2276,7 +2276,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
         $data = [];
 
 
-            $query = "SELECT CONCAT('Add/Les N-Overtime') as description,
+            $query = "SELECT CONCAT('Add/Less N-Overtime') as description,
         SUM((IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE    terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
          SUM((IF((SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(normal_days_overtime_amount)  FROM terminations WHERE  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
          from terminations tm";
@@ -2284,14 +2284,14 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
 
-            $query = "SELECT CONCAT('Add/Les S-Overtime') as description,
+            $query = "SELECT CONCAT('Add/Less S-Overtime') as description,
         SUM((IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
          SUM((IF((SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(public_overtime_amount)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
          from terminations tm";
          $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Leave Pay') as description,
+            $query = "SELECT CONCAT('Add/Less Leave Pay') as description,
     SUM((IF((SELECT SUM(leavePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(leavePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(leavePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(leavePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
@@ -2299,21 +2299,21 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
      array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Notice Pay') as description,
+            $query = "SELECT CONCAT('Add/Less Notice Pay') as description,
     SUM((IF((SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(noticePay)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les House Rent') as description,
+            $query = "SELECT CONCAT('Add/Less House Rent') as description,
     SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(houseAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Leave Allowance') as description,
+            $query = "SELECT CONCAT('Add/Less Leave Allowance') as description,
     SUM((IF((SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(leaveAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
@@ -2321,28 +2321,28 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Teller Allowance') as description,
+            $query = "SELECT CONCAT('Add/Less Teller Allowance') as description,
     SUM((IF((SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(tellerAllowance)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Arrears') as description,
+            $query = "SELECT CONCAT('Add/Less Arrears') as description,
     SUM((IF((SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(arrears)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
         $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Long Serving allowance') as description,
+            $query = "SELECT CONCAT('Add/Less Long Serving allowance') as description,
     SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(longServing)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
          $row = DB::select(DB::raw($query));
          array_push($data,['description'=>$row[0]->description,'current_amount'=>$row[0]->current_amount,'previous_amount'=>$row[0]->previous_amount]);
 
-            $query = "SELECT CONCAT('Add/Les Other Payments') as description,
+            $query = "SELECT CONCAT('Add/Less Other Payments') as description,
     SUM((IF((SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "') != 0,(SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $current_termination . "'),0))) as current_amount,
      SUM((IF((SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "') != 0,(SELECT SUM(otherPayments)  FROM terminations WHERE tm.id = terminations.id and  terminations.terminationDate LIKE '" . $previous_termination . "'),0))) as previous_amount
      from terminations tm";
@@ -2361,7 +2361,7 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
     public function total_deduction($current_payroll_month, $previous_payroll_month)
     {
 
-        $query = "SELECT  distinct(CONCAT('Add/Les ',dl.description)) as description,
+        $query = "SELECT  distinct(CONCAT('Add/Less ',dl.description)) as description,
          (IF((SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '" . $current_payroll_month . "' GROUP BY description),0)) as current_amount,
          (IF((SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description) > 0,(SELECT SUM(paid)  FROM deduction_logs WHERE deduction_logs.description = dl.description and  payment_date = '" . $previous_payroll_month . "' GROUP BY description),0)) as previous_amount,
 
