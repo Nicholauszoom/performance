@@ -771,7 +771,7 @@ class GeneralController extends Controller
      
         else {
             return response()->json([
-                'msg' => "Overtime already recommended {$status}"],400);
+                'msg' => "Overtime already recommended "],400);
         }
     }
 
@@ -965,11 +965,19 @@ class GeneralController extends Controller
             ],400);
         }
     }
-        else{
+        else {
+            if($status==4){
             $msg="You cannot further reject this overtime";
             return response([
                 'msg'=>$msg
-            ],400);
+            ],400);}
+            else if($status==1)
+            {
+                $msg="You cannot  reject this overtime";
+                return response([
+                    'msg'=>$msg
+                ],400);
+            }
         }
       //  dd($status);
        
