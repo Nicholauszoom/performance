@@ -456,6 +456,18 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
+    
+	function lineOvertime($id){
+		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment, eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF(e.mname != null, e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
+	CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totalHOURS
+	FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s 
+	WHERE e.department = d.id AND eo.empID = e.emp_id AND e.position = p.id AND eo.linemanager = :id 
+	ORDER BY eo.id DESC";
+
+return DB::select(DB::raw($query), ['id' => $id]);
+
+	}
+
     function approvedOvertimes(){
 		$query = "SELECT  eo.id as id,CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION,
 		  eo.days as totoalHOURS,eo.amount,eo.status as status,oc.name as overtime_category
@@ -621,6 +633,15 @@ class FlexPerformanceModel extends Model
 
 		return $row->counts;
 	}
+	function checkOvertimeStatus($overtimeID)
+{
+    $row = DB::table('employee_overtime')
+        ->where('id', $overtimeID)
+        ->value('status');
+
+    return $row;
+}
+
 
     function get_employee_overtime($overtimeID){
         $query  = "Select eo.empID, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";

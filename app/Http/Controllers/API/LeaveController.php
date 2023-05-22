@@ -649,7 +649,7 @@ class LeaveController extends Controller
 
 
             $leave->status=3;
-            $leave->state=1;
+            $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
@@ -674,7 +674,7 @@ class LeaveController extends Controller
 
             }
             $leave->status=3;
-            $leave->state=1;
+            $leave->state=0;
             $leave->level2=Auth()->user()->emp_id;
             $leave->position='Recommended by '. $position->name;
             $leave->updated_at= new DateTime();
@@ -698,7 +698,7 @@ class LeaveController extends Controller
 
             }
           $leave->status=3;
-          $leave->state=1;
+          $leave->state=0;
           $leave->level3=Auth()->user()->emp_id;
           $leave->position=$position->name;
           $leave->updated_at= new DateTime();

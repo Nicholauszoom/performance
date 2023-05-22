@@ -51,7 +51,8 @@ Route::middleware('auth:sanctum')->group( function () {
        //for approving Leaves
        Route::post('/approveLeave',[LeaveController::class,'approveLeave']);
 
-      // For Saving Overtimes
+    
+       // For Saving Overtimes
       Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);
       // For Saving Leaves
       Route::post('/apply-leave',[LeaveController::class,'store']);
@@ -83,6 +84,8 @@ Route::middleware('auth:sanctum')->group( function () {
        Route::post('/approveOvertime',[GeneralController::class,'approveOvertime']);
        Route::post('/lineApproveOvertime',[GeneralController::class,'lineApproveOvertime']);
        Route::get('/getDashboardData',[GeneralController::class,'dashboardData']);
+       Route::get('/myOvertimeApprovals',[GeneralController::class,'myOvertimeApprovals']);
+       Route::post('/denyOvertime',[GeneralController::class,'denyOvertime']);
 });
 
 
