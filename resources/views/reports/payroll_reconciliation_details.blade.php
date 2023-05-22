@@ -521,62 +521,7 @@
 
                 </table>
                 @endforeach
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-                <table class="table" id="reports">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p class="text-start" style="font-size:15px;">
-                                    <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
-                                </p>
-                            </td>
-                            <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p>
-                            </td>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <span class="text-start"><small>Reviewed By:</small></span>
-                            </td>
-                            <td>
-                                <span class="text-start"><small>Checked By:</small></span>
-                            </td>
-                            <td>
-                                <span class="text-start"><small>Approved By:</small></span>
-                            </td>
-
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <span class="text-start"><small>Name______________________</small></span>
-                            </td>
-                            <td>
-                                <span class="text-start"><small>Name______________________</small></span>
-                            </td>
-                            <td>
-                                <span class="text-start"><small>Name______________________</small></span>
-                            </td>
-
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <span class="text-start"><small>Signature and Date___________</small></span>
-                            </td>
-                            <td>
-                                <span class="text-start"><small>Signature and Date___________</small></span>
-                            </td>
-                            <td>
-                                <span class="text-start"><small>Signature and Date___________</small></span>
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
                 <div id="logo2" style="margin-left: 7px; z-index: -10">
                     <img src="{{ asset('assets/images/x-right.png') }}" width="100px;" height="50px;">
                 </div>

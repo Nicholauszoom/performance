@@ -2110,6 +2110,7 @@ dd($data['paye_terminated']);
 
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+
         $descriptions = [];
         foreach ($total_allowances as $row) {
             if ($row->allowance == "N-Overtime") {
@@ -2177,6 +2178,8 @@ dd($data['paye_terminated']);
 
         $data['total_allowances'] = $total_allowances;
         // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
+//dd($data['total_allowances']);
+
 
 
 
