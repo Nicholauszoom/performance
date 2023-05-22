@@ -256,7 +256,7 @@
                                             <td class="text-end">
                                                 {{ number_format($row->description == 'Add/Less S-Overtime' ? $row->current_amount : $row->current_amount, 2) }}
                                             </td>
-                                            <td class="text-end">{{ number_format($row->difference, 2) }}</td>
+                                            <td class="text-end">{{ number_format($row->current_amount-$row->previous_amount, 2) }}</td>
                                             <td class="text-end"></td>
                                         </tr>
                                         @php

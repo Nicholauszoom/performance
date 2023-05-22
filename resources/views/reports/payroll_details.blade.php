@@ -202,21 +202,21 @@
                                     <td class="text-end">{{ number_format($row2->salaryEnrollment, 0) }}
                                     </td>
 
-                                    <td class="text-end">{{ number_format(0, 0) }}</td>
+                                    <td class="text-end">{{ number_format(($row2->normal_days_overtime_amount+$row2->public_overtime_amount), 0) }}</td>
 
 
 
-                                    <td class="text-end">{{ number_format(0, 0) }}</td>
-                                    <td class="text-end">{{ number_format(0, 0) }}</td>
+                                    <td class="text-end">{{ number_format($row2->tellerAllowance, 0) }}</td>
+                                    <td class="text-end">{{ number_format($row2->houseAllowance, 0) }}</td>
 
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
 
                                     <td class="text-end">
                                         {{ number_format($row2->leavePay + $row2->leaveAllowance, 0) }}
                                     </td>
-                                    @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay;  @endphp
+                                    @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount;  @endphp
                                     <td class="text-end">
-                                        {{ number_format($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay, 0) }}
+                                        {{ number_format($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount, 0) }}
                                     </td>
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
                                     <td class="text-end">
@@ -271,13 +271,13 @@
                             <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
 
                             <td class="text-end">
-                                <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others, 0) }}</b></b>
+                                <b><b>{{ number_format($total_gross_salary, 0) }}</b></b>
                             </td>
 
                             <td class="text-end"><b><b> {{ number_format(0, 0) }}</b></b></td>
                             <td class="text-end">
 
-                                <b><b>{{ number_format($total_gross_salary, 0) }}</b></b>
+                                <b><b>{{ number_format($total_gross_salary- $total_pension, 0) }}</b></b>
 
                                 {{-- <b><b>{{ number_format($total_salary + $total_overtime + $total_teller_allowance + $total_house_rent + $total_others - $total_pension, 0) }}</b></b> --}}
                             </td>
