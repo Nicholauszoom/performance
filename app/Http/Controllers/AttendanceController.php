@@ -1098,6 +1098,17 @@ public function saveLeave(Request $request) {
         }
 
 
+        $emp_data = SysHelpers::employeeData($empID);
+        $email_data = array(
+            'subject' => 'Employee Overtime Approval',
+            'view' => 'emails.linemanager.approved_leave',
+            'email' => $emp_data->email,
+            'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
+        );
+        Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+
+
 
 
         $msg = "Leave Request Has been Approves Successfully !";
@@ -1270,19 +1281,25 @@ public function saveLeave(Request $request) {
        }
 }
 
-    public function holdLeave()
+    public function holdLeave($leaveID)
       {
 
-          if($this->uri->segment(3)!=''){
+        $leave=Leaves::where('id',$leaveID)->first();
 
-        $leaveID = $this->uri->segment(3);
-        $data = array(
-                 'status' =>3,
-                 'notification' => 1
-            );
-          $this->attendance_model->update_leave($data, $leaveID);
-          echo "<p class='alert alert-warning text-center'>Leave Held Successifully</p>";
-          }
+
+        $emp_data = SysHelpers::employeeData($leave->empID);
+        $email_data = array(
+            'subject' => 'Employee Overtime Approval',
+            'view' => 'emails.linemanager.cancel_leave',
+            'email' => $emp_data->email,
+            'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
+        );
+        Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+        $leave->delete();
+
+          echo "<p class='alert alert-warning text-center'>Leave Canceled Successifully</p>";
+
    }
 
   //   public function approveLeave1($id)

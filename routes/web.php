@@ -368,28 +368,28 @@ Route::middleware('auth')->group(function () {
     Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
 
 
-        Route::any('/revoke_authority' ,'revoke_authority')->name('attendandance.revoke_authority');
-            Route::any('/attendance' ,'attendance')->name('attendandance.attendance');
-            Route::any('/attendees' ,'attendees')->name('attendandance.attendees');
-            Route::any('/leave' ,'leave')->name('attendandance.leave');
+        Route::any('/revoke_authority' ,'revoke_authority')->name('attendance.revoke_authority');
+            Route::any('/attendance' ,'attendance')->name('attendance.attendance');
+            Route::any('/attendees' ,'attendees')->name('attendance.attendees');
+            Route::any('/leave' ,'leave')->name('attendance.leave');
 
 
-            Route::any('/apply_leave' ,'apply_leave')->name('attendandance.apply_leave');
-            Route::any('/cancelLeave' ,'cancelLeave')->name('attendandance.cancelLeave');
-            Route::any('/recommendLeave' ,'recommendLeave')->name('attendandance.recommendLeave');
-            Route::any('/holdLeave' ,'holdLeave')->name('attendandance.holdLeave');
-            Route::any('/approveLeave' ,'approveLeave')->name('attendandance.approveLeave');
-            Route::any('/rejectLeave' ,'rejectLeave')->name('attendandance.rejectLeave');
-            Route::any('/leavereport' ,'leavereport')->name('attendandance.leavereport');
-            Route::any('/customleavereport' ,'customleavereport')->name('attendandance.customleavereport');
-            Route::any('/leave_remarks' ,'leave_remarks')->name('attendandance.leave_remarks');
-            Route::any('/leave_application_info' ,'leave_application_info')->name('attendandance.leave_application_info');
-            Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendandance.updateLeaveReason');
-            Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendandance.updateLeaveAddress');
-            Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendandance.updateLeaveMobile');
-            Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendandance.updateLeaveType');
-            Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendandance.updateLeaveDateRange');
-            Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendandance.current_leave_progress');
+            Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
+            Route::any('/cancelLeave' ,'cancelLeave')->name('attendance.cancelLeave');
+            Route::any('/recommendLeave' ,'recommendLeave')->name('attendance.recommendLeave');
+            Route::any('/holdLeave/{id}' ,'holdLeave')->name('attendance.holdLeave');
+            Route::any('/approveLeave' ,'approveLeave')->name('attendance.approveLeave');
+            Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
+            Route::any('/leavereport' ,'leavereport')->name('attendance.leavereport');
+            Route::any('/customleavereport' ,'customleavereport')->name('attendance.customleavereport');
+            Route::any('/leave_remarks' ,'leave_remarks')->name('attendance.leave_remarks');
+            Route::any('/leave_application_info' ,'leave_application_info')->name('attendance.leave_application_info');
+            Route::any('/updateLeaveReason' ,'updateLeaveReason')->name('attendance.updateLeaveReason');
+            Route::any('/updateLeaveAddress' ,'updateLeaveAddress')->name('attendance.updateLeaveAddress');
+            Route::any('/updateLeaveMobile' ,'updateLeaveMobile')->name('attendance.updateLeaveMobile');
+            Route::any('/updateLeaveType' ,'updateLeaveType')->name('attendance.updateLeaveType');
+            Route::any('/updateLeaveDateRange' ,'updateLeaveDateRange')->name('attendance.updateLeaveDateRange');
+            Route::any('/current_leave_progress' ,'current_leave_progress')->name('attendance.current_leave_progress');
 
     });
 
@@ -412,7 +412,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
         Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
 
-        Route::any('/holdLeave' ,'holdLeave')->name('attendance.holdLeave');
+        Route::any('/holdLeave/{id}' ,'holdLeave')->name('attendance.holdLeave');
         Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
         Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
         Route::any('/leavereport' ,'leavereport')->name('attendance.leavereport');

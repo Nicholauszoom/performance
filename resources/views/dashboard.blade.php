@@ -79,7 +79,7 @@
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <p class="text-main">You Deligate leave approving authority to someone else! <strong> </strong></p>
 
-                        <p> <a href="{{ route('attendandance.revoke_authority') }}">Click here to revoke</a> </p>
+                        <p> <a href="{{ route('attendance.revoke_authority') }}">Click here to revoke</a> </p>
                     </div>
                 </div>
             </div>
