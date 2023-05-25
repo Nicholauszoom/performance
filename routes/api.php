@@ -86,6 +86,14 @@ Route::middleware('auth:sanctum')->group( function () {
        Route::get('/getDashboardData',[GeneralController::class,'dashboardData']);
        Route::get('/myOvertimeApprovals',[GeneralController::class,'myOvertimeApprovals']);
        Route::post('/denyOvertime',[GeneralController::class,'denyOvertime']);
+
+       Route::post('/rejectLeave',[LeaveController::class,'cancelLeave']);
+
+       //move attachment to public/storage
+       Route::post('/moveAttachment',[GeneralController::class,'leaveAttachment']);
+
+       //User Leave cancellation
+       Route::post('/cancelLeave',[LeaveController::class,'cancelUserLeave']);
 });
 
 

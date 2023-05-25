@@ -740,7 +740,89 @@ class LeaveController extends Controller
 
 
     }
+
+    public function rejectLeave(Request $request)
+      {
+        $leaveID = $request->id;
+        $leave=Leaves::find($leaveID);
+     
+        // if($this->uri->segment(3)!=''){
+          if($leave->state==1){
+      
+        $leave=Leaves::find($leaveID);
+        $data = array(
+                 'status' =>5,
+                 'notification' => 1
+            );
+          $this->attendance_model->update_leave($data, $leaveID);
+         $msg = "Leave Request Has been Rejected Successfully !";
+          return response(['msg'=>$msg,], 200);
+          }
+          else if($leave->status==5){
+            $msg='Leave Request Already Rejected';
+            return response(['msg'=>$msg,],202);
+          }
+          else{
+            $msg='Leave Request cannot be rejected';
+            return response(['msg'=>$msg,],400);
+          }
+   }
+
+   public function cancelLeave(Request $request)  {
+    $id=$request->id;
+    $leaveID = $id;
+
+    $leave=Leaves::where('id',$leaveID)->first();
+    if($leave != null) {
    
+if($id!=''  && $leave -> state == 1){
+  
+ 
+
+  $leave->delete();
+
+
+  $msg="Leave is Deleted Successfully !";
+
+ return response(['msg'=>$msg],200);
+}else{
+  $msg="Leave cancellation failed!";
+  return response(['msg'=>$msg],400);
+}
+    }
+    else{
+      $msg="That leave does not exist";
+  return response(['msg'=>$msg],400);
+    }
+}
+
+public function cancelUserLeave(Request $request)  {
+  $id=$request->id;
+  $leaveID = $id;
+
+  $leave=Leaves::where('id',$leaveID)->first();
+  if($leave != null) {
+ 
+if($id!=''  && $leave -> state == 1 ){
+
+
+
+$leave->delete();
+
+
+$msg="Leave is Deleted Successfully !";
+
+return response(['msg'=>$msg],200);
+}else{
+$msg="Leave cancellation failed!";
+return response(['msg'=>$msg],400);
+}
+  }
+  else{
+    $msg="That leave does not exist";
+return response(['msg'=>$msg],400);
+  }
+}
 
 
   // start of leave approval

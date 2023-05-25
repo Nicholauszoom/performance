@@ -681,6 +681,64 @@ class GeneralController extends Controller
 
     }
 
+    //Viewing leave attachment
+    // public function leaveAttachment(Request $request)
+    // {
+
+
+    //     $user = auth()->user()->emp_id;
+    //     $image=$request->image;
+    //     // request()->validate([
+    //     //     'image' => 'required'
+    //     // ]);
+
+    //     $employee = EMPL::where('emp_id', $user)->first();
+    //     if ($request->image !==null) {
+
+    //         $newImageName = $image->hashName();
+    //        $image->move(public_path('storage/profile'), $newImageName);
+       
+
+    //         $msg='';
+    //         return response( [ 'msg'=>$msg  ],200 );
+
+    //     }
+    //     else
+    //     {
+    //         $msg='No attachments found';
+    //         return response( [ 'msg'=>$msg  ],400 );
+    //     }
+
+
+
+    // }
+    public function leaveAttachment(Request $request)
+    {
+        $user = auth()->user()->emp_id;
+        $fileContent = $request->input('image');
+        $storageDirectory = 'storage/leaves/';
+    
+        $employee = EMPL::where('emp_id', $user)->first();
+    
+        if ($fileContent !== "") {
+            $fileName = hash('sha256', $fileContent);
+            $filePath = $storageDirectory . $fileName;
+            $bytesWritten = file_put_contents(public_path($filePath), $fileContent);
+    
+            if ($bytesWritten !== false) {
+                $msg = 'File saved successfully.';
+                return response(['msg' => $msg], 200);
+            } else {
+                $msg = 'Error occurred while saving the file.';
+                return response(['msg' => $msg], 500);
+            }
+        } else {
+            $msg = 'No file content provided.';
+            return response(['msg' => $msg], 400);
+        }
+    }
+    
+
 
 
     // Termination test
