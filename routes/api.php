@@ -92,7 +92,12 @@ Route::middleware('auth:sanctum')->group( function () {
        //move attachment to public/storage
        Route::post('/moveAttachment',[GeneralController::class,'leaveAttachment']);
 
+       //Cancel Overtime
+       Route::post('/cancelOvertime',[GeneralController::class,'cancelOvertime']);
+
+
        //User Leave cancellation
+      
        Route::post('/cancelLeave',[LeaveController::class,'cancelUserLeave']);
 });
 

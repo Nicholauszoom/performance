@@ -1041,15 +1041,43 @@ class GeneralController extends Controller
        
     }
 
-    public function cancelOvertime($id)
+    public function cancelOvertime(Request $request
+    )
     {
+
+        $id = $request->id;
+       $overtimes= $this->flexperformance_model->checkOvertimeExistence($id);
+        //dd($overtimes);
+        $status = $this->flexperformance_model->checkOvertimeStatus($id);
+        if($overtimes==true){
+
+        if($status==0 || $status==4){ 
         $result = $this->flexperformance_model->deleteOvertime($id);
 
         if ($result == true) {
-            echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
+          return response([
+              'msg'=>'Overtime cancelled Successfully'
+          ],200);
         } else {
-            echo "<p class='alert alert-danger text-center'>FAILED to DELETE, Please Try Again!</p>";
+            return response([
+                'msg'=>'Overtime not cancelled, Some Errors Occured Please Try Again!'
+            ],400);
+   
         }
+    }else{
+       // if($status==1){
+            return response([
+                'msg'=>'You cannot cancel this overtime'
+            ],400);
+        //}
+    }}
+    else{
+        if($overtimes == false){
+            return response([
+                'msg'=>'Overtime not found'
+            ],400);
+        }
+    }
     }
 
     public function confirmOvertimePayment(Request $request)

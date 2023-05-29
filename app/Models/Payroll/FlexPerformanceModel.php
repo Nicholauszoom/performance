@@ -641,6 +641,14 @@ return DB::select(DB::raw($query), ['id' => $id]);
 
     return $row;
 }
+function checkOvertimeExistence($overtimeID)
+{
+    $exists = DB::table('employee_overtime')
+        ->where('id', $overtimeID)
+        ->exists();
+
+    return $exists;
+}
 
 
     function get_employee_overtime($overtimeID){
