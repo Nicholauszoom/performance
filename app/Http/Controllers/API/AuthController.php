@@ -123,10 +123,10 @@ class AuthController extends Controller
             //$annualleaveBalance = $this->attendance_model->getLeaveBalance($user->hire_date, date('Y-m-d'));
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
             //$annualleaveBalance = 12;
-            $myNewData = json_decode(json_encode($data['employee'][0]), true);
+            //$myNewData = json_decode(json_encode($data['employee'][0]), true);
             $myNewData['accrued_days'] = $annualleaveBalance;
             $myNewData['pass_age'] = $pass_age;
-            $myNewDataJson = json_encode($myNewData);
+           // $myNewDataJson = json_encode($myNewData);
 
             $token = $user->createToken("API TOKEN");
             return response()->json([
