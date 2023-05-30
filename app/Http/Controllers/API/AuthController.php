@@ -120,6 +120,7 @@ class AuthController extends Controller
              //  dd(session()->all());
 
             $data['employee'] = $this->flexperformance_model->userprofile($request->emp_id);
+            dd($data['employee'],$request->emp_id);
             //$annualleaveBalance = $this->attendance_model->getLeaveBalance($user->hire_date, date('Y-m-d'));
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
             //$annualleaveBalance = 12;
