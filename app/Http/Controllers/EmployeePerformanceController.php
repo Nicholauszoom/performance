@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EMPL;
 use App\Models\EmployeeEvaluation;
+use App\Models\EmployeePerformance;
 use App\Models\PerformancePillar;
 use App\Models\PerformanceEvaluation;
 use App\Models\Payroll\FlexPerformanceModel;
@@ -80,6 +81,7 @@ class EmployeePerformanceController extends Controller
         return redirect('/flex/performance-pillars');
     }
 
+
     // Delete Performance pillar
     public function delete_pillar( $id)
     {
@@ -126,6 +128,9 @@ class EmployeePerformanceController extends Controller
 
     public function modal(Request $request){
         $data['id'] = $request->id;
+        if($request->type == 'behaviour'){
+            return view('new-performance.add-score-behaviour',$data);
+        }else
         return view('new-performance.add-score',$data);
     }
 
@@ -171,7 +176,7 @@ class EmployeePerformanceController extends Controller
     {
         $evaluation=EmployeeEvaluation::where('id',$id)->first();
 
-    
+        $data['id'] = $id;
 
         $data['evaluation']=EmployeeEvaluation::where('id',$id)->first();
         $data['employee']=EMPL::where('emp_id',$evaluation->empID)->first();
@@ -185,6 +190,28 @@ class EmployeePerformanceController extends Controller
 
 
         return view('new-performance.add-evaluation',$data);
+    }
+
+    public function show_employee_performance($id)
+    {
+        // $employee=EMPL::where('emp_id',$request->empID)->first();
+        $data['evaluations']=EmployeeEvaluation::where('empID',$id)->latest()->get();
+        $data['employee']=EMPL::where('emp_id',$id)->first();
+        return view('new-performance.employee-performance',$data);
+        // dd($employee);
+    }
+
+    public function submit_performance(Request $request){
+
+        $id = $request->evaluation_id;
+
+        $emp_performance = EmployeeEvaluation::find($id);
+       
+        $emp_performance->status = 1;
+        $emp_performance->save();
+
+
+        return redirect('flex/show_employee_performance/'.$emp_performance->empID);
     }
 
     // For Save Employee Evaluation Criterias

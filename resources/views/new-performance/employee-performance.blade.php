@@ -23,7 +23,7 @@
 
 
             </div>
-            {{-- <a href="{{ url('flex/save-evaluation/'.$employee->emp_id) }}" class="btn btn-sm btn-main float-end"> New Evaluation </a> --}}
+            <a href="{{ url('flex/save-evaluation/'.$employee->emp_id) }}" class="btn btn-sm btn-main float-end"> New Evaluation </a>
 
 
 
@@ -43,7 +43,7 @@
                             <th>SN</th>
                             <th>Date</th>
                             <th>Employee</th>
-
+                            <th>Status</th>
                             <th>Actions</th>
                             <th hidden></th>
                         </thead>
@@ -58,16 +58,30 @@
                                         $user = APP\Models\User::where('emp_id',$item->empID)->first();
                                     @endphp
                                     <td>{{ $user->fname}}  {{ $user->lname}}</td>
+                                    <td>
+                                        @if($item->status == 1)
+                                        <span
+                                        class="badge bg-info">SUBMITTED</span>
+                                        @else
+                                        <span
+                                        class="badge bg-warning">IN PROGRESS</span>
+                                        @endif
+                                    </td>
 
                                     <td>
                                         <a href="{{ route('flex.show_evaluation',$item->id) }}" class="btn btn-sm btn-main">
                                             <i class="ph-pen"></i>
                                         </a>
-
+                                         @if($item->status == 0)
                                         <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
                                         onclick="deleteEvaluation(<?php echo $item->id; ?>)">
                                         <button class="btn btn-danger btn-sm"><i class="ph-trash"></i> </button>
                                          </a>
+                                         @endif
+
+                                         <a href="{{ route('flex.show_evaluation',$item->id) }}" class="btn btn-sm btn-main">
+                                            <i class="ph-eye"></i>
+                                        </a>
 
                                     </td>
                                     <td hidden>

@@ -588,6 +588,12 @@ Route::middleware('auth')->group(function () {
         Route::any('/modal', 'modal')->name('flex.modal');
         Route::any('/addScore', 'addScore')->name('flex.addScore');
 
+        Route::any('/submit_performance', 'submit_performance')->name('flex.submit_performance');
+        Route::any('/show_employee_performance/{id}', 'show_employee_performance')->name('flex.show_employee_performance');
+
+
+
+
         Route::any('/deleteEvaluation/{id}','deleteEvaluation')->name('flex.deleteEvaluation');
 
 
