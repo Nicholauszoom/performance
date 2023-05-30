@@ -456,12 +456,12 @@ class FlexPerformanceModel extends Model
 		return DB::select(DB::raw($query));
 	}
 
-    
+
 	function lineOvertime($id){
 		$query = "SELECT @s:=@s+1 as SNo, eo.final_line_manager_comment as comment, eo.status as status, eo.id as eoid, eo.reason as reason, eo.empID as empID, CONCAT(e.fname,' ',IF(e.mname != null, e.mname,' '),' ', e.lname) as name, d.name as DEPARTMENT, p.name as POSITION, CAST(eo.application_time as date) as applicationDATE,
 	CAST(eo.time_end as time) as time_out, CAST(eo.time_start as time) as time_in, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) as totalHOURS
-	FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s 
-	WHERE e.department = d.id AND eo.empID = e.emp_id AND e.position = p.id AND eo.linemanager = :id 
+	FROM employee e, employee_overtime eo, position p, department d, (SELECT @s:=0) as s
+	WHERE e.department = d.id AND eo.empID = e.emp_id AND e.position = p.id AND eo.linemanager = :id
 	ORDER BY eo.id DESC";
 
 return DB::select(DB::raw($query), ['id' => $id]);
@@ -1377,7 +1377,7 @@ function retire_list()
 
 	function userprofile($empID)
 	{
-		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.id AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='".$empID."'";
+		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name, c.name as CONTRACT, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e,  contract c, country ctry, bank, branch b,  WHERE   e.contract_type = c.id  and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='".$empID."'";
 		return DB::select(DB::raw($query));
 	}
 
