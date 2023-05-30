@@ -1377,7 +1377,7 @@ function retire_list()
 
 	function userprofile($empID)
 	{
-		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name, c.name as CONTRACT, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e,  contract c, country ctry, bank, branch b,  WHERE   e.contract_type = c.id  and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='".$empID."'";
+		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name, c.name as CONTRACT, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e,  contract c, country ctry, bank, branch b WHERE   e.contract_type = c.id  and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='".$empID."'";
 		return DB::select(DB::raw($query));
 	}
 
