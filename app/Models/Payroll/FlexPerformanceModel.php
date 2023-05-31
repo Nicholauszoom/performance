@@ -1382,7 +1382,7 @@ function retire_list()
 
         $row =  DB::select(DB::raw($query));
 
-        dd($row);
+        
 
          return $row;
 
