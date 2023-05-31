@@ -132,7 +132,7 @@
                                                 </div>
 
                                                 <div class="">
-                                                    <div class="d-flex justify-content-end"><img src="{{ asset('img/performance.png') }}" alt="flex logo" height="70px" width="70px" class="img-fluid"></div>
+                                                    <div class="d-flex justify-content-end"><img src="{{ asset('assets/images/hc-hub-logo3.png') }}" alt="HC-HUB logo" height="100px" width="100px" class="img-fluid"></div>
                                                 </div>
                                             </div>
                                         </div>
