@@ -6984,7 +6984,7 @@ class GeneralController extends Controller
                     'username' => $row->emp_id,
                     'password' => $pass,
                 );
-                Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
+                Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
             }
 
 
