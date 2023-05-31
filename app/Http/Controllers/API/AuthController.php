@@ -129,7 +129,7 @@ class AuthController extends Controller
             $myNewData['pass_age'] = $pass_age;
            // $myNewDataJson = json_encode($myNewData);
 
-        
+
 
             $token = $user->createToken("API TOKEN");
             return response()->json([
@@ -137,7 +137,7 @@ class AuthController extends Controller
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'token' => $token->plainTextToken,
-                'hashed' => Hash::make($token),
+                'hashed' => Hash::make($token->plainTextToken),
             ], 200);
 
         } catch (\Throwable $th) {
