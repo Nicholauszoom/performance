@@ -61,13 +61,10 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
-
-            $token = $user->createToken("API TOKEN")->plainTextToken;
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
-                'token' => $token,
-                'hashed' => Hash::make($token),
+                'token' => $user->createToken("API TOKEN")->plainTextToken
             ], 200);
 
         } catch (\Throwable $th) {
@@ -127,17 +124,20 @@ class AuthController extends Controller
             //$annualleaveBalance = $this->attendance_model->getLeaveBalance($user->hire_date, date('Y-m-d'));
             $annualleaveBalance = $this->attendance_model->getLeaveBalance(auth()->user()->emp_id,auth()->user()->hire_date, date('Y-m-d'));
             //$annualleaveBalance = 12;
-            //$myNewData = json_decode(json_encode($data['employee'][0]), true);
+            $myNewData = json_decode(json_encode($data['employee'][0]), true);
             $myNewData['accrued_days'] = $annualleaveBalance;
             $myNewData['pass_age'] = $pass_age;
            // $myNewDataJson = json_encode($myNewData);
+
+        
 
             $token = $user->createToken("API TOKEN");
             return response()->json([
                 'employee'=>$myNewData,
                 'status' => true,
                 'message' => 'User Logged In Successfully',
-                'token' => $token->plainTextToken
+                'token' => $token->plainTextToken,
+                'hashed' => Hash::make($token),
             ], 200);
 
         } catch (\Throwable $th) {
