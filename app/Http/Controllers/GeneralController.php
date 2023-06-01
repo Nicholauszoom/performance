@@ -9008,7 +9008,7 @@ class GeneralController extends Controller
             // dd($request->current_job);
             $employee->national_id = $request->NIDA;
             $employee->form_4_index = $request->HELSB;
-            $employee->pension_fund = $request->pension_fund;
+           // $employee->pension_fund = $request->pension_fund;
             $employee->physical_address = $request->physical_address;
             $employee->update();
 
