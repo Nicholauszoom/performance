@@ -137,7 +137,7 @@ class AuthController extends Controller
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'token' => $token->plainTextToken,
-                'hashed' => Hash::make($token->plainTextToken),
+                //'hashed' => Hash::make($token->plainTextToken),
             ], 200);
 
         } catch (\Throwable $th) {
