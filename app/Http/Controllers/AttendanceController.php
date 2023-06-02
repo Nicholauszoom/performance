@@ -558,12 +558,14 @@ public function saveLeave(Request $request) {
                //fetch Line manager data from employee table and send email
                $linemanager =  LeaveApproval::where('empID',$empID)->first();
                $linemanager_data = SysHelpers::employeeData($linemanager->level1);
+               $employee_data = SysHelpers::employeeData($empID);
                $fullname = $linemanager_data['full_name'];
                $email_data = array(
                    'subject' => 'Employee Leave Approval',
                    'view' => 'emails.linemanager.leave-approval',
                    'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
+                   'employee_name'=>$employee_data['full_name'],
                );
                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
