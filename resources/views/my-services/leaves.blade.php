@@ -257,7 +257,7 @@
               </td>
               <td><?php echo $row->reason; ?></td>
             <td><div>
-                @if($row->position == null) <span class="label label-default badge bg-pending text-white">NOT YET RECOMMENDED</span> @endif
+                @if($row->position == null) <span class="label label-default badge bg-pending text-white">NOT  APROVED</span> @endif
                 <span class="label label-default badge bg-info text-white">{{ $row->position }}</span>
             </div></td>
               <td>

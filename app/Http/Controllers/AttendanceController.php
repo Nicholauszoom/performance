@@ -156,7 +156,14 @@ class AttendanceController extends Controller
       }
       $data['leave_types'] =LeaveType::all();
       // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
-      $data['leaves'] =Leaves::where('state',1)->latest()->get();
+      $data['leaves'] =Leaves::whereNot('state',0)->orderBy('id','DESC')->get();
+
+      $data['approved_leaves'] =Leaves::where('state',0)->orderBy('id','DESC')->get();
+
+
+
+
+    //   $data['leaves'] =  $this->attendance_model->all_leave_line();
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
 
       // Start of Escallation
@@ -540,8 +547,9 @@ public function saveLeave(Request $request) {
                     if ($request->hasfile('image')) {
 
                     $newImageName = $request->image->hashName();
-                    $request->image->move(public_path('storage/leaves'), $newImageName);
+                    $request->image->move(public_path('storage\leaves'), $newImageName);
                     $leaves->attachment =  $newImageName;
+
                     }
                   $leaves->save();
                   $leave_type=LeaveType::where('id',$nature)->first();
@@ -743,8 +751,9 @@ public function saveLeave(Request $request) {
                   if ($request->hasfile('image')) {
 
                     $newImageName = $request->image->hashName();
-                    $request->image->move(public_path('storage/leaves'), $newImageName);
+                    $request->image->move(public_path('storage\leaves'), $newImageName);
                     $leaves->attachment =  $newImageName;
+
                   }
 
 
@@ -960,6 +969,7 @@ public function saveLeave(Request $request) {
                 $newImageName = $request->image->hashName();
                 $request->image->move(public_path('storage/leaves'), $newImageName);
                 $leaves->attachment =  $newImageName;
+
               }
 
               $leaves->save();
@@ -1036,7 +1046,7 @@ public function saveLeave(Request $request) {
             $leave->status=3;
             $leave->state=0;
             $leave->level1=Auth()->user()->emp_id;
-            $leave->position='Recommended by '. $position->name;
+            $leave->position='Approved by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
 
@@ -1061,7 +1071,7 @@ public function saveLeave(Request $request) {
             $leave->status=3;
             $leave->state=0;
             $leave->level2=Auth()->user()->emp_id;
-            $leave->position='Recommended by '. $position->name;
+            $leave->position='Approved by '. $position->name;
             $leave->updated_at= new DateTime();
             $leave->update();
           }

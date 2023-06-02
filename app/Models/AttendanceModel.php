@@ -94,12 +94,19 @@ class AttendanceModel extends Model
     return $results;
 }
 
-	
+
 
 
 	function leave_line($empID)
 	{
 		$query = "SELECT @s:=@s+1 SNo,  lt.type as TYPE,  CONCAT(e.fname,' ', e.mname,' ', e.lname) as NAME, l.* FROM leave_application l, employee e,  leave_type lt,  (SELECT @s:=0) as s WHERE l.empID = e.emp_id AND  l.nature=lt.id AND e.line_manager = '" . $empID . "' AND NOT e.emp_id =  '" . $empID . "'  ";
+
+		return DB::select(DB::raw($query));
+	}
+
+    function all_leave_line()
+	{
+		$query = "SELECT *  FROM leaves ORDER BY id DESC";
 
 		return DB::select(DB::raw($query));
 	}
