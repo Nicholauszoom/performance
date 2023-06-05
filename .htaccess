@@ -14,6 +14,12 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
+
+    # RewriteEngine On
+    RewriteCond %{HTTP:Authorization} ^(.*)
+    RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
+
     RewriteCond %{REQUEST_FILENAME} !\.(css|js|png|jpg)$
 
     <Files ~ "\.(env|config.js|md|xml|gitignore|gitattributes|lock|editorconfig|yml|styleci.yml)$">
@@ -27,5 +33,3 @@ Options -Indexes
 </Files>
 
  </IfModule>
-
-
