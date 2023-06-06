@@ -27,7 +27,7 @@ Route::post('login', 'login');
 
 
 
-Route::middleware('auth:sanctum')->group( function () {2
+Route::middleware('auth:sanctum')->group( function () {
 
 
       // For user details
