@@ -27,7 +27,7 @@ Route::post('login', 'login');
 
 
 
-Route::middleware('auth:sanctum')->group( function () {
+Route::middleware('auth:sanctum')->group( function () {2
 
 
       // For user details
@@ -51,12 +51,12 @@ Route::middleware('auth:sanctum')->group( function () {
        //for approving Leaves
        Route::post('/approveLeave',[LeaveController::class,'approveLeave']);
 
-    
+
        // For Saving Overtimes
       Route::post('/apply-overtime',[GeneralController::class,'applyOvertime']);
       // For Saving Leaves
       Route::post('/apply-leave',[LeaveController::class,'store']);
-   
+
       // For Updating profile image
       Route::post('/update-image',[GeneralController::class,'updateImg']);
 
@@ -68,7 +68,7 @@ Route::middleware('auth:sanctum')->group( function () {
             Route::any('/reports/heslb','heslb')->name('flex.emmployee_loanreport');
             });
 
-      
+
       //test Apply Leave
       Route::post('/save-leave',[LeaveController::class,'saveLeave']);
 
@@ -79,7 +79,7 @@ Route::middleware('auth:sanctum')->group( function () {
             });
       Route::patch('update-password-employee', [PasswordController::class, 'updatePassword'])->name('password.profile');
 
-      
+
        //for approving overtimes
        Route::post('/approveOvertime',[GeneralController::class,'approveOvertime']);
        Route::post('/lineApproveOvertime',[GeneralController::class,'lineApproveOvertime']);
@@ -97,7 +97,7 @@ Route::middleware('auth:sanctum')->group( function () {
 
 
        //User Leave cancellation
-      
+
        Route::post('/cancelLeave',[LeaveController::class,'cancelUserLeave']);
 });
 
