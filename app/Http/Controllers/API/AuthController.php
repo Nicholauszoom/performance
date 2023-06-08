@@ -106,6 +106,7 @@ class AuthController extends Controller
             }
 
             $user = User::where('emp_id', $request->emp_id)->first();
+
             if ($user->tokens()->count() > 0) {
                 $user->tokens()->delete();
             }
@@ -132,6 +133,7 @@ class AuthController extends Controller
 
 
             $token = $user->createToken("API TOKEN");
+
             return response()->json([
                 'employee'=>$myNewData,
                 'status' => true,

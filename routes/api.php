@@ -21,12 +21,13 @@ use App\Http\Controllers\API\PasswordController;
 */
 Route::controller(AuthController::class)->group(function(){
 
-Route::post('login', 'login');
+    Route::post('login', 'login');
 
 });
 
-
-
+Route::get('/test', function (Request $request) {
+    return $request->header('apikey');
+});
 Route::middleware('auth:sanctum')->group( function () {
 
 

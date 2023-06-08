@@ -365,7 +365,7 @@ Route::middleware('auth')->group(function () {
     // start of attendance access permission routes
 
     // Routes 1
-    Route::prefix('attendance')->controller(AttendanceController::class)->group(function (){
+    Route::prefix('attendance')->controller(AtteendanceController::class)->group(function (){
 
 
         Route::any('/revoke_authority' ,'revoke_authority')->name('attendance.revoke_authority');

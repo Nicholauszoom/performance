@@ -291,32 +291,37 @@
             </div>
         @endif
     @endcan
-
-    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete1" tabindex="-1"
-        role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-            <div class="modal-content py-3">
-                <div class="modal-body">
-                    <center>
-                        <div id="message"></div>
-                    </center>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-4">
-
-                    </div>
-                    <div class="col-sm-6">
-
-                    </div>
-                    <div class="col-sm-2">
-
+    <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete"
+    tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content py-3">
+            <div class="modal-body">
+                <div id="message"></div>
+                <div class="row py-2">
+                    <div class="col-sm-12 col-lg-12 px-5">
+                        <label>Enter Your Comment Here!</label>
+                        <textarea id="comment" required></textarea>
                     </div>
                 </div>
-
             </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-default btn-sm" onclick="hidemodel()"
+                        data-dismiss="modal">No</button>
+                    <button type="button" id="yes_delete" class="btn btn-main btn-sm">Yes</button>
+                </div>
+                <div class="col-sm-2">
+
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 @endsection
 
 
@@ -329,30 +334,38 @@
     <script>
         function cancelLeave(id) {
 
-            const message = "Are You Sure That You Want to Reject This Leave Request ?";
+            const message = "Are You Sure That You Want to Reject This Leave Request?";
             $('#delete').modal('show');
             $('#delete').find('.modal-body #message').text(message);
 
             $("#yes_delete").click(function() {
                 $('#hideList').hide();
-                var message = document.getElementById('comment').value;
-                var terminationid = id;
-                var url =
-                    "{{ route('attendance.approveLeave', ['id' => ':terminationid', 'message' => ':msg']) }}";
-                url = url.replace(':msg', message);
-                url = url.replace(':terminationid', terminationid);
+                const message = document.getElementById('comment').value;
+                const terminationid = id;
+
+                 var data  =  terminationid+"|"+message;
+
+                var url = "{{ route('attendance.cancelLeave', ':data') }}";
+                url = url.replace(':data', data);
+
                 if (message != "") {
                     $.ajax({
                         // url: url,
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
                         url: url,
+                       // body:['']
                         async: true,
-                        beforeSend: function() {
-                            $('.request__spinner').show()
-                        },
-                        complete: function() {
+                        // beforeSend: function() {
+                        //     $('.request__spinner').show()
+                        // },
+                        // complete: function() {
 
-                        },
+                        // },
                         success: function(data) {
+                            alert(data);
                             var data = JSON.parse(data);
                             if (data.status == 'OK') {
                                 $('#delete').modal('hide');
@@ -620,7 +633,7 @@
                 },
                 singleClasses: "picker_1"
             }, function(start, end, label) {
-                // var years = moment().diff(start, 'years');
+                 var years = moment().diff(start, 'years');
                 // alert("The Employee is " + years+ " Years Old!");
 
             });

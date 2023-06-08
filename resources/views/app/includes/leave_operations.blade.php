@@ -162,7 +162,7 @@
     }
 
 
-    function cancelLeave(id)
+    function cancelLeave2(id)
     {
         if (confirm("Are You Sure You Want to Cancel and Delete This Leave Request") == true) {
         var leaveid = id;
