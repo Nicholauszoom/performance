@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 class Payroll extends Model {
     public function customemployee() {
-        $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state != 4 and e.login_user != 1 ";
+        $query = "SELECT DISTINCT e.emp_id as empID, CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as NAME FROM employee e WHERE e.state = 1 and e.login_user != 1 ";
         return DB::select(DB::raw($query));
     }
     public function customemployeeExit() {
@@ -115,7 +115,7 @@ class Payroll extends Model {
         return DB::select(DB::raw($query));
     }
     public function employee_bonuses() {
-        $query = "SELECT @s:=@s+1 SNo, b.*, tags.name as tag,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM employee e, department d, position p, bonus b, bonus_tags tags, (SELECT @s:=0) as s WHERE e.department = d.id AND e.position = p.id AND e.emp_id = b.empID AND tags.id = b.name and e.state != 4 and e.login_user != 1";
+        $query = "SELECT @s:=@s+1 SNo, b.*, tags.name as tag,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name, d.name as department, p.name as position FROM employee e, department d, position p, bonus b, bonus_tags tags, (SELECT @s:=0) as s WHERE e.department = d.id AND e.position = p.id AND e.emp_id = b.empID AND tags.id = b.name and e.state = 1 and e.login_user != 1";
         return DB::select(DB::raw($query));
     }
     public function waitingbonusesRecom() {
@@ -215,7 +215,7 @@ IF((e.unpaid_leave = 0)
  '" . $payroll_date . "' AS payment_date,
  a.Isbik as benefit_in_kind
 
-FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
+FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
             //INSERT BONUS
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
@@ -228,7 +228,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state != 4 and e.login_user != 1 GROUP BY b.empID, bt.name";
+	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state = 1 and e.login_user != 1 GROUP BY b.empID, bt.name";
             DB::insert(DB::raw($query));
             //INSERT OVERTIME
             $query = " INSERT INTO temp_allowance_logs(empID, description, policy, amount, payment_date)
@@ -241,7 +241,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
             /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
@@ -280,7 +280,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' as payment_date
 
-	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state != 4 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
+	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state = 1 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
             DB::insert(DB::raw($query));
             //DEDUCTION LOGS FROM IMPREST REFUND
             $query = "INSERT INTO temp_deduction_logs(empID, description, policy, paid, payment_date)
@@ -302,7 +302,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	     '" . $payroll_date . "' AS payment_date
 
-	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state != 4 and e.login_user != 1 AND a.id = 6";
+	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state = 1 and e.login_user != 1 AND a.id = 6";
             DB::insert(DB::raw($query));
             //STOP LOAN
             // $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
@@ -1250,7 +1250,7 @@ IF(
 
 	     '" . $year . "' as years,
          e.salary as actual_salary
-	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state != 4 and e.login_user != 1";
+	     FROM employee e, pension_fund pf, bank bn, bank_branch bb WHERE e.pension_fund = pf.id AND  e.bank = bn.id AND bb.id = e.bank_branch AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
 
 
@@ -1300,7 +1300,7 @@ IF((e.unpaid_leave = 0)
  '" . $payroll_date . "' AS payment_date,
  a.Isbik as benefit_in_kind
 
-FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state != 4 and e.login_user != 1";
+FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND a.state = 1 AND e.state = 1 and e.login_user != 1";
             DB::insert(DB::raw($query));
             //INSERT BONUS
             $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
@@ -1313,7 +1313,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state != 4 and e.login_user != 1 GROUP BY b.empID, bt.name";
+	    FROM employee e,  bonus b, bonus_tags bt WHERE e.emp_id =  b.empID and bt.id = b.name AND b.state = 1 and e.state = 1 and e.login_user != 1 GROUP BY b.empID, bt.name";
             DB::insert(DB::raw($query));
             //INSERT OVERTIME
             $query = " INSERT INTO allowance_logs(empID, description, policy, amount, payment_date)
@@ -1326,7 +1326,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' AS payment_date
 
-	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state != 4 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
+	    FROM  employee e, overtimes o WHERE  o.empID =  e.emp_id and e.state = 1 and e.login_user != 1 GROUP BY o.empID, o.overtime_category";
             DB::insert(DB::raw($query));
             //UPDATE SALARY ADVANCE.
             /*$query = "UPDATE loan SET paid = IF(((paid+deduction_amount) > amount), amount, (paid+deduction_amount)),
@@ -1363,7 +1363,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	    '" . $payroll_date . "' as payment_date
 
-	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state != 4 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
+	    FROM emp_deductions ed,  deductions d, employee e WHERE e.emp_id = ed.empID and e.state = 1 and e.login_user != 1 AND ed.deduction = d.id AND  d.state = 1";
             DB::insert(DB::raw($query));
             //DEDUCTION LOGS FROM IMPREST REFUND
             $query = "INSERT INTO deduction_logs(empID, description, policy, paid, payment_date)
@@ -1385,7 +1385,7 @@ FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND 
 
 	     '" . $payroll_date . "' AS payment_date
 
-	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state != 4 and e.login_user != 1 AND a.id = 6";
+	    FROM employee e, emp_allowances ea,  allowances a WHERE e.emp_id = ea.empID AND a.id = ea.allowance AND e.is_expatriate = 1 and e.state = 1 and e.login_user != 1 AND a.id = 6";
             DB::insert(DB::raw($query));
             //STOP LOAN
              $query = " UPDATE loan SET state = 0 WHERE amount = paid and state = 1";
@@ -2589,7 +2589,7 @@ as gross,
         return $row->payroll_date;
     }
     public function getPayroll($payrollMonth) {
-        $query = "SELECT CONCAT(ie.fname,' ', ie.mname,' ', ie.lname) as initName, IF( (pm.state=0), (SELECT CONCAT(ae.fname,' ', ae.mname,' ', ae.lname) FROM employee ae WHERE ae.emp_id = pm.appr_author and ae.state != 4 and ae.login_user != 1), 1) as apprName, pm.* FROM payroll_months pm, employee ie WHERE ie.emp_id = pm.init_author and ie.state != 4 and ie.login_user != 1 AND pm.payroll_date = '" . $payrollMonth . "' ";
+        $query = "SELECT CONCAT(ie.fname,' ', ie.mname,' ', ie.lname) as initName, IF( (pm.state=0), (SELECT CONCAT(ae.fname,' ', ae.mname,' ', ae.lname) FROM employee ae WHERE ae.emp_id = pm.appr_author and ae.state = 1 and ae.login_user != 1), 1) as apprName, pm.* FROM payroll_months pm, employee ie WHERE ie.emp_id = pm.init_author and ie.state = 1 and ie.login_user != 1 AND pm.payroll_date = '" . $payrollMonth . "' ";
         return DB::select(DB::raw($query));
     }
     public function payrollTotals($table, $payrollMonth) {
@@ -2649,7 +2649,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
         return DB::select(DB::raw($query));
     }
     public function payroll_review($empID, $table, $payrollMonth) {
-        $query = "SELECT CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName, b.name as bank, bb.name as branch, cbr.name as company_branch, bb.swiftcode, pf.name as pensionFundName, pf.*,  tpl.* FROM employee e, " . $table . " tpl,  bank_branch bb, bank b, pension_fund pf, branch cbr WHERE tpl.empID = e.emp_id and e.state != 4 AND bb.id= tpl.bank_branch AND b.id = tpl.bank AND tpl.pension_fund = pf.id  AND cbr.id = tpl.branch AND tpl.empID = '" . $empID . "' AND tpl.payroll_date = '" . $payrollMonth . "'";
+        $query = "SELECT CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName, b.name as bank, bb.name as branch, cbr.name as company_branch, bb.swiftcode, pf.name as pensionFundName, pf.*,  tpl.* FROM employee e, " . $table . " tpl,  bank_branch bb, bank b, pension_fund pf, branch cbr WHERE tpl.empID = e.emp_id and e.state = 1 AND bb.id= tpl.bank_branch AND b.id = tpl.bank AND tpl.pension_fund = pf.id  AND cbr.id = tpl.branch AND tpl.empID = '" . $empID . "' AND tpl.payroll_date = '" . $payrollMonth . "'";
         return DB::select(DB::raw($query));
     }
     public function allowances_review($empID, $table, $payrollMonth) {
@@ -2686,7 +2686,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
 		pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
 		IF((SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
 		IF((SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions
-		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state != 4 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
+		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state = 1 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
         return DB::select(DB::raw($query));
     }
     public function employeeTempPayrollList($date, $table_allowance_logs, $table_deduction_logs, $table_loan_logs, $table_payroll_logs, $table_arrears) {
@@ -2696,7 +2696,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
 		pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
 		IF((SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
 		IF((SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions
-		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state != 4 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
+		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state = 1 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
         return DB::select(DB::raw($query));
     }
     public function employeeTempPayrollList1($date, $table_allowance_logs, $table_deduction_logs, $table_loan_logs, $table_payroll_logs, $table_arrears) {
@@ -2706,7 +2706,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
 		pl.salary, pl.meals, pl.pension_employee AS pension, pl.taxdue,
 		IF((SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM " . $table_loan_logs . " ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
 		IF((SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM " . $table_deduction_logs . " dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions
-		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state != 4 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
+		FROM employee e, " . $table_payroll_logs . "  pl, department d, position p, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND e.state = 1 and e.login_user != 1 and pl.position = p.id and pl.department = d.id AND pl.payroll_date = '" . $date . "'";
         return DB::select(DB::raw($query));
     }
     /*
@@ -2739,7 +2739,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }*/
     // Below is the Test public function
     public function send_payslips($payroll_date) {
-        $query = "SELECT empID, email, payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName FROM employee, payroll_logs WHERE  emp_id = empID AND employee.state != 4 and payroll_date = '" . $payroll_date . "'";
+        $query = "SELECT empID, email, payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName FROM employee, payroll_logs WHERE  emp_id = empID AND employee.state = 1 and payroll_date = '" . $payroll_date . "'";
         return DB::select(DB::raw($query));
     }
     public function update_payroll_month($updates, $payroll_date, $arrearID, $dataLogs, $dataUpdates) {
@@ -2776,7 +2776,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
         return true;
     }
     public function all_arrears_individual() {
-        $query = "SELECT (@s:=@s+1) as SNo, ar.empID, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(ar.amount) as amount, SUM(ar.paid) as paid, SUM(ar.amount_last_paid) AS amount_last_paid, (SELECT last_paid_date FROM arrears WHERE empID = ar.empID ORDER BY id DESC LIMIT 1) AS last_paid_date FROM arrears ar, employee e, (SELECT @s:=0) AS s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.status = 1 GROUP BY ar.empID ORDER BY SNo";
+        $query = "SELECT (@s:=@s+1) as SNo, ar.empID, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(ar.amount) as amount, SUM(ar.paid) as paid, SUM(ar.amount_last_paid) AS amount_last_paid, (SELECT last_paid_date FROM arrears WHERE empID = ar.empID ORDER BY id DESC LIMIT 1) AS last_paid_date FROM arrears ar, employee e, (SELECT @s:=0) AS s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.status = 1 GROUP BY ar.empID ORDER BY SNo";
         return DB::select(DB::raw($query));
     }
     public function all_arrears_payroll_month() {
@@ -2785,18 +2785,18 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
     }
     public function arrears($start, $finish) {
         if ($finish > $start) {
-            $query = "SELECT (@s:=@s+1) as SNo, ar.empID, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(ar.amount) as amount, SUM(ar.paid) as paid, SUM(ar.amount_last_paid) AS amount_last_paid, (SELECT last_paid_date FROM arrears WHERE empID = ar.empID ORDER BY id DESC LIMIT 1) AS last_paid_date FROM arrears ar, employee e, (SELECT @s:=0) AS s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.payroll_date BETWEEN '" . $start . "' AND '" . $finish . "' AND ar.status = 1 GROUP BY ar.empID ORDER BY SNo";
+            $query = "SELECT (@s:=@s+1) as SNo, ar.empID, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(ar.amount) as amount, SUM(ar.paid) as paid, SUM(ar.amount_last_paid) AS amount_last_paid, (SELECT last_paid_date FROM arrears WHERE empID = ar.empID ORDER BY id DESC LIMIT 1) AS last_paid_date FROM arrears ar, employee e, (SELECT @s:=0) AS s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.payroll_date BETWEEN '" . $start . "' AND '" . $finish . "' AND ar.status = 1 GROUP BY ar.empID ORDER BY SNo";
         } else {
-            $query = "SELECT (@s:=@s+1) as SNo, ar.empID, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(ar.amount) as amount, SUM(ar.paid) as paid, SUM(ar.amount_last_paid) AS amount_last_paid, (SELECT last_paid_date FROM arrears WHERE empID = ar.empID ORDER BY id DESC LIMIT 1) AS last_paid_date FROM arrears ar, employee e, (SELECT @s:=0) AS s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.payroll_date BETWEEN '" . $finish . "' AND '" . $start . "' AND ar.status = 1 GROUP BY ar.empID ORDER BY SNo";
+            $query = "SELECT (@s:=@s+1) as SNo, ar.empID, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(ar.amount) as amount, SUM(ar.paid) as paid, SUM(ar.amount_last_paid) AS amount_last_paid, (SELECT last_paid_date FROM arrears WHERE empID = ar.empID ORDER BY id DESC LIMIT 1) AS last_paid_date FROM arrears ar, employee e, (SELECT @s:=0) AS s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.payroll_date BETWEEN '" . $finish . "' AND '" . $start . "' AND ar.status = 1 GROUP BY ar.empID ORDER BY SNo";
         }
         return DB::select(DB::raw($query));
     }
     public function OLD_pending_arrears_payment() {
-        $query = "SELECT (@s:=@s+1) as SNo, ar.empID, ar.payroll_date, ar.amount as arrear_amount, ar.paid as arrear_paid, CONCAT(fname,' ', mname,' ', lname) AS empName, arp.* FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.id = arp.arrear_id";
+        $query = "SELECT (@s:=@s+1) as SNo, ar.empID, ar.payroll_date, ar.amount as arrear_amount, ar.paid as arrear_paid, CONCAT(fname,' ', mname,' ', lname) AS empName, arp.* FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.id = arp.arrear_id";
         return DB::select(DB::raw($query));
     }
     public function pending_arrears_payment() {
-        $query = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state != 4 AND ar.id = arp.arrear_id GROUP BY e.fname,e.mname,e.lname,ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
+        $query = "SELECT (@s:=@s+1) as SNo, arp.id, ar.empID, ar.payroll_date, CONCAT(fname,' ', mname,' ', lname) AS empName, SUM(arp.amount) as amount, arp.status, ar.amount as arrear_amount, ar.paid as arrear_paid, ar.payroll_date, ar.last_paid_date, ar.amount_last_paid as amount_last_paid FROM employee e, arrears ar, arrears_pendings arp, (SELECT @s:=0) as s WHERE ar.empID = e.emp_id and e.state = 1 AND ar.id = arp.arrear_id GROUP BY e.fname,e.mname,e.lname,ar.payroll_date, ar.empID, ar.last_paid_date, ar.amount, ar.amount_last_paid, ar.paid,arp.id, arp.status";
         return DB::select(DB::raw($query));
     }
     public function employee_arrears($empID) {
@@ -2808,7 +2808,7 @@ FROM temp_loan_logs tlg, loan l WHERE l.id = tlg.loanID and payment_date = '" . 
         return DB::select(DB::raw($query));
     }
     public function monthly_arrears($payroll_month) {
-        $query = "SELECT (@s:=@s+1) AS SNo, ar.*,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName, pl.less_takehome, IF( (SELECT COUNT(id) FROM arrears_pendings WHERE arrear_id = ar.id)>0, (SELECT amount FROM arrears_pendings WHERE arrear_id = ar.id), 0 ) as pending_amount FROM employee e, arrears ar, payroll_logs pl, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id and e.state != 4 and e.login_user != 1 AND pl.payroll_date = ar.payroll_date AND pl.empID = ar.empID and ar.status = 1 AND ar.payroll_date = '" . $payroll_month . "'";
+        $query = "SELECT (@s:=@s+1) AS SNo, ar.*,  CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) AS empName, pl.less_takehome, IF( (SELECT COUNT(id) FROM arrears_pendings WHERE arrear_id = ar.id)>0, (SELECT amount FROM arrears_pendings WHERE arrear_id = ar.id), 0 ) as pending_amount FROM employee e, arrears ar, payroll_logs pl, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id and e.state = 1 and e.login_user != 1 AND pl.payroll_date = ar.payroll_date AND pl.empID = ar.empID and ar.status = 1 AND ar.payroll_date = '" . $payroll_month . "'";
         return DB::select(DB::raw($query));
     }
     public function approved_arrears() {
