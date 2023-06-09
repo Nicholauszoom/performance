@@ -90,10 +90,10 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Leave Approval</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Leave Dis-Approval</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
-                <p>This is to notify you that,Your Leave Application Rejected due to the following reasons,</p>
-                <p>{{ $message }}</p>
+                <p>This is to notify you that,Your Leave Application is  Rejected, due to the following reasons,</p>
+                <p>{{ $info }}</p>
                 <p>Please contact Your Line Manager for more clarification.</p>
                 <p>Regards,</p>
                 <p>HC HUB</p>

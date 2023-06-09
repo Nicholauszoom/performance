@@ -1247,14 +1247,14 @@ public function saveLeave(Request $request) {
           //dd($id);
           $result = explode('|',$data);
           $id = $result[0];
-          $message = $result[1];
+          $info = $result[1];
 
       if($id!=''){
         $leaveID = $id;
 
         $leave=Leaves::where('id',$leaveID)->first();
 
-        if($message != ''){
+        if($info != ''){
             //sending email specify the reason
 
                $employee_data = SysHelpers::employeeData($leave->empID);
@@ -1264,9 +1264,9 @@ public function saveLeave(Request $request) {
                    'view' => 'emails.linemanager.leave-rejection',
                    'email' => $employee_data['email'],
                    'full_name' => $fullname,
-                   'message'=>$message,
+                   'info'=>$info,
                );
-               dd($employee_data['email']);
+               //dd($employee_data['email']);
                Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
         }
         $leave->delete();
@@ -1276,7 +1276,9 @@ public function saveLeave(Request $request) {
 
         $msg="Leave Was Deleted Successfully !";
 
-        return redirect('flex/attendance/my-leaves')->with('msg', $msg);
+        echo "<p class='alert alert-primary text-center'>Leave Was Rejected Successfully</p>";
+
+      //  return redirect('flex/attendance/my-leaves')->with('msg', $msg);
       }
    }
 
