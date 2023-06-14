@@ -3079,15 +3079,25 @@ EOD;
     {
         // dd("hello");
 
+        
 
-        // dd($request->duration);
+
+        $nature = $request->nature;
+        $calender = explode('-',$request->duration);
+
+        $no_days = $calender[2];
+
 
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
             // $employee= Employee::all();
             //$employee = $this->flexperformance_model->employee();
             $employees = Employee::where('state', '=', 1)->get();
 
+
+
             foreach ($employees  as $employee) {
+
+
 
                 $d1 = new \DateTime(date($employee->hire_date));
 
@@ -3102,19 +3112,28 @@ EOD;
 
                 $employee->accrual_amount = $employee->salary/30;
 
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
-
-                $accrual_days = $days * $employee->accrual_rate / $days_this_month;
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                 dd($days_this_month);
+                $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
 
                 $employee->accrual_days = $accrual_days;
 
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+                $employee->nature = $nature;
 
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+
+                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
             }
 
         } else {
 
+            
             $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
             //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
             foreach ($employees  as $employee) {
@@ -3131,30 +3150,43 @@ EOD;
                 $days_this_month = intval(date('t', strtotime(date(''))));
 
 
-                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id);
+                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
+                //dd($employee->leave_taken);
 
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
 
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration);
-
-                $accrual_days = $days * $employee->accrual_rate / $days_this_month;
+                $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30? $days_this_month + 1 : $days_this_month);
 
                 $employee->accrual_days = $accrual_days;
 
                 $employee->accrual_amount = $employee->salary/30;
 
+                $employee->nature = $nature;
 
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+                
 
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration);
+                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+
+                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                
+                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                        
             }
         }
         // dd($employees);
+        $leave_name = $this->attendance_model->leave_name($nature);
         if($request->type == 1){
            $data['employees'] =  $employees;
+           $data['nature'] =  $nature;
+           $data['leave_name'] = $leave_name;
+           $data['date'] = $request->duration;
         $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
         return $pdf->download('Leave_report'.$request->duration.'.pdf');
         }else{
-            return view('reports.leave_balance_datatable', ['employees' => $employees]);
+            return view('reports.leave_balance_datatable', ['employees' => $employees,'nature' => $nature,'leave_name'=>$leave_name,'date'=>$request->duration]);
         }
 
 

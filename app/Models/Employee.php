@@ -61,4 +61,14 @@ class Employee extends Model
     public function roles(){
         return $this->belongsTo('App\Models\Role','level');
     }
+
+    public function positions(){
+        return $this->belongsTo('App\Models\Position','position');
+    }
+
+    public function departments(){
+        return $this->belongsTo('App\Models\Department','department');
+    }
+
+    
 }

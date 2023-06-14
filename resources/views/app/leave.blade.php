@@ -32,7 +32,7 @@
                 <table class="table table-striped table-bordered datatable-basic">
                     <thead>
                         <tr>
-                            <th>S/N</th>
+                            <th>Payroll No</th>
                             <th>Name</th>
                             <th>Duration</th>
                             <th>Nature</th>
@@ -68,7 +68,7 @@
 
                                 @if ($level1 != null || $level2 != null || $level3 != null)
                                     <tr>
-                                        <td>{{ $item->id }}</td>
+                                        <td>{{ $item->empID }}</td>
                                         <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
                                             {{ $item->employee->lname }}</td>
                                         <td>
@@ -167,7 +167,7 @@
                 <table class="table table-striped table-bordered datatable-basic">
                     <thead>
                         <tr>
-                            <th>S/N</th>
+                            <th>Payroll No</th>
                             <th>Name</th>
                             <th>Duration</th>
                             <th>Nature</th>
@@ -203,7 +203,7 @@
 
                                 @if ($level1 != null || $level2 != null || $level3 != null)
                                     <tr>
-                                        <td>{{ $item->id }}</td>
+                                        <td>{{ $item->empID }}</td>
                                         <td>{{ $item->employee->fname }} {{ $item->employee->mname }}
                                             {{ $item->employee->lname }}</td>
                                         <td>

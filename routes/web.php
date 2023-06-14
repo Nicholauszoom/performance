@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\BOTDataController;
 use App\Http\Controllers\ImprestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -90,6 +91,11 @@ Route::middleware('auth')->group(function () {
         // 'skill' => SkillsController::class,
         // 'trainingApp'=>TrainingAppController::class,
     ]);
+    Route::prefix('bot')->controller(BOTDataController::class)->group(function(){
+
+        Route::any('/index','index')->name('bot.botIndex');
+        Route::any('/postEmployeeData','postEmployeeData')->name('bot.postEmployeeData');
+    });
 
     // Routes with workforce access permission
     Route::prefix('flex')->controller(GeneralController::class)->group(function(){
@@ -98,6 +104,9 @@ Route::middleware('auth')->group(function () {
          // start of overtime routes
 
          Route::any('/passwordAutogenerate','passwordAutogenerate')->name('flex.passwordAutogenerate');
+
+
+
 
          Route::any('/overtime','overtime')->name('flex.overtime');
          Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');

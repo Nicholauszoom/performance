@@ -22,13 +22,13 @@
     </div>
 
     <div class="card-body">
-        
+
     </div>
 
     <table  class="table table-striped table-bordered datatable-basic">
       <thead>
         <tr>
-          <th>S/N</th>
+          <th>Payroll No</th>
           <th>Name</th>
           <th>Duration</th>
           <th>Nature</th>
@@ -46,7 +46,7 @@
 
         {{-- @if ( $item->employee->line_manager  ==  Auth::user()->emp_id) --}}
         <tr>
-          <td>{{ $item->id }}</td>
+          <td>{{ $item->empID }}</td>
           <td>{{ $item->employee->fname }} {{ $item->employee->mname }} {{ $item->employee->lname }}</td>
           <td>
             {{ $item->days }} Days

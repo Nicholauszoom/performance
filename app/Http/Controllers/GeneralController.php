@@ -3970,6 +3970,7 @@ class GeneralController extends Controller
             $data['employee'] = Employee::where('state', '=', 1)->get();
 
             $data['title'] = "Organisation Reports";
+            $data['leave_type'] = $this->attendance_model->leave_type();
             $data['employee'] = Employee::all();
             return view('app.organisation_reports', $data);
         } else {
@@ -6984,7 +6985,7 @@ class GeneralController extends Controller
                     'username' => $row->emp_id,
                     'password' => $pass,
                 );
-                Notification::route('mail', 'samwel.herman@cits.co.tz')->notify(new RegisteredUser($email_data));
+                Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
             }
 
 

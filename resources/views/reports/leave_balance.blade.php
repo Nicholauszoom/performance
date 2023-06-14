@@ -86,14 +86,14 @@
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Leave Entitled</th>
-
+        
                             <th>Opening Balance</th>
                             {{-- <th>Rate</th>
                             <th>Amount</th> --}}
-                            <th>Accrual Rate</th>
+                            @if($nature == 1) <th>Accrual Rate</th> @endif
                             <th>Used Days</th>
                             <th>Current Balance</th>
-                            <th>Amount</th>
+                          @if($nature == 1)  <th>Amount</th> @endif
                         </tr>
                     </thead>
 
@@ -101,21 +101,21 @@
                         <?php
                       $i=0;
                         foreach ($employees as $employee) { $i++ ?>
-                        <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo $employee->emp_id; ?></td>
-                            <td><?php echo $employee->fname; ?></td>
-                            <td><?php echo $employee->lname; ?></td>
-                            <td><?php echo $employee->leave_days_entitled; ?></td>
-                            <td><?php echo number_format($employee->opening_balance, 2); ?></td>
-                            {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
-                            <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                            <td><?php echo number_format($employee->accrual_days, 2); ?></td>
-                            <td><?php echo number_format($employee->opening_balance - $employee->current_balance, 2); ?></td>
-                            <td><?php echo number_format($employee->current_balance, 2); ?></td>
-                            <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td>
-
-                        </tr>
+                              <tr>
+                                <td><?php echo $i; ?></td>
+                                <td><?php echo $employee->emp_id; ?></td>
+                                <td><?php echo $employee->fname; ?></td>
+                                <td><?php echo $employee->lname; ?></td>
+                                <td><?php echo $employee->days_entitled; ?></td>
+                                <td><?php echo number_format($employee->opening_balance, 2); ?></td>
+                                {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
+                                <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
+                                @if($nature == 1)<td><?php echo number_format($employee->accrual_days, 2); ?></td> @endif
+                                <td><?php echo number_format(($employee->days_spent)) ?></td>
+                                <td><?php echo number_format($employee->current_balance, 2); ?></td>
+                                @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif
+            
+                            </tr>
 
                         <?php } ?>
                     </tbody>
