@@ -3361,15 +3361,22 @@ EOD;
     {
         # code...
 
+        $empID = $request->emp_id;
+        $today = $request->duration;
+        $nature = $request->nature;
+
         $date = explode('-', $request->duration);
         // $dur = $date[0].'-'.$date[1];
         $year = $date[0];
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $leave_data = $this->attendance_model->getMonthlyLeave();
+        $data['leave_data'] = $this->attendance_model->getMonthlyLeave1($empID,$today,$nature);
+        $data['nature'] = $this->attendance_model->leave_name($nature);
+
+        $data['date'] = $today;
         // dd($leave_data);
-        return view('app.reports.annual_leave_data', compact('leave_data'));
+        return view('app.reports.annual_leave_data',$data);
     }
 
     public function netTotalSummation($payroll_date)

@@ -1030,4 +1030,38 @@ class AttendanceModel extends Model
         // ->where('job_posts.id',$job_id)
         return $monthlyleave;
     }
+
+    function getMonthlyLeave1($empID,$today,$nature)
+    {
+
+         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+         $last_month_date = date('Y-m-t', strtotime($prev_month));
+
+        if($empID == 'All'){
+
+
+            $monthlyleave = DB::table('leaves')
+            ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+            ->select('*')
+            ->where('start', '<=', $today)
+            ->where('start','>=', $last_month_date)
+            ->where('nature', $nature)
+            ->get();
+
+    }else{
+
+        $monthlyleave = DB::table('leaves')
+        ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+        ->select('*')
+        ->where('start', '<=', $today)
+        ->where('start','>=', $last_month_date)
+        ->where('nature', $nature)
+        ->where('employee.emp_id',$empID)
+        ->get();
+
+    }
+
+
+        return $monthlyleave;
+    }
 }

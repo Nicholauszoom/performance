@@ -13,7 +13,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h5 class="text-main">Annual Leave Report</h5>
+            <h5 class="text-main">{{ $nature }} Leave Report</h5>
         </div>
 
         <table class="table datatable-excel-filter">
@@ -25,6 +25,7 @@
                   {{-- <th>Position</th> --}}
                   <th>Email</th>
                   <th>Leave Address</th>
+                  <th>Days</th>
                   <th>From</th>
                   <th>To</th>
                   {{-- <th>InputScreen</th> --}}
@@ -56,12 +57,13 @@
                         <td>{{ $row->email }}</td>
 
                         <td>{{ $row->leave_address }}</td>
+                        <td>{{ $row->days }}</td>
                         <td> {{ $row->start }} </td>
 
                         <td>{{ $row->end }}</td>
 
 
-                        
+
 
                         {{-- <td>{{ $row->input_screen }}</td> --}}
                     </tr>
