@@ -3113,13 +3113,12 @@ EOD;
                 $employee->accrual_amount = $employee->salary/30;
 
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-             
+
                 $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
 
                 $employee->accrual_days = $accrual_days;
 
                 $employee->nature = $nature;
-
                 $employee->days_entitled = $this->attendance_model->days_entilted($nature);
 
 
@@ -3232,9 +3231,9 @@ EOD;
                 $calender = explode('-',$request->duration);
                 $january = ($calender[0]-1).'-12-31';
 
-                $december_last_year = new DateTime(strtotime($january));
-                $hire_date = new DateTime(strtotime($employee->hire_date));
-                $today = new DateTime(strtotime($request->duration));
+                $december_last_year = new DateTime($january);
+                $hire_date = new DateTime($employee->hire_date);
+                $today = new DateTime($request->duration);
                 if($december_last_year > $hire_date){
 
                 $diff = $today->diff($december_last_year);
