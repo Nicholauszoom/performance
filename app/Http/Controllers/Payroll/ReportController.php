@@ -238,10 +238,9 @@ class ReportController extends Controller
             if ($reportType == 1) {
                 $data['paye'] = $this->reports_model->s_p91($year, $year);
                 $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
-dd($data['paye_terminated']);
+
                 $data['sdl'] = $this->reports_model->s_p10($year, $year);
                 $data['total'] = $this->reports_model->s_totalp10($year, $year);
-                dd($data['paye']);
 
             } else {
                 $data['paye'] = $this->reports_model->v_p91($year, $year);
@@ -3080,7 +3079,7 @@ EOD;
     {
         // dd("hello");
 
-        
+
 
 
         $nature = $request->nature;
@@ -3114,7 +3113,7 @@ EOD;
                 $employee->accrual_amount = $employee->salary/30;
 
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-                 dd($days_this_month);
+             
                 $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
 
                 $employee->accrual_days = $accrual_days;
@@ -3134,7 +3133,7 @@ EOD;
 
         } else {
 
-            
+
             $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
             //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
             foreach ($employees  as $employee) {
@@ -3164,7 +3163,7 @@ EOD;
 
                 $employee->nature = $nature;
 
-                
+
 
                 $employee->days_entitled = $this->attendance_model->days_entilted($nature);
 
@@ -3172,9 +3171,9 @@ EOD;
                 $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
 
                 $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-                
+
                 $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-                        
+
             }
         }
         // dd($employees);
@@ -3199,7 +3198,7 @@ EOD;
     {
         // dd("hello");
 
-        
+
 
 
         $nature = $request->nature;
@@ -3254,7 +3253,7 @@ EOD;
                 $employee->accrual_amount = $employee->salary/30;
 
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-             
+
 
                  $accrual_days = $days_this_year * $employee->leave_days_entitled /365;
 
@@ -3275,7 +3274,7 @@ EOD;
 
         } else {
 
-            
+
             $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
             //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
             foreach ($employees  as $employee) {
@@ -3328,7 +3327,7 @@ EOD;
 
                 $employee->nature = $nature;
 
-                
+
 
                 $employee->days_entitled = $this->attendance_model->days_entilted($nature);
 
@@ -3336,9 +3335,9 @@ EOD;
                 $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
 
                 $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-                
+
                 $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-                        
+
             }
         }
         // dd($employees);
