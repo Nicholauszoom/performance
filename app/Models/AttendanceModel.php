@@ -964,6 +964,21 @@ class AttendanceModel extends Model
         return DB::select(DB::raw($query));
     }
 
+    function get_dept_name($id){
+        $query = "SELECT name from department where id = '".$id."' limit 1";
+        $row = DB::select(DB::raw($query));
+
+
+        return $row[0]->name;
+    }
+
+    function get_position_name($id){
+        $query = "SELECT name from position where id = '".$id."' limit 1";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->name;
+    }
+
     function leavereport1($dates, $datee)
     {
         $query = "SELECT @s:=@s+1 as SNo, p.name as POSITION, lt.type as TYPE, d.name as DEPARTMENT,   CONCAT(fname,' ', mname,' ', lname) as NAME, ls.* FROM leaves ls, leave_type lt, position p, department d, employee e, (SELECT @s:=0) as s where e.emp_id = ls.empID and e.position = p.id and e.department = d.id and ls.nature = lt.id and ls.start between '" . $dates . "' and '" . $datee . "' ";

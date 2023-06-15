@@ -282,7 +282,7 @@
 
 
             //number formatter
-             alert(numberWithCommas(leaveStand));
+            // alert(numberWithCommas(leaveStand));
 
 
 

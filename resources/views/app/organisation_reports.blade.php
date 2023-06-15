@@ -679,6 +679,26 @@
 
                                 </div>
                             </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Department:</label>
+                                    <select class="form-control select @error('department') is-invalid @enderror" id="department" name="department" required>
+                                        <option value="All"> All </option>
+                                        @foreach ($departments as $depart)
+                                        <option value="{{ $depart->id }}">{{ $depart->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Position:</label>
+                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos" name="position" required>
+                                        <option value="All"> All </option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row py-3">
                             <label class="col-form-label col-md-3">Employee</label>
@@ -765,6 +785,26 @@
                                          <?php  } ?>
                                       </select>
 
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Department:</label>
+                                    <select class="form-control select @error('department') is-invalid @enderror" id="department1" name="department">
+                                        <option value=""> Select Department </option>
+                                        @foreach ($departments as $depart)
+                                        <option value="{{ $depart->id }}">{{ $depart->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Position:</label>
+                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos1" name="position">
+                                        <option value=""> Select Position </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -856,6 +896,8 @@
 
                                 </div>
                             </div>
+
+
                         </div>
                         <div class="row py-3">
                             <label class="col-form-label col-md-3">Employee</label>
@@ -921,6 +963,185 @@
 @endsection
 
 @push('footer-script')
+
+<script>
+    $(document).ready(function() {
+
+        $('#department').on('change', function() {
+            var stateID = $(this).val();
+
+            console.log(stateID);
+
+            if (stateID) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('/flex/positionFetcher') }}',
+                    data: 'dept_id=' + stateID,
+                    success: function(html) {
+                        let jq_json_obj = $.parseJSON(html);
+                        let jq_obj = eval(jq_json_obj);
+
+                        console.log(jq_obj);
+
+                        //populate position
+                        $("#pos option").remove();
+
+                        $('#pos').append($('<option>', {
+                            value: 'All',
+                            text: 'All',
+                            selected: true,
+                            //disabled: true
+                        }));
+
+
+                        $.each(jq_obj.position, function(detail, name) {
+                            $('#pos').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                        var x = [];
+
+                        $.each(jq_obj.linemanager, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        $.each(jq_obj.director, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        var flags = [];
+                        var output = [];
+                        for (var i = 0; i < x.length; i++) {
+                            var y = {};
+                            if (flags[x[i].id]) continue;
+                            flags[x[i].id] = true;
+                            y.id = x[i].id;
+                            y.name = x[i].name;
+                            output.push(y);
+                        }
+
+                        //populate linemanager
+                        // $("#linemanager option").remove();
+                        // $('#linemanager').append($('<option>', {
+                        //     value: '',
+                        //     text: 'Select Line Manager',
+                        //     selected: true,
+                        //     disabled: true
+                        // }));
+
+                        $.each(output, function(detail, name) {
+                            $('#linemanager').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                    }
+                });
+            } else {
+                // $('#pos').html('<option value="">Select state first</option>');
+            }
+        });
+
+        $('#department1').on('change', function() {
+            var stateID = $(this).val();
+
+            console.log(stateID);
+
+            if (stateID) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('/flex/positionFetcher') }}',
+                    data: 'dept_id=' + stateID,
+                    success: function(html) {
+                        let jq_json_obj = $.parseJSON(html);
+                        let jq_obj = eval(jq_json_obj);
+
+                        console.log(jq_obj);
+
+                        //populate position
+                        $("#pos1 option").remove();
+
+                        $('#pos1').append($('<option>', {
+                            value: 'All',
+                            text: 'All',
+                            selected: true,
+                            //disabled: true
+                        }));
+
+
+                        $.each(jq_obj.position, function(detail, name) {
+                            $('#pos1').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                        var x = [];
+
+                        $.each(jq_obj.linemanager, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        $.each(jq_obj.director, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        var flags = [];
+                        var output = [];
+                        for (var i = 0; i < x.length; i++) {
+                            var y = {};
+                            if (flags[x[i].id]) continue;
+                            flags[x[i].id] = true;
+                            y.id = x[i].id;
+                            y.name = x[i].name;
+                            output.push(y);
+                        }
+
+                        //populate linemanager
+                        // $("#linemanager option").remove();
+                        // $('#linemanager').append($('<option>', {
+                        //     value: '',
+                        //     text: 'Select Line Manager',
+                        //     selected: true,
+                        //     disabled: true
+                        // }));
+
+                        $.each(output, function(detail, name) {
+                            $('#linemanager').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                    }
+                });
+            } else {
+                // $('#pos').html('<option value="">Select state first</option>');
+            }
+        });
+    });
+</script>
     <!-- <script>
         $(function() {
             var today = new Date();

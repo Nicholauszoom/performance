@@ -3084,6 +3084,9 @@ EOD;
 
         $nature = $request->nature;
         $calender = explode('-',$request->duration);
+        $position = $request->position;
+        $department = $request->department;
+
 
         $no_days = $calender[2];
 
@@ -3091,7 +3094,18 @@ EOD;
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
             // $employee= Employee::all();
             //$employee = $this->flexperformance_model->employee();
-            $employees = Employee::where('state', '=', 1)->get();
+            if($department != 'All' && $position != 'All'){
+            $employees = Employee::where('state', '=', 1)->where('department',$department)->where('position',$position)->get();
+            }elseif($department != 'All' && $position == 'All'){
+                $employees = Employee::where('state', '=', 1)->where('department',$department)->get();
+
+            }elseif($department == 'All'){
+                $employees = Employee::where('state', '=', 1)->get();
+                }
+                // else{
+                //     $employees = Employee::where('state', '=', 1)->get();
+                // }
+         //   $employees = Employee::where('state', '=', 1)->get();
 
 
 
@@ -3177,15 +3191,24 @@ EOD;
         }
         // dd($employees);
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($request->type == 1){
-           $data['employees'] =  $employees;
+        if($department != 'All'){
+            $data['department_name'] = $this->attendance_model->get_dept_name($department);
+        }
+        if($position != 'All'){
+            $data['position_name'] = $this->attendance_model->get_position_name($department);
+        }
+        $leave_name = $this->attendance_model->leave_name($nature);
+
+        $data['employees'] =  $employees;
            $data['nature'] =  $nature;
            $data['leave_name'] = $leave_name;
            $data['date'] = $request->duration;
+        if($request->type == 1){
+
         $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
         return $pdf->download('Leave_report'.$request->duration.'.pdf');
         }else{
-            return view('reports.leave_balance_datatable', ['employees' => $employees,'nature' => $nature,'leave_name'=>$leave_name,'date'=>$request->duration]);
+            return view('reports.leave_balance_datatable',$data);
         }
 
 
@@ -3202,14 +3225,21 @@ EOD;
 
         $nature = $request->nature;
         $calender = explode('-',$request->duration);
+        $position = $request->position;
+        $department = $request->department;
 
         $no_days = $calender[2];
 
 
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
-            // $employee= Employee::all();
-            //$employee = $this->flexperformance_model->employee();
-            $employees = Employee::where('state', '=', 1)->get();
+            if($department != 'All' && $position != 'All'){
+                $employees = Employee::where('state', '=', 1)->where('department',$department)->where('position',$position)->get();
+                }elseif($department != 'All' && $position == 'All'){
+                    $employees = Employee::where('state', '=', 1)->where('department',$department)->get();
+
+                }elseif($department == 'All'){
+                    $employees = Employee::where('state', '=', 1)->get();
+                    }
 
 
 
@@ -3339,17 +3369,28 @@ EOD;
 
             }
         }
-        // dd($employees);
+
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($request->type == 1){
-           $data['employees'] =  $employees;
+        if($department != 'All'){
+            $data['department_name'] = $this->attendance_model->get_dept_name($department);
+        }
+        if($position != 'All'){
+            $data['position_name'] = $this->attendance_model->get_position_name($department);
+        }
+        $leave_name = $this->attendance_model->leave_name($nature);
+
+        $data['employees'] =  $employees;
            $data['nature'] =  $nature;
            $data['leave_name'] = $leave_name;
            $data['date'] = $request->duration;
+        // dd($employees);
+        $leave_name = $this->attendance_model->leave_name($nature);
+        if($request->type == 1){
+
         $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
         return $pdf->download('Leave_report'.$request->duration.'.pdf');
         }else{
-            return view('reports.leave_balance_datatable', ['employees' => $employees,'nature' => $nature,'leave_name'=>$leave_name,'date'=>$request->duration]);
+            return view('reports.leave_balance_datatable', $data);
         }
 
 

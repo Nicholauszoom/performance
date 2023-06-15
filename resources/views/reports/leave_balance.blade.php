@@ -66,7 +66,11 @@
                                 <div class="box-text text-end"></div>
                             </td>
                             <td>
-                                <div class="box-text"> </div>
+                                <div class="box-text"> @if(isset($department_name))
+                                    <h5 style="font-weight:bolder;text-align: center;">Department : {{ $department_name }}</h5>
+                                    @elseif(isset($position_name))
+                                    <h5 style="font-weight:bolder;text-align: center;">Position : {{ $position_name }}</h5>
+                                    @endif </div>
                             </td>
                             <td colspan="4" class="w-50" style="">
                                 <P class="mt-1" style="text-align: right; "> For the date of
@@ -124,11 +128,11 @@
                             <td><?php echo $employee->fname; ?></td>
                             <td><?php echo $employee->lname; ?></td>
                             <td><?php echo $employee->days_entitled; ?></td>
-                            <td><?php echo number_format($employee->opening_balance, 2); ?></td>
+                            <td><?php echo number_format($employee->opening_balance < 0?0:$employee->opening_balance, 2); ?></td>
                             {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
                             <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
                             @if($nature == 1)<td><?php echo number_format($employee->accrual_days, 2); ?></td> @endif
-                            <td><?php echo number_format(($employee->days_spent)) ?></td>
+                            <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
                             <td><?php echo number_format($employee->current_balance, 2); ?></td>
                             @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif
 

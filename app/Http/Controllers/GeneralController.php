@@ -3969,6 +3969,8 @@ class GeneralController extends Controller
             $data['projects'] = $this->project_model->allProjects();
             $data['employee'] = Employee::where('state', '=', 1)->get();
 
+            $data['departments'] = Departments::all();
+
             $data['title'] = "Organisation Reports";
             $data['leave_type'] = $this->attendance_model->leave_type();
             $data['employee'] = Employee::all();

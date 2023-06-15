@@ -18,6 +18,11 @@
     <div class="card">
         <div class="card-header">
             <h5 class="mb-0">{{ $leave_name }}  Leave Balance : {{ $date }}</h5>
+            @if(isset($department_name))
+            <h5 class="mb-0">Department : {{ $department_name }}</h5>
+            @elseif(isset($position_name))
+            <h5 class="mb-0">Position : {{ $position_name }}</h5>
+            @endif
         </div>
         <table class="table datatable-button-html5-columns">
             <thead>
@@ -65,11 +70,11 @@
                     <td><?php echo $employee->fname; ?></td>
                     <td><?php echo $employee->lname; ?></td>
                     <td><?php echo $employee->days_entitled; ?></td>
-                    <td><?php echo number_format($employee->opening_balance, 2); ?></td>
+                    <td><?php echo number_format($employee->opening_balance < 0?0:$employee->opening_balance, 2); ?></td>
                     {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
                     <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
                     @if($nature == 1)<td><?php echo number_format($employee->accrual_days, 2); ?></td> @endif
-                    <td><?php echo number_format(($employee->days_spent)) ?></td>
+                    <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
                     <td><?php echo number_format($employee->current_balance, 2); ?></td>
                     @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif
 
