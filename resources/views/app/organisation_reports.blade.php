@@ -737,6 +737,96 @@
                 </form>
             </div>
         </div>
+
+        <div class="col-md-6">
+            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
+                <div class="card-header">
+                    <h5 class="text-warning">Leave Report Per Year</h5>
+                </div>
+
+                <form id="demo-form2" enctype="multipart/form-data" method="post"
+                    action="{{ route('reports.annualleave2') }}" data-parsley-validate
+                    class="form-horizontal form-label-left">
+                    @csrf
+
+
+                    <div class="card-body">
+                        <div class="row">
+                            <label class="col-form-label col-md-3">Leave Type</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature" required>
+                                        <option value="">&nbsp;</option>
+                                          <?php
+                                          foreach($leave_type as $key){  ?>
+
+                                         <option value="<?php echo $key->id; ?>"><?php echo $key->type; ?> Leave</option>
+
+                                         <?php  } ?>
+                                      </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row py-3">
+                            <label class="col-form-label col-md-3">Employee</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <select required name="leave_employee"
+                                        class="select_payroll_month form-control select" data-width="1%">
+                                        <option selected disabled>Select Employee</option>
+                                        <option value="All"> All</option>
+                                        <?php foreach ($employee as $row) { ?>
+                                        <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
+                                        <?php } ?>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <label class="col-form-label col-md-3">Select Date</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
+                                    <select required name="duration" class="select_payroll_month form-control select"
+                                        data-width="1%">
+                                        <option selected disabled>Select Month</option>
+                                        <?php foreach ($month_list as $row) { ?>
+                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
+                                        <?php } ?>
+                                    </select> --}}
+                                    <span class="input-group-text"><i class="ph-calendar"></i></span>
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <label class="form-label">Report Format:</label>
+
+                            <div class="">
+                                <div class="d-inline-flex align-items-center me-3">
+                                    <input type="radio" name="type" value="1" id="p9">
+                                    <label class="ms-2" for="p9">PDF</label>
+                                </div>
+
+                                <div class="d-inline-flex align-items-center">
+                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <label class="ms-2" for="p9a">Data table</label>
+                                </div>
+                                <div class="d-inline-flex align-items-left px-5">
+                                <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
+                                    Print</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+<!--
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
@@ -789,7 +879,7 @@
             </div>
         </div>
 
-
+    -->
 
 
 

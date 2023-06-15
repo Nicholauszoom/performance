@@ -1292,6 +1292,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/projectTime','projectTime')->name('reports.projectTime');
         // Route::any('/funder','funder')->name('reports.funder');
         Route::any('/annualleave','annualleave')->name('reports.annualleave');
+        Route::any('/annualleave2','annualleave2')->name('reports.annualleave2');
         Route::any('/annualleave-table','annualLeaveData')->name('reports.annualleave.data');
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 

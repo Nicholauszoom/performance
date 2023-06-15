@@ -16,6 +16,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceModel;
+use DateTime;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use SebastianBergmann\Timer\Duration;
@@ -3108,7 +3109,7 @@ EOD;
                 $months = $diff->m;
                 $days = $diff->d;
 
-                $days_this_month = intval(date('t', strtotime(date(''))));
+                $days_this_month = intval(date('t', strtotime($request->duration)));
 
                 $employee->accrual_amount = $employee->salary/30;
 
@@ -3147,7 +3148,7 @@ EOD;
                 $months = $diff->m;
                 $days = $diff->d;
 
-                $days_this_month = intval(date('t', strtotime(date(''))));
+                $days_this_month = intval(date('t', strtotime($request->duration)));
 
 
                 $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
@@ -3192,6 +3193,171 @@ EOD;
 
 
     }
+
+
+    public function annualleave2(Request $request)
+    {
+        // dd("hello");
+
+        
+
+
+        $nature = $request->nature;
+        $calender = explode('-',$request->duration);
+
+        $no_days = $calender[2];
+
+
+        if ($request->leave_employee == Null || $request->leave_employee == "All") {
+            // $employee= Employee::all();
+            //$employee = $this->flexperformance_model->employee();
+            $employees = Employee::where('state', '=', 1)->get();
+
+
+
+            foreach ($employees  as $employee) {
+
+
+
+                $d1 = new \DateTime(date($employee->hire_date));
+
+                $d2 = new \DateTime("now");
+                $diff = $d1->diff($d2);
+
+                $years = $diff->y;
+                $months = $diff->m;
+                $days = $diff->d;
+
+                $diff = 0;
+
+                $calender = explode('-',$request->duration);
+                $january = ($calender[0]-1).'-12-31';
+
+                $december_last_year = new DateTime(strtotime($january));
+                $hire_date = new DateTime(strtotime($employee->hire_date));
+                $today = new DateTime(strtotime($request->duration));
+                if($december_last_year > $hire_date){
+
+                $diff = $today->diff($december_last_year);
+
+                }else{
+
+                $diff = $today->diff($hire_date);
+
+                }
+
+
+                $days_this_year = $diff->days;
+
+                $days_this_month = intval(date('t', strtotime($request->duration)));
+
+                $employee->accrual_amount = $employee->salary/30;
+
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+             
+
+                 $accrual_days = $days_this_year * $employee->leave_days_entitled /365;
+
+                $employee->accrual_days = $accrual_days;
+
+                $employee->nature = $nature;
+
+                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+
+                $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+                $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+            }
+
+        } else {
+
+            
+            $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
+            //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
+            foreach ($employees  as $employee) {
+
+                $d1 = new \DateTime(date($employee->hire_date));
+
+                $d2 = new \DateTime("now");
+                $diff = $d1->diff($d2);
+
+                $years = $diff->y;
+                $months = $diff->m;
+                $days = $diff->d;
+
+                $diff = 0;
+
+                $calender = explode('-',$request->duration);
+                $january = ($calender[0]-1).'-12-31';
+
+                $december_last_year = new DateTime($january);
+                $hire_date = new DateTime($employee->hire_date);
+                $today = new DateTime($request->duration);
+                if($december_last_year > $hire_date){
+
+                $diff = $today->diff($december_last_year);
+
+                }else{
+
+                $diff = $today->diff($hire_date);
+
+                }
+
+
+                //dd($diff->days);
+
+                $days_this_year = $diff->days;
+
+                //$days_this_month = intval(date('t', strtotime($request->duration)));
+
+
+                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
+                //dd($employee->leave_taken);
+
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+                $accrual_days = $days_this_year * $employee->leave_days_entitled /365;
+
+                $employee->accrual_days = $accrual_days;
+
+                $employee->accrual_amount = $employee->salary/30;
+
+                $employee->nature = $nature;
+
+                
+
+                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+
+                $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                
+                $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                        
+            }
+        }
+        // dd($employees);
+        $leave_name = $this->attendance_model->leave_name($nature);
+        if($request->type == 1){
+           $data['employees'] =  $employees;
+           $data['nature'] =  $nature;
+           $data['leave_name'] = $leave_name;
+           $data['date'] = $request->duration;
+        $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
+        return $pdf->download('Leave_report'.$request->duration.'.pdf');
+        }else{
+            return view('reports.leave_balance_datatable', ['employees' => $employees,'nature' => $nature,'leave_name'=>$leave_name,'date'=>$request->duration]);
+        }
+
+
+
+    }
+
 
     public function annualLeaveData(Request $request)
     {
