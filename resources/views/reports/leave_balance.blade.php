@@ -81,7 +81,7 @@
                 <table class="table" id="reports">
                     <thead>
                         <tr>
-                            <th>S/N</th>
+                            <th>No</th>
                             <th>EMP ID</th>
                             <th>First Name</th>
                             <th>Last Name</th>

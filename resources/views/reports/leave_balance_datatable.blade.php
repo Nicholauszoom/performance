@@ -22,7 +22,7 @@
         <table class="table datatable-button-html5-columns">
             <thead>
                 <tr>
-                    <th>S/N</th>
+                    <th>No</th>
                     <th>EMP ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -41,18 +41,18 @@
             <tbody>
                 <?php
               $i=0;
-             
+
                 foreach ($employees as $employee) { $i++ ?>
-               <?php 
+               <?php
                 $flag = true;
                if($employee->gender == 'Male' && $nature == 5){
                  $flag = true;
                 }elseif($employee->gender == 'Female' && $nature == 4){
-                    $flag  = true; 
+                    $flag  = true;
                 } elseif($nature !=5 && $nature != 4){
-                    $flag  = true; 
+                    $flag  = true;
                 }
-                
+
                 else{
                     $flag = false;
                 }
