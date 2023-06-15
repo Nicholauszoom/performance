@@ -421,7 +421,7 @@ class AttendanceModel extends Model
 
             $maximum_days = $days_entitled - $spent;
         }
-		
+
 
         //dd($days);
 
@@ -442,7 +442,7 @@ class AttendanceModel extends Model
 
         $calender = explode('-',$today);
 
-      
+
         $last_month_date = $calender[0].'-01-01';
 
 		 //dd($today);
@@ -480,7 +480,7 @@ class AttendanceModel extends Model
 
             $maximum_days = $days_entitled - $spent;
         }
-		
+
 
         //dd($days);
 
@@ -555,7 +555,7 @@ class AttendanceModel extends Model
 
         $calender = explode('-',$today);
 
-      
+
         $this_month = $calender[0].'-01-01';
 
         $first_this_month = date('Y-m-01', strtotime($this_month));
@@ -692,7 +692,7 @@ class AttendanceModel extends Model
 
 
         $days_spent = $row[0]->days_spent;
-        
+
         //dd($nature,$last_month_date,$today);
 
         return $days_spent;
@@ -709,7 +709,7 @@ class AttendanceModel extends Model
 
          $calender = explode('-',$today);
 
-      
+
          $this_month = ($calender[0]-1).'-12-31';
 
         $last_month_date = date('Y-m-t', strtotime($prev_month));
@@ -722,7 +722,7 @@ class AttendanceModel extends Model
 
 
         $days_spent = $row[0]->days_spent;
-        
+
         //dd($nature,$last_month_date,$today);
 
         return $days_spent;
@@ -776,7 +776,7 @@ class AttendanceModel extends Model
             $maximum_days = $days_entitled - $spent;
         }
 
-        
+
 
         //dd($days);
 
@@ -797,7 +797,7 @@ class AttendanceModel extends Model
 
         $calender = explode('-',$today);
 
-      
+
         $last_month_date = ($calender[0]-1).'-12-31';
 
         //dd($today);
@@ -837,7 +837,7 @@ class AttendanceModel extends Model
             $maximum_days = $days_entitled - $spent;
         }
 
-        
+
 
         //dd($days);
 
