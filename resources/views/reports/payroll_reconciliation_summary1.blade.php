@@ -237,6 +237,9 @@
                                             $total_current += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
                                             $total_amount += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
 
+                                          //  $total_amount += $row->difference;
+
+
                                         @endphp
                                     @else
                                         <tr style="border-bottom:1px solid rgb(211, 211, 230)">

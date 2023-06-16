@@ -1980,12 +1980,15 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
            UNION
 
+
             SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as current_amount,
             IF((SELECT sum(amount)  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and allowance_logs.empId = e.emp_id and  payment_date = '" . $previous_payroll_month . "' limit 1) > 0,(SELECT sum(amount)  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and allowance_logs.empId = e.emp_id  and  payment_date = '" . $previous_payroll_month . "' limit 1),0) as  previous_amount
             from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $current_termination_date . "%'
 
             UNION
+
+
 
             SELECT 'Add/Less S-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
             IF(public_overtime_amount > 0,public_overtime_amount,0) as current_amount,
@@ -2052,9 +2055,10 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
             UNION
 
             SELECT 'Add/Less N-Overtime' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,
-            IF(normal_days_overtime_amount > 0,normal_days_overtime_amount,0) as previous_amount,
-            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount
-            from terminations,employee e where e.emp_id = terminations.employeeID and terminationDate like '%" . $previous_termination_date . "%'
+
+            IF((SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and e.emp_id = allowance_logs.empID and  payment_date = '" . $current_payroll_month . "') > 0,(SELECT amount  FROM allowance_logs WHERE allowance_logs.description = 'N-Overtime' and  payment_date = '" . $current_payroll_month . "'),0) as  current_amount,
+            IF(tm.normal_days_overtime_amount > 0,tm.normal_days_overtime_amount,0) as previous_amount
+            from terminations tm,employee e where e.emp_id = tm.employeeID and tm.terminationDate like '%" . $previous_termination_date . "%'
 
             UNION
 
