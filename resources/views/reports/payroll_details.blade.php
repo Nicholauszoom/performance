@@ -306,10 +306,10 @@
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>1st Cheker & Approved By:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>1st Checker & Approved By:</b></small></p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>2nd Cheker & Approved By:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>2nd Checker & Approved By:</b></small></p>
                             </td>
                             <td><p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p></td>
                         </tr>
