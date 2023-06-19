@@ -7014,41 +7014,41 @@ class GeneralController extends Controller
     public function registerEmployee(Request $request)
     {
 
-        if ($request->method() == "POST") {
+        // if ($request->method() == "POST") {
 
-            $validator = Validator::make($request->all(), [
-                'fname' => 'required',
-                'mname' => 'required',
-                'currency' => 'required',
-                'emp_level' => 'required',
-                'cost_center' => 'required',
-                'leave_days_entitled' => 'required',
-                'lname' => 'required',
-                'emp_id' => 'required|unique:employee',
-                'salary' => 'required',
-                'gender' => 'required',
-                'email' => 'required',
-                'nationality' => 'required',
-                'merital_status' => 'required',
-                'position' => 'required',
-                'contract_type' => 'required',
-                'mobile' => 'required',
-                'account_no' => 'required',
-                'bank' => 'required',
-                'bank_branch' => 'required',
-                'pension_fund' => 'required',
-                'pf_membership_no' => 'required',
-                'line_manager' => 'required',
-                'department' => 'required',
-                'branch' => 'required',
-            ]);
+        //     $validator = Validator::make($request->all(), [
+        //         'fname' => 'required',
+        //         'mname' => 'required',
+        //         'currency' => 'required',
+        //         'emp_level' => 'required',
+        //         'cost_center' => 'required',
+        //         'leave_days_entitled' => 'required',
+        //         'lname' => 'required',
+        //         'emp_id' => 'required|unique:employee',
+        //         'salary' => 'required',
+        //         'gender' => 'required',
+        //         'email' => 'required',
+        //         'nationality' => 'required',
+        //         'merital_status' => 'required',
+        //         'position' => 'required',
+        //         'contract_type' => 'required',
+        //         'mobile' => 'required',
+        //         'account_no' => 'required',
+        //         'bank' => 'required',
+        //         'bank_branch' => 'required',
+        //         'pension_fund' => 'required',
+        //         'pf_membership_no' => 'required',
+        //         'line_manager' => 'required',
+        //         'department' => 'required',
+        //         'branch' => 'required',
+        //     ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 400,
-                    'errors' => $validator->messages(),
-                ]);
-            }
+        //     if ($validator->fails()) {
+        //         return response()->json([
+        //             'status' => 400,
+        //             'errors' => $validator->messages(),
+        //         ]);
+        //     }
 
 
             // DATE MANIPULATION
