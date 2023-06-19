@@ -3362,6 +3362,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function memberscount($id)
 	{
+       
 		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
 		$row = DB::select(DB::raw($query));
 
