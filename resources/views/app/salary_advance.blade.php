@@ -17,19 +17,19 @@
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-   
+
 
             <div class="clearfix"></div>
 
             <div class="row">
                 <!--MY APPLICATIONS -->
-                
-              
-              
+
+
+
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-3 py-1">
-                    <h2>My Loans 
+                    <h2>My Loans
                     </h2>
 
                     <ul class="nav navbar-right panel_toolbox">
@@ -44,7 +44,7 @@
                   <div class="card-body">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div>
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  
+                   @if(Session::has('note'))      {{ session('note') }}  @endif
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -67,17 +67,19 @@
                             <td><?php echo $row->TYPE; ?></td>
                             <td><?php echo $row->amount; ?></td>
                             <td><?php $datewell = explode("-",$row->application_date);
-                                  $mm = $datewell[1];
-                                  $dd = $datewell[2];
-                                  $yyyy = $datewell[0];  
-                                  $clear_date = $dd."-".$mm."-".$yyyy;
-                                  echo $clear_date;  ?>
+                                //   $mm = $datewell[1];
+                                //   $dd = $datewell[2];
+                                //   $yyyy = $datewell[0];
+                                //   $clear_date = $dd."-".$mm."-".$yyyy;
+
+                                echo $row->application_date;
+                                  //echo $clear_date;  ?>
                             </td>
                             <td>
                                 <div id ="status<?php echo $row->id; ?>" >
                                     <?php if ($row->status==0){ ?>
                                     <div class="col-md-12">
-                                    <span class="label label-default">SENT</span></div><?php } 
+                                    <span class="label label-default">SENT</span></div><?php }
                                     elseif($row->status==1){?>
                                     <div class="col-md-12">
                                     <span class="label label-info">RECOMMENDED</span></div><?php }
@@ -93,20 +95,20 @@
                                 </div>
                                </td>
 
-                            <td> 
-                            
+                            <td>
+
                             <?php   if($row->status==0 || $row->status==3){ ?>
-                                
+
                                 <a href="javascript:void(0)" onclick="cancelLoan(<?php echo $row->id;?>)">
                                 <button  class="btn btn-warning btn-xs">CANCEL</button></a>  <?php }  ?>
-                                
+
                                 <a href="<?php echo  url(''); ?>/flex/updateloan/{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
-                            
+
                             </td>
 
                             <td>
                                 <?php echo "<b>HR: </b>".$row->reason_hr."<br><b>Finance: </b>".$row->reason_finance; ?>
-                              
+
                             </td>
                             </tr>
                           <?php }?>
@@ -115,10 +117,10 @@
                   </div>
                 </div>
               </div>
-              
-              
-              <!--END MY APPLICATION-->               
-                
+
+
+              <!--END MY APPLICATION-->
+
               {{-- start of other loans application --}}
 
               @can('add-loan')
@@ -127,10 +129,10 @@
                 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                   <div class="card-head px-2">
                     <h2>Loans Aplication/Assignment(To Be Responded)
-                    
-                 
+
+
                      </h2>
-              
+
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -143,18 +145,18 @@
                   <div class="card-body">
                       <div id="resultfeed"></div>
                       <div id="resultfeedCancel"></div>
-                   @if(Session::has('note'))      {{ session('note') }}  @endif  
+                   @if(Session::has('note'))      {{ session('note') }}  @endif
                     <table id="datatable" class="table table-striped table-bordered">
                       <thead>
                         <tr>
                           <th>S/N</th>
                           <th>Name</th>
-                          <th>Position</th> 
+                          <th>Position</th>
                           <th>Type</th>
                           <th>Amount</th>
                           <th>Application Date</th>
                           <th>Status</th>
-                          <th>Option</th> 
+                          <th>Option</th>
                           <th>Remarks</th>
                         </tr>
                       </thead>
@@ -175,7 +177,7 @@
                             <td><?php $datewell = explode("-",$row->application_date);
                                   $mm = $datewell[1];
                                   $dd = $datewell[2];
-                                  $yyyy = $datewell[0];  
+                                  $yyyy = $datewell[0];
                                   $clear_date = $dd."-".$mm."-".$yyyy;
                                   echo $clear_date;  ?>
                             </td>
@@ -183,7 +185,7 @@
                               <div id ="status<?php echo $row->id; ?>" >
                                     <?php if ($row->status==0){ ?>
                                     <div class="col-md-12">
-                                    <span class="label label-default">SENT</span></div><?php } 
+                                    <span class="label label-default">SENT</span></div><?php }
                                     elseif($row->status==6){?>
                                     <div class="col-md-12">
                                     <span class="label label-info">RECOMMENDED BY HR</span></div><?php }
@@ -196,13 +198,13 @@
                                     elseif($row->status==5){ ?><?php }  ?>
                                 </div>
                             </td>
-                             
+
                             <!--Line Manager and HR -->
                             <td>
-                                
+
                                 <a href="<?php echo  url(''); ?>/flex/updateloan/{{ $row->id }}" title="Info and Details" class="icon-2 info-tooltip"><button type="button" class="btn btn-main btn-xs"><i class="ph-info"></i> | <i class="ph-pencil"></i></button> </a>
-                            
-                            
+
+
                             <?php //if(session('mng_emp') && $row->status==0){ ?>
                             {{-- <a href="javascript:void(0)" onclick="hrrecommendLoan(<?php echo $row->id;?>)" title="Recommend"> --}}
                             {{-- <button  class="btn btn-main"><i class="ph-check"></i></button></a> --}}
@@ -212,9 +214,9 @@
                            {{-- <button  class="btn btn-main"><i class="ph-check"></i></button></a> --}}
 
                             <?php  //}  ?>
-                            
+
                             <?php if(session('appr_paym') && $row->status==1 && $pendingPayroll==0){ ?>
-                      
+
                             <a href="javascript:void(0)" onclick="approveLoan(<?php echo $row->id;?>)">
                             <button  class="btn btn-main"><i class="ph-check"></i></button></a>
                             <?php }  ?>
@@ -235,19 +237,19 @@
               </div>
              <?php }?>
               <!--END SALARY ADVANCES TO BE PROVED/RECOMMENDED-->
-              
-              
+
+
               <!--APPLY SALARY ADVANCE-->
-              
-                
+
+
                 <!--END APPLY SALARY ADVANCE-->
-                
-                
-                
+
+
+
                 <!--INSERT DIRECT LOAN-->
                 <?php if(session('mng_emp')){ ?>
                <div id="insertDirectForm"  class="col-md-12 col-sm-12 col-xs-12 mx-auto">
-                            
+
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                       <div class="card-head px-3 py-2">
                         <h2><i class="fa fa-tasks"></i> Insert Direct Deduction (HESLB, Custom Deductions, etc..)</h2>
@@ -268,14 +270,14 @@
                             <label class="control-label col-md-3  col-xs-6" >Employee</label>
                             <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                             <select name="employee" class="form-control select" required >
-                   
+
                                <?php
                               foreach ($employee as $row) {
                                  # code... ?>
                               <option value="<?php echo $row->empID; ?>"><?php echo $row->NAME; ?></option> <?php } ?>
                             </select>
                             </div>
-                          </div> 
+                          </div>
 
                       <div class="form-group col-6 mb-3">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Type</label>
@@ -287,8 +289,8 @@
                         </select>
                         </div>
                       </div>
-                     
-                      
+
+
                       <div class="form-group col-6 mb-3">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Amount
                         </label>
@@ -314,7 +316,7 @@
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Other Remarks
                         </label>
                         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                          <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason(Optional)" rows="3"></textarea> 
+                          <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason(Optional)" rows="3"></textarea>
                           <span class="text-danger"><?php// echo form_error("lname");?></span>
                         </div>
                       </div>
@@ -324,13 +326,13 @@
                             <div class="col-md-12 col-sm-12 col-xs-12 ">
                                <button  class="btn btn-main float-end" >Insert</button>
                             </div>
-                          </div> 
+                          </div>
                           </form>
-            
+
                       </div>
                     </div>
                 </div>
-                
+
                 <?php } ?>
                 @endcan
             </div>
@@ -347,9 +349,9 @@
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -357,7 +359,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -365,15 +367,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -381,17 +383,17 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });
