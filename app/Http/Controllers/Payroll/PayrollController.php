@@ -297,11 +297,11 @@ class PayrollController extends Controller
 
 
 
-        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month,$previous_payroll_month);
         //dd($data['new_employee']);
         if($data['new_employee'] > 0){
 
-            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
+            $data['new_employee_salary'] = $this->reports_model->new_employee_salary1($current_payroll_month,$previous_payroll_month);
 
         }
         if($data['terminated_employee'] > 0){
@@ -312,56 +312,65 @@ class PayrollController extends Controller
         }
         $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
-         foreach($total_allowances as $row){
-            if($row->allowance == "N-Overtime"){
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
-            }elseif($row->allowance == "S-Overtime"){
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
-            }
-            elseif($row->allowance == "House Rent"){
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
+        foreach ($total_allowances as $row) {
 
+            if ($row->allowance == "N-Overtime") {
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+                //$row->difference += ($allowance[0]->current_amount - $allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+
+            } elseif ($row->allowance == "S-Overtime") {
+                if($row->current_amount != $row->previous_amount ){
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+              // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+               $row->difference += 0;
+                array_push($descriptions, $row->description);
             }
-            elseif($row->allowance == "Leave Allowance"){
+            } elseif ($row->allowance == "House Rent") {
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+                //$row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+            } elseif ($row->allowance == "Leave Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
-
-            }
-            elseif($row->allowance == "Teller Allowance"){
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+            } elseif ($row->allowance == "Teller Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
-
-            }
-            elseif($row->allowance == "Arrears"){
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+            } elseif ($row->allowance == "Arrears") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
-            }
-            elseif($row->allowance == "Long Serving allowance"){
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+              //  $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+            } elseif ($row->allowance == "Long Serving allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
-                $row->current_amount +=$allowance[0]->current_amount;
-                $row->current_amount +=$allowance[0]->current_amount;
-                array_push($descriptions,$row->description);
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
             }
-
-         }
-
+        }
          $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 
          $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
