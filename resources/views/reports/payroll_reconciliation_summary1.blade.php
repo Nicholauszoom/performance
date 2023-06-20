@@ -86,7 +86,7 @@
                     $total_amount = 0;
                 @endphp
 
-                <table class="table" id="reports" style="font-size:14px;  ">
+                <table class="table" id="reports" style="font-size:12px;  ">
                     <thead>
                         <tr>
                             <th><b>RefNo</b></th>
