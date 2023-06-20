@@ -51,6 +51,7 @@
                                 $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
                                 $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
                             foreach ($summary as $row){
+                                if($row->currency == $currency){
                                 $i++;
                                 $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                 $total_netpay +=  round($amount,0);
@@ -100,7 +101,7 @@
 
                             </tr>
 
-                            <?php } ?>
+                            <?php } } ?>
             </tbody>
                             <tfoot>
                             <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
@@ -118,7 +119,7 @@
                             </tr>
                         </tfoot>
 
-                            <?php } ?>
+                            <?php  } ?>
         </table>
     </div>
 
