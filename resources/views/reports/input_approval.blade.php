@@ -115,56 +115,22 @@
 
                         <table class="table" id="reports">
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <p class="text-start" style="font-size:15px;">
-                                            <small><b>HUMAN CAPITAL DEPARTMENT:</b></small>
-                                        </p>
-                                    </td>
-                                    <td>
-                                        <p class="text-start" style="font-size:15px;"><small><b>FINANCE DEPARTMENT:</b></small></p>
-                                    </td>
-                                    <td>.</td>
-                                </tr>
+                               
                                 <tr>
 
-                                    <td>
-                                        <p class="text-start"><small>Reviewed By:</small></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-start"><small>Checked By:</small></p>
-                                    </td>
                                     <td>
                                         <p class="text-start"><small>Approved By:</small></p>
                                     </td>
-
-                                </tr>
-                                <tr>
-
                                     <td>
                                         <p class="text-start"><small>Name______________________</small></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-start"><small>Name______________________</small></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-start"><small>Name______________________</small></p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p class="text-start"><small>Signature and Date___________</small></p>
-                                    </td>
-                                    <td>
-                                        <p class="text-start"><small>Signature and Date___________</small></p>
                                     </td>
                                     <td>
                                         <p class="text-start"><small>Signature and Date___________</small></p>
                                     </td>
 
                                 </tr>
+                               
+                                
                             </tbody>
                         </table>
                     </div>
