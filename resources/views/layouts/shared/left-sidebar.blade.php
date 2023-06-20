@@ -271,7 +271,7 @@
                             @can('view-pending-payments')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
-                                        href="{{ route('flex.approved_financial_payments') }}">Payroll Approves </a></li>
+                                        href="{{ route('flex.approved_financial_payments') }}">Payroll Approvers </a></li>
                             @endcan
                             @can('view-payslip')
                                 <li class="nav-item"><a

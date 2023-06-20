@@ -103,7 +103,8 @@ class Payroll extends Model {
         return DB::select(DB::raw($query));
     }
     public function payrollMonthList() {
-        $query = 'SELECT (@s:=@s+1) as SNo, pm.* FROM payroll_months pm, (SELECT @s:=0) as s ORDER BY pm.id DESC';
+       // $query = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e, ((SELECT @s:=0) as s ORDER BY pm.id DESC) where pm.init_author = e.emp_id ';
+        $query = 'SELECT (@s:=@s+1) as SNo, pm.*,e.fname,e.mname,e.lname FROM payroll_months pm,employee e where pm.init_author = e.emp_id ';
         return DB::select(DB::raw($query));
     }
     public function getNotifications() {

@@ -164,7 +164,7 @@
                                                             title="Approve Payroll" class="me-2">
                                                             <button type="button" class="btn btn-success text-white">
                                                                 <i class="ph-check me-2"></i>
-                                                                RECOMMEND PENDING PAYROLL
+                                                                APPROVE PENDING PAYROLL
                                                             </button>
                                                         </a>
 
@@ -187,7 +187,7 @@
                                                             title="Approve Payroll" class="me-2">
                                                             <button type="button" class="btn btn-success text-white">
                                                                 <i class="ph-check me-2"></i>
-                                                                RECOMMEND PENDING PAYROLL
+                                                                APPROVE PENDING PAYROLL
                                                             </button>
                                                         </a>
 
@@ -231,16 +231,16 @@
                                                 </td>
                                                 <td>
                                                     <?php if ($row->state == 1 ) { ?>
-                                                    <span class="badge bg-warning">Reccomended by Head of Finance
+                                                    <span class="badge bg-warning">Approved by Head of Finance
                                                     </span><br>
                                                     <?php }elseif($row->state == 2){ ?>
-                                                    <span class="badge bg-warning">Initiated by HR<br>
+                                                    <span class="badge bg-warning">Initiated by {{  $row->fname.' '.$row->mname.' '.$row->lname }}<br>
 
                                                         <?php }elseif($row->state == 3){ ?>
-                                                        <span class="badge bg-warning">Reccomended by Head of Human
+                                                        <span class="badge bg-warning">Approved by Head of Human
                                                             Capital<br>
                                                             <?php } elseif($row->state == 0) { ?>
-                                                            <span class="badge bg-success">APPROVED</span>
+                                                            <span class="badge bg-success">Approved by MD</span>
                                                             <br>
                                                             <?php } ?>
                                                 </td>
@@ -254,19 +254,18 @@
                                                 </td> --}}
 
                                                 <td class="options-width">
-                                                    <a href="javascript:void(0)"
+                                                    {{-- <a href="javascript:void(0)"
                                                         onclick="viewComment('{{ $row->payroll_date }}')"
                                                         title="View Comment" class="icon-2 info-tooltip">
                                                         <button type="button" class="btn btn-info text-white">
 
                                                             view comment
                                                         </button>
-                                                    </a>
+                                                    </a> --}}
                                                     <?php if ($row->state == 1 || $row->state == 2) { ?>
                                                     <a href="{{ route('payroll.temp_payroll_info', ['pdate' => base64_encode($row->payroll_date)]) }}"
                                                         title="Info and Details" class="icon-2 info-tooltip">
-                                                        <button type="button" class="btn btn-info btn-xs"><i
-                                                                class="ph-info"></i>
+                                                        <button type="button" class="btn btn-info btn-xs">view reports
                                                         </button>
                                                     </a>
                                                     <?php } else { ?>
