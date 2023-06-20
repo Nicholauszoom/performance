@@ -1882,6 +1882,15 @@ and e.branch = b.code and e.line_manager = el.emp_id and c.id = e.contract_type 
 
         return $row;
     }
+    public function employee_increase($current_payroll_month, $previous_payroll_month)
+    {
+        $query = "
+        (SELECT  'Add Employee' as description,e.emp_id,e.hire_date,e.contract_end,e.fname,e.lname,pl.salary,pl.salary as current_amount,0 as previous_amount
+        from employee e,payroll_logs pl where e.emp_id = pl.empID and pl.payroll_date = '" . $current_payroll_month . "' and e.emp_id NOT IN (SELECT empID from  payroll_logs where payroll_date = '" . $previous_payroll_month . "') )";
+        $row = DB::select(DB::raw($query));
+
+        return $row;
+    }
     public function employee_basic_increase($current_payroll_month, $previous_payroll_month)
     {
 

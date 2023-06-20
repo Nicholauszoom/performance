@@ -7,15 +7,15 @@
             <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Recon Summary</button>
         </a>
 
-        <a class="px-4"
+        <a class="ms-3"
         href="{{ route('reports.payrollReconciliationDetails_temp', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Recon details</button>
     </a>
         
-        <a class="px-4"
+        <a class="ms-3"
             href="{{ route('reports.get_payroll_temp_summary', ['date' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}"
             target="blank">
-            <button type="button" name="print" value="print" class="btn btn-main"> Payroll Details</button>
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Details</button>
         </a>
         <a class="ms-3"
             href="{{ route('reports.payrollReportLogs', ['payrolldate' => $payroll_date, 'type' => 2, 'payrollState' => $payrollState]) }}"
@@ -33,10 +33,10 @@
         </a>
         @if ($payrollState == 2)
             <a href="javascript:void(0)" onclick="generate_checklist()" class="ms-3">
-                <button type="button" class="btn btn-main">Perform Calculation </button>
+                <button type="button" class="btn btn-main btn-sm">Perform Calculation </button>
             </a>
             <a href="{{ route('payroll.cancelpayroll', 'none') }}" class="ms-3">
-                <button type="button" class="btn btn-warning">Cancel Payroll </button>
+                <button type="button" class="btn btn-warning btn-sm">Cancel Payroll </button>
             </a>
         @endif
     @else
@@ -47,7 +47,7 @@
         <a class="px-4"
             href="{{ route('reports.get_payroll_temp_summary1', ['payrolldate' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}"
             target="">
-            <button type="button" name="print" value="print" class="btn btn-main"> Payroll Details</button>
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Payroll Details</button>
         </a>
 
         <a class="ms-3"
@@ -73,13 +73,13 @@
 
         <a class="px-4" href="{{ route('reports.payroll_report1', ['pdate' =>$payroll_date]) }}>"
             target="blank">
-            <button type="button" name="print" value="print" class="btn btn-main"> <i
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> <i
                     class="ph-download-simple me-2"></i> Pay Checklist</button>
         </a>
 
         <a class="ms-3" href="{{ route('reports.payroll_report', ['pdate' => base64_encode($payroll_date)]) }}>"
             target="blank">
-            <button type="button" name="print" value="print" class="btn btn-main"> Export</button>
+            <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Export</button>
         </a>
 
 
