@@ -583,7 +583,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
 
-        from payroll_logs pl,employee e,bank b where b.id = e.branch and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
+        from payroll_logs pl,employee e,bank b where b.id = e.bank and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
 
         ";
 
