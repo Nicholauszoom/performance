@@ -31,8 +31,7 @@
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
                                     <p class="p-space">Bibi Titi Mohammed Road</p>
                                     <p class="p-space">P.O. Box 31, Dar es salaam </p>
-                                    <p class="p-space">+255 22 22119422/2111990 </p>
-                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
+
                                 </div>
                             </td>
                             <td> </td>
@@ -42,7 +41,7 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                    <img src="{{ asset('assets/images/tdfl.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
                                 </div>
                             </td>
                         </tr>
@@ -113,8 +112,7 @@
                                     $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
                                 foreach ($summary as $row){
                                     $i++;
-                                    $amount = $row->salary + $row->allowances-($row->pension_employer-$row->deductions-$row->taxdue);
-                                    //$total_netpay +=  round($amount,0);
+                                    $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                     $total_netpay +=  $amount;
 
                                     $total_gross_salary += ($row->salary + $row->allowances);
