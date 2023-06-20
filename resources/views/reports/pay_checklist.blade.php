@@ -137,6 +137,7 @@
                         </tr>
                     </tbody>
                 </table>
+                
 
                 <table class="table" id="reports" style="font-size:10px; height:20px;">
                     <tbody>
