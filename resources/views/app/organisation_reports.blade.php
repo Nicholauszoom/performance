@@ -249,6 +249,16 @@
                             </select>
                             <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
                         </div>
+                        <div class="input-group py-2">
+                            <select required name="format" class="select_payroll_month form-control select" data-width="1%">
+                                <option selected disabled>Select doc format</option>
+                               
+                                <option value="1">PDF</option>
+                                <option value="2">Excel</option>
+                               
+                            </select>
+                            
+                        </div>
 
                         <div class="mt-2">
                             <label class="form-label">Report Format:</label>

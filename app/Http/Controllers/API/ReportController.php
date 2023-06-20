@@ -2987,6 +2987,44 @@ EOD;
         // include(app_path() . '/reports/temp_payroll.php');
     }
 
+
+    function payrolldetails1(Request $request)
+    {
+
+        $date = $request->payrolldate;
+        $data['summary'] = $this->reports_model->get_payroll_summary($date);
+
+        $payrollMonth = $date;
+        $pensionFund = 2;
+        $reportType = 1; //Staff = 1, temporary = 2
+
+        $datewell = explode("-", $payrollMonth);
+        $mm = $datewell[1];
+        $dd = $datewell[2];
+        $yyyy = $datewell[0];
+        $date = $yyyy . "-" . $mm;
+
+        $data['payroll_date'] = $request->payrolldate;
+
+
+
+        $summary = $data['summary'];
+
+        //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
+
+        // $pdf = Pdf::loadView('reports.terminalbenefit',$data)->setPaper('a4', 'landscape');
+
+
+
+        // return $pdf->download('itsolutionstuff.pdf');
+         if($request->type != 1)
+         return view('reports.payrolldetails_datatable',$data);
+         else
+        return view('reports.payroll_details', $data);
+
+        // include(app_path() . '/reports/temp_payroll.php');
+    }
+
     public function payrollReportLogs(Request $request)
     {
         $date = explode('-',$request->payrolldate);
