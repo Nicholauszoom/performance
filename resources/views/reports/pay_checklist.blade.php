@@ -98,6 +98,7 @@
                     <tbody>
                         <?php
                         $sno =0;
+                        $total = 0;
                         foreach($employee_list as $row){
 
                             if($row->currency == $currency){
@@ -110,7 +111,11 @@
                                     $less_takehome = $row->less_takehome;
                                     $account_no = $row->account_no;
                                     if($less_takehome==0){
-                                    $amount = $row->salary + $row->allowances-$row->pension-$row->loans-$row->deductions-$row->meals-$row->taxdue; } else $amount = $less_takehome;
+                                    $amount = $row->salary + $row->allowances-$row->pension-$row->loans-$row->deductions-$row->meals-$row->taxdue; }
+                                     else {
+                                     $amount = $less_takehome;
+                                     }
+                                     $total += $amount;
                                     if  ($sno % 2 == 0) { $background = "#d3d3d3;"; } else { $background = "#FFFFFF;"; }
                                     ?>
                         <tr nobr="true" style="border-bottom:2px solid rgb(67, 67, 73)">
@@ -126,6 +131,10 @@
                             <td  style="text-align: right;">&nbsp;{{ number_format($amount / $row->rate, 2) }}</td>
                         </tr>
                         <?php }} ?>
+                        <tr nobr="true" style="border-bottom:2px solid rgb(67, 67, 73)">
+                            <td  style="text-align: right;" colspan="6">TOTAL</td>
+                            <td  style="text-align: right;" colspan="2">&nbsp;{{ number_format($total / $row->rate, 2) }}</td>
+                        </tr>
                     </tbody>
                 </table>
 

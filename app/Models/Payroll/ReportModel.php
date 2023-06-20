@@ -141,7 +141,7 @@ FROM employee e, department dpt, position p, branch br, contract ct, pension_fun
 	IF((SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE l.empID = e.emp_id AND  ll.payment_date = '" . $date . "' GROUP BY l.empID)>0,(SELECT SUM(ll.paid) FROM loan_logs ll, loan l WHERE e.emp_id = l.empID AND ll.loanID = l.id AND ll.payment_date = '" . $date . "' GROUP BY l.empID),0) AS loans,
 	IF((SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID)>0,(SELECT SUM(dl.paid) FROM deduction_logs dl WHERE dl.empID = e.emp_id AND dl.payment_date = '" . $date . "' GROUP BY dl.empID),0) AS deductions,
 	b.name as bank, bb.name as branch, bb.branch_code as swiftcode, pl.account_no
-	FROM employee e, payroll_logs pl,  bank_branch bb, bank b, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '" . $date . "'";
+	FROM employee e, payroll_logs pl,  bank_branch bb, bank b, (SELECT @s:=0) AS s WHERE pl.empID = e.emp_id AND bb.id= e.bank_branch AND b.id = e.bank AND pl.payroll_date = '" . $date . "' order by e.emp_id ASC";
 
         return DB::select(DB::raw($query));
     }
