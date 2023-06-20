@@ -111,7 +111,7 @@
                                     $less_takehome = $row->less_takehome;
                                     $account_no = $row->account_no;
                                     if($less_takehome==0){
-                                    $amount = $row->salary + $row->allowances-$row->pension-$row->loans-$row->deductions-$row->meals-$row->taxdue; }
+                                    $amount = $row->salary + $row->allowances-($row->pension-$row->deductions-$row->taxdue); }
                                      else {
                                      $amount = $less_takehome;
                                      }

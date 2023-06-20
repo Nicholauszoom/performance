@@ -113,8 +113,9 @@
                                     $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
                                 foreach ($summary as $row){
                                     $i++;
-                                    $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
-                                    $total_netpay +=  round($amount,0);
+                                    $amount = $row->salary + $row->allowances-($row->pension_employer-$row->deductions-$row->taxdue);
+                                    //$total_netpay +=  round($amount,0);
+                                    $total_netpay +=  $amount;
 
                                     $total_gross_salary += ($row->salary + $row->allowances);
                                     $total_salary = $total_salary + $row->salary;
