@@ -568,7 +568,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $query = "SELECT
         pl.*,
         e.fname,e.mname,e.lname,e.account_no,e.currency,b.name as bank_name,e.branch as branch_code,
-        e.emp_id,
+        e.emp_id,e.rate,
         'al.description' as allowance_id,
         0 as allowance_amount,
         (IF((SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID >0),(SELECT SUM(al.amount) FROM allowance_logs al WHERE al.empID = e.emp_id AND al.description lIKE '%Overtime%' AND al.payment_date = '" . $date . "' GROUP BY al.empID),0)) AS overtime,

@@ -96,7 +96,7 @@
                                 <td class="text-end">{{ $row->currency }}</td>
           
                  
-                                <td class="text-end">{{ number_format($amount, 0) }}</td>
+                                <td class="text-end">{{ number_format($amount/$row->rate, 0) }}</td>
 
 
                             </tr>
