@@ -79,6 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->middleware([Setting::class])->group(function(){
     // Route For Resources
     Route::resources([
         'permissions' => PermissionController::class,
@@ -91,6 +92,8 @@ Route::middleware('auth')->group(function () {
         // 'skill' => SkillsController::class,
         // 'trainingApp'=>TrainingAppController::class,
     ]);
+
+});
     Route::prefix('bot')->controller(BOTDataController::class)->group(function(){
 
         Route::any('/index','index')->name('bot.botIndex');
