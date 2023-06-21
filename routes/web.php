@@ -317,7 +317,7 @@ Route::middleware('auth')->group(function () {
 
 
     });
-    Route::prefix('flex/payroll')->controller(PayrollController::class)->group(function (){
+    Route::prefix('flex/payroll')->middleware('auth')->middleware([Payroll::class])->controller(PayrollController::class)->group(function (){
         Route::any('/get_reconsiliation_summary','get_reconsiliation_summary')->name('reports.get_reconsiliation_summary');
         Route::any('/get_reconsiliation_summary1','get_reconsiliation_summary1')->name('reports.get_reconsiliation_summary1');
         Route::any('/initPayroll','initPayroll')->name('payroll.initPayroll');
@@ -439,7 +439,7 @@ Route::middleware('auth')->group(function () {
     // end of attendance routes
 
     // start of  loans access permission routes
-    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Loan::class])->controller(GeneralController::class)->group(function (){
 
         Route::any('/companyInfo','companyInfo')->name('flex.companyInfo');
         Route::any('/updatecompanyInfo','updatecompanyInfo')->name('flex.updatecompanyInfo');
@@ -466,7 +466,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
-    Route::prefix('flex/pension_receipt')->controller(PensionPayslipController::class)->group(function(){
+    Route::prefix('flex/pension_receipt')->middleware('auth')->middleware([Loan::class])->controller(PensionPayslipController::class)->group(function(){
         Route::get('/index', 'index')->name('pension_receipt.index');
         Route::get('/receipt_export', 'export')->name('pension_receipt.export');
         Route::post('/receipt_import', 'import')->name('pension_receipt.import');
@@ -474,7 +474,7 @@ Route::middleware('auth')->group(function () {
     });
 
     //bank loans routes
-    Route::prefix('flex/bank-loans')->controller(BankLoanController::class)->group(function(){
+    Route::prefix('flex/bank-loans')->middleware('auth')->middleware([Loan::class])->controller(BankLoanController::class)->group(function(){
         Route::get('/all-loans', 'index')->name('bank-loans');
         Route::get('/delete-loan/{id}', 'delete_loan')->name('flex.delete-loans');;
         Route::get('/loans-export', 'export')->name('loans.export');
@@ -485,7 +485,7 @@ Route::middleware('auth')->group(function () {
 
 
     //start of organization access permission  routes
-    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Organisation::class])->controller(GeneralController::class)->group(function (){
 
         Route::any('/department','department')->name('flex.department');
         Route::any('/organization_level','organization_level')->name('flex.organization_level');
@@ -550,7 +550,7 @@ Route::middleware('auth')->group(function () {
 
 
     //Start of Acceleration routes
-    Route::prefix('flex/')->controller(AccelerationController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Report::class])->controller(AccelerationController::class)->group(function (){
         Route::any('acceleration','index')->name('flex.acceleration');
         Route::any('add-acceleration','create')->name('flex.add-acceleration');
         Route::any('save-acceleration','store')->name('flex.save-acceleration');
@@ -571,7 +571,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // For Performance Reports Routes
-    Route::prefix('flex/')->controller(PerformanceReportsController::class)->group(function (){
+    Route::prefix('flex/')->middleware('auth')->middleware([Setting::class])->controller(PerformanceReportsController::class)->group(function (){
         Route::any('performance-reports','index')->name('flex.performance-reports');
         Route::any('organization-reports','organization_report')->name('flex.organization-reports');
         Route::any('project-report','project_report')->name('flex.project-report');
@@ -776,7 +776,7 @@ Route::middleware('auth')->group(function () {
     });
 
 
-    Route::prefix('flex')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex')->controller(GeneralController::class)->middleware('auth')->middleware([WorkForce::class])->group(function (){
 
         Route::any('/index','index')->name('flex.index');
         Route::any('/import','import')->name('flex.import');
@@ -1280,7 +1280,7 @@ Route::middleware('auth')->group(function () {
         Route::any('/payrollReconciliationDetails','payrollReconciliationDetails')->name('reports.payrollReconciliationDetails');
         Route::any('/payrollReconciliationDetails_temp','payrollReconciliationDetails_temp')->name('reports.payrollReconciliationDetails_temp');
 
-        
+
         Route::any('/dynamic_pdf','dynamic_pdf')->name('reports.dynamic_pdf');
         Route::any('/employeeReport','employeeReport')->name('reports.employeeReport');
         Route::any('/payrolldetails','payrolldetails')->name('reports.payrolldetails');
