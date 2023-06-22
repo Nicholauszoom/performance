@@ -11,7 +11,7 @@
         href="{{ route('reports.payrollReconciliationDetails_temp', ['payrolldate' => $payroll_date, 'payrollState' => $payroll_state,'type'=>1]) }}">
         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Recon details</button>
     </a>
-        
+
         <a class="ms-3"
             href="{{ route('reports.get_payroll_temp_summary', ['date' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}"
             target="blank">
@@ -40,7 +40,7 @@
             </a>
         @endif
     @else
-        <a href="{{ route('reports.get_reconsiliation_summary1', ['payrolldate' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}"
+        <a href="{{ route('reports.get_reconsiliation_summary', ['payrolldate' => $payroll_date, 'payrollState' => $payrollState, 'type' => 1]) }}"
             target="">
             <button type="button" name="print" value="print" class="btn btn-main btn-sm"> Reconsiliation</button>
         </a>
