@@ -7109,7 +7109,7 @@ class GeneralController extends Controller
                     'mobile' => $request->input('mobile'),
                     'account_no' => $request->input("accno"),
                     'bank' => $request->input("bank"),
-                    'bank_branch' => $request->input("bank_branch"),
+                    'bank_branch' => 1,
                     'pension_fund' => $request->input("pension_fund"),
                     'pf_membership_no' => $request->input("pf_membership_no"),
                     'home' => $request->input("haddress"),
@@ -7153,6 +7153,19 @@ class GeneralController extends Controller
 
                     SysHelpers::FinancialLogs($id, 'Assign Salary', '0', $request->input("salary"), 'Employee Registration');
 
+
+                    //register employee to leave approve maping
+
+                    $approval = new LeaveApproval();
+                    $approval->empID = $emp_id;
+                    $approval->level1 = $request->input("linemanager");
+                    //$approval->level2 = $request->level_2;
+                   // $approval->level3 = $request->level_3;
+                    $approval->escallation_time = 2;
+                    $approval->save();
+
+
+                    //end leave approve mapping
 
                     /*give 100 allocation*/
                     $data = array(
