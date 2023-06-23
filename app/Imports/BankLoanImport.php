@@ -45,7 +45,7 @@ class BankLoanImport implements ToCollection, WithHeadingRow, WithValidation
             'amount' => $row['amount'],
             'created_at' => $date,
             'added_by'=>Auth::user()->id,
-            'date'=>$date_added->date,
+            //'date'=>$date_added->date,
           ];
           $check=DB::table('bank_loans')
           ->where($data)->first();

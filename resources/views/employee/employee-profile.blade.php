@@ -338,7 +338,7 @@
 
 
                                                     </div>
-                                                
+
 
                                                 </div>
                                                 <div class="card-footer ">
@@ -857,8 +857,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6 mb-2">
-                                                <label for="">Disciplinary of Study </label>
-                                                <input type="text" name="course" id="course"  placeholder="Enter Disciplinary of Study e.g Accounting/Marketing Law/Business etc" class="form-control" >
+                                                <label for="">Discpline of Study </label>
+                                                <input type="text" name="course" id="course"  placeholder="Enter Discpline of Study e.g Accounting/Marketing Law/Business etc" class="form-control" >
                                             </div>
 
                                                 <div class="col-md-3 mb-2">
@@ -994,7 +994,7 @@
                                             <td>
                                                 <a href="{{asset('storage/certifications/' . $item->certificate) }}" download="{{ $item->cert_name.'-certificate' }}" class="text-main btn btn-sm" title="Download Attachment">
                                                     <i class="ph ph-download"></i> &nbsp;
-                                                    
+
                                                   </a>
                                                  <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn text-danger">
                                                     <i class="ph-trash"></i>

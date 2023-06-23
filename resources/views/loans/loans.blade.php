@@ -71,7 +71,7 @@
                             <div id="deleteFeedback"></div>
                             <div id="resultSubmission"></div>
                             @if (session('status'))
-                            <div class="alert alert-danger" role="alert">
+                            <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                             </div>
                             @endif

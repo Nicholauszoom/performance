@@ -32,9 +32,9 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select"
+                            <select required name="payrolldate" class="select_payroll_month form-control select" required
                                 data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -45,12 +45,12 @@
                             <label class="form-label">Report Format:</label>
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                         <div class="input-group">
                             <select required name="payrolldate" class="select_payroll_month form-control select"
                                 data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -85,12 +85,12 @@
                             <label class="form-label">Report Format:</label>
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@
                         <div class="input-group">
                             <select required name="payrolldate" class="select_payroll_month form-control select"
                                 data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -125,12 +125,12 @@
                             <label class="form-label">Report Format:</label>
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
                         <div class="input-group">
                             <select required name="payrolldate" class="select_payroll_month form-control select"
                                 data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -166,12 +166,12 @@
                             <label class="form-label">Report Format:</label>
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +218,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Data table</label>
+                                <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
                     </div>
@@ -240,9 +240,9 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="pdate" class="select_payroll_month form-control select"
+                            <select required  name="pdate" class="select_payroll_month form-control select"
                                 data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -251,13 +251,13 @@
                         </div>
                         <div class="input-group py-2">
                             <select required name="format" class="select_payroll_month form-control select" data-width="1%">
-                                <option selected disabled>Select doc format</option>
-                               
+                                <option selected disabled value="">Select doc format</option>
+
                                 <option value="1">PDF</option>
                                 <option value="2">Excel</option>
-                               
+
                             </select>
-                            
+
                         </div>
 
                         <div class="mt-2">
@@ -265,7 +265,7 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">TZS</label>
                                 </div>
 
@@ -317,7 +317,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Data table</label>
+                                <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
                     </div>
@@ -340,7 +340,7 @@
                         <div class="input-group">
                             <select required name="emp_id" class="select_payroll_month form-control select"
                                 data-width="1%">
-                                <option selected disabled>Select Employee</option>
+                                <option value="" selected disabled>Select Employee</option>
                                 <?php foreach ($employee as $row) { ?>
                                 <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . ' ' . $row->mname . ' ' . $row->lname; ?></option>
                                 <?php } ?>
@@ -353,13 +353,13 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -405,7 +405,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Data table</label>
+                                <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
                     </div>
@@ -451,7 +451,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Data table</label>
+                                <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
                     </div>
@@ -494,7 +494,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -540,7 +540,7 @@
 
                             <div class="d-inline-flex align-items-center">
                                 <input type="radio" name="type" value="2" id="p9a">
-                                <label class="ms-2" for="p9a">Data table</label>
+                                <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
                     </div>
@@ -567,7 +567,7 @@
                                 <div class="input-group">
                                     <select required name="payrolldate" class="select_payroll_month form-control select"
                                         data-width="1%">
-                                        <option selected disabled>Select Month</option>
+                                        <option selected disabled value="">Select Month</option>
                                         <?php foreach ($month_list as $row) { ?>
                                         <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                         <?php } ?>
@@ -594,13 +594,13 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -627,7 +627,7 @@
                                 <div class="input-group">
                                     <select required name="emp_id" class="select_payroll_month form-control select"
                                         data-width="1%">
-                                        <option selected disabled>Select Employee</option>
+                                        <option selected disabled value="">Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -644,13 +644,13 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
                         </div>
@@ -716,7 +716,7 @@
                                 <div class="input-group">
                                     <select required name="leave_employee"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled>Select Employee</option>
+                                        <option selected disabled value=""`>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -749,13 +749,13 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <div class="d-inline-flex align-items-left px-5">
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
@@ -857,13 +857,13 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <div class="d-inline-flex align-items-left px-5">
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
@@ -954,7 +954,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data table</label>
+                                    <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
                                     Print</button>

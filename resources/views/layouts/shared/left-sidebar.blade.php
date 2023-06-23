@@ -565,7 +565,7 @@
                             @if (session('mng_roles_grp'))
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('flex.companyInfo') ? 'active' : null }}"
-                                        href="{{ route('flex.companyInfo') }}">company Info</a></li>
+                                        href="{{ route('flex.companyInfo') }}">Company Info</a></li>
                             @endif
 
 
