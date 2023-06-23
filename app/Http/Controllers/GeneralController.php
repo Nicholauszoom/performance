@@ -8367,6 +8367,17 @@ class GeneralController extends Controller
         return redirect('flex/termination')->with('msg', 'Termination was Cancelled successfully !');
     }
 
+    public function cancelTermination1($id)
+    {
+        $promotion = Termination::find($id);
+
+        $delete = $this->flexperformance_model->delete_logs($promotion->employeeID);
+
+        $promotion->delete();
+
+        return redirect('flex/termination')->with('msg', 'Termination was removed successfully !');
+    }
+
     //For Viewing Termination
     public function viewTermination($id)
     {

@@ -1382,7 +1382,7 @@ function retire_list()
 
         $row =  DB::select(DB::raw($query));
 
-        
+
 
          return $row;
 
@@ -1940,6 +1940,16 @@ IF(
     $leave_allowance = DB::select(DB::raw($query))[0]->leave_allowance;
 
     return $leave_allowance;
+    }
+
+    public function delete_logs($id){
+
+        DB::table('financial_logs')->where('payrollno',$id)->where('input_screen','Termination')->delete();
+
+        $query = "UPDATE employee set state = 1 where emp_id = '".$id."'";
+        DB::insert(DB::raw($query));
+
+        return true;
     }
 
 
@@ -3362,7 +3372,7 @@ d.department_pattern AS child_department, d.parent_pattern as parent_department 
 
 	function memberscount($id)
 	{
-       
+
 		$query = "SELECT count(id) as headcounts  FROM employee_group WHERE group_name =".$id."";
 		$row = DB::select(DB::raw($query));
 

@@ -71,6 +71,16 @@
                 <a  href="{{ url('flex/view-termination/'.$item->id) }}"  title="Print Terminal Benefit">
                     <button type="button" class="btn btn-main btn-xs" ><i class="ph-printer"></i></button>
                 </a>
+                @if($item->status == 1)
+                <a href="javascript:void(0)" title="Cancel" class="icon-2 info-tooltip"
+                onclick="cancelTermination1(<?php echo $item->id; ?>)">
+                <button class="btn btn-info btn-xs">
+
+                      undo
+                </button>
+                 </a>
+
+                @endif
 
                 @if($level)
                 @if($item->status!='1')
@@ -206,7 +216,7 @@
                             $('#resultfeedOvertime').fadeIn('fast').html(data);
                         });
 
-             
+
 
                         setTimeout(function() {
                             location.reload();
@@ -609,6 +619,89 @@
             //         });
             // }
         }
+
+
+        function cancelTermination1(id) {
+
+Swal.fire({
+    title: 'Are You Sure You Want to Edit This Employee Termination?',
+    // text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Cancel it!'
+}).then((result) => {
+    if (result.isConfirmed) {
+        var terminationid = id;
+
+        $.ajax({
+            url: "{{ url('flex/cancel-termination1') }}/" + terminationid
+        })
+        .done(function(data) {
+            $('#resultfeedOvertime').fadeOut('fast', function() {
+                $('#resultfeedOvertime').fadeIn('fast').html(data);
+            });
+
+            $('#status' + id).fadeOut('fast', function() {
+                $('#status' + id).fadeIn('fast').html(
+                    '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+                    );
+            });
+
+            // alert('Request Cancelled Successifully!! ...');
+
+            Swal.fire(
+                'Cancelled!',
+                'Employee Termination Cancelled Successifully!!.',
+                'success'
+            )
+
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
+        })
+        .fail(function() {
+            Swal.fire(
+                'Failed!',
+                'Employee Termination Cancellation Failed!! ....',
+                'success'
+            )
+
+            alert('Employee Termination Cancellation Failed!! ...');
+        });
+    }
+});
+
+// if (confirm("Are You Sure You Want to Cancel This Overtime Request") == true) {
+
+//     var overtimeid = id;
+
+//     $.ajax({
+//             url: "{{ url('flex/cancelOvertime') }}/" + overtimeid
+//         })
+//         .done(function(data) {
+//             $('#resultfeedOvertime').fadeOut('fast', function() {
+//                 $('#resultfeedOvertime').fadeIn('fast').html(data);
+//             });
+
+//             $('#status' + id).fadeOut('fast', function() {
+//                 $('#status' + id).fadeIn('fast').html(
+//                     '<div class="col-md-12"><span class="label label-warning">CANCELLED</span></div>'
+//                     );
+//             });
+
+//             alert('Request Cancelled Successifully!! ...');
+
+//             setTimeout(function() {
+//                 location.reload();
+//             }, 1000);
+//         })
+//         .fail(function() {
+//             alert('Overtime Cancellation Failed!! ...');
+//         });
+// }
+}
     </script>
 
 

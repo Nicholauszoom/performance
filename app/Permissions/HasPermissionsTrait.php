@@ -7,7 +7,7 @@ use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
 trait HasPermissionsTrait {
 
- 
+
     public function hasRole(...$roles)
     {
         foreach ($roles as $role) {
@@ -57,7 +57,7 @@ trait HasPermissionsTrait {
         }
         return  true;
     }
-    
+
    public function givePermissionsTo(... $permissions) {
 
     $permissions = $this->getAllPermissions($permissions);
@@ -84,11 +84,12 @@ trait HasPermissionsTrait {
   }
 
   public function hasPermissionTo($permission) {
- 
 
+     //check whether iyo active
+     
     return $this->hasPermissionThroughRole($permission);
-  
-    
+
+
   }
 
   public function hasPermissionThroughRole($permission) {
@@ -114,7 +115,7 @@ trait HasPermissionsTrait {
   protected function getAllPermissions(array $permissions) {
 
     return Permission::whereIn('slug',$permissions)->get();
-    
+
   }
 
 

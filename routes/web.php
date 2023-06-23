@@ -139,6 +139,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          // start of approvals route
          Route::get('/approve-termination/{id}','approveTermination')->name('flex.approveTermination');
          Route::get('/cancel-termination/{id}','cancelTermination')->name('flex.cancelTermination');
+         Route::get('/cancel-termination1/{id}','cancelTermination1')->name('flex.cancelTermination1');
          // end of termination routes
 
         //start of grievances and disciplinary actions routes
