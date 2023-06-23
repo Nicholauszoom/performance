@@ -143,7 +143,7 @@ class EmployeePerformanceController extends Controller
         $data['weighting'] = $request->weighting;
         $data['number'] = $request->number;
         $data['score'] =$request->score;
-        $data['rating'] =  ($data['score']/$data['weighting'])  *5;
+        $data['rating'] =  ($data['score']/$data['weighting'])+2;
 
       $performance->update($data);
 
@@ -206,7 +206,7 @@ class EmployeePerformanceController extends Controller
         $id = $request->evaluation_id;
 
         $emp_performance = EmployeeEvaluation::find($id);
-       
+
         $emp_performance->status = 1;
         $emp_performance->save();
 

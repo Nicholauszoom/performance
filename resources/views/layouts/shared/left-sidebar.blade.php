@@ -359,7 +359,7 @@
                 @endcan
 
                 {{-- For Performance Management --}}
-@can('view-Performance')
+                    @can('view-Performance')
                 <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
                     <a href="#" class="nav-link">
