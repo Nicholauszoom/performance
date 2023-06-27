@@ -74,7 +74,7 @@ class AttendanceController extends Controller
 
         if(!Auth::user()->can($permissions)){
 
-          abort(Response::HTTP_UNAUTHORIZED);
+          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
 
          }
 

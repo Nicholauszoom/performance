@@ -38,7 +38,7 @@ class ReportController extends Controller
 
         if(!Auth::user()->can($permissions)){
 
-          abort(Response::HTTP_UNAUTHORIZED);
+          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
 
          }
 
@@ -528,7 +528,7 @@ class ReportController extends Controller
     {
 
         $id = base64_decode($request->emp_id);
-        
+
         if($id != auth()->user()->emp_id){
             $this->authenticateUser('edit-employee');
         }

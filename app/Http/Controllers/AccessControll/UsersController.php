@@ -30,7 +30,7 @@ class UsersController extends Controller
 
         if(!Auth::user()->can($permissions)){
 
-          abort(Response::HTTP_UNAUTHORIZED);
+          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
 
          }
 
@@ -43,7 +43,7 @@ class UsersController extends Controller
     public function index()
     {
 
-        
+
         $this->authenticateUser('edit-roles');
         return view('access-controll.users.index', [
             'users' => User::all(),
