@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Cookie;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +27,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+            Cookie::defaults(['secure' => true, 'sameSite' => 'none']);
+        }
     }
 }

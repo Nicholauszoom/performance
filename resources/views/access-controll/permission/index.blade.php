@@ -18,6 +18,11 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
     <div class="card-header border-0">
         <h5 class="mb-0 text-warning">Permissions</h5>
+        <div class="header-elements">
+            <button type="button" class="btn btn-main float-end" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
+                <i class="ph-plus me-2"></i>Add Permission
+            </button>
+        </div>
     </div>
 
 
@@ -60,7 +65,7 @@
         </tbody>
     </table>
 </div>
-
+@include('access-controll.permission.add')
 @endsection
 
 

@@ -12,15 +12,34 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BankLoanTemplateExport;
 use Maatwebsite\Excel\Validators\ValidationException;
+use Illuminate\Http\Response;
 
 
 class BankLoanController extends Controller
 {
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
   /**
     * @return \Illuminate\Support\Collection
     */
     public function index()
     {
+
+        $this->authenticateUser('view-bank-loan');
         $loans = BankLoan::orderBy('created_at','DESC')->get();
 
         return view('loans.loans', compact('loans'));

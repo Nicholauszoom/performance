@@ -9,14 +9,32 @@ use App\Models\AccessControll\Role;
 use App\Models\AccessControll\Permission;
 use App\Models\AccessControll\SystemModule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class RoleController extends Controller
 {
 
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
+
     public function index()
     {
 
-
+        $this->authenticateUser('view-Roles');
         $roles = Role::all();
         $permissions = Permission::all();
         $modules = SystemModule::all();

@@ -13,10 +13,28 @@ use App\Models\AccessControll\Departments;
 use App\Models\AccessControll\Designation;
 use App\Models\Payroll\EmployeePayroll;
 use App\Models\CompanyRoles;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 
 class UsersController extends Controller
 {
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,6 +42,9 @@ class UsersController extends Controller
      */
     public function index()
     {
+
+        
+        $this->authenticateUser('edit-roles');
         return view('access-controll.users.index', [
             'users' => User::all(),
             'parent' => 'Organisation',

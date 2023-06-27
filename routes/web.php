@@ -58,6 +58,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::middleware('verify-outgoing-requests')->group(function () {
 Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
 Route::middleware('auth')->group(function () {
 
@@ -1343,7 +1344,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 // })->middleware('guest')->name('password.reset');
 
 
-
+});
 
 Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';

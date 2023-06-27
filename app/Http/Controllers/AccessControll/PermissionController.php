@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AccessControll\Permission;
 use App\Models\AccessControll\SystemModule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class PermissionController extends Controller
 {
@@ -15,8 +17,27 @@ class PermissionController extends Controller
 
 
     }
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
     public function index()
     {  // , compact('permissions', 'modules')
+
+        $this->authenticateUser('view-Permission');
+
         $permissions = Permission::all();
         $modules = SystemModule::all();
         return view('access-controll.permission.index', [

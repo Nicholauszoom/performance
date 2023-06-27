@@ -3,14 +3,34 @@
 namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
 class BOTDataController extends Controller
 {
+
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
     //
     public function index(){
 
+        $this->authenticateUser('view-endpoints');
         $employee =  Employee::all();
         $data['employee'] = $employee;
         return view('bot.index',$data);

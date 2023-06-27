@@ -81,6 +81,8 @@ class Kernel extends HttpKernel
         'dashboard' => \App\Http\Middleware\Dashboard::class, // For Dashboard
         'emptermination' => \App\Http\Middleware\EmployeeTermination::class, // For Employee Termination
         'promotion' => \App\Http\Middleware\Promotion::class, // For Employee Promotion
+        'verify-outgoing-requests' => \App\Http\Middleware\VerifyOutgoingRequests::class,
+
 
 
 

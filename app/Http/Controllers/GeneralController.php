@@ -72,6 +72,8 @@ use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Response;
+
 
 class GeneralController extends Controller
 {
@@ -92,6 +94,23 @@ class GeneralController extends Controller
         $this->project_model = new ProjectModel();
         $this->performanceModel = new PerformanceModel();
         $this->payroll_model = new Payroll;
+    }
+
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
     }
 
 
@@ -155,7 +174,15 @@ class GeneralController extends Controller
 
     public function userprofile(Request $request, $id)
     {
+
+
         $id = base64_decode($id);
+
+        if(auth()->user()->emp_id != $id){
+            $this->authenticateUser('edit-employee');
+        }
+
+
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
@@ -305,6 +332,8 @@ class GeneralController extends Controller
 
     public function department()
     {
+
+        $this->authenticateUser('view-organization');
         $id = session('emp_id');
         $data['employee'] = $this->flexperformance_model->customemployee();
         $data['cost_center'] = $this->flexperformance_model->costCenter();
@@ -498,6 +527,7 @@ class GeneralController extends Controller
 
     public function branch(Request $request)
     {
+        $this->authenticateUser('view-organization');
         $id = session('emp_id');
         $data['branch'] = $this->flexperformance_model->branch();
         // $data['department'] = $this->flexperformance_model->alldepartment();
@@ -508,6 +538,7 @@ class GeneralController extends Controller
 
     public function costCenter()
     {
+        $this->authenticateUser('view-organization');
         $id = session('emp_id');
         $data['cost_center'] = $this->flexperformance_model->costCenter();
         $data['countrydrop'] = $this->flexperformance_model->countrydropdown();
@@ -563,6 +594,8 @@ class GeneralController extends Controller
 
     public function CompanyInfo(Request $request)
     {
+
+        $this->authenticateUser('view-setting');
         if ($request->method() == "POST") {
 
             $data = array(
@@ -1810,6 +1843,7 @@ class GeneralController extends Controller
 
     public function position(Request $request)
     {
+        $this->authenticateUser('view-organization');
         $data['ddrop'] = $this->flexperformance_model->departmentdropdown();
         $data['all_position'] = $this->flexperformance_model->allposition();
         $data['levels'] = $this->flexperformance_model->getAllOrganizationLevel();
@@ -2430,6 +2464,9 @@ class GeneralController extends Controller
 
     public function approved_financial_payments(Request $request)
     {
+
+
+        $this->authenticateUser(' edit-payroll');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
         $data['overtime'] = $this->flexperformance_model->approvedOvertimes();
         $data['imprests'] = $this->imprest_model->confirmedImprests();
@@ -2785,6 +2822,9 @@ class GeneralController extends Controller
 
     public function employee(Request $request)
     {
+
+        $this->authenticateUser('view-employee');
+
 
         // if(session('mng_emp')){
         //     $data['employee'] = $this->flexperformance_model->employee();
@@ -3539,6 +3579,8 @@ class GeneralController extends Controller
 
     public function transfers(Request $request)
     {
+       $this->authenticateUser('view-transfer');
+
         // $data['leave'] =  $this->attendance_model->leavereport();
         if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
             $data['transfers'] = $this->flexperformance_model->employeeTransfers();
@@ -3553,6 +3595,8 @@ class GeneralController extends Controller
 
     public function salary_advance(Request $request)
     {
+
+       $this->authenticateUser('view-loan');
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
@@ -3684,6 +3728,8 @@ class GeneralController extends Controller
     public function confirmed_loans(Request $request)
     {
         $empID = session('emp_id');
+
+        $this->authenticateUser('view-loan');
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
         if (session('appr_loan') != '') {
@@ -3947,6 +3993,8 @@ class GeneralController extends Controller
     public function financial_reports(Request $request)
     {
         //
+
+        $this->authenticateUser('view-report');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
         $data['month_list'] = $this->flexperformance_model->payroll_month_list();
         $data['year_list'] = $this->flexperformance_model->payroll_year_list();
@@ -3963,6 +4011,7 @@ class GeneralController extends Controller
 
     public function organisation_reports()
     {
+        $this->authenticateUser('view-report');
         if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
             $data['month_list'] = $this->flexperformance_model->payroll_month_list();
             $data['year_list'] = $this->flexperformance_model->payroll_year_list();
@@ -4587,6 +4636,8 @@ class GeneralController extends Controller
 
     public function inactive_employee(Request $request)
     {
+        $this->authenticateUser('activate-employee');
+
         if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
             $data['employee1'] = $this->flexperformance_model->inactive_employee1();
             $data['employee2'] = $this->flexperformance_model->inactive_employee2();
@@ -4606,6 +4657,8 @@ class GeneralController extends Controller
 
     public function unpaid_leave()
     {
+
+$this->authenticateUser('view-unpaid-leaves');
 
         $data['employee'] = $this->flexperformance_model->unpaid_leave_employee();
         return view("unpaidleave.index", $data);
@@ -5461,6 +5514,9 @@ class GeneralController extends Controller
 
     public function submitInputs(Request $request)
     {
+
+
+          $this->authenticateUser('edit-payroll');
         $date = date("Y-m-d", strtotime($request->date));
         $data['pending_payroll'] = 0;
         if ($request->method() == 'POST') {
@@ -6032,6 +6088,8 @@ class GeneralController extends Controller
 
     public function financial_group(Request $request)
     {
+
+$this->authenticateUser('add-payroll');
         if (session('mng_roles_grp')) {
             $request_type = $request->method();
 
@@ -6804,6 +6862,7 @@ class GeneralController extends Controller
 
     public function employee_payslip(Request $request)
     {
+        $this->authenticateUser('view-payslip');
 
         $data['title'] = 'Employee Payslip';
         $data['payrollList'] = $this->payroll_model->payrollMonthList();
@@ -6952,6 +7011,8 @@ class GeneralController extends Controller
 
     public function passwordAutogenerate(Request $request)
     {
+        $this->authenticateUser('view-password-reset');
+
         // $email_data = array(
         //     'email' => $request->email,
         //     'fname' => $request->fname,
@@ -8090,6 +8151,8 @@ class GeneralController extends Controller
     public function termination()
     {
 
+        $this->authenticateUser('view-termination');
+
         $data['title'] = "Termination";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
         $data['employees'] = $this->flexperformance_model->Employee();
@@ -8118,6 +8181,7 @@ class GeneralController extends Controller
     // For Add Termination Page
     public function addTermination()
     {
+        $this->authenticateUser('add-termination');
 
         $data['title'] = "Terminate Employee";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
@@ -8137,7 +8201,7 @@ class GeneralController extends Controller
     // For Saving Termination
     public function saveTermination(Request $request)
     {
-
+        $this->authenticateUser('add-termination');
         // request()->validate(
         //     [
         //         'employeeID' => 'required',
@@ -8317,6 +8381,7 @@ class GeneralController extends Controller
     // For Aprroving termination
     public function  approveTermination($id)
     {
+        $this->authenticateUser('confirm-termination');
 
         $employee = Auth::User()->id;
 
@@ -8360,6 +8425,8 @@ class GeneralController extends Controller
     // For Cancelling Termination
     public function cancelTermination($id)
     {
+
+        $this->authenticateUser('confirm-termination');
         $promotion = Termination::find($id);
 
         $promotion->delete();
@@ -8369,6 +8436,8 @@ class GeneralController extends Controller
 
     public function cancelTermination1($id)
     {
+
+        $this->authenticateUser('confirm-termination');
         $promotion = Termination::find($id);
 
         $delete = $this->flexperformance_model->delete_logs($promotion->employeeID);
@@ -8381,6 +8450,7 @@ class GeneralController extends Controller
     //For Viewing Termination
     public function viewTermination($id)
     {
+        $this->authenticateUser('print-termination');
         $termination = Termination::where('id', $id)->first();
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
@@ -8452,6 +8522,10 @@ class GeneralController extends Controller
     public function promotion()
     {
 
+
+     $this->authenticateUser('view-promotions');
+
+
         $data['title'] = "Promtion|Increment";
         $data['employees'] = $this->flexperformance_model->Employee();
         $promotions = Promotion::orderBy('created_at', 'desc')->get();
@@ -8474,6 +8548,8 @@ class GeneralController extends Controller
     // For Viewing Add Promotion page
     public function addPromotion()
     {
+
+        $this->authenticateUser('add-promotion');
 
         $data['title'] = "Promote Employee";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
@@ -8498,6 +8574,8 @@ class GeneralController extends Controller
     // For Save Promotion
     public function savePromotion(Request $request)
     {
+
+        $this->authenticateUser('add-promotion');
 
         request()->validate(
             [
@@ -8543,6 +8621,8 @@ class GeneralController extends Controller
     public function  approvePromotion($id)
     {
 
+        $this->authenticateUser('add-promotion');
+
         $employee = Auth::User()->id;
         $role = UserRole::where('user_id', $employee)->first();
         $role_id = $role->role_id;
@@ -8586,6 +8666,8 @@ class GeneralController extends Controller
     // For Cancel Promotion
     public function cancelPromotion($id)
     {
+
+        $this->authenticateUser('edit-promotion');
         $promotion = Promotion::find($id);
 
         $promotion->delete();
@@ -8596,6 +8678,8 @@ class GeneralController extends Controller
     // For Add Increment Page
     public function addIncrement()
     {
+
+        $this->authenticateUser('view-increment');
 
         $data['title'] = "Increment Salary";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
@@ -8618,6 +8702,8 @@ class GeneralController extends Controller
     // For Save Increment Function
     public function saveIncrement(Request $request)
     {
+
+        $this->authenticateUser('add-increment');
 
         request()->validate(
             [
@@ -8702,6 +8788,11 @@ class GeneralController extends Controller
         $qualification->end_year = $request->finish_year;
 
         if ($request->hasfile('image')) {
+            $request->validate([
+                'image' => 'required|image|mimes:pdf|max:5048',
+            ]);
+
+
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->move('uploads/certificates/', $filename);
@@ -8719,6 +8810,8 @@ class GeneralController extends Controller
     public function grievancesComplains()
     {
 
+        $this->authenticateUser('view-grivance');
+
         $data['title'] = "Grievances|Disciplinary";
         $data['employees'] = $this->flexperformance_model->Employee();
         $promotions = Promotion::orderBy('created_at', 'desc')->get();
@@ -8733,12 +8826,16 @@ class GeneralController extends Controller
     // For add complain page
     public function addComplain(Request $request)
     {
+
+
         return view('workforce-management.add-complain');
     }
 
     // start of add disciplinary function
     public function addDisciplinary(Request $request)
     {
+
+        $this->authenticateUser('view-grivance');
         // $id=Auth::user()->emp_id;
         $data['employees'] = EMPL::all();
 
@@ -8750,6 +8847,8 @@ class GeneralController extends Controller
     // start of save disciplinary action
     public function saveDisciplinary(Request $request)
     {
+
+        $this->authenticateUser('add-grivance');
         request()->validate(
             [
                 'employeeID' => 'required',
@@ -8800,6 +8899,8 @@ class GeneralController extends Controller
     public function viewDisciplinary(Request $request, $id)
     {
 
+
+        $this->authenticateUser('view-grivance');
         $did = base64_decode($id);
 
         $data['title'] = "Employee";
@@ -8816,6 +8917,8 @@ class GeneralController extends Controller
     public function editDisciplinary(Request $request, $id)
     {
 
+
+        $this->authenticateUser('edit-grivance');
         $did = base64_decode($id);
 
         $data['title'] = "Employee";
@@ -8831,6 +8934,8 @@ class GeneralController extends Controller
     // start of update disciplinary action
     public function updateDisciplinary(Request $request)
     {
+
+        $this->authenticateUser('edit-grivance');
         // request()->validate(
         //     [
         //     'employeeID' => 'required',
@@ -8894,6 +8999,11 @@ class GeneralController extends Controller
     {
 
         $empID = base64_decode($id);
+
+      //  if(auth()->user()->emp_id != $empID){
+            $this->authenticateUser('edit-employee');
+       // }
+
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
         $data['title'] = "Employee";
@@ -9269,6 +9379,9 @@ class GeneralController extends Controller
 
                 $employee = EMPL::where('emp_id', $user)->first();
                 if ($request->hasfile('image')) {
+                    $request->validate([
+                        'image' => 'required|image|mimes:pdf|max:5048',
+                    ]);
                     $newImageName = $request->image->hashName();
                     $request->image->move(public_path('storage\profile'), $newImageName);
 
@@ -9372,6 +9485,10 @@ class GeneralController extends Controller
     {
         $id = base64_decode($id);
 
+        if(auth()->user()->emp_id != $id){
+            $this->authenticateUser('view-employee');
+        }
+
 
         $extra = $request->input('extra');
         $data['employee'] = $this->flexperformance_model->userprofile($id);
@@ -9436,8 +9553,18 @@ class GeneralController extends Controller
         ]);
         $user = $request->empID;
 
+        if(auth()->user()->emp_id != $user){
+            $this->authenticateUser('edit-employee');
+        }
+
+
+
         $employee = EMPL::where('emp_id', $user)->first();
         if ($request->hasfile('image')) {
+
+            $request->validate([
+                'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            ]);
 
             $newImageName = $request->image->hashName();
             $request->image->move(public_path('storage/profile'), $newImageName);

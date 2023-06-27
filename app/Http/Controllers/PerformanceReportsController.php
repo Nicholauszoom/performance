@@ -7,14 +7,32 @@ use App\Models\ProjectTask;
 use Illuminate\Http\Request;
 use App\Models\AccelerationTask;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class PerformanceReportsController extends Controller
 {
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
     //For All Reports Page
 
     public function index()
     {
         # code...
+        $this->authenticateUser('view-report');
 
         return view('performance-reports.index');
     }
@@ -37,9 +55,9 @@ class PerformanceReportsController extends Controller
         ->groupBy('projects.id')
         ->distinct('projects.id')
         ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
-        
+
         ->whereNotNull('employee_performances.performance')
-        
+
         ->join('project_tasks', 'employee_performances.task_id', '=', 'project_tasks.id')
         ->join('projects', 'project_tasks.project_id', '=', 'project_tasks.project_id')
         // ->whereBetween('project.start_date', [$start, $end])
@@ -54,7 +72,7 @@ class PerformanceReportsController extends Controller
 
     public function project_report(Request $request)
     {
-        
+
         $start = $request->start_date;
         $end = $request->end_date;
         $data['count']=1;
@@ -81,17 +99,17 @@ class PerformanceReportsController extends Controller
         // ->where('project_tasks.project_id','=',$request->project_id)
         // ->where('employee_performances.type','=','project')
         // ->join('projects','project_tasks.project_id' ,'=',' projects.id')
-        
+
         // ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
         // ->join('employee_performances', 'project_tasks.id', '=', 'employee_performances.task_id')
         // ->whereNotNull('employee_performances.performance')
-        
+
         // ->join('project_tasks', 'employee_performances.task_id', '=', 'project_tasks.id')
-    
-        
+
+
 
         // ->whereBetween('project.start_date', [$start, $end])
-       
+
         // ->get();
 
 //   return($data['performances']);
@@ -121,9 +139,9 @@ class PerformanceReportsController extends Controller
         ->groupBy('projects.id')
         ->distinct('projects.id')
         ->join('employee_performances', 'employee.emp_id', '=', 'employee_performances.empID')
-        
+
         ->whereNotNull('employee_performances.performance')
-        
+
         ->join('project_tasks', 'employee_performances.task_id', '=', 'project_tasks.id')
         ->join('projects', 'project_tasks.project_id', '=', 'project_tasks.project_id')
         // ->whereBetween('project.start_date', [$start, $end])

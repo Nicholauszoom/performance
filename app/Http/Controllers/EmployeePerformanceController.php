@@ -9,11 +9,28 @@ use App\Models\PerformancePillar;
 use App\Models\PerformanceEvaluation;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 use Illuminate\Support\Facades\Auth;
 
 class EmployeePerformanceController extends Controller
 {
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
     /**
      *
      * Display a listing of the resource.
@@ -31,6 +48,8 @@ class EmployeePerformanceController extends Controller
     public function index()
     {
 
+
+        $this->authenticateUser('view-Performance');
         $data['employees']=EMPL::whereNot('state',4)->latest()->whereNot('id',Auth::user()->id)->get();
         return view('new-performance.employees',$data);
     }
@@ -57,6 +76,7 @@ class EmployeePerformanceController extends Controller
     // For All Performance Pillars
     public function performance_pillars()
     {
+        $this->authenticateUser('edit-Performance');
         $data['pillars']=PerformancePillar::latest()->get();
         return view('new-performance.pillars',$data);
     }

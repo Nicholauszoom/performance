@@ -636,9 +636,9 @@
 
 
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ route('/flex/nationality')}}">Nationality</a></li>  --}}
-                            <li class="nav-item"><a
+                            {{-- <li class="nav-item"><a
                                     class="nav-link {{ request()->routeIs('payroll.mailConfiguration') ? 'active' : null }}"
-                                    href="{{ route('payroll.mailConfiguration') }}"></i> Mail Configuration </a></li>
+                                    href="{{ route('payroll.mailConfiguration') }}"></i> Mail Configuration </a></li> --}}
                         </ul>
                     </li>
                 @endcan

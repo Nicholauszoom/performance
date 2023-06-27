@@ -12,6 +12,8 @@ use App\Helpers\SysHelpers;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -27,6 +29,22 @@ class PayrollController extends Controller
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
+    }
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
     }
 
 
@@ -153,6 +171,10 @@ class PayrollController extends Controller
 
     public function employee_payslip()
     {
+
+
+        $this->authenticateUser('view-payslip');
+
         if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
             $title = 'Employee Payslip';
@@ -173,6 +195,7 @@ class PayrollController extends Controller
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
 
+           $this->authenticateUser('view-payroll');
 
         $data['pendingPayroll_month'] = $this->payroll_model->pendingPayroll_month();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();

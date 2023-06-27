@@ -16,6 +16,7 @@
             <div class="d-flex justify-content-between align-center">
                 <h5 class="text-main">User Activity Logs</h5>
 
+                @can('delete-logs')
                 @if (!empty($logs) && session('mng_audit'))
                     <form action="{{ route('flex.LogsDestroy') }}" method="POST">
                         @csrf
@@ -23,6 +24,7 @@
                         <button type="submit" class="btn btn-main" id="show-confirm" title="Delete Logs">DELETE ALL LOGS</button>
                     </form>
                 @endif
+                @endcan
             </div>
 
             <div id="feedBack" class="mt-2"></div>

@@ -21,7 +21,7 @@ $empID= Auth()->user()->emp_id;
         <!-- page content -->
         <div class="right_col" role="main">
           <div class="">
-   
+
 
             <div class="clearfix"></div>
 
@@ -32,7 +32,7 @@ $empID= Auth()->user()->emp_id;
                             <div class="card-header border-0">
                                 <h6 class="text-warning">Pension Summary</h6>
 
-                                <a class="ms-3" href="{{ route('reports.employee_pension',['emp_id'=>$empID]) }}" target="blank">
+                                <a class="ms-3" href="{{ route('reports.employee_pension',['emp_id'=>base64_encode($empID)]) }}" target="blank">
                                     <button type="button" name="print" value="print" class="btn btn-main btn-sm float-end">
                                         Print
                                     </button>
@@ -140,9 +140,9 @@ $empID= Auth()->user()->emp_id;
 <script>
 
 jQuery(document).ready(function($){
-  
+
     $('#advance_type').change(function () {
-        
+
     $("#advance_type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -150,7 +150,7 @@ jQuery(document).ready(function($){
             $("#amount_midf").removeAttr("disabled");
             $('#monthly_deduction').hide();
             $("#monthly_deductionf").attr("disabled", "disabled");
-           
+
         } else if(value == "2") {
             $('#amount').show();
             $('#monthly_deduction').show();
@@ -158,15 +158,15 @@ jQuery(document).ready(function($){
             $("#monthly_deductionf").removeAttr("disabled");
             $('#amount_mid').hide();
             $("#amount_midf").attr("disabled", "disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
-  
+
     $('#type').change(function () {
-        
+
     $("#type option:selected").each(function () {
         var value = $(this).val();
         if(value == "1") {
@@ -174,17 +174,17 @@ jQuery(document).ready(function($){
             $('#index_no').hide();
             $("#index_nof").attr("disabled", "disabled");
             $("#deductionf").removeAttr("disabled");
-           
+
         } else if(value == "2") {
             $('#index_no').show();
             $('#deduction').hide();
             $("#deductionf").attr("disabled", "disabled");
             $("#index_nof").removeAttr("disabled");
-           
+
         }
 
     });
-  }); 
+  });
 
 
 });

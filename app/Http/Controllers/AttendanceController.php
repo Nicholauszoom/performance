@@ -33,6 +33,7 @@ use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
 use App\CustomModels\flexFerformanceModel;
 use App\Models\Payroll\FlexPerformanceModel;
+use Illuminate\Http\Response;
 use App\Models\Level1;
 use App\Models\level2;
 use App\Models\Level3;
@@ -59,6 +60,23 @@ class AttendanceController extends Controller
       $this->project_model = new ProjectModel();
       $this->performanceModel = new PerformanceModel();
       $this->payroll_model = new Payroll;
+
+    }
+
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
 
     }
 
@@ -147,6 +165,8 @@ class AttendanceController extends Controller
 
   public function leave()
    {
+
+$this->authenticateUser('view-leave');
       $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
 
       if(session('appr_leave')){
@@ -1379,6 +1399,9 @@ public function saveLeave(Request $request) {
 
    public function leavereport() {
       $empID = session('emp_id');
+
+
+          $this->authenticateUser('view-unpaid-leaves');
       // $data['my_leave'] =  $this->attendance_model->my_leavereport($empID);
       $data['leaves'] =Leaves::where('state',0)->latest()->get();
 

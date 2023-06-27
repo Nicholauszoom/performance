@@ -17,6 +17,8 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Models\AttendanceModel;
 use DateTime;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use SebastianBergmann\Timer\Duration;
@@ -25,6 +27,22 @@ use SebastianBergmann\Timer\Duration;
 // use App\Helpers\SysHelpers;
 class ReportController extends Controller
 {
+
+    public function authenticateUser($permissions)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+
+
+        if(!Auth::user()->can($permissions)){
+
+          abort(Response::HTTP_UNAUTHORIZED);
+
+         }
+
+    }
     public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
     {
         $this->payroll_model = new Payroll();
@@ -508,7 +526,16 @@ class ReportController extends Controller
 
     function employee_pension(Request $request)
     {
-        $id = $request->emp_id;
+
+        $id = base64_decode($request->emp_id);
+        
+        if($id != auth()->user()->emp_id){
+            $this->authenticateUser('edit-employee');
+        }
+
+
+
+
         $data['employee_pension'] = $this->reports_model->employee_pension($id);
         $data['years'] = $this->reports_model->get_pension_years($id);
 
