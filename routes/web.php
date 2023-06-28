@@ -60,6 +60,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+ // Dashboard
+ Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+
 Route::middleware('verify-outgoing-requests')->group(function () {
 Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
 Route::middleware('auth')->group(function () {
@@ -70,8 +73,7 @@ Route::middleware('auth')->group(function () {
     //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
     Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
     Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
-    // Dashboard
-    Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+
     //->middleware('auth')->middleware([Dashboard::class]);
 
     // project
@@ -381,7 +383,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     // start of attendance access permission routes
 
     // Routes 1
-    Route::prefix('attendance')->middleware([WorkForce::class])->controller(AtteendanceController::class)->group(function (){
+    Route::prefix('attendance')->middleware([WorkForce::class])->controller(AttendanceController::class)->group(function (){
 
 
         Route::any('/revoke_authority' ,'revoke_authority')->name('attendance.revoke_authority');
@@ -424,12 +426,14 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
        // start of selfservices routes
        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+       Route::any('/my-loans','myLoans')->name('flex.my-loans');
        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
        Route::any('/my-biodata','my_biodata')->name('flex.my-biodata');
        Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
        Route::get('error', [HomeController::class,'home']);
        Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
+       Route::any('/userdata/{id}','userdata')->name('flex.userdata');
        // end of self services
 
        //managers routes
@@ -488,7 +492,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/companyInfo','companyInfo')->name('flex.companyInfo');
         Route::any('/updatecompanyInfo','updatecompanyInfo')->name('flex.updatecompanyInfo');
         Route::any('/submitInputs','submitInputs')->name('flex.submitInputs');
-        Route::any('/my-loans','myLoans')->name('flex.my-loans');
+
         Route::any('/salary_advance','salary_advance')->name('flex.salary_advance');
         Route::any('/current_loan_progress','current_loan_progress')->name('flex.current_loan_progress');
         Route::any('/apply_salary_advance','apply_salary_advance')->name('flex.apply_salary_advance');
@@ -792,7 +796,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         // Route::any('/logout','logout')->name('flex.logout');
         Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
         // for employee biodata
-        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+
         // for employee profile picture
 
         Route::any('/overtime_on_behalf','overtime_on_behalf')->name('flex.overtime_on_behalf');
@@ -1059,9 +1063,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
     });
 
+    Route::prefix('flex/performance')->controller(PerformanceController::class)->group(function (){
+    Route::any('/strategy_dashboard','strategy_dashboard')->name('performance.strategy_dashboard');
 
-
-
+    });
     Route::prefix('flex/performance')->middleware([WorkForce::class])->controller(PerformanceController::class)->group(function (){
 
         Route::any('/output_info','output_info')->name('performance.output_info');
@@ -1158,7 +1163,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/loan_notification','loan_notification')->name('performance.loan_notification');
         Route::any('/allnotifications','allnotifications')->name('performance.allnotifications');
         Route::any('/current_task_progress','current_task_progress')->name('performance.current_task_progress');
-        Route::any('/strategy_dashboard','strategy_dashboard')->name('performance.strategy_dashboard');
+
         Route::any('/outcomeGraph','outcomeGraph')->name('performance.outcomeGraph');
         Route::any('/printDashboard','printDashboard')->name('performance.printDashboard');
         Route::any('/outcome_report','outcome_report')->name('performance.outcome_report');
