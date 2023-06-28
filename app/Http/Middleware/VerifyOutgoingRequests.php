@@ -17,7 +17,8 @@ class VerifyOutgoingRequests
     public function handle($request, Closure $next)
     {
         $allowedDomains = [
-            'localhost/flex_performance',
+            'localhost',
+            'hc-hub.bancabc.co.tz'
 
             // Add more allowed domains here
         ];
@@ -26,7 +27,7 @@ class VerifyOutgoingRequests
         $domain = parse_url($url, PHP_URL_HOST);
 
         if (!in_array($domain, $allowedDomains)) {
-           //web abort(403, 'Unauthorized domain.');
+            abort(403, 'Unauthorized domain.');
         }
 
         return $next($request);
