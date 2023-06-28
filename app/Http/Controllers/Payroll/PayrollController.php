@@ -644,6 +644,7 @@ dd($data['current_increase']);
     public function payroll_info(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
+        
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_list'] = $this->payroll_model->employeePayrollList($payrollMonth, "allowance_logs", "deduction_logs", "loan_logs", "payroll_logs");
         $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);

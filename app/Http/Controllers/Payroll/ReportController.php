@@ -796,6 +796,10 @@ class ReportController extends Controller
         //dd($request->all());
         $empID = $request->input("employee");
 
+        if($empID != auth()->user()->emp_id){
+         $this->authenticateUser('view-report');
+        }
+
         if ($empID != "Select Employee") {
 
             // DATE MANIPULATION

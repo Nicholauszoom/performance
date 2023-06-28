@@ -53,8 +53,10 @@
 
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-leaves') ? 'active' : null }}"
-                                href="{{ route('flex.my-leaves') }}">Leaves</a>
+                                href="{{ route('flex.my-leaves') }}">My Leaves</a>
                         </li>
+
+
 
                         {{-- / --}}
 
@@ -63,9 +65,10 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('flex.my-overtimes') ? 'active' : null }}"
                                 href="{{ route('flex.my-overtimes') }}">
-                                Overtimes
+                                My Overtimes
                             </a>
                         </li>
+
 
                         {{--  / --}}
                         {{--  start of overtime link --}}
@@ -117,6 +120,27 @@
 
                     </ul>
                 </li>
+                @if(!Auth::user()->can('view-workforce'))
+                <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link">
+                        <i class="ph-user"></i>
+                        <span>Workforce Management</span>
+                    </a>
+
+                    <ul class="nav-group-sub collapse ">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('flex.overtime') ? 'active' : null }}"
+                                href="{{ route('flex.overtime') }}"> Overtimes </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('attendance.leave') ? 'active' : null }}"
+                                href="{{ route('attendance.leave') }}">Leave Applications</a>
+                        </li>
+
+                    </ul>
+                </li>
+                @endif
                 {{-- @endcan --}}
 
                 {{--
@@ -359,30 +383,30 @@
                 @endcan
 
                 {{-- For Performance Management --}}
-                    @can('view-Performance')
-                <li
-                    class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
-                    <a href="#" class="nav-link">
-                        <i class="ph-folder"></i>
-                        <span>Performance Management</span>
-                    </a>
-                    <ul
-                        class="nav-group-sub collapse {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
-                        <li class="nav-item">
-                            <a href="{{ route('flex.employee-list') }}"
-                                class="nav-link {{ request()->routeIs('flex.employee-list') ? 'active' : null }}">
-                                Employee Performance
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('flex.performance-pillars') }}"
-                                class="nav-link {{ request()->routeIs('flex.performance-pillars') ? 'active' : null }}">
-                                Performance Pillars
-                            </a>
-                        </li>
+                @can('view-Performance')
+                    <li
+                        class="nav-item nav-item-submenu {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
+                        <a href="#" class="nav-link">
+                            <i class="ph-folder"></i>
+                            <span>Performance Management</span>
+                        </a>
+                        <ul
+                            class="nav-group-sub collapse {{ request()->routeIs('flex.employee-list') || request()->routeIs('flex.performance-pillars') || request()->routeIs('flex.tasks') || request()->routeIs('flex.projects') ? 'show' : null }}">
+                            <li class="nav-item">
+                                <a href="{{ route('flex.employee-list') }}"
+                                    class="nav-link {{ request()->routeIs('flex.employee-list') ? 'active' : null }}">
+                                    Employee Performance
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('flex.performance-pillars') }}"
+                                    class="nav-link {{ request()->routeIs('flex.performance-pillars') ? 'active' : null }}">
+                                    Performance Pillars
+                                </a>
+                            </li>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
                 @endcan
                 {{-- <li
                     class="nav-item nav-item-submenu {{ request()->routeIs('flex.performance') || request()->routeIs('flex.performance-report') || request()->routeIs('flex.projects') || request()->routeIs('flex.tasks') ? 'nav-item-expand nav-item-open' : null }}">
@@ -629,10 +653,10 @@
                                         href="{{ route('flex.passwordAutogenerate') }}">Password Reset</a></li>
                             @endif
                             @if (session('mng_audit'))
-                            <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('bot.botIndex') ? 'active' : null }}"
-                                    href="{{ route('bot.botIndex') }}">Post data to BOT</a></li>
-                        @endif
+                                <li class="nav-item"><a
+                                        class="nav-link {{ request()->routeIs('bot.botIndex') ? 'active' : null }}"
+                                        href="{{ route('bot.botIndex') }}">Post data to BOT</a></li>
+                            @endif
 
 
                             {{-- <li class="nav-item"><a class="nav-link" href="{{ route('/flex/nationality')}}">Nationality</a></li>  --}}

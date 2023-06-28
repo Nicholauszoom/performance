@@ -14,17 +14,17 @@
 
 @section('content')
     @php
- 
+
     @endphp
             {{-- start of run payroll --}}
-      
-        
+
+
 
                 <div class="col-lg-12">
 
                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
                         <div class="card-header">
-                            <h5 class="card-title">Payroll Inputs</h5>
+                            <h5 class="card-title">Payslip</h5>
                         </div>
 @php
     $empID = auth()->user()->emp_id;
@@ -39,10 +39,10 @@
                                         <div class="card border-0 rounded-0">
                                             <div class="m-3">
                                                 <label class="form-label text-warning" for="stream">Pay Slip</label>
-            
+
                                                 <input hidden name="employee" value="{{ $empID }}">
                                                 <input hidden name="profile" value="1">
-            
+
                                                 <div class="input-group">
                                                     <select required name="payrolldate" class="select_payroll_month form-control select"
                                                         data-width="1%">
@@ -52,7 +52,7 @@
                                                                 {{ date('F, Y', strtotime($row->payroll_date)) }}</option>
                                                         @endforeach
                                                     </select>
-            
+
                                                     <button type="submit" class="btn btn-main" type="button"><i
                                                             class="ph-printer me-2"></i> Print</button>
                                                 </div>
@@ -65,8 +65,8 @@
                         </div>
                     </div>
                 </div >
-   
-       
+
+
 
 @endsection
 
@@ -116,7 +116,7 @@
 
 
     <script>
-       
+
     </script>
 
     <script>

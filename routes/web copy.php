@@ -1106,3 +1106,67 @@ Route::middleware('auth')->group(function () {
 
 // Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';
+
+
+//zilizofutwaa
+   //routes for setting
+    //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
+
+    //route for payroll
+    // Route::group(['prefix' => 'payroll'], function () {
+    //     Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
+    //     Route::any('temp_payroll_info',[PayrollController::class,'temp_payroll_info'])->name('temp_payroll_info');
+    //     Route::any('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
+    //     Route::post('payroll_report',[PayrollController::class,'payroll_report'])->name('payroll_report');
+    //     Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
+    //     Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
+    //     Route::any('send_payslips',[PayrollController::class,'send_payslips'])->name('send_payslips');
+    //     Route::any('recommendpayrollByHr',[PayrollController::class,'recommendpayrollByHr'])->name('recommendpayrollByHr');
+    //     Route::any('recommendpayrollByFinance',[PayrollController::class,'recommendpayrollByFinance'])->name('recommendpayrollByFinance');
+    //     Route::any('cancelpayroll/{type}',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
+    //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
+    //     Route::any('less_payments_print',[PayrollController::class,'less_payments_print'])->name('less_payments_print');
+    //     Route::any('grossReconciliation',[PayrollController::class,'grossReconciliation'])->name('grossReconciliation');
+    //     Route::any('netReconciliation',[PayrollController::class,'netReconciliation'])->name('netReconciliation');
+    //     Route::any('sendReviewEmail',[PayrollController::class,'sendReviewEmail'])->name('sendReviewEmail');
+    //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
+    //     Route::any('generate_checklist',[PayrollController::class,'generate_checklist'])->name('generate_checklist');
+    //     Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
+    //     Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
+    //     Route::any('submitLessPayments', [PayrollController::class, 'submitLessPayments'])->name('submitLessPayments');
+    //     Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
+    //     Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
+    //     Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
+    //     Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
+    //     Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
+    //     Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
+    //     Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
+    //     Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
+    //     Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
+    //     Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
+    //     Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
+    //     Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
+    //     Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
+    // });
+
+    //Routes for Recruitment Module
+
+// Route::group(['prefix' => 'recruitment'], function () {
+//     Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
+//     Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
+//     Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
+//     Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
+// });
+
+// Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
+// // Password Resetting Routes...
+
+// Route::get('/forgot-password', function () {
+//     return view('auth.forgot-password');
+// })->middleware('guest')->name('password.request');
+
+// Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
+
+// Route::get('/reset-password/{token}', function ($token) {
+//     return view('auth.reset-password', ['token' => $token]);
+// })->middleware('guest')->name('password.reset');

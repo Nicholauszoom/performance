@@ -166,7 +166,7 @@ class AttendanceController extends Controller
   public function leave()
    {
 
-$this->authenticateUser('view-leave');
+      //$this->authenticateUser('view-leave');
       $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
 
       if(session('appr_leave')){

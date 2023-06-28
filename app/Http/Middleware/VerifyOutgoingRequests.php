@@ -26,7 +26,7 @@ class VerifyOutgoingRequests
         $domain = parse_url($url, PHP_URL_HOST);
 
         if (!in_array($domain, $allowedDomains)) {
-           // abort(403, 'Unauthorized domain.');
+           //web abort(403, 'Unauthorized domain.');
         }
 
         return $next($request);

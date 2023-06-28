@@ -12,7 +12,7 @@
 @endpush
 
 @section('content')
-    @can('view-leave')
+
         <?php $totalAccrued = number_format($leaveBalance, 2); ?>
 
 
@@ -290,7 +290,7 @@
                 </table>
             </div>
         @endif
-    @endcan
+ 
     <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete"
     tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">

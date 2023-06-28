@@ -52,6 +52,8 @@ use App\Http\Controllers\AccessControll\DesignationController;
 use App\Http\Controllers\EmployeePerformanceController;
 use App\Http\Controllers\LearningDevelopment\SkillsController;
 use App\Http\Controllers\WorkforceManagement\EmployeeController;
+use Illuminate\Http\Response;
+
 
 
 Route::get('/', function () {
@@ -95,16 +97,16 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     ]);
 
 });
-    Route::prefix('bot')->controller(BOTDataController::class)->group(function(){
+    Route::prefix('bot')->middleware([Setting::class])->controller(BOTDataController::class)->group(function(){
 
         Route::any('/index','index')->name('bot.botIndex');
         Route::any('/postEmployeeData','postEmployeeData')->name('bot.postEmployeeData');
     });
 
     // Routes with workforce access permission
-    Route::prefix('flex')->controller(GeneralController::class)->group(function(){
+    Route::prefix('flex')->middleware([WorkForce::class])->controller(GeneralController::class)->group(function(){
 
-        Route::get('error', [HomeController::class,'home']);
+
          // start of overtime routes
 
          Route::any('/passwordAutogenerate','passwordAutogenerate')->name('flex.passwordAutogenerate');
@@ -112,7 +114,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-         Route::any('/overtime','overtime')->name('flex.overtime');
+
          Route::any('/statutory_deductions','statutory_deductions')->name('flex.statutory_deductions');
          Route::any('/overtime_info','overtime_info')->name('flex.overtime_info');
          Route::any('/overtime_category_info/{id}','overtime_category_info')->name('flex.overtime_category_info');
@@ -126,7 +128,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
          Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
          Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
-         Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
+
 
          Route::any('/cancelApprovedOvertimes/{id}','cancelApprovedOvertimes')->name('flex.cancelApprovedOvertimes');
 
@@ -204,14 +206,14 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
 
-        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
+
 
 
 
         // end of employee personal details  route
 
         // start of overtime routes
-        Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
+
 
         Route::any('/applyOvertimeOnbehalf','applyOvertimeOnbehalf')->name('flex.applyOvertimeOnbehalf');
 
@@ -312,7 +314,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
     // Routes with Payroll access permission
-    Route::prefix('flex')->controller(GeneralController::class)->group(function(){
+    Route::prefix('flex')->middleware([Payroll::class])->controller(GeneralController::class)->group(function(){
 
         Route::get('error', [HomeController::class,'home']);
 
@@ -379,7 +381,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     // start of attendance access permission routes
 
     // Routes 1
-    Route::prefix('attendance')->controller(AtteendanceController::class)->group(function (){
+    Route::prefix('attendance')->middleware([WorkForce::class])->controller(AtteendanceController::class)->group(function (){
 
 
         Route::any('/revoke_authority' ,'revoke_authority')->name('attendance.revoke_authority');
@@ -389,10 +391,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
             Route::any('/apply_leave' ,'apply_leave')->name('attendance.apply_leave');
-            Route::any('/cancelLeave' ,'cancelLeave')->name('attendance.cancelLeave');
+
             Route::any('/recommendLeave' ,'recommendLeave')->name('attendance.recommendLeave');
             Route::any('/holdLeave/{id}' ,'holdLeave')->name('attendance.holdLeave');
-            Route::any('/approveLeave' ,'approveLeave')->name('attendance.approveLeave');
+
             Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
             Route::any('/leavereport' ,'leavereport')->name('attendance.leavereport');
             Route::any('/customleavereport' ,'customleavereport')->name('attendance.customleavereport');
@@ -407,27 +409,64 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
     });
 
-    // Routes 2
+
+    //start routes for  all users(wote)
     Route::prefix('flex/attendance')->controller(AttendanceController::class)->group(function (){
+    Route::any('/my-leaves','myLeaves')->name('flex.my-leaves'); //atendance controller
+    Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave'); //atendance controller
+    Route::any('/cancelLeave' ,'cancelLeave')->name('attendance.cancelLeave');
+
+    //for manager
+    Route::any('/leave' ,'leave')->name('attendance.leave');
+    Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
+    });
+
+    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+       // start of selfservices routes
+       Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
+       Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
+       Route::any('/my-biodata','my_biodata')->name('flex.my-biodata');
+       Route::any('/applyOvertime','applyOvertime')->name('flex.applyOvertime');
+       Route::get('error', [HomeController::class,'home']);
+       Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
+       Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
+       // end of self services
+
+       //managers routes
+       Route::any('/overtime','overtime')->name('flex.overtime');
+
+         // start of grievances routes
+         Route::any('/my-grievences','my_grievances')->name('flex.my-grievances');
+
+    });
+
+    Route::prefix('flex/reports')->middleware('auth')->controller(ReportController::class)->group(function (){
+        Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');
+        Route::any('/payslip','payslip')->name('reports.payslip');
+    });
+    //end routes for all users
+
+    // Routes 2
+    Route::prefix('flex/attendance')->middleware([WorkForce::class])->controller(AttendanceController::class)->group(function (){
 
         Route::any('/attendance' ,'attendance')->name('attendance.attendance');
         Route::any('/attendees' ,'attendees')->name('attendance.attendees');
-        Route::any('/leave' ,'leave')->name('attendance.leave');
+
         // for my leaves routes
-        Route::any('/my-leaves','myLeaves')->name('flex.my-leaves');
+
         Route::any('/test','countWorkingDays')->name('flex.test');
 
         // for fetching sub leave type
         Route::get('get/details/{id}', 'getDetails')->name('getSubs');
         Route::any('/check_leave_balance' ,'check_leave_balance')->name('attendance.check_leave_balance');
 
-        Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave');
-        Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
+
+
         Route::any('/recommendLeave/{id}' ,'recommendLeave')->name('attendance.recommendLeave');
         Route::any('/recommendLeaveByHod/{id}' ,'recommendLeaveByHod')->name('attendance.recommendLeaveByHod');
 
         Route::any('/holdLeave/{id}' ,'holdLeave')->name('attendance.holdLeave');
-        Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
+
         Route::any('/rejectLeave' ,'rejectLeave')->name('attendance.rejectLeave');
         Route::any('/leavereport' ,'leavereport')->name('attendance.leavereport');
         Route::any('/customleavereport' ,'customleavereport')->name('attendance.customleavereport');
@@ -588,7 +627,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     });
 
     // start of report access permissions routes
-    Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+    Route::prefix('flex/')->middleware([WorkForce::class])->controller(GeneralController::class)->group(function (){
         Route::any('/financial_reports','financial_reports')->name('flex.financial_reports');
         Route::any('/organisation_reports','organisation_reports')->name('flex.organisation_reports');
     });
@@ -597,7 +636,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
     // For New Employees
-    Route::prefix('flex/')->controller(EmployeePerformanceController::class)->group(function (){
+    Route::prefix('flex/')->middleware([WorkForce::class])->controller(EmployeePerformanceController::class)->group(function (){
         Route::any('/all-employees','index')->name('flex.employee-list');
         Route::any('/modal', 'modal')->name('flex.modal');
         Route::any('/addScore', 'addScore')->name('flex.addScore');
@@ -630,7 +669,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     // End of new employees
 
      // start of settings access permissions routes
-     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
+     Route::prefix('flex/')->controller(GeneralController::class)->middleware('auth')->middleware([WorkForce::class])->group(function (){
 
         // For Financial Groups Settings
         Route::any('/financial_group','financial_group')->name('flex.financial_group');
@@ -701,63 +740,20 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
      // end of settings access permissions routes
 
     // Start of other routes
-    Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->name('user.disable');
+    Route::get('user_disable/{id}', [UsersController::class, 'save_disable'])->middleware([WorkForce::class])->name('user.disable');
 
-    Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('audit');
+    Route::get('/audit-trail', [AuditTrailController::class, 'index'])->middleware([WorkForce::class])->name('audit');
 
     //route for learning and development
-    Route::get('/skill', [SkillsController::class, 'skill'])->name('skill');
-    Route::get('/skillsList', [SkillsController::class, 'skillsList'])->name('skillsList');
-    Route::post('/addSkills', [SkillsController::class, 'skills'])->name('skills');
+    Route::get('/skill', [SkillsController::class, 'skill'])->middleware([WorkForce::class])->name('skill');
+    Route::get('/skillsList', [SkillsController::class, 'skillsList'])->middleware([WorkForce::class])->name('skillsList');
+    Route::post('/addSkills', [SkillsController::class, 'skills'])->middleware([WorkForce::class])->name('skills');
     // Route::get('/trainingApp', [TrainingAppController::class, 'trainingApp'])->name('trainingApp');
     // Route::post('/insertData', [TrainingAppController::class, 'insert'])->name('insert');
 
 
-    Route::get('flex/department_cost', [GeneralController::class, 'departmentCost'])->name('flex.departmentCost');
-    Route::any('flex/store_department_cost', [GeneralController::class, 'storeDepartmentCost'])->name('flex.storedepartmentcost');
-
-
-
-
-    //routes for setting
-    //Route::get('/roles.index', [RolesController::class, 'index'])->name('index');
-
-    //route for payroll
-    // Route::group(['prefix' => 'payroll'], function () {
-    //     Route::any('payroll',[PayrollController::class,'payroll'])->name('payroll');
-    //     Route::any('temp_payroll_info',[PayrollController::class,'temp_payroll_info'])->name('temp_payroll_info');
-    //     Route::any('payroll_info',[PayrollController::class,'payroll_info'])->name('payroll_info');
-    //     Route::post('payroll_report',[PayrollController::class,'payroll_report'])->name('payroll_report');
-    //     Route::any('initPayroll',[PayrollController::class,'initPayroll'])->name('initPayroll');
-    //     Route::any('runpayroll',[PayrollController::class,'runpayroll'])->name('runpayroll');
-    //     Route::any('send_payslips',[PayrollController::class,'send_payslips'])->name('send_payslips');
-    //     Route::any('recommendpayrollByHr',[PayrollController::class,'recommendpayrollByHr'])->name('recommendpayrollByHr');
-    //     Route::any('recommendpayrollByFinance',[PayrollController::class,'recommendpayrollByFinance'])->name('recommendpayrollByFinance');
-    //     Route::any('cancelpayroll/{type}',[PayrollController::class,'cancelpayroll'])->name('cancelpayroll');
-    //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
-    //     Route::any('less_payments_print',[PayrollController::class,'less_payments_print'])->name('less_payments_print');
-    //     Route::any('grossReconciliation',[PayrollController::class,'grossReconciliation'])->name('grossReconciliation');
-    //     Route::any('netReconciliation',[PayrollController::class,'netReconciliation'])->name('netReconciliation');
-    //     Route::any('sendReviewEmail',[PayrollController::class,'sendReviewEmail'])->name('sendReviewEmail');
-    //     Route::any('ADVtemp_less_payments',[PayrollController::class,'ADVtemp_less_payments'])->name('ADVtemp_less_payments');
-    //     Route::any('generate_checklist',[PayrollController::class,'generate_checklist'])->name('generate_checklist');
-    //     Route::any('employee_payslip', [PayrollController::class, 'employee_payslip'])->name('employee_payslip');
-    //     Route::any('employeeFilter', [PayrollController::class, 'employeeFilter'])->name('employeeFilter');
-    //     Route::any('submitLessPayments', [PayrollController::class, 'submitLessPayments'])->name('submitLessPayments');
-    //     Route::any('temp_submitLessPayments', [PayrollController::class, 'temp_submitLessPayments'])->name('temp_submitLessPayments');
-    //     Route::any('partial_payment', [PayrollController::class, 'partial_payment'])->name('partial_payment');
-    //     Route::any('comission_bonus', [PayrollController::class, 'comission_bonus'])->name('comission_bonus');
-    //     Route::any('approved_financial_payments', [GeneralController::class, 'approved_financial_payments'])->name('cipay.approved_financial_payments');
-    //     Route::any('employeeCostExport_temp', [ReportController::class, 'employeeCostExport_temp'])->name('reports.employeeCostExport_temp');
-    //     Route::any('imprest_info', [ImprestController::class, 'imprest_info'])->name('imprest.imprest_info');
-    //     Route::any('deletePayment', [GeneralController::class, 'deletePayment'])->name('cipay.deletePayment');
-    //     Route::any('partial', [GeneralController::class, 'partial'])->name('cipay.partial');
-    //     Route::any('financial_reports', [GeneralController::class, 'financial_reports'])->name('cipay.financial_reports');
-    //     Route::any('organisation_reports', [GeneralController::class, 'organisation_reports'])->name('cipay.organisation_reports');
-    //     Route::any('arrears_info', [GeneralController::class, 'arrears_info'])->name('cipay.arrears_info');
-    //     Route::any('incentives', [PayrollController::class,'incentives'])->name('incentives');
-    //     Route::any('/partial-payment', [PayrollController::class, 'partialPayment'])->name('partialPayment');
-    // });
+    Route::get('flex/department_cost', [GeneralController::class, 'departmentCost'])->middleware([WorkForce::class])->name('flex.departmentCost');
+    Route::any('flex/store_department_cost', [GeneralController::class, 'storeDepartmentCost'])->middleware([WorkForce::class])->name('flex.storedepartmentcost');
 
 
 
@@ -765,7 +761,11 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-    Route::prefix('')->controller(BaseController::class)->group(function (){
+
+
+
+
+    Route::prefix('')->middleware([WorkForce::class])->controller(BaseController::class)->group(function (){
 
         Route::any('/index' ,'index')->name('index');
         Route::any('/employee_info/{id}' ,'employee_info')->name('flex.employee_info');
@@ -794,6 +794,8 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         // for employee biodata
         Route::any('/userdata/{id}','userdata')->name('flex.userdata');
         // for employee profile picture
+
+        Route::any('/overtime_on_behalf','overtime_on_behalf')->name('flex.overtime_on_behalf');
 
 
         // Download biodata
@@ -986,7 +988,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/revokerole','revokerole')->name('flex.revokerole');
         Route::any('/appreciation','appreciation')->name('flex.appreciation');
         Route::any('/add_apprec','add_apprec')->name('flex.add_apprec');
-        Route::any('/employee_payslip','employee_payslip')->name('flex.employee_payslip');
+
         Route::any('/contract_expiration','contract_expiration')->name('flex.contract_expiration');
         Route::any('/updateCompanyName','updateCompanyName')->name('flex.updateCompanyName');
         Route::any('/addEmployee','addEmployee')->name('flex.addEmployee');
@@ -1013,14 +1015,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/disapproveRegistration/{id}','disapproveRegistration')->name('flex.disapproveRegistration');
 
 
-        // start of selfservices routes
-        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
 
-        Route::any('/overtime_on_behalf','overtime_on_behalf')->name('flex.overtime_on_behalf');
-
-        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');
-        Route::any('/my-biodata','my_biodata')->name('flex.my-biodata');
-        // end of self services
 
 
 
@@ -1031,7 +1026,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-    Route::prefix('flex/imprest')->controller(ImprestController::class)->group(function (){
+    Route::prefix('flex/imprest')->middleware([WorkForce::class])->controller(ImprestController::class)->group(function (){
 
         Route::any('/confirmed_imprest','confirmed_imprest')->name('imprest.confirmed_imprest');
         Route::any('/imprest','imprest')->name('imprest.imprest');
@@ -1067,7 +1062,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-    Route::prefix('flex/performance')->controller(PerformanceController::class)->group(function (){
+    Route::prefix('flex/performance')->middleware([WorkForce::class])->controller(PerformanceController::class)->group(function (){
 
         Route::any('/output_info','output_info')->name('performance.output_info');
         Route::any('/assign_output','assign_output')->name('performance.assign_output');
@@ -1184,7 +1179,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     });
 
 
-    Route::prefix('flex/project')->controller(ProjectController::class)->group(function (){
+    Route::prefix('flex/project')->middleware([WorkForce::class])->controller(ProjectController::class)->group(function (){
 
         Route::any('/index','index')->name('project.index');
         Route::any('/','index')->name('project.index');
@@ -1244,12 +1239,12 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     });
 
 
-    Route::prefix('flex/reports')->controller(ReportController::class)->group(function (){
+    Route::prefix('flex/reports')->middleware('auth')->middleware([Report::class])->controller(ReportController::class)->group(function (){
 
         Route::any('/journalEntryReport','journalEntryReport')->name('reports.journalEntryReport');
 
         Route::any('/payroll_report','payroll_report')->name('reports.payroll_report');
-        Route::any('/employee_pension','employee_pension')->name('reports.employee_pension');
+
         Route::any('/payroll_report1','payroll_report1')->name('reports.payroll_report1');
         Route::any('/get_payroll_temp_summary','get_payroll_temp_summary')->name('reports.get_payroll_temp_summary');
         Route::any('/get_payroll_temp_summary1','get_payroll_temp_summary1')->name('reports.get_payroll_temp_summary1');
@@ -1273,7 +1268,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/employment_cost','employment_cost')->name('reports.employment_cost');
         Route::any('/loanreport','loanreport')->name('reports.loanreport');
         Route::any('/customleavereport','customleavereport')->name('reports.customleavereport');
-        Route::any('/payslip','payslip')->name('reports.payslip');
+
         Route::any('/temp_payslip','temp_payslip')->name('reports.temp_payslip');
         Route::any('/backup_payslip','backup_payslip')->name('reports.backup_payslip');
         Route::any('/kpi','kpi')->name('reports.kpi');
@@ -1309,7 +1304,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
     // new cost center report
-    Route::prefix('flex/cost-center')->controller(CostCenterController::class)->group(function (){
+    Route::prefix('flex/cost-center')->middleware([WorkForce::class])->controller(CostCenterController::class)->group(function (){
 
     });
 
@@ -1321,27 +1316,6 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-//Routes for Recruitment Module
-
-// Route::group(['prefix' => 'recruitment'], function () {
-//     Route::get('/login', [RegisterController::class, 'index'])->name('recruitment.login');
-//     Route::get('/register', [RegisterController::class, 'register'])->name('register.index');
-//     Route::post('/store', [RegisterController::class, 'storeUser'])->name('register.store');
-//     Route::post('/jobseeker-login', [LoginController::class, 'loginProcess'])->name('jobseeker.login');
-// });
-
-// Route::get('/jobsearch-Dashboard', [JobController::class, 'index'])->name('dashboard.index')->middleware('auth');
-// // Password Resetting Routes...
-
-// Route::get('/forgot-password', function () {
-//     return view('auth.forgot-password');
-// })->middleware('guest')->name('password.request');
-
-// Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('guest')->name('password.email');
-
-// Route::get('/reset-password/{token}', function ($token) {
-//     return view('auth.reset-password', ['token' => $token]);
-// })->middleware('guest')->name('password.reset');
 
 
 });
