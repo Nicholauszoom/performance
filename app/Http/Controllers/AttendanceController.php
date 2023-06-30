@@ -37,6 +37,7 @@ use Illuminate\Http\Response;
 use App\Models\Level1;
 use App\Models\level2;
 use App\Models\Level3;
+use Exception;
 
 class AttendanceController extends Controller
 {
@@ -587,8 +588,16 @@ public function saveLeave(Request $request) {
                    'full_name' => $fullname,
                    'employee_name'=>$employee_data['full_name'],
                );
-               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
 
+               try {
+
+                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+            } catch (Exception $exception) {
+                $msg=$type_name." Leave Request  Has been Requested But Email is not sent(SMTP Problem)!";
+                  return $url->with('msg', $msg);
+
+            }
                   $msg=$type_name." Leave Request  Has been Requested Successfully!";
                   return $url->with('msg', $msg);
 
@@ -794,8 +803,16 @@ public function saveLeave(Request $request) {
                    'full_name' => $fullname,
                    'employee_name'=>$employee_data['full_name'],
                );
-               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+               try {
 
+                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+            } catch (Exception $exception) {
+                $leave_type=LeaveType::where('id',$nature)->first();
+                $type_name=$leave_type->type;
+                $msg=$type_name." Leave Request is submitted successfully But Email not sent(SMTP Problem)!";
+                return $url->with('msg', $msg);
+            }
 
                 $leave_type=LeaveType::where('id',$nature)->first();
                 $type_name=$leave_type->type;
@@ -1011,7 +1028,14 @@ public function saveLeave(Request $request) {
                    'full_name' => $fullname,
                    'employee_name'=>$employee_data['full_name'],
                );
-               Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+               try {
+
+                Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+            } catch (Exception $exception) {
+                $msg=$type_name." Leave Request is submitted successfully but email not sent(SMTP Problem)!";
+              return $url->with('msg', $msg);
+            }
               $msg=$type_name." Leave Request is submitted successfully!";
               return $url->with('msg', $msg);
               }
@@ -1138,7 +1162,16 @@ public function saveLeave(Request $request) {
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
         );
-        Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+        try {
+
+            Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+        } catch (Exception $exception) {
+
+        $msg = "Leave Request Has been Approves Successfully But Email is not sent(SMPT problem) !";
+        // return redirect('flex/view-action/'.$emp,$data)->with('msg', $msg);
+        return redirect('flex/attendance/leave')->with('msg', $msg);
+        }
 
 
 
@@ -1287,14 +1320,21 @@ public function saveLeave(Request $request) {
                    'info'=>$info,
                );
                //dd($employee_data['email']);
-               Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+               try {
+
+                Notification::route('mail', $employee_data['email'])->notify(new EmailRequests($email_data));
+
+            } catch (Exception $exception) {
+
+                echo "<p class='alert alert-primary text-center'>Email Not sent</p>";
+            }
         }
         $leave->delete();
 
 
 
 
-        $msg="Leave Was Deleted Successfully !";
+        $msg="Leave  Deleted Successfully !";
 
         echo "<p class='alert alert-primary text-center'>Leave Was Rejected Successfully</p>";
 
@@ -1350,9 +1390,16 @@ public function saveLeave(Request $request) {
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
         );
-        Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
 
         $leave->delete();
+        try {
+
+            Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
+
+        } catch (Exception $exception) {
+
+            echo "<p class='alert alert-warning text-center'>Leave Canceled Successifully but email not sent</p>";
+        }
 
           echo "<p class='alert alert-warning text-center'>Leave Canceled Successifully</p>";
 

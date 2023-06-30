@@ -73,6 +73,7 @@ use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
+use Exception;
 
 
 class GeneralController extends Controller
@@ -2172,7 +2173,13 @@ class GeneralController extends Controller
                             'email' => $linemanager_data['email'],
                             'full_name' => $fullname,
                         );
-                        Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+                        try {
+
+                            Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
+
+                        } catch (Exception $exception) {
+                            echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
+                        }
                         echo "<p class='alert alert-success text-center'>Overtime Request Sent Successifully</p>";
                     } else {
                         echo "<p class='alert alert-danger text-center'>Overtime Request Not Sent, Please Try Again!</p>";
@@ -7048,7 +7055,15 @@ $this->authenticateUser('add-payroll');
                     'username' => $row->emp_id,
                     'password' => $pass,
                 );
-                Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
+
+                try {
+
+                    Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
+
+                } catch (Exception $exception) {
+                    return redirect()->back()->with(['error' => 'Password change Failed to to Email SMTP problems']);
+
+                }
             }
 
 
