@@ -56,21 +56,23 @@ use Illuminate\Http\Response;
 
 
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
 
  // Dashboard
- Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+
 
 Route::middleware('verify-outgoing-requests')->group(function () {
-Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
-Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
 
+
+    Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
     //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
+    Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
+
     Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
     Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
 
@@ -82,7 +84,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
 
 Route::middleware('auth')->middleware([Setting::class])->group(function(){
     // Route For Resources
@@ -1063,7 +1065,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
     });
 
-    Route::prefix('flex/performance')->controller(PerformanceController::class)->group(function (){
+    Route::prefix('flex/performance')->middleware([WorkForce::class])->controller(PerformanceController::class)->group(function (){
     Route::any('/strategy_dashboard','strategy_dashboard')->name('performance.strategy_dashboard');
 
     });
