@@ -38,7 +38,7 @@ Options -Indexes
 # Prevent access to specific directories
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(storage|vendor|app) - [F,L,NC]
+    RewriteRule ^(storage|vendor|app|database) - [F,L,NC]
 </IfModule>
 
 <Files ~ "(artisan|package.json|webpack.mix.js)$">
