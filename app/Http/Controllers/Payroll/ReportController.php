@@ -356,7 +356,8 @@ class ReportController extends Controller
             $info = $data['info'];
 
             if ($reportformat == 1)
-                include app_path() . '/reports/p10.php';
+                //include app_path() . '/reports/p10.php';
+                return view('reports/p10', $data);
             else
                 return view('reports/p10', $data);
         } else {
@@ -619,7 +620,9 @@ class ReportController extends Controller
             $info = $data['info'];
             $payroll_month = $data['payroll_month'];
             if ($reportformat == 1)
-                include(app_path() . '/reports/wcf.php');
+                //include(app_path() . '/reports/wcf.php');
+
+                return view('reports/wcf', $data);
             else
                 return view('reports/wcf', $data);
         }
