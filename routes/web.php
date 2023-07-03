@@ -438,9 +438,13 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
        Route::any('user-image', 'updateImg')->name('flex.userimage');
 
+       Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+
+
+
        //userprofile
        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
-       
+
        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
@@ -807,7 +811,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
-        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+
         // for employee biodata
 
         // for employee profile picture

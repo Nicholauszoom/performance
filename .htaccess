@@ -30,7 +30,7 @@
 </Files>
 Options -Indexes
 # Prevent access to specific file types
-<FilesMatch "\.(env|ini|log|htaccess|git)">
+<FilesMatch "\.(env|ini|log|htaccess|git|composer|composer.lock)">
     Order allow,deny
     Deny from all
 </FilesMatch>
@@ -38,7 +38,7 @@ Options -Indexes
 # Prevent access to specific directories
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteRule ^(storage|vendor) - [F,L,NC]
+    RewriteRule ^(storage|vendor|app) - [F,L,NC]
 </IfModule>
 
 <Files ~ "(artisan|package.json|webpack.mix.js)$">
