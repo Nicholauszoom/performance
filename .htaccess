@@ -46,7 +46,7 @@ Options -Indexes
     Order allow,deny
     Deny from all
 </Files>
-<Files "composer.json">
+<Files composer.json>
 Order Allow,Deny
 Deny from all
 </Files>
