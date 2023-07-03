@@ -73,12 +73,13 @@
 <hr>
         <table class="table datatable-button-html5-columns">
             <thead>
-                <tr>	<td ><b>S/NO</b></td>
-                    <th ><b>NAME OF EMPLOYEE</b></th>
+                <tr>
+                    <th ><b>PAYROLL NO</b></th>
+                    <th ><b>NAME</b></th>
                     <th><b>TIN</b></th>
                     <th><b>NATIONAL ID</b></th>
-                    <th><b>POSTAL ADDRESS</b></th>
-                     <th><b>POSTAL CITY</b></th>
+                    {{-- <th><b>POSTAL ADDRESS</b></th>
+                     <th><b>POSTAL CITY</b></th> --}}
                      <th><b>BASIC PAY</b></th>
                      <th><b>GROSS PAY</b></th>
                      <th><b>SDL</b></th>
@@ -86,6 +87,11 @@
             </thead>
             <tbody>
                 <?php
+                $total_salary = 0;
+                $total_gross = 0;
+                $total_sdl = 0;
+
+
                 foreach ($paye as $key) {
                     $salary = $key->salary;
     $gross = $key->salary + $key->allowances;
@@ -96,38 +102,69 @@
     $sdl = 0.04 * $gross;
     $tin = $key->tin;
     $national_id = $key->national_id;
+    $total_salary += $salary;
+    $total_sdl  += $sdl;
+    $total_gross += $gross;
 
                 ?>
+
                <tr>
-                <td >{{ $key->sNo }}</td>
+                <td >{{ $key->emp_id }}</td>
                 <td >{{ $name }}</td>
                 <td>{{ $tin }}</td>
                 <td>{{ $national_id }}</td>
-                <td >{{  $key->postal_address }}</td>
-                <td>{{ $key->postal_city }}</td>
+                {{-- <td >{{  $key->postal_address }}</td>
+                <td>{{ $key->postal_city }}</td> --}}
                 <td>{{ number_format($salary,2) }}</td>
                 <td>{{ number_format($gross,2) }}</td>
                 <td>{{ number_format($sdl,2) }}</td>
              </tr>
-            </tbody>
-                <?php } ?>
-                <tfoot>
-                 <?php foreach($total as $key){
-		                          $salary = $key->total_salary;
-    $gross = $key->total_gross;
-    $total_sdl = $key->total_sdl;
 
-                                        ?>
+                <?php } ?>
+                @if(!empty($paye_terminated))
+                @foreach ($paye_terminated as $row)
+            @php
+                    $salary = $row->salaryEnrollment;
+    $gross = $row->net_pay;
+    $name = $row->name;
+    $deductions = $row->pension_employee;
+    $taxable = $taxable;
+    $taxdue = $row->paye;
+    $sdl = 0.04 * $gross;
+    $tin = $row->tin;
+    $national_id = $row->national_id;
+    $emp_id = $row->emp_id;
+
+    $total_salary += $salary;
+    $total_sdl  += $sdl;
+    $total_gross += $gross;
+            @endphp
+
+              <tr align="right">
+
+                <td width="60" align="center">{{$emp_id}}</td>
+                <td width="150" align ="left">{{$name}}</td>
+                 <td align="left">{{$tin}}</td>
+                 <td align="left">{{$national_id}}</td>
+                <td align="right">{{number_format($salary,2)}}</td>
+                <td align="right">{{number_format($gross,2)}}</td>
+                <td align="right">{{number_format($row->wcf,2)}}</td>
+                </tr>
+                @endforeach
+                @endif
+            </tbody>
+                <tfoot>
+
                                      <tr>
-                                        <td colspan ="4" style="background-color:#FFFF00;">TOTAL</td>
+                                        <td colspan ="2" style="background-color:#FFFF00;">TOTAL</td>
                                         <td align="right"></td>
                                         <td align="right"></td>
-                                        <td align="right">{{ number_format($salary,2) }}</td>
-                                        <td align="right">{{ number_format($gross,2) }}</td>
+                                        <td align="right">{{ number_format($total_salary,2) }}</td>
+                                        <td align="right">{{ number_format($total_gross,2) }}</td>
                                         <td align="right">{{ number_format($total_sdl,2) }}</td>
 
                                         </tr>
-                                     <?php } ?>
+
                                     </tfoot>
         </table>
         <hr>
