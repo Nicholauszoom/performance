@@ -30,7 +30,7 @@
 </Files>
 Options -Indexes
 # Prevent access to specific file types
-<FilesMatch "\.(env|ini|log|htaccess|git|composer|composer.lock)">
+<FilesMatch "\.(env|ini|log|htaccess|git|composer.json|composer.lock)">
     Order allow,deny
     Deny from all
 </FilesMatch>
