@@ -528,7 +528,9 @@ class ReportController extends Controller
     function employee_pension(Request $request)
     {
 
+
         $id = base64_decode($request->emp_id);
+
 
         if($id != auth()->user()->emp_id){
             $this->authenticateUser('edit-employee');

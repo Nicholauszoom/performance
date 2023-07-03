@@ -240,7 +240,7 @@
                             <div class="card-body border-0">
                                 <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3"
                                     id="tabs-target-right" role="tablist">
-                                    <li class="nav-item" role="presentation">
+                                    {{-- <li class="nav-item" role="presentation">
                                         <a href="#work" class="nav-link active show" data-bs-toggle="tab"
                                             aria-selected="true" role="tab" tabindex="-1">
                                             Work
@@ -258,9 +258,9 @@
                                             role="tab" tabindex="-1">
                                             L & D
                                         </a>
-                                    </li>
+                                    </li> --}}
 
-                                    <li class="nav-item" role="presentation">
+                                    <li class="nav-item active" role="presentation">
                                         <a href="#pension" class="nav-link" data-bs-toggle="tab" aria-selected="false"
                                             role="tab" tabindex="-1">
                                             Pension History
@@ -273,66 +273,11 @@
 
                             <div class="tab-content " id="myTabContent">
                                 {{-- work --}}
-                                <div role="tabpanel" class="tab-pane fade active show " id="work"
-                                    aria-labelledby="work-tab">
-
-                                    <div
-                                        class="card border-top  border-top-width-3 border-top-main rounded-0 m-2 shadow-none">
-                                        <div class="card-header d-flex justify-content-between">
-                                            <h5 class="text-main">Next of Kin(s)</h5>
-
-                                            @if (session('mng_emp'))
-                                                <button type="button" class="btn btn-main" data-bs-toggle="modal"
-                                                    data-bs-target="#nextkinModal">
-                                                    <i class="ph-plus me-2"></i> Add Next of kin
-                                                </button>
-                                            @endif
-                                        </div>
-
-                                        <table class="table table-striped table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Relationship</th>
-                                                    <th>Mobile</th>
-                                                    <th>Postal Address</th>
-                                                    <th>Option</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($kin as $row)
-                                                    <tr>
-                                                        <td width="1px"> {{ $loop->iteration }}</td>
-                                                        </td>
-                                                        <td><?php echo $row->fname . ' ' . $row->mname . ' ' . $row->lname; ?></td>
-                                                        <td><?php echo $row->relationship; ?></td>
-                                                        <td><?php echo $row->mobile; ?></td>
-                                                        <td><?php echo $row->postal_address; ?></td>
-
-                                                        <td class="options-width">
-                                                            <form method="POST"
-                                                                action="{{ route('flex.deletekin', ['empID' => $empID, 'id' => $row->id]) }}">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger btn-xs">
-                                                                    <i class="ph-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                            {{-- <a href="<?php echo url('') . 'flex/deletekin/' . $row->id; ?>" title="Delete" class="btn btn-danger btn-sm">
-                                        </a> --}}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
+                              
                                 {{-- / --}}
 
                                 {{-- Permission --}}
-                                <div role="tabpanel" class="tab-pane " id="permission" aria-labelledby="permission-tab">
+                                {{-- <div role="tabpanel" class="tab-pane " id="permission" aria-labelledby="permission-tab">
                                     <div class="card rounded-0  shadow-none">
                                         <div class="card-header">
                                             <h6 class="text-muted">Permissons</h6>
@@ -418,11 +363,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 {{-- / --}}
 
                                 {{-- asset --}}
-                                <div role="tabpanel" class="tab-pane " id="asset" aria-labelledby="asset-tab">
+                                {{-- <div role="tabpanel" class="tab-pane " id="asset" aria-labelledby="asset-tab">
 
 
                                     <div class="card border-top  border-top-width-3 border-top-main rounded-0">
@@ -474,11 +419,11 @@
                                         </table>
                                     </div>
 
-                                </div>
+                                </div> --}}
                                 {{-- / --}}
 
                                 {{-- L & D --}}
-                                <div role="tabpanel" class="tab-pane " id="l-d" aria-labelledby="l-d-tab">
+                                {{-- <div role="tabpanel" class="tab-pane " id="l-d" aria-labelledby="l-d-tab">
                                     <div
                                         class="card border-top  border-top-width-3 border-top-main  rounded-0  shadow-none mb-3">
                                         <div class="card-header">
@@ -646,11 +591,12 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> --}}
                                 {{-- / --}}
 
                                 {{-- Pension --}}
-                                <div role="tabpanel" class="tab-pane " id="pension" aria-labelledby="permission-tab">
+                                <div role="tabpanel" class="tab-pane active" id="pension"
+                                    aria-labelledby="permission-tab">
                                     <div class="card rounded-0 border-0 shadow-none">
                                         <div class="row">
                                             <div class="col-md-12 col-lg-12 col-sm-12">
@@ -660,7 +606,7 @@
                                                         <h6 class="text-muted">Pension Summary</h6>
 
                                                         <a class="ms-3"
-                                                            href="{{ route('reports.employee_pension', ['emp_id' =>base64_encode($empID)]) }}"
+                                                            href="{{ route('reports.employee_pension', ['emp_id' => base64_encode($empID)]) }}"
                                                             target="blank">
                                                             <button type="button" name="print" value="print"
                                                                 class="btn btn-main btn-sm">
@@ -972,8 +918,8 @@
 @push('footer-script')
     <script type="text/javascript">
         /*
-                         check if form submitted is for creating or updating
-                     */
+                             check if form submitted is for creating or updating
+                         */
         $("#save-qualification-btn").click(function(event) {
             event.preventDefault();
             if ($("#update_id").val() == null || $("#update_id").val() == "") {
@@ -1037,8 +983,8 @@
                     $("#save-community-btn").prop('disabled', false);
 
                     /*
-                        show validation error
-                                    */
+                            show validation error
+                                        */
                     if (typeof response.responseJSON.errors !== 'undefined') {
                         let errors = response.responseJSON.errors;
                         let abbreviationValidation = "";
