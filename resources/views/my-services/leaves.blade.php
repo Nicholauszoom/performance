@@ -73,7 +73,7 @@
 
         <div class="form-group col-6">
           <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave <span  class="text-danger">*</span></label>
-                  <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature">
+                  <select class="form-control form-select  select @error('emp_ID') is-invalid @enderror" required id="docNo" name="nature">
                     <option value="">&nbsp;</option>
                       <?php  $sex = Auth::user()->gender;
                       if ($sex=='Male') { $gender = 1; }else if($sex=='Female') {$gender = 2; }

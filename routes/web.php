@@ -126,16 +126,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
          Route::any('/arrears_info','arrears_info')->name('flex.arrears_info');
          Route::any('/individual_arrears_info','individual_arrears_info')->name('flex.individual_arrears_info');
-         Route::any('/holdOvertime','holdOvertime')->name('flex.holdOvertime');
-         Route::any('/approveOvertime/{id}','approveOvertime')->name('flex.approveOvertime');
-         Route::any('/lineapproveOvertime/{id}','lineapproveOvertime')->name('flex.lineapproveOvertime');
-         Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
-         Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
-         Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
-
-
-         Route::any('/cancelApprovedOvertimes/{id}','cancelApprovedOvertimes')->name('flex.cancelApprovedOvertimes');
-
+        
          // start of termination routes
          Route::any('/termination','termination')->name('flex.termination');
          Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
@@ -454,6 +445,15 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
        Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
        // end of self services
+
+       //overtime approves
+       Route::any('/lineapproveOvertime/{id}','lineapproveOvertime')->name('flex.lineapproveOvertime');
+       Route::any('/hrapproveOvertime/{id}','hrapproveOvertime')->name('flex.hrapproveOvertime');
+       Route::any('/fin_approveOvertime/{id}','fin_approveOvertime')->name('flex.fin_approveOvertime');
+       Route::any('/denyOvertime/{id}','denyOvertime')->name('flex.denyOvertime');
+
+
+       Route::any('/cancelApprovedOvertimes/{id}','cancelApprovedOvertimes')->name('flex.cancelApprovedOvertimes');
 
        //managers routes
        Route::any('/overtime','overtime')->name('flex.overtime');
