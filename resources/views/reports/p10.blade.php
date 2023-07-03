@@ -115,9 +115,9 @@
                 <td>{{ $national_id }}</td>
                 {{-- <td >{{  $key->postal_address }}</td>
                 <td>{{ $key->postal_city }}</td> --}}
-                <td>{{ number_format($salary,2) }}</td>
-                <td>{{ number_format($gross,2) }}</td>
-                <td>{{ number_format($sdl,2) }}</td>
+                <td align="right">{{ number_format($salary,2) }}</td>
+                <td align="right">{{ number_format($gross,2) }}</td>
+                <td align="right">{{ number_format($sdl,2) }}</td>
              </tr>
 
                 <?php } ?>
@@ -142,10 +142,10 @@
 
               <tr align="right">
 
-                <td width="60" align="center">{{$emp_id}}</td>
-                <td width="150" align ="left">{{$name}}</td>
-                 <td align="left">{{$tin}}</td>
-                 <td align="left">{{$national_id}}</td>
+                <td width="60">{{$emp_id}}</td>
+                <td width="150" >{{$name}}</td>
+                 <td >{{$tin}}</td>
+                 <td >{{$national_id}}</td>
                 <td align="right">{{number_format($salary,2)}}</td>
                 <td align="right">{{number_format($gross,2)}}</td>
                 <td align="right">{{number_format($row->wcf,2)}}</td>
