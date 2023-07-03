@@ -6,6 +6,7 @@ use Closure;
 use App\Models\UserRole;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\RolePermission;
 
 class Organisation
@@ -24,11 +25,11 @@ class Organisation
         $role_id=$role->role_id;
         $permission=Permission::where('slug','view-organization')->first();
         $role_permision=RolePermission::where('role_id',$role_id)->where('permission_id',$permission->id)->first();
-        
+
         if ($role_permision) {
             return $next($request);
         }
+        abort(Response::HTTP_UNAUTHORIZED);
 
-        return redirect('flex/errors');
     }
 }

@@ -297,7 +297,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/editdepartment','editdepartment')->name('flex.editdepartment');
         Route::any('/employee','employee')->name('flex.employee');
 
-        Route::any('/addkin/{id}','addkin')->name('flex.addkin');
+
         Route::any('/deletekin/{empID}/{id}','deletekin')->name('flex.deletekin');
         Route::any('/addproperty','addproperty')->name('flex.addproperty');
         Route::any('/employee_exit/{id}','employee_exit')->name('flex.employee_exit');
@@ -439,6 +439,8 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::any('user-image', 'updateImg')->name('flex.userimage');
 
        Route::any('/userprofile/{id}','userprofile')->name('flex.userprofile');
+
+       Route::any('/addkin/{id}','addkin')->name('flex.addkin');
 
 
 

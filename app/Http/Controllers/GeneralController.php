@@ -108,7 +108,7 @@ class GeneralController extends Controller
 
         if(!Auth::user()->can($permissions)){
 
-          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
+          abort(Response::HTTP_UNAUTHORIZED);
 
          }
 
@@ -4348,6 +4348,9 @@ class GeneralController extends Controller
 
     public function addkin(Request $request, $id)
     {
+        if($id != auth()->user()->emp_id){
+            $this->authenticateUser('edit-employee');
+        }
         date_default_timezone_set('Africa/Dar_es_Salaam');
 
         $data = array(

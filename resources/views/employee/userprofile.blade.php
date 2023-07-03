@@ -45,11 +45,11 @@
         $retired = $row->retired;
         $login_user = $row->login_user;
     }
-    
+
     foreach ($active_properties as $rowActive) {
         $numActive = $rowActive->ACTIVE_PROPERTIES;
     }
-    
+
     $delimeter = '|';
     ?>
 
@@ -246,12 +246,7 @@
                                             Work
                                         </a>
                                     </li>
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#permission" class="nav-link" data-bs-toggle="tab" aria-selected="false"
-                                            role="tab" tabindex="-1">
-                                            Permission
-                                        </a>
-                                    </li>
+                                  
                                     <li class="nav-item" role="presentation">
                                         <a href="#asset" class="nav-link" data-bs-toggle="tab" aria-selected="false"
                                             role="tab" tabindex="-1">
@@ -272,12 +267,7 @@
                                         </a>
                                     </li>
 
-                                    <li class="nav-item" role="presentation">
-                                        <a href="#exit" class="nav-link" data-bs-toggle="tab" aria-selected="false"
-                                            role="tab" tabindex="-1">
-                                            Exit
-                                        </a>
-                                    </li>
+
                                 </ul>
                             </div>
 
@@ -358,52 +348,16 @@
                                                     </div>
 
                                                     <div class="card-body">
-                                                        <form action="{{ route('flex.revokerole') }}" method="post">
+                                                        <form action="" method="post">
                                                             @csrf
 
                                                             <input type="text" hidden="hidden" name="empID"
                                                                 value="<?php echo $empID; ?>" />
 
-                                                            <table class="table table-striped table-bordered">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>S/N</th>
-                                                                        <th>Name</th>
-                                                                        <?php if(session('mng_roles_grp')) { ?>
-                                                                        <th>Option</th>
-                                                                        <?php } ?>
-                                                                    </tr>
-                                                                </thead>
 
-                                                                <tbody>
-                                                                    <?php  foreach ($role as $row) {   ?>
-                                                                    <tr>
-                                                                        <td><?php echo $row->SNo; ?></td>
-                                                                        <td><?php echo $row->NAME; ?></td>
-                                                                        <?php if(session('mng_roles_grp'))  { ?>
-                                                                        <td class="options-width">
-                                                                            <label class="containercheckbox">
-                                                                                <input type="checkbox" name="option[]"
-                                                                                    value="<?php echo $row->role; ?>">
-                                                                                <span class="checkmark"></span>
-                                                                            </label>
-                                                                            <input type="text" hidden="hidden"
-                                                                                name="roleid"
-                                                                                value="<?php echo $row->id; ?>" />
-                                                                        </td>
-                                                                        <?php } ?>
-                                                                    </tr>
-                                                                    <?php }  ?>
-                                                                </tbody>
-                                                            </table>
 
                                                             <?php if(session('mng_roles_grp'))  { ?>
-                                                            <div class="form-group mt-3">
-                                                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                                                    <button type="submit" name="revoke"
-                                                                        class="btn btn-main">REVOKE</button>
-                                                                </div>
-                                                            </div>
+
                                                             <?php } ?>
                                                         </form>
                                                     </div>
@@ -721,7 +675,7 @@
                                                         foreach ($employee_pension as $row) {
                                                             $total += $row->pension_employee;
                                                         }
-                                                        
+
                                                     @endphp
 
                                                     <div class="card-body">
@@ -811,86 +765,7 @@
                                 {{-- / --}}
 
                                 {{-- Exit --}}
-                                <div role="tabpanel" class="tab-pane " id="exit" aria-labelledby="exit-tab">
-                                    <div
-                                        class="card border-top border-top-width-3 border-top-main  rounded-0 border-0 shadow-none">
 
-                                        <div class="card-body">
-                                            <form id="upload_form" method="post" enctype="multipart/form-data"
-                                                action="{{ route('flex.employeeDeactivationRequest') }}"
-                                                data-parsley-validate>
-                                                @csrf
-
-                                                <!--   index.php/cipay/employee_exit-->
-                                                <?php if ($state != 3): ?>
-                                                <div class="mb-3" align="center">
-                                                    <label class="form-label"></label>
-
-                                                    <div class="">
-                                                        <div class="d-inline-flex align-items-center me-3">
-                                                            <input type="radio" name="initiator" value="Employee"
-                                                                id="dc_li_c">
-                                                            <label class="ms-2" for="dc_li_c">Employee
-                                                                Initiated</label>
-                                                        </div>
-
-                                                        <div class="d-inline-flex align-items-center">
-                                                            <input type="radio" name="initiator" value="Employer"
-                                                                id="dc_li_u">
-                                                            <label class="ms-2" for="dc_li_u">Employer
-                                                                Initiated</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="stream">Exit Date</label>
-                                                            <input type="date" required name="exit_date"
-                                                                autocomplete="off" placeholder="Exit Date"
-                                                                class="form-control" id="exit_date"
-                                                                aria-describedby="inputSuccess2Status">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="last-name">Interview
-                                                                Notes</label>
-                                                            <textarea placeholder="Message or Reason  For Exit" cols="10" class="form-control" name="reason"
-                                                                rows="5"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="mt-3">
-                                                    <input type="text" hidden name="empID"
-                                                        value="<?php echo $empID; ?>" />
-                                                    <input type="text" hidden name="state" value="disable" />
-                                                    <button type="submit" name="exit" value="exit"
-                                                        class="btn btn-main">Confirm Exit</button>
-                                                    <?php else: ?>
-                                                    <input type="text" hidden name="empID"
-                                                        value="<?php echo $empID; ?>" />
-                                                    <input type="text" hidden name="state" value="enable" />
-                                                    <button type="submit" name="exit" disabled value="exit"
-                                                        class="btn btn-main">Confirm Exit</button>
-                                                    <?php endif; ?>
-                                                    <!-- <?php if($state = 0 ){ ?>
-                                                    <h5><?php echo number_format($allowances, 2); ?></h5> <?php } ?>
-                                                    <button  type="submit" <?php if($state == 1 || $numActive > 0) { ?> disabled <?php } ?> name="exit" value = "exit" class="btn btn-warning">CONFIRM EXIT</button> -->
-
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
                                 {{-- / --}}
 
                             </div>
