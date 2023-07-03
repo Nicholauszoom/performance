@@ -1344,9 +1344,11 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 });
 
-Route::get('composer.json', function () {
-    abort(404);
-});
+
 
 Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';
+
+Route::get('composer.json', function () {
+    abort(404);
+});
