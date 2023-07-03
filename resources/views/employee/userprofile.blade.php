@@ -246,7 +246,7 @@
                                             Work
                                         </a>
                                     </li>
-                                  
+
                                     <li class="nav-item" role="presentation">
                                         <a href="#asset" class="nav-link" data-bs-toggle="tab" aria-selected="false"
                                             role="tab" tabindex="-1">
@@ -660,7 +660,7 @@
                                                         <h6 class="text-muted">Pension Summary</h6>
 
                                                         <a class="ms-3"
-                                                            href="{{ route('reports.employee_pension', ['emp_id' => $empID]) }}"
+                                                            href="{{ route('reports.employee_pension', ['emp_id' =>base64_encode($empID)]) }}"
                                                             target="blank">
                                                             <button type="button" name="print" value="print"
                                                                 class="btn btn-main btn-sm">
