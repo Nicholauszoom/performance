@@ -126,7 +126,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          Route::any('/recommendOvertime/{id}','recommendOvertime')->name('flex.recommendOvertime');
          Route::any('/arrears_info','arrears_info')->name('flex.arrears_info');
          Route::any('/individual_arrears_info','individual_arrears_info')->name('flex.individual_arrears_info');
-        
+
          // start of termination routes
          Route::any('/termination','termination')->name('flex.termination');
          Route::any('/get_employee_available_info','get_employee_available_info')->name('flex.get_employee_available_info');
@@ -1342,6 +1342,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
+});
+
+Route::get('composer.json', function () {
+    abort(404);
 });
 
 Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
