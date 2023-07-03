@@ -199,13 +199,13 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          // end of promotion/increment routes
 
         // start of employee personal details route
-        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
-        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
-        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
-        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
-        Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
-        Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
-        Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
+        //Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
+        // Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+        // Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
+        // Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
+        // Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
+        // Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
+        // Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
         Route::any('/activateEmployee/{logID}/{empID}','activateEmployee')->name('flex.activateEmployee');
         Route::any('/deactivateEmployee','deactivateEmployee')->name('flex.deactivateEmployee');
         Route::any('/inactive_employee','inactive_employee')->name('flex.inactive_employee');
@@ -436,6 +436,17 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::any('/cancelOvertime/{id}','cancelOvertime')->name('flex.cancelOvertime');
        Route::any('/download_payslip','download_payslip')->name('flex.download_payslip');
        Route::any('/userdata/{id}','userdata')->name('flex.userdata');
+       Route::any('user-image', 'updateImg')->name('flex.userimage');
+
+       //userprofile
+       Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
+       
+       Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+       Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
+       Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
+       Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');
+       Route::any('/delete-certification/{id}','deleteCertification')->name('flex.deleteCertification');
+       Route::any('/delete-history/{id}','deleteHistory')->name('flex.deleteHistory');
        // end of self services
 
        //managers routes
@@ -807,7 +818,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         // Download biodata
         Route::any('/biodata','viewBiodata')->name('flex.biodata');
           // update profile image
-        Route::any('user-image', 'updateImg')->name('flex.userimage');
+
 
 
 

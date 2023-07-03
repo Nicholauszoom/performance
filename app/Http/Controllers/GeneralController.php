@@ -9015,9 +9015,9 @@ $this->authenticateUser('add-payroll');
 
         $empID = base64_decode($id);
 
-      //  if(auth()->user()->emp_id != $empID){
+         if(auth()->user()->emp_id != $empID){
             $this->authenticateUser('edit-employee');
-       // }
+        }
 
 
         $data['employee'] = $this->flexperformance_model->userprofile($empID);
@@ -9139,6 +9139,10 @@ $this->authenticateUser('add-payroll');
 
 
         $id = $request->employeeID;
+
+        if(auth()->user()->emp_id != $id){
+            $this->authenticateUser('edit-employee');
+        }
 
         // dd($request->landmark);
         $empl = Employee::where('emp_id', $id)->first();
@@ -9428,9 +9432,14 @@ $this->authenticateUser('add-payroll');
     // delete child/dependant  function
     public function deleteChild($id)
     {
+
         $child = EmployeeDependant::find($id);
 
         $empID = $child->employeeID;
+
+        if(auth()->user()->emp_id != $empID){
+            $this->authenticateUser('edit-employee');
+        }
 
         $child->delete();
 
@@ -9444,6 +9453,10 @@ $this->authenticateUser('add-payroll');
 
         $empID = $parent->employeeID;
 
+        if(auth()->user()->emp_id != $empID){
+            $this->authenticateUser('edit-employee');
+        }
+
         $parent->delete();
 
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Parent is Deleted successfully !');
@@ -9454,6 +9467,10 @@ $this->authenticateUser('add-payroll');
         $qualification = EducationQualification::find($id);
 
         $empID = $qualification->employeeID;
+
+        if(auth()->user()->emp_id != $empID){
+            $this->authenticateUser('edit-employee');
+        }
 
         $qualification->delete();
 
@@ -9466,6 +9483,10 @@ $this->authenticateUser('add-payroll');
 
         $empID = $certification->employeeID;
 
+        if(auth()->user()->emp_id != $empID){
+            $this->authenticateUser('edit-employee');
+        }
+
         $certification->delete();
 
         return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', 'Employee Professional Certification was Deleted successfully !');
@@ -9477,6 +9498,10 @@ $this->authenticateUser('add-payroll');
         $history = EmploymentHistory::find($id);
 
         $empID = $history->employeeID;
+
+        if(auth()->user()->emp_id != $empID){
+            $this->authenticateUser('edit-employee');
+        }
 
         $history->delete();
 

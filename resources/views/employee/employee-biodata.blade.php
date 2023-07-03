@@ -814,7 +814,7 @@
             </div>
             {{--  end of current image --}}
             {{-- start of update image form --}}
-            <form method="post" action="{{ url('flex/user-image')}}" enctype="multipart/form-data">
+            <form method="post" action="{{ route('flex.userimage')}}" enctype="multipart/form-data">
                  @csrf
                 {{-- <input type="hidden" name="update_id" id="{{Auth::User()->id;}}"> --}}
                 <div class="row">
