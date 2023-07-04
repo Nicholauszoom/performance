@@ -35,6 +35,7 @@ class TrustProxies extends Middleware
             $response = $next($request);
             $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
             $response->header('X-Frame-Options', 'SAMEORIGIN');
+            $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
             return $response;
 
         }
