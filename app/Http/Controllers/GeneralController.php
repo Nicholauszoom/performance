@@ -9352,6 +9352,9 @@ $this->authenticateUser('add-payroll');
                 // $qualification->certificate = $request->certificate;
 
                 if ($request->hasfile('certificate')) {
+                    $request->validate([
+                        'certificate' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                    ]);
                     $newImageName = $request->certificate->hashName();
                     $request->certificate->move(public_path('storage\certificates'), $newImageName);
                     $qualification->certificate = $newImageName;
@@ -9376,6 +9379,9 @@ $this->authenticateUser('add-payroll');
                 $certification->cert_status = $request->cert_status;
 
                 if ($request->hasfile('certificate2')) {
+                    $request->validate([
+                        'certificate2' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                    ]);
                     $newImageName = $request->certificate2->hashName();
                     $request->certificate2->move(public_path('storage\certifications'), $newImageName);
                     $certification->certificate = $newImageName;
@@ -10236,6 +10242,9 @@ $this->authenticateUser('add-payroll');
         $grievance->remarks = $request->remarks;
         $grievance->forwarded_by = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
+            $request->validate([
+                'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+            ]);
             $newAttachmentName = $request->attachment->hashName();
             $request->attachment->move(public_path('storage\grieavences-supports'), $newAttachmentName);
             $grievance->support_document = $newAttachmentName;
@@ -10335,6 +10344,9 @@ $this->authenticateUser('add-payroll');
         $grievance->description = $request->description;
         $grievance->empID = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
+            $request->validate([
+                'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+            ]);
             $newAttachmentName = $request->attachment->hashName();
             $request->attachment->move(public_path('storage\grieavences-attachments'), $newAttachmentName);
             $grievance->attachment = $newAttachmentName;
