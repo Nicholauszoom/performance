@@ -79,7 +79,7 @@ Route::middleware('auth')->group(function () {
     //->middleware('auth')->middleware([Dashboard::class]);
 
     // project
-    Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
+    Route::get('/project', [ProjectController::class, 'index'])->middleware([WorkForce::class])->name('project.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->middleware([WorkForce::class])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->middleware([WorkForce::class])->name('profile.update');
