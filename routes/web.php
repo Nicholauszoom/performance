@@ -157,17 +157,12 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
         // start of grievances routes
-       
-        Route::any('/grievences','grievances')->name('flex.grievances');
-        Route::any('/add-complain','addComplain')->name('flex.addComplain');
 
-        Route::any('/edit-complain/{id}','edit_complain')->name('flex.edit-complain');
-        Route::any('/update-grievance','update_grievance')->name('flex.update-grievances');
-        Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
+        Route::any('/grievences','grievances')->name('flex.grievances');
+
         Route::any('/resolve_grievance/{id}','resolve_grievance')->name('flex.resolve_grievance');
         Route::any('/unresolve_grievance/{id}','unresolve_grievance')->name('flex.unresolve_grievance');
 
-        Route::any('/grievance_details/{id}','grievance_details')->name('flex.grievance_details');
 
         // end of grievances routes
 
@@ -461,6 +456,13 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          // start of grievances routes
          Route::any('/my-grievences','my_grievances')->name('flex.my-grievances');
          Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
+         Route::any('/add-complain','addComplain')->name('flex.addComplain');
+
+         //Route::any('/edit-complain/{id}','edit_complain')->name('flex.edit-complain');
+         Route::any('/update-grievance','update_grievance')->name('flex.update-grievances');
+         Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
+         Route::any('/grievance_details/{id}','grievance_details')->name('flex.grievance_details');
+
 
     });
 

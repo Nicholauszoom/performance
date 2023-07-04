@@ -10101,6 +10101,10 @@ $this->authenticateUser('add-payroll');
 
         $data['title'] = 'Grievances Details';
         $data['details'] = $this->flexperformance_model->grievance_details($id);
+        $grievance = Grievance::where('id', $id)->first();
+        if($grievance->empID != Auth::user()->emp_id ){
+            $this->authenticateUser('edit-employee');
+        }
 
         return view('app.grievance_details', $data);
 
@@ -10197,7 +10201,9 @@ $this->authenticateUser('add-payroll');
     public function cancel_grievance($id)
     {
         $project = Grievance::where('id', $id)->first();
-
+        if($project->empID != Auth::user()->emp_id ){
+            $this->authenticateUser('edit-employee');
+        }
         $project->delete();
 
         return redirect('flex/my-grievences');
@@ -10207,7 +10213,9 @@ $this->authenticateUser('add-payroll');
     {
 
         $grievance = Grievance::find($id);
-
+        if($grievance->empID != Auth::user()->emp_id ){
+            $this->authenticateUser('edit-employee');
+        }
 
         $grievance->status = 1;
         $grievance->update();
@@ -10221,7 +10229,9 @@ $this->authenticateUser('add-payroll');
     {
 
         $grievance = Grievance::find($id);
-
+        if($grievance->empID != Auth::user()->emp_id ){
+            $this->authenticateUser('edit-employee');
+        }
 
         $grievance->status = 0;
         $grievance->update();
@@ -10238,6 +10248,9 @@ $this->authenticateUser('add-payroll');
     {
 
         $grievance = Grievance::find($request->id);
+        if($grievance->empID != Auth::user()->emp_id ){
+            $this->authenticateUser('edit-employee');
+        }
 
         $grievance->remarks = $request->remarks;
         $grievance->forwarded_by = Auth::user()->emp_id;
