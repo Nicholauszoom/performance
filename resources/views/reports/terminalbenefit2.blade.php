@@ -194,7 +194,7 @@
                         <ul class="list-group">
                             @if ($termination->salaryEnrollment != 0)
                                 <li class="list-group-item d-flex">
-                                    <span class="text-muted">Salary Enrollment</span>
+                                    <span class="text-muted">Salary Emoluments</span>
                                     <span class="font-weight-bold">{{ number_format($termination->salaryEnrollment, 2) }}</span>
                                 </li>
                             @endif
