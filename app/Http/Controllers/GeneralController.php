@@ -8361,7 +8361,10 @@ $this->authenticateUser('add-payroll');
 
         $net_pay = $total_gross - $total_deductions;
 
-        $taxable = ($net_pay - $pension_employee);
+        $net_pay = $total_gross - $total_deductions;
+
+       // $taxable = ($net_pay - $pension_employee);
+        $taxable = ($total_gross - $pension_employee);
         //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
 
         $paye1 = DB::table('paye')->where('maximum', '>', $taxable)->where('minimum', '<=', $taxable)->first();
