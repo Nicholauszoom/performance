@@ -163,7 +163,7 @@
                             </li>
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">Payroll Number</span>
-                                <span class="font-weight-bold"> {{ $termination->employee->payroll_no }} </span>
+                                <span class="font-weight-bold"> {{ $termination->employeeID }} </span>
                             </li>
                             @if ($termination->leaveStand != 0)
                                 <li class="list-group-item d-flex">
