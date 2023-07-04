@@ -157,10 +157,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
         // start of grievances routes
-        Route::any('/my-grievences','my_grievances')->name('flex.my-grievances');
+       
         Route::any('/grievences','grievances')->name('flex.grievances');
         Route::any('/add-complain','addComplain')->name('flex.addComplain');
-        Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
+
         Route::any('/edit-complain/{id}','edit_complain')->name('flex.edit-complain');
         Route::any('/update-grievance','update_grievance')->name('flex.update-grievances');
         Route::any('/cancel-grievance/{id}','cancel_grievance')->name('flex.cancel-grievance');
@@ -460,6 +460,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
          // start of grievances routes
          Route::any('/my-grievences','my_grievances')->name('flex.my-grievances');
+         Route::any('/save-grievances','save_grievance')->name('flex.save-grievances');
 
     });
 
