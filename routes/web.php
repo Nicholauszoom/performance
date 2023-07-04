@@ -70,20 +70,19 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
-    //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
-    Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
 
-    Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
-    Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
+
+    Route::any('import',[ImportEmployeeController::class,'import'])->middleware([WorkForce::class])->name('import.employee');
+    Route::any('download',[ImportEmployeeController::class,'download'])->middleware([WorkForce::class])->name('export.employee');
 
     //->middleware('auth')->middleware([Dashboard::class]);
 
     // project
-    Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->middleware([WorkForce::class])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->middleware([WorkForce::class])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware([WorkForce::class])->name('profile.destroy');
 
 
 Route::middleware('auth')->middleware([Setting::class])->group(function(){
