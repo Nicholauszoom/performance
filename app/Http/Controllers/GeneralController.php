@@ -8357,11 +8357,12 @@ $this->authenticateUser('add-payroll');
 
         $pension_employee = $this->flexperformance_model->get_pension_employee($salaryEnrollment, $leavePay, $arrears, $overtime_amount, $employeeID);
 
-        $total_deductions = $salaryAdvance + $otherDeductions;
+        $total_deductions = $salaryAdvance;
+        //+ $otherDeductions
 
         $net_pay = $total_gross - $total_deductions;
 
-        $net_pay = $total_gross - $total_deductions;
+        //$net_pay = $total_gross - $total_deductions;
 
        // $taxable = ($net_pay - $pension_employee);
         $taxable = ($total_gross - $pension_employee);
