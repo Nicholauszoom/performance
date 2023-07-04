@@ -566,7 +566,9 @@ public function saveLeave(Request $request) {
                   $leaves->application_date = date('Y-m-d');
                   // For Leave Attachments
                     if ($request->hasfile('image')) {
-
+                        $request->validate([
+                            'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                        ]);
                     $newImageName = $request->image->hashName();
                     $request->image->move(public_path('storage\leaves'), $newImageName);
                     $leaves->attachment =  $newImageName;
@@ -780,6 +782,9 @@ public function saveLeave(Request $request) {
                   $leaves->application_date = date('Y-m-d');
                  // START
                   if ($request->hasfile('image')) {
+                    $request->validate([
+                        'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                    ]);
 
                     $newImageName = $request->image->hashName();
                     $request->image->move(public_path('storage\leaves'), $newImageName);
@@ -1006,6 +1011,9 @@ public function saveLeave(Request $request) {
               $leaves->sub_category = $request->sub_cat;
               $leaves->application_date = date('Y-m-d');
               if ($request->hasfile('image')) {
+                $request->validate([
+                    'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                ]);
                 $newImageName = $request->image->hashName();
                 $request->image->move(public_path('storage/leaves'), $newImageName);
                 $leaves->attachment =  $newImageName;
@@ -1257,7 +1265,9 @@ public function saveLeave(Request $request) {
 
             // START
             if ($request->hasfile('image')) {
-
+                $request->validate([
+                    'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                ]);
               $newImageName = $request->image->hashName();
               $request->image->move(public_path('storage/leaves'), $newImageName);
               // $employee->photo = $newImageName;
