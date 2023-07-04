@@ -10286,8 +10286,9 @@ $this->authenticateUser('add-payroll');
     {
 
 
-        $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
-        $empID = session('emp_id');
+        $empID = auth()->user()->emp_id;
+        $data['myloan'] = $this->flexperformance_model->mysalary_advance($empID);
+
 
         $data['my_loans'] = $this->flexperformance_model->my_confirmedloan($empID);
 
