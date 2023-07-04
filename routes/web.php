@@ -70,15 +70,16 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
+    //Route::get('file-import','Admin\JournalImportController@importView')->name('import-view');
+    Route::any('generate-pdf',[App\Http\Controllers\PDFController::class,'generatePDF']);
 
-
-    Route::any('import',[ImportEmployeeController::class,'import'])->middleware([WorkForce::class])->name('import.employee');
-    Route::any('download',[ImportEmployeeController::class,'download'])->middleware([WorkForce::class])->name('export.employee');
+    Route::any('import',[ImportEmployeeController::class,'import'])->name('import.employee');
+    Route::any('download',[ImportEmployeeController::class,'download'])->name('export.employee');
 
     //->middleware('auth')->middleware([Dashboard::class]);
 
     // project
-
+    Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -1347,7 +1348,3 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 Route::post('/password-reset', [NewPasswordController::class, 'store'])->middleware('guest')->name('password.new');
 require __DIR__ . '/auth.php';
-
-Route::get('composer.json', function () {
-    abort(404);
-});
