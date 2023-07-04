@@ -80,9 +80,9 @@ Route::middleware('auth')->group(function () {
     // project
 
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->middleware([WorkForce::class])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->middleware([WorkForce::class])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->middleware([WorkForce::class])->name('profile.destroy');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
 Route::middleware('auth')->middleware([Setting::class])->group(function(){
