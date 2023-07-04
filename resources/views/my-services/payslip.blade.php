@@ -30,7 +30,9 @@
     $empID = auth()->user()->emp_id;
 @endphp
                         <div class="card-body">
-                            <div id="payrollFeedback"></div>
+                            <div id="payrollFeedback">
+                                @include('layouts.alerts.message')
+                            </div>
 
                             <div class="row">
                                 <div class="col-md-12">

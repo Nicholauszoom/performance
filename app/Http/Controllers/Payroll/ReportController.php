@@ -826,11 +826,15 @@ class ReportController extends Controller
 
             if ($check == 0) {
                 if ($profile == 0) {
-                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    //session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/payroll/employee_payslip/');
+                    return redirect()->back()->with(['error'=>'Sorry No Payroll Records Found For This Employee under the Selected Month']);
                 } else {
-                    session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                    return redirect('/flex/userprofile/?id=' . $empID);
+                   // session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                   // return redirect(url('/flex/userprofile/?id=' . base64_encode($empID)));
+                   return redirect()->back()->with(['error'=>'Sorry No Payroll Records Found For This Employee under the Selected Month']);;
+                    
+                    
                 }
             } else {
                 $emp = Employee::where('emp_id',$empID)->first();

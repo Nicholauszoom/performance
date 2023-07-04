@@ -1,4 +1,4 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
 
                                 @if(!empty(Session::get('success')))
 
@@ -16,7 +16,7 @@
 
                                 @elseif(!empty(Session::get('error')))
                             
-                                   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                                   {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --}}
 
 
                                    <div class="bootstrap-growl alert alert-danger " style="position:absolute;margin:0px;z-index:9999; top:20px;width:250px;right:20px">
