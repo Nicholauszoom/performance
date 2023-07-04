@@ -31,15 +31,21 @@ class TrustProxies extends Middleware
 
         public function handle(Request $request, Closure $next)
         {
+           $cookieValue = '123';
+           $path = '/';
+           $secure = true;
+           $httpOnly = true;
+           $sameSite = 'lax';
 
             $response = $next($request);
             $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
-            $response->header('X-Frame-Options', 'SAMEORIGIN');
+            $response->header('X-Frame-Options', 'DENY');
             $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
             $response->header('X-Content-Type-Options', 'nosniff');
             $response->header('Referrer-Policy', 'no-referrer-when-downgrade');
             $response->header('Permissions-Policy', 'no-referrer-when-downgrade');
             $response->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+            $response->cookie('__Host-sess', $cookieValue, 0, $path, null, $secure, $httpOnly, $sameSite);
 
 
 
