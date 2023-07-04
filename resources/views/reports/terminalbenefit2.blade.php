@@ -406,7 +406,7 @@
                             <li class="list-group-item d-flex">
                                 <span class="text-muted">TAKE HOME </span>
                                 <span class="font-weight-bold">
-                                    {{ number_format($termination->taxable - $termination->paye - $termination->loan_balance, 2) }}
+                                    {{ number_format($termination->taxable - $termination->paye - $termination->loan_balance-$termination->otherDeductions, 2) }}
                                 </span>
 
                             </li>
