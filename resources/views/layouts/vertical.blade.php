@@ -89,7 +89,7 @@ border-radius: 50%;
 
                 <!-- Content area -->
                 <div class="content">
-
+                    @include('layouts.alerts.message')
                     @yield('content')
                 </div>
                 <!-- /content area -->

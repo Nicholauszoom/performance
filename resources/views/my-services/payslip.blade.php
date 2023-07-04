@@ -31,7 +31,7 @@
 @endphp
                         <div class="card-body">
                             <div id="payrollFeedback">
-                                @include('layouts.alerts.message')
+                                
                             </div>
 
                             <div class="row">
