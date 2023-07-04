@@ -38,6 +38,11 @@ class TrustProxies extends Middleware
             $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
             $response->header('X-Content-Type-Options', 'nosniff');
             $response->header('Referrer-Policy', 'no-referrer-when-downgrade');
+            $response->header('Permissions-Policy', 'no-referrer-when-downgrade');
+            $response->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+
+
+
 
 
 
