@@ -9641,7 +9641,8 @@ $this->authenticateUser('add-payroll');
         $employee->update();
 
         //    return redirect('flex/employee')->with('status', 'Image Has been uploaded');
-        return redirect('flex/employee-profile/' . base64_encode($user))->with('msg', 'Employee Image has been updated successfully !');
+       // return redirect('flex/employee-profile/' . base64_encode($user))->with('msg', 'Employee Image has been updated successfully !');
+        return redirect()->back();
     }
 
 
