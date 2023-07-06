@@ -47,6 +47,7 @@ return [
     'socket_read_timeout' => env('CLAMAV_SOCKET_READ_TIMEOUT', 30),
 
     /*
+   
     |--------------------------------------------------------------------------
     | Throw exceptions instead of returning failures when scan fails.
     |--------------------------------------------------------------------------
