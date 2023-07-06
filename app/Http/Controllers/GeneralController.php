@@ -35,6 +35,8 @@ use App\Models\LeaveApproval;
 use App\Models\BehaviourRatio;
 use App\Models\EmployeeDetail;
 use App\Models\InputSubmission;
+//use PHPClamAV\Scanner;
+use PHPClamav\Facades\Clamav;
 
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSkills;
@@ -9601,9 +9603,9 @@ $this->authenticateUser('add-payroll');
     public function updateImg(Request $request)
     {
 
-        request()->validate([
-            'image' => 'required'
-        ]);
+        // request()->validate([
+        //     'image' => 'required'
+        // ]);
         $user = $request->empID;
 
         if(auth()->user()->emp_id != $user){
@@ -9616,11 +9618,17 @@ $this->authenticateUser('add-payroll');
         if ($request->hasfile('image')) {
 
             $request->validate([
-                'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'image' => 'required|clamav',
             ]);
 
+
+
             $newImageName = $request->image->hashName();
-            $request->image->move(public_path('storage/profile'), $newImageName);
+            $filePath  = $request->image->move(public_path('storage/profile'), $newImageName);
+           // $path = $filePath->path();
+            //$scanner = new Scanner();
+           // $result = Clamav::scanFile($filePath);
+
 
             //    $filename=time().'.'.$file->getClientOriginalExtension();
             //    $file->move('uploads/userprofile/', $filename);

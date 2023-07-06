@@ -99,6 +99,9 @@
           <div class="sidebar-section-body text-center">
               <div class="card-img-actions d-inline-block my-3">
                 {{-- rounded-circle --}}
+                @error('image')
+    <div class="error">{{ $message }}</div>
+          @enderror
                   <img class="img " src="{{ ($photo == 'user.png') ? asset('img/user.png') : asset('storage/profile/' . $photo) }}" width="200px" height="200px" alt="">
               </div>
 
