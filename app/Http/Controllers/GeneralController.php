@@ -8813,7 +8813,7 @@ $this->authenticateUser('add-payroll');
 
         if ($request->hasfile('image')) {
             $request->validate([
-                'image' => 'required|image|mimes:pdf|max:5048',
+                'image' => 'required|image|mimes:pdf|clamav|max:5048',
             ]);
 
 
@@ -9355,7 +9355,7 @@ $this->authenticateUser('add-payroll');
 
                 if ($request->hasfile('certificate')) {
                     $request->validate([
-                        'certificate' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                        'certificate' => 'mimes:jpg,png,jpeg,pdf|clamav|max:2048',
                     ]);
                     $newImageName = $request->certificate->hashName();
                     $request->certificate->move(public_path('storage\certificates'), $newImageName);
@@ -9382,7 +9382,7 @@ $this->authenticateUser('add-payroll');
 
                 if ($request->hasfile('certificate2')) {
                     $request->validate([
-                        'certificate2' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                        'certificate2' => 'mimes:jpg,png,jpeg,pdf|clamav|max:2048',
                     ]);
                     $newImageName = $request->certificate2->hashName();
                     $request->certificate2->move(public_path('storage\certifications'), $newImageName);
@@ -9414,7 +9414,7 @@ $this->authenticateUser('add-payroll');
                 $employee = EMPL::where('emp_id', $user)->first();
                 if ($request->hasfile('image')) {
                     $request->validate([
-                        'image' => 'required|image|mimes:pdf|max:5048',
+                        'image' => 'required|image|clamav|mimes:pdf|max:5048',
                     ]);
                     $newImageName = $request->image->hashName();
                     $request->image->move(public_path('storage\profile'), $newImageName);
@@ -9618,7 +9618,7 @@ $this->authenticateUser('add-payroll');
         if ($request->hasfile('image')) {
 
             $request->validate([
-                'image' => 'required|clamav',
+                'image' => 'required|clamav|mimes:jpg,png,jpeg,pdf',
             ]);
 
 
@@ -10264,7 +10264,7 @@ $this->authenticateUser('add-payroll');
         $grievance->forwarded_by = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
             $request->validate([
-                'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                'attachment' => 'mimes:jpg,png,jpeg,pdf|clamav|max:2048',
             ]);
             $newAttachmentName = $request->attachment->hashName();
             $request->attachment->move(public_path('storage\grieavences-supports'), $newAttachmentName);
@@ -10366,7 +10366,7 @@ $this->authenticateUser('add-payroll');
         $grievance->empID = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
             $request->validate([
-                'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                'attachment' => 'mimes:jpg,png,jpeg,pdf|clamav|max:2048',
             ]);
             $newAttachmentName = $request->attachment->hashName();
             $request->attachment->move(public_path('storage\grieavences-attachments'), $newAttachmentName);

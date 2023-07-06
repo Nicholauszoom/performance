@@ -31,5 +31,5 @@ class EmployeeTermination
         }
 
         abort(Response::HTTP_UNAUTHORIZED);
-    }
+     }
 }
