@@ -9091,59 +9091,91 @@ $this->authenticateUser('add-payroll');
 
                 // start of name information validation
                 'employeeID' => 'required',
-                'fname' => 'required',
-                'mname' => 'nullable',
-                'lname' => 'required',
-                'maide_name' => 'nullable',
+                'fname' => 'required|alpha',
+                'mname' => 'nullable|alpha',
+                'lname' => 'required|alpha',
+                'maide_name' => 'nullable|alpha',
 
 
                 // start of biographical informations
                 'bithdate' => 'nullable',
-                'country_of_birth' => 'nullable',
+                'country_of_birth' => 'nullable|alpha',
                 'gender' => 'required',
                 // 'martial' => 'nullable',
-                'religion' => 'nullable',
+                'religion' => 'nullable|alpha',
 
                 // Address Information
-                'physical_address' => 'nullable',
-                'landmark' => 'nullable',
+                'physical_address' => 'nullable|alpha',
+                'landmark' => 'nullable|alpha',
 
                 // Start of Personal Identification details
                 'TIN' => 'required',
                 'NIDA' => 'required',
-                'passport' => 'nullable',
+                'passport' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
                 'pension' => 'required',
                 'HELSB' => 'nullable',
 
                 // Start of Emmegence Contact
 
-                'em_fname' => 'nullable',
-                'em_mname' => 'nullable',
+                'em_fname' => 'nullable|alpha',
+                'em_mname' => 'nullable|alpha',
                 'spouse_birthplace' => 'nullaspousee',
-                'em_relationship' => 'nullable',
-                'em_ocupation' => 'nullable',
+                'em_relationship' => 'nullable|alpha',
+                'em_ocupation' => 'nullable|alpha',
                 'em_phone' => 'nullable',
 
                 // Start of Employment Details
                 'employment_date' => 'nullable',
-                'former_title' => 'nullable',
-                'current_title' => 'nullable',
-                'department' => 'nullable',
-                'line_manager' => 'nullable',
-                'hod' => 'nullable',
-                'employee_status' => 'nullable',
+                'former_title' => 'nullable|alpha',
+                'current_title' => 'nullable|alpha',
+                'department' => 'nullable|alpha',
+                'line_manager' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
+                'hod' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
+                'employee_status' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
 
                 // start of spouse details
-                'spouse_name' => 'nullable',
+                'spouse_name' => 'nullable|alpha',
                 'spouse_birthdate' => 'nullable',
-                'spouse_birthplace' => 'nullable',
-                'spouse_nationality' => 'nullable',
-                'spouse_employer' => 'nullable',
-                'spouse_job_title' => 'nullable',
-                'spouse_medical_status' => 'nullable',
+                'spouse_birthplace' => 'nullable|alpha',
+                'spouse_nationality' => 'nullable|alpha',
+                'spouse_employer' => 'nullable|alpha',
+                'spouse_job_title' => 'nullable|alpha',
+                'spouse_medical_status' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
 
                 // start of children details
+                'dep_name' => 'nullable|alpha',
+                'dep_surname' => 'nullable|alpha',
 
+                //start of parent details
+                'parent_names' => 'nullable|alpha',
+                'parent_relation' => 'nullable|alpha',
+                'parent_living_status' => 'nullable|alpha|regex:/^[A-Za-z0-9 ]+$/',
+                'parent_residence' => 'nullable|alpha|regex:/^[A-Za-z0-9 ]+$/',
+
+                //start of academic details
+                'institute' => 'nullable|alpha',
+                'level' => 'nullable|alpha',
+                'parent_living_status' => 'nullable|alpha',
+
+                //profesional qualification
+                'cert_start' => 'nullable|numeric',
+                'cert_end' => 'nullable|numeric',
+                'cert_name' => 'nullable|alpha',
+
+                'cert_qualification' => 'nullable|alpha',
+                'cert_name' => 'nullable|alpha',
+                'cert_number' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
+                'cert_status' => 'nullable',
+
+                //employment history
+                'hist_start' => 'nullable|numeric',
+                'hist_end' => 'nullable|numeric',
+                'hist_employer' => 'nullable|alpha',
+
+                'hist_industry' => 'nullable|alpha',
+                'hist_position' => 'nullable|alpha',
+                'hist_reason' => 'nullable|alpha',
+                'cert_status' => 'nullable'
 
                 // start of former works
             ]
