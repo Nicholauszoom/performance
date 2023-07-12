@@ -1997,6 +1997,16 @@ class GeneralController extends Controller
 
     public function applyOvertime(Request $request)
     {
+        request()->validate(
+            [
+
+                // start of name information validation
+
+
+                'reason' => 'required|alpha',
+
+
+            ]);
 
         $start = $request->input('time_start');
         $finish = $request->input('time_finish');
@@ -9122,7 +9132,7 @@ $this->authenticateUser('add-payroll');
                 'spouse_birthplace' => 'nullaspousee',
                 'em_relationship' => 'nullable|alpha',
                 'em_ocupation' => 'nullable|alpha',
-                'em_phone' => 'nullable',
+                'em_phone' => 'nullable:numeric',
 
                 // Start of Employment Details
                 'employment_date' => 'nullable',
@@ -10411,6 +10421,18 @@ $this->authenticateUser('add-payroll');
     // For Saving New Grievances
     public function save_grievance(Request $request)
     {
+
+        request()->validate(
+            [
+
+                // start of name information validation
+
+
+                'title' => 'nullable|alpha',
+                'description' => 'required|alpha',
+
+
+            ]);
         $grievance = new Grievance();
         $grievance->title = $request->title;
         $grievance->description = $request->description;

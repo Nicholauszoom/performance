@@ -477,6 +477,18 @@ class AttendanceController extends Controller
 
 
 public function saveLeave(Request $request) {
+
+    request()->validate(
+        [
+
+            // start of name information validation
+
+            'mobile' => 'required|numeric',
+            'leave_address' => 'nullable|alpha',
+            'reason' => 'required|alpha',
+
+
+        ]);
         $start = $request->start;
         $end = $request->end;
 
