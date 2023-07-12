@@ -70,17 +70,7 @@
 
     <form action="{{ route('flex.saveDetails') }}" method="post" enctype="multipart/form-data">
         @csrf
-        @if ($errors->any())
-        <div class="btn disabled btn-danger ">
-            <div class="col-12">
-                @foreach ($errors->all() as $error)
-                <p>{{$error}}</p>
-                @endforeach
-            </div>
 
-        </div>
-
-        @endif
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
     <div class="row">
         <div class="col-md-12">

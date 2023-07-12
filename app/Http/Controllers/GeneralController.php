@@ -9400,7 +9400,7 @@ $this->authenticateUser('add-payroll');
 
                 if ($request->hasfile('certificate')) {
                     $request->validate([
-                        'image' => 'required|clamav',
+                        'certificate' => 'required|clamav',
                     ]);
                     $request->validate([
                         'certificate' => 'mimes:jpg,png,jpeg,pdf|max:2048',
@@ -9430,7 +9430,7 @@ $this->authenticateUser('add-payroll');
 
                 if ($request->hasfile('certificate2')) {
                     $request->validate([
-                        'image' => 'required|clamav',
+                        'certificate2' => 'required|clamav',
                     ]);
                     $request->validate([
                         'certificate2' => 'mimes:jpg,png,jpeg,pdf|max:2048',
@@ -10322,7 +10322,7 @@ $this->authenticateUser('add-payroll');
         $grievance->forwarded_by = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
             $request->validate([
-                'image' => 'required|clamav',
+                'attachment' => 'required|clamav',
             ]);
             $request->validate([
                 'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',
@@ -10439,7 +10439,7 @@ $this->authenticateUser('add-payroll');
         $grievance->empID = Auth::user()->emp_id;
         if ($request->hasfile('attachment')) {
             $request->validate([
-                'image' => 'required|clamav',
+                'attachment' => 'required|clamav',
             ]);
             $request->validate([
                 'attachment' => 'mimes:jpg,png,jpeg,pdf|max:2048',

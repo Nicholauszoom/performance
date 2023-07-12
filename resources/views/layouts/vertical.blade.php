@@ -90,6 +90,17 @@ border-radius: 50%;
                 <!-- Content area -->
                 <div class="content">
                     @include('layouts.alerts.message')
+                    @if ($errors->any())
+                    <div class="btn disabled btn-danger ">
+                        <div class="col-12">
+                            @foreach ($errors->all() as $error)
+                            <p>{{$error}}</p>
+                            @endforeach
+                        </div>
+
+                    </div>
+
+                    @endif
                     @yield('content')
                 </div>
                 <!-- /content area -->
