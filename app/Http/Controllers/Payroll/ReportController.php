@@ -833,8 +833,8 @@ class ReportController extends Controller
                    // session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                    // return redirect(url('/flex/userprofile/?id=' . base64_encode($empID)));
                    return redirect()->back()->with(['error'=>'Sorry No Payroll Records Found For This Employee under the Selected Month']);;
-                    
-                    
+
+
                 }
             } else {
                 $emp = Employee::where('emp_id',$empID)->first();
@@ -2175,7 +2175,7 @@ class ReportController extends Controller
         $count_current_month = $this->reports_model->s_count($current_payroll_month);
 
         $current_decrease =  $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
-        $current_increase = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
+        $current_increase = $this->reports_model->basic_increase_temp($previous_payroll_month, $current_payroll_month);
 
 
         $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month,$previous_payroll_month);
@@ -2190,6 +2190,7 @@ class ReportController extends Controller
             $data['employee_decrease'] = $this->reports_model->employee_decrease1($current_payroll_month, $previous_payroll_month);
 
         }
+       // dd($current_increase['basic_increase']);
 
         if ($current_increase['basic_increase'] > 0) {
             //add increase in basic pay

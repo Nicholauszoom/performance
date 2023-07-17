@@ -171,7 +171,7 @@
                                     <td class="text-end">{{ number_format($row2->pension_employee, 2) }}
                                     </td>
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
-                                    <td class="text-end">{{ number_format($row2->loan_balance, 0) }}</td>
+                                    <td class="text-end">{{ number_format($row2->loan_balance+$row2->otherDeductions, 0) }}</td>
                                     <td class="text-end">
                                         {{ number_format($row2->pension_employee + $row2->paye + $row2->otherDeductions, 0) }}
                                     </td>

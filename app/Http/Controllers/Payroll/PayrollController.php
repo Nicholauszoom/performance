@@ -251,6 +251,8 @@ class PayrollController extends Controller
     public function temp_payroll_info(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
+        //$payrollMonth = '2023-07-17';
+
 
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_month_info'] = $this->payroll_model->payroll_month_info($payrollMonth);
@@ -644,7 +646,7 @@ dd($data['current_increase']);
     public function payroll_info(Request $request)
     {
         $payrollMonth = base64_decode($request->pdate);
-        
+
         $data['payroll_details'] = $this->payroll_model->getPayroll($payrollMonth);
         $data['payroll_list'] = $this->payroll_model->employeePayrollList($payrollMonth, "allowance_logs", "deduction_logs", "loan_logs", "payroll_logs");
         $data['payroll_totals'] = $this->payroll_model->payrollTotals("payroll_logs", $payrollMonth);

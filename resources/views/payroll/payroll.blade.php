@@ -113,7 +113,7 @@
                                         <script>
                                         setTimeout(function() {
                                             var url =
-                                                "{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($payrollList[0]->payroll_date)])}}"
+                                                "{{route('payroll.temp_payroll_info',['pdate'=>base64_encode($row->payroll_date)])}}"
                                             window.location.href = url;
                                         }, 1000)
                                         </script>
