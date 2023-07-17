@@ -2485,7 +2485,7 @@ class GeneralController extends Controller
     {
 
 
-        $this->authenticateUser(' edit-payroll');
+        $this->authenticateUser('edit-payroll');
         // if(session('mng_paym')||session('recom_paym')||session('appr_paym')){
         $data['overtime'] = $this->flexperformance_model->approvedOvertimes();
         $data['imprests'] = $this->imprest_model->confirmedImprests();
