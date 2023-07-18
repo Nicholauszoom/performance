@@ -92,7 +92,7 @@
                     </li>
                 </ul>
             </div>
-
+<!-------   -->
             <div
                 class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0border-0 shadow-none">
                 <div class="card-header border-0 shadow-none">
@@ -273,7 +273,7 @@
 
                             <div class="tab-content " id="myTabContent">
                                 {{-- work --}}
-                              
+
                                 {{-- / --}}
 
                                 {{-- Permission --}}
