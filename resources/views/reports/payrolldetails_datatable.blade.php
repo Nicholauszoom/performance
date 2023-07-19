@@ -25,7 +25,7 @@
                 <tr>
                     <th ><b>Pay No</b></th>
                                 <td></td>
-                                <th  colspan="2" class="text-center"><b>Name</b><br>
+                                <th  class="text-center"><b>Name</b><br>
                                 </th>
                                 <th  class="text-end"><b>Basic Salary</b></th>
                                 <th  class="text-end"><b>Overtime</b></th>
@@ -91,10 +91,9 @@
 
                                 <td class="text-end">{{ $row->emp_id }}</td>
                                 <td></td>
-                                <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }} @if($row->fname == ""|| $row->fname == "" ) {{ substr($row->lname, 0, 3) }} @else @endif
+                                <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
                                 </td>
-                                <td class="" style="margin-left: 0px;" colspan="">{{ $row->lname }} @if($row->fname == ""|| $row->fname == "" ) {{ substr($row->lname, 0, 3) }} @else  @endif
-                                </td>
+
 
                                 <td class="text-end">{{ number_format($row->salary, 0) }}</td>
 
@@ -137,10 +136,9 @@
                                     <td class="">{{ $row2->emp_id }}</td>
 
                                     <td></td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->fname }}
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->fname }} {{ $row2->mname }} {{ $row2->lname }}
                                     </td>
-                                    <td class="" style="margin-left: 0px;" colspan="">{{ $row2->lname }}
-                                    </td>
+
 
 
                                     <td class="text-end">{{ number_format($row2->salaryEnrollment, 0) }}
@@ -199,9 +197,9 @@
                             <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
 
                                 {{-- <td></td>
-                                <td></td>
                                 <td></td> --}}
-                                <td colspan="4">
+                                <td></td>
+                                <td>
                                         <b>
                                             <center><b>TOTAL<b></center>
                                             </b></td>
