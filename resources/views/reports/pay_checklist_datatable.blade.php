@@ -23,17 +23,17 @@
         <table class="table datatable-button-html5-columns">
             <thead>
                 <tr>
-                    <th ><b>Pay No</b></th>
+                    <th><b>Pay No</b></th>
 
-                                <th   class="text-center"><b>Name</b><br>
-                                </th>
-                                <th  class="text-end"><b>Bank</b></th>
-                                <th  class="text-end"><b>BranchCode</b></th>
+                    <th class="text-center"><b>Name</b><br>
+                    </th>
+                    <th class="text-end"><b>Bank</b></th>
+                    <th class="text-end"><b>BranchCode</b></th>
 
-                                <th  class="text-end"><b>Account No</b></th>
-                                <th  class="text-end"><b>Currency</b></th>
+                    <th class="text-end"><b>Account No</b></th>
+                    <th class="text-end"><b>Currency</b></th>
 
-                                <th  class="text-end"><b>Net Pay</b></th>
+                    <th class="text-end"><b>Net Pay</b></th>
 
 
                 </tr>
@@ -77,49 +77,51 @@
 
                             ?>
 
-                            <tr>
+                <tr>
 
-                                <td class="text-end">{{ $row->emp_id }}</td>
+                    <td class="text-end">{{ $row->emp_id }}</td>
 
-                                <td  style="margin-right: 0px" >
-                                    {{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
-                                </td>
-
-
-                                <td class="text-end">{{ $row->bank_name }}</td>
-
-                                <td class="text-end">{{ $row->branch_code }}</td>
-
-                                <td class="text-end">{{ $row->account_no }}</td>
+                    <td style="margin-right: 0px">
+                        {{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
+                    </td>
 
 
-                                <td class="text-end">{{ $row->currency }}</td>
+                    <td class="text-end">{{ $row->bank_name }}</td>
+
+                    <td class="text-end">{{ $row->branch_code }}</td>
+
+                    <td class="text-end">{{ $row->account_no }}</td>
 
 
-                                <td class="text-end">{{ number_format($amount/$row->rate, 0) }}</td>
+                    <td class="text-end">{{ $row->currency }}</td>
 
 
-                            </tr>
+                    <td class="text-end">{{ number_format($amount / $row->rate, 0) }}</td>
 
-                            <?php } } ?>
+
+                </tr>
+
+                <?php } } ?>
             </tbody>
-                            <tfoot>
-                            <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
+            <tfoot>
+                <tr style="font-size:10px; !important; border:3px solid rgb(9, 5, 64)">
 
-                                {{-- <td></td>
-                                <td></td>
-                                <td></td> --}}
-                                <td colspan="7">
-                                        <b>
-                                            <b>TOTAL<b>
-                                            </b></td>
+<td></td>
+<td></td>
+                    <td>
+                        <b>
+                            <b>TOTAL<b>
+                        </b>
+                    </td>
+<td></td>
+<td></td>
+<td></td>
+                    <td  class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
 
-                                <td colspan="2" class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
+                </tr>
+            </tfoot>
 
-                            </tr>
-                        </tfoot>
-
-                            <?php  } ?>
+            <?php  } ?>
         </table>
     </div>
 
