@@ -24,15 +24,15 @@
             <thead>
                 <tr>
                     <th ><b>Pay No</b></th>
-                                <td></td>
-                                <th  colspan="2" class="text-center"><b>Name</b><br>
+
+                                <th   class="text-center"><b>Name</b><br>
                                 </th>
                                 <th  class="text-end"><b>Bank</b></th>
                                 <th  class="text-end"><b>BranchCode</b></th>
 
                                 <th  class="text-end"><b>Account No</b></th>
                                 <th  class="text-end"><b>Currency</b></th>
-                             
+
                                 <th  class="text-end"><b>Net Pay</b></th>
 
 
@@ -80,11 +80,11 @@
                             <tr>
 
                                 <td class="text-end">{{ $row->emp_id }}</td>
-                                <td></td>
-                                <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }} @if($row->fname == ""|| $row->fname == "" ) {{ substr($row->lname, 0, 3) }} @else @endif
+
+                                <td  style="margin-right: 0px" >
+                                    {{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
                                 </td>
-                                <td class="" style="margin-left: 0px;" colspan="">{{ $row->lname }} @if($row->fname == ""|| $row->fname == "" ) {{ substr($row->lname, 0, 3) }} @else  @endif
-                                </td>
+
 
                                 <td class="text-end">{{ $row->bank_name }}</td>
 
@@ -94,8 +94,8 @@
 
 
                                 <td class="text-end">{{ $row->currency }}</td>
-          
-                 
+
+
                                 <td class="text-end">{{ number_format($amount/$row->rate, 0) }}</td>
 
 
@@ -113,7 +113,7 @@
                                         <b>
                                             <b>TOTAL<b>
                                             </b></td>
-                               
+
                                 <td colspan="2" class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
 
                             </tr>
