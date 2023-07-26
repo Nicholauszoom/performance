@@ -51,7 +51,17 @@ class ImportPension implements ToCollection,WithHeadingRow
 
            ];
 
-          DB::table('payroll_logs')->insert($data);
+
+        //    $result = DB::table('employee')->where('id','<',490)->where('emp_id',$row['emp_id'])->select('emp_id')->first();
+        //    if(!empty($result)){
+
+        //     DB::table('payroll_logs')->where('empID',$row['emp_id'])->update($data);
+        //    }else{
+
+            DB::table('payroll_logs')->insert($data);
+        //   }
+
+
 
 
 

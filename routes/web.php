@@ -109,6 +109,9 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
     // Routes with workforce access permission
     Route::prefix('flex')->middleware([WorkForce::class])->controller(GeneralController::class)->group(function(){
+       //charts routes
+
+       Route::any('/chart-line-ajax','employeeChart')->name('flex.chart-line-ajax');
 
 
          // start of overtime routes

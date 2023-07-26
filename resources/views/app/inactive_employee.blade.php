@@ -83,7 +83,7 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-body text-warning">Exit Requests</div>
 
-  <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
+  <table id="datatable-keytable1" class="table table-striped table-bordered datatable-basic">
     <thead>
       <tr>
         <th>No.</th>
@@ -160,7 +160,7 @@
 <div class="card border-top  border-top-width-3 border-top-main rounded-0">
   <div class="card-body text-warning">Exit Employee List</div>
 
-  <table id="datatable-keytable" class="table table-striped table-bordered datatable-basic">
+  <table id="datatable" class="table table-striped table-bordered datatable-basic">
     <thead>
       <tr>
         <th>No.</th>
@@ -182,7 +182,7 @@
         <tr id="activeRecord<?php echo $row->logID; ?>">
           <td width="1px"><?php echo $row->SNo; ?></td>
           <td>
-            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/'.$row->emp_id; ?>"><?php echo $row->NAME; ?></a>
+            <a title="More Details"  href="<?php echo  url('') .'/flex/userprofile/'.base64_encode($row->emp_id); ?>"><?php echo $row->NAME; ?></a>
           </td>
           <td ><?php echo $row->gender; ?></td>
           <td><?php echo "<b>Department: </b>".$row->DEPARTMENT."<br><b>Position: </b>".$row->POSITION; ?></td>

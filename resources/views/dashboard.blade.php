@@ -87,6 +87,7 @@
         {{-- /col --}}
 
         {{-- Start of Self Services  --}}
+        @if(!auth()->user()->can('view-dashboard'))
         <section>
             <div class="row">
                 <div class="col-md-3 col-6">
@@ -170,6 +171,7 @@
                 </div>
             </div>
         </section>
+        @endif
         {{-- end  of self-service --}}
 
         {{-- start of dashboard statistics --}}
@@ -205,77 +207,63 @@
 
                     </div>
                 @endif
-                {{-- /col --}}
-                {{--
-        <div class="col-xl-12">
-            <div class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0 card-layout">
-                <div class="card-header bg-main text-center">
-                    <h5 class="mb-0" >Current Payroll Summary ({{ date('F, Y', strtotime($payroll_date)) }})</h5>
+
+        {{-- <div class="col-md-6">
+            <div
+                class="card border-top border-bottom border-bottom-width-3 border-top-width-3 border-top-main border-bottom-main rounded-0rounded-0 card-layout">
+
+                <div class="card-body">
+
+                    <select class="sel" name="year">
+
+
+
+                        <option value="2022">Year 2022</option>
+
+                        <option value="2021">Year 2021</option>
+                        <option value="2023">Year 2023</option>
+
+                    </select>
+
+
+
+                    <div style="width: 80%;margin: 0 auto;">
+
+                        {!! $chart->container() !!}
+
+                    </div>
+
+
+
+
+
+
+
+                    {!! $chart->script() !!}
+
+
+
+                    <script type="text/javascript">
+
+                        var original_api_url = {{ $chart->id }}_api_url;
+
+                        $(".sel").change(function(){
+
+                            var year = $(this).val();
+
+                            {{ $chart->id }}_refresh(original_api_url + "?year="+year);
+
+                        });
+
+                    </script>
                 </div>
 
-                <table class="table table-bordered">
-                    <tbody>
-                        <tr>
-                            <th>Basic Salaries</th>
-                            <td>{{ number_format($salary, 2) }}</td>
-                        </tr>
-                        <tr>
-                            @if ($allowances > 0)
-                                <th>Allowances</th>
-                                <td>{{ number_format($allowances, 2) }}</td>
-                            @endif
-                        </tr>
-                        <tr>
-                            <th>Gross Salaries (Total)</th>
-                            <td>{{ number_format($salary + $allowances, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Net Salary</th>
-                            <td>{{ number_format($net_total, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <th>Total Pension</th>
-                            <td>{{ number_format($pension_employer + $pension_employee, 2) }}</td>
-                        </tr>
-                        @if ($arrears > 0)
-                            <tr>
-                                <th>Arrears</th>
-                                <td>{{ number_format($arrears, 2) }}</td>
-                            </tr>
-                        @endif
-                        @if ($medical_employer + $medical_employee > 0)
-                            <tr>
-                                <th>Total Medical</th>
-                                <td>{{ number_format($medical_employer + $medical_employee) }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <th>Taxdue (PAYE)</th>
-                            <td>{{ number_format($taxdue, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <th>WCF</th>
-                            <td>{{ number_format(($salary + $allowances) * 0.01, 2) }}</td>
-                        </tr>
-                        <tr>
-                            <th>SDL</th>
-                            <td>{{ number_format($taxdue, 2) }}</td>
-                        </tr>
-                        @if ($total_heslb > 0)
-                            <tr>
-                                <th>HESLB</th>
-                                <td>{{ number_format($total_heslb, 2) }}</td>
-                            </tr>
-                        @endif
-                        <tr>
-                            <th>Total Employees Cost</th>
-                            <th>{{ number_format($salary + $allowances + $sdl + ($salary + $allowances) * 0.01 + $pension_employer + $medical_employer, 2) }}
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
+
+
+
             </div>
         </div> --}}
+
 
                 <div class="col-md-12">
                     <div

@@ -700,10 +700,18 @@
                 contentType: false,
                 cache: false,
                 processData: false,
+                beforeSend: function () {
+                    $('.request__spinner').show() },
+                    complete: function(){
+
+                    },
                 success: function(data) {
                     $('#file').val('');
                     //load_data();
                     alert(' Employees Succefully Imported');
+                    setTimeout(function() { // wait for 2 secs(2)
+                                    location.reload(); // then reload the div to clear the success notification
+                                }, 1500);
                 }
             })
         });

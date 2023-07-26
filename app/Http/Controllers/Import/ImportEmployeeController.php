@@ -31,10 +31,10 @@ class ImportEmployeeController extends Controller
         // $data1 = Excel::import(new ImportBranches, $request->file('file')->store('files'));
 
 
-         //$data1 = Excel::import(new ImportPension, $request->file('file')->store('files'));
+         $data1 = Excel::import(new ImportPension, $request->file('file')->store('files'));
 
 
-         $data1 = Excel::import(new ImportLeaves, $request->file('file')->store('files'));
+         //$data1 = Excel::import(new ImportLeaves, $request->file('file')->store('files'));
 
 
        // $data1 = Excel::import(new ImportAllowances, $request->file('file')->store('files'));

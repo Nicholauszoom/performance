@@ -834,7 +834,7 @@ function retire_list()
 	function inactive_employee3()
 	{
 		$query="SELECT @s:=@s+1 SNo, p.name as POSITION, d.name as DEPARTMENT, ad.state as log_state, ad.current_state, ad.author as initiator,
-		e.*, ad.id as logID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department and e.state = 4  ORDER BY ad.id DESC, ad.current_state ASC ";
+		e.*, ad.id as logID, CONCAT(e.fname,' ',IF( e.mname != null,e.mname,' '),' ', e.lname) as NAME, (SELECT CONCAT(el.fname,' ', el.mname,' ', el.lname) from employee el where el.emp_id=e.line_manager ) as LINEMANAGER FROM employee e, activation_deactivation ad,  department d, position p , (select @s:=0) as s WHERE ad.empID = e.emp_id  and  p.id=e.position and d.id=e.department  and e.state = 4  ORDER BY  ad.current_state ASC ";
 
 		return DB::select(DB::raw($query));
 	}
@@ -1377,6 +1377,7 @@ function retire_list()
 
 	function userprofile($empID)
 	{
+      
 		$query = "SELECT e.*, bank.name as bankName, ctry.name as country, b.name as branch_name,  bb.name as bankBranch, d.name as deptname, c.name as CONTRACT, p.name as pName, (SELECT CONCAT(fname,' ', mname,' ', lname) from employee where  emp_id = e.line_manager) as LINEMANAGER from employee e, department d, contract c, country ctry, position p, bank, branch b, bank_branch bb WHERE d.id=e.department and p.id=e.position and e.contract_type = c.id AND e.bank_branch = bb.id and ctry.code = e.nationality AND e.bank = bank.id AND e.branch = b.id AND e.emp_id ='".$empID."'";
 
 

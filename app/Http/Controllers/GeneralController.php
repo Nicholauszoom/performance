@@ -8,6 +8,7 @@ use DateTime;
 use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Role;
+use App\Charts\EmployeeLineChart;
 use App\Models\User;
 use App\Models\Holiday;
 use App\Models\Project;
@@ -4060,11 +4061,47 @@ class GeneralController extends Controller
         return view('app.viewrecords', $data);
     }
 
+    public function employeeChart(Request $request){
+
+        $year = $request->has('year') ? $request->year : date('Y');
+
+        $employee = Employee::select(DB::raw("COUNT(*) as count"))
+
+                    ->whereYear('hire_date', $year)
+
+                    ->groupBy(DB::raw("Month(hire_date)"))
+
+                    ->pluck('count');
+
+
+
+        $chart = new EmployeeLineChart;
+
+
+
+        $chart->dataset('New Employee Registered Chart', 'bar', $employee)->options([
+
+                    'fill' => 'true',
+
+                   // 'borderColor' => '#0A1330'
+
+                ]);
+
+
+
+        return $chart->api();
+
+    }
+
 
 
     public function home(Request $request)
     {
 
+        $api = url('/flex/chart-line-ajax');
+        $chart = new EmployeeLineChart;
+        $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
+        $data['chart'] = $chart;
 
         $strategyStatistics = $this->performanceModel->strategy_info(session('current_strategy')->strategyID);
 
