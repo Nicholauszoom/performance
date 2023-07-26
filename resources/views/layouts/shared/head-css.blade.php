@@ -24,8 +24,4 @@
 <script src="{{ asset('assets/js/pages/extra_noty.js') }}"></script>
 <script src="{{ asset('assets/js/pages/extra_sweetalert.js') }}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
-        
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
-
 @stack('head-scriptTwo')
