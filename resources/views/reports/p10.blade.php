@@ -148,7 +148,7 @@
                  <td >{{$national_id}}</td>
                 <td align="right">{{number_format($salary,2)}}</td>
                 <td align="right">{{number_format($gross,2)}}</td>
-                <td align="right">{{number_format($row->wcf,2)}}</td>
+                <td align="right">{{number_format($row->sdl,2)}}</td>
                 </tr>
                 @endforeach
                 @endif
