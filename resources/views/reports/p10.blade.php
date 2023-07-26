@@ -99,7 +99,7 @@
     $deductions = $key->pension_employee;
     $taxable = $key->salary + $key->allowances - $key->pension_employee;
     $taxdue = $key->taxdue;
-    $sdl = 0.04 * $gross;
+    $sdl = $key->sdl;
     $tin = $key->tin;
     $national_id = $key->national_id;
     $total_salary += $salary;
@@ -130,7 +130,7 @@
     $deductions = $row->pension_employee;
     $taxable = $taxable;
     $taxdue = $row->paye;
-    $sdl = 0.04 * $gross;
+    $sdl = $row->sdl;
     $tin = $row->tin;
     $national_id = $row->national_id;
     $emp_id = $row->emp_id;

@@ -86,7 +86,7 @@
                 @if($item->status!='1')
                 @if ($item->status!=$check)
                 <br><br>
-                @can('confirm-termination')
+                {{-- @can('confirm-termination') --}}
                 {{-- start of termination confirm button --}}
                 <a href="javascript:void(0)" title="Approve" class="me-2"
                 onclick="approveTermination(<?php echo $item->id; ?>)">
@@ -107,7 +107,7 @@
                 </button>
                  </a>
                 {{-- / --}}
-                @endcan
+                {{-- @endcan --}}
                 @endif
                 @endif
                 @endif
