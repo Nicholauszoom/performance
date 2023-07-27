@@ -79,6 +79,25 @@
                                 </div>
                             </div>
 
+                            <div class="row mb-3" style="display:none" id="deligation">
+                                <label class="col-form-label col-sm-3">Deligate Leave Approving To :</label>
+                                <div class="col-sm-9">
+
+                                    <select class="form-control select" name="deligated" id="deligated">
+                                        <option selected disabled> Select Deligated</option>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{ $employee->emp_id }}">{{ $employee->emp_id }} -
+                                                {{ $employee->fname }} {{ $employee->mname }} {{ $employee->lname }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('employeeID')
+                                        <p class="text-danger mt-1"> Input field Error </p>
+                                    @enderror
+                                </div>
+                            </div>
+
 
                             <p class="text-secondary font-weight-bolder">
                                 <hr>
@@ -249,6 +268,12 @@
                     var data = JSON.parse(data);
 
                     //alert(data.leave_allowance);
+                    var deligate = data.deligate;
+                    if(deligate > 0){
+                        $("#deligation").show();
+                    }else{
+                        $("#deligation").hide();
+                    }
 
                     document.getElementById("leaveAllowance").value = data.leave_allowance;
                     document.getElementById("salaryEnrollment").value = data.employee_salary;

@@ -483,9 +483,9 @@ public function saveLeave(Request $request) {
 
             // start of name information validation
 
-            'mobile' => 'required|numeric',
-            'leave_address' => 'nullable|alpha',
-            'reason' => 'required|alpha',
+            //'mobile' => 'required|numeric',
+           // 'leave_address' => 'nullable|alpha',
+           // 'reason' => 'required|alpha',
 
 
         ]);
