@@ -70,5 +70,13 @@ class Employee extends Model
         return $this->belongsTo('App\Models\Department','department');
     }
 
-    
+    public function branchies(){
+        return $this->belongsTo('App\Models\Branch','branch');
+    }
+
+    public function contracts(){
+        return $this->belongsTo('App\Models\Contract','contract_type');
+    }
+
+
 }

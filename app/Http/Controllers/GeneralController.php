@@ -10091,6 +10091,11 @@ $this->authenticateUser('add-payroll');
 
         $data['parent'] = "Employee Profile";
 
+        if($id == 'All'){
+            $data2['employee'] = Employee::all()->where('state',1);
+             return view('reports.employee_data_datatable',$data2);
+        }
+
         // return view('employee.userprofile', $data);
         $pdf = Pdf::loadView('reports.employee-data', $data, compact('details', 'emergency', 'spouse', 'children', 'parents', 'childs'));
         $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');

@@ -340,7 +340,7 @@
                         <div class="input-group">
                             <select required name="emp_id" class="select_payroll_month form-control select"
                                 data-width="1%">
-                                <option value="" selected disabled>Select Employee</option>
+                                <option value="All" selected >All</option>
                                 <?php foreach ($employee as $row) { ?>
                                 <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . ' ' . $row->mname . ' ' . $row->lname; ?></option>
                                 <?php } ?>
