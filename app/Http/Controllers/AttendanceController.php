@@ -579,7 +579,7 @@ public function saveLeave(Request $request) {
                   // For Leave Attachments
                     if ($request->hasfile('image')) {
                         $request->validate([
-                            'image' => 'required|clamav',
+                          //  'image' => 'required|clamav',
                         ]);
                         $request->validate([
                             'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
@@ -798,7 +798,7 @@ public function saveLeave(Request $request) {
                  // START
                   if ($request->hasfile('image')) {
                     $request->validate([
-                        'image' => 'required|clamav',
+                       // 'image' => 'required|clamav',
                     ]);
                     $request->validate([
                         'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
@@ -1030,7 +1030,7 @@ public function saveLeave(Request $request) {
               $leaves->application_date = date('Y-m-d');
               if ($request->hasfile('image')) {
                 $request->validate([
-                    'image' => 'required|clamav',
+                   // 'image' => 'required|clamav',
                 ]);
                 $request->validate([
                     'image' => 'mimes:jpg,png,jpeg,pdf|max:2048',
