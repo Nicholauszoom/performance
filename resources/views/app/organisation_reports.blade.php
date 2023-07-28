@@ -801,7 +801,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Department:</label>
                                     <select class="form-control select @error('department') is-invalid @enderror" id="department1" name="department">
-                                        <option value=""> Select Department </option>
+                                        <option value="All"> All </option>
                                         @foreach ($departments as $depart)
                                         <option value="{{ $depart->id }}">{{ $depart->name }}</option>
                                         @endforeach
@@ -813,7 +813,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Position:</label>
                                     <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos1" name="position">
-                                        <option value=""> Select Position </option>
+                                        <option value="All"> All </option>
                                     </select>
                                 </div>
                             </div>

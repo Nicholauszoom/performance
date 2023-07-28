@@ -60,6 +60,7 @@
                             <td class="">
                                 <div class="box-text">
                                     <h5 style="font-weight:bolder;text-align: left;">{{ $leave_name }} Leave Report</h5>
+
                                 </div>
                             </td>
                             <td>
@@ -89,15 +90,10 @@
                             <th>EMP ID</th>
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Leave Entitled</th>
+                            <th>department</th>
+                            <th>Position</th>
+                            <th>Leave Days Taken</th>
 
-                            <th>Opening Balance</th>
-                            {{-- <th>Rate</th>
-                            <th>Amount</th> --}}
-                            @if($nature == 1) <th>Accrual Rate</th> @endif
-                            <th>Used Days</th>
-                            <th>Current Balance</th>
-                          @if($nature == 1)  <th>Amount</th> @endif
                         </tr>
                     </thead>
 
@@ -127,15 +123,9 @@
                             <td><?php echo $employee->emp_id; ?></td>
                             <td><?php echo $employee->fname; ?></td>
                             <td><?php echo $employee->lname; ?></td>
-                            <td><?php echo $employee->days_entitled; ?></td>
-                            <td><?php echo number_format($employee->opening_balance < 0?0:$employee->opening_balance, 2); ?></td>
-                            {{-- <td><?php echo number_format($employee->accrual_amount, 2); ?></td>
-                            <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                            @if($nature == 1)<td><?php echo number_format($employee->accrual_days, 2); ?></td> @endif
+                            <td><?php echo $employee->departments->name; ?></td>
+                            <td><?php echo $employee->positions->name; ?></td>
                             <td><?php echo number_format(($employee->opening_balance < 0?($employee->days_spent +(-1*$employee->opening_balance)):$employee->days_spent),2) ?></td>
-                            <td><?php echo number_format($employee->current_balance, 2); ?></td>
-                            @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount, 2); ?></td> @endif
-
                         </tr>
                         @else
                         <tr>
@@ -143,15 +133,9 @@
                             <td><?php echo $employee->emp_id; ?></td>
                             <td><?php echo $employee->fname; ?></td>
                             <td><?php echo $employee->lname; ?></td>
-                            <td><?php echo $employee->days_entitled*0; ?></td>
-                            <td><?php echo number_format($employee->opening_balance*0, 2); ?></td>
-                            {{-- <td><?php echo number_format($employee->accrual_amount*0, 2); ?></td>
-                            <td><?php echo number_format($employee->accrual_amount * $employee->opening_balance, 2); ?></td> --}}
-                            @if($nature == 1)<td><?php echo number_format($employee->accrual_days*0, 2); ?></td> @endif
+                            <td><?php echo $employee->departments->name; ?></td>
+                            <td><?php echo $employee->positions->name; ?></td>
                             <td><?php echo number_format(($employee->days_spent*0)) ?></td>
-                            <td><?php echo number_format($employee->current_balance*0, 2); ?></td>
-                            @if($nature == 1)   <td><?php echo number_format($employee->current_balance * $employee->accrual_amount*0, 2); ?></td> @endif
-
                         </tr>
                         @endif
 

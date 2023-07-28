@@ -518,9 +518,20 @@ public function saveLeave(Request $request) {
         $annualleaveBalance = $this->attendance_model->getLeaveBalance(session('emp_id'), session('hire_date'), date('Y-m-d'));
 
         // For  Requested days
-
+         if($nature == 1){
         $holidays=SysHelpers::countHolidays($start,$end);
         $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+         }
+         else{
+
+           // $holidays=SysHelpers::countHolidays($start,$end);
+           // $different_days = SysHelpers::countWorkingDays($start,$end)-$holidays;
+        $different_days = SysHelpers::countWorkingDaysForOtherLeaves($start,$end);
+
+        // $startDate = Carbon::parse($start);
+        // $endDate = Carbon::parse($end);
+        // $different_days = $endDate->diffInDays($startDate);
+         }
 
         // For Total Leave days
          $total_remaining=$leaves+$different_days;
@@ -688,10 +699,10 @@ public function saveLeave(Request $request) {
                     {
                       $d1 = $paternity->created_at;
                       $d2 = new DateTime();
-                      $interval = SysHelpers::countWorkingDays($d1,$d2);
-                      $range=SysHelpers::countWorkingDays($d1,$d2);
+                      $interval = SysHelpers::countWorkingDaysForOtherLeaves($d1,$d2);
+                      $range=SysHelpers::countWorkingDaysForOtherLeaves($d1,$d2);
 
-                      $month=SysHelpers::countWorkingDays($d1,$d2);
+                      $month=SysHelpers::countWorkingDaysForOtherLeaves($d1,$d2);
                       // Incase an Employee has less than four working month since the last applied paternity
                       if ($month <112) {
                         $max_days=7;
@@ -912,7 +923,7 @@ public function saveLeave(Request $request) {
                 {
                   $d1 = $paternity->created_at;
                   $d2 = new DateTime();
-                  $interval = SysHelpers::countWorkingDays($d1,$d2);
+                  $interval = SysHelpers::countWorkingDaysForOtherLeaves($d1,$d2);
 
                   $month=$interval;
                     // For Employee With Less Than 4 month of service and last application
@@ -1333,8 +1344,14 @@ public function saveLeave(Request $request) {
     public function cancelLeave($data)  {
           //dd($id);
           $result = explode('|',$data);
-          $id = $result[0];
-          $info = $result[1];
+          if(count($result) > 1){
+            $id = $result[0];
+            $info = $result[1];
+          }else{
+            $id = $data;
+            $info = '';
+          }
+
 
       if($id!=''){
         $leaveID = $id;

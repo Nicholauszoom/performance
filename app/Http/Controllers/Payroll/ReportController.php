@@ -3324,18 +3324,31 @@ EOD;
                 $months = $diff->m;
                 $days = $diff->d;
 
-                $days_this_month = intval(date('t', strtotime($request->duration)));
+                $days_this_month_init = intval(date('t', strtotime($request->duration)));
+                if($no_days == $days_this_month_init ){
+                if($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28 ){
+                    $days_this_month = 31;
+                    $no_days = 31;
+                    }
+                else
+                $days_this_month = $days_this_month_init;
+                }else{
+                    $days_this_month = $days_this_month_init;
+                }
 
                 $employee->accrual_amount = $employee->salary/30;
 
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
 
                 $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
 
                 $employee->accrual_days = $accrual_days;
 
                 $employee->nature = $nature;
-                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
+                //$employee->days_entitled = $this->attendance_model->days_entilted($nature);
+
+                $employee->days_entitled = $employee->leave_days_entitled;
 
 
                 $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
@@ -3362,7 +3375,18 @@ EOD;
                 $months = $diff->m;
                 $days = $diff->d;
 
-                $days_this_month = intval(date('t', strtotime($request->duration)));
+                $days_this_month_init = intval(date('t', strtotime($request->duration)));
+                if($no_days == $days_this_month_init ){
+                if($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28 ){
+                    $days_this_month = 31;
+                    $no_days = 31;
+                    }
+                else
+                $days_this_month = $days_this_month_init;
+                }else{
+                    $days_this_month = $days_this_month_init;
+                }
+
 
 
                 $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
@@ -3380,8 +3404,8 @@ EOD;
 
 
 
-                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
-
+                //$employee->days_entitled = $this->attendance_model->days_entilted($nature);
+                $employee->days_entitled = $employee->leave_days_entitled;
 
                 $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
 
@@ -3405,12 +3429,31 @@ EOD;
            $data['nature'] =  $nature;
            $data['leave_name'] = $leave_name;
            $data['date'] = $request->duration;
-        if($request->type == 1){
 
-        $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
-        return $pdf->download('Leave_report'.$request->duration.'.pdf');
+           $other = ' ';
+        if(!empty($data['department_name']))
+          $other = 'Department : '.$data['department_name'];
+        elseif(!empty($data['position_name']))
+         $other =  'Position : '. $data['position_name'];
+
+
+           $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date : '.date('d-M-Y',strtotime($data['date']));
+        if($request->type == 1){
+        if($nature == 1){
+            $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_report'.$request->duration.'.pdf');
         }else{
-            return view('reports.leave_balance_datatable',$data);
+            $pdf = Pdf::loadView('reports.other_leave_balance',$data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_report'.$request->duration.'.pdf');
+        }
+
+        }else{
+            if($nature == 1){
+                return view('reports.leave_balance_datatable',$data);
+            }else{
+                return view('reports.other_leave_balance_datatable',$data);
+            }
+
         }
 
 
@@ -3461,9 +3504,9 @@ EOD;
                 $diff = 0;
 
                 $calender = explode('-',$request->duration);
-                $january = ($calender[0]-1).'-12-31';
+                $december = ($calender[0]-1).'-12-31';
 
-                $december_last_year = new DateTime($january);
+                $december_last_year = new DateTime($december);
                 $hire_date = new DateTime($employee->hire_date);
                 $today = new DateTime($request->duration);
                 if($december_last_year > $hire_date){
@@ -3522,9 +3565,9 @@ EOD;
                 $diff = 0;
 
                 $calender = explode('-',$request->duration);
-                $january = ($calender[0]-1).'-12-31';
+                $december = ($calender[0]-1).'-12-31';
 
-                $december_last_year = new DateTime($january);
+                $december_last_year = new DateTime($december);
                 $hire_date = new DateTime($employee->hire_date);
                 $today = new DateTime($request->duration);
                 if($december_last_year > $hire_date){
@@ -3587,12 +3630,32 @@ EOD;
            $data['date'] = $request->duration;
         // dd($employees);
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($request->type == 1){
 
-        $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
-        return $pdf->download('Leave_report'.$request->duration.'.pdf');
+
+        $other = ' ';
+        if(!empty($data['department_name']))
+          $other = 'Department : '.$data['department_name'];
+        elseif(!empty($data['position_name']))
+         $other =  'Position : '. $data['position_name'];
+        $january = $calender[0].'-01-01';
+  
+        $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date : From '.date('d-M-Y',strtotime($january)).' To '.date('d-M-Y',strtotime($data['date']));
+        if($request->type == 1){
+        if($nature == 1){
+            $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_report'.$request->duration.'.pdf');
         }else{
-            return view('reports.leave_balance_datatable', $data);
+            $pdf = Pdf::loadView('reports.other_leave_balance',$data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_report'.$request->duration.'.pdf');
+        }
+
+        }else{
+            if($nature == 1){
+                return view('reports.leave_balance_datatable',$data);
+            }else{
+                return view('reports.other_leave_balance_datatable',$data);
+            }
+
         }
 
 
