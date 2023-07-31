@@ -359,17 +359,19 @@ class AttendanceModel extends Model
     }
 
 
-    function days_entilted($nature){
+    function days_entilted($nature)
+    {
 
-        $query = "SELECT max_days FROM leave_type WHERE id = '".$nature."' limit 1";
+        $query = "SELECT max_days FROM leave_type WHERE id = '" . $nature . "' limit 1";
 
         $row = DB::select(DB::raw($query));
 
         return $row[0]->max_days;
     }
 
-    function leave_name($nature){
-        $query = "SELECT type FROM leave_type WHERE id = '".$nature."' limit 1";
+    function leave_name($nature)
+    {
+        $query = "SELECT type FROM leave_type WHERE id = '" . $nature . "' limit 1";
 
         $row = DB::select(DB::raw($query));
 
@@ -377,48 +379,48 @@ class AttendanceModel extends Model
     }
 
     function getLeaveBalance($empID, $hireDate, $today)
-	{
+    {
 
         $nature = 1;
 
-        $today = date("Y-m-d",strtotime($today));
+        $today = date("Y-m-d", strtotime($today));
 
 
-		$prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+        $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
 
-		$last_month_date = date('Y-m-t', strtotime($prev_month));
+        $last_month_date = date('Y-m-t', strtotime($prev_month));
 
-		 //dd($today);
+        //dd($today);
 
-		$query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start <= '" . $today. "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
 
-		$row = DB::select(DB::raw($query));
-		$employee = DB::table('employee')->where('emp_id', $empID)->first();
-		//$date = $employee->hire_date;
-		$d1 = new DateTime($hireDate);
-		// $todayDate = date('Y-m-d');
-		$d2 = new DateTime($today);
+        $row = DB::select(DB::raw($query));
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+        //$date = $employee->hire_date;
+        $d1 = new DateTime($hireDate);
+        // $todayDate = date('Y-m-d');
+        $d2 = new DateTime($today);
 
-		$diff = $d1->diff($d2);
+        $diff = $d1->diff($d2);
 
-		$years = $diff->y;
-		$months = $diff->m;
-		$days = $diff->d;
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
 
-		$days_this_month = intval(date('t', strtotime($last_month_date)));
-		$accrual_days = (($days * $employee->accrual_rate)/30 ) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        $days_this_month = intval(date('t', strtotime($last_month_date)));
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
         //$days * $employee->accrual_rate / $days_this_month +
-		$interval = $d1->diff($d2);
-		$diffInMonths  = $interval->m;
-		//    dd($diffInMonths);
-		$spent = $row[0]->days_spent;
-		// $accrued = $row[0]->days_accrued;
+        $interval = $d1->diff($d2);
+        $diffInMonths  = $interval->m;
+        //    dd($diffInMonths);
+        $spent = $row[0]->days_spent;
+        // $accrued = $row[0]->days_accrued;
 
-		// $accrual= 7*$accrued/90;
-		$accrual = 0;
-        if($nature == 1){
+        // $accrual= 7*$accrued/90;
+        $accrual = 0;
+        if ($nature == 1) {
             $maximum_days = $accrual_days - $spent;
-        }else{
+        } else {
             $days_entitled  = $this->days_entilted($nature);
 
             $maximum_days = $days_entitled - $spent;
@@ -429,133 +431,133 @@ class AttendanceModel extends Model
 
 
 
-		return $maximum_days;
-	}
+        return $maximum_days;
+    }
 
-    function getLeaveBalance_report($empID, $hireDate, $today,$nature)
-	{
-
-        $today = date("Y-m-d",strtotime($today));
-
-
-		$prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
-
-		$last_month_date = date('Y-m-t', strtotime($prev_month));
-
-		 //dd($today);
-
-		$query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start <= '" . $today. "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
-
-		$row = DB::select(DB::raw($query));
-		$employee = DB::table('employee')->where('emp_id', $empID)->first();
-		//$date = $employee->hire_date;
-		$d1 = new DateTime($hireDate);
-		// $todayDate = date('Y-m-d');
-		$d2 = new DateTime($today);
-
-		$diff = $d1->diff($d2);
-
-		$years = $diff->y;
-		$months = $diff->m;
-		$days = $diff->d;
-
-		$days_this_month = intval(date('t', strtotime($last_month_date)));
-		$accrual_days = (($days * $employee->accrual_rate)/30 ) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
-        //$days * $employee->accrual_rate / $days_this_month +
-		$interval = $d1->diff($d2);
-		$diffInMonths  = $interval->m;
-		//    dd($diffInMonths);
-		$spent = $row[0]->days_spent;
-		// $accrued = $row[0]->days_accrued;
-
-		// $accrual= 7*$accrued/90;
-		$accrual = 0;
-        if($nature == 1){
-            $maximum_days = $accrual_days - $spent;
-        }else{
-            $days_entitled  = $this->days_entilted($nature);
-
-            $maximum_days = $days_entitled - $spent;
-        }
-
-
-        //dd($days);
-
-
-
-		return $maximum_days;
-	}
-
-
-    function getLeaveBalance2($empID, $hireDate, $today,$nature)
-	{
-
-        $today = date("Y-m-d",strtotime($today));
-
-
-		//$prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
-
-		//$last_month_date = date('Y-m-t', strtotime($prev_month));
-
-        $calender = explode('-',$today);
-
-
-        $last_month_date = $calender[0].'-01-01';
-
-		 //dd($today);
-
-		$query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start <= '" . $today. "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
-
-		$row = DB::select(DB::raw($query));
-		$employee = DB::table('employee')->where('emp_id', $empID)->first();
-		//$date = $employee->hire_date;
-		$d1 = new DateTime($hireDate);
-		// $todayDate = date('Y-m-d');
-		$d2 = new DateTime($today);
-
-		$diff = $d1->diff($d2);
-
-		$years = $diff->y;
-		$months = $diff->m;
-		$days = $diff->d;
-
-		$days_this_month = intval(date('t', strtotime($last_month_date)));
-		$accrual_days = (($days * $employee->accrual_rate)/30 ) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
-        //$days * $employee->accrual_rate / $days_this_month +
-		$interval = $d1->diff($d2);
-		$diffInMonths  = $interval->m;
-		//    dd($diffInMonths);
-		$spent = $row[0]->days_spent;
-		// $accrued = $row[0]->days_accrued;
-
-		// $accrual= 7*$accrued/90;
-		$accrual = 0;
-        if($nature == 1){
-            $maximum_days = $accrual_days - $spent;
-        }else{
-            $days_entitled  = $this->days_entilted($nature);
-
-            $maximum_days = $days_entitled - $spent;
-        }
-
-
-        //dd($days);
-
-
-
-		return $maximum_days;
-	}
-
-    function get_anualLeave($empID,$nature = null)
+    function getLeaveBalance_report($empID, $hireDate, $today, $nature)
     {
 
-        $leaves = DB::table('leaves')->where('empID', $empID)->where('nature',$nature)->sum('days');
+        $today = date("Y-m-d", strtotime($today));
+
+
+        $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+
+        $last_month_date = date('Y-m-t', strtotime($prev_month));
+
+        //dd($today);
+
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+
+        $row = DB::select(DB::raw($query));
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+        //$date = $employee->hire_date;
+        $d1 = new DateTime($hireDate);
+        // $todayDate = date('Y-m-d');
+        $d2 = new DateTime($today);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        $days_this_month = intval(date('t', strtotime($last_month_date)));
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        //$days * $employee->accrual_rate / $days_this_month +
+        $interval = $d1->diff($d2);
+        $diffInMonths  = $interval->m;
+        //    dd($diffInMonths);
+        $spent = $row[0]->days_spent;
+        // $accrued = $row[0]->days_accrued;
+
+        // $accrual= 7*$accrued/90;
+        $accrual = 0;
+        if ($nature == 1) {
+            $maximum_days = $accrual_days - $spent;
+        } else {
+            $days_entitled  = $this->days_entilted($nature);
+
+            $maximum_days = $days_entitled - $spent;
+        }
+
+
+        //dd($days);
+
+
+
+        return $maximum_days;
+    }
+
+
+    function getLeaveBalance2($empID, $hireDate, $today, $nature)
+    {
+
+        $today = date("Y-m-d", strtotime($today));
+
+
+        //$prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+
+        //$last_month_date = date('Y-m-t', strtotime($prev_month));
+
+        $calender = explode('-', $today);
+
+
+        $last_month_date = $calender[0] . '-01-01';
+
+        //dd($today);
+
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+
+        $row = DB::select(DB::raw($query));
+        $employee = DB::table('employee')->where('emp_id', $empID)->first();
+        //$date = $employee->hire_date;
+        $d1 = new DateTime($hireDate);
+        // $todayDate = date('Y-m-d');
+        $d2 = new DateTime($today);
+
+        $diff = $d1->diff($d2);
+
+        $years = $diff->y;
+        $months = $diff->m;
+        $days = $diff->d;
+
+        $days_this_month = intval(date('t', strtotime($last_month_date)));
+        $accrual_days = (($days * $employee->accrual_rate) / 30) + $months * $employee->accrual_rate + $years * 12 * $employee->accrual_rate;
+        //$days * $employee->accrual_rate / $days_this_month +
+        $interval = $d1->diff($d2);
+        $diffInMonths  = $interval->m;
+        //    dd($diffInMonths);
+        $spent = $row[0]->days_spent;
+        // $accrued = $row[0]->days_accrued;
+
+        // $accrual= 7*$accrued/90;
+        $accrual = 0;
+        if ($nature == 1) {
+            $maximum_days = $accrual_days - $spent;
+        } else {
+            $days_entitled  = $this->days_entilted($nature);
+
+            $maximum_days = $days_entitled - $spent;
+        }
+
+
+        //dd($days);
+
+
+
+        return $maximum_days;
+    }
+
+    function get_anualLeave($empID, $nature = null)
+    {
+
+        $leaves = DB::table('leaves')->where('empID', $empID)->where('nature', $nature)->sum('days');
 
         return $leaves;
     }
 
 
-    function getLeaveTaken($empID, $hireDate, $today,$nature)
+    function getLeaveTaken($empID, $hireDate, $today, $nature)
     {
 
         // $last_month_date = date('Y-m-t', strtotime($prev_month));
@@ -601,7 +603,7 @@ class AttendanceModel extends Model
         return $total_leave;
     }
 
-    function getLeaveTaken2($empID, $hireDate, $today,$nature)
+    function getLeaveTaken2($empID, $hireDate, $today, $nature)
     {
 
         // $last_month_date = date('Y-m-t', strtotime($prev_month));
@@ -610,10 +612,10 @@ class AttendanceModel extends Model
 
         $leaves = DB::table('leaves')->where('empID', $empID)->where('nature', $nature)->get();
 
-        $calender = explode('-',$today);
+        $calender = explode('-', $today);
 
 
-        $this_month = $calender[0].'-01-01';
+        $this_month = $calender[0] . '-01-01';
 
         $first_this_month = date('Y-m-01', strtotime($this_month));
 
@@ -731,7 +733,7 @@ class AttendanceModel extends Model
         return true;
     }
 
-    public function days_spent($empID, $hireDate, $today,$nature)
+    public function days_spent($empID, $hireDate, $today, $nature)
     {
 
         $today = date("Y-m-d", strtotime($today));
@@ -744,7 +746,7 @@ class AttendanceModel extends Model
         //dd($today);
 
         //opening balance
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start >= '" . $last_month_date . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start >= '" . $last_month_date . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
         $row = DB::select(DB::raw($query));
 
 
@@ -756,7 +758,7 @@ class AttendanceModel extends Model
     }
 
 
-    public function days_spent2($empID, $hireDate, $today,$nature)
+    public function days_spent2($empID, $hireDate, $today, $nature)
     {
 
         $today = date("Y-m-d", strtotime($today));
@@ -764,17 +766,17 @@ class AttendanceModel extends Model
 
         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
 
-         $calender = explode('-',$today);
+        $calender = explode('-', $today);
 
 
-         $this_month = ($calender[0]-1).'-12-31';
+        $this_month = ($calender[0] - 1) . '-12-31';
 
         $last_month_date = date('Y-m-t', strtotime($prev_month));
 
         $last_month_date = $this_month;
 
         //opening balance
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start >= '" . $last_month_date . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start >= '" . $last_month_date . "' and start <= '" . $today . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
         $row = DB::select(DB::raw($query));
 
 
@@ -786,7 +788,7 @@ class AttendanceModel extends Model
     }
 
 
-    function getOpeningLeaveBalance($empID, $hireDate, $today,$nature)
+    function getOpeningLeaveBalance($empID, $hireDate, $today, $nature)
     {
 
         $today = date("Y-m-d", strtotime($today));
@@ -798,7 +800,7 @@ class AttendanceModel extends Model
 
         //dd($today);
 
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start <= '" . $last_month_date . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $last_month_date . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
 
         $row = DB::select(DB::raw($query));
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
@@ -825,9 +827,9 @@ class AttendanceModel extends Model
         // $accrual= 7*$accrued/90;
         $accrual = 0;
 
-        if($nature == 1){
+        if ($nature == 1) {
             $maximum_days = $accrual_days - $spent;
-        }else{
+        } else {
             $days_entitled = $this->days_entilted($nature);
 
             $maximum_days = $days_entitled - $spent;
@@ -842,7 +844,7 @@ class AttendanceModel extends Model
         return $maximum_days;
     }
 
-    function getOpeningLeaveBalance2($empID, $hireDate, $today,$nature)
+    function getOpeningLeaveBalance2($empID, $hireDate, $today, $nature)
     {
 
         $today = date("Y-m-d", strtotime($today));
@@ -850,16 +852,16 @@ class AttendanceModel extends Model
 
         //$prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
 
-       // $last_month_date = date('Y-m-t', strtotime($prev_month));
+        // $last_month_date = date('Y-m-t', strtotime($prev_month));
 
-        $calender = explode('-',$today);
+        $calender = explode('-', $today);
 
 
-        $last_month_date = ($calender[0]-1).'-12-31';
+        $last_month_date = ($calender[0] - 1) . '-12-31';
 
         //dd($today);
 
-        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '".$nature."' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '".$nature."' and empID = '" . $empID . "' and start <= '" . $last_month_date . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
+        $query = "SELECT  IF( (SELECT COUNT(id)  FROM leaves WHERE nature= '" . $nature . "' AND empID = '" . $empID . "')=0, 0, (SELECT SUM(days)  FROM leaves WHERE nature= '" . $nature . "' and empID = '" . $empID . "' and start <= '" . $last_month_date . "'  GROUP BY nature )) as days_spent, DATEDIFF('" . $today . "','" . $hireDate . "') as days_accrued limit 1";
 
         $row = DB::select(DB::raw($query));
         $employee = DB::table('employee')->where('emp_id', $empID)->first();
@@ -886,9 +888,9 @@ class AttendanceModel extends Model
         // $accrual= 7*$accrued/90;
         $accrual = 0;
 
-        if($nature == 1){
+        if ($nature == 1) {
             $maximum_days = $accrual_days - $spent;
-        }else{
+        } else {
             $days_entitled = $this->days_entilted($nature);
 
             $maximum_days = $days_entitled - $spent;
@@ -1021,16 +1023,18 @@ class AttendanceModel extends Model
         return DB::select(DB::raw($query));
     }
 
-    function get_dept_name($id){
-        $query = "SELECT name from department where id = '".$id."' limit 1";
+    function get_dept_name($id)
+    {
+        $query = "SELECT name from department where id = '" . $id . "' limit 1";
         $row = DB::select(DB::raw($query));
 
 
         return $row[0]->name;
     }
 
-    function get_position_name($id){
-        $query = "SELECT name from position where id = '".$id."' limit 1";
+    function get_position_name($id)
+    {
+        $query = "SELECT name from position where id = '" . $id . "' limit 1";
         $row = DB::select(DB::raw($query));
 
         return $row[0]->name;
@@ -1103,37 +1107,270 @@ class AttendanceModel extends Model
         return $monthlyleave;
     }
 
-    function getMonthlyLeave1($empID,$today,$nature)
+    function getMonthlyLeave1($empID, $today, $nature, $department, $position)
     {
 
-         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
-         $last_month_date = date('Y-m-t', strtotime($prev_month));
+        $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+        $last_month_date = date('Y-m-t', strtotime($prev_month));
 
-        if($empID == 'All'){
+        if ($empID == 'All') {
+            if ($department != 'All' && $position != 'All') {
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->select('*')
+                    ->where('start', '<=', $today)
+                    ->where('employee.position', $position)
+                    ->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $last_month_date)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department != 'All' && $position == 'All') {
 
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $last_month_date)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department == 'All') {
+                $employees = Employee::where('state', '=', 1)->get();
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('start', '>=', $last_month_date)
+                    ->where('nature', $nature)
+                    ->get();
+            }
+        } else {
 
             $monthlyleave = DB::table('leaves')
-            ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
-            ->select('*')
-            ->where('start', '<=', $today)
-            ->where('start','>=', $last_month_date)
-            ->where('nature', $nature)
-            ->get();
+                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('department', 'department.id', '=', 'employee.department')
+                ->join('position', 'position.id', '=', 'employee.position')
+                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->where('nature', $nature)
+                ->where('employee.emp_id', $empID)
+                ->get();
+        }
 
-    }else{
 
-        $monthlyleave = DB::table('leaves')
-        ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
-        ->select('*')
-        ->where('start', '<=', $today)
-        ->where('start','>=', $last_month_date)
-        ->where('nature', $nature)
-        ->where('employee.emp_id',$empID)
-        ->get();
-
-    }
 
 
         return $monthlyleave;
     }
+
+
+    function getMonthlyLeave2($empID, $today, $nature, $department, $position)
+    {
+
+        $calender = explode('-',$today);
+        $january = $calender[0].'-01-01';
+
+        if ($empID == 'All') {
+            if ($department != 'All' && $position != 'All') {
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->select('*')
+                    ->where('employee.position', $position)
+                    ->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $january)
+                    ->where('start', '<=', $today)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department != 'All' && $position == 'All') {
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $january)
+                    ->where('start', '<=', $today)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department == 'All') {
+                $employees = Employee::where('state', '=', 1)->get();
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('start', '>=', $january)
+                    ->where('start', '<=', $today)
+                    ->where('nature', $nature)
+                    ->get();
+            }
+        } else {
+
+            $monthlyleave = DB::table('leaves')
+                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('department', 'department.id', '=', 'employee.department')
+                ->join('position', 'position.id', '=', 'employee.position')
+                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->where('nature', $nature)
+                ->where('employee.emp_id', $empID)
+                ->where('start', '<=', $today)
+                ->where('start', '>=', $january)
+                ->get();
+        }
+
+
+
+
+        return $monthlyleave;
+    }
+
+    function getpendingLeave1($empID, $today, $nature, $department, $position)
+    {
+
+        $calender = explode('-',$today);
+        $january = $calender[0].'-01-01';
+
+        if ($empID == 'All') {
+            if ($department != 'All' && $position != 'All') {
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->select('*')
+                    ->where('employee.position', $position)
+                    ->where('employee.state', 1)
+                    ->where('leaves.status','!=',3)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $january)
+                    ->where('start', '<=', $today)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department != 'All' && $position == 'All') {
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $january)
+                    ->where('leaves.status','!=',3)
+                    ->where('start', '<=', $today)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department == 'All') {
+                $employees = Employee::where('state', '=', 1)->get();
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('start', '>=', $january)
+                    ->where('leaves.status','!=',3)
+                    ->where('start', '<=', $today)
+                    ->where('nature', $nature)
+                    ->get();
+            }
+        } else {
+
+            $monthlyleave = DB::table('leaves')
+                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('department', 'department.id', '=', 'employee.department')
+                ->join('position', 'position.id', '=', 'employee.position')
+                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->where('nature', $nature)
+                ->where('leaves.status','!=',3)
+                ->where('employee.emp_id', $empID)
+                ->where('start', '<=', $today)
+                ->where('start', '>=', $january)
+                ->get();
+        }
+
+
+
+
+        return $monthlyleave;
+    }
+
+
+    function getpendingLeave($empID, $today, $nature, $department, $position)
+    {
+
+        $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
+        $last_month_date = date('Y-m-t', strtotime($prev_month));
+
+        if ($empID == 'All') {
+            if ($department != 'All' && $position != 'All') {
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->select('*')
+                    ->where('start', '<=', $today)
+                    ->where('employee.position', $position)
+                    ->where('leaves.status','!=',3)
+                    ->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('start', '>=', $last_month_date)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department != 'All' && $position == 'All') {
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('employee.department', $department)
+                    ->where('leaves.status','!=',3)
+                    ->where('start', '>=', $last_month_date)
+                    ->where('nature', $nature)
+                    ->get();
+            } elseif ($department == 'All') {
+                $employees = Employee::where('state', '=', 1)->get();
+
+                $monthlyleave = DB::table('leaves')
+                    ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                    ->join('department', 'department.id', '=', 'employee.department')
+                    ->join('position', 'position.id', '=', 'employee.position')
+                    ->where('leaves.status','!=',3)
+                    ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+                    ->where('start', '>=', $last_month_date)
+                    ->where('nature', $nature)
+                    ->get();
+            }
+        } else {
+
+            $monthlyleave = DB::table('leaves')
+                ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+                ->join('department', 'department.id', '=', 'employee.department')
+                ->join('position', 'position.id', '=', 'employee.position')
+                ->where('leaves.status','!=',3)
+                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->where('nature', $nature)
+                ->where('employee.emp_id', $empID)
+                ->get();
+        }
+
+
+
+
+        return $monthlyleave;
+    }
+
+
+
+
+
 }

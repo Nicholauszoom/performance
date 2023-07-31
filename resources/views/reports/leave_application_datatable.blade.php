@@ -10,7 +10,6 @@
 @endpush
 
 @section('content')
-
     <div class="card">
         <div class="card-header">
             <h5 class="text-main">{{ $nature }} Leave Report</h5>
@@ -19,14 +18,14 @@
         <table class="table datatable-excel-filter">
             <thead>
                 <tr>
-                <th>Payroll No</th>
-                  <th>Employee Name</th>
-                  <th>Department</th>
-                  <th>Position</th>
-                  <th>Leave Address</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Days</th>
+                    <th>Payroll No</th>
+                    <th>Employee Name</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th>Leave Address</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Days</th>
                 </tr>
             </thead>
 
@@ -35,19 +34,17 @@
                     $i = 1;
                 @endphp
                 @foreach ($leave_data as $row)
-                        <td>{{ $row->emp_id }}</td>
-                        <td>{{ $row->full_name }}</td>
-                        <td>{{ $row->department_name }}</td>
-                        <td>{{ $row->position_name }}</td>
-                        <td>{{ $row->leave_address }}</td>
-                        <td> {{ $row->start }} </td>
-                        <td>{{ $row->end }}</td>
-                        <td>{{ number_format($row->days,2) }}</td>
+                    <td>{{ $row->emp_id }}</td>
+                    <td>{{ $row->full_name }}</td>
+                    <td>{{ $row->department_name }}</td>
+                    <td>{{ $row->position_name }}</td>
+                    <td>{{ $row->leave_address }}</td>
+                    <td> {{ $row->start }} </td>
+                    <td>{{ $row->end }}</td>
+                    <td>{{ number_format($row->days, 2) }}</td>
                     </tr>
                 @endforeach
-              </tbody>
+            </tbody>
         </table>
     </div>
-
 @endsection
-

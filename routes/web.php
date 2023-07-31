@@ -1327,6 +1327,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/annualleave','annualleave')->name('reports.annualleave');
         Route::any('/annualleave2','annualleave2')->name('reports.annualleave2');
         Route::any('/annualleave-table','annualLeaveData')->name('reports.annualleave.data');
+        Route::any('/annualleave-table2','annualLeaveData2')->name('reports.annualleave.year');
+        Route::any('/pendingLeaves','pendingLeaves')->name('reports.leave.pending.monthly');
+        Route::any('/pendingLeaves1','pendingLeaves1')->name('reports.leave.pending.yearly');
+
         Route::any('/netTotalSummation','netTotalSummation')->name('reports.netTotalSummation');
 
 
