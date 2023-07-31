@@ -49,7 +49,7 @@
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -170,7 +170,7 @@
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -212,12 +212,12 @@
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9">
+                                <input type="radio" name="type" value="1" id="p9" required>
                                 <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a">
+                                <input type="radio" name="type" value="2" id="p9a" required>
                                 <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">USD</label>
                                 </div>
                             </div>
@@ -311,12 +311,12 @@
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9">
+                                <input type="radio" name="type" value="1" id="p9" required>
                                 <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a">
+                                <input type="radio" name="type" value="2" id="p9a" required>
                                 <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
@@ -358,7 +358,7 @@
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -399,12 +399,12 @@
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9">
+                                <input type="radio" name="type" value="1" id="p9" required>
                                 <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a">
+                                <input type="radio" name="type" value="2" id="p9a" required>
                                 <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
@@ -445,12 +445,12 @@
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9">
+                                <input type="radio" name="type" value="1" id="p9" required>
                                 <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a">
+                                <input type="radio" name="type" value="2" id="p9a" required>
                                 <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
@@ -488,12 +488,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -534,12 +534,12 @@
 
                         <div class="">
                             <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9">
+                                <input type="radio" name="type" value="1" id="p9" required>
                                 <label class="ms-2" for="p9">PDF</label>
                             </div>
 
                             <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a">
+                                <input type="radio" name="type" value="2" id="p9a" required>
                                 <label class="ms-2" for="p9a">Excel</label>
                             </div>
                         </div>
@@ -599,7 +599,7 @@
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -649,7 +649,7 @@
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                             </div>
@@ -731,16 +731,9 @@
                             <label class="col-form-label col-md-3">Select Date</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
-                                    <select required name="duration" class="select_payroll_month form-control select"
-                                        data-width="1%">
-                                        <option selected disabled>Select Month</option>
-                                        <?php foreach ($month_list as $row) { ?>
-                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                        <?php } ?>
-                                    </select> --}}
+
                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} " required>
                                 </div>
                             </div>
                         </div>
@@ -754,7 +747,7 @@
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <div class="d-inline-flex align-items-left px-5">
@@ -839,16 +832,9 @@
                             <label class="col-form-label col-md-3">Select Date</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
-                                    <select required name="duration" class="select_payroll_month form-control select"
-                                        data-width="1%">
-                                        <option selected disabled>Select Month</option>
-                                        <?php foreach ($month_list as $row) { ?>
-                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                        <?php } ?>
-                                    </select> --}}
+
                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" required value="{{ date('Y-m-d') }} " required>
                                 </div>
                             </div>
                         </div>
@@ -862,7 +848,7 @@
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <div class="d-inline-flex align-items-left px-5">
@@ -951,16 +937,9 @@
                             <label class="col-form-label col-md-3">Select Date</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
-                                    <select required name="duration" class="select_payroll_month form-control select"
-                                        data-width="1%">
-                                        <option selected disabled>Select Month</option>
-                                        <?php foreach ($month_list as $row) { ?>
-                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                        <?php } ?>
-                                    </select> --}}
+
                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                <input type="date" class="form-control date" name="duration" required placeholder="Select dates" value="{{ date('Y-m-d') }} ">
                                 </div>
                             </div>
                         </div>
@@ -969,12 +948,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
@@ -1060,16 +1039,9 @@
                             <label class="col-form-label col-md-3">Select Date</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
-                                    <select required name="duration" class="select_payroll_month form-control select"
-                                        data-width="1%">
-                                        <option selected disabled>Select Month</option>
-                                        <?php foreach ($month_list as $row) { ?>
-                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                        <?php } ?>
-                                    </select> --}}
+
                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                <input type="date" class="form-control date" name="duration" required placeholder="Select dates" value="{{ date('Y-m-d') }} ">
                                 </div>
                             </div>
                         </div>
@@ -1078,12 +1050,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
@@ -1169,16 +1141,9 @@
                             <label class="col-form-label col-md-3">Select Date</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
-                                    <select required name="duration" class="select_payroll_month form-control select"
-                                        data-width="1%">
-                                        <option selected disabled>Select Month</option>
-                                        <?php foreach ($month_list as $row) { ?>
-                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                        <?php } ?>
-                                    </select> --}}
+
                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                <input type="date" class="form-control date" name="duration" required placeholder="Select dates" value="{{ date('Y-m-d') }} ">
                                 </div>
                             </div>
                         </div>
@@ -1187,12 +1152,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>
@@ -1278,16 +1243,9 @@
                             <label class="col-form-label col-md-3">Select Date</label>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    {{-- <input type="date" name="terminationDate" class="form-control" id="terminationDate">
-                                    <select required name="duration" class="select_payroll_month form-control select"
-                                        data-width="1%">
-                                        <option selected disabled>Select Month</option>
-                                        <?php foreach ($month_list as $row) { ?>
-                                        <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                        <?php } ?>
-                                    </select> --}}
+
                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} ">
+                                <input type="date" class="form-control date" name="duration" placeholder="Select dates" value="{{ date('Y-m-d') }} " required>
                                 </div>
                             </div>
                         </div>
@@ -1296,12 +1254,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel</label>
                                 </div>
                                 <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i>

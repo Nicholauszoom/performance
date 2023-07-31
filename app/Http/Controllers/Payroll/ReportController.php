@@ -3853,7 +3853,7 @@ EOD;
 
     }
 
-    public function pendingLeaves2(Request $request)
+    public function pendingLeaves1(Request $request)
     {
         # code...
 
@@ -3870,7 +3870,7 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getpendingLeave1($empID,$today,$nature,$department,$position);
+        $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
         $data['nature'] = $this->attendance_model->leave_name($nature);
 
         $data['date'] = $today;

@@ -1234,7 +1234,7 @@ class AttendanceModel extends Model
         return $monthlyleave;
     }
 
-    function getpendingLeave1($empID, $today, $nature, $department, $position)
+    function getpendingLeaves1($empID, $today, $nature, $department, $position)
     {
 
         $calender = explode('-',$today);
