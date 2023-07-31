@@ -866,7 +866,7 @@
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
-                    <h5 class="text-warning">Leave Applications(monthly)</h5>
+                    <h5 class="text-warning">Approved Leave Applications(monthly)</h5>
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
@@ -968,7 +968,7 @@
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
                 <div class="card-header">
-                    <h5 class="text-warning">Leave Applications(yearly)</h5>
+                    <h5 class="text-warning">Approved Leave Applications(yearly)</h5>
                 </div>
 
                 <form id="demo-form2" enctype="multipart/form-data" method="post"
