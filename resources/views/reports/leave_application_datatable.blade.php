@@ -22,6 +22,7 @@
                     <th>Employee Name</th>
                     <th>Department</th>
                     <th>Position</th>
+                    <th>Approver</th>
                     <th>Leave Address</th>
                     <th>From</th>
                     <th>To</th>
@@ -38,6 +39,11 @@
                     <td>{{ $row->full_name }}</td>
                     <td>{{ $row->department_name }}</td>
                     <td>{{ $row->position_name }}</td>
+                    @foreach ($employee as $emp)
+                        @if ($emp->emp_id == $row->level1)
+                            <td>{{ $emp->fname . ' ' . $emp->mname . ' ' . $emp->lname }}</td>
+                        @endif
+                    @endforeach
                     <td>{{ $row->leave_address }}</td>
                     <td> {{ $row->start }} </td>
                     <td>{{ $row->end }}</td>

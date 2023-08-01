@@ -3808,7 +3808,7 @@ EOD;
         // dd($dur);
         $data['leave_data'] = $this->attendance_model->getpendingLeave($empID,$today,$nature,$department,$position);
         $data['nature'] = $this->attendance_model->leave_name($nature);
-
+        $data['employee'] = Employee::all();
 
         $data['date'] = $today;
         // dd($leave_data);
@@ -3872,7 +3872,7 @@ EOD;
         // dd($dur);
         $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
         $data['nature'] = $this->attendance_model->leave_name($nature);
-
+        $data['employee'] = Employee::all();
         $data['date'] = $today;
         // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
