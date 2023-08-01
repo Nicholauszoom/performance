@@ -280,51 +280,7 @@
             </div>
         </div>
 
-        {{-- <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="text-warning">Master Payroll</h5>
-            </div>
 
-            <form
-                id="demo-form2"
-                enctype="multipart/form-data"
-                method="post"
-                action="{{ route('reports.employeeCostExport') }}"
-                data-parsley-validate class="form-horizontal form-label-left"
-            >
-                @csrf
-
-                <div class="card-body">
-                    <div class="input-group">
-                        <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                            <option selected disabled>Select Month</option>
-                            <?php foreach ($month_list as $row) { ?>
-                            <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                            <?php } ?>
-                        </select>
-                        <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
-                    </div>
-
-                    <div class="mt-2">
-                        <label class="form-label">Report Format:</label>
-
-                        <div class="">
-                            <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9" required>
-                                <label class="ms-2" for="p9">PDF</label>
-                            </div>
-
-                            <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a" required>
-                                <label class="ms-2" for="p9a">Excel</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> --}}
 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
@@ -367,187 +323,6 @@
                 </form>
             </div>
         </div>
-
-        {{-- <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="text-warning">Gross Reconciliation</h5>
-            </div>
-
-            <form
-                id="demo-form2"
-                enctype="multipart/form-data"
-                method="post"
-                action="{{ route('reports.grossReconciliation') }}"
-                data-parsley-validate class="form-horizontal form-label-left"
-            >
-                @csrf
-
-                <div class="card-body">
-                    <div class="input-group">
-                        <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                            <option selected disabled>Select Month</option>
-                            <?php foreach ($month_list as $row) { ?>
-                            <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                            <?php } ?>
-                        </select>
-                        <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
-                    </div>
-
-                    <div class="mt-2">
-                        <label class="form-label">Report Format:</label>
-
-                        <div class="">
-                            <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9" required>
-                                <label class="ms-2" for="p9">PDF</label>
-                            </div>
-
-                            <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a" required>
-                                <label class="ms-2" for="p9a">Excel</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> --}}
-
-        {{-- <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="text-warning">Net Reconciliation</h5>
-            </div>
-
-            <form
-                id="demo-form2"
-                enctype="multipart/form-data"
-                method="post"
-                action="{{ route('reports.netReconciliation') }}"
-                data-parsley-validate class="form-horizontal form-label-left"
-            >
-                @csrf
-
-                <div class="card-body">
-                    <div class="input-group">
-                        <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                            <option selected disabled>Select Month</option>
-                            <?php foreach ($month_list as $row) { ?>
-                            <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                            <?php } ?>
-                        </select>
-                        <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
-                    </div>
-
-                    <div class="mt-2">
-                        <label class="form-label">Report Format:</label>
-
-                        <div class="">
-                            <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9" required>
-                                <label class="ms-2" for="p9">PDF</label>
-                            </div>
-
-                            <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a" required>
-                                <label class="ms-2" for="p9a">Excel</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> --}}
-
-        {{-- <div class="col-md-6">
-            <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
-                <div class="card-header">
-                    <h5 class="text-warning">Loans</h5>
-                </div>
-
-                <form id="demo-form2" enctype="multipart/form-data" method="post"
-                    action="{{ route('reports.loanReports') }}" data-parsley-validate
-                    class="form-horizontal form-label-left">
-                    @csrf
-
-                    <div class="card-body">
-                        <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select"
-                                data-width="1%">
-                                <option selected disabled>Select Month</option>
-                                <?php foreach ($month_list as $row) { ?>
-                                <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                                <?php } ?>
-                            </select>
-                            <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
-                        </div>
-
-                        <div class="mt-2">
-                            <label class="form-label">Report Format:</label>
-
-                            <div class="">
-                                <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9" required>
-                                    <label class="ms-2" for="p9">PDF</label>
-                                </div>
-
-                                <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a" required>
-                                    <label class="ms-2" for="p9a">Excel</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div> --}}
-
-        {{-- <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="text-warning">Payroll Input Journal (Time)</h5>
-            </div>
-
-            <form
-                id="demo-form2"
-                enctype="multipart/form-data"
-                method="post"
-                action="{{ route('reports.payrollInputJournalExportTime') }}"
-                data-parsley-validate class="form-horizontal form-label-left"
-            >
-                @csrf
-
-                <div class="card-body">
-                    <div class="input-group">
-                        <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                            <option selected disabled>Select Month</option>
-                            <?php foreach ($month_list as $row) { ?>
-                            <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
-                            <?php } ?>
-                        </select>
-                        <button type="submit" class="btn btn-main"><i class="ph-printer me-2"></i> Print</button>
-                    </div>
-
-                    <div class="mt-2">
-                        <label class="form-label">Report Format:</label>
-
-                        <div class="">
-                            <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="type" value="1" id="p9" required>
-                                <label class="ms-2" for="p9">PDF</label>
-                            </div>
-
-                            <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="type" value="2" id="p9a" required>
-                                <label class="ms-2" for="p9a">Excel</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div> --}}
 
         <div class="col-md-6">
             <div class="card border-top  border-top-width-3 border-top-main rounded-0 p-2">
@@ -896,7 +671,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Department:</label>
-                                    <select class="form-control select @error('department') is-invalid @enderror" id="department1" name="department">
+                                    <select class="form-control select @error('department') is-invalid @enderror" id="department2" name="department">
                                         <option value="All"> All </option>
                                         @foreach ($departments as $depart)
                                         <option value="{{ $depart->id }}">{{ $depart->name }}</option>
@@ -908,7 +683,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Position:</label>
-                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos1" name="position">
+                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos2" name="position">
                                         <option value="All"> All </option>
                                     </select>
                                 </div>
@@ -998,7 +773,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Department:</label>
-                                    <select class="form-control select @error('department') is-invalid @enderror" id="department1" name="department">
+                                    <select class="form-control select @error('department') is-invalid @enderror" id="department3" name="department">
                                         <option value="All"> All </option>
                                         @foreach ($departments as $depart)
                                         <option value="{{ $depart->id }}">{{ $depart->name }}</option>
@@ -1010,7 +785,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Position:</label>
-                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos1" name="position">
+                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos3" name="position">
                                         <option value="All"> All </option>
                                     </select>
                                 </div>
@@ -1100,7 +875,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Department:</label>
-                                    <select class="form-control select @error('department') is-invalid @enderror" id="department1" name="department">
+                                    <select class="form-control select @error('department') is-invalid @enderror" id="department4" name="department">
                                         <option value="All"> All </option>
                                         @foreach ($departments as $depart)
                                         <option value="{{ $depart->id }}">{{ $depart->name }}</option>
@@ -1112,7 +887,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Position:</label>
-                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos1" name="position">
+                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos4" name="position">
                                         <option value="All"> All </option>
                                     </select>
                                 </div>
@@ -1202,7 +977,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Department:</label>
-                                    <select class="form-control select @error('department') is-invalid @enderror" id="department1" name="department">
+                                    <select class="form-control select @error('department') is-invalid @enderror" id="department5" name="department">
                                         <option value="All"> All </option>
                                         @foreach ($departments as $depart)
                                         <option value="{{ $depart->id }}">{{ $depart->name }}</option>
@@ -1214,7 +989,7 @@
                             <div class="col-md-6 col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Position:</label>
-                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos1" name="position">
+                                    <select class="form-control select1_single select @error('position') is-invalid @enderror" id="pos5" name="position">
                                         <option value="All"> All </option>
                                     </select>
                                 </div>
@@ -1456,80 +1231,356 @@
                 // $('#pos').html('<option value="">Select state first</option>');
             }
         });
+        $('#department2').on('change', function() {
+            var stateID = $(this).val();
+
+            console.log(stateID);
+
+            if (stateID) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('/flex/positionFetcher') }}',
+                    data: 'dept_id=' + stateID,
+                    success: function(html) {
+                        let jq_json_obj = $.parseJSON(html);
+                        let jq_obj = eval(jq_json_obj);
+
+                        console.log(jq_obj);
+
+                        //populate position
+                        $("#pos2 option").remove();
+
+                        $('#pos2').append($('<option>', {
+                            value: 'All',
+                            text: 'All',
+                            selected: true,
+                            //disabled: true
+                        }));
+
+
+                        $.each(jq_obj.position, function(detail, name) {
+                            $('#pos2').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                        var x = [];
+
+                        $.each(jq_obj.linemanager, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        $.each(jq_obj.director, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        var flags = [];
+                        var output = [];
+                        for (var i = 0; i < x.length; i++) {
+                            var y = {};
+                            if (flags[x[i].id]) continue;
+                            flags[x[i].id] = true;
+                            y.id = x[i].id;
+                            y.name = x[i].name;
+                            output.push(y);
+                        }
+
+                        //populate linemanager
+                        // $("#linemanager option").remove();
+                        // $('#linemanager').append($('<option>', {
+                        //     value: '',
+                        //     text: 'Select Line Manager',
+                        //     selected: true,
+                        //     disabled: true
+                        // }));
+
+                        $.each(output, function(detail, name) {
+                            $('#linemanager').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                    }
+                });
+            } else {
+                // $('#pos').html('<option value="">Select state first</option>');
+            }
+        });
+        $('#department3').on('change', function() {
+            var stateID = $(this).val();
+
+            console.log(stateID);
+
+            if (stateID) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('/flex/positionFetcher') }}',
+                    data: 'dept_id=' + stateID,
+                    success: function(html) {
+                        let jq_json_obj = $.parseJSON(html);
+                        let jq_obj = eval(jq_json_obj);
+
+                        console.log(jq_obj);
+
+                        //populate position
+                        $("#pos3 option").remove();
+
+                        $('#pos3').append($('<option>', {
+                            value: 'All',
+                            text: 'All',
+                            selected: true,
+                            //disabled: true
+                        }));
+
+
+                        $.each(jq_obj.position, function(detail, name) {
+                            $('#pos3').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                        var x = [];
+
+                        $.each(jq_obj.linemanager, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        $.each(jq_obj.director, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        var flags = [];
+                        var output = [];
+                        for (var i = 0; i < x.length; i++) {
+                            var y = {};
+                            if (flags[x[i].id]) continue;
+                            flags[x[i].id] = true;
+                            y.id = x[i].id;
+                            y.name = x[i].name;
+                            output.push(y);
+                        }
+
+                        //populate linemanager
+                        // $("#linemanager option").remove();
+                        // $('#linemanager').append($('<option>', {
+                        //     value: '',
+                        //     text: 'Select Line Manager',
+                        //     selected: true,
+                        //     disabled: true
+                        // }));
+
+                        $.each(output, function(detail, name) {
+                            $('#linemanager').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                    }
+                });
+            } else {
+                // $('#pos').html('<option value="">Select state first</option>');
+            }
+        });
+
+        $('#department4').on('change', function() {
+            var stateID = $(this).val();
+
+            console.log(stateID);
+
+            if (stateID) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('/flex/positionFetcher') }}',
+                    data: 'dept_id=' + stateID,
+                    success: function(html) {
+                        let jq_json_obj = $.parseJSON(html);
+                        let jq_obj = eval(jq_json_obj);
+
+                        console.log(jq_obj);
+
+                        //populate position
+                        $("#pos4 option").remove();
+
+                        $('#pos4').append($('<option>', {
+                            value: 'All',
+                            text: 'All',
+                            selected: true,
+                            //disabled: true
+                        }));
+
+
+                        $.each(jq_obj.position, function(detail, name) {
+                            $('#pos4').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                        var x = [];
+
+                        $.each(jq_obj.linemanager, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        $.each(jq_obj.director, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        var flags = [];
+                        var output = [];
+                        for (var i = 0; i < x.length; i++) {
+                            var y = {};
+                            if (flags[x[i].id]) continue;
+                            flags[x[i].id] = true;
+                            y.id = x[i].id;
+                            y.name = x[i].name;
+                            output.push(y);
+                        }
+
+                        //populate linemanager
+                        // $("#linemanager option").remove();
+                        // $('#linemanager').append($('<option>', {
+                        //     value: '',
+                        //     text: 'Select Line Manager',
+                        //     selected: true,
+                        //     disabled: true
+                        // }));
+
+                        $.each(output, function(detail, name) {
+                            $('#linemanager').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                    }
+                });
+            } else {
+                // $('#pos').html('<option value="">Select state first</option>');
+            }
+        });
+
+        $('#department5').on('change', function() {
+            var stateID = $(this).val();
+
+            console.log(stateID);
+
+            if (stateID) {
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ url('/flex/positionFetcher') }}',
+                    data: 'dept_id=' + stateID,
+                    success: function(html) {
+                        let jq_json_obj = $.parseJSON(html);
+                        let jq_obj = eval(jq_json_obj);
+
+                        console.log(jq_obj);
+
+                        //populate position
+                        $("#pos5 option").remove();
+
+                        $('#pos5').append($('<option>', {
+                            value: 'All',
+                            text: 'All',
+                            selected: true,
+                            //disabled: true
+                        }));
+
+
+                        $.each(jq_obj.position, function(detail, name) {
+                            $('#pos5').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                        var x = [];
+
+                        $.each(jq_obj.linemanager, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        $.each(jq_obj.director, function(detail, name) {
+                            var y = {};
+                            y.name = name.NAME;
+                            y.id = name.empID;
+                            x.push(y);
+
+                            // $('#linemanager').append($('<option>', {value: name.empID, text: name.NAME}));
+                        });
+
+                        var flags = [];
+                        var output = [];
+                        for (var i = 0; i < x.length; i++) {
+                            var y = {};
+                            if (flags[x[i].id]) continue;
+                            flags[x[i].id] = true;
+                            y.id = x[i].id;
+                            y.name = x[i].name;
+                            output.push(y);
+                        }
+
+                        //populate linemanager
+                        // $("#linemanager option").remove();
+                        // $('#linemanager').append($('<option>', {
+                        //     value: '',
+                        //     text: 'Select Line Manager',
+                        //     selected: true,
+                        //     disabled: true
+                        // }));
+
+                        $.each(output, function(detail, name) {
+                            $('#linemanager').append($('<option>', {
+                                value: name.id,
+                                text: name.name
+                            }));
+                        });
+
+                    }
+                });
+            } else {
+                // $('#pos').html('<option value="">Select state first</option>');
+            }
+        });
+
+
+
     });
 </script>
-    <!-- <script>
-        $(function() {
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
 
-            var startYear = today.getFullYear() - 18;
-            var endYear = today.getFullYear() - 60;
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
-
-
-            var dateStart = dd + '/' + mm + '/' + startYear;
-            var dateEnd = dd + '/' + mm + '/' + endYear;
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-
-            function cb(start, end) {
-                $('#duration span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            }
-
-            $('#duration').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                minYear: 1901,
-                maxYear: parseInt(moment().format('YYYY'), 10)
-            }, cb);
-
-            cb(start, end);
-
-        });
-        -- >
-
-        <
-        !--$(function() {
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-
-            var startYear = today.getFullYear() - 18;
-            var endYear = today.getFullYear() - 60;
-            if (dd < 10) {
-                dd = '0' + dd;
-            }
-            if (mm < 10) {
-                mm = '0' + mm;
-            }
-
-
-            var dateStart = dd + '/' + mm + '/' + startYear;
-            var dateEnd = dd + '/' + mm + '/' + endYear;
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-
-            function cb(start, end) {
-                $('#duration_ span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            }
-
-            $('#duration_').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                minYear: 1901,
-                maxYear: parseInt(moment().format('YYYY'), 10)
-            }, cb);
-
-            cb(start, end);
-
-        });
-        -- >
-    </script>
 @endpush
