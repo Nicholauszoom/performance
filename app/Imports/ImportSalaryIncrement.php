@@ -21,33 +21,32 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 use DateTime;
 
-class ImportSalaryIncrement implements ToCollection,WithHeadingRow
+class ImportSalaryIncrement implements ToCollection, WithHeadingRow
 {
     protected $flexperformance_model;
 
 
     /**
-    * @param Collection $collection
-    */
+     * @param Collection $collection
+     */
     public function collection(Collection $collection)
     {
         $flexperformance_model = new FlexperformanceModel;
         $this->flexperformance_model = $flexperformance_model;
 
 
-        foreach ($collection as $row)
-        {
+        foreach ($collection as $row) {
 
 
 
 
-  //start iport increments
+            //start iport increments
             $id = $row['emp_id'];
             //dd($id);
             $empl = Employee::where('emp_id', $id)->first();
             $oldSalary = $empl->salary;
             $oldRate = $empl->rate;
-           $new_salary =  $row['increment']+$empl->salary;
+            $new_salary =  $row['increment'] + $empl->salary;
 
             // saving old employee data
             $old = new Promotion();
@@ -78,33 +77,28 @@ class ImportSalaryIncrement implements ToCollection,WithHeadingRow
 
             SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $new_salary * $oldRate, 'Salary Increment');
 
-    //end iport increments
+            //end iport increments
 
 
 
-    //start import  arreas
+            //start import  arreas
+            if (!empty($row['arrears']) && $row['arrears'] > 0) {
+                $rate = $this->flexperformance_model->get_rate($row['currency']);
 
-    $rate = $this->flexperformance_model->get_rate($row['currency']);
+                $data = array(
+                    'empID' => $row['emp_id'],
+                    'allowance' => 40,
+                    'amount' => $row['arrears'] * $rate,
+                    'mode' => 1,
+                    'percent' => 0 / 100,
+                    'currency' => $row['currency'],
+                    'rate' => $rate,
+                );
 
-    $data = array(
-        'empID' => $row['emp_id'],
-        'allowance' => 40,
-        'amount' => $row['arrears'] * $rate,
-        'mode' => 1,
-        'percent' => 0 / 100,
-        'currency' => $row['currency'],
-        'rate' => $rate,
-    );
+                $result = $this->flexperformance_model->assign_allowance($data);
 
-    $result = $this->flexperformance_model->assign_allowance($data);
-
-    SysHelpers::FinancialLogs($data['empID'], 'Assign ' . 'Arrears', '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
-
-
-
-
-
-
+                SysHelpers::FinancialLogs($data['empID'], 'Assign ' . 'Arrears', '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+            }
         }
     }
 }

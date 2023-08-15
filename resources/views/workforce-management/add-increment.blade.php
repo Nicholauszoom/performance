@@ -109,7 +109,7 @@
 
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-warning">Increment Salary By Uploading File</h5>
+            <h5 class="mb-0 text-warning">Increment Salary and Arrears By Uploading File</h5>
 
                 {{-- <a href="{{ route('flex.promotion') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Promotions|Increments
