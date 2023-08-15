@@ -20,7 +20,7 @@
 
     <div class="card-header border-0">
         <div class="d-flex justify-content-between">
-            <h5 class="mb-0 text-warning">Increment Employee Salary</h5>
+            <h5 class="mb-0 text-warning">Employee Salary Increment</h5>
 
                 <a href="{{ route('flex.promotion') }}" class="btn btn-perfrom">
                     <i class="ph-list me-2"></i> All Promotions|Increments
