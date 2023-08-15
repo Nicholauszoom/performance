@@ -174,6 +174,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
          // start of promotion/increment routes
          Route::any('promotion','promotion')->name('flex.promotion');
          Route::any('/add-promotion','addPromotion')->name('flex.addPromotion');
+         Route::any('/add-bulk-increment','addBulkIncrement')->name('flex.addBulkIncrement');
          Route::post('/save-promotion','savePromotion')->name('flex.savePromotion');
          Route::get('/view-promotion/{id}','viewPromotion')->name('flex.viewPromotion');
          Route::any('/add-increment','addIncrement')->name('flex.addIncrement');

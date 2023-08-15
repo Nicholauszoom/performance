@@ -74,6 +74,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Models\AccessControll\Departments;
 use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Notification;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\Importable;
+use App\Imports\ImportSalaryIncrement;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
 use Exception;
@@ -8846,11 +8849,17 @@ $this->authenticateUser('add-payroll');
         return redirect('flex/promotion')->with('msg', 'Promotion was Canceled successfully !');
     }
 
+    public function addBulkIncrement(Request $request){
+
+
+
+    }
+
     // For Add Increment Page
     public function addIncrement()
     {
 
-        $this->authenticateUser('view-increment');
+        $this->authenticateUser('add-increment');
 
         $data['title'] = "Increment Salary";
         $data['my_overtimes'] = $this->flexperformance_model->my_overtimes(session('emp_id'));
