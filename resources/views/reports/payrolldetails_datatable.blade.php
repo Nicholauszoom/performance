@@ -32,7 +32,7 @@
 
                                 <th  class="text-end"><b>Respons. Allowance</b></th>
                                 <th  class="text-end"><b>House Allowance</b></th>
-                                <th  class="text-end"><b>Areas</b></th>
+                                <th  class="text-end"><b>Arrears</b></th>
                                 <th  class="text-end"><b>Other Payment</b></th>
                                 <th  class="text-end"><b>Gross Salary</b></th>
                                 <th  class="text-end"><b>Tax Benefit</b></th>
@@ -44,7 +44,7 @@
                                 <th  class="text-end"><b>Loan Board</b></th>
                                 <th  class="text-end"><b>Advance/Others</b></th>
                                 <th  class="text-end"><b>Total Deduction</b></th>
-                                <th  class="text-end"><b>Ammount Payable</b></th>
+                                <th  class="text-end"><b>Amount Payable</b></th>
 
 
                 </tr>
