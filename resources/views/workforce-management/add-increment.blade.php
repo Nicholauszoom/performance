@@ -119,7 +119,7 @@
     </div>
 
 
-            <div id="save_termination" class="" tabindex="-1">
+            <div  class="" tabindex="-1">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         @if (session('status'))
@@ -129,8 +129,9 @@
                         @endif
 
                         <form
-                            action="{{ route('flex.saveIncrement') }}"
+                            action="{{ route('flex.addBulkIncrement') }}"
                             method="POST"
+                            enctype="multipart/form-data"
                             class="form-horizontal"
                         >
                             @csrf

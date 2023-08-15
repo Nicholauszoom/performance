@@ -10,57 +10,96 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Illuminate\Support\Str;
 use App\Models\ImportsEmployee;
 use App\Models\Payroll\FlexPerformanceModel;
+use App\Models\Employee;
+use App\Models\Promotion;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\SysHelpers;
 use App\Models\PerformanceModel;
 use App\Models\ProjectModel;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+
 use DateTime;
 
 class ImportSalaryIncrement implements ToCollection,WithHeadingRow
 {
+    protected $flexperformance_model;
+
+
     /**
     * @param Collection $collection
     */
     public function collection(Collection $collection)
     {
+        $flexperformance_model = new FlexperformanceModel;
+        $this->flexperformance_model = $flexperformance_model;
 
 
         foreach ($collection as $row)
         {
 
-//dd($row['emp_id']);
-        $date = DB::table('employee')->where('emp_id',$row['emp_id'])->select('*')->first();
-		$d1 = new DateTime($date->hire_date);
-		$todayDate = date('Y-m-d',strtotime('2022-12-31'));
-		$d2 = new DateTime($todayDate);
-		$diff = $d1->diff($d2);
 
-		$years = $diff->y;
-		$months = $diff->m;
-        $days = $diff->d;
-        if($days > 1){
 
-            $months = $months;
 
-        }
+  //start iport increments
+            $id = $row['emp_id'];
+            //dd($id);
+            $empl = Employee::where('emp_id', $id)->first();
+            $oldSalary = $empl->salary;
+            $oldRate = $empl->rate;
+           $new_salary =  $row['increment']+$empl->salary;
 
-        $accrue = $months * $date->accrual_rate + $years * 12 * $date->accrual_rate;
-        if($row['emp_id'] == 102927){
-            $leave = $accrue - $row['days'];
-            dd($accrue,$date->emp_id);
-        }
-        $leave = $accrue - $row['days'];
+            // saving old employee data
+            $old = new Promotion();
+            $old->employeeID = $id;
+            $old->oldSalary = $empl->salary;
+            $old->newSalary = $new_salary;
+            $old->oldPosition = $empl->position;
+            $old->newPosition = $empl->position;;
+            $old->oldLevel = $empl->emp_level;
+            $old->newLevel = $empl->emp_level;
+            $old->created_by = Auth::user()->id;
+            $old->action = "incremented";
 
-          $data = [
-            //'code'=>$row['code'],
-            'days'=>$leave,
-            //'location_code'=>$row['location_code'],
-            //'location_id'=>$row['location_id'],
+            $old->save();
 
-          ];
-          DB::table('leaves')->where('empID',$row['emp_id'])->update($data);
-        //   DB::table('branch')
-        //   ->insert($data);
+
+            $promotion = Promotion::where('id', $old->id)->first();
+
+            // dd($promotion);
+            $promotion->status = "Successful";
+            $promotion->update();
+
+            $increment = Employee::where('emp_id', $promotion->employeeID)->first();
+            $increment->salary = $promotion->newSalary;
+            $increment->position = $promotion->newPosition;
+            $increment->emp_level = $promotion->newLevel;
+            $increment->update();
+
+            SysHelpers::FinancialLogs($id, 'Salary Increment', $oldSalary * $oldRate, $new_salary * $oldRate, 'Salary Increment');
+
+    //end iport increments
+
+
+
+    //start import  arreas
+
+    $rate = $this->flexperformance_model->get_rate($row['currency']);
+
+    $data = array(
+        'empID' => $row['emp_id'],
+        'allowance' => 40,
+        'amount' => $row['arrears'] * $rate,
+        'mode' => 1,
+        'percent' => 0 / 100,
+        'currency' => $row['currency'],
+        'rate' => $rate,
+    );
+
+    $result = $this->flexperformance_model->assign_allowance($data);
+
+    SysHelpers::FinancialLogs($data['empID'], 'Assign ' . 'Arrears', '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
+
 
 
 

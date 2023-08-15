@@ -8849,8 +8849,14 @@ $this->authenticateUser('add-payroll');
         return redirect('flex/promotion')->with('msg', 'Promotion was Canceled successfully !');
     }
 
+    use Importable;
     public function addBulkIncrement(Request $request){
 
+
+    $data1 = Excel::import(new ImportSalaryIncrement, $request->file('file')->store('files'));
+
+    $msg = "Employee Salary  Incremention and Arrears has been requested successfully !";
+    return redirect('flex/promotion')->with('success', $msg);
 
 
     }
