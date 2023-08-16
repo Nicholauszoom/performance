@@ -4,24 +4,26 @@ namespace App\Http\Controllers\API;
 
 use DateTime;
 use Carbon\Carbon;
-use App\Models\Leaves;
-use App\Models\LeaveType;
-use App\Models\LeaveSubType;
-use App\Models\LeaveApproval;
-use App\Models\Position;
-// use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use App\Models\EMPL;
+use App\Models\Leaves;
+use App\Models\Position;
+use App\Models\LeaveType;
+use App\Helpers\SysHelpers;
+// use Illuminate\Support\Carbon;
+use App\Models\LeaveSubType;
 use Illuminate\Http\Request;
+use App\Models\LeaveApproval;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
 use App\Models\PerformanceModel;
+use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Http\Controllers\Controller;
 use App\Models\Payroll\ImprestModel;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Payroll\FlexPerformanceModel;
 use Illuminate\Support\Facades\Session;
+use App\Models\Payroll\FlexPerformanceModel;
+
 class LeaveController extends Controller
 {
 
