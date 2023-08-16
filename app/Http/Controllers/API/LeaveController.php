@@ -75,7 +75,7 @@ class LeaveController extends Controller
   //  return response()->json($data);
     
    
-    
+  
 
     return response(
         [
