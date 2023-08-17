@@ -38,12 +38,17 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
         foreach ($collection as $row) {
 
 
+           if($row['emp_id'] != null){
+
 
 
             //start iport increments
             $id = $row['emp_id'];
-            //dd($id);
+
             $empl = Employee::where('emp_id', $id)->first();
+            if(empty($empl)){
+
+            }
             $oldSalary = $empl->salary;
             $oldRate = $empl->rate;
             $new_salary =  $row['increment'];
@@ -99,6 +104,8 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
 
                 SysHelpers::FinancialLogs($data['empID'], 'Assign ' . 'Arrears', '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
             }
+
+        }
         }
     }
 }
