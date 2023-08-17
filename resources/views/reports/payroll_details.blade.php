@@ -276,7 +276,7 @@
                             </td>
 
                             <td class="text-end"><b><b>{{ number_format($total_house_rent, 0) }}</b></b></td>
-                            <td class="text-end"><b><b>{{ number_format(0, 0) }}<b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_arrears, 0) }}<b></b></td>
                             <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
 
                             <td class="text-end">
