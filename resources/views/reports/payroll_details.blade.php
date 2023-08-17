@@ -26,11 +26,14 @@
                             <td class="">
                                 <div class="box-text text-right" style="text-align:left;">
                                     <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
+                                    <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
                                     </p>
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
                                     <p class="p-space">Bibi Titi Mohammed Road</p>
                                     <p class="p-space">P.O. Box 31, Dar es salaam </p>
+
+                                    <p class="p-space">+255 22 22119422/2111990 </p>
+                                    <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
 
                                 </div>
                             </td>
@@ -41,7 +44,8 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                    <img src="{{ asset('assets/images/tdfl.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px"
+                                        height="150px" class="image-fluid">
                                 </div>
                             </td>
                         </tr>
@@ -58,10 +62,15 @@
                                     <h5 style="font-weight:bolder;text-align: left;"> Payroll Details </h5>
                                 </div>
                             </td>
-                            <td> <div class="box-text text-end"></div> </td>
-                            <td> <div class="box-text"> </div> </td>
+                            <td>
+                                <div class="box-text text-end"></div>
+                            </td>
+                            <td>
+                                <div class="box-text"> </div>
+                            </td>
                             <td colspan="4" class="w-50" style="">
-                                <P class="mt-1" style="text-align: right; "> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</p>
+                                <P class="mt-1" style="text-align: right; "> For the month of
+                                    {{ date('M-Y', strtotime($payroll_date)) }}</p>
                             </td>
                         </tr>
                     </thead>
@@ -69,7 +78,7 @@
 
                 <hr>
 
-                <table class="table" id="reports"  style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -267,7 +276,7 @@
                             </td>
 
                             <td class="text-end"><b><b>{{ number_format($total_house_rent, 0) }}</b></b></td>
-                            <td class="text-end"><b><b>{{ number_format($total_arrears, 0) }}<b></b></td>
+                            <td class="text-end"><b><b>{{ number_format(0, 0) }}<b></b></td>
                             <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
 
                             <td class="text-end">
@@ -306,12 +315,16 @@
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>1st Checker & Approved By:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>1st Checker & Approved
+                                            By:</b></small></p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>2nd Checker & Approved By:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>2nd Checker & Approved
+                                            By:</b></small></p>
                             </td>
-                            <td><p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p></td>
+                            <td>
+                                <p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p>
+                            </td>
                         </tr>
                         <tr>
 
