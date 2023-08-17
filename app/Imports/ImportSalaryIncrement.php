@@ -56,7 +56,7 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
             // saving old employee data
             $old = new Promotion();
             $old->employeeID = $id;
-            $old->oldSalary = $empl->salary;
+            $old->oldSalary = $empl->salary/$empl->rate;
             $old->newSalary = $new_salary;
             $old->oldPosition = $empl->position;
             $old->newPosition = $empl->position;;
@@ -75,7 +75,7 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
             $promotion->update();
 
             $increment = Employee::where('emp_id', $promotion->employeeID)->first();
-            $increment->salary = $promotion->newSalary;
+            $increment->salary = $promotion->newSalary*$empl->rate;
             $increment->position = $promotion->newPosition;
             $increment->emp_level = $promotion->newLevel;
             $increment->update();
