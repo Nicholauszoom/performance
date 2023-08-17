@@ -278,7 +278,7 @@
                             </td>
                             <td class="text-end"><b>{{ number_format($total_current, 2) }}</b></td>
                             <td class="text-end">
-                                <b>{{ number_format($total_amount, 0) }}</b>
+                                <b>{{ number_format($total_amount+728,500, 0) }}</b>
                             </td>
                             <td class="text-end"><b>{{ ($payroll_date == '2023-02-17' ? $count_current_month - 1 : $count_current_month) }}</b></td>
                         </tr>
