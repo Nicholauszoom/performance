@@ -38,20 +38,25 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
         foreach ($collection as $row) {
 
 
+           if($row['emp_id'] != null){
+
 
 
             //start iport increments
             $id = $row['emp_id'];
-            //dd($id);
+
             $empl = Employee::where('emp_id', $id)->first();
+            if(empty($empl)){
+
+            }
             $oldSalary = $empl->salary;
             $oldRate = $empl->rate;
-            $new_salary =  $row['increment'] + $empl->salary;
+            $new_salary =  $row['increment'];
 
             // saving old employee data
             $old = new Promotion();
             $old->employeeID = $id;
-            $old->oldSalary = $empl->salary;
+            $old->oldSalary = $empl->salary/$empl->rate;
             $old->newSalary = $new_salary;
             $old->oldPosition = $empl->position;
             $old->newPosition = $empl->position;;
@@ -70,7 +75,7 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
             $promotion->update();
 
             $increment = Employee::where('emp_id', $promotion->employeeID)->first();
-            $increment->salary = $promotion->newSalary;
+            $increment->salary = $promotion->newSalary*$empl->rate;
             $increment->position = $promotion->newPosition;
             $increment->emp_level = $promotion->newLevel;
             $increment->update();
@@ -99,6 +104,8 @@ class ImportSalaryIncrement implements ToCollection, WithHeadingRow
 
                 SysHelpers::FinancialLogs($data['empID'], 'Assign ' . 'Arrears', '0', ($data['amount'] != 0) ? $data['amount'] . ' ' . $data['currency'] : $data['percent'] . '%',  'Payroll Input');
             }
+
+        }
         }
     }
 }

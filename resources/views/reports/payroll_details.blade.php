@@ -26,11 +26,12 @@
                             <td class="">
                                 <div class="box-text text-right" style="text-align:left;">
                                     <p class="p-space">
-                                        <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
+                                    <h5 style="font-weight:bolder;margin-top:15px;">HC-HUB</h5>
                                     </p>
                                     <p class="p-space">5th & 6th Floor, Uhuru Heights</p>
                                     <p class="p-space">Bibi Titi Mohammed Road</p>
                                     <p class="p-space">P.O. Box 31, Dar es salaam </p>
+
                                     <p class="p-space">+255 22 22119422/2111990 </p>
                                     <p class="p-space"> web:<a href="www.bancabc.co.tz">www.bancabc.co.tz</a></p>
 
@@ -43,7 +44,8 @@
 
                             <td colspan="4" class="w-50" style="">
                                 <div class="box-text text-end">
-                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px" height="150px" class="image-fluid">
+                                    <img src="{{ asset('assets/images/logo-dif2.png') }}" alt="logo here" width="180px"
+                                        height="150px" class="image-fluid">
                                 </div>
                             </td>
                         </tr>
@@ -60,10 +62,15 @@
                                     <h5 style="font-weight:bolder;text-align: left;"> Payroll Details </h5>
                                 </div>
                             </td>
-                            <td> <div class="box-text text-end"></div> </td>
-                            <td> <div class="box-text"> </div> </td>
+                            <td>
+                                <div class="box-text text-end"></div>
+                            </td>
+                            <td>
+                                <div class="box-text"> </div>
+                            </td>
                             <td colspan="4" class="w-50" style="">
-                                <P class="mt-1" style="text-align: right; "> For the month of {{ date('M-Y', strtotime($payroll_date)) }}</p>
+                                <P class="mt-1" style="text-align: right; "> For the month of
+                                    {{ date('M-Y', strtotime($payroll_date)) }}</p>
                             </td>
                         </tr>
                     </thead>
@@ -71,7 +78,7 @@
 
                 <hr>
 
-                <table class="table" id="reports"  style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:9px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -110,7 +117,7 @@
                                     $total_taxable_amount = 0;
                                     //$total_gross_salary = 0;
                                     $total_taxs = 0;
-                                    $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
+                                    $total_salary = 0; $total_netpay = 0; $total_arrears = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
                                     $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
                                 foreach ($summary as $row){
                                     $i++;
@@ -120,6 +127,7 @@
                                     $total_gross_salary += ($row->salary + $row->allowances);
                                     $total_salary = $total_salary + $row->salary;
                                     $total_allowance = $total_allowance + $row->allowances ;
+                                    $total_arrears = $total_arrears + $row->arrears_allowance;
                                     $total_overtime = $total_overtime +$row->overtime;
                                     $total_house_rent = $total_house_rent + $row->house_rent;
                                     $total_others = $total_others + $row->other_payments ;
@@ -161,7 +169,7 @@
                             <td class="text-end">{{ number_format($row->teller_allowance, 0) }}</td>
                             <td class="text-end">{{ number_format($row->house_rent, 0) }}</td>
 
-                            <td class="text-end">{{ number_format(0, 0) }}</td>
+                            <td class="text-end">{{ number_format($row->arrears_allowance, 0) }}</td>
 
                             <td class="text-end">{{ number_format($row->other_payments, 0) }}</td>
 
@@ -268,7 +276,7 @@
                             </td>
 
                             <td class="text-end"><b><b>{{ number_format($total_house_rent, 0) }}</b></b></td>
-                            <td class="text-end"><b><b>{{ number_format(0, 0) }}<b></b></td>
+                            <td class="text-end"><b><b>{{ number_format($total_arrears, 0) }}<b></b></td>
                             <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
 
                             <td class="text-end">
@@ -307,12 +315,16 @@
                                 </p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>1st Checker & Approved By:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>1st Checker & Approved
+                                            By:</b></small></p>
                             </td>
                             <td>
-                                <p class="text-start" style="font-size:15px;"><small><b>2nd Checker & Approved By:</b></small></p>
+                                <p class="text-start" style="font-size:15px;"><small><b>2nd Checker & Approved
+                                            By:</b></small></p>
                             </td>
-                            <td><p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p></td>
+                            <td>
+                                <p class="text-start" style="font-size:15px;"><small><b>Approved By:</b></small></p>
+                            </td>
                         </tr>
                         <tr>
 

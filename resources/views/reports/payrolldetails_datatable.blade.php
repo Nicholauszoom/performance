@@ -42,7 +42,7 @@
 
                                 <th  class="text-end"><b>Respons. Allowance</b></th>
                                 <th  class="text-end"><b>House Allowance</b></th>
-                                <th  class="text-end"><b>Areas</b></th>
+                                <th  class="text-end"><b>Arrears</b></th>
                                 <th  class="text-end"><b>Other Payment</b></th>
                                 <th  class="text-end"><b>Gross Salary</b></th>
                                 <th  class="text-end"><b>Tax Benefit</b></th>
@@ -58,7 +58,7 @@
                                 <th  class="text-end"><b>Loan Board</b></th>
                                 <th  class="text-end"><b>Advance/Others</b></th>
                                 <th  class="text-end"><b>Total Deduction</b></th>
-                                <th  class="text-end"><b>Ammount Payable</b></th>
+                                <th  class="text-end"><b>Amount Payable</b></th>
 
 
                 </tr>
@@ -75,7 +75,7 @@
                                 $total_taxable_amount = 0;
                                 $total_gross_salary = 0;
                                 $total_taxs = 0;
-                                $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
+                                $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_arrears = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
                                 $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0; $total_gross_salary = 0; $taxable_amount = 0;
                             foreach ($summary as $row){
                                 $i++;
@@ -86,6 +86,7 @@
                                 $total_salary = $total_salary + $row->salary;
                                 $total_allowance = $total_allowance + $row->allowances ;
                                 $total_overtime = $total_overtime +$row->overtime;
+                                $total_arrears = $total_arrears + $row->arrears_allowance;
                                 $total_house_rent = $total_house_rent + $row->house_rent;
                                 $total_others = $total_others + $row->other_payments ;
                                 $total_taxs += round($row->taxdue,0);
@@ -129,7 +130,7 @@
                                 <td class="text-end">{{ number_format($row->teller_allowance, 0) }}</td>
                                 <td class="text-end">{{ number_format($row->house_rent, 0) }}</td>
 
-                                <td class="text-end">{{ number_format(0, 0) }}</td>
+                                <td class="text-end">{{ number_format($row->arrears_allowance, 0) }}</td>
 
                                 <td class="text-end">{{ number_format($row->other_payments, 0) }}</td>
 
@@ -246,7 +247,7 @@
                                 </td>
 
                                 <td class="text-end"><b><b>{{ number_format($total_house_rent, 0) }}</b></b></td>
-                                <td class="text-end"><b><b>{{ number_format(0, 0) }}<b></b></td>
+                                <td class="text-end"><b><b>{{ number_format($total_arrears, 0) }}<b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_others, 0) }}</b></b></td>
 
                                 <td class="text-end">
