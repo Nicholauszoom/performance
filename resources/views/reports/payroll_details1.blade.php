@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -70,7 +71,7 @@
                                     <th scope="col" class="text-end"><b>PAYE</b></th>
 
 
-                                    <th scope="col" class="text-end"><b>NSSF</b></th>
+                                    <th scope="col" class="text-end"><b>NSSF Employee</b></th>
                                     <th scope="col" class="text-end"><b>Loan Board</b></th>
                                     <th scope="col" class="text-end"><b>Advance/Others</b></th>
                                     <th scope="col" class="text-end"><b>Total Deduction</b></th>

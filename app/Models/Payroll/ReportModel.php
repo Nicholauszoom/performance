@@ -567,7 +567,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     {
         $query = "SELECT
         pl.*,
-        e.fname,e.mname,e.lname,e.account_no,e.currency,b.name as bank_name,e.branch as branch_code,
+        e.fname,e.mname,e.lname,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,cc.name as costCenterName,b.name as bank_name,e.branch as branch_code,
         e.emp_id,e.rate,
         'al.description' as allowance_id,
         0 as allowance_amount,
@@ -583,7 +583,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
 
         (SELECT SUM(ll.paid) FROM loan_logs ll,loan l WHERE ll.loanID = l.id AND e.emp_id = l.empID AND  ll.payment_date = '" . $date . "' GROUP BY ll.payment_date) AS total_loans
 
-        from payroll_logs pl,employee e,bank b where b.id = e.bank and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
+        from payroll_logs pl,employee e,bank b,department de,cost_center cc where b.id = e.bank and e.department = de.id and de.cost_center_id = cc.id and e.emp_id = pl.empID /* and e.state !=4 */  and pl.payroll_date='" . $date . "' ORDER BY e.emp_id ASC
 
         ";
 

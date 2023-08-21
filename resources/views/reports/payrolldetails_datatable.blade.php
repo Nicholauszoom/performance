@@ -27,7 +27,17 @@
                                 <td></td>
                                 <th  class="text-center"><b>Name</b><br>
                                 </th>
+                                <th  class="text-center"><b>Account Number</b><br>
+                                </th>
+                                <th  class="text-center"><b>Pension Number</b><br>
+                                </th>
+                                <th  class="text-center"><b>Department</b><br>
+                                </th>
+                                <th  class="text-center"><b>Cost Center</b><br>
+                                </th>
                                 <th  class="text-end"><b>Basic Salary</b></th>
+                                
+                                <th  class="text-end"><b>Net Basic Salary</b></th>
                                 <th  class="text-end"><b>Overtime</b></th>
 
                                 <th  class="text-end"><b>Respons. Allowance</b></th>
@@ -40,7 +50,11 @@
                                 <th  class="text-end"><b>PAYE</b></th>
 
 
-                                <th  class="text-end"><b>NSSF</b></th>
+                                <th  class="text-end"><b>NSSF Employee</b></th>
+                                <th  class="text-end"><b>NSSF Employer</b></th>
+                                <th  class="text-end"><b>NSSF Payable</b></th>
+                                <th  class="text-end"><b>SDL</b></th>
+                                <th  class="text-end"><b>WCF</b></th>
                                 <th  class="text-end"><b>Loan Board</b></th>
                                 <th  class="text-end"><b>Advance/Others</b></th>
                                 <th  class="text-end"><b>Total Deduction</b></th>
@@ -55,6 +69,8 @@
                             if(!empty($summary)){
                                 $total_loans = 0;
                                 $others = 0;
+                                $totalsdl=0;
+                                $totalwcf=0;
                                 $total_teller_allowance = 0;
                                 $total_taxable_amount = 0;
                                 $total_gross_salary = 0;
@@ -83,6 +99,8 @@
                                 $total_teller_allowance += $row->teller_allowance;
 
                                 $others += $row->deductions;
+                                $totalsdl  += $row->sdl;
+                                    $totalwcf  += $row->wcf;
 
 
                             ?>
@@ -93,8 +111,16 @@
                                 <td></td>
                                 <td class="" style="margin-right: 0px" colspan="">{{ $row->fname }} {{ $row->mname }} {{ $row->lname }}
                                 </td>
+                                <td class="" style="margin-right: 0px" colspan="">{{ $row->account_no }}
+                                </td>
+                                <td class="" style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
+                                </td>
+                                <td class="" style="margin-right: 0px" colspan="">{{ $row->name}}
+                                </td>
+                                <td class="" style="margin-right: 0px" colspan="">{{ $row->costCenterName}}
+                                </td>
 
-
+                                <td class="text-end">{{ number_format($row->salary, 0) }}</td>
                                 <td class="text-end">{{ number_format($row->salary, 0) }}</td>
 
                                 <td class="text-end">{{ number_format($row->overtime, 0) }}</td>
@@ -116,6 +142,10 @@
                                 <td class="text-end">{{ number_format($row->taxdue, 2) }}</td>
 
                                 <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
+                                <td class="text-end">{{ number_format($row->pension_employer, 2) }}</td>
+                                <td class="text-end">{{ number_format($row->pension_employer*2, 2) }}</td>
+                                <td class="text-end">{{ number_format($row->sdl, 2) }}</td>
+                                <td class="text-end">{{ number_format($row->wcf, 2) }}</td>
                                 <td class="text-end">{{ number_format($row->loans, 0) }}</td>
 
                                 <td class="text-end">{{ number_format(intval($row->deductions), 0) }}</td>
@@ -187,6 +217,7 @@
                                     $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
                                     $total_pension += $row2->pension_employee;
                                     $total_gross_salary += $row2->total_gross;
+                                   
 
                                     // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
 
@@ -199,10 +230,16 @@
                                 {{-- <td></td>
                                 <td></td> --}}
                                 <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>  
+                                <td></td>
+                                <td></td>
                                 <td>
                                         <b>
                                             <center><b>TOTAL<b></center>
                                             </b></td>
+                                <td class="text-end"><b><b>{{ number_format($total_salary, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_salary, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_overtime, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_teller_allowance, 0) }}</b></b>
@@ -224,6 +261,10 @@
                                 <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
 
                                 <td class="text-end"><b><b>{{ number_format($total_pension, 0) }}</b></b></td>
+                                <td class="text-end"><b><b>{{ number_format($total_pension, 0) }}</b></b></td>
+                                <td class="text-end"><b><b>{{ number_format($total_pension*2, 0) }}</b></b></td>
+                                <td class="text-end"><b><b>{{ number_format($totalsdl, 0) }}</b></b></td>
+                                <td class="text-end"><b><b>{{ number_format($totalwcf, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_loans, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($others, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_deduction, 0) }}</b></b></td>
