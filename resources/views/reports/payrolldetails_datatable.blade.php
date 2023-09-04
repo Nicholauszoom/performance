@@ -24,7 +24,7 @@
             <thead>
                 <tr>
                     <th ><b>Pay No</b></th>
-                                <td></td>
+                                <th></th>
                                 <th  class="text-center"><b>Name</b><br>
                                 </th>
                                 <th  class="text-center"><b>Account Number</b><br>
@@ -36,7 +36,7 @@
                                 <th  class="text-center"><b>Cost Center</b><br>
                                 </th>
                                 <th  class="text-end"><b>Basic Salary</b></th>
-                                
+
                                 <th  class="text-end"><b>Net Basic Salary</b></th>
                                 <th  class="text-end"><b>Overtime</b></th>
 
@@ -121,7 +121,7 @@
                                 <td class="" style="margin-right: 0px" colspan="">{{ $row->costCenterName}}
                                 </td>
 
-                                <td class="text-end">{{ number_format($row->salary, 0) }}</td>
+                                <td class="text-end">{{ number_format($row->actual_salary, 0) }}</td>
                                 <td class="text-end">{{ number_format($row->salary, 0) }}</td>
 
                                 <td class="text-end">{{ number_format($row->overtime, 0) }}</td>
@@ -169,9 +169,18 @@
                                     <td></td>
                                     <td class="" style="margin-right: 0px" colspan="">{{ $row2->fname }} {{ $row2->mname }} {{ $row2->lname }}
                                     </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->account_no }}
+                                    </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
+                                    </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->name}}
+                                    </td>
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->costCenterName}}
 
 
 
+                                    <td class="text-end">{{ number_format($row2->actual_salary, 0) }}
+                                    </td>
                                     <td class="text-end">{{ number_format($row2->salaryEnrollment, 0) }}
                                     </td>
 
@@ -199,6 +208,12 @@
 
                                     <td class="text-end">{{ number_format($row2->pension_employee, 2) }}
                                     </td>
+                                    <td class="text-end">{{ number_format($row2->pension_employee, 2) }}
+                                    </td>
+                                    <td class="text-end">{{ number_format($row2->pension_employee*2, 2) }}
+                                    </td>
+                                    <td class="text-end">{{ number_format($row->sdl, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->wcf, 2) }}</td>
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
                                     <td class="text-end">{{ number_format($row2->loan_balance+$row2->otherDeductions, 0) }}</td>
                                     <td class="text-end">
@@ -218,7 +233,7 @@
                                     $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
                                     $total_pension += $row2->pension_employee;
                                     $total_gross_salary += $row2->total_gross;
-                                   
+
 
                                     // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
 
@@ -233,7 +248,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>  
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td>
