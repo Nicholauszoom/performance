@@ -71,6 +71,7 @@
                                 $others = 0;
                                 $totalsdl=0;
                                 $totalwcf=0;
+                                $total_actual_salary = 0;
                                 $total_teller_allowance = 0;
                                 $total_taxable_amount = 0;
                                 $total_gross_salary = 0;
@@ -99,6 +100,7 @@
                                 $total_loans = $total_loans + $row->total_loans;
                                 $total_teller_allowance += $row->teller_allowance;
 
+                                $total_actual_salary += $row->actual_salary;
                                 $others += $row->deductions;
                                 $totalsdl  += $row->sdl;
                                     $totalwcf  += $row->wcf;
@@ -169,13 +171,13 @@
                                     <td></td>
                                     <td class="" style="margin-right: 0px" colspan="">{{ $row2->fname }} {{ $row2->mname }} {{ $row2->lname }}
                                     </td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->account_no }}
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->account_no }}
                                     </td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->pf_membership_no }}
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->pf_membership_no }}
                                     </td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->name}}
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->name}}
                                     </td>
-                                    <td class="" style="margin-right: 0px" colspan="">{{ $row->costCenterName}}
+                                    <td class="" style="margin-right: 0px" colspan="">{{ $row2->costCenterName}}
 
 
 
@@ -212,8 +214,8 @@
                                     </td>
                                     <td class="text-end">{{ number_format($row2->pension_employee*2, 2) }}
                                     </td>
-                                    <td class="text-end">{{ number_format($row->sdl, 2) }}</td>
-                                    <td class="text-end">{{ number_format($row->wcf, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row2->sdl, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row2->wcf, 2) }}</td>
                                     <td class="text-end">{{ number_format(0, 0) }}</td>
                                     <td class="text-end">{{ number_format($row2->loan_balance+$row2->otherDeductions, 0) }}</td>
                                     <td class="text-end">
@@ -224,6 +226,7 @@
 
                                 </tr>
                                 @php
+                                $total_actual_salary += $row2->actual_salary;
                                     $others += $row2->loan_balance;
                                     $total_salary += $row2->salaryEnrollment;
                                     $total_others += $row2->leavePay + $row2->leaveAllowance;
@@ -233,6 +236,9 @@
                                     $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
                                     $total_pension += $row2->pension_employee;
                                     $total_gross_salary += $row2->total_gross;
+
+                                    //$totalsdl  += $row->sdl;
+                                    //$totalwcf  += $row->wcf;
 
 
                                     // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
