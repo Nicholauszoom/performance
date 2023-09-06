@@ -229,6 +229,7 @@
                                 $total_actual_salary += $row2->actual_salary;
                                     $others += $row2->loan_balance;
                                     $total_salary += $row2->salaryEnrollment;
+                                    $total_actual_salary += $row->actual_salary;
                                     $total_others += $row2->leavePay + $row2->leaveAllowance;
                                     $total_taxable_amount += $row2->taxable;
                                     $total_taxs += $row2->paye;
@@ -237,11 +238,11 @@
                                     $total_pension += $row2->pension_employee;
                                     $total_gross_salary += $row2->total_gross;
 
-                                    //$totalsdl  += $row->sdl;
-                                    //$totalwcf  += $row->wcf;
+                                    $totalsdl  += $row->sdl;
+                                    $totalwcf  += $row->wcf;
 
 
-                                    // $total_gross_salary += ($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay);
+
 
                                 @endphp
                             @endif
@@ -261,7 +262,7 @@
                                         <b>
                                             <center><b>TOTAL<b></center>
                                             </b></td>
-                                <td class="text-end"><b><b>{{ number_format($total_salary, 0) }}</b></b></td>
+                                <td class="text-end"><b><b>{{ number_format($total_actual_salary, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_salary, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_overtime, 0) }}</b></b></td>
                                 <td class="text-end"><b><b>{{ number_format($total_teller_allowance, 0) }}</b></b>
