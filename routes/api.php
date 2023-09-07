@@ -1,12 +1,15 @@
 <?php
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\LeaveController;
-use App\Http\Controllers\API\GeneralController;
 use App\Http\Controllers\API\ReportController;
+use App\Http\Controllers\API\GeneralController;
 use App\Http\Controllers\API\PasswordController;
+use App\Http\Controllers\API\PushNotificationController;
+
 
 
 /*
@@ -24,12 +27,15 @@ Route::controller(AuthController::class)->group(function(){
     Route::post('login', 'login');
 
 });
+Route::get('/getNotification',[PushNotificationController::class,'index']);
+
 
 Route::get('/test', function (Request $request) {
     return $request->header('apikey');
 });
 Route::middleware('auth:sanctum')->group( function () {
-
+      Route::post('/updateToken',[PushNotificationController::class,'updateDeviceToken']);
+      Route::post('/send-bulk-notification',[PushNotificationController::class,'bulksend']);
 
       // For user details
       Route::get('/user',[AuthController::class,'user']);
@@ -100,6 +106,16 @@ Route::middleware('auth:sanctum')->group( function () {
        //User Leave cancellation
 
        Route::post('/cancelLeave',[LeaveController::class,'cancelUserLeave']);
-});
+
+       
+
+       // Push Notification routes
+
+   
+
+
+
+
+      });
 
 
