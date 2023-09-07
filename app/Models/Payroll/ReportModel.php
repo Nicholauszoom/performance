@@ -567,7 +567,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
     {
         $query = "SELECT
         pl.*,
-        e.fname,e.mname,e.lname,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,cc.name as costCenterName,b.name as bank_name,e.branch as branch_code,
+        e.fname,e.mname,e.lname,e.account_no,e.pf_membership_no,pl.sdl,pl.wcf,e.currency,de.name,e.cost_center as costCenterName,b.name as bank_name,e.branch as branch_code,
         e.emp_id,e.rate,
         'al.description' as allowance_id,
         0 as allowance_amount,
@@ -596,7 +596,7 @@ FROM payroll_logs pl, employee e WHERE e.emp_id = pl.empID and e.contract_type =
         $calender = explode('-', $date);
         $date = $calender[0] . "-" . $calender[1];
 
-        $query  = "SELECT t.*,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e where e.emp_id = t.employeeID and t.terminationDate LIKE '%" . $date . "%' ";
+        $query  = "SELECT t.*,e.pf_membership_no,e.cost_center as costCenterName,e.account_no,de.name,e.emp_id,e.mname,e.fname,e.lname,CONCAT(e.fname,' ', IF(e.mname != null,e.mname,' '),' ', e.lname) as name from terminations t,employee e,department de where e.emp_id = t.employeeID and e.department = de.id and t.terminationDate LIKE '%" . $date . "%' ";
         return (DB::select(DB::raw($query)));
     }
 

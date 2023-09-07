@@ -3207,6 +3207,7 @@ EOD;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
         $data['termination'] = $this->reports_model->get_termination($date);
 
+        
         $payrollMonth = $date;
         $pensionFund = 2;
         $reportType = 1; //Staff = 1, temporary = 2
