@@ -58,7 +58,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data Table </label>
+                                    <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data Table </label>
+                                    <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +168,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data Table </label>
+                                    <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data Table </label>
+                                    <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
                         </div>
@@ -278,7 +278,7 @@
 
                                 <div class="d-inline-flex align-items-center">
                                     <input type="radio" name="type" value="2" id="p9a">
-                                    <label class="ms-2" for="p9a">Data Table </label>
+                                    <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
                         </div>
@@ -289,7 +289,7 @@
             </div>
         </div>
 
-    
+
     </div>
 
 

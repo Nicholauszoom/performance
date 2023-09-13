@@ -409,6 +409,27 @@ class PayrollController extends Controller
                 array_push($descriptions, $row->description);
                 }
             }
+            elseif ($row->allowance == "Transport Allowance") {
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
+                if(count($allowance) > 0){
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+                }
+            }
+            elseif ($row->allowance == "Night Shift Allowance") {
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
+                dd($allowance);
+                if(count($allowance) > 0){
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += $allowance[0]->previous_amount;
+               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                $row->difference += 0;
+                array_push($descriptions, $row->description);
+                }
+            }
         }
          $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 

@@ -102,9 +102,9 @@
 
                                         <td>{{ $row->field_name }}</td>
 
-                                        <td>{{ $row->action_from }}</td>
+                                        <td class="text-end">{{ $row->action_from }}</td>
 
-                                        <td>{{ $row->action_to }}</td>
+                                        <td class="text-end">{{ $row->action_to }}</td>
 
                                         <td>{{ $row->input_screen }}</td>
                                     </tr>
@@ -115,7 +115,7 @@
 
                         <table class="table" id="reports">
                             <tbody>
-                               
+
                                 <tr>
 
                                     <td>
@@ -129,8 +129,8 @@
                                     </td>
 
                                 </tr>
-                               
-                                
+
+
                             </tbody>
                         </table>
                     </div>
