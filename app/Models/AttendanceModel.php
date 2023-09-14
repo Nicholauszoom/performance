@@ -1248,10 +1248,7 @@ class AttendanceModel extends Model
         $calender = explode('-',$today);
         $january = $calender[0].'-01-01';
         return DB::table('leaves')->where('leaves.status','!=',3)->get();
-  if ($nature == 'All') {
 
-    
-  }
         if ($empID == 'All') {
 
             if ($department != 'All' && $position != 'All') {
