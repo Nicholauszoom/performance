@@ -97,7 +97,7 @@
                 <p>Regards,</p>
                 <p>HC HUB</p>
                 <p style="text-align: center;margin: 2.5em auto;">
-                  <a class="button" href="{{url('/')}}" style="background: #00204e;
+                  <a class="button" href="{{url('/login',['next' => $next])}}" style="background: #00204e;
                        text-decoration: none;
                        padding: 1em 1.5em;
                        color: #ffffff;

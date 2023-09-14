@@ -58,7 +58,6 @@
                                                         <p>{{ Session::get('password_set') }}</p>
                                                     </div>
                                                     @endif --}}
-
                                                 @if (session()->has('password_set'))
                                                 <div
                                                     class="alert alert-success border-0 alert-dismissible fade show mb-3">
@@ -92,7 +91,9 @@
                                                 </div>
                                                 @endif
                                                 @endif
-
+                                                @if ($next)
+                                                    <input name="next" type="hidden" value="{{ $next }}">
+                                                @endif
                                                 <div class="mb-3">
                                                     <label class="form-label text-main font-weight-bold">Payroll Number</label>
 

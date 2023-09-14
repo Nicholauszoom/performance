@@ -492,6 +492,9 @@ public function saveLeave(Request $request) {
         $start = $request->start;
         $end = $request->end;
 
+        // For Redirection Url
+        $url = redirect('flex/attendance/my-leaves');
+
      if($start <= $end){
 
         //For Gender
@@ -503,6 +506,13 @@ public function saveLeave(Request $request) {
         $year = $arryear[0];
         $nature  = $request->nature;
         $empID  = Auth::user()->emp_id;
+
+        // Check if there is a pending leave in the given number of days (start,end)
+        $pendingLeave = Leaves::where('empId',$empID)->where('state',1)->whereDate('end','>=',$start)->first();
+        // dd($pendingLeave);
+        if($pendingLeave){
+            return $url->with('error','You have a pending '.$pendingLeave->type->type .' application within the requested leave time');
+        }
 
         // Checking used leave days based on leave type and sub type
         $leaves=Leaves::where('empID',$empID)->where('nature',$nature)->where('sub_category',$request->sub_cat)->whereNot('reason','Automatic applied!')->whereYear('created_at',date('Y'))->sum('days');
@@ -544,8 +554,6 @@ public function saveLeave(Request $request) {
 
 
 
-        // For Redirection Url
-        $url = redirect('flex/attendance/my-leaves');
 
         // For Employees with less than 12 months of employement
         if($day <= 365)
@@ -615,6 +623,7 @@ public function saveLeave(Request $request) {
                    'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
                    'employee_name'=>$employee_data['full_name'],
+                   'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
                );
 
                try {
@@ -836,6 +845,7 @@ public function saveLeave(Request $request) {
                    'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
                    'employee_name'=>$employee_data['full_name'],
+                   'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
                );
                try {
 
@@ -1067,6 +1077,7 @@ public function saveLeave(Request $request) {
                    'email' => $linemanager_data['email'],
                    'full_name' => $fullname,
                    'employee_name'=>$employee_data['full_name'],
+                   'next' => parse_url(route('attendance.leave'), PHP_URL_PATH)
                );
                try {
 
@@ -1092,7 +1103,7 @@ public function saveLeave(Request $request) {
 
            }
           }else{
-               $msg="Error!! start date should be less that end date!";
+               $msg="Error!! start date should be less than end date!";
               return redirect()->back()->with('msg', $msg);
           }
 
