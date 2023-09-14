@@ -1179,6 +1179,9 @@ class AttendanceModel extends Model
         $calender = explode('-',$today);
         $january = $calender[0].'-01-01';
 
+        $last_month_date = date('Y-m-t', strtotime($january));
+        
+
         if ($empID == 'All') {
             if ($department != 'All' && $position != 'All') {
                 $monthlyleave = DB::table('leaves')
