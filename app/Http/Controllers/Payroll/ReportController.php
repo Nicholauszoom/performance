@@ -3207,7 +3207,7 @@ EOD;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
         $data['termination'] = $this->reports_model->get_termination($date);
 
-        
+
         $payrollMonth = $date;
         $pensionFund = 2;
         $reportType = 1; //Staff = 1, temporary = 2
@@ -3854,6 +3854,70 @@ EOD;
 
     }
 
+    // public function pendingLeaves1(Request $request)
+    // {
+    //     # code...
+
+    //     $empID = $request->emp_id;
+    //     $today = $request->duration;
+    //     $nature = $request->nature;
+    //     $department = $request->department;
+    //     $position = $request->position;
+    //     $print_type = $request->print_type;
+
+    //     $date = explode('-', $request->duration);
+    //     // $dur = $date[0].'-'.$date[1];
+    //     $year = $date[0];
+    //     $month = $date[1];
+    //     // $dur = date('Y-m', strtotime($month));
+    //     // dd($dur);
+    //     $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
+    //     $data['nature'] = $this->attendance_model->leave_name($nature);
+    //     $data['employee'] = Employee::all();
+    //     $data['date'] = $today;
+    //     // dd($leave_data);
+    //     //return view('reports.leave_application_datatable',$data);
+
+    //     $leave_name = $this->attendance_model->leave_name($nature);
+    //     if($department != 'All'){
+    //         $data['department_name'] = $this->attendance_model->get_dept_name($department);
+    //     }
+    //     if($position != 'All'){
+    //         $data['position_name'] = $this->attendance_model->get_position_name($department);
+    //     }
+    //     $leave_name = $this->attendance_model->leave_name($nature);
+
+
+    //        $data['nature'] =  $nature;
+    //        $data['leave_name'] = $leave_name;
+    //        $data['date'] = $request->duration;
+    //     // dd($employees);
+    //     $leave_name = $this->attendance_model->leave_name($nature);
+
+
+    //     $other = ' ';
+    //     if(!empty($data['department_name']))
+    //       $other = 'Department : '.$data['department_name'];
+    //     elseif(!empty($data['position_name']))
+    //      $other =  'Position : '. $data['position_name'];
+    //    // $january = $calender[0].'-01-01';
+
+    //     $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
+    //     if($request->type == 1){
+
+    //         $pdf = Pdf::loadView('reports.leave_application',$data)->setPaper('a4', 'landscape');
+    //         return $pdf->download('Leave_apprication_report'.$request->duration.'.pdf');
+
+
+    //     }else{
+
+    //         return view('reports.leave_application_datatable',$data);
+
+    //     }
+
+    // }
+
+
     public function pendingLeaves1(Request $request)
     {
         # code...
@@ -3861,6 +3925,7 @@ EOD;
         $empID = $request->emp_id;
         $today = $request->duration;
         $nature = $request->nature;
+
         $department = $request->department;
         $position = $request->position;
         $print_type = $request->print_type;
@@ -3871,28 +3936,31 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
+
         $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
-        $data['nature'] = $this->attendance_model->leave_name($nature);
+        dd($data['leave_data']);
         $data['employee'] = Employee::all();
         $data['date'] = $today;
-        // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
 
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
         if($department != 'All'){
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
         if($position != 'All'){
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
-        $leave_name = $this->attendance_model->leave_name($nature);
+
+        if ($nature != 'All'){
+            $leave_name = $this->attendance_model->leave_name($nature);
+            $data['leave_name'] = $leave_name;
+
+        }
 
 
-           $data['nature'] =  $nature;
-           $data['leave_name'] = $leave_name;
-           $data['date'] = $request->duration;
+        $data['nature'] =  $nature;
+        $data['date'] = $request->duration;
         // dd($employees);
-        $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
@@ -3902,7 +3970,7 @@ EOD;
          $other =  'Position : '. $data['position_name'];
        // $january = $calender[0].'-01-01';
 
-        $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
+        $data['excelTitle'] = $leave_name ??  "All".' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
         if($request->type == 1){
 
             $pdf = Pdf::loadView('reports.leave_application',$data)->setPaper('a4', 'landscape');
@@ -3916,6 +3984,7 @@ EOD;
         }
 
     }
+
 
 
 
