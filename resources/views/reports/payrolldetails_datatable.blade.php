@@ -238,8 +238,8 @@
                                     $total_pension += $row2->pension_employee;
                                     $total_gross_salary += $row2->total_gross;
 
-                                    $totalsdl  += $row->sdl;
-                                    $totalwcf  += $row->wcf;
+                                    $totalsdl  += $row2->sdl;
+                                    $totalwcf  += $row2->wcf;
 
 
 
