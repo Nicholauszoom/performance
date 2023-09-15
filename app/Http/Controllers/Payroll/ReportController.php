@@ -331,6 +331,8 @@ class ReportController extends Controller
 
             if ($reportformat == 1)
                 include app_path() . '/reports/p10.php';
+              //  $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
+        //return $pdf->download('paychecklist-'.$payrollMonth.'.pdf');
             else
                 return view('reports/p10', $data);
         } elseif ($period == 2 && $checkup2 >= 1) {
@@ -621,11 +623,14 @@ class ReportController extends Controller
             $totalwcf = $data['totalwcf'];
             $info = $data['info'];
             $payroll_month = $data['payroll_month'];
-            if ($reportformat == 1)
+            $data['payroll_date'] = $payroll_month;
+            if ($reportformat == 1){
                 //include(app_path() . '/reports/wcf.php');
-
-                return view('reports/wcf', $data);
-            else
+                $pdf = Pdf::loadView('reports.wcf_pdf', $data)->setPaper('a4', 'potrait');
+                return $pdf->download("wcf-report-".$payroll_month.".pdf");
+//pdf
+               // return view('reports/wcf', $data);
+            }else
                 return view('reports/wcf', $data);
         }
     }
@@ -2126,6 +2131,7 @@ class ReportController extends Controller
 
         //allowances
         $data['summary'] = $this->reports_model->allowance_by_employee($current_payroll_month, $previous_payroll_month);
+        //dd($data['summary']);
         $raw_name = [];
         $required_allowance = [];
 
@@ -2347,7 +2353,34 @@ class ReportController extends Controller
 
                 array_push($descriptions, $row->description);
                 }
-            } elseif ($row->allowance == "Arrears") {
+            }
+            elseif ($row->allowance == "Transport Allowance") {
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
+                if(count($allowance) > 0){
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += 0;
+                $row->difference += ($allowance[0]->current_amount);
+
+                array_push($descriptions, $row->description);
+                }
+            }
+            elseif ($row->allowance == "Night Shift Allowance") {
+
+                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
+
+                if(count($allowance) > 0){
+
+                $row->current_amount += $allowance[0]->current_amount;
+                $row->previous_amount += 0;
+                $row->difference += ($allowance[0]->current_amount);
+
+                array_push($descriptions, $row->description);
+                }
+            }
+
+
+            elseif ($row->allowance == "Arrears") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
                 if(count($allowance) > 0){
                 $row->current_amount += $allowance[0]->current_amount;
@@ -2369,7 +2402,7 @@ class ReportController extends Controller
         }
 
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
-
+       
         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
 
         foreach ($result as $row) {
@@ -3744,28 +3777,42 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getMonthlyLeave2($empID,$today,$nature,$department,$position);
-        $data['nature'] = $this->attendance_model->leave_name($nature);
+        if($nature != 'All'){
+
+            $data['leave_data'] = $this->attendance_model->getMonthlyLeave2($empID,$today,$nature,$department,$position);
+            $data['nature'] = $this->attendance_model->leave_name($nature);
+            $leave_name = $this->attendance_model->leave_name($nature);
+        }else {
+            $natures = $this->attendance_model->getAllNatureValues($nature);
+            $data['nature'] = 'All';
+            $leave_name = 'All Approved';
+            $allLeaveData = [];
+            foreach($natures as $_nature){
+                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getpendingLeaves1($empID,$today,$_nature->id,$department,$position)->toArray());
+
+            }
+            $data['leave_data'] = $allLeaveData;
+            $data['is_all'] = true;
+        }
 
         $data['date'] = $today;
         // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
 
-        $leave_name = $this->attendance_model->leave_name($nature);
         if($department != 'All'){
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
         if($position != 'All'){
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
            $data['nature'] =  $nature;
            $data['leave_name'] = $leave_name;
            $data['date'] = $request->duration;
         // dd($employees);
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
@@ -3880,7 +3927,7 @@ EOD;
         }else {
             $natures = $this->attendance_model->getAllNatureValues($nature);
             $data['nature'] = 'All';
-            $leave_name = 'All';
+            $leave_name = 'All Pending';
             $allLeaveData = [];
             foreach($natures as $_nature){
                 $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getpendingLeaves1($empID,$today,$_nature->id,$department,$position)->toArray());

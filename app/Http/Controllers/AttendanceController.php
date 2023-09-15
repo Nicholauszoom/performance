@@ -176,72 +176,12 @@ class AttendanceController extends Controller
         $data['otherleave'] = $this->attendance_model->other_leaves(session('emp_id'));
       }
       $data['leave_types'] =LeaveType::all();
-      // $data['employees'] =EMPL::where('line_manager',Auth::user()->emp_id)->get();
+
       $data['leaves'] =Leaves::whereNot('state',0)->orderBy('id','DESC')->get();
 
       $data['approved_leaves'] =Leaves::where('state',0)->orderBy('id','DESC')->get();
 
-
-
-
-    //   $data['leaves'] =  $this->attendance_model->all_leave_line();
       $data['leaveBalance'] = $this->attendance_model->getLeaveBalance(Auth::user()->emp_id, Auth::user()->hire_date, date('Y-m-d'));
-
-      // Start of Escallation
-      // $leaves=Leaves::get();
-      // if ($leaves) {
-
-      //   foreach($leaves as $item)
-      //   {
-      //       $today= new DateTime();
-      //       $applied =$item->updated_at;
-      //       $diff= $today->diff($applied);
-      //       $range=$diff->days;
-      //       $approval=LeaveApproval::where('empID',$item->empID)->first();
-      //       if ($approval) {
-      //         if ($range>$approval->escallation_time) {
-      //           $leave=Leaves::where('id' ,$item->id)->first();
-      //           $status=$leave->status;
-
-      //           if ($status == 0) {
-      //             if ($approval->level2 != null) {
-      //               $leave->status=1;
-      //               $leave->updated_at=$today;
-      //               $leave->update();
-
-      //             }
-
-      //           }
-      //           elseif ($status == 1)
-      //           {
-      //             if ($approval->level3 != null) {
-      //               $leave->status=2;
-      //               $leave->updated_at=$today;
-      //               $leave->update();
-      //             }
-      //             else
-      //             {
-      //               $leave->status=0;
-      //               $leave->updated_at=$today;
-      //               $leave->update();
-      //             }
-      //           }
-      //           elseif ($status == 2)
-      //           {
-      //             if ($approval->level1 != null) {
-      //               $leave->status=0;
-      //               $leave->updated_at=$today;
-      //               $leave->update();
-      //             }
-      //           }
-      //         }
-      //       }
-      //   }
-      // }
-      // End of Escallation
-
-
-      // Start of Auto apply leave
 
       $employ=EMPL::whereNot('state',4)->get();
 
@@ -251,38 +191,8 @@ class AttendanceController extends Controller
             $total_leave=Leaves::where('empID',$item->emp_id)->where('nature',1)->sum('days');
 
             $remaining=$balance-$total_leave-6.99;
-            // $date="03-01";
-            // if($date==Date('m-d'))
-            // {
-            //   if ($balance>6.99) {
-
-            //     // For Saving Leave
-            //     $leaves=new Leaves();
-            //     $empID=$item->emp_id;
-            //     $leaves->empID = $empID;
-            //     $leaves->start =Date('Y-m-d') ;
-            //     $leaves->end=Date('Y-m-d') ;
-            //     $leaves->leave_address="auto";
-            //     $leaves->mobile = $item->phone;
-            //     $leaves->nature = 1;
-            //     $leaves->remaining=6.99;
-            //     $leaves->days=$remaining;
-            //     $leaves->reason="Did not go for Annual leave !";
-            //     $leaves->position="Unused Annual";
-            //     $leaves->status=3;
-            //     $leaves->state=0;
-            //     $leaves->save();
-
-
-            //   }
-
-
-            // }
 
       }
-
-
-      // End of auto apply leave
 
       // For Working days
       $d1 = new DateTime (Auth::user()->hire_date);

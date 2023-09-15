@@ -415,7 +415,8 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     });
 
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
-       // start of selfservices routes
+       // start of selfservices routes leave_escalation
+       Route::any('/leave_escalation','leave_escalation')->name('flex.leave_escalation');
        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
        Route::any('/my-loans','myLoans')->name('flex.my-loans');
        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');

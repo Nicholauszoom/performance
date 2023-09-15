@@ -277,6 +277,18 @@
                                     <span class="font-weight-bold">{{ number_format($termination->bonus, 2) }}</span>
                                 </li>
                             @endif
+                            @if ($termination->transport_allowance != 0)
+                            <li class="list-group-item d-flex">
+                                <span class="text-muted">Transport Allowance</span>
+                                <span class="font-weight-bold">{{ number_format($termination->transport_allowance, 2) }}</span>
+                            </li>
+                        @endif
+                        @if ($termination->nightshift_allowance != 0)
+                        <li class="list-group-item d-flex">
+                            <span class="text-muted">Night Shift Allowance</span>
+                            <span class="font-weight-bold">{{ number_format($termination->nightshift_allowance, 2) }}</span>
+                        </li>
+                    @endif
                             @if ($termination->longServing != 0)
                                 <li class="list-group-item d-flex">
                                     <span class="text-muted">Long Serving</span>
