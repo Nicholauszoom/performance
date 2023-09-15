@@ -25,6 +25,9 @@
                     @if(isset($employee))
                     <th>Approver</th>
                     @endif
+                    @if(isset($is_all))
+                    <th>Nature</th>
+                    @endif
                     <th>Leave Address</th>
                     <th>From</th>
                     <th>To</th>
@@ -48,6 +51,12 @@
                     @endif
                     @endforeach
                     @endif
+                    @isset($is_all)
+                        <td>  @php
+                            echo App\Models\LeaveType::where('id',$row->nature)->first()->type;
+                            @endphp
+                            </td>
+                    @endisset
                     <td>{{ $row->leave_address }}</td>
                     <td> {{ $row->start }} </td>
                     <td>{{ $row->end }}</td>

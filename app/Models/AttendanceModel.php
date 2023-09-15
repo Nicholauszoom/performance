@@ -1397,7 +1397,13 @@ class AttendanceModel extends Model
     }
 
 
-
+    function getAllNatureValues($nature){
+        if($nature == 'All'){
+            return DB::table('leave_type')->select(['id', 'type'])->get(); // Assuming 'name' is the field that stores the nature value
+        }else{
+            return [$nature]; // Return the provided nature value as an array
+        }
+    }
 
 
 }

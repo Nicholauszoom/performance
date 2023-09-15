@@ -3207,7 +3207,7 @@ EOD;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
         $data['termination'] = $this->reports_model->get_termination($date);
 
-        
+
         $payrollMonth = $date;
         $pensionFund = 2;
         $reportType = 1; //Staff = 1, temporary = 2
@@ -3871,28 +3871,44 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
-        $data['nature'] = $this->attendance_model->leave_name($nature);
+        if($nature != 'All'){
+
+            $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
+            $data['nature'] = $this->attendance_model->leave_name($nature);
+        $leave_name = $this->attendance_model->leave_name($nature);
+
+        }else {
+            $natures = $this->attendance_model->getAllNatureValues($nature);
+            $data['nature'] = 'All';
+            $leave_name = 'All';
+            $allLeaveData = [];
+            foreach($natures as $_nature){
+                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getpendingLeaves1($empID,$today,$_nature->id,$department,$position)->toArray());
+
+            }
+            $data['leave_data'] = $allLeaveData;
+            $data['is_all'] = true;
+        }
+
         $data['employee'] = Employee::all();
         $data['date'] = $today;
         // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
 
-        $leave_name = $this->attendance_model->leave_name($nature);
         if($department != 'All'){
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
         if($position != 'All'){
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
            $data['nature'] =  $nature;
            $data['leave_name'] = $leave_name;
            $data['date'] = $request->duration;
         // dd($employees);
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
@@ -3901,7 +3917,7 @@ EOD;
         elseif(!empty($data['position_name']))
          $other =  'Position : '. $data['position_name'];
        // $january = $calender[0].'-01-01';
-
+        // dd($data);
         $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
         if($request->type == 1){
 
