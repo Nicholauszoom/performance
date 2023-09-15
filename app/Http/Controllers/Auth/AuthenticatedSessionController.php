@@ -28,9 +28,10 @@ class AuthenticatedSessionController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('auth.login');
+        $data['next'] = $request->query('next');
+        return view('auth.login',$data);
     }
 
     /**
@@ -65,6 +66,10 @@ class AuthenticatedSessionController extends Controller
 
                 SysHelpers::AuditLog(1, 'Logged in with '.$employeeName , $request);
 
+                // redirect to specific page if $request->next is set
+                if($request->next){
+                    return redirect($request->next);
+                }
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
         }
@@ -126,7 +131,7 @@ class AuthenticatedSessionController extends Controller
         $data = json_encode($data);
         $data = json_decode($data, true);
         $res = $this->dateDiffCalculate();
-        
+
 
         if($data) {
             session(['pass_age' => $res]);

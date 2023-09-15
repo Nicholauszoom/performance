@@ -409,7 +409,6 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/my-leaves','myLeaves')->name('flex.my-leaves'); //atendance controller
     Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave'); //atendance controller
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
-
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
     Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');

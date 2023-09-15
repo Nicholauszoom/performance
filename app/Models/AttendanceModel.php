@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 
@@ -1378,7 +1379,10 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
 
         $prev_month = date("Y-m-d", strtotime('-1 month', strtotime($today)));
         $last_month_date = date('Y-m-t', strtotime($prev_month));
-
+        // dd($last_month_date);
+        $givenDate = Carbon::parse($today);
+        $firstDayOfMonth = $givenDate->firstOfMonth()->toDateString();
+        $lastDayOfMonth = $givenDate->endOfMonth()->toDateString();
         if ($empID == 'All') {
             if ($department != 'All' && $position != 'All') {
                 $monthlyleave = DB::table('leaves')
@@ -1391,7 +1395,8 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                     ->where('leaves.status','!=',3)
                     ->where('employee.state', 1)
                     ->where('employee.department', $department)
-                    ->where('start', '>=', $last_month_date)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department != 'All' && $position == 'All') {
@@ -1403,7 +1408,8 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                     ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                     ->select('leaves.*','leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')                    ->where('employee.department', $department)
                     ->where('leaves.status','!=',3)
-                    ->where('start', '>=', $last_month_date)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('nature', $nature)
                     ->get();
             } elseif ($department == 'All') {
@@ -1416,6 +1422,8 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                     ->join('leave_approvals', 'leave_approvals.empID', '=', 'leaves.empID')
                     ->select('leaves.*','leave_approvals.level1', 'employee.*', 'department.name as department_name', 'position.name as  position_name')                    ->where('start', '>=', $last_month_date)
                     ->where('nature', $nature)
+                    ->where('start', '>=', $firstDayOfMonth)
+                    ->where('start', '<=', $lastDayOfMonth)
                     ->where('leaves.status','!=',3)
                     ->get();
             }
@@ -1428,7 +1436,8 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status','!=',3)
                 ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')
-                ->where('start', '>=', $last_month_date)
+                ->where('start', '>=', $firstDayOfMonth)
+                ->where('start', '<=', $lastDayOfMonth)
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->get();
@@ -1441,7 +1450,13 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
     }
 
 
-
+    function getAllNatureValues($nature){
+        if($nature == 'All'){
+            return DB::table('leave_type')->select(['id', 'type'])->get(); // Assuming 'name' is the field that stores the nature value
+        }else{
+            return [$nature]; // Return the provided nature value as an array
+        }
+    }
 
 
 }
