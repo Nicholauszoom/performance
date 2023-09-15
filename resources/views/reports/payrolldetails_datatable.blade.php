@@ -229,7 +229,7 @@
                                 $total_actual_salary += $row2->actual_salary;
                                     $others += $row2->loan_balance;
                                     $total_salary += $row2->salaryEnrollment;
-                                    $total_actual_salary += $row->actual_salary;
+                                    $total_actual_salary += $row2->actual_salary;
                                     $total_others += $row2->leavePay + $row2->leaveAllowance;
                                     $total_taxable_amount += $row2->taxable;
                                     $total_taxs += $row2->paye;
@@ -257,7 +257,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                
+
                                 <td>
                                         <b>
                                             <center><b>TOTAL<b></center>
