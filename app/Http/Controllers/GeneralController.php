@@ -5578,15 +5578,17 @@ class GeneralController extends Controller
 
         $this->authenticateUser('edit-payroll');
         $date = date_create_from_format('d/m/Y', $request->date);
-
-        $date = $date->format('d-m-Y');
-        
         $data['pending_payroll'] = 0;
+
+
+        if ($date) {
+
+        $date = $date->format('m/d/Y');
+        $date = date("Y-m-d", strtotime($date));
+        
         if ($request->method() == 'POST') {
             $month  = $this->payroll_model->checkPayrollMonth($date);
-
             $submission  = $this->payroll_model->checkInputMonth($date);
-
             if ($month < 1) {
                 if ($submission < 1) {
                     $allowances = $this->payroll_model->getAssignedAllowance();
@@ -5607,9 +5609,12 @@ class GeneralController extends Controller
             } else {
                 echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
             }
-        } else {
+        } 
+        
+    }else {
             return view('payroll.submit_inputs', $data);
         }
+    
     }
 
     public function assign_allowance_group(Request $request)
