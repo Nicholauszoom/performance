@@ -257,7 +257,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
+                                
                                 <td>
                                         <b>
                                             <center><b>TOTAL<b></center>
