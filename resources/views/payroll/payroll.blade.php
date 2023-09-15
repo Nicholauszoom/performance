@@ -506,7 +506,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "{{route('payroll.send_payslips',['payrollDate'=>" + payrollDate + "])}}",
+                        url: "{{route('payroll.send_payslips',['payrollDate'=>''])}}" + payrollDate,
                         success: function(data) {
                             let jq_json_obj = $.parseJSON(data);
                             let jq_obj = eval(jq_json_obj);

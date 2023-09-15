@@ -11,6 +11,7 @@ use App\Models\Payroll\ReportModel;
 use App\Helpers\SysHelpers;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\EmailRequests;
+use App\Notifications\EmailPayslip;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
@@ -39,12 +40,10 @@ class PayrollController extends Controller
 
 
 
-        if(!Auth::user()->can($permissions)){
+        if (!Auth::user()->can($permissions)) {
 
-          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
-
-         }
-
+            abort(Response::HTTP_UNAUTHORIZED, '500|Page Not Found');
+        }
     }
 
 
@@ -54,109 +53,109 @@ class PayrollController extends Controller
         if ($request->post()) {
 
             $pendingInputs = $this->payroll_model->checkInputs($request->payrolldate);
-       if($pendingInputs > 0){
-            $pendingPayroll = $this->payroll_model->pendingPayrollCheck();
+            if ($pendingInputs > 0) {
+                $pendingPayroll = $this->payroll_model->pendingPayrollCheck();
 
-            if ($pendingPayroll > 0) {
-                echo "<p class='alert alert-warning text-center'>FAILED! There is Pending Payroll which Needs To be Confirmed Before Another Payroll is Run</p>";
-            } else {
+                if ($pendingPayroll > 0) {
+                    echo "<p class='alert alert-warning text-center'>FAILED! There is Pending Payroll which Needs To be Confirmed Before Another Payroll is Run</p>";
+                } else {
 
-                // DATE MANIPULATION
-                $calendar = $request->payrolldate;
-                $datewell = explode("/", $calendar);
-                $mm = $datewell[1];
-                $dd = $datewell[0];
-                $yyyy = $datewell[2];
-                $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
-                $payroll_month = $yyyy . "-" . $mm;
-                $empID = auth()->user()->emp_id;
-                $today = date('Y-m-d');
+                    // DATE MANIPULATION
+                    $calendar = $request->payrolldate;
+                    $datewell = explode("/", $calendar);
+                    $mm = $datewell[1];
+                    $dd = $datewell[0];
+                    $yyyy = $datewell[2];
+                    $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+                    $payroll_month = $yyyy . "-" . $mm;
+                    $empID = auth()->user()->emp_id;
+                    $today = date('Y-m-d');
 
-                $check = $this->payroll_model->payrollcheck($payroll_month);
-                if ($check == 0) {
-                    $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
-                    //notify the finance
-
-
-                    /*copy allocation table to logs*/
-
-                    $all_allocations = $this->flexperformance_model->getAllocation();
-
-                    foreach ($all_allocations as $all_allocation) {
-                        $data_allocation_log = array(
-                            'empID' => $all_allocation->empID,
-                            'activity_code' => $all_allocation->activity_code,
-                            'grant_code' => $all_allocation->grant_code,
-                            'percent' => $all_allocation->percent,
-                            'isActive' => $all_allocation->isActive,
-                            'payroll_date' => $payroll_date
-                        );
-
-                        $this->payroll_model->insertAllocation($data_allocation_log);
-                    }
+                    $check = $this->payroll_model->payrollcheck($payroll_month);
+                    if ($check == 0) {
+                        $result = $this->payroll_model->initPayroll($today, $payroll_date, $payroll_month, $empID);
+                        //notify the finance
 
 
-                    //copying arrears pending
-                    $arrears_pending = $this->payroll_model->arrearsPending();
-                    if ($arrears_pending) {
+                        /*copy allocation table to logs*/
 
-                        foreach ($arrears_pending as $arrear_pending) {
-                            $data_copy_arrear_pendings = array(
-                                'arrear_id' => $arrear_pending->arrear_id,
-                                'amount_paid' => $arrear_pending->amount,
-                                'init_by' => $arrear_pending->init_by,
-                                'confirmed_by' => $arrear_pending->confirmed_by,
-                                'payment_date' => $payroll_date,
-                                'payroll_date' => $payroll_date,
+                        $all_allocations = $this->flexperformance_model->getAllocation();
+
+                        foreach ($all_allocations as $all_allocation) {
+                            $data_allocation_log = array(
+                                'empID' => $all_allocation->empID,
+                                'activity_code' => $all_allocation->activity_code,
+                                'grant_code' => $all_allocation->grant_code,
+                                'percent' => $all_allocation->percent,
+                                'isActive' => $all_allocation->isActive,
+                                'payroll_date' => $payroll_date
                             );
 
-                            $this->payroll_model->insertArrearLog($data_copy_arrear_pendings);
+                            $this->payroll_model->insertAllocation($data_allocation_log);
                         }
-                    }
 
 
-                    $arrears_id = $this->payroll_model->arrearsPendingByArrearId();
-                    if ($arrears_id) {
-                        foreach ($arrears_id as $arrear_id) {
-                            $arrear_logs = $this->payroll_model->getArrearLog($arrear_id->arrear_id);
+                        //copying arrears pending
+                        $arrears_pending = $this->payroll_model->arrearsPending();
+                        if ($arrears_pending) {
 
-                            if ($arrear_logs) {
-                                $total_paid = 0;
-                                $last_paid = 0;
-                                foreach ($arrear_logs as $arrear_log) {
-                                    $total_paid += $arrear_log->amount_paid;
-                                    $last_paid = $arrear_log->amount_paid;
-                                }
-
-                                $arrears_update = array(
-                                    'paid' => $total_paid,
-                                    'amount_last_paid' => $last_paid
+                            foreach ($arrears_pending as $arrear_pending) {
+                                $data_copy_arrear_pendings = array(
+                                    'arrear_id' => $arrear_pending->arrear_id,
+                                    'amount_paid' => $arrear_pending->amount,
+                                    'init_by' => $arrear_pending->init_by,
+                                    'confirmed_by' => $arrear_pending->confirmed_by,
+                                    'payment_date' => $payroll_date,
+                                    'payroll_date' => $payroll_date,
                                 );
-                                $this->payroll_model->updateArrear($arrear_id->arrear_id, $arrears_update);
+
+                                $this->payroll_model->insertArrearLog($data_copy_arrear_pendings);
                             }
                         }
-                    }
-                    $this->payroll_model->truncateArrearsPending();
 
-                    if ($result == true) {
-                        // $linemanager_data = SysHelpers::employeeData(auth()->user()->full_name);
 
-                        $description  = "Run payroll of date " . $payroll_date;
-                        // dd('Payroll Run and Email has been sent');
-                        //$result = SysHelpers::auditLog(1,$description,$request);
+                        $arrears_id = $this->payroll_model->arrearsPendingByArrearId();
+                        if ($arrears_id) {
+                            foreach ($arrears_id as $arrear_id) {
+                                $arrear_logs = $this->payroll_model->getArrearLog($arrear_id->arrear_id);
 
-                        echo "<p class='alert alert-info text-center'>Period Changed Successfull</p>";
+                                if ($arrear_logs) {
+                                    $total_paid = 0;
+                                    $last_paid = 0;
+                                    foreach ($arrear_logs as $arrear_log) {
+                                        $total_paid += $arrear_log->amount_paid;
+                                        $last_paid = $arrear_log->amount_paid;
+                                    }
+
+                                    $arrears_update = array(
+                                        'paid' => $total_paid,
+                                        'amount_last_paid' => $last_paid
+                                    );
+                                    $this->payroll_model->updateArrear($arrear_id->arrear_id, $arrears_update);
+                                }
+                            }
+                        }
+                        $this->payroll_model->truncateArrearsPending();
+
+                        if ($result == true) {
+                            // $linemanager_data = SysHelpers::employeeData(auth()->user()->full_name);
+
+                            $description  = "Run payroll of date " . $payroll_date;
+                            // dd('Payroll Run and Email has been sent');
+                            //$result = SysHelpers::auditLog(1,$description,$request);
+
+                            echo "<p class='alert alert-info text-center'>Period Changed Successfull</p>";
+                        } else {
+                            echo "<p class='alert alert-danger text-center'>Failed To run the Payroll, Please Try again, If the Error persists Contact Your System Admin</p>";
+                        }
                     } else {
-                        echo "<p class='alert alert-danger text-center'>Failed To run the Payroll, Please Try again, If the Error persists Contact Your System Admin</p>";
+                        echo "<p class='alert alert-warning text-center'>" . $payroll_month . "Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
                     }
-                } else {
-                    echo "<p class='alert alert-warning text-center'>" . $payroll_month . "Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
                 }
+            } else {
+                echo "<p class='alert alert-warning text-center'>FAILED! There is Pending Payroll Inputs Needs To be Submitted Before  Payroll is Run</p>";
             }
-        }else{
-            echo "<p class='alert alert-warning text-center'>FAILED! There is Pending Payroll Inputs Needs To be Submitted Before  Payroll is Run</p>";
         }
-    }
     }
 
     public function financial_reports()
@@ -195,7 +194,7 @@ class PayrollController extends Controller
         // if (session('mng_paym') || session('recom_paym') || session('appr_paym')) {
 
 
-           $this->authenticateUser('view-payroll');
+        $this->authenticateUser('view-payroll');
 
         $data['pendingPayroll_month'] = $this->payroll_model->pendingPayroll_month();
         $data['pendingPayroll'] = $this->payroll_model->pendingPayrollCheck();
@@ -275,9 +274,9 @@ class PayrollController extends Controller
         $data['payroll_state'] = $data['payroll_month_info'][0]->state;
         $data['title'] = "Payroll Info";
 
-       // dd($data);
+        // dd($data);
 
-        return view('payroll.payroll_info',$data);
+        return view('payroll.payroll_info', $data);
     }
 
     public function get_reconsiliation_summary(Request $request)
@@ -313,7 +312,7 @@ class PayrollController extends Controller
         $data['total_previous_gross'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
 
         $data['total_current_gross'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
-        $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month):0;
+        $data['count_previous_month'] = !empty($previous_payroll_month) ? $this->reports_model->s_count($previous_payroll_month) : 0;
         $data['count_current_month'] = $this->reports_model->s_count1($current_payroll_month);
         $data['total_previous_overtime'] = $this->reports_model->s_overtime1($previous_payroll_month);
         $data['total_current_overtime'] = $this->reports_model->s_overtime1($current_payroll_month);
@@ -322,18 +321,15 @@ class PayrollController extends Controller
 
 
 
-        $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month, $previous_payroll_month);
         //dd($data['new_employee']);
-        if($data['new_employee'] > 0){
+        if ($data['new_employee'] > 0) {
 
-            $data['new_employee_salary'] = $this->reports_model->new_employee_salary1($current_payroll_month,$previous_payroll_month);
-
+            $data['new_employee_salary'] = $this->reports_model->new_employee_salary1($current_payroll_month, $previous_payroll_month);
         }
-        if($data['terminated_employee'] > 0){
+        if ($data['terminated_employee'] > 0) {
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
-
-
         }
         $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
@@ -342,111 +338,112 @@ class PayrollController extends Controller
             if ($row->allowance == "N-Overtime") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-                //$row->difference += ($allowance[0]->current_amount - $allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += $allowance[0]->previous_amount;
+                    //$row->difference += ($allowance[0]->current_amount - $allowance[0]->previous_amount);
+                    $row->difference += 0;
+                    array_push($descriptions, $row->description);
                 }
-
             } elseif ($row->allowance == "S-Overtime") {
-                if($row->current_amount != $row->previous_amount ){
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-              // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-               $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if ($row->current_amount != $row->previous_amount) {
+                    $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                    if (count($allowance) > 0) {
+                        $row->current_amount += $allowance[0]->current_amount;
+                        $row->previous_amount += $allowance[0]->previous_amount;
+                        // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                        $row->difference += 0;
+                        array_push($descriptions, $row->description);
+                    }
                 }
-            }
             } elseif ($row->allowance == "House Rent") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-                //$row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += $allowance[0]->previous_amount;
+                    //$row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                    $row->difference += 0;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Leave Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += $allowance[0]->previous_amount;
+                    // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                    $row->difference += 0;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Teller Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += $allowance[0]->previous_amount;
+                    // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                    $row->difference += 0;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Arrears") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-              //  $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += $allowance[0]->previous_amount;
+                    //  $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                    $row->difference += 0;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Long Serving allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += $allowance[0]->previous_amount;
+                    // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
+                    $row->difference += 0;
+                    array_push($descriptions, $row->description);
                 }
             }
         }
-         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
+        $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 
-         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+        $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
 
-         foreach($result as $row){
+        foreach ($result as $row) {
 
-           array_push($total_allowances,(object)['description'=>$row['description'],
-                                        'allowance'=>$row['description'],
-                                        'current_amount'=>$row['current_amount'],
-                                       'previous_amount'=>$row['previous_amount'],
-                                       'difference'=>$row['current_amount']-$row['previous_amount']]);
-         }
+            array_push($total_allowances, (object)[
+                'description' => $row['description'],
+                'allowance' => $row['description'],
+                'current_amount' => $row['current_amount'],
+                'previous_amount' => $row['previous_amount'],
+                'difference' => $row['current_amount'] - $row['previous_amount']
+            ]);
+        }
 
 
 
 
 
-         $data['total_allowances'] = $total_allowances;
+        $data['total_allowances'] = $total_allowances;
         // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
 
 
 
         $data['total_previous_basic'] = !empty($previous_payroll_month) ? $this->reports_model->total_basic($previous_payroll_month) : 0;
         $data['total_current_basic'] = !empty($current_payroll_month) ? $this->reports_model->total_basic1($current_payroll_month) : 0;
-//dd($data['total_current_basic'],$data['total_previous_basic']);
+        //dd($data['total_current_basic'],$data['total_previous_basic']);
         $data['total_previous_net'] = !empty($previous_payroll_month) ? $this->reports_model->s_grossMonthly($previous_payroll_month) : 0;
         $data['total_current_net'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
 
-        $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month,$current_payroll_month);
-       // dd($data['previous_decrease']);
-       // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
+        $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
+        // dd($data['previous_decrease']);
+        // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
-       // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
-       // $data['current_increase'] = $this->reports_model->basic_increase1($previous_payroll_month,$current_payroll_month);
+        // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
+        // $data['current_increase'] = $this->reports_model->basic_increase1($previous_payroll_month,$current_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase_temp($previous_payroll_month, $current_payroll_month);
 
-    //    dd($data['current_increase']);
+        //    dd($data['current_increase']);
 
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
@@ -455,36 +452,36 @@ class PayrollController extends Controller
         // $pdf = Pdf::loadView('reports.payroll_details',$data);
 
 
-        if($request->type == 1)
-        return view('payroll.reconsiliation_summary', $data);
+        if ($request->type == 1)
+            return view('payroll.reconsiliation_summary', $data);
 
-        $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
+        $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
         return $pdf->download('payroll_reconciliation_summary.pdf');
 
         //return $pdf->download('sam.pdf');
-         //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
+        //$pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
 
-         //return $pdf->download('payroll_reconciliation_summary.pdf');
+        //return $pdf->download('payroll_reconciliation_summary.pdf');
         //return view('reports.payroll_reconciliation_summary1', $data);
 
-       // return view('reports.samplepdf', $data);
-    //    dd($data['payroll_state']);
+        // return view('reports.samplepdf', $data);
+        //    dd($data['payroll_state']);
         return view('payroll.reconsiliation_summary', $data);
     }
 
 
-    function arrayRecursiveDiff($aArray1, $aArray2) {
-        $aReturn = array();
-;
-//bool in_array( $val, $array_name, $mode );
-      for($i = 0;$i<count($aArray1); $i++){
-        if(in_array($aArray1[$i]['description'], $aArray2)){
-            Unset($aArray1[$i]);
-           // dd($row['description']);
-        }else{
-           // array_push($aRetur)
+    function arrayRecursiveDiff($aArray1, $aArray2)
+    {
+        $aReturn = array();;
+        //bool in_array( $val, $array_name, $mode );
+        for ($i = 0; $i < count($aArray1); $i++) {
+            if (in_array($aArray1[$i]['description'], $aArray2)) {
+                unset($aArray1[$i]);
+                // dd($row['description']);
+            } else {
+                // array_push($aRetur)
+            }
         }
-      }
 
         return $aArray1;
     }
@@ -538,21 +535,18 @@ class PayrollController extends Controller
 
 
 
-        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month, $previous_payroll_month);
         //dd($data['new_employee']);
-        if($data['new_employee'] > 0){
+        if ($data['new_employee'] > 0) {
 
-            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
-
+            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month, $previous_payroll_month);
         }
 
 
 
-        if($data['terminated_employee'] > 0){
+        if ($data['terminated_employee'] > 0) {
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
-
-
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
         $descriptions = [];
@@ -560,57 +554,56 @@ class PayrollController extends Controller
             if ($row->allowance == "N-Overtime") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->current_amount += $allowance[0]->current_amount;
+                    array_push($descriptions, $row->description);
                 }
-
             } elseif ($row->allowance == "S-Overtime") {
-                if($row->current_amount != $row->previous_amount ){
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if ($row->current_amount != $row->previous_amount) {
+                    $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                    if (count($allowance) > 0) {
+                        $row->current_amount += $allowance[0]->current_amount;
+                        $row->current_amount += $allowance[0]->current_amount;
+                        array_push($descriptions, $row->description);
+                    }
                 }
-            }
             } elseif ($row->allowance == "House Rent") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->current_amount += $allowance[0]->current_amount;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Leave Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->current_amount += $allowance[0]->current_amount;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Teller Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->current_amount += $allowance[0]->current_amount;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Arrears") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->current_amount += $allowance[0]->current_amount;
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Long Serving allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->current_amount += $allowance[0]->current_amount;
-                array_push($descriptions, $row->description);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->current_amount += $allowance[0]->current_amount;
+                    array_push($descriptions, $row->description);
                 }
             }
         }
@@ -652,7 +645,7 @@ class PayrollController extends Controller
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
-dd($data['current_increase']);
+        dd($data['current_increase']);
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
@@ -662,13 +655,11 @@ dd($data['current_increase']);
 
 
 
-         if($request->type == 1)
-         return view('payroll.reconsiliation_summary', $data);
+        if ($request->type == 1)
+            return view('payroll.reconsiliation_summary', $data);
 
-         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1',$data)->setPaper('a4', 'potrait');
-         return $pdf->download('payroll_reconciliation_summary.pdf');
-
-
+        $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
+        return $pdf->download('payroll_reconciliation_summary.pdf');
     }
 
     public function payroll_info(Request $request)
@@ -689,7 +680,7 @@ dd($data['current_increase']);
 
         $data['payroll_date'] = $payrollMonth;
         $data['payrollMonth'] = $payrollMonth;
-       // dd($data['payrollMonth']);
+        // dd($data['payrollMonth']);
         $data['payroll_state'] = $data['payroll_month_info'][0]->state;
         $data['title'] = "Payroll Info";
 
@@ -716,7 +707,7 @@ dd($data['current_increase']);
 
 
 
-        return view('payroll.payroll_info',$data);
+        return view('payroll.payroll_info', $data);
     }
 
     public function payroll_info1(Request $request)
@@ -2013,616 +2004,119 @@ dd($data['current_increase']);
         }
     }
 
-    function send_payslips()
+
+    public function send_payslip_email($date, $employee)
+    {
+        //dd($request->all());
+
+        // $profile = $request->input("profile"); //For redirecting Purpose
+        $date_separate = explode("-", $date);
+
+        $mm = $date_separate[1];
+        $yyyy = $date_separate[0];
+        $dd = $date_separate[2];
+        $one_year_back = $date_separate[0] - 1;
+
+        $payroll_date = $yyyy . "-" . $mm . "-" . $dd;
+        $payroll_month_end = $yyyy . "-" . $mm . "-31";
+        $payroll_month = $yyyy . "-" . $mm;
+
+        $empID = $employee->empID;
+        $check = $this->reports_model->payslipcheck($payroll_month, $empID);
+
+
+        $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
+        $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
+        $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
+        $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
+        $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
+        $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
+        $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
+        $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
+        $data['total_pensions'] = $this->reports_model->total_pensions($empID, $payroll_date);
+        $data['total_deductions'] = $this->reports_model->total_deductions($empID, $payroll_month);
+        $data['companyinfo'] = $this->reports_model->company_info();
+        $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+        $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
+        $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
+        $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+        $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
+        $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
+        $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
+
+        $slipinfo = $data['slipinfo'];
+        $leaves = $data['leaves'];
+        $annualLeaveSpent = $data['annualLeaveSpent'];
+        $allowances = $data['allowances'];
+        $deductions = $data['deductions'];
+        $loans = $data['loans'];
+        $salary_advance_loan = $data['salary_advance_loan'];
+        $total_allowances = $data['total_allowances'];
+        $total_pensions = $data['total_pensions'];
+        $total_deductions = $data['total_deductions'];
+        $companyinfo = $data['companyinfo'];
+        $arrears_paid = $data['arrears_paid'];
+        $arrears_paid_all = $data['arrears_paid_all'];
+        $arrears_all = $data['arrears_all'];
+        $arrears_paid = $data['arrears_paid'];
+        $paid_with_arrears = $data['paid_with_arrears'];
+        $paid_with_arrears_d = $data['paid_with_arrears_d'];
+        $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
+        $data['payroll_date'] = $date;
+
+        $date = explode('-', $date);
+        $payroll_month = $date[0] . '-' . $date[1];
+
+        $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
+        $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
+
+        //include(app_path() . '/reports/customleave_report.php');
+        // include app_path() . '/reports/payslip.php';
+
+        //return view('payroll.payslip2', $data);
+        $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
+
+        // $pdf->stream('payslip_for_' . $empID . '.pdf'),
+
+        $email_data = array(
+            'subject' => 'Employee Overtime Approval',
+            'view' => 'emails.payslip',
+            'email' => "",
+            'pdf' => $pdf,
+            'full_name' => $employee->empName,
+        );
+
+
+        Notification::route('mail', $employee->email)->notify(new EmailPayslip($email_data));
+
+
+
+        // $data_all['emp_id'] = $payroll_emp_ids;
+
+        // return view('app.reports/payslip_all', $data_all);
+    }
+
+
+    function send_payslips(Request $request)
     {
 
+        $payrollDate = $request->input("payrollDate");
+
         //Get All Employee Emails
-        $payrollDate = $this->uri->segment(3);
+        // $payrollDate = $this->uri->segment(3);
+
+
         $employees = $this->payroll_model->send_payslips($payrollDate);
         $this->payroll_model->updatePayrollMail($payrollDate);
         $response_array = [];
-        foreach ($employees as $row) {
-            $payroll_date = $row->payroll_date;
-            $empID = $row->empID;
-            $email = $row->email;
-            $month = date('Y-m', strtotime($row->payroll_date));
-            $payroll_month = $month;
-            $payroll_month_end = $month . "-31";
-            $empName = $row->empName;
-            if ($row->email) {
-                $result = $this->payslip_attachments($empID, $email, $payroll_date, $payroll_month, $payroll_month_end, $empName);
+        foreach ($employees as $employee) {
 
-                if ($result) {
-                    $response_array['status'] = 'SENT';
-                } else {
-                    $response_array['status'] = 'ERR';
-                }
-            }
+            $this->send_payslip_email($payrollDate, $employee);
         }
-
         echo json_encode($response_array);
     }
 
-    function payslip_attachments($empID, $email, $payroll_date, $payroll_month, $payroll_month_end, $empName)
-    {
-
-        $this->load->library('phpmailer_lib');
-        $mail = $this->phpmailer_lib->load(); // PHPMailer object
-
-        //START PAYSLIP SECTION
-        $payrollMonth = date('F/Y', strtotime($payroll_date));
-        // Payslip details
-        $slipinfo = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
-        $leaves = $this->reports_model->leaves($empID, $payroll_month_end);
-        $annualLeaveSpent = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
-        $allowances = $this->reports_model->allowances($empID, $payroll_month);
-        $deductions = $this->reports_model->deductions($empID, $payroll_month);
-        $loans = $this->reports_model->loans($empID, $payroll_month);
-        $salary_advance_loan = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
-        $total_allowances = $this->reports_model->total_allowances($empID, $payroll_month);
-        $total_pensions = $this->reports_model->total_pensions($empID, $payroll_date);
-        $total_deductions = $this->reports_model->total_deductions($empID, $payroll_month);
-        $companyinfo = $this->reports_model->company_info();
-        $arrears_paid = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
-        $arrears_paid_all = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
-        $arrears_all = $this->reports_model->employeeArrearAll($empID, $payroll_date);
-        $arrears_paid = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
-        $paid_with_arrears = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
-        $paid_with_arrears_d = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
-        $salary_advance_loan_remained = $this->reports_model->loansAmountRemained($empID, $payroll_date);
-        $senderInfo = $this->payroll_model->senderInfo();
-        $employee_details = $this->flexperformance_model->getEmployeeNameByemail($email);
-        if ($employee_details) {
-
-            foreach ($employee_details as $info) {
-                $userpassword = $this->password_generator(5);
-            }
-
-            // START PAYSLIP
-            $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-            // set document information
-            $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetProtection(null, $userpassword, "vso-password", 0, null);
-            $pdf->SetAuthor('Miraji Issa');
-            $pdf->SetTitle('Payslip');
-            $pdf->SetSubject('Cipay');
-            $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-
-            // set default header data
-
-            // $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 001',
-            //  PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
-            $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
-
-            // remove default header/footer
-            $pdf->setPrintHeader(false);
-            $pdf->setPrintFooter(true);
-
-            // set header and footer fonts
-            $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-            $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-            // set default monospaced font
-            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-            // set margins
-            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-            // set auto page breaks
-            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-            // set image scale factor
-            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-            // set some language-dependent strings (optional)
-            if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
-                require_once(dirname(__FILE__) . '/lang/eng.php');
-                $pdf->setLanguageArray($l);
-            }
-
-            // ---------------------------------------------------------
-
-            // set default font subsetting mode
-            $pdf->setFontSubsetting(true);
-
-            // Set font
-            // dejavusans is a UTF-8 Unicode font, if you only need to
-            // print standard ASCII chars, you can use core fonts like
-            // helvetica or times to reduce file size.
-            $pdf->SetFont('times', '', 10, '', true);
-
-            // Add a page
-            // This method has several options, check the source code documentation for more information.
-            $pdf->AddPage('P', 'A4');
-
-
-            foreach ($slipinfo as $row) {
-                $id = $row->empID;
-                $old_id = $row->oldID;
-                if ($row->oldID == 0) $employeeID = $row->empID;
-                else $employeeID = $row->oldID;
-                $hiredate = $row->hire_date;
-                $name = $row->name;
-                $position = $row->position_name;
-                $department = $row->department_name;
-                $branch = $row->branch_name;
-                $salary = $row->salary;
-                $pension_fund = $row->pension_fund_name;
-                $pension_fund_abbrv = $row->pension_fund_abbrv;
-                $membership_no = $row->membership_no;
-                $bank = $row->bank_name;
-                $account_no = $row->account_no;
-                $hiredate = $row->hire_date;
-                $payroll_month = $row->payroll_date;
-                $pension_employee = $row->pension_employee;
-                $meals = $row->meals;
-                $taxdue = $row->taxdue;
-            }
-
-            foreach ($companyinfo as $row) {
-                $companyname = $row->cname;
-            }
-
-            foreach ($total_pensions as $row) {
-                $uptodate_pension_employee = $row->total_pension_employee;
-                $uptodate_pension_employer = $row->total_pension_employer;
-            }
-
-            $sum_allowances = $total_allowances;
-            $sum_deductions = $total_deductions;
-            $sum_loans = 0;
-
-            // DATE MANIPULATION
-            $hire = date_create($hiredate);
-            $today = date_create($payroll_month);
-            $diff = date_diff($hire, $today);
-            $accrued = 37 * $diff->format("%a%") / 365;
-            $totalAccrued = (number_format((float)$accrued, 2, '.', '')); //3,04days
-
-            $balance = $totalAccrued - $annualLeaveSpent; //days
-            if ($balance < 0) {
-                $balance = 0;
-            }
-
-
-            // $dateconvert =$payroll_date;
-            /*$datewell = explode("-",$payroll_month);
-            $mm = $datewell[1];
-            $dd = $datewell[2];
-            $yyyy = $datewell[0];
-            $outstanding_date = $dd."-".$mm."-".$yyyy;
-            */
-
-
-            $pdf->SetXY(85, 5);
-
-            $path = FCPATH . 'uploads/logo/logo.png';
-            // Image($file, $x='', $y='', $w=0, $h=0, $type='', $link='', $align='', $resize=false, $dpi=300, $palign='', $ismask=false, $imgmask=false, $border=0, $fitbox=false, $hidden=false, $fitonpage=false)
-            $pdf->Image($path, '', '', 30, 25, '', '', 'T', false, 300, '', false, false, '', false, false, false);
-
-
-            $pdf->SetXY(86, $pdf->GetY() + 25); //(+3)
-            $header = "
-<p align='center'><b>Employee Payslip</b></p>";
-            $pdf->writeHTMLCell(0, 12, '', '', $header, 0, 1, 0, true, '', true);
-
-            // SET THE FONT FAMILY
-            $pdf->SetFont('courier', '', 10, '', true);
-            // SET THE STYLE FOR DOTTED LINES
-            $style4 = array('B' => array('width' => 0, 'cap' => 'square', 'join' => 'miter', 'dash' => 3));
-
-            $pdf->SetXY(15, $pdf->GetY() - 6); //(+3)
-            $header = "
-<p><b>Payslip For :<b> &nbsp;&nbsp;&nbsp;" . date('F, Y', strtotime($payroll_month)) . "</b></p>";
-            $pdf->writeHTMLCell(0, 12, '', '', $header, 0, 1, 0, true, '', true);
-            $pdf->Rect(16, $pdf->GetY() - 7, 175, 0, '', $style4);  //Dotted LIne
-
-
-            // Employee Info
-            $pdf->SetXY(0, $pdf->GetY() - 10);
-            $subtitle1 = "
-<p><br>EMPLOYEE DETAILS:";
-
-
-            $employee_info = '
-<table width = "100%">
-    <tr align="left">
-        <th width="110"><b>ID:</b></th>
-        <th width="230">' . $employeeID . '</th>
-        <th width="120"><b>Pension Fund:</b></th>
-        <th width="180">' . $pension_fund_abbrv . '</th>
-    </tr>
-    <tr align="left">
-        <td align "left"><b>Name:</b></td>
-        <td align "left">' . $name . '</td>
-        <td align "left"><b>Membership No:</b></td>
-        <td align "left">' . $membership_no . '</td>
-    </tr>
-    <tr align="left">
-        <td align "left"><b>Department:</b></td>
-        <td align "left">' . $department . '</td>
-        <td align "left"><b>Bank:</b></td>
-        <td align "left">' . $bank . ' </td>
-    </tr>
-    <tr align="left">
-        <td align "left"><b>Position:</b></td>
-        <td align "left">' . $position . '</td>
-        <td align "left"><b>Acc No:</b></td>
-        <td align "left">' . $account_no . '</td>
-    </tr>
-    <tr align="left">
-        <td align "left"><b>Branch:</b></td>
-        <td align "left">' . $branch . '</td>
-    </tr>
-</table>';
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $subtitle1, 0, 1, 0, true, '', true);
-
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 3, $employee_info, 0, 1, 0, true, '', true);
-            $pdf->Rect(16, $pdf->GetY() + 2, 175, 0, '', $style4);  //Dotted LIne
-
-
-            //START EARNINGS AND PAYMENTS
-            $pdf->SetXY(15, $pdf->GetY());
-            $out = "<p><br>PAYMENTS/EARNINGS:";
-            $allowance = '
-<table width = "100%">
-    <tr>
-        <td width="500" align="left"><b>Basic Salary</b></td>
-        <td width="100" align="right">' . number_format($salary, 2) . '</td>
-    </tr>';
-            foreach ($allowances as $row) {
-                $allowance .= '
-    <tr>
-        <td width="500" align "left"><b>' . $row->description . '</b></td>
-        <td width="100" align "right">' . number_format($row->amount, 2) . '</td>
-    </tr>';
-            }
-
-            $allowance .= '</table>';
-
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $out, 0, 1, 0, true, '', true);
-
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 4, $allowance, 0, 1, 0, true, '', true);
-
-            $pdf->SetXY(15, $pdf->GetY() + 3);
-            $pay1 = "<p><br><br>TOTAL EARNINGS(GROSS)</p>";
-
-            $gross = '<table width="100" align "right"><tr width="100" align "left" align="left"><th>' . number_format($sum_allowances + $salary, 2) . '</th></tr></table>';
-
-            $pdf->Rect(148, $pdf->GetY(), 46, 0, '', $style4);
-            $pdf->writeHTMLCell(0, 12, 155, $pdf->GetY() + 0.5, $gross, 0, 1, 0, true, '', true);
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 20, $pay1, 0, 1, 0, true, '', true);
-            $pdf->Rect(16.5, $pdf->GetY(), 177.5, 0, '', $style4);
-
-            //END EARNINGS AND PAYMENTS
-
-
-            //START DEDUCTIONS
-            $pdf->SetXY(15, $pdf->GetY());
-            $subtitle2 = "<p><br>DEDUCTIONS:";
-            $deduction = '
-<table width = "100%">
-    <tr>
-        <td width="500" align="left"><b>Pension (' . $pension_fund_abbrv . ')</b></td>
-        <td width="100" align="right">' . number_format($pension_employee, 2) . '</td>
-    </tr>
-    <tr>
-        <td width="500" align="left"><b>PAYE AMOUNT</b></td>
-        <td width="100" align="right">' . number_format($taxdue, 2) . '</td>
-    </tr>';
-            //    <tr>
-            //        <td width="500" align "left"><b>MEALS</b></td>
-            //        <td width="100" align "right">'.number_format($meals, 2).'</td>
-            //    </tr>';
-            if ($meals > 0) {
-                $deduction .= '<tr>
-               <td width="500" align="left"><b>MEALS</b></td>
-               <td width="100" align="right">' . number_format($meals, 2) . '</td>
-        </tr>';
-            }
-
-            foreach ($deductions as $row) {
-                $deduction .= '
-    <tr>
-        <td width="500" align="left"><b>' . $row->description . '</b></td>
-        <td width="100" align="right">' . number_format($row->paid, 2) . '</td>
-    </tr>';
-            }
-
-            foreach ($loans as $row) {
-
-                $paid = $row->paid;
-                if ($row->remained == 0) {
-                    $get_remainder = $row->paid / $row->policy;
-                    $array = explode('.', $get_remainder);
-                    $num = '0' . '.' . $array[1];
-                    //        $paid = $num*$row->policy;
-                    $paid = $salary_advance_loan_remained;
-                }
-
-
-                $deduction .= '
-    <tr>
-        <td width="500" align="left"><b>' . $row->description . '</b></td>
-        <td width="100" align="right">' . number_format($paid, 2) . '</td>
-    </tr>';
-                $sum_loans = ($sum_loans + $paid);
-            }
-
-            $deduction .= '</table>';
-
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $subtitle2, 0, 1, 0, true, '', true);
-
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 4, $deduction, 0, 1, 0, true, '', true);
-
-            $pdf->SetXY(15, $pdf->GetY() + 3);
-            $subtitle3 = "<p><br><br>TOTAL DEDUCTIONS</p>";
-
-            $alldeduction = '<table width="100" align "right"><tr width="100" align "left" align="left"><th>' . number_format(($pension_employee + $taxdue + $sum_deductions + $sum_loans + $meals), 2) . '</th></tr></table>';
-
-            $pdf->Rect(148, $pdf->GetY(), 46, 0, '', $style4);
-            $pdf->writeHTMLCell(0, 12, 155, $pdf->GetY() + 0.5, $alldeduction, 0, 1, 0, true, '', true);
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 20, $subtitle3, 0, 1, 0, true, '', true);
-            $pdf->Rect(16.5, $pdf->GetY(), 177.5, 0, '', $style4);
-            //END DEDUCTIONS
-
-            // START TAKE HOME
-            $amount_takehome = ($sum_allowances + $salary) - ($sum_loans + $pension_employee + $taxdue + $sum_deductions + $meals);
-
-            $paid_salary = $amount_takehome;
-            foreach ($paid_with_arrears as $paid_with_arrear) {
-                if ($paid_with_arrear->with_arrears) {
-                    $with_arr = $paid_with_arrear->with_arrears; //with held
-                    $paid_salary = $amount_takehome - $with_arr; //paid amount
-                } else {
-                    $with_arr = 0; //with held
-                }
-            }
-
-            foreach ($arrears_paid as $arrear_paid) {
-                if ($arrear_paid->arrears_paid) {
-                    $paid_salary = $amount_takehome + $arrear_paid->arrears_paid - $with_arr;
-                    $paid_arr = $arrear_paid->arrears_paid;
-                } else {
-                    $paid_arr = 0;
-                }
-            }
-
-            foreach ($paid_with_arrears_d as $paid_with_arrear_d) {
-                if ($paid_with_arrear_d->arrears_paid) {
-                    $paid_arr_all = $paid_with_arrear_d->arrears_paid;
-                } else {
-                    $paid_arr_all = 0;
-                }
-            }
-
-            if ($with_arr > 0) {
-                foreach ($arrears_all as $arrear_all) {
-
-                    if ($arrear_all->arrears_all) {
-                        $due_arr = $arrear_all->arrears_all - $paid_arr_all;
-                    } else {
-                        $due_arr = 0;
-                    }
-                }
-            } else {
-                foreach ($arrears_all as $arrear_all) {
-
-                    if ($arrear_all->arrears_all) {
-                        $due_arr = $arrear_all->arrears_all - $paid_arr_all;
-                    } else {
-                        $due_arr = 0;
-                    }
-                }
-            }
-
-
-            $takehome = '
-<table width = "100%">';
-            // foreach($loans as $row){
-            $takehome .= '
-    <tr>
-        <td width="500" align="left"><b>Net Pay</b></td>
-        <td width="100" align="right">' . number_format($amount_takehome, 2) . '</td>
-    </tr>';
-
-            if ($paid_salary > 0) {
-                $takehome .= '<tr>
-                    <td width="500" align="left"><b>Paid Amount</b></td>
-                    <td width="100" align="right">' . number_format($paid_salary, 2) . '</td>
-                </tr>';
-            }
-
-            if ($paid_arr > 0) {
-                $takehome .= '<tr>
-                <td width="500" align="left"><b>Arrears Paid</b></td>
-                <td width="100" align="right">' . number_format($paid_arr, 2) . '</td>
-            </tr>';
-            }
-
-            if ($with_arr > 0) {
-                $takehome .= '<tr>
-                    <td width="500" align="left"><b>Arrears Withheld</b></td>
-                    <td width="100" align="right">' . number_format($with_arr, 2) . '</td>
-                </tr>';
-            }
-
-            if ($due_arr > 0) {
-                $takehome .= '<tr>
-                    <td width="500" align="left"><b>Arrears Due</b></td>
-                    <td width="100" align="right">' . number_format($due_arr, 2) . '</td>
-                </tr>';
-            }
-
-
-            $takehome .= '<tr>
-                    <td width="500" align="left"></td>
-                    <td width="100" align="right"></td>
-                </tr>';
-
-            $takehome .= '</table>';
-
-            $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() + 2, $takehome, 0, 1, 0, true, '', true);
-
-            $pdf->Rect(16.5, $pdf->GetY() - 5, 177.5, 0, '', $style4);
-            // END TAKE HOME
-
-            //OUTSTANDING LOANS
-
-            if (!empty($loans)) {
-                $pdf->SetXY(15, $pdf->GetY() - 6);
-                $subtitle4 = "<p><br>OUTSTANDINGS(SALARY ADVANCE AND LOANS):";
-                $outstandings = '
-  <table width = "100%">';
-                foreach ($loans as $row) {
-                    $outstandings .= '
-      <tr>
-          <td width="500" align="left"><b>' . $row->description . '</b></td>
-          <td width="100" align="right">' . number_format($row->remained, 2) . '</td>
-      </tr>';
-                }
-
-                $outstandings .= '
-      <tr>
-          <td width="500" align="left"></td>
-          <td width="100" align="right"></td>
-      </tr>';
-
-
-                $outstandings .= '</table>';
-
-                $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $subtitle4, 0, 1, 0, true, '', true);
-
-                $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 2, $outstandings, 0, 1, 0, true, '', true);
-
-                $pdf->Rect(16.5, $pdf->GetY() - 5, 177.5, 0, '', $style4);
-            }
-            //END OUTSTANDING LOANS
-
-            //UPTODATE PENSIONS
-            // $pdf->SetXY(15, $pdf->GetY()-5);
-            // $uptodates_title = "<p><br>UP TODATE CONTRIBUTIONS:";
-            // $uptodatepension = '
-            // <table width = "100%">
-            //     <tr>
-            //         <td width="500" align="left"><b>'.$pension_fund_abbrv.' Contributed By Employee</b></td>
-            //         <td width="105" align="right">'.number_format($uptodate_pension_employee, 2).'</td>
-            //     </tr>
-            //     <tr>
-            //         <td width="500" align="left"><b>'.$pension_fund_abbrv.' Contributed By Employer</b></td>
-            //         <td width="105" align="right">'.number_format($uptodate_pension_employer, 2).'</td>
-            //     </tr>
-            // </table>';
-
-            // $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $uptodates_title , 0, 1, 0, true, '', true);
-
-            // $pdf->writeHTMLCell(0, 12, '', $pdf->GetY()-4, $uptodatepension, 0, 1, 0, true, '', true);
-
-            // $pdf->SetXY(15, $pdf->GetY());
-            // $uptodates = "<p><br><br>TOTAL PENSION CONTRIBUTIONS</p>";
-
-            // $sumpensions = '<table width="120" align "right"><tr width="120" align "left" align="left"><th>'.number_format($uptodate_pension_employee+$uptodate_pension_employer,2).'</th></tr></table>';
-
-            // $pdf->Rect(148, $pdf->GetY(), 46, 0, '', $style4);
-            // $pdf->writeHTMLCell(0, 12, 155, $pdf->GetY()+2, $sumpensions, 0, 1, 0, true, '', true);
-            // $pdf->writeHTMLCell(0, 12, '', $pdf->GetY()-20, $uptodates, 0, 1, 0, true, '', true);
-            // $pdf->Rect(16.5, $pdf->GetY(), 177.5, 0, '', $style4);
-
-            //END UPTODATE PENSIONS
-
-
-            //START LEAVES
-            //             $pdf->SetXY(15, $pdf->GetY());
-
-            //             $subtitle5 = "<p><br>LEAVES:";
-            //             $leave = '
-            // <table width = "100%">
-            //     <tr>
-            //         <td width="500" align="left"><b>Annual Leave Balance(Days)</b></td>
-            //         <td width="100" align="right">' . $balance . '</td>
-            //     </tr>';
-            //             foreach ($leaves as $row) {
-            //                 if ($row->type == 1) continue;
-            //                 $leave .= '
-            //     <tr>
-            //         <td width="500" align="left"><b>' . $row->nature . '</b></td>
-            //         <td width="100" align="right">' . $row->days . '</td>
-            //     </tr>';
-            //             }
-            //             $leave .= '</table>';
-
-            //             $pdf->writeHTMLCell(0, 12, '', $pdf->GetY(), $subtitle5, 0, 1, 0, true, '', true);
-
-            //             $pdf->writeHTMLCell(0, 12, '', $pdf->GetY() - 1, $leave, 0, 1, 0, true, '', true);
-
-            //             $pdf->Rect(16.5, $pdf->GetY() + 2, 177.5, 0, '', $style4);
-
-            //END LEAVES
-
-
-            // Close and output PDF document
-            // This method has several options, check the source code documentation for more information.
-            $payslip = $pdf->Output('payslip-' . $empID . '-' . $payrollMonth . '.pdf', 'S');
-
-            //============================================================+
-            // END OF FILE
-            //============================================================+
-
-            // END PAYSLIP SECTION
-
-
-            // SEND EMAIL
-            foreach ($senderInfo as $keyInfo) {
-                $host = $keyInfo->host;
-                $username = $keyInfo->username;
-                $password = $keyInfo->password;
-                $smtpsecure = $keyInfo->secure;
-                $port = $keyInfo->port;
-                $senderEmail = $keyInfo->email;
-                $senderName = $keyInfo->name;
-            }
-            // SMTP configuration
-            $mail->isSMTP();
-            $mail->Host = $host;
-            $mail->SMTPAuth = true;
-            $mail->Username = $username;
-            $mail->Password = $password;
-            $mail->SMTPSecure = $smtpsecure;
-            $mail->Port = $port;
-
-
-            $mail->setFrom($senderEmail, $senderName);
-            // $mail->addReplyTo('mirajissa1@gmail.com', 'CodexWorld');
-
-            // Add a recipient
-            $mail->addAddress($email);
-
-            // Email subject
-            $mail->Subject = $payrollMonth . '-PAYSLIP';
-
-            // Set email format to HTML
-            $mail->isHTML(true);
-
-            // Email body content
-            $mailContent = "<h1>Hello! &nbsp; " . $empName . "</h1>
-            <p>Please Find The Attached Payslip For the <b>" . $payrollMonth . "</b> Payroll Month. The required password is <b>" . $userpassword . "</b> .</p>";
-            $mail->Body = $mailContent;
-            $mail->AddStringAttachment($payslip, 'payslip.pdf');
-
-            // Send email
-            if (!$mail->send()) {
-                //                echo 'Message could not be sent.';
-                //                echo 'Mailer Error: ' . $mail->ErrorInfo;
-                return false;
-            } else {
-                return true;
-            }
-            // SEND EMAIL
-        }
-    }
+ 
 
     public function mailConfiguration()
     {
