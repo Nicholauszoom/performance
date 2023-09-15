@@ -5574,10 +5574,13 @@ class GeneralController extends Controller
 
     public function submitInputs(Request $request)
     {
-
+        
 
         $this->authenticateUser('edit-payroll');
-        $date = date("Y-m-d", strtotime($request->date));
+        $date = date_create_from_format('d/m/Y', $request->date);
+
+        $date = $date->format('d-m-Y');
+        
         $data['pending_payroll'] = 0;
         if ($request->method() == 'POST') {
             $month  = $this->payroll_model->checkPayrollMonth($date);
