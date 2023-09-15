@@ -15,7 +15,7 @@
 @section('content')
     <div class="mb-3">
         <h6 class="mb-0 text-main">Employee Registration</h6>
-        <span class="text-muted d-block">All the requiredes fields need to be filled</span>
+        <span class="text-muted d-block">All the required fields need to be filled</span>
     </div>
 
     <form id="addEmployee" enctype="multipart/form-data" autocomplete="off" method="post" data-parsley-validate>

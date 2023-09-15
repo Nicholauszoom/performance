@@ -758,7 +758,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature" required>
-                                        <option value="">&nbsp;</option>
+                                        <option value="All">All</option>
                                           <?php
                                           foreach($leave_type as $key){  ?>
 
@@ -962,7 +962,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature" required>
-                                        <option value="">&nbsp;</option>
+                                        <option value="All">All</option>
                                           <?php
                                           foreach($leave_type as $key){  ?>
 

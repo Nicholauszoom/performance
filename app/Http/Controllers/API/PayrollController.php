@@ -1520,6 +1520,7 @@ class PayrollController extends Controller
                     $response_array['status'] = 'ERR';
                 }
             }
+            return "sent";
         }
 
         echo json_encode($response_array);

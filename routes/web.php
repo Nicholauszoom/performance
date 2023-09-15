@@ -409,14 +409,14 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/my-leaves','myLeaves')->name('flex.my-leaves'); //atendance controller
     Route::post('/save_leave' ,'saveLeave')->name('attendance.saveLeave'); //atendance controller
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
-
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
     Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
     });
 
     Route::prefix('flex/')->controller(GeneralController::class)->group(function (){
-       // start of selfservices routes
+       // start of selfservices routes leave_escalation
+       Route::any('/leave_escalation','leave_escalation')->name('flex.leave_escalation');
        Route::any('/my-overtimes','myOvertimes')->name('flex.my-overtimes');
        Route::any('/my-loans','myLoans')->name('flex.my-loans');
        Route::any('/my-pensions','myPensions')->name('flex.my-pensions');

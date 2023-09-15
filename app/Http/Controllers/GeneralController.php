@@ -38,7 +38,7 @@ use App\Models\EmployeeDetail;
 use App\Models\InputSubmission;
 //use PHPClamAV\Scanner;
 use PHPClamav\Facades\Clamav;
-
+use App\Models\Leaves;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSkills;
 use App\Models\EmployeeSpouse;
@@ -112,12 +112,10 @@ class GeneralController extends Controller
 
 
 
-        if(!Auth::user()->can($permissions)){
+        if (!Auth::user()->can($permissions)) {
 
-          abort(Response::HTTP_UNAUTHORIZED);
-
-         }
-
+            abort(Response::HTTP_UNAUTHORIZED);
+        }
     }
 
 
@@ -185,7 +183,7 @@ class GeneralController extends Controller
 
         $id = base64_decode($id);
 
-        if(auth()->user()->emp_id != $id){
+        if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -2010,7 +2008,8 @@ class GeneralController extends Controller
                 'reason' => 'required|alpha',
 
 
-            ]);
+            ]
+        );
 
         $start = $request->input('time_start');
         $finish = $request->input('time_finish');
@@ -2192,7 +2191,6 @@ class GeneralController extends Controller
                         try {
 
                             Notification::route('mail', $linemanager_data['email'])->notify(new EmailRequests($email_data));
-
                         } catch (Exception $exception) {
                             echo "<p class='alert alert-danger text-center'>Overtime Request  Sent, But Email not sent due to connectivity problem!</p>";
                         }
@@ -2222,7 +2220,7 @@ class GeneralController extends Controller
 
         $result =   $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
-            $amount = $days*($employee_data->salary/176)*$percent;
+            $amount = $days * ($employee_data->salary / 176) * $percent;
 
             SysHelpers::FinancialLogs($empID, 'Direct Assig Overtime', '0.00', number_format($amount, 2), 'Payroll Input');
 
@@ -2707,7 +2705,6 @@ class GeneralController extends Controller
         $result = $this->flexperformance_model->deleteApprovedOvertime($id);
 
         if ($result == true) {
-           SysHelpers::FinancialLogs($data->empID, 'Direct Cancel  Overtime', number_format($data->amount, 2),'0.00','Payroll Input');
 
             echo "<p class='alert alert-warning text-center'>Overtime DELETED Successifully</p>";
         } else {
@@ -3602,7 +3599,7 @@ class GeneralController extends Controller
 
     public function transfers(Request $request)
     {
-       $this->authenticateUser('view-transfer');
+        $this->authenticateUser('view-transfer');
 
         // $data['leave'] =  $this->attendance_model->leavereport();
         if (session('mng_emp') || session('vw_emp') || session('appr_emp') || session('mng_roles_grp')) {
@@ -3619,7 +3616,7 @@ class GeneralController extends Controller
     public function salary_advance(Request $request)
     {
 
-       $this->authenticateUser('view-loan');
+        $this->authenticateUser('view-loan');
 
         // if(session('mng_paym') ||session('recom_paym') ||session('appr_paym')){
         $data['myloan'] = $this->flexperformance_model->mysalary_advance(session('emp_id'));
@@ -4064,17 +4061,18 @@ class GeneralController extends Controller
         return view('app.viewrecords', $data);
     }
 
-    public function employeeChart(Request $request){
+    public function employeeChart(Request $request)
+    {
 
         $year = $request->has('year') ? $request->year : date('Y');
 
         $employee = Employee::select(DB::raw("COUNT(*) as count"))
 
-                    ->whereYear('hire_date', $year)
+            ->whereYear('hire_date', $year)
 
-                    ->groupBy(DB::raw("Month(hire_date)"))
+            ->groupBy(DB::raw("Month(hire_date)"))
 
-                    ->pluck('count');
+            ->pluck('count');
 
 
 
@@ -4084,16 +4082,15 @@ class GeneralController extends Controller
 
         $chart->dataset('New Employee Registered Chart', 'bar', $employee)->options([
 
-                    'fill' => 'true',
+            'fill' => 'true',
 
-                   // 'borderColor' => '#0A1330'
+            // 'borderColor' => '#0A1330'
 
-                ]);
+        ]);
 
 
 
         return $chart->api();
-
     }
 
 
@@ -4400,7 +4397,7 @@ class GeneralController extends Controller
 
     public function addkin(Request $request, $id)
     {
-        if($id != auth()->user()->emp_id){
+        if ($id != auth()->user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
         date_default_timezone_set('Africa/Dar_es_Salaam');
@@ -4720,7 +4717,7 @@ class GeneralController extends Controller
     public function unpaid_leave()
     {
 
-$this->authenticateUser('view-unpaid-leaves');
+        $this->authenticateUser('view-unpaid-leaves');
 
         $data['employee'] = $this->flexperformance_model->unpaid_leave_employee();
         return view("unpaidleave.index", $data);
@@ -4778,6 +4775,74 @@ $this->authenticateUser('view-unpaid-leaves');
         session('note', "<p class='alert alert-warning text-center'>Unpaid Leave Added Successifully</p>");
 
         return redirect(route('flex.unpaid_leave'));
+    }
+
+
+
+    public function leave_escalation(){
+
+             // Start of Escallation
+      $leaves=Leaves::where('state',1)->get();
+
+      if ($leaves) {
+
+        foreach($leaves as $item)
+        {
+            $today= new DateTime();
+            $applied =$item->updated_at;
+            $diff= $today->diff($applied);
+            $range=$diff->days;
+            $approval=LeaveApproval::where('empID',$item->empID)->first();
+
+            if ($approval) {
+              if ($range >$approval->escallation_time) {
+                $leave=Leaves::where('id' ,$item->id)->first();
+                $status=$leave->status;
+
+
+                if ($status == 0) {
+                  if ($approval->level2 != null) {
+                    $leave->status=1;
+                    $leave->updated_at=$today;
+                    $leave->update();
+ 
+                  }
+                  else
+                  {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
+
+                }
+                elseif ($status == 1)
+                {
+                  if ($approval->level3 != null) {
+                    $leave->status=2;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
+                  else
+                  {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
+                }
+                elseif ($status == 2)
+                {
+                  if ($approval->level1 != null) {
+                    $leave->status=0;
+                    $leave->updated_at=$today;
+                    $leave->update();
+                  }
+                }
+              }
+            }
+        }
+      }
+    //   End of Escallation
+
     }
     #####################DEDUCTIONS############################################
 
@@ -5576,16 +5641,21 @@ $this->authenticateUser('view-unpaid-leaves');
 
     public function submitInputs(Request $request)
     {
+        
 
-
-          $this->authenticateUser('edit-payroll');
-        $date = date("Y-m-d", strtotime($request->date));
+        $this->authenticateUser('edit-payroll');
+        $date = date_create_from_format('d/m/Y', $request->date);
         $data['pending_payroll'] = 0;
+
+
+        if ($date) {
+
+        $date = $date->format('m/d/Y');
+        $date = date("Y-m-d", strtotime($date));
+        
         if ($request->method() == 'POST') {
             $month  = $this->payroll_model->checkPayrollMonth($date);
-
             $submission  = $this->payroll_model->checkInputMonth($date);
-
             if ($month < 1) {
                 if ($submission < 1) {
                     $allowances = $this->payroll_model->getAssignedAllowance();
@@ -5606,9 +5676,12 @@ $this->authenticateUser('view-unpaid-leaves');
             } else {
                 echo "<p class='alert alert-danger text-center'>You cant submit inputs to previous payroll Month</p>";
             }
-        } else {
+        } 
+        
+    }else {
             return view('payroll.submit_inputs', $data);
         }
+    
     }
 
     public function assign_allowance_group(Request $request)
@@ -6151,7 +6224,7 @@ $this->authenticateUser('view-unpaid-leaves');
     public function financial_group(Request $request)
     {
 
-$this->authenticateUser('add-payroll');
+        $this->authenticateUser('add-payroll');
         if (session('mng_roles_grp')) {
             $request_type = $request->method();
 
@@ -7114,10 +7187,8 @@ $this->authenticateUser('add-payroll');
                 try {
 
                     Notification::route('mail', $row->email)->notify(new RegisteredUser($email_data));
-
                 } catch (Exception $exception) {
                     return redirect()->back()->with(['error' => 'Password change Failed to to Email SMTP problems']);
-
                 }
             }
 
@@ -7145,7 +7216,7 @@ $this->authenticateUser('add-payroll');
     public function registerEmployee(Request $request)
     {
 
-         if ($request->method() == "POST") {
+        if ($request->method() == "POST") {
 
             // $validator = Validator::make($request->all(), [
             //     'fname' => 'required',
@@ -7174,12 +7245,12 @@ $this->authenticateUser('add-payroll');
             //     'branch' => 'required',
             // ]);
 
-        //     if ($validator->fails()) {
-        //         return response()->json([
-        //             'status' => 400,
-        //             'errors' => $validator->messages(),
-        //         ]);
-        // //     }
+            //     if ($validator->fails()) {
+            //         return response()->json([
+            //             'status' => 400,
+            //             'errors' => $validator->messages(),
+            //         ]);
+            // //     }
 
 
             // DATE MANIPULATION
@@ -7291,7 +7362,7 @@ $this->authenticateUser('add-payroll');
                     $approval->empID = $emp_id;
                     $approval->level1 = $request->input("linemanager");
                     //$approval->level2 = $request->level_2;
-                   // $approval->level3 = $request->level_3;
+                    // $approval->level3 = $request->level_3;
                     $approval->escallation_time = 2;
                     $approval->save();
 
@@ -8271,8 +8342,8 @@ $this->authenticateUser('add-payroll');
     // For Saving Termination
     public function saveTermination(Request $request)
     {
-        if($request->employeeID == $request->deligated){
-            return redirect()->back()->with(['error'=>'Terminated and deligated should not be the sane person']);
+        if ($request->employeeID == $request->deligated) {
+            return redirect()->back()->with(['error' => 'Terminated and deligated should not be the sane person']);
         }
         $this->authenticateUser('add-termination');
         // request()->validate(
@@ -8425,7 +8496,7 @@ $this->authenticateUser('add-payroll');
 
         //$net_pay = $total_gross - $total_deductions;
 
-       // $taxable = ($net_pay - $pension_employee);
+        // $taxable = ($net_pay - $pension_employee);
         $taxable = ($total_gross - $pension_employee);
         //$taxable = ($taxable < 0) ? -1*$taxable:$taxable;
 
@@ -8488,92 +8559,85 @@ $this->authenticateUser('add-payroll');
 
                 $this->flexperformance_model->update_employee_termination($id);
 
-                $approval=LeaveApproval::where('empID',$employeeID)->first();
-                $approver=Auth()->user()->emp_id;
-                $employee=Auth()->user()->position;
+                $approval = LeaveApproval::where('empID', $employeeID)->first();
+                $approver = Auth()->user()->emp_id;
+                $employee = Auth()->user()->position;
 
-                $position=Position::where('id',$employee)->first();
+                $position = Position::where('id', $employee)->first();
 
 
                 // chacking level 1
-                if ($approval->level1==$employeeID) {
+                if ($approval->level1 == $employeeID) {
                     $empID = $request->deligated;
-                        // For Deligation
-                    if($request->deligated!=null){
-                        $id=Auth::user()->emp_id;
+                    // For Deligation
+                    if ($request->deligated != null) {
+                        $id = Auth::user()->emp_id;
 
                         $this->attendance_model->save_deligated($leave->empID);
 
 
-                      $level1=DB::table('leave_approvals')->Where('level1',$empID)->update(['level1'=>$leave->deligated]);
-                      $level2=DB::table('leave_approvals')->Where('level2',$empID)->update(['level2'=>$leave->deligated]);
-                      $level3=DB::table('leave_approvals')->Where('level3',$empID)->update(['level3'=>$leave->deligated]);
-                      // dd($request->deligate);
+                        $level1 = DB::table('leave_approvals')->Where('level1', $empID)->update(['level1' => $leave->deligated]);
+                        $level2 = DB::table('leave_approvals')->Where('level2', $empID)->update(['level2' => $leave->deligated]);
+                        $level3 = DB::table('leave_approvals')->Where('level3', $empID)->update(['level3' => $leave->deligated]);
+                        // dd($request->deligate);
 
                     }
 
 
 
 
-                    $leave->status=3;
-                    $leave->state=0;
-                    $leave->level1=Auth()->user()->emp_id;
-                    $leave->position='Approved by '. $position->name;
-                    $leave->updated_at= new DateTime();
+                    $leave->status = 3;
+                    $leave->state = 0;
+                    $leave->level1 = Auth()->user()->emp_id;
+                    $leave->position = 'Approved by ' . $position->name;
+                    $leave->updated_at = new DateTime();
                     $leave->update();
-
-
-                }
-                elseif($approval->level2==$approver)
-                {
-
-                      // For Deligation
-                    if($leave->deligated!=null){
-                        $id=Auth::user()->emp_id;
-                        $this->attendance_model->save_deligated($leave->empID);
-
-
-
-                      $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
-                      $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
-                      $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
-                      // dd($request->deligate);
-
-                    }
-                    $leave->status=3;
-                    $leave->state=0;
-                    $leave->level2=Auth()->user()->emp_id;
-                    $leave->position='Approved by '. $position->name;
-                    $leave->updated_at= new DateTime();
-                    $leave->update();
-                  }
-
-                elseif($approval->level3==$approver)
-                {
+                } elseif ($approval->level2 == $approver) {
 
                     // For Deligation
-                    if($leave->deligated!=null){
-                        $id=Auth::user()->emp_id;
+                    if ($leave->deligated != null) {
+                        $id = Auth::user()->emp_id;
                         $this->attendance_model->save_deligated($leave->empID);
 
 
 
-                      $level1=DB::table('leave_approvals')->Where('level1',$id)->update(['level1'=>$leave->deligated]);
-                      $level2=DB::table('leave_approvals')->Where('level2',$id)->update(['level2'=>$leave->deligated]);
-                      $level3=DB::table('leave_approvals')->Where('level3',$id)->update(['level3'=>$leave->deligated]);
-                      // dd($request->deligate);
+                        $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
+                        $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
+                        $level3 = DB::table('leave_approvals')->Where('level3', $id)->update(['level3' => $leave->deligated]);
+                        // dd($request->deligate);
 
                     }
-                  $leave->status=3;
-                  $leave->state=0;
-                  $leave->level3=Auth()->user()->emp_id;
-                  $leave->position=$position->name;
-                  $leave->updated_at= new DateTime();
-                  $leave->update();
+                    $leave->status = 3;
+                    $leave->state = 0;
+                    $leave->level2 = Auth()->user()->emp_id;
+                    $leave->position = 'Approved by ' . $position->name;
+                    $leave->updated_at = new DateTime();
+                    $leave->update();
+                } elseif ($approval->level3 == $approver) {
+
+                    // For Deligation
+                    if ($leave->deligated != null) {
+                        $id = Auth::user()->emp_id;
+                        $this->attendance_model->save_deligated($leave->empID);
+
+
+
+                        $level1 = DB::table('leave_approvals')->Where('level1', $id)->update(['level1' => $leave->deligated]);
+                        $level2 = DB::table('leave_approvals')->Where('level2', $id)->update(['level2' => $leave->deligated]);
+                        $level3 = DB::table('leave_approvals')->Where('level3', $id)->update(['level3' => $leave->deligated]);
+                        // dd($request->deligate);
+
+                    }
+                    $leave->status = 3;
+                    $leave->state = 0;
+                    $leave->level3 = Auth()->user()->emp_id;
+                    $leave->position = $position->name;
+                    $leave->updated_at = new DateTime();
+                    $leave->update();
                 }
 
                 $msg = 'Employee is Terminated Successfully !';
-                return redirect('flex/termination')->with(['success'=>$msg]);
+                return redirect('flex/termination')->with(['success' => $msg]);
             } else {
                 // To be upgraded
                 $termination = Termination::where('id', $id)->first();
@@ -8581,14 +8645,12 @@ $this->authenticateUser('add-payroll');
                 $termination->update();
 
                 $msg = 'Approved By ' . $roles->name;
-                return redirect('flex/termination')->with(['success'=>$msg]);
+                return redirect('flex/termination')->with(['success' => $msg]);
             }
         } else {
             $msg = "Failed To Terminate !";
-            return redirect('flex/termination')->with(['error'=> $msg]);
+            return redirect('flex/termination')->with(['error' => $msg]);
         }
-
-
     }
 
 
@@ -8625,13 +8687,13 @@ $this->authenticateUser('add-payroll');
 
         $employee_info = $this->flexperformance_model->userprofile($termination->employeeID);
 
-        $name = $termination->employee->fname . ' ' . $termination->employee->mname . ' ' . $termination->employee->lname ;
+        $name = $termination->employee->fname . ' ' . $termination->employee->mname . ' ' . $termination->employee->lname;
 
 
         $pdf = Pdf::loadView('reports.terminalbenefit2', compact('termination', 'employee_info'));
-       // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
+        // $pdf->setPaper([0, 0, 885.98, 396.85], 'landscape');
         $pdf->setPaper('landscape');
-        return $pdf->download('terminal-benefit-slip-for-'.$name.'.pdf');
+        return $pdf->download('terminal-benefit-slip-for-' . $name . '.pdf');
         //return view('reports.terminalbenefit',compact('termination', 'employee_info'));
         //return view('workforce-management.terminal-balance', compact('termination','employee_info'));
     }
@@ -8645,14 +8707,14 @@ $this->authenticateUser('add-payroll');
 
 
 
-        $level1 = DB::table('leave_approvals')->Where('level1',$employeeID)->count();
-        $level2 = DB::table('leave_approvals')->Where('level2',$employeeID)->count();
-        $level3 = DB::table('leave_approvals')->Where('level3',$employeeID)->count();
+        $level1 = DB::table('leave_approvals')->Where('level1', $employeeID)->count();
+        $level2 = DB::table('leave_approvals')->Where('level2', $employeeID)->count();
+        $level3 = DB::table('leave_approvals')->Where('level3', $employeeID)->count();
 
-        $data['deligate']= $level1 + $level2 + $level3;
+        $data['deligate'] = $level1 + $level2 + $level3;
 
 
-        $leave_entitled = Employee::where('emp_id',$employeeID)->first();
+        $leave_entitled = Employee::where('emp_id', $employeeID)->first();
 
         $calendar = $request->terminationDate;
         $datewell = explode("-", $calendar);
@@ -8703,7 +8765,7 @@ $this->authenticateUser('add-payroll');
     {
 
 
-     $this->authenticateUser('view-promotions');
+        $this->authenticateUser('view-promotions');
 
 
         $data['title'] = "Promtion|Increment";
@@ -8856,15 +8918,14 @@ $this->authenticateUser('add-payroll');
     }
 
     use Importable;
-    public function addBulkIncrement(Request $request){
+    public function addBulkIncrement(Request $request)
+    {
 
 
-    $data1 = Excel::import(new ImportSalaryIncrement, $request->file('file')->store('files'));
+        $data1 = Excel::import(new ImportSalaryIncrement, $request->file('file')->store('files'));
 
-    $msg = "Employee Salary  Incremention and Arrears has been requested successfully !";
-    return redirect('flex/promotion')->with('success', $msg);
-
-
+        $msg = "Employee Salary  Incremention and Arrears has been requested successfully !";
+        return redirect('flex/promotion')->with('success', $msg);
     }
 
     // For Add Increment Page
@@ -9195,7 +9256,7 @@ $this->authenticateUser('add-payroll');
 
         $empID = base64_decode($id);
 
-         if(auth()->user()->emp_id != $empID){
+        if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9259,22 +9320,22 @@ $this->authenticateUser('add-payroll');
 
                 // start of name information validation
                 'employeeID' => 'required',
-                'fname' => 'required|alpha',
-                'mname' => 'nullable|alpha',
-                'lname' => 'required|alpha',
-                'maide_name' => 'nullable|alpha',
+                'fname' => 'required',
+                'mname' => 'nullable',
+                'lname' => 'required',
+                'maide_name' => 'nullable',
 
 
                 // start of biographical informations
                 'bithdate' => 'nullable',
-                'country_of_birth' => 'nullable|alpha',
+                'country_of_birth' => 'nullable',
                 'gender' => 'required',
                 // 'martial' => 'nullable',
-                'religion' => 'nullable|alpha',
+                'religion' => 'nullable',
 
                 // Address Information
-                'physical_address' => 'nullable|alpha',
-                'landmark' => 'nullable|alpha',
+                'physical_address' => 'nullable',
+                'landmark' => 'nullable',
 
                 // Start of Personal Identification details
                 'TIN' => 'required',
@@ -9285,64 +9346,64 @@ $this->authenticateUser('add-payroll');
 
                 // Start of Emmegence Contact
 
-                'em_fname' => 'nullable|alpha',
-                'em_mname' => 'nullable|alpha',
-                'spouse_birthplace' => 'nullaspousee',
-                'em_relationship' => 'nullable|alpha',
-                'em_ocupation' => 'nullable|alpha',
+                'em_fname' => 'nullable',
+                'em_mname' => 'nullable',
+                'spouse_birthplace' => 'nullable',
+                'em_relationship' => 'nullable',
+                'em_ocupation' => 'nullable',
                 'em_phone' => 'nullable:numeric',
 
                 // Start of Employment Details
                 'employment_date' => 'nullable',
-                'former_title' => 'nullable|alpha',
-                'current_title' => 'nullable|alpha',
-                'department' => 'nullable|alpha',
+                'former_title' => 'nullable',
+                'current_title' => 'nullable',
+                'department' => 'nullable',
                 'line_manager' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
                 'hod' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
                 'employee_status' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
 
                 // start of spouse details
-                'spouse_name' => 'nullable|alpha',
+                'spouse_name' => 'nullable',
                 'spouse_birthdate' => 'nullable',
-                'spouse_birthplace' => 'nullable|alpha',
-                'spouse_nationality' => 'nullable|alpha',
-                'spouse_employer' => 'nullable|alpha',
-                'spouse_job_title' => 'nullable|alpha',
+                'spouse_birthplace' => 'nullable',
+                'spouse_nationality' => 'nullable',
+                'spouse_employer' => 'nullable',
+                'spouse_job_title' => 'nullable',
                 'spouse_medical_status' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
 
                 // start of children details
-                'dep_name' => 'nullable|alpha',
-                'dep_surname' => 'nullable|alpha',
+                'dep_name' => 'nullable',
+                'dep_surname' => 'nullable',
 
                 //start of parent details
-                'parent_names' => 'nullable|alpha',
-                'parent_relation' => 'nullable|alpha',
-                'parent_living_status' => 'nullable|alpha|regex:/^[A-Za-z0-9 ]+$/',
-                'parent_residence' => 'nullable|alpha|regex:/^[A-Za-z0-9 ]+$/',
+                'parent_names' => 'nullable',
+                'parent_relation' => 'nullable',
+                'parent_living_status' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
+                'parent_residence' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
 
                 //start of academic details
-                'institute' => 'nullable|alpha',
-                'level' => 'nullable|alpha',
-                'parent_living_status' => 'nullable|alpha',
+                'institute' => 'nullable',
+                'level' => 'nullable',
+                'parent_living_status' => 'nullable',
 
                 //profesional qualification
                 'cert_start' => 'nullable|numeric',
                 'cert_end' => 'nullable|numeric',
-                'cert_name' => 'nullable|alpha',
+                'cert_name' => 'nullable',
 
-                'cert_qualification' => 'nullable|alpha',
-                'cert_name' => 'nullable|alpha',
+                'cert_qualification' => 'nullable',
+                'cert_name' => 'nullable',
                 'cert_number' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
                 'cert_status' => 'nullable',
 
                 //employment history
                 'hist_start' => 'nullable|numeric',
                 'hist_end' => 'nullable|numeric',
-                'hist_employer' => 'nullable|alpha',
+                'hist_employer' => 'nullable',
 
-                'hist_industry' => 'nullable|alpha',
-                'hist_position' => 'nullable|alpha',
-                'hist_reason' => 'nullable|alpha',
+                'hist_industry' => 'nullable',
+                'hist_position' => 'nullable',
+                'hist_reason' => 'nullable',
                 'cert_status' => 'nullable'
 
                 // start of former works
@@ -9352,7 +9413,7 @@ $this->authenticateUser('add-payroll');
 
         $id = $request->employeeID;
 
-        if(auth()->user()->emp_id != $id){
+        if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9376,7 +9437,7 @@ $this->authenticateUser('add-payroll');
             // dd($request->current_job);
             $employee->national_id = $request->NIDA;
             $employee->form_4_index = $request->HELSB;
-           // $employee->pension_fund = $request->pension_fund;
+            // $employee->pension_fund = $request->pension_fund;
             $employee->physical_address = $request->physical_address;
             $employee->update();
 
@@ -9664,7 +9725,7 @@ $this->authenticateUser('add-payroll');
 
         $empID = $child->employeeID;
 
-        if(auth()->user()->emp_id != $empID){
+        if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9680,7 +9741,7 @@ $this->authenticateUser('add-payroll');
 
         $empID = $parent->employeeID;
 
-        if(auth()->user()->emp_id != $empID){
+        if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9695,7 +9756,7 @@ $this->authenticateUser('add-payroll');
 
         $empID = $qualification->employeeID;
 
-        if(auth()->user()->emp_id != $empID){
+        if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9710,7 +9771,7 @@ $this->authenticateUser('add-payroll');
 
         $empID = $certification->employeeID;
 
-        if(auth()->user()->emp_id != $empID){
+        if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9726,7 +9787,7 @@ $this->authenticateUser('add-payroll');
 
         $empID = $history->employeeID;
 
-        if(auth()->user()->emp_id != $empID){
+        if (auth()->user()->emp_id != $empID) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9752,7 +9813,7 @@ $this->authenticateUser('add-payroll');
     {
         $id = base64_decode($id);
 
-        if(auth()->user()->emp_id != $id){
+        if (auth()->user()->emp_id != $id) {
             $this->authenticateUser('view-employee');
         }
 
@@ -9820,7 +9881,7 @@ $this->authenticateUser('add-payroll');
         // ]);
         $user = $request->empID;
 
-        if(auth()->user()->emp_id != $user){
+        if (auth()->user()->emp_id != $user) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -9840,9 +9901,9 @@ $this->authenticateUser('add-payroll');
 
             $newImageName = $request->image->hashName();
             $filePath  = $request->image->move(public_path('storage/profile'), $newImageName);
-           // $path = $filePath->path();
+            // $path = $filePath->path();
             //$scanner = new Scanner();
-           // $result = Clamav::scanFile($filePath);
+            // $result = Clamav::scanFile($filePath);
 
 
             //    $filename=time().'.'.$file->getClientOriginalExtension();
@@ -9856,7 +9917,7 @@ $this->authenticateUser('add-payroll');
         $employee->update();
 
         //    return redirect('flex/employee')->with('status', 'Image Has been uploaded');
-       // return redirect('flex/employee-profile/' . base64_encode($user))->with('msg', 'Employee Image has been updated successfully !');
+        // return redirect('flex/employee-profile/' . base64_encode($user))->with('msg', 'Employee Image has been updated successfully !');
         return redirect()->back();
     }
 
@@ -10212,9 +10273,9 @@ $this->authenticateUser('add-payroll');
 
         $data['parent'] = "Employee Profile";
 
-        if($id == 'All'){
-            $data2['employee'] = Employee::all()->where('state',1);
-             return view('reports.employee_data_datatable',$data2);
+        if ($id == 'All') {
+            $data2['employee'] = Employee::all()->where('state', 1);
+            return view('reports.employee_data_datatable', $data2);
         }
 
         // return view('employee.userprofile', $data);
@@ -10331,7 +10392,7 @@ $this->authenticateUser('add-payroll');
         $data['title'] = 'Grievances Details';
         $data['details'] = $this->flexperformance_model->grievance_details($id);
         $grievance = Grievance::where('id', $id)->first();
-        if($grievance->empID != Auth::user()->emp_id ){
+        if ($grievance->empID != Auth::user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -10430,7 +10491,7 @@ $this->authenticateUser('add-payroll');
     public function cancel_grievance($id)
     {
         $project = Grievance::where('id', $id)->first();
-        if($project->empID != Auth::user()->emp_id ){
+        if ($project->empID != Auth::user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
         $project->delete();
@@ -10442,7 +10503,7 @@ $this->authenticateUser('add-payroll');
     {
 
         $grievance = Grievance::find($id);
-        if($grievance->empID != Auth::user()->emp_id ){
+        if ($grievance->empID != Auth::user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -10458,7 +10519,7 @@ $this->authenticateUser('add-payroll');
     {
 
         $grievance = Grievance::find($id);
-        if($grievance->empID != Auth::user()->emp_id ){
+        if ($grievance->empID != Auth::user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -10477,7 +10538,7 @@ $this->authenticateUser('add-payroll');
     {
 
         $grievance = Grievance::find($request->id);
-        if($grievance->empID != Auth::user()->emp_id ){
+        if ($grievance->empID != Auth::user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -10595,7 +10656,8 @@ $this->authenticateUser('add-payroll');
                 'description' => 'required|alpha',
 
 
-            ]);
+            ]
+        );
         $grievance = new Grievance();
         $grievance->title = $request->title;
         $grievance->description = $request->description;
@@ -11371,40 +11433,40 @@ $this->authenticateUser('add-payroll');
             }
 
 
-             // For Behaviour Outstanding
-             if ($behaviour >= 80 && $behaviour < 100) {
+            // For Behaviour Outstanding
+            if ($behaviour >= 80 && $behaviour < 100) {
                 //For Improvement
                 if ($performance > 0 && $performance < 20) {
                     $item21 = $item21 + $performance;
-                    array_push($data['item21_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+                    array_push($data['item21_data'], ['full_name' => $item->NAME, 'emp_id' => $item->emp_id, 'department' => $item->DEPARTMENT, 'performance' => $performance, 'behavior' => $behaviour]);
 
                     $item21_count++;
                 }
                 // For Improvement Good
                 if ($performance >= 20 && $performance < 40) {
                     $item22 = $item22 + $performance;
-                    array_push($data['item22_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+                    array_push($data['item22_data'], ['full_name' => $item->NAME, 'emp_id' => $item->emp_id, 'department' => $item->DEPARTMENT, 'performance' => $performance, 'behavior' => $behaviour]);
 
                     $item22_count++;
                 }
                 // For Improvement Strong
                 if ($performance >= 40 && $performance < 60) {
                     $item23 = $item23 + $performance;
-                    array_push($data['item23_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+                    array_push($data['item23_data'], ['full_name' => $item->NAME, 'emp_id' => $item->emp_id, 'department' => $item->DEPARTMENT, 'performance' => $performance, 'behavior' => $behaviour]);
 
                     $item23_count++;
                 }
                 // For Improvement very Strong
                 if ($performance >= 60 && $performance < 80) {
                     $item24 = $item24 + $performance;
-                    array_push($data['item24_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+                    array_push($data['item24_data'], ['full_name' => $item->NAME, 'emp_id' => $item->emp_id, 'department' => $item->DEPARTMENT, 'performance' => $performance, 'behavior' => $behaviour]);
 
                     $item24_count++;
                 }
                 // For Improvement Outstanding
                 if ($performance >= 80 && $performance < 100) {
                     $item25 = $item25 + $performance;
-                    array_push($data['item25_data'],['full_name'=>$item->NAME,'emp_id'=>$item->emp_id,'department'=>$item->DEPARTMENT,'performance'=>$performance,'behavior'=>$behaviour]);
+                    array_push($data['item25_data'], ['full_name' => $item->NAME, 'emp_id' => $item->emp_id, 'department' => $item->DEPARTMENT, 'performance' => $performance, 'behavior' => $behaviour]);
 
                     $item25_count++;
                 }
@@ -11788,19 +11850,19 @@ $this->authenticateUser('add-payroll');
         //  $data['very_strong'] = ($item19 > 0) ? $item19_count : 0;
         //  $data['very_strong_outstanding'] = ($item20 > 0) ? $item20_count : 0;
 
-         // For Column 5
-         $data['outstanding_improvement'] = ($item21 > 0) ? $item21_count : 0;
-         $data['outstanding_good'] = ($item22 > 0) ? $item22_count : 0;
-         $data['outstanding_strong'] = ($item23 > 0) ? $item23_count : 0;
-         $data['outstanding_very_strong'] = ($item24 > 0) ? $item24_count : 0;
-         $data['outstanding'] = ($item25 > 0) ? $item25_count : 0;
+        // For Column 5
+        $data['outstanding_improvement'] = ($item21 > 0) ? $item21_count : 0;
+        $data['outstanding_good'] = ($item22 > 0) ? $item22_count : 0;
+        $data['outstanding_strong'] = ($item23 > 0) ? $item23_count : 0;
+        $data['outstanding_very_strong'] = ($item24 > 0) ? $item24_count : 0;
+        $data['outstanding'] = ($item25 > 0) ? $item25_count : 0;
 
         $par = 'item' . $id . '_data';
         $data2['result'] = $data[$par];
         // $data2['result'] = $data['item22_data'] ;
 
-// dd($data['item23_data'] );
-// return $data2;
+        // dd($data['item23_data'] );
+        // return $data2;
         return view('performance.performance_details', $data2);
     }
 
