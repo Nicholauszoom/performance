@@ -36,12 +36,10 @@ class ReportController extends Controller
 
 
 
-        if(!Auth::user()->can($permissions)){
+        if (!Auth::user()->can($permissions)) {
 
-          abort(Response::HTTP_UNAUTHORIZED,'500|Page Not Found');
-
-         }
-
+            abort(Response::HTTP_UNAUTHORIZED, '500|Page Not Found');
+        }
     }
     public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
     {
@@ -128,20 +126,19 @@ class ReportController extends Controller
             $payroll_month = $data['payroll_month'];
             $total_heslb = $data['total_heslb'];
 
-            if($request->type == 1){
+            if ($request->type == 1) {
                 $data['currency'] = 'TZS';
-            }else{
+            } else {
                 $data['currency'] = 'USD';
             }
 
-            if($request->format == 1){
-            $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
-            return $pdf->download('paychecklist-'.$payrollMonth.'.pdf');
-            }else{
+            if ($request->format == 1) {
+                $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
+                return $pdf->download('paychecklist-' . $payrollMonth . '.pdf');
+            } else {
 
                 return view('reports.pay_checklist_datatable', $data);
             }
-
         }
     }
 
@@ -169,28 +166,28 @@ class ReportController extends Controller
         $summary = $data['summary'];
 
         //$data = ['title' => 'Welcome to ItSolutionStuff.com'];
-        if($request->type == 1){
+        if ($request->type == 1) {
             $data['currency'] = 'TZS';
-        }else{
+        } else {
             $data['currency'] = 'USD';
         }
 
-        if($request->format == 1){
-        $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
-        return $pdf->download('paychecklist-'.$payrollMonth.'.pdf');
-        }else{
+        if ($request->format == 1) {
+            $pdf = Pdf::loadView('reports.pay_checklist', $data)->setPaper('a4', 'potrait');
+            return $pdf->download('paychecklist-' . $payrollMonth . '.pdf');
+        } else {
 
             return view('reports.pay_checklist_datatable', $data);
         }
 
 
 
-    //     if ($request->type != 1)
-    //         return view('reports.payrolldetails_datatable', $data);
-    //     else {
-    //         $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
-    //         return $pdf->download('payrolldetails-'.$data['payroll_date'].'.pdf');
-    //    }
+        //     if ($request->type != 1)
+        //         return view('reports.payrolldetails_datatable', $data);
+        //     else {
+        //         $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
+        //         return $pdf->download('payrolldetails-'.$data['payroll_date'].'.pdf');
+        //    }
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
@@ -264,8 +261,6 @@ class ReportController extends Controller
                 $data['paye'] = $this->reports_model->s_p9($payrolldate);
                 $data['total'] = $this->reports_model->s_totalp9($payrolldate);
                 $data['paye_termination'] = $this->reports_model->s_p9_termination($payrolldate);
-
-
             } else {
 
                 $data['paye'] = $this->reports_model->v_p9($payrolldate);
@@ -316,7 +311,6 @@ class ReportController extends Controller
 
                 $data['sdl'] = $this->reports_model->s_p10($year, $year);
                 $data['total'] = $this->reports_model->s_totalp10($year, $year);
-
             } else {
                 $data['paye'] = $this->reports_model->v_p91($year, $year);
                 $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
@@ -340,8 +334,6 @@ class ReportController extends Controller
                 $data['sdl'] = $this->reports_model->s_p10($year, $year);
                 $data['total'] = $this->reports_model->s_totalp10($year, $year);
                 $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
-
-
             } else {
                 $data['paye'] = $this->reports_model->v_p91($year, $year);
                 $data['paye_terminated'] = $this->reports_model->s_p91_terminated($year, $year);
@@ -532,7 +524,7 @@ class ReportController extends Controller
         $id = base64_decode($request->emp_id);
 
 
-        if($id != auth()->user()->emp_id){
+        if ($id != auth()->user()->emp_id) {
             $this->authenticateUser('edit-employee');
         }
 
@@ -606,11 +598,9 @@ class ReportController extends Controller
                 $data['wcf'] = $this->reports_model->s_wcf($date);
                 $data['wcf_termination'] = $this->reports_model->s_wcf_termination($date);
                 $data['totalwcf'] = $this->reports_model->s_totalwcf($date);
-
             } else {
                 $data['wcf'] = $this->reports_model->v_wcf($date);
                 $data['totalwcf'] = $this->reports_model->v_totalwcf($date);
-
             }
 
             $data['info'] = $this->reports_model->company_info();
@@ -801,8 +791,8 @@ class ReportController extends Controller
         //dd($request->all());
         $empID = $request->input("employee");
 
-        if($empID != auth()->user()->emp_id){
-         $this->authenticateUser('view-report');
+        if ($empID != auth()->user()->emp_id) {
+            $this->authenticateUser('view-report');
         }
 
         if ($empID != "Select Employee") {
@@ -828,16 +818,14 @@ class ReportController extends Controller
                 if ($profile == 0) {
                     //session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
                     return redirect('/flex/payroll/employee_payslip/');
-                    return redirect()->back()->with(['error'=>'Sorry No Payroll Records Found For This Employee under the Selected Month']);
+                    return redirect()->back()->with(['error' => 'Sorry No Payroll Records Found For This Employee under the Selected Month']);
                 } else {
-                   // session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
-                   // return redirect(url('/flex/userprofile/?id=' . base64_encode($empID)));
-                   return redirect()->back()->with(['error'=>'Sorry No Payroll Records Found For This Employee under the Selected Month']);;
-
-
+                    // session('note', "<p class='alert alert-warning text-center'>Sorry No Payroll Records Found For This Employee under the Selected Month</font></p>");
+                    // return redirect(url('/flex/userprofile/?id=' . base64_encode($empID)));
+                    return redirect()->back()->with(['error' => 'Sorry No Payroll Records Found For This Employee under the Selected Month']);;
                 }
             } else {
-                $emp = Employee::where('emp_id',$empID)->first();
+                $emp = Employee::where('emp_id', $empID)->first();
                 $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
                 $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
                 $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
@@ -888,12 +876,12 @@ class ReportController extends Controller
                 // include app_path() . '/reports/payslip.php';
 
                 //return view('payroll.payslip_details_pdf', $data);
-               // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
+                // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
 
-             $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
+                $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
 
 
-             return $pdf->download('payslip_for_' . $empID . '.pdf');
+                return $pdf->download('payslip_for_' . $empID . '.pdf');
             }
         } else {
             // DATE MANIPULATION
@@ -2028,7 +2016,8 @@ class ReportController extends Controller
             exit("Invalid Resource Access");
         }
     }
-    public function journalEntryReport(Request $request){
+    public function journalEntryReport(Request $request)
+    {
 
         $data['gross_managent'] = $this->reports_model->gross_management($request->payrolldate);
 
@@ -2053,16 +2042,14 @@ class ReportController extends Controller
 
 
 
-       if($request->type == 2){
-           return view('reports.journal_entry_datatable',$data);
-       }else{
+        if ($request->type == 2) {
+            return view('reports.journal_entry_datatable', $data);
+        } else {
 
-        $pdf = Pdf::loadView('reports.journal_entry', $data)->setPaper('a4', 'potrait');
+            $pdf = Pdf::loadView('reports.journal_entry', $data)->setPaper('a4', 'potrait');
 
-        return $pdf->download('journal_entry_report.pdf');
-       }
-
-
+            return $pdf->download('journal_entry_report.pdf');
+        }
     }
 
 
@@ -2096,7 +2083,7 @@ class ReportController extends Controller
         $current_increase = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
 
-        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month, $previous_payroll_month);
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
         if ($data['new_employee'] > 0) {
             //increase of employee
@@ -2106,7 +2093,6 @@ class ReportController extends Controller
         if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease($current_payroll_month, $previous_payroll_month);
-
         }
 
         if ($current_increase['basic_increase'] > 0) {
@@ -2146,7 +2132,7 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('reports.payroll_reconciliation_details', $data)->setPaper('a4', 'potrait');
 
-        return $pdf->download('payroll_reconciliation_details-'.$current_payroll_month.'.pdf');
+        return $pdf->download('payroll_reconciliation_details-' . $current_payroll_month . '.pdf');
     }
 
     public function payrollReconciliationDetails_temp(Request $request)
@@ -2178,7 +2164,7 @@ class ReportController extends Controller
         $current_increase = $this->reports_model->basic_increase_temp($previous_payroll_month, $current_payroll_month);
 
 
-        $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee1($current_payroll_month, $previous_payroll_month);
         $data['terminated_employee'] = $this->reports_model->terminated_employee($previous_payroll_month);
         if ($data['new_employee'] > 0) {
             //increase of employee
@@ -2188,9 +2174,8 @@ class ReportController extends Controller
         if ($data['terminated_employee']  > 0) {
             //decrease of employee
             $data['employee_decrease'] = $this->reports_model->employee_decrease1($current_payroll_month, $previous_payroll_month);
-
         }
-       // dd($current_increase['basic_increase']);
+        // dd($current_increase['basic_increase']);
 
         if ($current_increase['basic_increase'] > 0) {
             //add increase in basic pay
@@ -2229,7 +2214,7 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('reports.payroll_reconciliation_details', $data)->setPaper('a4', 'potrait');
 
-        return $pdf->download('payroll_reconciliation_details-'.$current_payroll_month.'.pdf');
+        return $pdf->download('payroll_reconciliation_details-' . $current_payroll_month . '.pdf');
     }
 
     public function payrollReconciliationSummary(Request $request)
@@ -2273,21 +2258,18 @@ class ReportController extends Controller
 
 
 
-        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month,$previous_payroll_month);
+        $data['new_employee'] = $this->reports_model->new_employee($current_payroll_month, $previous_payroll_month);
 
-        if($data['new_employee'] > 0){
+        if ($data['new_employee'] > 0) {
 
-            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
-
+            $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month, $previous_payroll_month);
         }
 
 
 
-        if($data['terminated_employee'] > 0){
+        if ($data['terminated_employee'] > 0) {
 
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
-
-
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
 
@@ -2298,72 +2280,72 @@ class ReportController extends Controller
             if ($row->allowance == "N-Overtime") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'N-Overtime');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                //$row->previous_amount += $allowance[0]->previous_amount;
-                $row->previous_amount += 0;
-               $row->difference += ($allowance[0]->current_amount);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    //$row->previous_amount += $allowance[0]->previous_amount;
+                    $row->previous_amount += 0;
+                    $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "S-Overtime") {
-                if($row->current_amount != $row->previous_amount ){
-                $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-               $row->difference += ($allowance[0]->current_amount);
+                if ($row->current_amount != $row->previous_amount) {
+                    $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'S-Overtime');
+                    if (count($allowance) > 0) {
+                        $row->current_amount += $allowance[0]->current_amount;
+                        $row->previous_amount += 0;
+                        $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                        array_push($descriptions, $row->description);
+                    }
                 }
-            }
             } elseif ($row->allowance == "House Rent") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'house_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += 0;
+                    $row->difference += ($allowance[0]->current_amount);
 
 
-                array_push($descriptions, $row->description);
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Leave Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'leave_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += 0;
+                    $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Teller Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'teller_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += 0;
+                    $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Arrears") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'arreas');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += 0;
+                    $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                    array_push($descriptions, $row->description);
                 }
             } elseif ($row->allowance == "Long Serving allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'long_serving');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                if (count($allowance) > 0) {
+                    $row->current_amount += $allowance[0]->current_amount;
+                    $row->previous_amount += 0;
+                    $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                    array_push($descriptions, $row->description);
                 }
             }
         }
@@ -2389,7 +2371,7 @@ class ReportController extends Controller
 
         $data['total_allowances'] = $total_allowances;
         // $data['total_allowances'] = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
-//dd($data['total_allowances']);
+        //dd($data['total_allowances']);
 
 
 
@@ -2420,7 +2402,7 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('reports.payroll_reconciliation_summary1', $data)->setPaper('a4', 'potrait');
 
 
-        return $pdf->download('payroll_reconciliation_summary-'.$current_payroll_month.'.pdf');
+        return $pdf->download('payroll_reconciliation_summary-' . $current_payroll_month . '.pdf');
         //return view('reports.payroll_reconciliation_summary1', $data);
 
         // return view('reports.samplepdf', $data);
@@ -3233,8 +3215,8 @@ EOD;
             return view('reports.payrolldetails_datatable', $data);
         else {
             $pdf = Pdf::loadView('reports.payroll_details', $data)->setPaper('a4', 'landscape');
-            return $pdf->download('payrolldetails-'.$data['payroll_date'].'.pdf');
-       }
+            return $pdf->download('payrolldetails-' . $data['payroll_date'] . '.pdf');
+        }
 
         // include(app_path() . '/reports/temp_payroll.php');
     }
@@ -3286,7 +3268,7 @@ EOD;
 
 
         $nature = $request->nature;
-        $calender = explode('-',$request->duration);
+        $calender = explode('-', $request->duration);
         $position = $request->position;
         $department = $request->department;
 
@@ -3297,18 +3279,17 @@ EOD;
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
             // $employee= Employee::all();
             //$employee = $this->flexperformance_model->employee();
-            if($department != 'All' && $position != 'All'){
-            $employees = Employee::where('state', '=', 1)->where('department',$department)->where('position',$position)->get();
-            }elseif($department != 'All' && $position == 'All'){
-                $employees = Employee::where('state', '=', 1)->where('department',$department)->get();
-
-            }elseif($department == 'All'){
+            if ($department != 'All' && $position != 'All') {
+                $employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)->get();
+            } elseif ($department != 'All' && $position == 'All') {
+                $employees = Employee::where('state', '=', 1)->where('department', $department)->get();
+            } elseif ($department == 'All') {
                 $employees = Employee::where('state', '=', 1)->get();
-                }
-                // else{
-                //     $employees = Employee::where('state', '=', 1)->get();
-                // }
-         //   $employees = Employee::where('state', '=', 1)->get();
+            }
+            // else{
+            //     $employees = Employee::where('state', '=', 1)->get();
+            // }
+            //   $employees = Employee::where('state', '=', 1)->get();
 
 
 
@@ -3326,20 +3307,19 @@ EOD;
                 $days = $diff->d;
 
                 $days_this_month_init = intval(date('t', strtotime($request->duration)));
-                if($no_days == $days_this_month_init ){
-                if($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28 ){
-                    $days_this_month = 31;
-                    $no_days = 31;
-                    }
-                else
-                $days_this_month = $days_this_month_init;
-                }else{
+                if ($no_days == $days_this_month_init) {
+                    if ($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28) {
+                        $days_this_month = 31;
+                        $no_days = 31;
+                    } else
+                        $days_this_month = $days_this_month_init;
+                } else {
                     $days_this_month = $days_this_month_init;
                 }
 
-                $employee->accrual_amount = $employee->salary/30;
+                $employee->accrual_amount = $employee->salary / 30;
 
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
 
                 $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
@@ -3352,14 +3332,13 @@ EOD;
                 $employee->days_entitled = $employee->leave_days_entitled;
 
 
-                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
 
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration, $nature);
             }
-
         } else {
 
 
@@ -3377,29 +3356,28 @@ EOD;
                 $days = $diff->d;
 
                 $days_this_month_init = intval(date('t', strtotime($request->duration)));
-                if($no_days == $days_this_month_init ){
-                if($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28 ){
-                    $days_this_month = 31;
-                    $no_days = 31;
-                    }
-                else
-                $days_this_month = $days_this_month_init;
-                }else{
+                if ($no_days == $days_this_month_init) {
+                    if ($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28) {
+                        $days_this_month = 31;
+                        $no_days = 31;
+                    } else
+                        $days_this_month = $days_this_month_init;
+                } else {
                     $days_this_month = $days_this_month_init;
                 }
 
 
 
-                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
+                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id, $nature);
                 //dd($employee->leave_taken);
 
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30? $days_this_month + 1 : $days_this_month);
+                $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
 
                 $employee->accrual_days = $accrual_days;
 
-                $employee->accrual_amount = $employee->salary/30;
+                $employee->accrual_amount = $employee->salary / 30;
 
                 $employee->nature = $nature;
 
@@ -3408,93 +3386,77 @@ EOD;
                 //$employee->days_entitled = $this->attendance_model->days_entilted($nature);
                 $employee->days_entitled = $employee->leave_days_entitled;
 
-                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
+                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration, $nature);
             }
         }
         // dd($employees);
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($department != 'All'){
+        if ($department != 'All') {
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
-        if($position != 'All'){
+        if ($position != 'All') {
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
         $leave_name = $this->attendance_model->leave_name($nature);
 
         $data['employees'] =  $employees;
-           $data['nature'] =  $nature;
-           $data['leave_name'] = $leave_name;
-           $data['date'] = $request->duration;
+        $data['nature'] =  $nature;
+        $data['leave_name'] = $leave_name;
+        $data['date'] = $request->duration;
 
-           $other = ' ';
-        if(!empty($data['department_name']))
-          $other = 'Department : '.$data['department_name'];
-        elseif(!empty($data['position_name']))
-         $other =  'Position : '. $data['position_name'];
+        $other = ' ';
+        if (!empty($data['department_name']))
+            $other = 'Department : ' . $data['department_name'];
+        elseif (!empty($data['position_name']))
+            $other =  'Position : ' . $data['position_name'];
 
 
-           $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date : '.date('d-M-Y',strtotime($data['date']));
-        if($request->type == 1){
-        if($nature == 1){
-            $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_report'.$request->duration.'.pdf');
-        }else{
-            $pdf = Pdf::loadView('reports.other_leave_balance',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_report'.$request->duration.'.pdf');
-        }
-
-        }else{
-            if($nature == 1){
-                return view('reports.leave_balance_datatable',$data);
-            }else{
-                return view('reports.other_leave_balance_datatable',$data);
+        $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : ' . date('d-M-Y', strtotime($data['date']));
+        if ($request->type == 1) {
+            if ($nature == 1) {
+                $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
+                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+            } else {
+                $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
+                return $pdf->download('Leave_report' . $request->duration . '.pdf');
             }
-
+        } else {
+            if ($nature == 1) {
+                return view('reports.leave_balance_datatable', $data);
+            } else {
+                return view('reports.other_leave_balance_datatable', $data);
+            }
         }
-
-
-
     }
 
 
     public function annualleave2(Request $request)
     {
         // dd("hello");
-
-
-
-
         $nature = $request->nature;
-        $calender = explode('-',$request->duration);
+        $calender = explode('-', $request->duration);
         $position = $request->position;
         $department = $request->department;
 
         $no_days = $calender[2];
 
 
+
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
-            if($department != 'All' && $position != 'All'){
-                $employees = Employee::where('state', '=', 1)->where('department',$department)->where('position',$position)->get();
-                }elseif($department != 'All' && $position == 'All'){
-                    $employees = Employee::where('state', '=', 1)->where('department',$department)->get();
-
-                }elseif($department == 'All'){
-                    $employees = Employee::where('state', '=', 1)->get();
-                    }
-
-
+            if ($department != 'All' && $position != 'All') {
+                $employees = Employee::where('state', '=', 1)->where('department', $department)->where('position', $position)->get();
+            } elseif ($department != 'All' && $position == 'All') {
+                $employees = Employee::where('state', '=', 1)->where('department', $department)->get();
+            } elseif ($department == 'All') {
+                $employees = Employee::where('state', '=', 1)->get();
+            }
 
             foreach ($employees  as $employee) {
-
-
-
                 $d1 = new \DateTime(date($employee->hire_date));
-
                 $d2 = new \DateTime("now");
                 $diff = $d1->diff($d2);
 
@@ -3504,20 +3466,18 @@ EOD;
 
                 $diff = 0;
 
-                $calender = explode('-',$request->duration);
-                $december = ($calender[0]-1).'-12-31';
+                $calender = explode('-', $request->duration);
+                $december = ($calender[0] - 1) . '-12-31';
 
                 $december_last_year = new DateTime($december);
                 $hire_date = new DateTime($employee->hire_date);
                 $today = new DateTime($request->duration);
-                if($december_last_year > $hire_date){
+                if ($december_last_year > $hire_date) {
 
-                $diff = $today->diff($december_last_year);
+                    $diff = $today->diff($december_last_year);
+                } else {
 
-                }else{
-
-                $diff = $today->diff($hire_date);
-
+                    $diff = $today->diff($hire_date);
                 }
 
 
@@ -3525,62 +3485,37 @@ EOD;
 
                 $days_this_month = intval(date('t', strtotime($request->duration)));
 
-                $employee->accrual_amount = $employee->salary/30;
+                $employee->accrual_amount = $employee->salary / 30;
 
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-
-                 $accrual_days = $days_this_year * $employee->leave_days_entitled /365;
-
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
+                $accrual_days = $days_this_year * $employee->leave_days_entitled / 365;
                 $employee->accrual_days = $accrual_days;
-
-                $employee->nature = $nature;
-
-                $employee->days_entitled = $this->attendance_model->days_entilted($nature);
-
-
-                $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-                $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
+                $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
             }
-
         } else {
-
 
             $employees = Employee::where('emp_id', $request->leave_employee)->where('state', '=', 1)->get();
             //$employees = $this->flexperformance_model->userprofile($request->leave_employee);
             foreach ($employees  as $employee) {
-
                 $d1 = new \DateTime(date($employee->hire_date));
-
                 $d2 = new \DateTime("now");
                 $diff = $d1->diff($d2);
-
                 $years = $diff->y;
                 $months = $diff->m;
                 $days = $diff->d;
-
                 $diff = 0;
-
-                $calender = explode('-',$request->duration);
-                $december = ($calender[0]-1).'-12-31';
-
+                $calender = explode('-', $request->duration);
+                $december = ($calender[0] - 1) . '-12-31';
                 $december_last_year = new DateTime($december);
                 $hire_date = new DateTime($employee->hire_date);
                 $today = new DateTime($request->duration);
-                if($december_last_year > $hire_date){
-
-                $diff = $today->diff($december_last_year);
-
-                }else{
-
-                $diff = $today->diff($hire_date);
-
+                if ($december_last_year > $hire_date) {
+                    $diff = $today->diff($december_last_year);
+                } else {
+                    $diff = $today->diff($hire_date);
                 }
-
 
                 //dd($diff->days);
 
@@ -3588,82 +3523,71 @@ EOD;
 
                 //$days_this_month = intval(date('t', strtotime($request->duration)));
 
-
-                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
+                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id, $nature);
                 //dd($employee->leave_taken);
 
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->maximum_days = $this->attendance_model->getLeaveTaken2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $accrual_days = $days_this_year * $employee->leave_days_entitled /365;
+                $accrual_days = $days_this_year * $employee->leave_days_entitled / 365;
 
                 $employee->accrual_days = $accrual_days;
 
-                $employee->accrual_amount = $employee->salary/30;
+                $employee->accrual_amount = $employee->salary / 30;
+
 
                 $employee->nature = $nature;
-
-
-
                 $employee->days_entitled = $this->attendance_model->days_entilted($nature);
 
+                $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $employee->days_spent = $this->attendance_model->days_spent2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
 
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-                $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
+                $employee->current_balance = $this->attendance_model->getLeaveBalance2($employee->emp_id, $employee->hire_date, $request->duration, $nature);
             }
         }
 
+
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($department != 'All'){
+        if ($department != 'All') {
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
-        if($position != 'All'){
+        if ($position != 'All') {
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
         $leave_name = $this->attendance_model->leave_name($nature);
 
         $data['employees'] =  $employees;
-           $data['nature'] =  $nature;
-           $data['leave_name'] = $leave_name;
-           $data['date'] = $request->duration;
+        $data['nature'] =  $nature;
+        $data['leave_name'] = $leave_name;
+        $data['date'] = $request->duration;
         // dd($employees);
         $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
-        if(!empty($data['department_name']))
-          $other = 'Department : '.$data['department_name'];
-        elseif(!empty($data['position_name']))
-         $other =  'Position : '. $data['position_name'];
-        $january = $calender[0].'-01-01';
+        if (!empty($data['department_name']))
+            $other = 'Department : ' . $data['department_name'];
+        elseif (!empty($data['position_name']))
+            $other =  'Position : ' . $data['position_name'];
+        $january = $calender[0] . '-01-01';
 
-        $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date : From '.date('d-M-Y',strtotime($january)).' To '.date('d-M-Y',strtotime($data['date']));
-        if($request->type == 1){
-        if($nature == 1){
-            $pdf = Pdf::loadView('reports.leave_balance',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_report'.$request->duration.'.pdf');
-        }else{
-            $pdf = Pdf::loadView('reports.other_leave_balance',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_report'.$request->duration.'.pdf');
-        }
-
-        }else{
-            if($nature == 1){
-                return view('reports.leave_balance_datatable',$data);
-            }else{
-                return view('reports.other_leave_balance_datatable',$data);
+        $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date : From ' . date('d-M-Y', strtotime($january)) . ' To ' . date('d-M-Y', strtotime($data['date']));
+        if ($request->type == 1) {
+            if ($nature == 1) {
+                $pdf = Pdf::loadView('reports.leave_balance', $data)->setPaper('a4', 'landscape');
+                return $pdf->download('Leave_report' . $request->duration . '.pdf');
+            } else {
+                $pdf = Pdf::loadView('reports.other_leave_balance', $data)->setPaper('a4', 'landscape');
+                return $pdf->download('Leave_report' . $request->duration . '.pdf');
             }
-
+        } else {
+            if ($nature == 1) {
+                return view('reports.leave_balance_datatable', $data);
+            } else {
+                return view('reports.other_leave_balance_datatable', $data);
+            }
         }
-
-
-
     }
-
-
     public function annualLeaveData(Request $request)
     {
         # code...
@@ -3681,7 +3605,7 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getMonthlyLeave1($empID,$today,$nature,$department,$position);
+        $data['leave_data'] = $this->attendance_model->getMonthlyLeave1($empID, $today, $nature, $department, $position);
         $data['nature'] = $this->attendance_model->leave_name($nature);
 
         $data['date'] = $today;
@@ -3689,47 +3613,57 @@ EOD;
         //return view('reports.leave_application_datatable',$data);
 
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($department != 'All'){
+        if ($department != 'All') {
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
-        if($position != 'All'){
+        if ($position != 'All') {
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
         $leave_name = $this->attendance_model->leave_name($nature);
 
 
-           $data['nature'] =  $nature;
-           $data['leave_name'] = $leave_name;
-           $data['date'] = $request->duration;
+        $data['nature'] =  $nature;
+        $data['leave_name'] = $leave_name;
+        $data['date'] = $request->duration;
         // dd($employees);
         $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
-        if(!empty($data['department_name']))
-          $other = 'Department : '.$data['department_name'];
-        elseif(!empty($data['position_name']))
-         $other =  'Position : '. $data['position_name'];
-       // $january = $calender[0].'-01-01';
+        if (!empty($data['department_name']))
+            $other = 'Department : ' . $data['department_name'];
+        elseif (!empty($data['position_name']))
+            $other =  'Position : ' . $data['position_name'];
+        // $january = $calender[0].'-01-01';
 
-        $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
-        if($request->type == 1){
+        $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date :' . date('d-M-Y', strtotime($data['date']));
+        if ($request->type == 1) {
 
-            $pdf = Pdf::loadView('reports.leave_application',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report'.$request->duration.'.pdf');
+            $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+        } else {
 
-
-        }else{
-
-            return view('reports.leave_application_datatable',$data);
-
+            return view('reports.leave_application_datatable', $data);
         }
-
     }
 
     public function annualLeaveData2(Request $request)
     {
-        # code...
+
+        $today = $request->duration;
+        $calender = explode('-',$today);
+        $january = $calender[0].'-01-01';
+        $monthlyleave = DB::table('leaves')
+        ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+        ->join('department', 'department.id', '=', 'employee.department')
+        ->join('position', 'position.id', '=', 'employee.position')
+        ->where('leaves.status',3)
+        ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('employee.state', 1)
+        ->where('start', '>=', $january)
+        ->where('start', '<=', $today)
+        ->get();
+
+
 
         $empID = $request->emp_id;
         $today = $request->duration;
@@ -3737,57 +3671,82 @@ EOD;
         $department = $request->department;
         $position = $request->position;
         $print_type = $request->print_type;
-
         $date = explode('-', $request->duration);
         // $dur = $date[0].'-'.$date[1];
         $year = $date[0];
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getMonthlyLeave2($empID,$today,$nature,$department,$position);
-        $data['nature'] = $this->attendance_model->leave_name($nature);
 
+        $monthlyLeaveData = $this->attendance_model->getMonthlyLeave22($empID, $today, $nature2, $department, $position);
+
+        $data['leave_data'] = $data['leave_data']->concat($monthlyLeaveData);
+        if ($nature != "All") {
+            $data['leave_data'] = $this->attendance_model->getMonthlyLeave2($empID, $today, $nature, $department, $position);
+            dd($data['leave_data']);
+
+        } else {
+            $leaveNature = $this->attendance_model->getLeaveTypes();
+
+            $data['leave_data'] = collect();
+            foreach ($leaveNature as $nature2) {
+                $monthlyLeaveData = $this->attendance_model->getMonthlyLeave22($empID, $today, $nature2, $department, $position);
+
+                $data['leave_data'] = $data['leave_data']->concat($monthlyLeaveData);
+            }
+        }
+
+// $data['leave_data']=  $monthlyleave;
+        if($nature == "All"){
+            $data['nature'] =  "All";
+        }else{
+            $data['nature'] =  $this->attendance_model->leave_name($nature);
+
+        }
         $data['date'] = $today;
         // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
 
-        $leave_name = $this->attendance_model->leave_name($nature);
-        if($department != 'All'){
+        $leave_name = ($nature != "All") ? $this->attendance_model->leave_name($nature) : "All";
+        if ($department != 'All') {
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
-        if($position != 'All'){
+        if ($position != 'All') {
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
-           $data['nature'] =  $nature;
-           $data['leave_name'] = $leave_name;
-           $data['date'] = $request->duration;
+        $data['nature'] =  $nature;
+        $data['leave_name'] = $leave_name;
+        $data['date'] = $request->duration;
         // dd($employees);
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
-        if(!empty($data['department_name']))
-          $other = 'Department : '.$data['department_name'];
-        elseif(!empty($data['position_name']))
-         $other =  'Position : '. $data['position_name'];
-       // $january = $calender[0].'-01-01';
+        if (!empty($data['department_name']))
+            $other = 'Department : ' . $data['department_name'];
+        elseif (!empty($data['position_name']))
+            $other =  'Position : ' . $data['position_name'];
+        // $january = $calender[0].'-01-01';
 
-        $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
-        if($request->type == 1){
+        $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date :' . date('d-M-Y', strtotime($data['date']));
 
-            $pdf = Pdf::loadView('reports.leave_application',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report'.$request->duration.'.pdf');
+        if ($nature != "All") {
+            if ($request->type == 1) {
 
+                $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
+                return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+            } else {
 
-        }else{
+                return view('reports.leave_application_datatable', $data);
+            }
+        } else {
 
-            return view('reports.leave_application_datatable',$data);
-
+            $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
         }
-
     }
 
     public function pendingLeaves(Request $request)
@@ -3807,7 +3766,7 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getpendingLeave($empID,$today,$nature,$department,$position);
+        $data['leave_data'] = $this->attendance_model->getpendingLeave($empID, $today, $nature, $department, $position);
         $data['nature'] = $this->attendance_model->leave_name($nature);
         $data['employee'] = Employee::all();
 
@@ -3816,42 +3775,38 @@ EOD;
         //return view('reports.leave_application_datatable',$data);
 
         $leave_name = $this->attendance_model->leave_name($nature);
-        if($department != 'All'){
+        if ($department != 'All') {
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
-        if($position != 'All'){
+        if ($position != 'All') {
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
         $leave_name = $this->attendance_model->leave_name($nature);
 
 
-           $data['nature'] =  $nature;
-           $data['leave_name'] = $leave_name;
-           $data['date'] = $request->duration;
+        $data['nature'] =  $nature;
+        $data['leave_name'] = $leave_name;
+        $data['date'] = $request->duration;
         // dd($employees);
         $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';
-        if(!empty($data['department_name']))
-          $other = 'Department : '.$data['department_name'];
-        elseif(!empty($data['position_name']))
-         $other =  'Position : '. $data['position_name'];
-       // $january = $calender[0].'-01-01';
+        if (!empty($data['department_name']))
+            $other = 'Department : ' . $data['department_name'];
+        elseif (!empty($data['position_name']))
+            $other =  'Position : ' . $data['position_name'];
+        // $january = $calender[0].'-01-01';
 
-        $data['excelTitle'] = $leave_name.' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
-        if($request->type == 1){
+        $data['excelTitle'] = $leave_name . ' Leave Report | ' . $other . ' | Date :' . date('d-M-Y', strtotime($data['date']));
+        if ($request->type == 1) {
 
-            $pdf = Pdf::loadView('reports.leave_application',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report'.$request->duration.'.pdf');
+            $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+        } else {
 
-
-        }else{
-
-            return view('reports.leave_application_datatable',$data);
-
+            return view('reports.leave_application_datatable', $data);
         }
-
     }
 
     // public function pendingLeaves1(Request $request)
@@ -3937,24 +3892,23 @@ EOD;
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
 
-        $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID,$today,$nature,$department,$position);
+        $data['leave_data'] = $this->attendance_model->getpendingLeaves1($empID, $today, $nature, $department, $position);
         // dd($data['leave_data']);
         $data['employee'] = Employee::all();
         $data['date'] = $today;
         //return view('reports.leave_application_datatable',$data);
 
         // $leave_name = $this->attendance_model->leave_name($nature);
-        if($department != 'All'){
+        if ($department != 'All') {
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
-        if($position != 'All'){
+        if ($position != 'All') {
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
 
-        if ($nature != 'All'){
+        if ($nature != 'All') {
             $leave_name = $this->attendance_model->leave_name($nature);
             $data['leave_name'] = $leave_name;
-
         }
 
 
@@ -3964,25 +3918,21 @@ EOD;
 
 
         $other = ' ';
-        if(!empty($data['department_name']))
-          $other = 'Department : '.$data['department_name'];
-        elseif(!empty($data['position_name']))
-         $other =  'Position : '. $data['position_name'];
-       // $january = $calender[0].'-01-01';
+        if (!empty($data['department_name']))
+            $other = 'Department : ' . $data['department_name'];
+        elseif (!empty($data['position_name']))
+            $other =  'Position : ' . $data['position_name'];
+        // $january = $calender[0].'-01-01';
 
-        $data['excelTitle'] = $leave_name ??  "All".' Leave Report | '.$other.' | Date :'.date('d-M-Y',strtotime($data['date']));
-        if($request->type == 1){
+        $data['excelTitle'] = $leave_name ??  "All" . ' Leave Report | ' . $other . ' | Date :' . date('d-M-Y', strtotime($data['date']));
+        if ($request->type == 1) {
 
-            $pdf = Pdf::loadView('reports.leave_application',$data)->setPaper('a4', 'landscape');
-            return $pdf->download('Leave_apprication_report'.$request->duration.'.pdf');
+            $pdf = Pdf::loadView('reports.leave_application', $data)->setPaper('a4', 'landscape');
+            return $pdf->download('Leave_apprication_report' . $request->duration . '.pdf');
+        } else {
 
-
-        }else{
-
-            return view('reports.leave_application_datatable',$data);
-
+            return view('reports.leave_application_datatable', $data);
         }
-
     }
 
 

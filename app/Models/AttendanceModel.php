@@ -378,6 +378,21 @@ class AttendanceModel extends Model
         return $row[0]->type;
     }
 
+    function getLeaveTypes(){
+        $query = "SELECT id FROM leave_type" ;
+
+        $rows = DB::select(DB::raw($query));
+
+        $ids = [];
+
+        foreach ($rows as $row) {
+            $ids[] = (string) $row->id; // Cast to string
+        }
+
+        return $ids;
+    }
+
+
     function getLeaveBalance($empID, $hireDate, $today)
     {
 
@@ -1180,7 +1195,7 @@ class AttendanceModel extends Model
         $january = $calender[0].'-01-01';
 
         $last_month_date = date('Y-m-t', strtotime($january));
-        
+
 
         if ($empID == 'All') {
             if ($department != 'All' && $position != 'All') {
@@ -1231,7 +1246,7 @@ class AttendanceModel extends Model
                 ->join('department', 'department.id', '=', 'employee.department')
                 ->join('position', 'position.id', '=', 'employee.position')
                 ->where('leaves.status',3)
-                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')->where('start', '>=', $last_month_date)
+                ->select('leaves.*', 'employee.*', 'department.name as department_name', 'position.name as  position_name')
                 ->where('nature', $nature)
                 ->where('employee.emp_id', $empID)
                 ->where('start', '<=', $today)
@@ -1239,21 +1254,57 @@ class AttendanceModel extends Model
                 ->get();
         }
 
-
-
-
         return $monthlyleave;
     }
+
+
+
+function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
+{
+    $calender = explode('-', $today);
+    $january = $calender[0] . '-01-01';
+    $lastMonthDate = date('Y-m-t', strtotime($january));
+
+    $query = DB::table('leaves')
+        ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
+        ->join('department', 'department.id', '=', 'employee.department')
+        ->join('position', 'position.id', '=', 'employee.position')
+        ->where('leaves.status', 3)
+        ->select(
+            'leaves.*',
+            'employee.*',
+            'department.name as department_name',
+            'position.name as position_name'
+        )
+        ->where('start', '>=', $january)
+        ->where('start', '<=', $today)
+        ->where('nature', $nature2);
+
+    if ($empID != 'All') {
+        $query->where('employee.emp_id', $empID);
+    }
+
+    if ($department != 'All') {
+        $query->where('employee.department', $department);
+    }
+
+    if ($position != 'All') {
+        $query->where('employee.position', $position);
+    }
+
+    $monthlyleave = $query->where('employee.state', 1)->get();
+
+    return $monthlyleave;
+}
+
 
     function getpendingLeaves1($empID, $today, $nature, $department, $position)
     {
 
         $calender = explode('-',$today);
         $january = $calender[0].'-01-01';
-        return DB::table('leaves')->where('leaves.status','!=',3)->get();
 
         if ($empID == 'All') {
-
             if ($department != 'All' && $position != 'All') {
                 $monthlyleave = DB::table('leaves')
                     ->join('employee', 'leaves.empID', '=', 'employee.emp_id')
