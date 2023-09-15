@@ -90,7 +90,7 @@
             <!--      Intro Section -->
             <tr>
               <td style="padding:30px;background-color:#ffffff;">
-                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payslip</h1>
+                <h1 style="margin-top:0;margin-bottom:1.38em;font-size:1.953em;line-height:1.3;font-weight:bold;letter-spacing:-0.02em;">Payslip  {{$month}}</h1>
                 <p style="margin:0;">Dear, {{$full_name}}</p>
                 <p>Please find attached payslip for this month !</p>
                 <p>You can also access this payslip and other payslips in the system using mobile application or in the web browser under payslip section in using the link below!</p>

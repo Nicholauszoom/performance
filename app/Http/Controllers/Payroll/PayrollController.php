@@ -2078,11 +2078,17 @@ class PayrollController extends Controller
 
         // $pdf->stream('payslip_for_' . $empID . '.pdf'),
 
+        $timestamp = strtotime($data['payroll_date']); // Convert the date to a Unix timestamp
+        $monthName = date('F', $timestamp); // Get the month name
+
+        // return $monthName;
+
         $email_data = array(
             'subject' => 'Employee Overtime Approval',
             'view' => 'emails.payslip',
             'email' => "",
             'pdf' => $pdf,
+            'month'=>$monthName.' '.$date_separate[0],
             'full_name' => $employee->empName,
         );
 
@@ -2100,8 +2106,9 @@ class PayrollController extends Controller
     function send_payslips(Request $request)
     {
 
-        $payrollDate = $request->input("payrollDate");
 
+        
+        $payrollDate = $request->input("payrollDate");
         //Get All Employee Emails
         // $payrollDate = $this->uri->segment(3);
 

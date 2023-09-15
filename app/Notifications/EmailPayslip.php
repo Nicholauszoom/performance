@@ -49,7 +49,7 @@ class EmailPayslip extends Notification
         return (new MailMessage)
                     ->subject($new_data['subject'])
                     ->view($new_data['view'], $new_data)
-                    ->attachData($new_data['pdf']->output(), 'Payslip.pdf', [
+                    ->attachData($new_data['pdf']->output(), 'Payslip '.$new_data['month'].'pdf', [
                         'mime' => 'application/pdf',
                     ]);
                     // ->line('T!');
