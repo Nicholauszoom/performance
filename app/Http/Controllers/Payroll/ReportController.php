@@ -581,11 +581,15 @@ class ReportController extends Controller
         $info = $data['info'];
         $payroll_month = $data['payroll_month'];
         $pension_fund = $data['pension_fund'];
+        $data['payroll_date'] = $payroll_month;
 
-        if ($reportformat == 1)
-            include(app_path() . '/reports/pension.php');
+        if ($reportformat == 1){
+           // include(app_path() . '/reports/pension.php');
+            $pdf = Pdf::loadView('reports.pension', $data)->setPaper('a4', 'potrait');
+            return $pdf->download("wcf-report-".$payroll_month.".pdf");
+        }
         else
-            return view('reports/pension', $data);
+            return view('reports/pension_datatable', $data);
     }
 
     function wcf(Request $request)
@@ -2402,7 +2406,7 @@ class ReportController extends Controller
         }
 
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
-       
+
         $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
 
         foreach ($result as $row) {
