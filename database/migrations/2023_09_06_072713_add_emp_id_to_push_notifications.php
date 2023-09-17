@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::table('push_notifications', function (Blueprint $table) {
             $table->unsignedBigInteger('emp_id')->nullable(); // Make the column nullable
-            $table->foreign('emp_id')->references('emp_id')->on('employees')->nullable(); // Make the foreign key nullable
+            // $table->foreign('emp_id')->references('emp_id')->on('employees')->nullable(); // Make the foreign key nullable
         });
     }
 
