@@ -9,7 +9,7 @@ class AddTimestampsToPushNotifications extends Migration
     public function up()
     {
         Schema::table('push_notifications', function (Blueprint $table) {
-            $table->timestamps();
+            // $table->timestamps();
         });
     }
 

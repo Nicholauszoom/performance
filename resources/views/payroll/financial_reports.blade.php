@@ -38,8 +38,8 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                                <option selected disabled>Select Month</option>
+                            <select required name="payrolldate" class="select_payroll_month form-control select"  data-width="1%">
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -52,12 +52,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF </label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                     <div class="card-body">
                         <div class="input-group">
                             <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -101,12 +101,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF </label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
@@ -132,13 +132,14 @@
                     action="{{ route('reports.pension')}}"
                     target="_blank"
                     data-parsley-validate
+                    class="form-horizontal form-label-left"
                 >
                     @csrf
 
                     <div class="card-body">
                         <div class="input-group">
                             <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value>Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"><?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -151,7 +152,7 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="fund" value="2">
+                                    <input type="radio" name="fund" value="2" required>
                                     <label class="ms-2" for="period1">NSSF</label>
                                 </div>
                             </div>
@@ -162,12 +163,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9"required>
                                     <label class="ms-2" for="p9">PDF </label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
@@ -196,7 +197,7 @@
                     <div class="card-body">
                         <div class="input-group">
                             <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                                <option selected disabled>Select Month</option>
+                                <option selected disabled value>Select Month</option>
                                 <?php foreach ($month_list as $row) {?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo  date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -209,12 +210,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="period" value="1" id="period1">
+                                    <input type="radio" name="period" value="1" id="period1" required>
                                     <label class="ms-2" for="period1">JANUARY to JUNE</label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="period" value="2" id="period2">
+                                    <input type="radio" name="period" value="2" id="period2" required>
                                     <label class="ms-2" for="period2">JULY to DECEMBER</label>
                                 </div>
                             </div>
@@ -225,12 +226,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF </label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
@@ -258,8 +259,8 @@
 
                     <div class="card-body">
                         <div class="input-group">
-                            <select required name="payrolldate" class="select_payroll_month form-control select" data-width="1%">
-                                <option selected disabled>Select Month</option>
+                            <select name="payrolldate" class="select_payroll_month form-control select" data-width="1%" required>
+                                <option selected disabled value="">Select Month</option>
                                 <?php foreach ($month_list as $row) { ?>
                                 <option value="<?php echo $row->payroll_date; ?>"> <?php echo date('F, Y', strtotime($row->payroll_date)); ?></option>
                                 <?php } ?>
@@ -272,12 +273,12 @@
 
                             <div class="">
                                 <div class="d-inline-flex align-items-center me-3">
-                                    <input type="radio" name="type" value="1" id="p9">
+                                    <input type="radio" name="type" value="1" id="p9" required>
                                     <label class="ms-2" for="p9">PDF </label>
                                 </div>
 
                                 <div class="d-inline-flex align-items-center">
-                                    <input type="radio" name="type" value="2" id="p9a">
+                                    <input type="radio" name="type" value="2" id="p9a" required>
                                     <label class="ms-2" for="p9a">Excel </label>
                                 </div>
                             </div>
