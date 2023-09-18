@@ -78,7 +78,7 @@
 
                 <hr>
 
-                <table class="table" id="reports" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:5px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 

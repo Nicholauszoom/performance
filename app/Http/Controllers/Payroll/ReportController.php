@@ -2407,7 +2407,7 @@ class ReportController extends Controller
 
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
 
-        $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+       $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
 
         foreach ($result as $row) {
 
