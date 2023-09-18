@@ -2287,6 +2287,8 @@ class ReportController extends Controller
 
         if($data['new_employee'] > 0){
 
+
+
             $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
 
         }
@@ -2300,7 +2302,7 @@ class ReportController extends Controller
 
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
-
+    // dd($total_allowances);
 
         $descriptions = [];
         foreach ($total_allowances as $row) {
@@ -2361,12 +2363,16 @@ class ReportController extends Controller
             elseif ($row->allowance == "Transport Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                if(count($allowance) > 0){
+                for($i = 0;$i<count($allowance); $i++){
+                    $row->current_amount += $allowance[$i]->current_amount;
+                    $row->previous_amount += $allowance[$i]->previous_amount;
+                    $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
+
+                    array_push($descriptions, $row->description);
+                }
+
                 }
             }
             elseif ($row->allowance == "Night Shift Allowance") {
@@ -2374,13 +2380,15 @@ class ReportController extends Controller
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
 
                 if(count($allowance) > 0){
+                    for($i = 0;$i<count($allowance); $i++){
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
 
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                        array_push($descriptions, $row->description);
+                    }
 
-                array_push($descriptions, $row->description);
-                }
+                    }
             }
 
 
