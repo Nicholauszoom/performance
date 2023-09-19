@@ -550,14 +550,7 @@ class ReportController extends Controller
 
     function pension(Request $request)
     {
-    $query = 'Update terminations SET actual_salary = 3561600.00 where employeeID = 101959';
-    DB::insert(DB::raw($query));
-    $query = "update financial_logs set action_from = '0.00' where action_from = '0'";
-    DB::insert(DB::raw($query));
-    $query = "update financial_logs set action_to = '0.00' where action_to = '0'";
-    DB::insert(DB::raw($query));
-     $uery = "update financial_logs set action_from = REPLACE(action_from,'TZS',''),action_to = REPLACE(action_to,'TZS','')";
-    DB::insert(DB::raw($query));
+    
 
         $reportType = 1;
         $reportformat = $request->input('type');
