@@ -18,7 +18,8 @@ class VerifyOutgoingRequests
     {
         $allowedDomains = [
             'localhost',
-            'hc-hub.bancabc.co.tz'
+            'hc-hub.bancabc.co.tz',
+            'shop.flex.co.tz'
 
             // Add more allowed domains here
         ];
