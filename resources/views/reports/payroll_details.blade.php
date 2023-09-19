@@ -78,7 +78,7 @@
 
                 <hr>
 
-                <table class="table" id="reports" style="font-size:9px; ">
+                <table class="table" id="reports" style="font-size:5px; ">
                     <thead style="font-size:8px;">
                         <tr style="border-bottom:2px solid rgb(9, 5, 64);">
 
@@ -91,7 +91,7 @@
 
                             <th class="text-end" style="margin-bottom: 30px;"><b>Respons. Allowance</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>House Allowance</b></th>
-                            <th class="text-end" style="margin-bottom: 30px;"><b>Arrears</b></th>
+                            {{-- <th class="text-end" style="margin-bottom: 30px;"><b>Arrears</b></th> --}}
                             <th class="text-end" style="margin-bottom: 30px;"><b>Other Payment</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Gross Salary</b></th>
                             <th class="text-end" style="margin-bottom: 30px;"><b>Tax Benefit</b></th>
@@ -127,7 +127,7 @@
                                     $total_gross_salary += ($row->salary + $row->allowances);
                                     $total_salary = $total_salary + $row->salary;
                                     $total_allowance = $total_allowance + $row->allowances ;
-                                    $total_arrears = $total_arrears + $row->arrears_allowance;
+                                    //$total_arrears = $total_arrears + $row->arrears_allowance;
                                     $total_overtime = $total_overtime +$row->overtime;
                                     $total_house_rent = $total_house_rent + $row->house_rent;
                                     $total_others = $total_others + $row->other_payments ;
@@ -169,7 +169,7 @@
                             <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td>
                             <td class="text-end">{{ number_format($row->house_rent, 2) }}</td>
 
-                            <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td>
+                            {{-- <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td> --}}
 
                             <td class="text-end">{{ number_format($row->other_payments, 2) }}</td>
 
@@ -218,10 +218,10 @@
                                     <td class="text-end">{{ number_format($row2->tellerAllowance, 2) }}</td>
                                     <td class="text-end">{{ number_format($row2->houseAllowance, 2) }}</td>
 
-                                    <td class="text-end">{{ number_format(0, 2) }}</td>
+                                    {{-- <td class="text-end">{{ number_format(0, 2) }}</td> --}}
 
                                     <td class="text-end">
-                                        {{ number_format($row2->leavePay + $row2->leaveAllowance, 2) }}
+                                        {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance, 2) }}
                                     </td>
                                     @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount;  @endphp
                                     <td class="text-end">
@@ -247,7 +247,7 @@
                                 @php
                                     $others += $row2->loan_balance;
                                     $total_salary += $row2->salaryEnrollment;
-                                    $total_others += $row2->leavePay + $row2->leaveAllowance;
+                                    $total_others += $row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance;
                                     $total_taxable_amount += $row2->taxable;
                                     $total_taxs += $row2->paye;
                                     //$total_netpay += ($row2->taxable -$row2->paye);
@@ -276,7 +276,7 @@
                             </td>
 
                             <td class="text-end"><b><b>{{ number_format($total_house_rent, 2) }}</b></b></td>
-                            <td class="text-end"><b><b>{{ number_format($total_arrears, 2) }}<b></b></td>
+                            {{-- <td class="text-end"><b><b>{{ number_format($total_arrears, 2) }}<b></b></td> --}}
                             <td class="text-end"><b><b>{{ number_format($total_others, 2) }}</b></b></td>
 
                             <td class="text-end">

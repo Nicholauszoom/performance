@@ -69,7 +69,7 @@
                 </table>
 
                 <hr>
-                        <table class="table" id="reports"  style="font-size:12px;">
+                        <table class="table" id="reports"  style="font-size:7px;">
                             <thead style="border-bottom:2px solid rgb(9, 5, 64);">
                                 <tr>
                                     <th>Payrollno</th>

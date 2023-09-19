@@ -35,7 +35,7 @@ class PayrollController extends Controller
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
         $this->attendance_model = new AttendanceModel();
-        
+
     }
 
     public function authenticateUser($permissions)
@@ -338,6 +338,7 @@ class PayrollController extends Controller
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
         }
         $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
+        
         $descriptions = [];
         foreach ($total_allowances as $row) {
 
@@ -413,23 +414,28 @@ class PayrollController extends Controller
             elseif ($row->allowance == "Transport Allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
                 if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
-                }
+                    for($i = 0;$i<count($allowance); $i++){
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+
+                    }
             }
             elseif ($row->allowance == "Night Shift Allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
-                dd($allowance);
                 if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
-                }
+                    for($i = 0;$i<count($allowance); $i++){
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+
+                    }
             }
         }
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
@@ -463,7 +469,7 @@ class PayrollController extends Controller
         $data['total_current_net'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
 
         $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
-        // dd($data['previous_decrease']);
+
         // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
@@ -2042,10 +2048,10 @@ class PayrollController extends Controller
         $date_separate = explode("-", $date);
 
         $start=$date;
-        
 
 
-      
+
+
 
         $mm = $date_separate[1];
         $yyyy = $date_separate[0];
@@ -2097,7 +2103,7 @@ class PayrollController extends Controller
           $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
 
 
-         
+
         // $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
 
         // $pdf->stream('payslip_for_' . $empID . '.pdf'),
@@ -2131,7 +2137,7 @@ class PayrollController extends Controller
     {
 
 
-        
+
         $payrollDate = $request->input("payrollDate");
         //Get All Employee Emails
         // $payrollDate = $this->uri->segment(3);
@@ -2147,7 +2153,7 @@ class PayrollController extends Controller
         echo json_encode($response_array);
     }
 
- 
+
 
     public function mailConfiguration()
     {

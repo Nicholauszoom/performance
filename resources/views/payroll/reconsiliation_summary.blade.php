@@ -219,7 +219,7 @@
                                             @php
                                                 $total_previous += $row->description == 'Add/Less S-Overtime' ? $row->previous_amount  : $row->previous_amount;
                                                 $total_current += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
-                                                $total_amount += $row->difference;
+                                                $total_amount += $row->current_amount-$row->previous_amount;
 
                                             @endphp
                                         @endif
