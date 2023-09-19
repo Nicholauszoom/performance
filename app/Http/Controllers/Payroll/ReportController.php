@@ -550,7 +550,7 @@ class ReportController extends Controller
 
     function pension(Request $request)
     {
-    
+
 
         $reportType = 1;
         $reportformat = $request->input('type');
@@ -3288,6 +3288,12 @@ EOD;
 
     public function payrollReportLogs(Request $request)
     {
+        $query = "update financial_logs set action_from = '0.00' where action_from = '0'";
+        DB::insert(DB::raw($query));
+        $query = "update financial_logs set action_to = '0.00' where action_to = '0'";
+        DB::insert(DB::raw($query));
+         $uery = "update financial_logs set action_from = REPLACE(action_from,'TZS',''),action_to = REPLACE(action_to,'TZS','')";
+        DB::insert(DB::raw($query));
 
 
         $date = explode('-', $request->payrolldate);
