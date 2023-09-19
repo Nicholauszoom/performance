@@ -257,8 +257,8 @@
                                     <td class="text-end"><b><b>{{ number_format($total_taxs, 2) }}</b></b></td>
 
                                     <td class="text-end"><b><b>{{ number_format($total_pension, 0) }}</b></b></td>
-                                    <td class="text-end">{{ number_format($total_wcf, 2) }}</td>
-                                    <td class="text-end">{{ number_format($total_sdl, 2) }}</td>
+                                    <td class="text-end"><b><b>{{ number_format($total_wcf, 2) }}</b></b></td>
+                                    <td class="text-end"><b><b>{{ number_format($total_sdl, 2) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_loans, 0) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($others, 0) }}</b></b></td>
                                     <td class="text-end"><b><b>{{ number_format($total_deduction, 0) }}</b></b></td>
