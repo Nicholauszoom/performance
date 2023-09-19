@@ -3292,9 +3292,9 @@ EOD;
         DB::insert(DB::raw($query));
         $query = "update financial_logs set action_to = '0.00' where action_to = '0'";
         DB::insert(DB::raw($query));
-         $uery = "update financial_logs set action_from = REPLACE(action_from,'TZS',''),action_to = REPLACE(action_to,'TZS','')";
+         $uery = "update financial_logs set action_from = REPLACE(action_from,'TZS',' '),action_to = REPLACE(action_to,'TZS',' ')";
         DB::insert(DB::raw($query));
-        $uery = "update financial_logs set action_from = REPLACE(action_from,'USD',''),action_to = REPLACE(action_to,'USD','')";
+        $uery = "update financial_logs set action_from = REPLACE(action_from,'USD',' '),action_to = REPLACE(action_to,'USD',' ')";
         DB::insert(DB::raw($query));
 
 
