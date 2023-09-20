@@ -29,6 +29,7 @@ class SecureHeaders
         $response->header('X-Frame-Options', 'SAMEORIGIN');
         $response->header('X-XSS-Protection', '1; mode=block');
         $response->header('Content-Security-Policy', 'https://hc-hub.bancabc.co.tz');
+        $response->header('Content-Security-Policy', 'http://shop.flex.co.tz');
         $response->cookie('__Host-sess', $cookieValue, 0, $path, null, $secure, $httpOnly, $sameSite);
 
 
