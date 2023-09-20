@@ -30,7 +30,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request)
     {
-        //dd('Here we are');
         $data['next'] = $request->query('next');
         return view('auth.login',$data);
     }
@@ -44,9 +43,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
 
-         dd($request);
         $request->authenticate();
-
 
         if($this->password_set(Auth::user()->emp_id) == 1){
 
@@ -70,9 +67,9 @@ class AuthenticatedSessionController extends Controller
                 SysHelpers::AuditLog(1, 'Logged in with '.$employeeName , $request);
 
                 // redirect to specific page if $request->next is set
-                // if($request->next){
-                //     return redirect($request->next);
-                // }
+                if($request->next){
+                    return redirect($request->next);
+                }
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
         }

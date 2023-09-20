@@ -42,7 +42,7 @@
                             <div class="row">
 
                                 <div  class="col-md-5 offset-8  border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0" style="background: #ffffff8e">
-                                    <form action="{{ url('login') }}" method="POST" class="" autocomplete="off">
+                                    <form action="{{ route('login') }}" method="POST" class="" autocomplete="off">
                                         @csrf
 
                                         <div class=" border-bottom-main mb-0 pt-4">
