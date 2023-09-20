@@ -177,7 +177,7 @@
                                         <td class="text-end">{{ number_format($row2->salaryEnrollment,2) }}
                                         </td>
 
-                                        <td class="text-end">{{ number_format(0,2) }}</td>
+                                        <td class="text-end">{{ number_format($row2->normal_days_overtime_amount + $row->public_overtime_amount,2) }}</td>
 
 
 
