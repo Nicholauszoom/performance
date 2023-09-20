@@ -62,6 +62,7 @@ use Illuminate\Http\Response;
 
  // Dashboard
 
+ Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
 // Route::middleware('verify-outgoing-requests')->group(function () {
 
