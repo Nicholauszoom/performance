@@ -56,9 +56,9 @@ use Illuminate\Http\Response;
 
 
 
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+Route::get('/', function () {
+    return ("am here");
+});
 
  // Dashboard
 
