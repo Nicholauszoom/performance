@@ -1,3 +1,5 @@
+<?php
+
 use App\Http\Controllers\Payroll\ManageSalaryController;
 use App\Http\Controllers\Payroll\MakePaymentsController;
 use App\Http\Controllers\Payroll\MultiplePaymentsController;
@@ -6,9 +8,9 @@ use App\Http\Controllers\Payroll\EmployeeLoanController;
 use App\Http\Controllers\Payroll\OvertimeController;
 use App\Http\Controllers\Payroll\GetPaymentController;
 use App\Http\Controllers\Payroll\GetPayment2Controller;
-    
 
-    
+
+
     Route::resource('salary_template', SalaryTemplateController::class);
     Route::any('manage_salary',[ManageSalaryController::class,'getDetails']);
     Route::any('addTemplate', [ManageSalaryController::class,'addTemplate']);

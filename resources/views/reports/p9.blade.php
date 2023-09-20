@@ -110,7 +110,6 @@ $total_taxdue = 0;
             <tr>
                 <td colspan="1"></td>
                 <td colspan="1">TOTAL</td>
-
                 <td width="140" style="text-align: right;">{{ number_format($total_salary,2) }}</td>
                 <td width="140" style="text-align: right;">{{ number_format($total_gross,2) }}</td>
                 <td width="140" style="text-align: right;">{{ number_format($total_deductions,2) }}</td>

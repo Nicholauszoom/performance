@@ -1,3 +1,4 @@
+<?php
 <!DOCTYPE html>
 <html>
 
@@ -214,8 +215,8 @@ table tfoot tr td:first-child {
                         <td class="col-sm-1 w-50" colspan="7"><b><?php echo $Project_name->name; ?></b></td>
 
                     </tr>
-                    <?php  
-                    $total = 0; 
+                    <?php
+                    $total = 0;
                     $n = 0;
                     ?>
                     <?php if(!empty($activity_result)){foreach($activity_result as $row){  ?>
@@ -230,14 +231,14 @@ table tfoot tr td:first-child {
                         <td class="col-sm-1 w-50"><?php if($row->target-$row->result == 0){
                             echo "Not Started";
                         }
-                    
+
                         elseif($row->result != 0)
                         echo "In Progress";
                         elseif($row->target-$row->result == 0)
                         echo "Complete";
 
-                        
-                        
+
+
                         ?></td>
                         <td class="col-sm-1 w-50"><?php $n++; $total += ($row->result/$row->target)*100; echo ($row->result/$row->target)*100;  ?>%</td>
 
@@ -313,7 +314,7 @@ table tfoot tr td:first-child {
             <button type="button" onclick="window.print()" class="print-btn">Print</button>
         </div>
     </div>
-    
+
 
 
 </body>
@@ -331,21 +332,21 @@ table tfoot tr td:first-child {
     '16' => 'sixteen','17' => 'seventeen','18' => 'eighteen','19' => 'nineteen','20' => 'twenty',
     '30' => 'thirty','40' => 'fourty','50' => 'fifty','60' => 'sixty','70' => 'seventy',
     '80' => 'eighty','90' => 'ninty');
-    
+
     //First find the length of the number
     $number_length = strlen($number);
     //Initialize an empty array
-    $number_array = array(0,0,0,0,0,0,0,0,0);        
+    $number_array = array(0,0,0,0,0,0,0,0,0);
     $received_number_array = array();
-    
+
     //Store all received numbers into an array
-    for($i=0;$i<$number_length;$i++){    
-  		$received_number_array[$i] = substr($number,$i,1);    
+    for($i=0;$i<$number_length;$i++){
+  		$received_number_array[$i] = substr($number,$i,1);
   	}
 
     //Populate the empty array with the numbers received - most critical operation
-    for($i=9-$number_length,$j=0;$i<9;$i++,$j++){ 
-        $number_array[$i] = $received_number_array[$j]; 
+    for($i=9-$number_length,$j=0;$i<9;$i++,$j++){
+        $number_array[$i] = $received_number_array[$j];
     }
 
     $number_to_words_string = ";
@@ -359,23 +360,23 @@ table tfoot tr td:first-child {
                 $number_array[$j] = intval($number_array[$i])*10+$number_array[$j];
                 $number_array[$i] = 0;
             }
-               
+
         }
     }
 
     $value = ";
     for($i=0;$i<9;$i++){
-        if($i==0 || $i==2 || $i==4 || $i==7){    
-            $value = $number_array[$i]*10; 
+        if($i==0 || $i==2 || $i==4 || $i==7){
+            $value = $number_array[$i]*10;
         }
-        else{ 
-            $value = $number_array[$i];    
-        }            
+        else{
+            $value = $number_array[$i];
+        }
         if($value!=0)         {    $number_to_words_string.= $words["$value"]." "; }
         if($i==1 && $value!=0){    $number_to_words_string.= "Crores "; }
         if($i==3 && $value!=0){    $number_to_words_string.= "Lakhs ";    }
         if($i==5 && $value!=0){    $number_to_words_string.= "Thousand "; }
-        if($i==6 && $value!=0){    $number_to_words_string.= "Hundred  "; }            
+        if($i==6 && $value!=0){    $number_to_words_string.= "Hundred  "; }
 
     }
     if($number_length>9){ $number_to_words_string = "Sorry This does not support more than 99 Crores"; }
