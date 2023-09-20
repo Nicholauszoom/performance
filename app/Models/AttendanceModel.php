@@ -1458,5 +1458,12 @@ function getMonthlyLeave22($empID, $today, $nature2, $department, $position)
         }
     }
 
+    function getAllNatureValues2($nature){
+        if($nature == 'All'){
+            return DB::table('leave_type')->select(['id'])->get(); // Assuming 'name' is the field that stores the nature value
+        }else{
+            return [$nature]; // Return the provided nature value as an array
+        }
+    }
 
 }
