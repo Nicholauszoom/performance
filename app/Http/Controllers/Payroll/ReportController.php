@@ -434,7 +434,7 @@ class ReportController extends Controller
     }
     function get_payroll_temp_summary(Request $request)
     {
-   
+
         $data['payroll_state'] = $request->payrollState;
         $date = $request->date;
 
@@ -484,8 +484,8 @@ class ReportController extends Controller
         // include(app_path() . '/reports/temp_payroll.php');
     }
     function get_payroll_temp_summary1(Request $request)
-    {   
-        
+    {
+
 
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
@@ -3338,18 +3338,11 @@ EOD;
     public function annualleave(Request $request)
     {
         // dd("hello");
-
-
-
-
         $nature = $request->nature;
         $calender = explode('-',$request->duration);
         $position = $request->position;
         $department = $request->department;
-
-
         $no_days = $calender[2];
-
 
         if ($request->leave_employee == Null || $request->leave_employee == "All") {
             // $employee= Employee::all();
@@ -3366,13 +3359,7 @@ EOD;
                 //     $employees = Employee::where('state', '=', 1)->get();
                 // }
          //   $employees = Employee::where('state', '=', 1)->get();
-
-
-
             foreach ($employees  as $employee) {
-
-
-
                 $d1 = new \DateTime(date($employee->hire_date));
 
                 $d2 = new \DateTime("now");
@@ -3393,28 +3380,51 @@ EOD;
                 }else{
                     $days_this_month = $days_this_month_init;
                 }
-
                 $employee->accrual_amount = $employee->salary/30;
 
+                if($nature != 'All'){
+
                 $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-
                 $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
-
                 $employee->accrual_days = $accrual_days;
-
                 $employee->nature = $nature;
                 //$employee->days_entitled = $this->attendance_model->days_entilted($nature);
 
                 $employee->days_entitled = $employee->leave_days_entitled;
-
-
                 $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-
                 $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
                 $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+
+            }else {
+                $natures = $this->attendance_model->getAllNatureValues($nature);
+                $data['nature'] = 'All';
+                $leave_name = 'All LEAVE REPORT(MONTHLY)';
+                $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30 ? $days_this_month + 1 : $days_this_month);
+                $employee->accrual_days = $accrual_days;
+                $employee->nature = $nature;
+
+                $allLeaveTaken = [];
+                $allLeaveData = 0;
+
+                $allDays = 0;
+                $openingBalanceTotal = 0;
+                $currentBalance = 0;
+
+                foreach($natures as $_nature){
+                    $this_nature = $_nature->id;
+                    $allLeaveData = $allLeaveData + $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$this_nature);
+                    $allDays = $allDays +  $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$this_nature);
+                    $openingBalanceTotal = $openingBalanceTotal +  $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$this_nature);
+                    $currentBalance = $currentBalance + $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$this_nature);
+                }
+                $employee->maximum_days = $allLeaveData;
+                $employee->days_entitled = $employee->leave_days_entitled;
+                $employee->days_spent = $allDays;
+                $employee->opening_balance = $openingBalanceTotal;
+                $employee->current_balance = $currentBalance;
+                $data['is_all'] = true;
+
+            }
             }
 
         } else {
@@ -3425,14 +3435,11 @@ EOD;
             foreach ($employees  as $employee) {
 
                 $d1 = new \DateTime(date($employee->hire_date));
-
                 $d2 = new \DateTime("now");
                 $diff = $d1->diff($d2);
-
                 $years = $diff->y;
                 $months = $diff->m;
                 $days = $diff->d;
-
                 $days_this_month_init = intval(date('t', strtotime($request->duration)));
                 if($no_days == $days_this_month_init ){
                 if($days_this_month_init == 30 || $days_this_month_init == 29 || $days_this_month_init == 28 ){
@@ -3445,43 +3452,79 @@ EOD;
                     $days_this_month = $days_this_month_init;
                 }
 
+                if($nature != 'All'){
+                    $leave_name = $this->attendance_model->leave_name($nature);
 
+                    $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
+                    //dd($employee->leave_taken);
+                    $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                    $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30? $days_this_month + 1 : $days_this_month);
+                    $employee->accrual_days = $accrual_days;
+                    $employee->accrual_amount = $employee->salary/30;
+                    $employee->nature = $nature;
+                    //$employee->days_entitled = $this->attendance_model->days_entilted($nature);
+                    $employee->days_entitled = $employee->leave_days_entitled;
+                    $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                    $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                    $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
 
-                $employee->leave_taken = $this->attendance_model->get_anualLeave($employee->emp_id,$nature);
+                } else{
+
+                $natures = $this->attendance_model->getAllNatureValues($nature);
+                $data['nature'] = 'All';
+                $leave_name = 'All LEAVE REPORT(MONTHLY)';
+                $allLeaveData = [];
+                $allLeaveTaken = [];
+                $allDays = [];
+                $openingBalanceTotal = [];
+                $currentBalance = [];
+
+                foreach($natures as $_nature){
+                    $allLeaveData = array_merge($allLeaveData,  $this->attendance_model->get_anualLeave($employee->emp_id,$_nature));
+                    $allLeaveTaken = array_merge($allLeaveTaken,  $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$_nature));
+
+                    $allDays = array_merge($allDays,  $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$_nature));
+                    $openingBalanceTotal = array_merge($openingBalanceTotal,  $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature));
+                    $currentBalance = array_merge($currentBalance,  $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature));
+
+                }
+                $data['is_all'] = true;
+
+                $employee->leave_taken = $allLeaveData;
                 //dd($employee->leave_taken);
-
-                $employee->maximum_days = $this->attendance_model->getLeaveTaken($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->maximum_days = $allLeaveTaken;
 
                 $accrual_days = $no_days * $employee->accrual_rate / ($days_this_month == 30? $days_this_month + 1 : $days_this_month);
-
                 $employee->accrual_days = $accrual_days;
-
                 $employee->accrual_amount = $employee->salary/30;
-
                 $employee->nature = $nature;
-
-
 
                 //$employee->days_entitled = $this->attendance_model->days_entilted($nature);
                 $employee->days_entitled = $employee->leave_days_entitled;
-
-                $employee->days_spent = $this->attendance_model->days_spent($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-                $employee->opening_balance = $this->attendance_model->getOpeningLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
-
-                $employee->current_balance = $this->attendance_model->getLeaveBalance($employee->emp_id, $employee->hire_date, $request->duration,$nature);
+                $employee->days_spent = $allDays;
+                $employee->opening_balance = $openingBalance;
+                $employee->current_balance = $currentBalance;
 
             }
+            }
         }
+
         // dd($employees);
-        $leave_name = $this->attendance_model->leave_name($nature);
         if($department != 'All'){
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
         if($position != 'All'){
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
+
+        if($nature == "All"){
+            $leave_name ="All";
+        }
+        else{
+            $leave_name = $this->attendance_model->leave_name($nature);
+
+        }
 
         $data['employees'] =  $employees;
            $data['nature'] =  $nature;
@@ -3513,10 +3556,10 @@ EOD;
             }
 
         }
-
-
-
     }
+
+
+
 
 
     public function annualleave2(Request $request)
@@ -3838,29 +3881,47 @@ EOD;
         $month = $date[1];
         // $dur = date('Y-m', strtotime($month));
         // dd($dur);
-        $data['leave_data'] = $this->attendance_model->getpendingLeave($empID,$today,$nature,$department,$position);
-        $data['nature'] = $this->attendance_model->leave_name($nature);
+
+        if($nature != 'All'){
+
+            $data['leave_data'] = $this->attendance_model->getpendingLeave($empID,$today,$nature,$department,$position);
+            $data['nature'] = $this->attendance_model->leave_name($nature);
+            $leave_name = $this->attendance_model->leave_name($nature);
+        }else {
+            $natures = $this->attendance_model->getAllNatureValues2($nature);
+            $leave_name = 'All Approved  Pending';
+            $allLeaveData = [];
+            foreach($natures as $_nature){
+            $this_nature = $_nature->id;
+                $allLeaveData = array_merge($allLeaveData, $this->attendance_model->getpendingLeave($empID,$today,$this_nature,$department,$position)->toArray());
+
+            }
+            $data['leave_data'] = $allLeaveData;
+            $data['is_all'] = true;
+            $data['nature'] = 'All';
+
+        }
+
+
         $data['employee'] = Employee::all();
 
         $data['date'] = $today;
         // dd($leave_data);
         //return view('reports.leave_application_datatable',$data);
 
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
         if($department != 'All'){
             $data['department_name'] = $this->attendance_model->get_dept_name($department);
         }
         if($position != 'All'){
             $data['position_name'] = $this->attendance_model->get_position_name($department);
         }
-        $leave_name = $this->attendance_model->leave_name($nature);
-
-
+        // $leave_name = $this->attendance_model->leave_name($nature);
            $data['nature'] =  $nature;
            $data['leave_name'] = $leave_name;
            $data['date'] = $request->duration;
         // dd($employees);
-        $leave_name = $this->attendance_model->leave_name($nature);
+        // $leave_name = $this->attendance_model->leave_name($nature);
 
 
         $other = ' ';

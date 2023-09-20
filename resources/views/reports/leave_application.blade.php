@@ -59,7 +59,7 @@
                         <tr>
                             <td class="">
                                 <div class="box-text">
-                                    <h5 style="font-weight:bolder;text-align: left;">{{ $leave_name }} Leave Report</h5>
+                                    <h5 style="font-weight:bolder;text-align: left;">{{ $leave_name ?? "All" }} Leave Report</h5>
 
                                 </div>
                             </td>
