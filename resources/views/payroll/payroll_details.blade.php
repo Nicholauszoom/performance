@@ -187,11 +187,11 @@
                                         <td class="text-end">{{ number_format(0,2) }}</td>
 
                                         <td class="text-end">
-                                            {{ number_format($row2->leavePay + $row2->leaveAllowance,2) }}
+                                            {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance,2) }}
                                         </td>
                                         @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay;  @endphp
                                         <td class="text-end">
-                                            {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance,2) }}
+                                            {{ number_format($row2->total_gross,2) }}
                                         </td>
                                         <td class="text-end">{{ number_format(0,2) }}</td>
                                         <td class="text-end">
