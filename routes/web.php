@@ -63,7 +63,7 @@ use Illuminate\Http\Response;
  // Dashboard
 
 
-Route::middleware('verify-outgoing-requests')->group(function () {
+// Route::middleware('verify-outgoing-requests')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
@@ -1353,7 +1353,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-});
+// });
 
 
 
