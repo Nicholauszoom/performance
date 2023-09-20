@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request)
     {
-        dd('Here we are');
+        //dd('Here we are');
         $data['next'] = $request->query('next');
         return view('auth.login',$data);
     }
