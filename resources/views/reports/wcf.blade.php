@@ -95,8 +95,12 @@
 							</tbody>
                             <tfoot>
                                 <tr align="right">
-									<td width="50" style="text-align:center;" colspan="5" align="center">TOTAL</td>
-
+									{{-- <td width="50" style="text-align:center;" colspan="5" align="center">TOTAL</td> --}}
+									<td colspan="1"></td>
+									<td colspan="1"></td>
+									<td colspan="1"></td>
+									<td colspan="1"></td>
+									<td colspan="1">TOTAL</td>
 									<td align="right">{{number_format($total_salary,2)}}</td>
 									<td align="right">{{number_format($total_gross,2)}}</td>
 									<td align="right">{{number_format($total_wcf,2)}}</td>

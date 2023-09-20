@@ -196,12 +196,12 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label for="">Transport Allowance</label>
-                                    <input type="number" class="form-control" value="0" name="transport_allowance" id="transport_allowance"
+                                    <input type="text" class="form-control" value="0" name="transport_allowance" id="transport_allowance"
                                         >
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label for="">Night Shift Allowancee </label>
-                                    <input type="number" class="form-control" value="0" name="nightshift_allowance"
+                                    <label for="">Night Shift Allowance </label>
+                                    <input type="text" class="form-control" value="0" name="nightshift_allowance"
                                         id="">
                                 </div>
                             </div>

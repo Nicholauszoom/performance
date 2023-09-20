@@ -29,7 +29,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <h5 class="text-center">Payroll Reconsiliation Summary</h5>
+                    <h5 class="text-center">Payroll Reconciliation Summary</h5>
                     @if ($payrollState == 0)
                     <a href="{{ route('reports.get_reconsiliation_summary1', ['payrolldate' => $payroll_date,'payrollState'=>$payrollState,'type'=>2]) }}" target="blank">
                         <button type="button" name="print" value="print" class="btn btn-main btn-sm"> PDF</button>
@@ -219,7 +219,7 @@
                                             @php
                                                 $total_previous += $row->description == 'Add/Less S-Overtime' ? $row->previous_amount  : $row->previous_amount;
                                                 $total_current += $row->description == 'Add/Less S-Overtime' ? $row->current_amount  : $row->current_amount;
-                                                $total_amount += $row->difference;
+                                                $total_amount += $row->current_amount-$row->previous_amount;
 
                                             @endphp
                                         @endif

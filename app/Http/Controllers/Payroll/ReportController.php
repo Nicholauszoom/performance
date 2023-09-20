@@ -434,6 +434,7 @@ class ReportController extends Controller
     }
     function get_payroll_temp_summary(Request $request)
     {
+   
         $data['payroll_state'] = $request->payrollState;
         $date = $request->date;
 
@@ -483,7 +484,8 @@ class ReportController extends Controller
         // include(app_path() . '/reports/temp_payroll.php');
     }
     function get_payroll_temp_summary1(Request $request)
-    {
+    {   
+        
 
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
@@ -550,6 +552,8 @@ class ReportController extends Controller
 
     function pension(Request $request)
     {
+
+
         $reportType = 1;
         $reportformat = $request->input('type');
 
@@ -581,11 +585,15 @@ class ReportController extends Controller
         $info = $data['info'];
         $payroll_month = $data['payroll_month'];
         $pension_fund = $data['pension_fund'];
+        $data['payroll_date'] = $payroll_month;
 
-        if ($reportformat == 1)
-            include(app_path() . '/reports/pension.php');
+        if ($reportformat == 1){
+           // include(app_path() . '/reports/pension.php');
+            $pdf = Pdf::loadView('reports.pension', $data)->setPaper('a4', 'potrait');
+            return $pdf->download("wcf-report-".$payroll_month.".pdf");
+        }
         else
-            return view('reports/pension', $data);
+            return view('reports/pension_datatable', $data);
     }
 
     function wcf(Request $request)
@@ -2283,6 +2291,8 @@ class ReportController extends Controller
 
         if($data['new_employee'] > 0){
 
+
+
             $data['new_employee_salary'] = $this->reports_model->new_employee_salary($current_payroll_month,$previous_payroll_month);
 
         }
@@ -2296,7 +2306,7 @@ class ReportController extends Controller
 
         }
         $total_allowances = $this->reports_model->total_allowance($current_payroll_month, $previous_payroll_month);
-
+    // dd($total_allowances);
 
         $descriptions = [];
         foreach ($total_allowances as $row) {
@@ -2357,12 +2367,16 @@ class ReportController extends Controller
             elseif ($row->allowance == "Transport Allowance") {
 
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
-                if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
 
-                array_push($descriptions, $row->description);
+                if(count($allowance) > 0){
+                for($i = 0;$i<count($allowance); $i++){
+                    $row->current_amount += $allowance[$i]->current_amount;
+                    $row->previous_amount += $allowance[$i]->previous_amount;
+                    $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
+
+                    array_push($descriptions, $row->description);
+                }
+
                 }
             }
             elseif ($row->allowance == "Night Shift Allowance") {
@@ -2370,13 +2384,15 @@ class ReportController extends Controller
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
 
                 if(count($allowance) > 0){
+                    for($i = 0;$i<count($allowance); $i++){
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
 
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += 0;
-                $row->difference += ($allowance[0]->current_amount);
+                        array_push($descriptions, $row->description);
+                    }
 
-                array_push($descriptions, $row->description);
-                }
+                    }
             }
 
 
@@ -2402,8 +2418,8 @@ class ReportController extends Controller
         }
 
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
-       
-        $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
+
+       $result = $this->arrayRecursiveDiff($all_terminal_allowance, $descriptions);
 
         foreach ($result as $row) {
 
@@ -3274,6 +3290,14 @@ EOD;
 
     public function payrollReportLogs(Request $request)
     {
+        $query = "update financial_logs set action_from = '0.00' where action_from = '0'";
+        DB::insert(DB::raw($query));
+        $query = "update financial_logs set action_to = '0.00' where action_to = '0'";
+        DB::insert(DB::raw($query));
+         $uery = "update financial_logs set action_from = REPLACE(action_from,'TZS',' '),action_to = REPLACE(action_to,'TZS',' ')";
+        DB::insert(DB::raw($query));
+        $uery = "update financial_logs set action_from = REPLACE(action_from,'USD',' '),action_to = REPLACE(action_to,'USD',' ')";
+        DB::insert(DB::raw($query));
 
 
         $date = explode('-', $request->payrolldate);

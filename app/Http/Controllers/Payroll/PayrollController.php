@@ -15,6 +15,9 @@ use App\Notifications\EmailPayslip;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
+use App\models\Employee;
+use App\Models\AttendanceModel;
+
 
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -24,12 +27,15 @@ class PayrollController extends Controller
     protected $payroll_model;
     protected $reports_model;
     protected $flexperformance_model;
+    protected $attendance_model;
 
     public function __construct($payroll_model = null, $flexperformance_model = null, $reports_model = null)
     {
         $this->payroll_model = new Payroll();
         $this->reports_model = new ReportModel;
         $this->flexperformance_model = new FlexPerformanceModel;
+        $this->attendance_model = new AttendanceModel();
+
     }
 
     public function authenticateUser($permissions)
@@ -332,6 +338,7 @@ class PayrollController extends Controller
             $data['termination_salary'] = $this->reports_model->terminated_salary($previous_payroll_month);
         }
         $total_allowances = $this->reports_model->total_allowance1($current_payroll_month, $previous_payroll_month);
+        
         $descriptions = [];
         foreach ($total_allowances as $row) {
 
@@ -407,23 +414,28 @@ class PayrollController extends Controller
             elseif ($row->allowance == "Transport Allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'transport_allowance');
                 if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
-                }
+                    for($i = 0;$i<count($allowance); $i++){
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+
+                    }
             }
             elseif ($row->allowance == "Night Shift Allowance") {
                 $allowance = $this->reports_model->total_terminated_allowance($current_payroll_month, $previous_payroll_month, 'nightshift_allowance');
-                dd($allowance);
                 if(count($allowance) > 0){
-                $row->current_amount += $allowance[0]->current_amount;
-                $row->previous_amount += $allowance[0]->previous_amount;
-               // $row->difference += ($allowance[0]->current_amount -$allowance[0]->previous_amount);
-                $row->difference += 0;
-                array_push($descriptions, $row->description);
-                }
+                    for($i = 0;$i<count($allowance); $i++){
+                        $row->current_amount += $allowance[$i]->current_amount;
+                        $row->previous_amount += $allowance[$i]->previous_amount;
+                        $row->difference += ($allowance[$i]->current_amount-$allowance[$i]->previous_amount);
+
+                        array_push($descriptions, $row->description);
+                    }
+
+                    }
             }
         }
         $all_terminal_allowance = $this->reports_model->all_terminated_allowance($current_payroll_month, $previous_payroll_month);
@@ -457,7 +469,7 @@ class PayrollController extends Controller
         $data['total_current_net'] = $this->reports_model->s_grossMonthly1($current_payroll_month);
 
         $data['current_decrease'] =  $this->reports_model->basic_decrease1($previous_payroll_month, $current_payroll_month);
-        // dd($data['previous_decrease']);
+
         // $data['current_decrease'] = $this->reports_model->basic_decrease($current_payroll_month);
 
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
@@ -666,7 +678,7 @@ class PayrollController extends Controller
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
-        dd($data['current_increase']);
+       ($data['current_increase']);
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
@@ -2029,9 +2041,17 @@ class PayrollController extends Controller
     public function send_payslip_email($date, $employee)
     {
         //dd($request->all());
+        $empID = $employee->empID;
+                                    //For redirecting Purpose
 
         // $profile = $request->input("profile"); //For redirecting Purpose
         $date_separate = explode("-", $date);
+
+        $start=$date;
+
+
+
+
 
         $mm = $date_separate[1];
         $yyyy = $date_separate[0];
@@ -2042,60 +2062,49 @@ class PayrollController extends Controller
         $payroll_month_end = $yyyy . "-" . $mm . "-31";
         $payroll_month = $yyyy . "-" . $mm;
 
-        $empID = $employee->empID;
         $check = $this->reports_model->payslipcheck($payroll_month, $empID);
 
 
-        $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
-        $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
-        $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
-        $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
-        $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
-        $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
-        $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
-        $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
-        $data['total_pensions'] = $this->reports_model->total_pensions($empID, $payroll_date);
-        $data['total_deductions'] = $this->reports_model->total_deductions($empID, $payroll_month);
-        $data['companyinfo'] = $this->reports_model->company_info();
-        $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
-        $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
-        $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
-        $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
-        $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
-        $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
-        $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
+            $emp = Employee::where('emp_id',$empID)->first();
+            $data['slipinfo'] = $this->reports_model->payslip_info($empID, $payroll_month_end, $payroll_month);
+            $data['leaves'] = $this->reports_model->leaves($empID, $payroll_month_end);
+            $data['annualLeaveSpent'] = $this->reports_model->annualLeaveSpent($empID, $payroll_month_end);
+            $data['allowances'] = $this->reports_model->allowances($empID, $payroll_month);
+            $data['deductions'] = $this->reports_model->deductions($empID, $payroll_month);
+            $data['loans'] = $this->reports_model->loans($empID, $payroll_month);
+            $data['salary_advance_loan'] = $this->reports_model->loansPolicyAmount($empID, $payroll_month);
+            $data['total_allowances'] = $this->reports_model->total_allowances($empID, $payroll_month);
+            $data['total_pensions'] = $this->reports_model->total_pensions($empID, $payroll_date);
+            $data['total_deductions'] = $this->reports_model->total_deductions($empID, $payroll_month);
+            $data['companyinfo'] = $this->reports_model->company_info();
+            $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+            $data['arrears_paid_all'] = $this->reports_model->employeeArrearAllPaid($empID, $payroll_date);
+            $data['arrears_all'] = $this->reports_model->employeeArrearAll($empID, $payroll_date);
+            $data['arrears_paid'] = $this->reports_model->employeeArrearByMonth($empID, $payroll_date);
+            $data['paid_with_arrears'] = $this->reports_model->employeePaidWithArrear($empID, $payroll_date);
+            $data['paid_with_arrears_d'] = $this->reports_model->employeeArrearPaidAll($empID, $payroll_date);
+            $data['salary_advance_loan_remained'] = $this->reports_model->loansAmountRemained($empID, $payroll_date);
+            $data['leaveBalance'] = $this->attendance_model->getLeaveBalance($empID, $emp->hire_date, $payroll_month_end);
 
-        $slipinfo = $data['slipinfo'];
-        $leaves = $data['leaves'];
-        $annualLeaveSpent = $data['annualLeaveSpent'];
-        $allowances = $data['allowances'];
-        $deductions = $data['deductions'];
-        $loans = $data['loans'];
-        $salary_advance_loan = $data['salary_advance_loan'];
-        $total_allowances = $data['total_allowances'];
-        $total_pensions = $data['total_pensions'];
-        $total_deductions = $data['total_deductions'];
-        $companyinfo = $data['companyinfo'];
-        $arrears_paid = $data['arrears_paid'];
-        $arrears_paid_all = $data['arrears_paid_all'];
-        $arrears_all = $data['arrears_all'];
-        $arrears_paid = $data['arrears_paid'];
-        $paid_with_arrears = $data['paid_with_arrears'];
-        $paid_with_arrears_d = $data['paid_with_arrears_d'];
-        $salary_advance_loan_remained = $data['salary_advance_loan_remained'];
-        $data['payroll_date'] = $date;
+            $data['payroll_date'] =$date;
 
-        $date = explode('-', $date);
-        $payroll_month = $date[0] . '-' . $date[1];
+            $date = explode('-', $payroll_date);
+            $payroll_month = $date[0] . '-' . $date[1];
 
-        $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
-        $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
+            $data['bank_loan'] = $this->reports_model->bank_loans($empID, $payroll_month);
+            $data['total_bank_loan'] = $this->reports_model->sum_bank_loans($empID, $payroll_month);
 
-        //include(app_path() . '/reports/customleave_report.php');
-        // include app_path() . '/reports/payslip.php';
+            //include(app_path() . '/reports/customleave_report.php');
+            // include app_path() . '/reports/payslip.php';
 
-        //return view('payroll.payslip2', $data);
-        $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
+            //return view('payroll.payslip_details_pdf', $data);
+           // $pdf = Pdf::loadView('payroll.payslip', $data)->setPaper('a4', 'potrait');
+
+          $pdf = Pdf::loadView('payroll.payslip_details_pdf', $data)->setPaper('a4', 'potrait');
+
+
+
+        // $pdf = Pdf::loadView('payroll.payslip2', $data)->setPaper('a4', 'potrait');
 
         // $pdf->stream('payslip_for_' . $empID . '.pdf'),
 
@@ -2105,12 +2114,12 @@ class PayrollController extends Controller
         // return $monthName;
 
         $email_data = array(
-            'subject' => 'Employee Overtime Approval',
+            'subject' => 'Payslip for '.$monthName.' '.$date_separate[0],
             'view' => 'emails.payslip',
             'email' => "",
             'pdf' => $pdf,
             'month'=>$monthName.' '.$date_separate[0],
-            'full_name' => $employee->empName,
+            'full_name' => $emp->fname,
         );
 
 
@@ -2128,7 +2137,7 @@ class PayrollController extends Controller
     {
 
 
-        
+
         $payrollDate = $request->input("payrollDate");
         //Get All Employee Emails
         // $payrollDate = $this->uri->segment(3);
@@ -2144,7 +2153,7 @@ class PayrollController extends Controller
         echo json_encode($response_array);
     }
 
- 
+
 
     public function mailConfiguration()
     {

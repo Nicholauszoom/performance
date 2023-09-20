@@ -93,9 +93,6 @@ const DatatableButtonsHtml5 = function() {
                         extend: 'excelHtml5',
                         footer: true,
                         className: 'btn btn-light',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
                     },
                     {
                         extend: 'pdfHtml5',

@@ -116,7 +116,7 @@
 <td></td>
 <td></td>
 <td></td>
-                    <td  class="text-end"><b><b>{{ number_format($total_netpay, 0) }}</b></b></td>
+                    <td  class="text-end"><b><b>{{ number_format($total_netpay, 2) }}</b></b></td>
 
                 </tr>
             </tfoot>

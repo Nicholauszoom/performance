@@ -4781,71 +4781,7 @@ class GeneralController extends Controller
 
 
 
-    public function leave_escalation(){
 
-             // Start of Escallation
-      $leaves=Leaves::where('state',1)->get();
-
-      if ($leaves) {
-
-        foreach($leaves as $item)
-        {
-            $today= new DateTime();
-            $applied =$item->updated_at;
-            $diff= $today->diff($applied);
-            $range=$diff->days;
-            $approval=LeaveApproval::where('empID',$item->empID)->first();
-
-            if ($approval) {
-              if ($range >$approval->escallation_time) {
-                $leave=Leaves::where('id' ,$item->id)->first();
-                $status=$leave->status;
-
-
-                if ($status == 0) {
-                  if ($approval->level2 != null) {
-                    $leave->status=1;
-                    $leave->updated_at=$today;
-                    $leave->update();
- 
-                  }
-                  else
-                  {
-                    $leave->status=0;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-
-                }
-                elseif ($status == 1)
-                {
-                  if ($approval->level3 != null) {
-                    $leave->status=2;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-                  else
-                  {
-                    $leave->status=0;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-                }
-                elseif ($status == 2)
-                {
-                  if ($approval->level1 != null) {
-                    $leave->status=0;
-                    $leave->updated_at=$today;
-                    $leave->update();
-                  }
-                }
-              }
-            }
-        }
-      }
-    //   End of Escallation
-
-    }
     #####################DEDUCTIONS############################################
 
     public function delete_deduction($id, Request $request)
