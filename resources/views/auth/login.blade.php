@@ -58,7 +58,7 @@
                                                         <p>{{ Session::get('password_set') }}</p>
                                                     </div>
                                                     @endif --}}
-                                                @if (session()->has('password_set'))
+                                                {{-- @if (session()->has('password_set'))
                                                 <div
                                                     class="alert alert-success border-0 alert-dismissible fade show mb-3">
                                                     <span class="fw-semibold">Success!!!</span>
@@ -76,7 +76,7 @@
 
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                                 </div>
-                                                @else
+                                                @else --}}
 
                                                 @if ($errors->any())
                                                 <div
