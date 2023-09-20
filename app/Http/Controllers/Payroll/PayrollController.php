@@ -678,7 +678,7 @@ class PayrollController extends Controller
         // $data['previous_increase'] = $this->reports_model->basic_increase($previous_payroll_month);
         $data['current_increase'] = $this->reports_model->basic_increase($previous_payroll_month, $current_payroll_month);
 
-        dd($data['current_increase']);
+       ($data['current_increase']);
         $data['termination'] = $this->reports_model->get_termination($current_payroll_month);
 
 
