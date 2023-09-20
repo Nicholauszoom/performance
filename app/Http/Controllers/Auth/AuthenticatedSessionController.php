@@ -70,9 +70,9 @@ class AuthenticatedSessionController extends Controller
                 SysHelpers::AuditLog(1, 'Logged in with '.$employeeName , $request);
 
                 // redirect to specific page if $request->next is set
-                if($request->next){
-                    return redirect($request->next);
-                }
+                // if($request->next){
+                //     return redirect($request->next);
+                // }
                 return redirect()->intended(RouteServiceProvider::HOME);
             }
         }

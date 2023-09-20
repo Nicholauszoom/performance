@@ -91,9 +91,9 @@
                                                 </div>
                                                 @endif
                                                 @endif
-                                                {{-- @if ($next)
+                                                @if ($next)
                                                     <input name="next" type="hidden" value="{{ $next }}">
-                                                @endif --}}
+                                                @endif
                                                 <div class="mb-3">
                                                     <label class="form-label text-main font-weight-bold">Payroll Number</label>
 
