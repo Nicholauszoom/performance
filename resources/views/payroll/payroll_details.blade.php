@@ -177,7 +177,7 @@
                                         <td class="text-end">{{ number_format($row2->salaryEnrollment,2) }}
                                         </td>
 
-                                        <td class="text-end">{{ number_format(0,2) }}</td>
+                                        <td class="text-end">{{ number_format($row2->normal_days_overtime_amount + $row2->public_overtime_amount,2) }}</td>
 
 
 
@@ -187,11 +187,11 @@
                                         <td class="text-end">{{ number_format(0,2) }}</td>
 
                                         <td class="text-end">
-                                            {{ number_format($row2->leavePay + $row2->leaveAllowance,2) }}
+                                            {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance,2) }}
                                         </td>
                                         @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay;  @endphp
                                         <td class="text-end">
-                                            {{ number_format($row2->leavePay + $row2->leaveAllowance+$row2->transport_allowance+$row2->nightshift_allowance,2) }}
+                                            {{ number_format($row2->total_gross,2) }}
                                         </td>
                                         <td class="text-end">{{ number_format(0,2) }}</td>
                                         <td class="text-end">
@@ -220,6 +220,7 @@
                                         $total_wcf += $row2->wcf;
                                         $total_sdl += $row2->sdl;
                                         $total_taxs += $row2->paye;
+                                        $total_overtime += $row2->normal_days_overtime_amount + $row2->public_overtime_amount;
                                         //$total_netpay += ($row2->taxable -$row2->paye);
                                         $total_deduction += $row2->pension_employee + $row2->paye + $row2->otherDeductions + $row2->loan_balance;
                                         $total_pension += $row2->pension_employee;

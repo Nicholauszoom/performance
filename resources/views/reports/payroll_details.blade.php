@@ -211,7 +211,7 @@
                                     <td class="text-end">{{ number_format($row2->salaryEnrollment, 2) }}
                                     </td>
 
-                                    <td class="text-end">{{ number_format(($row2->normal_days_overtime_amount+$row2->public_overtime_amount), 2) }}</td>
+                                    <td class="text-end">{{ number_format(($row2->normal_days_overtime_amount + $row2->public_overtime_amount), 2) }}</td>
 
 
 
@@ -225,7 +225,7 @@
                                     </td>
                                     @php $gros = $row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount;  @endphp
                                     <td class="text-end">
-                                        {{ number_format($row2->salaryEnrollment + $row2->leaveAllowance + $row2->leavePay+$row2->normal_days_overtime_amount+$row2->public_overtime_amount, 2) }}
+                                        {{ number_format($row2->total_gross, 2) }}
                                     </td>
                                     <td class="text-end">{{ number_format(0, 2) }}</td>
                                     <td class="text-end">
