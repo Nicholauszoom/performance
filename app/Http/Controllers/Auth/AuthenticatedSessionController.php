@@ -30,6 +30,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(Request $request)
     {
+        //dd('Here we are');
         $data['next'] = $request->query('next');
         return view('auth.login',$data);
     }
@@ -43,7 +44,9 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
 
+         dd($request);
         $request->authenticate();
+
 
         if($this->password_set(Auth::user()->emp_id) == 1){
 

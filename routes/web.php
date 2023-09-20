@@ -56,14 +56,15 @@ use Illuminate\Http\Response;
 
 
 
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+Route::get('/', function () {
+    return ("am here");
+});
 
  // Dashboard
 
+ Route::get('/dashboard', [GeneralController::class, 'home'])->name('dashboard.index');
 
-Route::middleware('verify-outgoing-requests')->group(function () {
+// Route::middleware('verify-outgoing-requests')->group(function () {
 
 Route::middleware('auth')->group(function () {
 
@@ -816,7 +817,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
         Route::any('/index','index')->name('flex.index');
         Route::any('/import','import')->name('flex.import');
         Route::any('/password_check/{$str}','password_check')->name('flex.password_check');
-        Route::any('/login_info','login_info')->name('flex.login_info');
+        // Route::any('/login_info','login_info')->name('flex.login_info');
         Route::any('/checkPassword/{$password}','checkPassword')->name('flex.checkPassword');
         Route::any('/update_login_info','update_login_info')->name('flex.update_login_info');
         // Route::any('/logout','logout')->name('flex.logout');
@@ -1353,7 +1354,7 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
 
 
-});
+// });
 
 
 
