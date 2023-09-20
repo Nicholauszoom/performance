@@ -44,8 +44,9 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
 
-        dd('Here we are');
+         dd($request);
         $request->authenticate();
+
 
         if($this->password_set(Auth::user()->emp_id) == 1){
 
