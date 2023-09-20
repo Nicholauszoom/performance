@@ -90,7 +90,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                                                 </div>
                                                 @endif
-                                                @endif
+                                                {{-- @endif --}}
                                                 @if ($next)
                                                     <input name="next" type="hidden" value="{{ $next }}">
                                                 @endif
