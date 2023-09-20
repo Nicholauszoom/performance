@@ -26,8 +26,8 @@
                                     <th>PAYROLL NO</th>
 									<th>MEMBER NO</th>
 									<th>FULL NAME</th>
-									<th hidden>MIDDLE NAME</th>
-									<th hidden>SURNAME</th>
+									{{-- <th hidden>MIDDLE NAME</th>
+									<th hidden>SURNAME</th> --}}
                                     <th>GROS PAY</th>
                                     <th>CONTRIBUTION</th>
 
@@ -60,8 +60,8 @@
                                     <td>{{ $row->emp_id }}</td>
 									<td>{{ !empty($member_no)? $member_no : "unknown" }}</td>
 									<td>{{ $row->name }}</td>
-									<td hidden>{{ $row->mname }}</td>
-                                    <td hidden>{{ $row->lname }}</td>
+									{{-- <td hidden>{{ $row->mname }}</td>
+                                    <td hidden>{{ $row->lname }}</td> --}}
                                     <td >{{ number_format($salary,2) }}</td>
 									<td>{{ number_format($total_contribution,2) }}</td>
 
@@ -94,8 +94,8 @@
                                     <td>{{ $row2->emp_id }}</td>
 									<td>{{ !empty($member_no)? $member_no : "unknown" }}</td>
 									<td>{{ $row2->name }}</td>
-									<td hidden>{{ $row2->mname }}</td>
-                                    <td hidden>{{ $row2->lname }}</td>
+									{{-- <td hidden>{{ $row2->mname }}</td>
+                                    <td hidden>{{ $row2->lname }}</td> --}}
                                     <td>{{ number_format($salary,2) }}</td>
 									<td>{{ number_format($contribution,2) }}</td>
 
@@ -105,12 +105,14 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4"><b>TOTAL</b></td>
-
+                                    {{-- <td hidden></td>
+                                    <td hidden></td> --}}
+                                    <td colspan="3"></td>
+                                    <td><b>TOTAL</b></td>
                                     <td><b>{{ number_format($total_salary,2) }}</b></td>
 									<td><b>{{ number_format($total_contribution,2) }}</b></td>
 
-
+                                    
 								</tr>
                             </tfoot>
 						</table>

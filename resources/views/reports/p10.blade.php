@@ -107,7 +107,11 @@
                 <tfoot>
 
                                      <tr>
-                                        <td colspan ="2" style="background-color:#FFFF00;">TOTAL</td>
+                                        <td colspan="1"></td>
+                                        
+                                    
+                                        <td colspan="1">TOTAL</td>
+                                        {{-- <td colspan ="2" style="background-color:#FFFF00;">TOTAL</td> --}}
                                         <td align="right"></td>
                                         <td align="right"></td>
                                         <td align="right">{{ number_format($total_salary,2) }}</td>

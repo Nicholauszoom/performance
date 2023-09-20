@@ -1,4 +1,4 @@
-@extends('layouts.vertical', ['title' => 'Payroll Input Changes Approval Report'])
+{{-- @extends('layouts.vertical', ['title' => 'Payroll Input Changes Approval Report'])
 
 @push('head-script')
     <script src="{{ asset('assets/js/components/tables/datatables/datatables.min.js') }}"></script>
@@ -62,4 +62,4 @@
     </div>
 
 @endsection
-
+ --}}

@@ -434,6 +434,7 @@ class ReportController extends Controller
     }
     function get_payroll_temp_summary(Request $request)
     {
+   
         $data['payroll_state'] = $request->payrollState;
         $date = $request->date;
 
@@ -483,7 +484,8 @@ class ReportController extends Controller
         // include(app_path() . '/reports/temp_payroll.php');
     }
     function get_payroll_temp_summary1(Request $request)
-    {
+    {   
+        
 
         $date = $request->payrolldate;
         $data['summary'] = $this->reports_model->get_payroll_summary($date);
