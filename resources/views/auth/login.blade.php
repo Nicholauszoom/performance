@@ -42,7 +42,7 @@
                             <div class="row">
 
                                 <div  class="col-md-5 offset-8  border-top  border-top-width-3 border-bottom border-bottom-main  border-bottom-width-3 border-top-main rounded-0" style="background: #ffffff8e">
-                                    <form action="{{ route('login2') }}" method="POST" class="" autocomplete="off">
+                                    <form action="{{ route('login') }}" method="POST" class="" autocomplete="off">
                                         @csrf
 
                                         <div class=" border-bottom-main mb-0 pt-4">
@@ -100,7 +100,7 @@
                                                     <div class="form-control-feedback form-control-feedback-start">
                                                         <input
                                                             class="form-control @if ($errors->has('emp_id')) is-invalid @endif"
-                                                            name="emp_id" type="text" id="emp-id" required
+                                                            name="emp_id" type="text" id="emp-id1" required
                                                             placeholder="username" autocomplete="off">
 
                                                         <div class="form-control-feedback-icon">
@@ -113,7 +113,7 @@
                                                     <label class="form-label text-main">Password</label>
 
                                                     <div class="form-control-feedback form-control-feedback-start">
-                                                        <input type="password" id="password"
+                                                        <input type="password" id="password1"
                                                             class="form-control @if ($errors->has('password')) is-invalid @endif"
                                                             placeholder="password" name="password" required
                                                             autocomplete="off">
