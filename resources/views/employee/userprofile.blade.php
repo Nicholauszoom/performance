@@ -26,7 +26,8 @@
         $contract_end = $row->contract_end;
         $position = $row->pName;
         $ctype = $row->CONTRACT;
-        $linemanager = $row->LINEMANAGER;
+        $linemanager = $row->line_manager;
+        
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
@@ -165,7 +166,8 @@
                         <tr>
                         <tr>
                             <td>Line Manager:</td>
-                            <td>{{ $linemanager }}</td>
+                            <td>{{ App\Models\Employee::all()->where('emp_id',$linemanager)->first()->full_name;
+            }}</td>
                         </tr>
                         <tr>
                             <td>Contract Type:</td>

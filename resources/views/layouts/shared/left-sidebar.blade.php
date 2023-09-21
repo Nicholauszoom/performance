@@ -262,12 +262,27 @@
                         <ul
                             class="nav-group-sub collapse {{ request()->routeIs('flex.submitInputs') || request()->routeIs('pension_receipt.index') || request()->routeIs('flex.financial_group') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.payroll') || request()->routeIs('payroll.employee_payslip') || request()->routeIs('payroll.comission_bonus') || request()->routeIs('flex.approved_financial_payments') ? 'show' : null }}">
                             {{-- start of payroll link --}}
-                            @can('view-payroll')
+                            <li class="nav-item"><a
+                                class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"
+                                href="{{ route('flex.financial_group') }}">Payroll inputs </a></li>
+                                @can('view-payslip')
+                                <li class="nav-item"><a
+                                        class="nav-link {{ request()->routeIs('flex.submitInputs') ? 'active' : null }}"
+                                        href="{{ route('flex.submitInputs') }}"> Submit Inputs </a></li>
+                            @endcan
+                         
+                                @can('view-payroll')
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('payroll.payroll') ? 'active' : null }}"
                                         href="{{ route('payroll.payroll') }}"> Payroll </a></li>
                             @endcan
                             {{-- / --}}
+                            @can('view-pending-payments')
+                            <li class="nav-item"><a
+                                    class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
+                                    href="{{ route('flex.approved_financial_payments') }}">Payroll Approvers </a></li>
+                        @endcan
+                       
 
                             {{-- start of payslip link  --}}
                             @can('view-payslip')
@@ -276,10 +291,7 @@
                                         href="{{ route('payroll.employee_payslip') }}"> Payslip </a></li>
                             @endcan
 
-                            <li class="nav-item"><a
-                                    class="nav-link {{ request()->routeIs('flex.financial_group') ? 'active' : null }}"
-                                    href="{{ route('flex.financial_group') }}">Payroll inputs </a></li>
-
+                          
                             {{-- / --}}
 
                             {{-- start of incentives link --}}
@@ -292,16 +304,7 @@
                             {{-- / --}}
 
                             {{--  start of pending payments link --}}
-                            @can('view-pending-payments')
-                                <li class="nav-item"><a
-                                        class="nav-link {{ request()->routeIs('flex.approved_financial_payments') ? 'active' : null }}"
-                                        href="{{ route('flex.approved_financial_payments') }}">Payroll Approvers </a></li>
-                            @endcan
-                            @can('view-payslip')
-                                <li class="nav-item"><a
-                                        class="nav-link {{ request()->routeIs('flex.submitInputs') ? 'active' : null }}"
-                                        href="{{ route('flex.submitInputs') }}"> Submit Inputs </a></li>
-                            @endcan
+                         
 
                             @can('view-payslip')
                                 <li class="nav-item"><a
