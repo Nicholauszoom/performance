@@ -79,8 +79,10 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
                     <?php
                                 $i =0;
+                          
                                 if(!empty($summary)){
                                     $total_loans = 0;
                                     $others = 0;
@@ -91,11 +93,12 @@
                                     $total_taxs = 0;
                                     $total_salary = 0; $total_netpay = 0; $total_allowance = 0; $total_overtime = 0; $total_house_rent = 0; $total_sdl = 0; $total_wcf = 0;
                                     $total_tax = 0; $total_pension = 0; $total_others = 0; $total_deduction = 0;  $taxable_amount = 0;
+                                    // dd($summary);
                                 foreach ($summary as $row){
                                     $i++;
                                     $amount = $row->salary + $row->allowances-$row->pension_employer-$row->loans-$row->deductions-$row->meals-$row->taxdue;
                                     $total_netpay +=  round($amount,0);
-                                    $total_arrears +=$row->arrears_allowance;
+                                    $total_arrears +=$row->arrears;
 
                                     $total_gross_salary += ($row->salary + $row->allowances);
                                     $total_salary = $total_salary + $row->salary;
@@ -135,7 +138,7 @@
                                     <td class="text-end">{{ number_format($row->teller_allowance, 2) }}</td>
                                     <td class="text-end">{{ number_format($row->house_rent, 2) }}</td>
 
-                                    <td class="text-end">{{ number_format($row->arrears_allowance, 2) }}</td>
+                                    <td class="text-end">{{ number_format($row->arrears, 2) }}</td>
 
                                     <td class="text-end">{{ number_format($row->other_payments, 2) }}</td>
 
@@ -163,7 +166,9 @@
                                 </tr>
 
                                 <?php } ?>
+                             
                                 @foreach ($termination as $row2)
+                                
                                     <tr style="border-bottom:2px solid rgb(67, 67, 73)">
 
                                         <td class="">{{ $row2->emp_id }}</td>

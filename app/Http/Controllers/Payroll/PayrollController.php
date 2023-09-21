@@ -155,7 +155,7 @@ class PayrollController extends Controller
                             echo "<p class='alert alert-danger text-center'>Failed To run the Payroll, Please Try again, If the Error persists Contact Your System Admin</p>";
                         }
                     } else {
-                        echo "<p class='alert alert-warning text-center'>" . $payroll_month . "Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
+                        echo "<p class='alert alert-warning text-center'>" . $payroll_month . " Sorry The Payroll for This Month is Already Procesed, Try another Month!</p>";
                     }
                 }
             } else {

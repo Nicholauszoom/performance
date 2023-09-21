@@ -265,7 +265,7 @@
                     location.reload();
                 }, 5000)
             })
-            .fail(function() {
+            .fail(function(data) {
                 // alert('Payroll Failed!! ...');
                 // Basic initialization
                 new Noty({
