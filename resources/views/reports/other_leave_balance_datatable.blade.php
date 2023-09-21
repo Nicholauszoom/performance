@@ -33,6 +33,7 @@
                     <th>Last Name</th>
                     <th>department</th>
                     <th>Position</th>
+
                     @if(isset($is_all))
                     <th>Leave Type</th>
                     @endif
@@ -68,6 +69,8 @@
                     <td><?php echo $employee->lname; ?></td>
                     <td><?php echo $employee->departments->name; ?></td>
                     <td><?php echo $employee->positions->name; ?></td>
+                   
+
                     @if(isset($is_all))
                     <td><?php echo App\Models\LeaveType::where('id',$employee->nature)->first()->type; ?></td>
                     @endif

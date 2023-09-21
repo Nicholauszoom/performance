@@ -402,7 +402,6 @@
                                 <div class="input-group">
                                     <select required name="emp_id" class="select_payroll_month form-control select"
                                         data-width="1%">
-                                        <option selected disabled required value="">Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -492,7 +491,6 @@
                                 <div class="input-group">
                                     <select required name="leave_employee"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled value=""`>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -593,7 +591,6 @@
                                 <div class="input-group">
                                     <select required name="leave_employee"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -657,7 +654,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <select class="form-control form-select required select @error('emp_ID') is-invalid @enderror" id="docNo" name="nature" required>
-                                        <option value="">&nbsp;</option>
+                                        <option value="All">All</option>
                                           <?php
                                           foreach($leave_type as $key){  ?>
 
@@ -698,7 +695,6 @@
                                 <div class="input-group">
                                     <select required name="emp_id"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -800,7 +796,6 @@
                                 <div class="input-group">
                                     <select required name="emp_id"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -902,7 +897,6 @@
                                 <div class="input-group">
                                     <select required name="emp_id"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>
@@ -1004,7 +998,6 @@
                                 <div class="input-group">
                                     <select required name="emp_id"
                                         class="select_payroll_month form-control select" data-width="1%">
-                                        <option selected disabled>Select Employee</option>
                                         <option value="All"> All</option>
                                         <?php foreach ($employee as $row) { ?>
                                         <option value="<?php echo $row->emp_id; ?>"> <?php echo $row->fname . '  ' . $row->lname; ?></option>

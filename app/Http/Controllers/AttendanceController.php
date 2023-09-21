@@ -169,7 +169,7 @@ class AttendanceController extends Controller
 
       //$this->authenticateUser('view-leave');
       $data['myleave'] =Leaves::where('empID',Auth::user()->emp_id)->get();
-
+    //   dd($data);
       if(session('appr_leave')){
         $data['otherleave'] = $this->attendance_model->leave_line(session('emp_id'));
       }else{
