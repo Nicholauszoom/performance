@@ -2591,7 +2591,7 @@ class GeneralController extends Controller
         if ($result == true) {
 
 
-            SysHelpers::FinancialLogs($emp_id, 'Assigned Overtime', '0.00', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id, 'Overtime', '0.00', number_format($overtime, 2), 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
@@ -4768,7 +4768,7 @@ class GeneralController extends Controller
 
         $data = ['empID' => $request->empID, 'start_date' => $request->start_date, 'end_date' => $request->end_date, 'reason' => $request->reason];
 
-        SysHelpers::FinancialLogs($request->empID, 'Assigned  To Unpaid Leave', $request->start_date, $request->end_date, 'Payroll Input');
+        SysHelpers::FinancialLogs($request->empID, 'Unpaid Leave', $request->start_date, $request->end_date, 'Payroll Input');
 
         $result = $this->flexperformance_model->save_unpaid_leave($data);
 
@@ -4943,7 +4943,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $request->input('deductionID'))->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from ' . $deductionName->name, number_format($deductionName->amount / $deductionName->rate,2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate,2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     //SysHelpers::FinancialLogs($empID, 'Removed from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -4982,7 +4982,7 @@ class GeneralController extends Controller
 
                     $deductionName = DB::table('deduction')->select('name')->where('id', $deductionID)->limit(1)->first();
 
-                    SysHelpers::FinancialLogs($request->input('empID'), 'Removed from ' . $deductionName->name, number_format($deductionName->amount / $deductionName->rate,2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($request->input('empID'), $deductionName->name, number_format($deductionName->amount / $deductionName->rate,2) . ' ' . $deductionName->currency, '0.00', 'Payroll Input');
 
                     // SysHelpers::FinancialLogs($groupID, 'Removed Group from deduction', $deductionName->name, '0', 'Payroll Input');
                 }
@@ -5597,12 +5597,12 @@ class GeneralController extends Controller
                     $allowances = $this->payroll_model->getAssignedAllowance();
                     foreach ($allowances as $row) {
                         if ($row->state == 1) {
-                            SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
+                            SysHelpers::FinancialLogs($row->empID,$row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
                         }
                     }
                     $deductions = $this->payroll_model->getAssignedDeduction();
                     foreach ($deductions as $row) {
-                        SysHelpers::FinancialLogs($row->empID, 'Assign ' . $row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
+                        SysHelpers::FinancialLogs($row->empID,$row->name, '0', ($row->amount != 0) ? number_format($row->amount, 2) . ' ' . $row->currency : $row->percent . '%',  'Payroll Input', $date);
                     }
                     InputSubmission::create(['empID' => auth()->user()->emp_id, 'date' => $date]);
                     echo "<p class='alert alert-success text-center'>Inputs  submitted Successfuly</p>";
@@ -5681,7 +5681,7 @@ class GeneralController extends Controller
 
                     // SysHelpers::FinancialLogs($row->empID, 'Removed from '.$allowanceName->name, '0', ($data['amount'] != 0)? $data['amount'].' '.$data['currency'] : $data['percent'].'%',  'Payroll Input');
 
-                    SysHelpers::FinancialLogs($empID, 'Removed from' . $allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : number_format($amount->amount,2) . ' ' . $amount->currency, '0.00', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID,$allowanceName->name, $amount->percent != 0 ? ($amount->percent * 100) . '%' : number_format($amount->amount,2) . ' ' . $amount->currency, '0.00', 'Payroll Input');
 
                     $result = $this->flexperformance_model->remove_individual_from_allowance($empID, $allowanceID);
                 }
@@ -6353,7 +6353,7 @@ class GeneralController extends Controller
                     $refID = $values[0];
                     $empID = $values[1];
 
-                    SysHelpers::FinancialLogs($empID, 'Removed From Financial group', $groupName, '-', 'Payroll Input');
+                    SysHelpers::FinancialLogs($empID, 'Financial group', $groupName, '-', 'Payroll Input');
 
                     $result = $this->flexperformance_model->removeEmployeeFromGroup($refID, $empID, $groupID);
                 }
@@ -7289,7 +7289,7 @@ class GeneralController extends Controller
 
                     SysHelpers::FinancialLogs($id, 'Add Employee', '', '', 'Employee Registration');
 
-                    SysHelpers::FinancialLogs($id, 'Assign Salary', '0.00', number_format($request->input("salary"),2), 'Employee Registration');
+                    SysHelpers::FinancialLogs($id, 'Salary', '0.00', number_format($request->input("salary"),2), 'Employee Registration');
 
 
                     //register employee to leave approve maping
