@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 //use App\Http\Controllers\Controller;
 
 use DateTime;
+use Exception;
 use Carbon\Carbon;
 use App\Models\EMPL;
 use App\Models\Leaves;
+use App\Models\Level1;
+use App\Models\level2;
+use App\Models\Level3;
 use App\Models\Position;
 use App\Models\LeaveType;
 use App\Helpers\SysHelpers;
@@ -15,29 +19,26 @@ use App\Models\LeaveSubType;
 use App\Models\ProjectModel;
 use Illuminate\Http\Request;
 use App\Models\LeaveApproval;
+use Illuminate\Http\Response;
 use App\Http\Middleware\Leave;
 use App\Models\AttendanceModel;
 use App\Models\Payroll\Payroll;
+
+
 use App\Models\PerformanceModel;
-use App\CustomModels\PayrollModel;
-use Illuminate\Support\Facades\Notification;
 use App\Models\EmailNotification;
-use App\Notifications\EmailRequests;
-
-
+use App\CustomModels\PayrollModel;
 use App\CustomModels\ReportsModel;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\Payroll\ReportModel;
 use App\Models\Payroll\ImprestModel;
+use App\Notifications\EmailRequests;
 use Illuminate\Support\Facades\Auth;
 use App\CustomModels\flexFerformanceModel;
 use App\Models\Payroll\FlexPerformanceModel;
-use Illuminate\Http\Response;
-use App\Models\Level1;
-use App\Models\level2;
-use App\Models\Level3;
-use Exception;
+use Illuminate\Support\Facades\Notification;
+use App\Http\Controllers\API\PushNotificationController;
 
 class AttendanceController extends Controller
 {
@@ -1024,6 +1025,7 @@ public function saveLeave(Request $request) {
     public function approveLeave($id)
       {
         $leave=Leaves::find($id);
+        // dd($leave);
         $empID=$leave->empID;
         $approval=LeaveApproval::where('empID',$empID)->first();
         $approver=Auth()->user()->emp_id;
@@ -1123,7 +1125,11 @@ public function saveLeave(Request $request) {
             'email' => $emp_data->email,
             'full_name' => $emp_data->fname,' '.$emp_data->mname.' '.$emp_data->lname,
         );
+
         try {
+          PushNotificationController::bulksend("Leave Approval",
+        "Your Leave request is successful granted",
+      "",$empID);
 
             Notification::route('mail', $emp_data->email)->notify(new EmailRequests($email_data));
 
