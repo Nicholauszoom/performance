@@ -65,15 +65,12 @@
 
 {{-- start of user credentials --}}
 
-<div class="">
-
+<div class="row">
+        <div class="col-md-12">
 
     <form action="{{ route('flex.saveDetails') }}" method="post" enctype="multipart/form-data">
         @csrf
-
         <input type="hidden" name="employeeID"  value="<?php echo $empID; ?>" id="">
-    <div class="row">
-        <div class="col-md-12">
             <div class="card border-top  rounded-0 border-0 shadow-none">
                 <div class="card-body border-0">
                     <ul class="nav nav-tabs nav-tabs-underline nav-justified nav-tabs-filled mb-3" id="tabs-target-right" role="tablist">
@@ -135,7 +132,7 @@
                                         <div class="card rounded-0 border-0 shadow-none pb-4">
                                         <div class="sidebar-section-body text-center">
                                             <div class="card-img-actions d-inline-block my-3">
-                                                <img class="" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.urlencode($name).'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
+                                                <img class="" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.$name.'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
                                             </div>
 
                                             <h6 class="mb-0">{{ $name }}</h6>
@@ -143,21 +140,20 @@
                                         </div>
                                         <div class="row mx-auto">
                                             <div class="col-md-7 mx-auto">
-                                                    <label for="file" class="text-secondary font-weight-light">Upload New Passport Image</label>
-                                                    <input type="file" name="image" id="image" class="form-control">
-                                                    <input type="hidden" name="empID" value="<?php echo $empID; ?>">
+                                                <label for="image" class="text-secondary font-weight-light">Upload a New Passport Image</label>
+                                                <input type="file" name="image" id="image" class="form-control" required>
+                                                <input type="hidden" name="empID" value="{{ $empID }}">
                                             </div>
 
-
-                                            <div class="col-md-4 mb-0 mx-auto ">
-                                                  <label for="" class="text-white">.</label>
-                                                  <button type="submit" class="btn text-light btn-main btn-block col-lg-12" >
-                                                      <i class="fa fa-save"></i>
-                                                      {{ __('Update Image') }}
-                                                  </button>
+                                            <div class="col-md-4 mx-auto">
+                                                <div class="mt-3"> <!-- Added margin top for separation -->
+                                                    <button type="submit" class="btn btn-main btn-block"> <!-- Simplified button styling -->
+                                                        <i class="fa fa-save"></i> Update Image
+                                                    </button>
+                                                </div>
                                             </div>
-
                                         </div>
+
                                         <ul class="nav nav-sidebar mt-3">
                                             <li class="nav-item-divider"></li>
 
@@ -195,8 +191,6 @@
 
                                    {{--displaying all the errors  --}}
 
-
-
                                 <div class="row">
 
                                     <div class="col-12">
@@ -220,7 +214,7 @@
 
                                                     <div class="form-group col-6">
                                                         <label for="">First Name</label>
-                                                        <input type="text" name="fname" value="<?php echo $fname; ?>" class="form-control">
+                                                        <input type="text" name="fname" value="<?php echo $fname; ?>" class="form-control" required>
                                                     </div>
                                                     <div class="form-group col-6">
                                                         <label for="">Middle Name</label>
@@ -408,11 +402,11 @@
 
                                                 <div class="form-group col-6 mb-2">
                                                     <label for="">TIN Number</label>
-                                                    <input type="text" name="TIN" value="<?php echo $tin; ?>" class="form-control">
+                                                    <input type="text" name="TIN" value="<?php echo $tin; ?>" class="form-control" required>
                                                 </div>
                                                 <div class="form-group col-6 mb-2">
                                                     <label for="">NIDA Number</label>
-                                                    <input type="text" name="NIDA" value="<?php echo $national_id; ?>"  class="form-control">
+                                                    <input type="text" name="NIDA" value="<?php echo $national_id; ?>"  class="form-control" required>
                                                 </div>
                                                 <div class="form-group col-6 mb-2">
                                                     <label for="">Passport Number</label>
@@ -420,7 +414,7 @@
                                                 </div>
                                                 <div class="form-group col-6 mb-2">
                                                     <label for="">Pension Fund Number</label>
-                                                    <input type="text" name="pension" value="<?php echo $pf_membership_no; ?>" class="form-control">
+                                                    <input type="text" name="pension" value="<?php echo $pf_membership_no; ?>" class="form-control" required>
                                                 </div>
 
                                                 <div class="form-group col-6 mb-2">
@@ -440,704 +434,40 @@
                             </div>
                           </div>
                      </div>
+                    </form>
                     {{-- / --}}
 
                     {{-- page 3 --}}
-                    <div role="tabpanel" class="tab-pane " id="page3" aria-labelledby="asset-tab">
+                    @include('employee.employment-details')
 
-                        <div class="card  rounded-0 border-0 shadow-none">
-                            <div class="card-header">
-                                <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
-                            </div>
-                            <div class="row p-2">
-
-                                <div class="col-md-12">
-                                    <div class="card border-top border-top-width-3 border-top-main  rounded-0 p-2">
-                                        <h5>Emmergency Contact Details</h5>
-                                        <p>
-                                            <small>
-                                            <i>
-                                            *
-                                            For Emergency Purpose
-                                            </i>
-                                            </small>
-                                            </p>
-
-
-                                            <div class="row mb-2">
-
-                                                <div class="form-group col-6">
-                                                    <label for="">First Name</label>
-                                                    <input type="text" name="em_fname" @if($emergency) value="{{ $emergency->em_fname}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Middle Name</label>
-                                                    <input type="text" name="em_mname" @if($emergency) value="{{ $emergency->em_mname}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Surname</label>
-                                                    <input type="text" name="em_lname" @if($emergency) value="{{ $emergency->em_sname}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Relationship</label>
-                                                    <input type="text" name="em_relationship" @if($emergency) value="{{ $emergency->em_relationship}}" @endif id="" class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Occupation</label>
-                                                    <input type="text" name="em_occupation" @if($emergency) value="{{ $emergency->em_occupation}}" @endif id="" class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Cellphone Number</label>
-                                                    <input type="text" name="em_phone" @if($emergency) value="{{ $emergency->em_phone}}" @endif id="" class="form-control">
-                                                </div>
-
-
-                                            </div>
-                                            <div class="card-footer ">
-                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
-                                            </div>
-                                    </div>
-
-
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                        <h5 class="text-warning">Employment Details</h5>
-
-
-
-                                            <div class="row mb-2">
-
-                                                <div class="form-group col-6 mb-2">
-                                                    <label for="">Date of Employment</label>
-                                                    <input type="text" name="employment_date" value="<?php echo $hire_date; ?>" class="form-control">
-                                                </div>
-                                                <div class="form-group col-6 mb-2">
-                                                    <label for="">First Job Title</label>
-                                                    <input type="text" name="former_title" @if($details) value="{{ $details->former_title}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6 mb-2">
-                                                    <p></p>
-                                                    <label for="">Current Job Title: <?php echo $title; ?></label>
-                                                    <br>
-                                                    <label for="">Department : <?php echo $department; ?></label>
-                                                    <br>
-                                                    <label for="">Branch : <?php echo $branch; ?></label>
-
-                                                </div>
-
-
-
-                                                <div class="form-group col-12 mb-2">
-                                                    <label for="">Line Manager</label>
-                                                    <br>
-                                                    <p>Current:  <?php echo $linemanager; ?>  </p>
-                                                    <label for="">Update Line Manager</label>
-                                                    <select class="form-control select @error('line_manager') is-invalid @enderror" name="line_manager">
-                                                        <option value="<?php echo $line_managerID; ?>"> Select New Line Manager </option>
-                                                        @foreach ($employees as $depart)
-
-                                                        <option value="{{ $depart->emp_id }}" >{{ $depart->fname }}  {{ $depart->lname }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                {{-- <div class="form-group col-12 mb-2">
-                                                    <label for="">Head Of Department</label>
-                                                    <input type="text" name="hod" value="" class="form-control">
-                                                </div> --}}
-
-
-
-                                            </div>
-                                            <div class="card-footer ">
-                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
-                                            </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                     </div>
-                    {{-- / --}}
 
                     {{-- Page 4--}}
-                    <div role="tabpanel" class="tab-pane " id="page4" aria-labelledby="l-d-tab">
-                        <div class="card rounded-0  border-0 shadow-none mb-3">
-                            <div class="card-header">
-                                <h5 class="text-main">FAMILY DETAILS </h5>
-                            </div>
-                            <div class="row p-2">
 
-                                <div class="col-md-12">
-                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                        <h5 class="text-warning">Spouse Details</h5>
-                                        <p>
-                                            <small>
-                                            <i>*(If you are married, please complete the below details and attach your Marriage Certificate)
-                                            </i>
-                                            </small>
-                                            </p>
-                                            <div class="row mb-2">
-
-                                                <div class="form-group col-12">
-                                                    <label for="">Name as Per NIDA/ Passport</label>
-                                                    <input type="text" name="spouse_name" @if($spouse) value="{{ $spouse->spouse_fname}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Place of Birth (City/Region)</label>
-                                                    <input type="text" name="spouse_birthplace" @if($spouse) value="{{ $spouse->spouse_birthplace}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Date of Birth</label>
-                                                    <input type="date" name="spouse_birthdate" @if($spouse) value="{{ $spouse->spouse_birthdate}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Country of Birth</label>
-                                                    <input type="text" name="spouse_birthcountry" @if($spouse) value="{{ $spouse->spouse_birthcountry}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Nationality</label>
-                                                    <input type="text" name="spouse_nationality" @if($spouse) value="{{ $spouse->spouse_nationality}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">NIDA Number</label>
-                                                    <input type="text" name="spouse_nida" @if($spouse) value="{{ $spouse->spouse_nida}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Passport Number</label>
-                                                    <input type="text" name="spouse_passport" @if($spouse) value="{{ $spouse->spouse_passport}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Employer</label>
-                                                    <input type="text" name="spouse_employer" @if($spouse) value="{{ $spouse->spouse_employer}}" @endif class="form-control">
-                                                </div>
-                                                <div class="form-group col-6">
-                                                    <label for="">Job Title</label>
-                                                    <input type="text" name="spouse_job_title" @if($spouse) value="{{ $spouse->spouse_job_title}}" @endif class="form-control">
-                                                </div>
-
-
-                                            </div>
-                                            <div class="card-footer ">
-                                                <button type="submit" class="btn btn-main float-end"> Save Details</button>
-                                            </div>
-                                    </div>
-
-
-                                </div>
-
-
-
-                             <div class="col-md-12">
-
-
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="card  border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                      <div class="card-header text-warning">
-                                        Children/Dependants Details:
-                                      </div>
-                                      <div class="card-body">
-                                        <h5>Add Dependant</h5>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-6 mb-2">
-                                                <label for="">Name (First Two)</label><br>
-                                                <input type="text" name="dep_name" placeholder="Enter Dependants First and Second Name" class="form-control" />
-
-                                            </div>
-                                            <div class="col-6 mb-2">
-                                                <label for="">Surname</label><br>
-                                                <input type="text" name="dep_surname" placeholder="Enter Dependants Surname" class="form-control" />
-
-                                            </div>
-                                            <div class="col-6 mb-2">
-                                                <label for="">Birth Certificate Number</label><br>
-                                                <input type="text" name="dep_certificate" placeholder="Enter Birth Certificate Number" class="form-control" />
-                                            </div>
-                                            <div class="col-6 mb-2">
-                                                <label for="">Birhdate</label><br>
-                                                <input type="date" name="dep_birthdate" placeholder="Enter Dependants Birthdate" class="form-control" />
-
-                                            </div>
-                                            <div class="col-4 mb-2">
-                                                <label for="">Gender</label><br>
-                                                <input type="radio" id="dep_male" name="dep_gender" value="M"> <label for="dep_male">Male (M)</label>
-                                                <input type="radio" id="dep_female" name="dep_gender" value="F"> <label for="dep_female">Female (F)</label>
-                                            </div>
-
-                                            <div class="card-footer ">
-                                                <button type="submit" class="btn btn-main float-end"> Save Dependant</button>
-                                            </div>
-
-                                        </div>
-                                        <hr>
-
-                                        <table class="table table-border-none" id="dynamicAddRemove">
-                                            <tr>
-                                            <th>Names of Children</th>
-                                            <th>Surname</th>
-                                            <th>Birthdate</th>
-                                            <th>Sex: M/F</th>
-                                            <th>Birth Certificate #</th>
-                                            <th>Action</th>
-                                            @forelse ( $children as $item )
-                                          <tr>
-
-                                            <td>{{ $item->dep_name}} </td>
-                                            <td>{{ $item->dep_surname }} </td>
-                                            <td>{{ $item->dep_birthdate }}</td>
-                                            <td>{{ $item->dep_gender }}</td>
-                                            <td>{{ $item->dep_certificate }} </td>
-                                            <td>
-                                                <a href="{{ url('flex/delete-child/'.$item->id) }}" class="btn btn-sm btn danger">
-                                                    <i class="ph-trash"></i>
-                                                </a>
-                                            </td>
-                                          </tr>
-
-                                          @empty
-
-                                          @endforelse
-
-                                            </table>
-
-                                      </div>
-                                    </div>
-                                  </div>
-                                <div class="col-md-12">
-                                    <div class="card  border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                      <div class="card-header">
-                                          Parents Details:
-                                      </div>
-                                      <div class="card-body">
-                                        <h5>Add Parent</h5>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-6 mb-2">
-                                                <label for="">Names (Three Names)</label><br>
-                                                <input type="text" name="parent_names" placeholder="Enter Parents Name" class="form-control" />
-
-                                            </div>
-                                            <div class="col-6 mb-2">
-                                                <label for="">Relationship</label><br>
-
-                                                <select name="parent_relation" id="" class="select custom-select form-control">
-                                                    <option value="Father">Father</option>
-                                                    <option value="Mother">Mother</option>
-                                                    <option value="Guardian">Guardian</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-6 mb-2">
-                                                <label for="">Birthdate</label><br>
-                                                <input type="date" name="parent_birthdate" placeholder="" class="form-control" />
-                                            </div>
-                                            <div class="col-6 mb-2">
-                                                <label for="">Residence  (City/Region & Country)</label><br>
-                                                <input type="text" name="parent_residence" placeholder="Enter Parent's Residence" class="form-control" />
-
-                                            </div>
-                                            <div class="col-4 mb-2">
-                                                <label for="">Living Status</label><br>
-                                                <input type="radio" id="Alive" name="parent_living_status" value="Alive"> <label for="Alive">Alive</label>
-                                                <input type="radio" id="Deceased" name="parent_living_status" value="Deceased"> <label for="Deceased">Deceased</label>
-                                            </div>
-                                            <div class="card-footer ">
-                                                <button type="submit" class="btn btn-main float-end"> Save Parent</button>
-                                            </div>
-                                        </div>
-                                        <hr>
-
-
-                                          <table class="table table-border-none" id="dynamicAddRemoveParent">
-                                          <tr>
-                                          <th class="text-center">Names (Three Names)</th>
-                                          <th>Relationship</th>
-                                          <th>Birthdate</th>
-                                          <th class="text-center">Residence  (City/Region & Country)</th>
-                                          <th>Living Status</th>
-                                          <th>Action</th>
-                                          </tr>
-                                          @forelse ( $parents as $item )
-                                          <tr>
-
-                                            <td>{{ $item->parent_names}} </td>
-                                            <td>{{ $item->parent_relation }} </td>
-                                            <td>{{ $item->parent_birthdate }}</td>
-                                            <td>{{ $item->parent_residence }}</td>
-                                            <td>{{ $item->parent_living_status }} </td>
-                                            <td>
-                                                <a href="{{ url('flex/delete-parent/'.$item->id) }}" class="btn btn-sm btn danger">
-                                                    <i class="ph-trash"></i>
-                                                </a>
-                                            </td>
-                                          </tr>
-                                          @empty
-
-                                          @endforelse
-
-
-                                          </table>
-
-                                          <script type="text/javascript">
-                                            var i = 0;
-                                            $("#add-btn").click(function(){
-                                            ++i;
-                                            $("#dynamicAddRemove").append('<tr><td><input type="text" name="moreFields['+i+'][dep_name]" placeholder="" class="form-control" /><input type="hidden" name="moreFields['+i+'][employeeID]" value="<?php echo $empID; ?>" class="form-control" /></td><td><input type="text" name="moreFields['+i+'][dep_surname]" placeholder="" class="form-control" /></td><td><input type="text" name="moreFields['+i+'][dep_birthdate]" placeholder="" class="form-control" /></td><td><input type="text" name="moreFields['+i+'][dep_gender]" placeholder="" class="form-control" /></td><td><input type="text" name="moreFields['+i+'][dep_certificate]" placeholder="" class="form-control" /></td><td><button type="button" class="btn btn-danger btn-sm  remove-tr">Remove</button></td></tr>');
-                                            });
-                                            $(document).on('click', '.remove-tr', function(){
-                                            $(this).parents('tr').remove();
-                                            });
-
-                                            $("#add-btn1").click(function(){
-                                            ++i;
-                                            $("#dynamicAddRemoveParent").append('<tr><td><input type="text" name="moreParent['+i+'][parent_names]" placeholder="" class="form-control" /><input type="hidden" name="moreParent['+i+'][employeeID]" value="<?php echo $empID; ?>" class="form-control" /></td><td><input type="text" name="moreParent['+i+'][parent_relation]" placeholder="" class="form-control" /></td><td><input type="text" name="moreParent['+i+'][parent_birthdate]" placeholder="" class="form-control" /></td><td><input type="text" name="moreParent['+i+'][parent_residence]" placeholder="" class="form-control" /></td><td><input type="text" name="moreParent['+i+'][parent_living_status]" placeholder="" class="form-control" /></td><td><button type="button" class="btn btn-danger btn-sm  remove-tr">Remove</button></td></tr>');
-                                            });
-                                            $(document).on('click', '.remove-tr', function(){
-                                            $(this).parents('tr').remove();
-                                            });
-                                            </script>
-                                      </div>
-                                    </div>
-                                  </div>
-
-
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
+                    @include('employee.family-details')
                     {{-- / --}}
 
                     {{-- Page 5 --}}
-                    <div role="tabpanel" class="tab-pane " id="page5" aria-labelledby="exit-tab">
-                        <div class="card rounded-0 border-0 shadow-none">
 
-                            <div class="card-header">
-                                <h5 class="text-main">EDUCATIONAL BACKGROUND: </h5>
-                            </div>
-                            <div class="row p-2">
-
-
-                                <div class="col-md-12">
-                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                      <div class="card-body">
-                                        <h5>Add Academic Qualification</h5>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Name of University</label>
-                                                <input type="text" name="institute" id="institute"  placeholder="Enter University Name" class="form-control" >
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="">Qualification Obtained </label>
-                                                <select name="level" id="level" class="select custom-select form-control">
-                                                    <option value="Certificate">Certificate </option>
-                                                    <option value="Diploma">Diploma </option>
-                                                    <option value="Degree">Degree </option>
-                                                    <option value="Masters">Masters </option>
-                                                    <option value="PhD">PhD </option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Discpline of Study </label>
-                                                <input type="text" name="course" id="course"  placeholder="Enter Discpline of Study e.g Accounting/Marketing Law/Business etc" class="form-control" >
-                                            </div>
-
-                                                <div class="col-md-3 mb-2">
-                                                    <label for="">Start Year</label>
-                                                    <input type="year" name="start_year" id="start_year"  placeholder="Start Year" class="form-control" >
-                                                </div>
-                                                <div class="col-md-3 mb-2">
-                                                    <label for="">Finish Year</label>
-                                                    <input type="year" name="finish_year"  id="finish_year"  placeholder="Finish Year" class="form-control" >
-                                                </div>
-
-                                                <div class="col-md-6 mb-2">
-                                                    <label for="">Location of Study</label>
-                                                    <input type="text" name="study_location"  id="study_location"  placeholder="Location of Study" class="form-control" >
-                                                </div>
-
-                                                <div class="col-md-6 mb-2">
-                                                    <label for="">Final Score & Grades</label>
-                                                    <input type="text" name="final_score"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
-                                                </div>
-
-                                                <div class="col-md-6 mb-2">
-                                                    <label for="">Education Certificate</label>
-                                                    <input type="file" name="certificate"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
-                                                </div>
-                                                <div class="card-footer ">
-                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
-                                                </div>
-                                        </div>
-                                        <hr>
-
-                                        <table class="table table-border-none" id="dynamicAddRemove">
-                                            <tr>
-                                            <th class="text-center">From /To(Month & Year)</th>
-                                            <th class="text-center">University/College/School (From highest level of education)</th>
-                                            <th class="text-center">Qualification Obtained </th>
-                                            <th class="text-center">Disciplinary of Study </th>
-                                            <th class="text-center">Location </th>
-                                            <th class="text-center">Final Score & Grades</th>
-                                            <th class="text-center">Action</th>
-                                            @forelse ( $qualifications as $item )
-                                          <tr>
-
-                                            <td class="text-center">{{ $item->start_year}} - {{ $item->end_year}} </td>
-                                            <td class="text-center">{{ $item->institute }} </td>
-                                            <td class="text-center">{{ $item->level }}</td>
-                                            <td class="text-center">{{ $item->course }}</td>
-                                            <td class="text-center">{{ $item->study_location }} </td>
-                                            <td class="text-center">{{ $item->final_score }} </td>
-                                            <td class="text-center">
-                                            <a href="{{asset('storage/certificates/' . $item->certificate) }}" download="{{$item->institute.'-Certificate'}}" class="text-main btn btn-sm" title="Download Attachment">
-                                                    <i class="ph ph-download"></i> &nbsp;
-                                            </a>
-                                            <a href="{{ url('flex/delete-qualification/'.$item->id) }}" class="btn btn-sm btn text-danger">
-                                                    <i class="ph-trash"></i>
-                                                </a>
-                                            </td>
-                                          </tr>
-
-                                          @empty
-
-                                          @endforelse
-
-                                            </table>
-
-                                      </div>
-                                    </div>
-                                  </div>
-                                <div class="col-md-12">
-                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                      <div class="card-body">
-                                        <h5>Add Professional Certifications/License</h5>
-                                        <hr>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Name of Certification/License</label>
-                                                <input type="text" name="cert_name" id="institute"  placeholder="Enter Name of Certification/License" class="form-control" >
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="">Qualification Obtained </label>
-                                                <input type="text" name="cert_qualification" id="cert_qualification"  placeholder="Enter Qualification Obtained " class="form-control" >
-
-                                            </div>
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Membership Number</label>
-                                                <input type="text" name="cert_number" id="cert_number" placeholder="Enter Membership Number" class="form-control" >
-                                            </div>
-
-                                                <div class="col-md-3 mb-2">
-                                                    <label for="">Start Year</label>
-                                                    <input type="year" name="cert_start" id="cert_start"  placeholder="Start Year" class="form-control" >
-                                                </div>
-                                                <div class="col-md-3 mb-2">
-                                                    <label for="">Finish Year</label>
-                                                    <input type="year" name="cert_end"  id="cert_end" placeholder="Finish Year" class="form-control" >
-                                                </div>
-
-                                                <div class="col-md-6 mb-2">
-                                                    <label for="">Upload Certification</label>
-                                                    <input type="file" name="certificate2"  id="final_score"  placeholder="Final Score & Grades" class="form-control" >
-                                                </div>
-                                                <div class="col-4 mb-2">
-                                                    <label for="">Status </label><br>
-                                                    <input type="radio" id="active" name="cert_status" value="Active"> <label for="active">Active</label>
-                                                    <input type="radio" id="inactive" name="cert_status" value="Active"> <label for="inactive">Inactive</label>
-                                                </div>
-
-
-                                                <div class="card-footer ">
-                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
-                                                </div>
-                                        </div>
-                                        <hr>
-
-
-                                          <table class="table table-border-none" id="dynamicAddRemoveParent">
-                                          <tr>
-                                          <th class="text-center">From/To (Month & Year)</th>
-                                          <th class="text-center">Name of Professional Certification/License If any</th>
-                                          <th class="text-center">Qualification Obtained </th>
-                                          <th class="text-center">Membership Number</th>
-                                          <th class="text-center">Status Active/ Inactive</th>
-                                          <th class="text-center">Action</th>
-                                          </tr>
-                                          @forelse ( $certifications as $item )
-                                          <tr>
-
-                                            <td class="text-center" >{{ $item->cert_start}} - {{ $item->cert_end }}</td>
-                                            <td class="text-center" >{{ $item->cert_name }} </td>
-                                            <td class="text-center">{{ $item->cert_qualification }}</td>
-                                            <td class="text-center">{{ $item->cert_number }}</td>
-                                            <td class="text-center">{{ $item->cert_status }} </td>
-                                            <td>
-                                                <a href="{{asset('storage/certifications/' . $item->certificate) }}" download="{{ $item->cert_name.'-certificate' }}" class="text-main btn btn-sm" title="Download Attachment">
-                                                    <i class="ph ph-download"></i> &nbsp;
-
-                                                  </a>
-                                                 <a href="{{ url('flex/delete-certification/'.$item->id) }}" class="btn btn-sm btn text-danger">
-                                                    <i class="ph-trash"></i>
-                                                </a>
-                                            </td>
-                                          </tr>
-                                          @empty
-
-                                          @endforelse
-
-
-                                          </table>
-
-
-                                      </div>
-                                    </div>
-                                  </div>
-
-
-
-                            </div>
-
-                        </div>
-                     </div>
-                    {{-- / --}}
+                    @include('employee.education-professional')
 
                     {{-- Page 6 --}}
-                    <div role="tabpanel" class="tab-pane " id="page6" aria-labelledby="exit-tab">
-                        <div class="card rounded-0 border-0 shadow-none">
-
-                            <div class="card-header">
-                                <h5 class="text-main">EMPLOYMENT HISTORY: </h5>
-                            </div>
-                            <div class="row p-2">
-
-
-                                <div class="col-md-12">
-                                    <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 p-2">
-                                      <div class="card-body">
-                                        <h5>Add Employment History</h5>
-                                        <hr>
-                                        <p class="text-muted"><b> Previous Employer(s) Details:</b></p>
-                                        <p>
-                                           <small><i>
-                                            Kindly declare your previous employers
-                                            (up to a period of 5 years to the date of joining BancABC)
-                                        </i></small>
-
-                                        </p>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Name of Employer</label>
-                                                <input type="text" name="hist_employer" id="hist_employer"  placeholder="Enter Name of Employer" class="form-control" >
-                                            </div>
-
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Industry</label>
-                                                <input type="text" name="hist_industry" id="hist_industry"  placeholder="Enter Industry Auditing/Telecom Financial/Mining etc" class="form-control" >
-                                            </div>
-
-                                            <div class="col-md-6 mb-2">
-                                                <label for="">Position Held at the time of exit</label>
-                                                <input type="text" name="hist_position" id="hist_position"  placeholder="Enter Position Held at the time of exit" class="form-control" >
-                                            </div>
-
-                                                <div class="col-md-3 mb-2">
-                                                    <label for="">Start Year</label>
-                                                    <input type="year"  name="hist_start" id="hist_start"   placeholder="Start Year" class="form-control" >
-                                                </div>
-                                                <div class="col-md-3 mb-2">
-                                                    <label for="">Finish Year</label>
-                                                    <input type="year" name="hist_end"  id="hist_end"  placeholder="Finish Year" class="form-control" >
-                                                </div>
-
-                                                <div class="col-md-6 mb-2">
-                                                    <label for="">Reason for Leaving</label>
-                                                    <textarea name="hist_reason" id="" class="form-control" placeholder="Enter Reason for Leaving Here" rows="4"></textarea>
-                                                </div>
-
-                                                <div class="col-6">
-                                                    <label for="hist_status">Employment Status</label>
-                                                    <select name="hist_status" id="hist_status" class="select form-control">
-                                                        <option value="Permanent">Permanent</option>
-                                                        <option value="Fixed Term">Fixed Term</option>
-                                                        <option value="Internship">Internship</option>
-                                                    </select>
-                                                </div>
-                                                <div class="card-footer mt-2">
-                                                    <button type="submit" class="btn btn-main float-end"> Save Details</button>
-                                                </div>
-                                        </div>
-                                        <hr>
-
-                                        <table class="table table-border-none" id="dynamicAddRemove">
-                                            <tr>
-                                            <th class="text-center">From /To(Month & Year)</th>
-                                            <th class="text-center">Employer</th>
-                                            <th class="text-center">Industry Auditing/Telecom Financial/Mining etc </th>
-                                            <th class="text-center">Position Held at the time of exit</th>
-                                            <th class="text-center">Employment Status</th>
-                                            <th class="text-center">Reason for Leaving</th>
-                                            <th class="text-center">Action</th>
-                                            @forelse ( $histories as $item )
-                                          <tr>
-
-                                            <td class="text-center">{{ $item->hist_start}} - {{ $item->hist_end}} </td>
-                                            <td class="text-center">{{ $item->hist_employer }} </td>
-                                            <td class="text-center">{{ $item->hist_industry }} </td>
-                                            <td class="text-center">{{ $item->hist_position }}</td>
-                                            <td class="text-center">{{ $item->hist_status }}</td>
-                                            <td class="text-center">{{ $item->hist_reason }} </td>
-                                            <td class="text-center">
-                                                <a href="{{ url('flex/delete-history/'.$item->id) }}" class="btn btn-sm btn danger">
-                                                    <i class="ph-trash"></i>
-                                                </a>
-                                            </td>
-                                          </tr>
-
-                                          @empty
-
-                                          @endforelse
-
-                                            </table>
-
-                                      </div>
-                                    </div>
-                                  </div>
-
-                            </div>
-                        </div>
-                     </div>
-                    {{-- / --}}
+                    @include('employee.employee-history')
 
 
 
-                </div>
-                {{-- <div class="card-footer ">
-                    <button type="submit" class="btn btn-main float-end"> Update Employee Detail</button>
-                </div> --}}
+
+                    </div>
+                        {{-- <div class="card-footer ">
+                            <button type="submit" class="btn btn-main float-end"> Update Employee Detail</button>
+                        </div> --}}
                 </div>
 
 
+          </div>
         </div>
+
       </div>
-    </div>
 
-
-
-
-</form>
-
-</div>
 
 {{-- end of user credentials --}}
 {{-- user profile image  modal --}}

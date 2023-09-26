@@ -77,6 +77,7 @@ use Illuminate\Support\Facades\Notification;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\Importable;
 use App\Imports\ImportSalaryIncrement;
+use Illuminate\Support\Facades\Storage;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Response;
 use Exception;
@@ -9256,16 +9257,16 @@ class GeneralController extends Controller
 
                 // start of name information validation
                 'employeeID' => 'required',
-                'fname' => 'required',
+                'fname' => 'nullable',
                 'mname' => 'nullable',
-                'lname' => 'required',
+                'lname' => 'nullable',
                 'maide_name' => 'nullable',
 
 
                 // start of biographical informations
                 'bithdate' => 'nullable',
                 'country_of_birth' => 'nullable',
-                'gender' => 'required',
+                'gender' => 'nullable',
                 // 'martial' => 'nullable',
                 'religion' => 'nullable',
 
@@ -9274,10 +9275,10 @@ class GeneralController extends Controller
                 'landmark' => 'nullable',
 
                 // Start of Personal Identification details
-                'TIN' => 'required',
-                'NIDA' => 'required',
+                'TIN' => 'nullable',
+                'NIDA' => 'nullable',
                 'passport' => 'nullable|regex:/^[A-Za-z0-9 ]+$/',
-                'pension' => 'required',
+                'pension' => 'nullable',
                 'HELSB' => 'nullable',
 
                 // Start of Emmegence Contact
@@ -9410,8 +9411,82 @@ class GeneralController extends Controller
                 $profile->save();
             }
 
-            // start of emergency contacts
-            $emergency = EmergencyContact::where('employeeID', $id)->first();
+
+
+
+
+            if ($request->image != null) {
+                $user = $request->empID;
+
+                $employee = Employee::where('emp_id', $user)->first();
+                if ($request->hasfile('image')) {
+                    $request->validate([
+                        'image' => 'required|image|mimes:jpg,png,jpeg,pdf|max:5048',
+                    ]);
+                    $newImageName = $request->image->hashName();
+
+                    Storage::disk('public')->put('profile/'.$newImageName, file_get_contents($request->image));
+                    $employee->photo = $newImageName;
+                }
+                // saving data
+                $employee->update();
+            }
+        }
+
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
+
+    public function employeeDetails(Request $request){
+        dd($request);
+        $id = $request->employeeID;
+
+
+            // Start of Employee Details
+            $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+            if ($profile) {
+
+                $profile->marriage_date = $request->marriage_date;
+                $profile->maide_name = $request->maide_name;
+                $profile->birthplace = $request->birthplace;
+                $profile->birthcountry = $request->birthcountry;
+                $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                $profile->passport_number = $request->passport_number;
+                $profile->landmark = $request->landmark;
+                $profile->prefix = $request->prefix;
+                $profile->former_title = $request->former_title;
+                $profile->divorced_date = $request->divorced_date;
+
+                $profile->update();
+            } else {
+                $profile = new EmployeeDetail();
+                $profile->prefix = $request->prefix;
+                $profile->maide_name = $request->maide_name;
+                $profile->birthplace = $request->birthplace;
+                $profile->birthcountry = $request->birthcountry;
+                $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                $profile->passport_number = $request->passport_number;
+                $profile->former_title = $request->former_title;
+                $profile->divorced_date = $request->divorced_date;
+                $profile->marriage_date = $request->marriage_date;
+                $profile->save();
+            }
+
+
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+
+
+
+    }
+
+    public function employeeEmergency(Request $request){
+        $id = $request->employeeID;
+
+        $emergency = EmergencyContact::where('employeeID', $id)->first();
 
             if ($emergency) {
 
@@ -9435,7 +9510,85 @@ class GeneralController extends Controller
                 $emergency->save();
             }
 
+            $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
 
+
+    public function employeeParent(Request $request){
+        $empID = $request->employeeID;
+        $parent = EmployeeParent::where('employeeID', $empID)
+            ->Where('parent_relation', 'LIKE', $request->parent_relation)
+            ->where('parent_birthdate', 'LIKE', $request->parent_birthdate)
+            ->first();
+
+        if ($parent) {
+            $parent->employeeID = $request->employeeID;
+            $parent->parent_names = $request->parent_names;
+            $parent->parent_relation = $request->parent_relation;
+            $parent->parent_birthdate = $request->parent_birthdate;
+            $parent->parent_residence = $request->parent_residence;
+            $parent->parent_living_status = $request->parent_living_status;
+
+            $parent->update();
+        } else {
+            if ($request->parent_names != null && $request->parent_relation != null) {
+                $parent = new EmployeeParent();
+
+                $parent->employeeID = $request->employeeID;
+                $parent->parent_names = $request->parent_names;
+                $parent->parent_relation = $request->parent_relation;
+                $parent->parent_birthdate = $request->parent_birthdate;
+                $parent->parent_residence = $request->parent_residence;
+                $parent->parent_living_status = $request->parent_living_status;
+
+                $parent->save();
+            }
+        }
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($empID))->with('msg', $msg);
+    }
+
+    public function employeeDependant(Request $request){
+
+            // start of depedants details
+            $emp_id = $request->employeeID;
+            $cert = $request->dep_certficate;
+            $dependant = EmployeeDependant::where('employeeID', $emp_id)
+                ->Where('dep_certificate', 'LIKE', $request->dep_certficate)
+                ->where('dep_surname', $request->dep_surname)
+                ->first();
+            if ($dependant) {
+
+                // $dependant->employeeID=$request->employeeID;
+                $dependant->dep_name = $request->dep_name;
+                $dependant->dep_surname = $request->dep_surname;
+                $dependant->dep_birthdate = $request->dep_birthdate;
+                $dependant->dep_gender = $request->dep_gender;
+                $dependant->dep_certificate = $request->dep_certificate;
+
+                $dependant->update();
+            } else {
+                if ($request->dep_name != '' || $request->dep_certificate != '') {
+                    $dependant = new EmployeeDependant();
+
+                    $dependant->employeeID = $request->employeeID;
+                    $dependant->dep_name = $request->dep_name;
+                    $dependant->dep_surname = $request->dep_surname;
+                    $dependant->dep_birthdate = $request->dep_birthdate;
+                    $dependant->dep_gender = $request->dep_gender;
+                    $dependant->dep_certificate = $request->dep_certificate;
+
+                    $dependant->save();
+                }
+            }
+
+            $msg = "Employee Details Have Been Updated successfully";
+            return redirect('flex/employee-profile/' . base64_encode($emp_id))->with('msg', $msg);
+    }
+    public function employeeSpouse(Request $request){
+
+        $id = $request->employeeID;
 
             // start of spouse details
             $spouse = EmployeeSpouse::where('employeeID', $id)->first();
@@ -9469,180 +9622,91 @@ class GeneralController extends Controller
 
                 $spouse->save();
             }
+            $msg = "Employee Details Have Been Updated successfully";
+            return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
 
+    public function employeeHistory(Request $request){
+        $id = $request->employeeID;
+        if ($request->hist_employer != null && $request->hist_position != null) {
+            $history = new EmploymentHistory();
 
-            // start of depedants details
-            $emp_id = $request->employeeID;
-            $cert = $request->dep_certficate;
-            $dependant = EmployeeDependant::where('employeeID', $emp_id)
-                ->Where('dep_certificate', 'LIKE', $request->dep_certficate)
-                ->where('dep_surname', $request->dep_surname)
-                ->first();
+            $history->employeeID = $request->employeeID;
+            $history->hist_start = $request->hist_start;
+            $history->hist_end = $request->hist_end;
+            $history->hist_employer = $request->hist_employer;
+            $history->hist_industry = $request->hist_industry;
+            $history->hist_position = $request->hist_position;
+            $history->hist_status = $request->hist_status;
+            $history->hist_reason = $request->hist_reason;
 
-
-
-            if ($dependant) {
-
-                // $dependant->employeeID=$request->employeeID;
-                $dependant->dep_name = $request->dep_name;
-                $dependant->dep_surname = $request->dep_surname;
-                $dependant->dep_birthdate = $request->dep_birthdate;
-                $dependant->dep_gender = $request->dep_gender;
-                $dependant->dep_certificate = $request->dep_certificate;
-
-                $dependant->update();
-            } else {
-                if ($request->dep_name != '' || $request->dep_certificate != '') {
-                    $dependant = new EmployeeDependant();
-
-                    $dependant->employeeID = $request->employeeID;
-                    $dependant->dep_name = $request->dep_name;
-                    $dependant->dep_surname = $request->dep_surname;
-                    $dependant->dep_birthdate = $request->dep_birthdate;
-                    $dependant->dep_gender = $request->dep_gender;
-                    $dependant->dep_certificate = $request->dep_certificate;
-
-                    $dependant->save();
-                }
-            }
-
-
-
-            // For Parents and Guardians
-            $empID = $request->employeeID;
-            $parent = EmployeeParent::where('employeeID', $empID)
-                ->Where('parent_relation', 'LIKE', $request->parent_relation)
-                ->where('parent_birthdate', 'LIKE', $request->parent_birthdate)
-                ->first();
-
-            if ($parent) {
-                $parent->employeeID = $request->employeeID;
-                $parent->parent_names = $request->parent_names;
-                $parent->parent_relation = $request->parent_relation;
-                $parent->parent_birthdate = $request->parent_birthdate;
-                $parent->parent_residence = $request->parent_residence;
-                $parent->parent_living_status = $request->parent_living_status;
-
-                $parent->update();
-            } else {
-                if ($request->parent_names != null && $request->parent_relation != null) {
-                    $parent = new EmployeeParent();
-
-                    $parent->employeeID = $request->employeeID;
-                    $parent->parent_names = $request->parent_names;
-                    $parent->parent_relation = $request->parent_relation;
-                    $parent->parent_birthdate = $request->parent_birthdate;
-                    $parent->parent_residence = $request->parent_residence;
-                    $parent->parent_living_status = $request->parent_living_status;
-
-                    $parent->save();
-                }
-            }
-
-            // For Educational Qualifiation
-            if ($request->institute != null && $request->course != null) {
-                $qualification = new EducationQualification();
-
-                $qualification->employeeID = $request->employeeID;
-                $qualification->institute = $request->institute;
-                $qualification->level = $request->level;
-                $qualification->course = $request->course;
-                $qualification->start_year = $request->start_year;
-                $qualification->end_year = $request->finish_year;
-                $qualification->final_score = $request->final_score;
-                $qualification->study_location = $request->study_location;
-                // $qualification->certificate = $request->certificate;
-
-                if ($request->hasfile('certificate')) {
-                    $request->validate([
-                        'certificate' => 'required|clamav',
-                    ]);
-                    $request->validate([
-                        'certificate' => 'mimes:jpg,png,jpeg,pdf|max:2048',
-                    ]);
-                    $newImageName = $request->certificate->hashName();
-                    $request->certificate->move(public_path('storage\certificates'), $newImageName);
-                    $qualification->certificate = $newImageName;
-                }
-
-                $qualification->save();
-            }
-
-
-
-            // For Professional Certification
-            if ($request->cert_qualification != null && $request->cert_number != null) {
-                $certification = new ProfessionalCertification();
-
-                $certification->employeeID = $request->employeeID;
-                $certification->cert_start = $request->cert_start;
-                // dd($request->cert_start);
-                $certification->cert_end = $request->cert_end;
-                $certification->cert_name = $request->cert_name;
-                $certification->cert_qualification = $request->cert_qualification;
-                $certification->cert_number = $request->cert_number;
-                $certification->cert_status = $request->cert_status;
-
-                if ($request->hasfile('certificate2')) {
-                    $request->validate([
-                        'certificate2' => 'required|clamav',
-                    ]);
-                    $request->validate([
-                        'certificate2' => 'mimes:jpg,png,jpeg,pdf|max:2048',
-                    ]);
-                    $newImageName = $request->certificate2->hashName();
-                    $request->certificate2->move(public_path('storage\certifications'), $newImageName);
-                    $certification->certificate = $newImageName;
-                }
-                $certification->save();
-            }
-
-
-            // For Employment History
-            if ($request->hist_employer != null && $request->hist_position != null) {
-                $history = new EmploymentHistory();
-
-                $history->employeeID = $request->employeeID;
-                $history->hist_start = $request->hist_start;
-                $history->hist_end = $request->hist_end;
-                $history->hist_employer = $request->hist_employer;
-                $history->hist_industry = $request->hist_industry;
-                $history->hist_position = $request->hist_position;
-                $history->hist_status = $request->hist_status;
-                $history->hist_reason = $request->hist_reason;
-
-                $history->save();
-            }
-
-            if ($request->image != null) {
-                $user = $request->empID;
-
-                $employee = EMPL::where('emp_id', $user)->first();
-                if ($request->hasfile('image')) {
-                    $request->validate([
-                        'image' => 'required|clamav',
-                    ]);
-                    $request->validate([
-                        'image' => 'required|image|mimes:pdf|max:5048',
-                    ]);
-                    $newImageName = $request->image->hashName();
-                    $request->image->move(public_path('storage\profile'), $newImageName);
-
-                    //    $file=$request->file('image');
-                    //    $filename=time().'.'.$file->getClientOriginalExtension();
-                    //    $file->move('storage/profile/', $newImageName);
-                    $employee->photo = $newImageName;
-                }
-                // saving data
-                $employee->update();
-            }
+            $history->save();
         }
 
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
 
+    public function educationQualification(Request $request){
+         // For Educational Qualifiation
+         $id = $request->employeeID;
+         if ($request->institute != null && $request->course != null) {
+            $qualification = new EducationQualification();
 
+            $qualification->employeeID = $request->employeeID;
+            $qualification->institute = $request->institute;
+            $qualification->level = $request->level;
+            $qualification->course = $request->course;
+            $qualification->start_year = $request->start_year;
+            $qualification->end_year = $request->finish_year;
+            $qualification->final_score = $request->final_score;
+            $qualification->study_location = $request->study_location;
+            // $qualification->certificate = $request->certificate;
 
+            if ($request->hasfile('certificate')) {
+                // $request->validate([
+                //     'certificate' => 'required|clamav',
+                // ]);
+                $request->validate([
+                    'certificate' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                ]);
+                $newImageName = $request->certificate->hashName();
+                $request->certificate->move(public_path('storage\certificates'), $newImageName);
+                $qualification->certificate = $newImageName;
+            }
 
+            $qualification->save();
+        }
 
+        $msg = "Employee Details Have Been Updated successfully";
+        return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+    }
+
+    public function professionalCertificate(Request $request){
+        $id = $request->employeeID;
+
+        if ($request->cert_qualification != null && $request->cert_number != null) {
+            $certification = new ProfessionalCertification();
+
+            $certification->employeeID = $request->employeeID;
+            $certification->cert_start = $request->cert_start;
+            // dd($request->cert_start);
+            $certification->cert_end = $request->cert_end;
+            $certification->cert_name = $request->cert_name;
+            $certification->cert_qualification = $request->cert_qualification;
+            $certification->cert_number = $request->cert_number;
+            $certification->cert_status = $request->cert_status;
+
+            if ($request->hasfile('certificate2')) {
+                $request->validate([
+                    'certificate2' => 'mimes:jpg,png,jpeg,pdf|max:2048',
+                ]);
+                $newImageName = $request->certificate2->hashName();
+                $request->certificate2->move(public_path('storage\certifications'), $newImageName);
+                $certification->certificate = $newImageName;
+            }
+            $certification->save();
+        }
 
 
         $msg = "Employee Details Have Been Updated successfully";
@@ -9825,9 +9889,6 @@ class GeneralController extends Controller
 
         $employee = EMPL::where('emp_id', $user)->first();
         if ($request->hasfile('image')) {
-            $request->validate([
-                'image' => 'required|clamav',
-            ]);
 
             $request->validate([
                 'image' => 'required|mimes:jpg,png,jpeg,pdf',
@@ -9836,7 +9897,9 @@ class GeneralController extends Controller
 
 
             $newImageName = $request->image->hashName();
-            $filePath  = $request->image->move(public_path('storage/profile'), $newImageName);
+            Storage::disk('public')->put('profile/'.$newImageName, file_get_contents($request->image));
+
+
             // $path = $filePath->path();
             //$scanner = new Scanner();
             // $result = Clamav::scanFile($filePath);

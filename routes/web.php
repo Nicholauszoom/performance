@@ -438,6 +438,14 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
        Route::any('/employee-profile/{id}','viewProfile')->name('flex.viewProfile');
 
        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
+       Route::post('/save-details-employment','updateEmployeeDetails')->name('flex.saveDetailsEmployment');
+       Route::post('/save-details-qualification','educationQualification')->name('flex.saveEducationDetails');
+       Route::post('/save-details-professional','professionalCertificate')->name('flex.saveProfessionalCertifications');
+       Route::post('/save-details-history','employeeHistory')->name('flex.saveEmployeeHistory');
+       Route::post('/save-details-spouse','employeeSpouse')->name('flex.saveEmployeeSpouse');
+       Route::post('/save-details-dependant','employeeDependant')->name('flex.saveEmployeeDependant');
+       Route::post('/save-details-parents','employeeParent')->name('flex.saveEmployeeParent');
+       Route::post('/save-details-emergence','employeeEmergency')->name('flex.saveEmployeeEmergency');
        Route::any('/delete-child/{id}','deleteChild')->name('flex.deleteChild');
        Route::any('/delete-parent/{id}','deleteParent')->name('flex.deleteParent');
        Route::any('/delete-qualification/{id}','deleteQualification')->name('flex.deleteQualification');

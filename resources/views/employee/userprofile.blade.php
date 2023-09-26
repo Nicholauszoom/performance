@@ -27,7 +27,7 @@
         $position = $row->pName;
         $ctype = $row->CONTRACT;
         $linemanager = $row->line_manager;
-        
+
         $pf_membership_no = $row->pf_membership_no;
         $account_no = $row->account_no;
         $mobile = $row->mobile;
@@ -65,9 +65,8 @@
                 <div class="sidebar-section-body text-center">
                     <div class="card-img-actions d-inline-block my-3">
                         {{-- rounded-circle --}}
-                        <img class="img "
-                            src="{{ $photo == 'user.png' ? 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}"
-                            width="150" height="150" alt="">
+                            <img class="img" src="{{ ($photo == 'user.png') ? 'https://ui-avatars.com/api/?name='.$name.'&background=00204e&color=fff' : asset('storage/profile/' . $photo) }}" width="150" height="150" alt="">
+
                     </div>
 
                     <h6 class="mb-0">{{ $name }}</h6>
