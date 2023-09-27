@@ -2217,13 +2217,14 @@ class GeneralController extends Controller
         $line_maager = $employee_data->line_manager;
         $percent = $this->flexperformance_model->get_percent($overtime_category);
 
+        $overtime_name = $this->flexperformance_model->get_overtime_name($overtime_category);
 
 
         $result =   $this->flexperformance_model->direct_insert_overtime($empID, $signatory, $overtime_category, $date, $days, $percent, $line_maager);
         if ($result == true) {
             $amount = $days * ($employee_data->salary / 176) * $percent;
 
-            SysHelpers::FinancialLogs($empID, 'Direct Assig Overtime', '0.00', number_format($amount, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($empID,$overtime_name, '0.00', number_format($amount, 2), 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Request saved Successifully</p>";
         } else {
@@ -2587,12 +2588,14 @@ class GeneralController extends Controller
         //dd($overtime);
 
         $emp_id = $this->flexperformance_model->get_employee_overtimeID($overtimeID);
+        $overtime_category = $emp_id = $this->flexperformance_model->get_employee_overtime_category($overtimeID);
+        $overtime_name = $this->flexperformance_model->get_overtime_name($overtime_category);
 
         $result = $this->flexperformance_model->approveOvertime($overtimeID, $signatory, $time_approved);
         if ($result == true) {
 
 
-            SysHelpers::FinancialLogs($emp_id, 'Overtime', '0.00', number_format($overtime, 2), 'Payroll Input');
+            SysHelpers::FinancialLogs($emp_id,$overtime_name, '0.00', number_format($overtime, 2), 'Payroll Input');
 
             echo "<p class='alert alert-success text-center'>Overtime Approved Successifully</p>";
         } else {
@@ -8783,7 +8786,7 @@ class GeneralController extends Controller
         $old->save();
         // saving new employee data
 
-        SysHelpers::FinancialLogs($id, 'Salary Increment(promotion)', number_format($empl->salary * $empl->rate,2), number_format($request->newSalary * $empl->rate,2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($empl->salary * $empl->rate,2), number_format($request->newSalary * $empl->rate,2), 'Salary Increment');
 
         // $promotion =Employee::where('emp_id',$id)->first();
         // $promotion->position=$request->newPosition;
@@ -8927,7 +8930,7 @@ class GeneralController extends Controller
 
         $old->save();
 
-        SysHelpers::FinancialLogs($id, 'Salary Increment', number_format($oldSalary * $oldRate,2), number_format($request->newSalary * $oldRate,2), 'Salary Increment');
+        SysHelpers::FinancialLogs($id, 'Salary', number_format($oldSalary * $oldRate,2), number_format($request->newSalary * $oldRate,2), 'Salary Increment');
 
 
         $msg = "Employee Salary  Incremention has been requested successfully !";

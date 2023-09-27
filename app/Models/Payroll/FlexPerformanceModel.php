@@ -667,6 +667,15 @@ function checkOvertimeExistence($overtimeID)
 
     }
 
+    function get_employee_overtime_category($overtimeID){
+        $query  = "Select eo.overtime_category, (TIMESTAMPDIFF(MINUTE, eo.time_start, eo.time_end)/60) * (IF((eo.overtime_type = 0),((e.salary/176)*((SELECT day_percent FROM overtime_category WHERE id = eo.overtime_category))),((e.salary/176)*((SELECT night_percent FROM overtime_category WHERE id = eo.overtime_category))) )) AS amount from employee_overtime eo,employee e where e.emp_id = eo.empID and  eo.id = '".$overtimeID."'";
+         $data = DB::select(DB::raw($query));
+      return  $data[0]->overtime_category;
+
+
+    }
+
+
 
 
     function approveOvertime($id, $signatory, $time_approved) {
@@ -690,6 +699,13 @@ function checkOvertimeExistence($overtimeID)
         $row = DB::select(DB::raw($query));
 
         return $row[0]->day_percent;
+    }
+
+    function get_overtime_name($id){
+        $query = "SELECT name from overtime_category where id = $id limit 1";
+        $row = DB::select(DB::raw($query));
+
+        return $row[0]->name;
     }
 
 
@@ -2111,13 +2127,13 @@ SysHelpers::FinancialLogs($termination->employeeID,'Reason For Termination', '0.
 SysHelpers::FinancialLogs($termination->employeeID,'Salary', number_format($termination->actual_salary,2) ,number_format($termination->salaryEnrollment,2), 'Termination');
 //overtimes
 if($termination->normalDays != 0){
-    SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime', 0.00 ,number_format($termination->normalDays,2), 'Termination');
-    SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime Amount', 0.00 ,number_format($termination->normal_days_overtime_amount,2), 'Termination');
+   // SysHelpers::FinancialLogs($termination->employeeID,'N-Overtime', 0.00 ,number_format($termination->normalDays,2), 'Termination');
+    SysHelpers::FinancialLogs($termination->employeeID,'Normal Days Overtime', 0.00 ,number_format($termination->normal_days_overtime_amount,2), 'Termination');
 
 }
 if($termination->publicDays != 0){
-    SysHelpers::FinancialLogs($termination->employeeID,'S-Overtime', 0.00 ,number_format($termination->publicDays,2), 'Termination');
-    SysHelpers::FinancialLogs($termination->publicDays,'S-Overtime Amount', 0.00 ,number_format($termination->public_overtime_amount,2), 'Termination');
+    //SysHelpers::FinancialLogs($termination->employeeID,'S-Overtime', 0.00 ,number_format($termination->publicDays,2), 'Termination');
+    SysHelpers::FinancialLogs($termination->publicDays,'Sunday Overtime', 0.00 ,number_format($termination->public_overtime_amount,2), 'Termination');
 }
 if($termination->noticePay != 0)
 SysHelpers::FinancialLogs($termination->employeeID,'Notice Pay', 0.00 ,number_format($termination->noticePay,2), 'Termination');
