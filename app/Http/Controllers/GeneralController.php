@@ -9257,9 +9257,9 @@ class GeneralController extends Controller
 
                 // start of name information validation
                 'employeeID' => 'required',
-                'fname' => 'nullable',
+                'fname' => 'required',
                 'mname' => 'nullable',
-                'lname' => 'nullable',
+                'lname' => 'required',
                 'maide_name' => 'nullable',
 
 
@@ -9437,8 +9437,340 @@ class GeneralController extends Controller
         return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
     }
 
+    public function employeeBasicDetails(Request $request){
+        request()->validate(
+            [
+
+                // start of name information validation
+                'employeeID' => 'required',
+                'fname' => 'required',
+                'mname' => 'nullable',
+                'lname' => 'required',
+                'maide_name' => 'nullable',
+                'prefix' => 'nullable',
+            ]);
+
+        $id = $request->employeeID;
+
+
+
+        if (auth()->user()->emp_id != $id) {
+            $this->authenticateUser('edit-employee');
+        }
+
+        // dd($request->landmark);
+        $empl = Employee::where('emp_id', $id)->first();
+
+        if ($empl) {
+            // updating employee data
+            $employee = Employee::where('emp_id', $id)->first();
+            $employee->fname = $request->fname;
+            $employee->mname = $request->mname;
+            $employee->lname = $request->lname;
+            //$employee->mobile = $request->mobile;
+           // $employee->line_manager = $request->line_manager;
+           // $employee->job_title = $request->current_job;
+            // $employee->gender = $request->gender;
+            // $employee->birthdate = $request->birthdate;
+            // $employee->merital_status = $request->merital;
+
+
+            // dd($request->current_job);
+            // $employee->national_id = $request->NIDA;
+            // $employee->form_4_index = $request->HELSB;
+            // $employee->pension_fund = $request->pension_fund;
+            // $employee->physical_address = $request->physical_address;
+            $employee->update();
+
+            // Start of Employee Details
+            $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+            if ($profile) {
+
+                // $profile->marriage_date = $request->marriage_date;
+                $profile->maide_name = $request->maide_name;
+                // $profile->birthplace = $request->birthplace;
+                // $profile->birthcountry = $request->birthcountry;
+                // $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                // $profile->passport_number = $request->passport_number;
+                // $profile->landmark = $request->landmark;
+                $profile->prefix = $request->prefix;
+                // $profile->former_title = $request->former_title;
+                // $profile->divorced_date = $request->divorced_date;
+
+                $profile->update();
+            } else {
+                $profile = new EmployeeDetail();
+                $profile->prefix = $request->prefix;
+                // $profile->maide_name = $request->maide_name;
+                // $profile->birthplace = $request->birthplace;
+                // $profile->birthcountry = $request->birthcountry;
+                // $profile->religion = $request->religion;
+                 $profile->employeeID = $request->employeeID;
+                // $profile->passport_number = $request->passport_number;
+                // $profile->former_title = $request->former_title;
+                // $profile->divorced_date = $request->divorced_date;
+                // $profile->marriage_date = $request->marriage_date;
+                $profile->save();
+            }
+
+            $msg = "Employee Details Have Been Updated successfully";
+            return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+       }
+   }
+
+   public function employeeAddressDetails(Request $request){
+     // request()->validate(
+     //     [
+
+     //         // start of name information validation
+     //         'mname' => 'nullable',
+     //         'maide_name' => 'nullable',
+     //         'prefix' => 'nullable',
+     //         'bithdate' => 'nullable',
+     //     ]);
+
+     $id = $request->employeeID;
+
+
+
+     if (auth()->user()->emp_id != $id) {
+         $this->authenticateUser('edit-employee');
+     }
+
+     // dd($request->landmark);
+     $empl = Employee::where('emp_id', $id)->first();
+
+     if ($empl) {
+         // updating employee data
+         $employee = Employee::where('emp_id', $id)->first();
+         // $employee->fname = $request->fname;
+         // $employee->mname = $request->mname;
+         // $employee->lname = $request->lname;
+         $employee->mobile = $request->mobile;
+        // $employee->line_manager = $request->line_manager;
+        // $employee->job_title = $request->current_job;
+        //   $employee->gender = $request->gender;
+        //   $employee->birthdate = $request->birthdate;
+        //   $employee->merital_status = $request->merital;
+
+
+         // $employee->national_id = $request->NIDA;
+         // $employee->form_4_index = $request->HELSB;
+         // $employee->pension_fund = $request->pension_fund;
+          $employee->physical_address = $request->physical_address;
+         $employee->update();
+
+         // Start of Employee Details
+         $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+         if ($profile) {
+
+              //$profile->marriage_date = $request->marriage_date;
+             //$profile->maide_name = $request->maide_name;
+            //   $profile->birthplace = $request->birthplace;
+            //   $profile->birthcountry = $request->birthcountry;
+            //   $profile->religion = $request->religion;
+             // $profile->employeeID = $request->employeeID;
+             // $profile->passport_number = $request->passport_number;
+             $profile->landmark = $request->landmark;
+            // $profile->prefix = $request->prefix;
+             // $profile->former_title = $request->former_title;
+            //  $profile->divorced_date = $request->divorced_date;
+
+             $profile->update();
+         } else {
+             $profile = new EmployeeDetail();
+             //$profile->prefix = $request->prefix;
+             // $profile->maide_name = $request->maide_name;
+            //   $profile->birthplace = $request->birthplace;
+            //   $profile->birthcountry = $request->birthcountry;
+            //   $profile->religion = $request->religion;
+               $profile->employeeID = $request->employeeID;
+             // $profile->passport_number = $request->passport_number;
+             // $profile->former_title = $request->former_title;
+            //  $profile->divorced_date = $request->divorced_date;
+            //  $profile->marriage_date = $request->marriage_date;
+             $profile->save();
+         }
+             $msg = "Employee Details Have Been Updated successfully";
+             return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+
+           }
+
+     }
+
+
+     public function employeePersonDetails(Request $request){
+        // request()->validate(
+        //     [
+
+        //         // start of name information validation
+        //         'mname' => 'nullable',
+        //         'maide_name' => 'nullable',
+        //         'prefix' => 'nullable',
+        //         'bithdate' => 'nullable',
+        //     ]);
+
+        $id = $request->employeeID;
+
+
+
+        if (auth()->user()->emp_id != $id) {
+            $this->authenticateUser('edit-employee');
+        }
+
+        // dd($request->landmark);
+        $empl = Employee::where('emp_id', $id)->first();
+
+        if ($empl) {
+            // updating employee data
+            $employee = Employee::where('emp_id', $id)->first();
+            // $employee->fname = $request->fname;
+            // $employee->mname = $request->mname;
+            // $employee->lname = $request->lname;
+            // $employee->mobile = $request->mobile;
+           // $employee->line_manager = $request->line_manager;
+           // $employee->job_title = $request->current_job;
+           //   $employee->gender = $request->gender;
+           //   $employee->birthdate = $request->birthdate;
+           //   $employee->merital_status = $request->merital;
+
+
+            $employee->national_id = $request->NIDA;
+            $employee->tin = $request->TIN;
+            $employee->pension_fund = $request->pension;
+            $employee->form_4_index = $request->HESLB;
+            //  $employee->physical_address = $request->physical_address;
+            $employee->update();
+
+            // Start of Employee Details
+            $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+            if ($profile) {
+
+                 //$profile->marriage_date = $request->marriage_date;
+                //$profile->maide_name = $request->maide_name;
+               //   $profile->birthplace = $request->birthplace;
+               //   $profile->birthcountry = $request->birthcountry;
+               //   $profile->religion = $request->religion;
+                $profile->employeeID = $request->employeeID;
+                $profile->passport_number = $request->passport_number;
+                // $profile->landmark = $request->landmark;
+               // $profile->prefix = $request->prefix;
+                // $profile->former_title = $request->former_title;
+               //  $profile->divorced_date = $request->divorced_date;
+
+                $profile->update();
+            } else {
+                $profile = new EmployeeDetail();
+                //$profile->prefix = $request->prefix;
+                // $profile->maide_name = $request->maide_name;
+               //   $profile->birthplace = $request->birthplace;
+               //   $profile->birthcountry = $request->birthcountry;
+               //   $profile->religion = $request->religion;
+                  $profile->employeeID = $request->employeeID;
+                $profile->passport_number = $request->passport_number;
+                // $profile->former_title = $request->former_title;
+               //  $profile->divorced_date = $request->divorced_date;
+               //  $profile->marriage_date = $request->marriage_date;
+                $profile->save();
+            }
+                $msg = "Employee Details Have Been Updated successfully";
+                return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+
+              }
+
+        }
+
+
+
+
+   public function employeeBioDetails(Request $request){
+   // dd($request);
+    // request()->validate(
+    //     [
+
+    //         // start of name information validation
+    //         'mname' => 'nullable',
+    //         'maide_name' => 'nullable',
+    //         'prefix' => 'nullable',
+    //         'bithdate' => 'nullable',
+    //     ]);
+
+    $id = $request->employeeID;
+
+
+
+    if (auth()->user()->emp_id != $id) {
+        $this->authenticateUser('edit-employee');
+    }
+
+    // dd($request->landmark);
+    $empl = Employee::where('emp_id', $id)->first();
+
+    if ($empl) {
+        // updating employee data
+        $employee = Employee::where('emp_id', $id)->first();
+        // $employee->fname = $request->fname;
+        // $employee->mname = $request->mname;
+        // $employee->lname = $request->lname;
+        //$employee->mobile = $request->mobile;
+       // $employee->line_manager = $request->line_manager;
+       // $employee->job_title = $request->current_job;
+         $employee->gender = $request->gender;
+         $employee->birthdate = $request->birthdate;
+         $employee->merital_status = $request->merital;
+
+
+        // $employee->national_id = $request->NIDA;
+        // $employee->form_4_index = $request->HELSB;
+        // $employee->pension_fund = $request->pension_fund;
+        // $employee->physical_address = $request->physical_address;
+        $employee->update();
+
+        // Start of Employee Details
+        $profile = EmployeeDetail::where('employeeID', $id)->first();
+
+        if ($profile) {
+
+             $profile->marriage_date = $request->marriage_date;
+            //$profile->maide_name = $request->maide_name;
+             $profile->birthplace = $request->birthplace;
+             $profile->birthcountry = $request->birthcountry;
+             $profile->religion = $request->religion;
+            // $profile->employeeID = $request->employeeID;
+            // $profile->passport_number = $request->passport_number;
+            // $profile->landmark = $request->landmark;
+           // $profile->prefix = $request->prefix;
+            // $profile->former_title = $request->former_title;
+            $profile->divorced_date = $request->divorced_date;
+
+            $profile->update();
+        } else {
+            $profile = new EmployeeDetail();
+            //$profile->prefix = $request->prefix;
+            // $profile->maide_name = $request->maide_name;
+             $profile->birthplace = $request->birthplace;
+             $profile->birthcountry = $request->birthcountry;
+             $profile->religion = $request->religion;
+            //  $profile->employeeID = $request->employeeID;
+            // $profile->passport_number = $request->passport_number;
+            // $profile->former_title = $request->former_title;
+            $profile->divorced_date = $request->divorced_date;
+            $profile->marriage_date = $request->marriage_date;
+            $profile->save();
+        }
+            $msg = "Employee Details Have Been Updated successfully";
+            return redirect('flex/employee-profile/' . base64_encode($id))->with('msg', $msg);
+
+          }
+
+    }
+
+
     public function employeeDetails(Request $request){
-        dd($request);
         $id = $request->employeeID;
 
 
@@ -9482,6 +9814,7 @@ class GeneralController extends Controller
 
 
     }
+
 
     public function employeeEmergency(Request $request){
         $id = $request->employeeID;

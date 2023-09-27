@@ -439,6 +439,10 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
 
        Route::post('/save-details','updateEmployeeDetails')->name('flex.saveDetails');
        Route::post('/save-details-employment','updateEmployeeDetails')->name('flex.saveDetailsEmployment');
+       Route::post('/save-details-basic','employeeBasicDetails')->name('flex.saveBasicDetails');
+       Route::post('/save-details-address','employeeAddressDetails')->name('flex.saveAddressDetails');
+       Route::post('/save-details-person','employeePersonDetails')->name('flex.savePersonDetails');
+       Route::post('/save-details-bio','employeeBioDetails')->name('flex.saveBioDetails');
        Route::post('/save-details-qualification','educationQualification')->name('flex.saveEducationDetails');
        Route::post('/save-details-professional','professionalCertificate')->name('flex.saveProfessionalCertifications');
        Route::post('/save-details-history','employeeHistory')->name('flex.saveEmployeeHistory');
