@@ -411,6 +411,8 @@ Route::middleware('auth')->middleware([Setting::class])->group(function(){
     Route::any('/cancelLeave/{id}' ,'cancelLeave')->name('attendance.cancelLeave');
     //for manager
     Route::any('/leave' ,'leave')->name('attendance.leave');
+    Route::post('/saveLeaveOnBehalf' ,'saveLeaveOnBehalf')->name('attendance.saveLeaveOnBehalf'); //atendance controller
+
     Route::any('/approveLeave/{id}' ,'approveLeave')->name('attendance.approveLeave');
     });
 

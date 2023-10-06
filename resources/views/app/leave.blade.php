@@ -5,10 +5,12 @@
 <script src="{{ asset('assets/js/components/ui/moment/moment.min.js') }}"></script>
 <script src="{{ asset('assets/js/components/pickers/daterangepicker.js') }}"></script>
 <script src="{{ asset('assets/js/components/pickers/datepicker.min.js') }}"></script>
+<script src="{{ asset('assets/js/components/forms/selects/select2.min.js') }}"></script>
 @endpush
 
 @push('head-scriptTwo')
 <script src="{{ asset('assets/js/pages/datatables_basic.js') }}"></script>
+<script src="{{ asset('assets/js/pages/form_select2.js') }}"></script>
 @endpush
 
 @section('content')
@@ -19,7 +21,164 @@
 
 
 @if (session('mng_emp') || session('appr_leave'))
-<div class="card border-top  border-top-width-3 border-top-main rounded-0">
+
+    @if (session('msg'))
+             <div class="alert alert-success col-md-8 mx-auto mt-4" role="alert">
+             {{ session('msg') }}
+    </div>
+    @endif
+   <div class="card border-top  border-top-width-3 border-top-main border-bottom-main rounded-0 col-lg-12 ">
+    <div class="card-header">
+        <h5 class="text-warning"> Apply Leave On Behalf </h5>
+    </div>
+    {{-- id="applyLeave" --}}
+    <div class="card-body">
+
+
+      <div class="col-6 form-group text-sucess text-secondary" id="remaining" style="display:none">
+        <code class="text-success">  <span id="remain" class="text-success"></span> </code>
+
+      </div>
+
+        <form  autocomplete="off" action="{{ url('flex/attendance/saveLeaveOnBehalf') }}"  method="post"  enctype="multipart/form-data">
+          @csrf
+            <!-- START -->
+            <div class="row">
+                <div class="form-group col-6">
+                    <label class="col-form-label ">Employee Name: </label>
+                        <select name="empID" class="form-control select">
+                            <option value=""> -- Choose Employee Here -- </option>
+                            @foreach($employees as $item)
+                            <option value="{{ $item->emp_id }}" class="text-center"> {{ $item->fname }} {{ $item->mname }} {{ $item->lname }} </option>
+                            @endforeach
+                        </select>
+                </div>
+            </div>
+            <div class="row">
+
+
+            <div class="form-group col-6">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Start Date <span  class="text-danger">*</span></label>
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <div class="has-feedback">
+                        <input type="date" name="start" id="start-date" class="form-control col-xs-12 " placeholder="Start Date"  required="" >
+                        <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                        </div>
+                <span class="text-danger"><?php// echo form_error("fname");?></span>
+            </div>
+
+                </div>
+                    <input type="text" name="limit" hidden value="<?php echo $totalAccrued; ?>">
+                    {{-- <input type="text" name="empId" id="empID" hidden value="{{ Auth::User()->emp_id }}"> --}}
+
+                <div class="form-group col-6">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name"> End Date <span  class="text-danger">*</span>
+                </label>
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <div class="has-feedback">
+                    <input type="date" required="" id="end-date" placeholder="End Date" name="end" class="form-control col-xs-12 " >
+                    <span class="fa fa-calendar-o form-control-feedback right" aria-hidden="true"></span>
+                </div>
+                    <span class="text-danger"><?php// echo form_error("fname");?></span>
+                </div>
+                </div>
+
+                    <div class="form-group col-6">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name" for="stream" >Nature of Leave <span  class="text-danger">*</span></label>
+                            <select class="form-control form-select  select " required id="docNo" name="nature">
+                                <option value="" class="text-center"> -- select Leave Type Here -- </option>
+                            @foreach($leave_type as $key)
+                            <option value="{{ $key->id }}" class="text-center"> {{ $key->type }} </option>
+                            @endforeach
+                            </select>
+                    </div>
+                    {{-- @if($days<336) --}}
+                    <div class="col-6 form-group" id="sub" style="display:none">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12 ">Sub Category <span  class="text-danger">*</span></label>
+                    <select name="sub_cat" class="form-control select custom-select" id="subs_cat">
+                    </select>
+                    </div>
+                    {{-- @endif --}}
+
+        <div class="form-group col-6">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Leave Address <span  class="text-danger">*</span>
+          </label>
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <input required="required" type="text" id="address" name="address" class="form-control col-md-7 col-xs-12">
+            <span class="text-danger"><?php// echo form_error("lname");?></span>
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Mobile <span  class="text-danger">*</span></label>
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <input required="required" class="form-control col-md-7 col-xs-12" type="tel" maxlength="10" name="mobile">
+            <span class="text-danger"><?php// echo form_error("mname");?></span>
+          </div>
+        </div>
+          {{-- start of attachment --}}
+
+          <div class="form-group col-6" style="display:none" id="attachment">
+            <label for="middle-name" class="control-label col-md-3 col-sm-3 col-xs-12">Attachment<span  class="text-danger">*</span></label></label>
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+              <input class="form-control col-md-7 col-xs-12"  type="file" name="image">
+              <span class="text-danger"><?php// echo form_error("mname");?></span>
+            </div>
+          </div>
+        <div class="form-group col-12 mb-2">
+          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Reason For Leave <span  class="text-danger">*</span>
+          </label>
+          <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <textarea maxlength="256" class="form-control col-md-7 col-xs-12" name="reason" placeholder="Reason" required="required" rows="3"></textarea>
+            <span class="text-danger"><?php// echo form_error("lname");?></span>
+          </div>
+        </div>
+
+
+            <!-- END -->
+            <div class="form-group py-2">
+              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 col-md-offset-3">
+                <button class="float-end btn btn-main" type="button" data-bs-toggle="modal" data-bs-target="#approval"> Submit </button>
+
+              </div>
+            </div>
+
+          </div>
+
+          {{-- start of add approval modal --}}
+
+    <div id="approval" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+
+            <div class="modal-header">
+            <button type="button" class="btn-close " data-bs-dismiss="modal">
+
+            </button>
+        </div>
+        <modal-body class="p-4">
+            <h6 class="text-center">Are you Sure ?</h6>
+            <div class="row ">
+            <div class="col-4 mx-auto">
+                <button  type="submit" class="btn bg-main btn-sm px-4 " >Yes</button>
+
+                <button type="button" class="btn bg-danger btn-sm  px-4 text-light" data-bs-dismiss="modal">
+                No
+            </button>
+            </div>
+
+
+            </div>
+        </modal-body>
+        <modal-footer>
+
+        </modal-footer>
+
+
+        </div>
+    </div>
+    </div>
+    </form>
+  <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body">
         <h5 class="text-warning">New Leave Applications</h5>
 
@@ -145,8 +304,8 @@
 
         </tbody>
     </table>
-</div>
-<div class="card border-top  border-top-width-3 border-top-main rounded-0">
+  </div>
+  <div class="card border-top  border-top-width-3 border-top-main rounded-0">
     <div class="card-body">
         <h5 class="text-warning">Approved Leave Applications</h5>
 
@@ -272,7 +431,7 @@
 
         </tbody>
     </table>
-</div>
+  </div>
 @endif
 
 <div class="modal fade bd-example-modal-sm" data-backdrop="static" data-keyboard="false" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -664,4 +823,62 @@
         });
     });
 </script>
+
+<script>
+
+    $('#docNo').chang  e(function(){
+        var id = $(this).val();
+        const start = document.getElementById("start-date").value;
+        const end = document.getElementById("end-date").value;
+      var par= id+'|'+start+'|'+end;
+        var url = '{{ route("getSubs", ":id") }}';
+        url = url.replace(':id', par);
+
+        if (id==1) {
+          $("#attachment").hide();
+        } else {
+          $("#attachment").show();
+        }
+
+        $('#subs_cat').find('option').not(':first').remove();
+
+        $.ajax({
+            url: url,
+            type: 'get',
+            dataType: 'json',
+
+            success: function(response){
+
+              let days=response.days;
+               let subs=response.data;
+              var status ="<span>"+response.days+" Days</span>"
+              $("#remaining").empty(status);
+               $("#remaining").append(status);
+               $("#remaining").show()
+               $("#sub").hide();
+
+
+              for (var i = 0; i < response.data.length; i++) {
+
+                var id=subs[i].id;
+                var name=subs[i].name;
+                var option = "<option value='"+id+"'>"+name+"</option>";
+
+
+                $("#subs_cat").append(option);
+
+                $("#sub").show();
+
+              }
+
+
+            }
+        });
+    });
+
+
+    </script>
+
+  <script>
+
 @endpush
